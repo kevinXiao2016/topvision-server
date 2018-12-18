@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.report.domain.OltPonPortFlowReport">
+
+	<select id="statEntityPonFlow" parameterType="map" resultType="com.topvision.ems.epon.report.domain.OltPonPortFlowStastic">
+		<![CDATA[
+		SELECT
+			IFNULL(SUM(case when (c.portOutUsedMax*100 >= 0 AND c.portOutUsedMax*100 < 20) then 1 else 0 end),0) as range20,
+			IFNULL(SUM(case when (c.portOutUsedMax*100 >= 20 AND c.portOutUsedMax*100 < 40) then 1 else 0 end),0) as range40,
+			IFNULL(SUM(case when (c.portOutUsedMax*100 >= 40 AND c.portOutUsedMax*100 < 60) then 1 else 0 end),0) as range60,
+			IFNULL(SUM(case when (c.portOutUsedMax*100 >= 60 AND c.portOutUsedMax*100 < 80) then 1 else 0 end),0) as range80,
+			IFNULL(SUM(case when (c.portOutUsedMax*100 >= 80 AND c.portOutUsedMax*100 <= 100) then 1 else 0 end),0) as range100,
+			IFNULL(max(c.portInSpeedMax)/1000000,0) maxRecvFlow,
+			IFNULL(max(c.portOutSpeedMax)/1000000,0) maxSendFlow
+		FROM (
+			SELECT max(A.portInSpeedMax) portInSpeedMax,max(A.portOutSpeedMax) portOutSpeedMax,
+			       max(A.portInUsedMax) portInUsedMax,max(A.portOutUsedMax) portOutUsedMax
+			from perfstats15tablesummary A, oltponrelation B,oltponattribute D
+			WHERE A.entityId = B.entityId AND A.portIndex = B.ponIndex AND B.ponId = D.ponId 
+			AND D.ponOperationStatus = 1 AND A.entityId = #{entityId}
+			AND	${sql} GROUP BY A.portIndex
+			) c
+		]]>
+	</select>
+
+	<select id="selectEntityPonCount" parameterType="long" resultType="int">
+		SELECT count(*) from oltponattribute WHERE entityId = #{entityId} AND ponOperationStatus = 1;
+	</select>
+
+	<select id="selectPonFlowDetail" parameterType="map" resultType="com.topvision.ems.epon.report.domain.OltPonPortFlowDetail">
+		<![CDATA[
+		SELECT portIndex,portOutSpeedMax/1000000 stats15InOctets,portOutUsedMax*100 portUsedMax,collectTime,name FROM (
+			SELECT A.entityId, A.portIndex,A.portOutSpeedMax,A.portOutUsedMax,A.stats15EndTime collectTime,E.name
+			FROM perfstats15tableSummary A,entity E, oltponrelation B,oltponattribute D
+			WHERE
+				A.entityId = B.entityId AND A.portIndex = B.ponIndex AND B.ponId = D.ponId AND	D.ponOperationStatus = 1 AND A.entityId = E.entityId
+				AND A.entityId = #{entityId} AND (A.stats15EndTime BETWEEN #{stTime} and #{etTime})
+			ORDER BY portOutSpeedMax DESC
+		) C 
+		GROUP BY portIndex
+		HAVING (portUsedMax >= #{rangeStart} and portUsedMax <#{rangeEnd})
+		]]>
+	</select>
+
+</mapper>

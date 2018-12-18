@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="elec" namespace="/epon/elec" extends="default">
+        <!-- 添加操作日志拦截器配置  -->
+        
+        <action name="showElecComVlan" class="electricityOnuAction" method="showElecComVlan">
+            <result>/elec/showOnuComVlan.jsp</result>
+        </action>
+        <action name="refreshOnuComVlan"  class="electricityOnuAction"  method="refreshOnuComVlan"></action>
+        <action name="loadVlanList" class="electricityOnuAction" method="loadVlanList"></action>
+        <action name="cfgElecComVlan" class="electricityOnuAction" method="cfgElecComVlan"></action>
+        <action name="showElecComStatic" class="electricityOnuAction" method="showElecComStatic">
+            <result>/elec/showElecComStatic.jsp</result>
+        </action>
+        <action name="fetchElecComStaticData" class="electricityOnuAction" method="fetchElecComStaticData"></action>
+        <action name="clearElecComStatic"  class="electricityOnuAction" method="clearElecComStatic"></action>
+        <action name="showElecPonCutover" class="electricityOnuAction" method="showElecPonCutover">
+            <result>/elec/showElecPonCutover.jsp</result>
+        </action>
+        <action name="cfgElecPonCutover"  class="electricityOnuAction" method="cfgElecPonCutover"></action>
+        <action name="loadPonCutOverPort" class="electricityOnuAction" method="loadPonCutOverPort" />
+        
+<!-- *********************** Parting line ******************** -->
+        <action name="showOnuMacMgmt" class="electricityOnuAction" method="showOnuMacMgmt">
+            <result>/elec/onuMacMgmt.jsp</result>
+        </action>
+        <action name="modifyOnuMacMgmt"  class="electricityOnuAction" method="modifyOnuMacMgmt"></action>
+        <action name="refreshOnuMacMgmt"  class="electricityOnuAction" method="refreshOnuMacMgmt"></action>
+        <action name="showOnuInbandMgmt" class="electricityOnuAction" method="showOnuInbandMgmt">
+            <result>/elec/onuInbandMgmt.jsp</result>
+        </action>
+        <action name="modifyOnuInbandMgmt"  class="electricityOnuAction" method="modifyOnuInbandMgmt"></action>
+        <action name="refreshOnuInbandMgmt"  class="electricityOnuAction" method="refreshOnuInbandMgmt"></action>
+        <action name="showComBaseConfig" class="electricityOnuAction" method="showComBaseConfig">
+            <result>/elec/comBaseConfig.jsp</result>
+        </action>
+        <action name="modifyComBase"  class="electricityOnuAction" method="modifyComBase"></action>
+        <action name="refreshComBase"  class="electricityOnuAction" method="refreshComBase"></action>
+        <action name="showComRemoteConfig" class="electricityOnuAction" method="showComRemoteConfig">
+            <result>/elec/comRemoteConfig.jsp</result>
+        </action>
+        <action name="modifyComRemote"  class="electricityOnuAction" method="modifyComRemote"></action>
+        <action name="refreshComRemote"  class="electricityOnuAction" method="refreshComRemote"></action>
+        <action name="refreshUniUSUtgPri" class="electricityOnuAction" method="refreshUniUSUtgPri"></action>
+    </package>
+</struts>

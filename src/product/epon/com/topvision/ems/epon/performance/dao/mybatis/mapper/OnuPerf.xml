@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.performance.domain.OnuLinkCollectInfo">
+
+	<insert id="insertOnuOnlineStatus" parameterType="onuOnlineResult">
+		insert into onuonlinestatus(entityId, onuId, onuIndex, onlineStatus, collectTime)
+		values(#{entityId},#{onuId},#{onuIndex},#{onuOnlneStatus},#{collectTime})
+	</insert>
+	
+	<insert id="insertOnuLinkQuality" parameterType="onuLinkQualityResult">
+		insert into perfonulinkquality(entityId, onuId, onuIndex, onuPonRevPower, onuPonTransPower, oltPonRevPower, collectTime)
+		values(#{entityId},#{onuId},#{onuIndex},#{onuPonRevPower},#{onuPonTransPower},#{oltPonRevPower},#{collectTime})
+	</insert>
+	
+	<select id="queryUniIndexByOnuId" parameterType="long" resultType="long"> 
+		select uniIndex from oltunirelation where onuId = #{ounId}
+	</select>
+	
+	<select id="queryPonIndexByOnuId" parameterType="long" resultType="long"> 
+		select onuPonIndex from oltonuponrelation where onuId = #{ounId}
+	</select>
+	
+	<insert id="insertOnuFlowQuality" parameterType="onuFlowCollectInfo">
+		insert into perfonuflowquality(onuId, portIndex, entityId, portInOctets, portOutOctets,portInSpeed, portOutSpeed, collectTime)
+		values(#{onuId},#{portIndex},#{entityId},#{portInOctets},#{portOutOctets},#{portInSpeed},#{portOutSpeed},#{collectTime})
+	</insert>
+	
+	<insert id="insertOrUpdateLinkInfo" parameterType="onuLinkCollectInfo">
+	    insert into perfonulinkquality(entityId, onuId, onuIndex, onuPonRevPower, onuPonTransPower, oltPonRevPower)
+		values(#{entityId},#{onuId},#{onuIndex},#{onuRevResult},#{onuTransResult},#{oltRevResult})
+		ON DUPLICATE KEY UPDATE  
+		onuPonRevPower = #{onuRevResult}, onuPonTransPower = #{onuTransResult}, oltPonRevPower = #{oltRevResult}
+	</insert>
+	
+	<insert id="insertOrUpdateCatvInfo" parameterType="onuLinkCollectInfo">
+	    insert into perfonucatvquality(entityId, onuId, onuIndex, onuCatvOrInfoRxPower, onuCatvOrInfoRfOutVoltage, onuCatvOrInfoVoltage, onuCatvOrInfoTemperature, collectTime)
+		values(#{entityId},#{onuId},#{onuIndex},#{onuCatvOrInfoRxPower},#{onuCatvOrInfoRfOutVoltage},#{onuCatvOrInfoVoltage},#{onuCatvOrInfoTemperature},#{collectTime})
+		ON DUPLICATE KEY UPDATE  
+		onuCatvOrInfoRxPower = #{onuCatvOrInfoRxPower}, onuCatvOrInfoRfOutVoltage = #{onuCatvOrInfoRfOutVoltage}, onuCatvOrInfoVoltage = #{onuCatvOrInfoVoltage}, onuCatvOrInfoTemperature = #{onuCatvOrInfoTemperature}, collectTime=#{collectTime} 
+	</insert>
+	
+    <select id="getMonitorIdByIdentifyKeyAndCategory" parameterType="map" resultType="long">
+        select monitorId from perfmonitor where
+        identifyKey=#{identifyKey} and
+        category=#{category}
+	</select>
+	
+	<select id="queryMinPonRevPower" parameterType="OnuLinkCollectInfo" resultType="perfOnuQualityHistory">
+		SELECT entityId, onuId, onuIndex, onuPonRevPower as minOnuPonRevPower, collectTime as minPowerTime 
+		FROM perfonulinkquality 
+		WHERE onuId = #{onuId} AND entityId = #{entityId}
+		AND collectTime >= DATE_ADD(NOW(),INTERVAL -1 DAY) 
+		ORDER BY onuPonRevPower ASC, collectTime DESC limit 1
+	</select>
+	
+	<!-- <select id="queryMaxPonRevPower" parameterType="OnuLinkCollectInfo" resultType="perfOnuQualityHistory">
+		SELECT onuPonRevPower as maxOnuPonRevPower, collectTime as maxPowerTime 
+		FROM perfonulinkquality 
+		WHERE onuId = #{onuId} AND entityId = #{entityId} AND onuPonRevPower != 0
+		AND collectTime >= DATE_ADD(NOW(),INTERVAL -30 DAY) 
+		ORDER BY onuPonRevPower DESC, collectTime DESC limit 1
+	</select> -->
+	
+	<select id="queryMinCATVRevPower" parameterType="OnuLinkCollectInfo" resultType="perfOnuQualityHistory">
+		SELECT entityId, onuId, onuIndex, onuCatvOrInfoRxPower as minCatvRevPower, collectTime as minCatvTime 
+		FROM perfonucatvquality 
+		WHERE onuId = #{onuId} AND entityId = #{entityId} AND onuCatvOrInfoRxPower >-200
+		AND collectTime>= DATE_ADD(NOW(),INTERVAL -1 DAY)
+		ORDER BY onuCatvOrInfoRxPower ASC, collectTime DESC LIMIT 1	
+	</select>
+	
+	<!-- <select id="queryMaxCATVRevPower" parameterType="OnuLinkCollectInfo" resultType="perfOnuQualityHistory">
+		SELECT onuCatvOrInfoRxPower as maxCatvRevPower, collectTime as maxCatvTime 
+		FROM perfonucatvquality
+		WHERE onuId = #{onuId} AND entityId = #{entityId} AND onuCatvOrInfoRxPower != 0
+		AND collectTime>= DATE_ADD(NOW(),INTERVAL -30 DAY)
+		ORDER BY onuCatvOrInfoRxPower DESC, collectTime DESC LIMIT 1	
+	</select> -->
+	
+	<insert id="insertOrUpdateMinReceivedPower" parameterType="perfOnuQualityHistory">
+		INSERT INTO perfonuqualityhistory(entityId, onuId, onuIndex, minOnuPonRevPower, minPowerTime, minPowerTimeStr, minCatvRevPower, minCatvTime, minCatvTimeStr)
+		VALUES(#{entityId}, #{onuId}, #{onuIndex}, #{minOnuPonRevPower}, #{minPowerTime}, #{minPowerTimeStr}, #{minCatvRevPower}, #{minCatvTime}, #{minCatvTimeStr})
+		ON DUPLICATE KEY UPDATE 
+		minOnuPonRevPower = #{minOnuPonRevPower}, minPowerTime = #{minPowerTime}, minPowerTimeStr = #{minPowerTimeStr}, minCatvRevPower = #{minCatvRevPower}, minCatvTime = #{minCatvTime}, minCatvTimeStr=#{minCatvTimeStr}
+	</insert>
+</mapper> 

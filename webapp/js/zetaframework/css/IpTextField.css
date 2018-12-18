@@ -1,0 +1,17 @@
+.ipTextField {
+	border: solid 1px #7F9EB9;
+	background-color: #fff;
+}
+
+.ipTextField input {
+	ime-mode: disabled;
+	width: 35px;
+	border: 0px;
+	text-align: center;
+}
+
+.ipTextField .dot {
+	width: 10px;
+	font-size: 12px;
+	background-color: #fff;
+}

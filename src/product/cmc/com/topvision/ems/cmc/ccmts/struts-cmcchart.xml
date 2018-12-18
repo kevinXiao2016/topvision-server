@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcchart" namespace="/cmc" extends="default">
+	    <action name="getFlashUsageByEntityId" class="cmcChartAction" method="getFlashUsageByEntityId">
+        </action>
+        <action name="getCpuUsageByEntityId" class="cmcChartAction" method="getCpuUsageByEntityId">
+        </action>
+        <action name="getMemoryUsageByEntityId" class="cmcChartAction" method="getMemoryUsageByEntityId">
+        </action>
+        <action name="getBitUnErrorRateByCmcPortId" class="cmcChartAction" method="getBitUnErrorRateByCmcPortId">
+        </action>
+        <action name="getChannelUtilizationByCmcPortId" class="cmcChartAction"
+            method="getChannelUtilizationByCmcPortId">
+        </action>
+	</package>
+</struts>

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.igmpconfig.domain.IgmpOnuConfig">
+    
+    <insert id="insertBindCtcProfile" parameterType="IgmpUniBindCtcProfile">
+		INSERT INTO igmpunibindctcprofile(uniIndex, entityId, profileId, portType)
+        VALUES(#{uniIndex},#{entityId},#{profileId},#{portType}) 
+    </insert>
+    
+    <select id="queryBindCtcProfileList" parameterType="map" resultType="IgmpUniBindCtcProfile">
+     	SELECT A.* , B.profileDesc
+        FROM igmpunibindctcprofile A 
+        JOIN igmpctcprofile B ON A.entityId = B.entityId AND A.profileId = B.profileId
+        WHERE A.entityId = #{entityId} AND A.uniIndex = #{uniIndex}
+    </select>
+    
+   <select id="queryHasGroupBindProfile" parameterType="long" resultType="IgmpUniBindCtcProfile">
+    	SELECT A.* FROM igmpunibindctcprofile A
+    	WHERE A.entityId = #{entityId} 
+    	AND A.profileId in ( SELECT B.profileId FROM igmpctcprofilegrouprela B WHERE A.entityId = B.entityId)
+    </select>
+    
+    <select id="queryWithSrcGroupBindProfile" parameterType="long" resultType="IgmpUniBindCtcProfile">
+    	SELECT A.* FROM igmpunibindctcprofile A
+		WHERE A.entityId = #{entityId} 
+		AND A.profileId IN (
+			SELECT B.profileId 
+		  	FROM igmpctcprofilegrouprela B 
+		  	INNER JOIN  igmpvlangroup C ON B.entityId = C.entityId AND B.groupId = C.groupId
+			WHERE  A.entityId = B.entityId AND C.groupSrcIp != '0.0.0.0'
+		)	 
+    </select>
+    
+    <select id="queryWithoutSrcGroupBindProfile" parameterType="long" resultType="IgmpUniBindCtcProfile">
+    	SELECT A.* FROM igmpunibindctcprofile A
+		WHERE A.entityId = #{entityId} 
+		AND A.profileId IN (
+			SELECT B.profileId 
+		  	FROM igmpctcprofilegrouprela B 
+		  	INNER JOIN  igmpvlangroup C ON B.entityId = C.entityId AND B.groupId = C.groupId
+			WHERE  A.entityId = B.entityId AND C.groupSrcIp = '0.0.0.0'
+		)	 
+    </select>
+    
+    <delete id="deleteBindCtcProfile" parameterType="IgmpUniBindCtcProfile">
+        DELETE FROM igmpunibindctcprofile
+        WHERE entityId = #{entityId} AND uniIndex = #{uniIndex} AND profileId = #{profileId}
+    </delete>
+    
+    <delete id="deleteAllBindCtcProfile" parameterType="long">
+        DELETE FROM igmpunibindctcprofile
+        WHERE entityId = #{entityId}
+    </delete>
+    
+    <insert id="insertIgmpOnuConfig" parameterType="IgmpOnuConfig">
+        INSERT INTO igmponuconfig(entityId, onuIndex, portType, onuMode, onuFastLeave)
+        VALUES(#{entityId},#{onuIndex},#{portType},#{onuMode}, #{onuFastLeave}) 
+    </insert>
+    
+    <select id="queryIgmpOnuConfig" parameterType="map" resultType="IgmpOnuConfig">
+        SELECT * FROM igmponuconfig
+        WHERE entityId = #{entityId} and onuIndex = #{onuIndex}
+    </select>
+    
+    <update id="updateIgmpOnuConfig" parameterType="IgmpOnuConfig">
+        UPDATE igmponuconfig
+        SET onuMode = #{onuMode}, onuFastLeave = #{onuFastLeave}
+        WHERE entityId = #{entityId} and onuIndex = #{onuIndex}
+    </update>
+    
+    <insert id="insertOrUpdateOnuConfig" parameterType="IgmpOnuConfig">
+    	INSERT INTO igmponuconfig(entityId, onuIndex, portType, onuMode, onuFastLeave)
+        VALUES(#{entityId},#{onuIndex},#{portType},#{onuMode}, #{onuFastLeave})
+        ON DUPLICATE KEY UPDATE
+    	onuMode = #{onuMode}, onuFastLeave = #{onuFastLeave}
+    </insert>
+    
+    <delete id="deleteAllOnuConfig" parameterType="long">
+        DELETE FROM igmponuconfig
+        WHERE entityId = #{entityId}
+    </delete>
+    
+    <insert id="insertIgmpUniConfig" parameterType="IgmpUniConfig">
+        INSERT INTO igmpuniconfig(uniIndex, entityId, portType, maxGroupNum, vlanList, vlanMode)
+        VALUES(#{uniIndex},#{entityId},#{portType},#{maxGroupNum}, #{vlanList}, #{vlanMode})
+    </insert>
+    
+    <select id="queryIgmpUniConfig" parameterType="map" resultType="IgmpUniConfig">
+        SELECT * FROM igmpuniconfig 
+        WHERE entityId = #{entityId} AND uniIndex = #{uniIndex}
+    </select>
+    
+    <update id="updateIgmpUniConfig" parameterType="IgmpUniConfig">
+        UPDATE igmpuniconfig
+        SET maxGroupNum = #{maxGroupNum}, vlanList = #{vlanList}, vlanMode = #{vlanMode}
+        WHERE entityId = #{entityId} AND uniIndex = #{uniIndex} 
+    </update>
+    
+    <insert id="insertOrUpdateUniConfig" parameterType="IgmpUniConfig">
+    	INSERT INTO igmpuniconfig(uniIndex, entityId, portType, maxGroupNum, vlanList, vlanMode)
+        VALUES(#{uniIndex},#{entityId},#{portType},#{maxGroupNum}, #{vlanList}, #{vlanMode})
+        ON DUPLICATE KEY UPDATE
+    	maxGroupNum = #{maxGroupNum}, vlanList = #{vlanList}, vlanMode = #{vlanMode}
+    </insert>
+    
+    <delete id="deleteAllUniConfig" parameterType="long">
+        DELETE FROM igmpuniconfig
+        WHERE entityId = #{entityId}
+    </delete>
+    
+    <insert id="insertUniVlanTrans" parameterType="IgmpUniVlanTrans">
+        INSERT INTO igmpunivlantrans(transIndex, entityId, uniIndex, portType, transOldVlan, transNewVlan)
+        VALUES(#{transIndex}, #{entityId},#{uniIndex},#{portType},#{transOldVlan}, #{transNewVlan}) 
+    </insert>
+	
+    <select id="queryUniVlanTransList" parameterType="map" resultType="IgmpUniVlanTrans">
+        SELECT * FROM igmpunivlantrans
+        WHERE entityId = #{entityId} AND uniIndex = #{uniIndex} 
+    </select>
+    
+    <delete id="deleteUniVlanTrans" parameterType="IgmpUniVlanTrans" >
+        DELETE FROM igmpunivlantrans
+        WHERE entityId = #{entityId} AND uniIndex = #{uniIndex} AND transIndex = #{transIndex}
+    </delete>
+    
+    <delete id="deleteAllUniVlanTrans" parameterType="long">
+        DELETE FROM igmpunivlantrans
+        WHERE entityId = #{entityId} 
+    </delete>
+    
+    <select id="queryUniPortList" parameterType="long" resultType="IgmpPortInfo">
+        SELECT uniIndex AS portIndex 
+        FROM oltunirelation 
+        WHERE onuId = #{onuId}
+        ORDER BY uniIndex
+    </select>
+    
+</mapper>
+

@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GponProfileRefresh">
+
+	<insert id="insertGponLineProfileGem" parameterType="gponLineProfileGem">
+		INSERT INTO 
+			GponLineProfileGem(entityId,ProfileGemProfileIndex,ProfileGemIndex,ProfileGemEncrypt,ProfileGemTcontId,
+				ProfileGemQueuePri,ProfileGemUpCar,ProfileGemDownCar,ProfileGemMapNum) 
+			VALUES (#{entityId},#{gponLineProfileGemProfileIndex},#{gponLineProfileGemIndex},#{gponLineProfileGemEncrypt},
+				#{gponLineProfileGemTcontId},#{gponLineProfileGemQueuePri},#{gponLineProfileGemUpCar},#{gponLineProfileGemDownCar},
+				#{gponLineProfileGemMapNum})
+	</insert>
+	
+	<insert id="insertGponDbaProfileInfo" parameterType="gponDbaProfileInfo">
+		INSERT INTO 
+			GponDbaProfileInfo(entityId,ProfileId,ProfileName,ProfileType,ProfileAssureRate,ProfileFixRate,ProfileMaxRate,ProfileBindNum) 
+		VALUES (#{entityId},#{gponDbaProfileId},#{gponDbaProfileName},#{gponDbaProfileType},#{gponDbaProfileAssureRate},
+			#{gponDbaProfileFixRate},#{gponDbaProfileMaxRate},#{gponDbaProfileBindNum})
+	</insert>
+	
+	<insert id="insertGponLineProfileGemMap"  parameterType="gponLineProfileGemMap">
+		INSERT INTO GponLineProfileGemMap(
+			entityId,ProfileGemMapProfileIndex,ProfileGemMapGemIndex,ProfileGemMapIndex,ProfileGemMapVlan,
+			ProfileGemMapPriority,ProfileGemMapPortType,ProfileGemMapPortId) 
+		VALUES (
+			#{entityId},#{gponLineProfileGemMapProfileIndex},#{gponLineProfileGemMapGemIndex},
+			#{gponLineProfileGemMapIndex},#{gponLineProfileGemMapVlan},#{gponLineProfileGemMapPriority},
+			#{gponLineProfileGemMapPortType},#{gponLineProfileGemMapPortId}
+		)
+	</insert>
+	
+	<insert id="insertGponSrvProfilePortVlanCfg"  parameterType="gponSrvProfilePortVlanCfg">
+		INSERT INTO GponSrvProfilePortVlanCfg(
+			entityId,ProfilePortVlanProfileIndex,ProfilePortVlanPortTypeIndex,ProfilePortVlanPortIdIndex,
+			ProfilePortVlanPvid,ProfilePortVlanPvidPri,ProfilePortVlanMode) 
+		VALUES (
+			#{entityId},#{gponSrvProfilePortVlanProfileIndex},#{gponSrvProfilePortVlanPortTypeIndex},
+			#{gponSrvProfilePortVlanPortIdIndex},#{gponSrvProfilePortVlanPvid},#{gponSrvProfilePortVlanPvidPri},
+			#{gponSrvProfilePortVlanMode}
+		)
+	</insert>
+	
+	<insert id="insertGponTrafficProfileInfo"  parameterType="gponTrafficProfileInfo">
+		INSERT INTO GponTrafficProfileInfo(
+			entityId,ProfileId,ProfileName,ProfileCfgCir,ProfileCfgPir,ProfileCfgCbs,ProfileCfgPbs,ProfileCfgPriority,ProfileBindNum) 
+		VALUES (
+			#{entityId},#{gponTrafficProfileId},#{gponTrafficProfileName},#{gponTrafficProfileCfgCir},
+			#{gponTrafficProfileCfgPir},#{gponTrafficProfileCfgCbs},#{gponTrafficProfileCfgPbs},
+			#{gponTrafficProfileCfgPriority},#{gponTrafficProfileBindNum}
+		)
+	</insert>
+	
+	<insert id="insertGponSrvProfilePortVlanTranslation"  parameterType="gponSrvProfilePortVlanTranslation">
+		INSERT INTO GponSrvProfilePortVlanTranslation(
+			entityId,ProfilePortVlanTransProfileIndex,ProfilePortVlanTransPortTypeIndex,ProfilePortVlanTransPortIdIndex,
+			ProfilePortVlanTransVlanIndex,ProfilePortVlanTransNewVlan) 
+		VALUES (
+			#{entityId},#{gponSrvProfilePortVlanTransProfileIndex},#{gponSrvProfilePortVlanTransPortTypeIndex},
+			#{gponSrvProfilePortVlanTransPortIdIndex},#{gponSrvProfilePortVlanTransVlanIndex},#{gponSrvProfilePortVlanTransNewVlan}
+		)
+	</insert>
+	
+	<insert id="insertGponSrvProfilePortVlanTrunk"  parameterType="gponSrvProfilePortVlanTrunk">
+		INSERT INTO GponSrvProfilePortVlanTrunk(
+			entityId,ProfilePortVlanTrunkProfileIndex,ProfilePortVlanTrunkPortTypeIndex,ProfilePortVlanTrunkPortIdIndex,
+			ProfilePortVlanTrunkVlanList) 
+		VALUES (
+			#{entityId},#{gponSrvProfilePortVlanTrunkProfileIndex},#{gponSrvProfilePortVlanTrunkPortTypeIndex},
+			#{gponSrvProfilePortVlanTrunkPortIdIndex},#{gponSrvProfilePortVlanTrunkVlanList}
+		)
+	</insert>
+	
+	<insert id="insertGponSrvProfilePortVlanAggregation"  parameterType="gponSrvProfilePortVlanAggregation">
+		INSERT INTO GponSrvProfilePortVlanAggregation(
+			entityId,ProfilePortVlanAggrProfileIndex,ProfilePortVlanAggrPortTypeIndex,ProfilePortVlanAggrPortIdIndex,
+			ProfilePortVlanAggrVlanIndex,ProfilePortVlanAggrVlanList) 
+		VALUES (
+			#{entityId},#{gponSrvProfilePortVlanAggrProfileIndex},#{gponSrvProfilePortVlanAggrPortTypeIndex},
+			#{gponSrvProfilePortVlanAggrPortIdIndex},#{gponSrvProfilePortVlanAggrVlanIndex},#{gponSrvProfilePortVlanAggrVlanList}
+		)
+	</insert>
+	
+	<insert id="insertGponLineProfileInfo"  parameterType="gponLineProfileInfo">
+		INSERT INTO GponLineProfileInfo(
+			entityId,ProfileId,ProfileName,ProfileUpstreamFECMode,ProfileMappingMode,ProfileTcontNum,ProfileGemNum,ProfileBindNum) 
+		VALUES (
+			#{entityId},#{gponLineProfileId},#{gponLineProfileName},#{gponLineProfileUpstreamFECMode},
+			#{gponLineProfileMappingMode},#{gponLineProfileTcontNum},#{gponLineProfileGemNum},#{gponLineProfileBindNum}
+		)
+	</insert>
+	
+    <insert id="insertTopGponSrvProfile"  parameterType="topGponSrvProfile">
+        INSERT INTO topgponsrvprofile(
+            entityId,topGponSrvProfileIndex,topGponSrvProfilePotsNum) 
+        VALUES (
+            #{entityId},#{topGponSrvProfileIndex},#{topGponSrvProfilePotsNum}
+        )
+        ON DUPLICATE KEY UPDATE
+            topGponSrvProfilePotsNum=#{topGponSrvProfilePotsNum}
+    </insert>
+	
+	<insert id="insertGponLineProfileTcont"  parameterType="gponLineProfileTcont">
+		INSERT INTO GponLineProfileTcont(
+			ProfileTcontProfileIndex,ProfileTcontIndex,ProfileTcontDbaProfileId,entityId) 
+		VALUES (
+			#{gponLineProfileTcontProfileIndex},#{gponLineProfileTcontIndex},#{gponLineProfileTcontDbaProfileId},#{entityId}
+		)
+	</insert>
+	
+	<insert id="insertGponSrvProfileEthPortConfig"  parameterType="gponSrvProfileEthPortConfig">
+		INSERT INTO GponSrvProfileEthPortConfig(
+			entityId,ProfileEthPortProfileIndex,ProfileEthPortIdIndex,ProfileEthPortMacLimited,ProfileEthPortMtu,
+			ProfileEthPortFlowCtrl,ProfileEthPortInTrafficProfileId,ProfileEthPortOutTrafficProfileId,
+			ProfileEthPortMcMaxGroup,ProfileEthPortDnMcMode,ProfileEthPortDnMcTCI,ProfileEthPortMcMvlanList) 
+		VALUES (
+			#{entityId},#{gponSrvProfileEthPortProfileIndex},#{gponSrvProfileEthPortIdIndex},#{gponSrvProfileEthPortMacLimited},
+			#{gponSrvProfileEthPortMtu},#{gponSrvProfileEthPortFlowCtrl},#{gponSrvProfileEthPortInTrafficProfileId},
+			#{gponSrvProfileEthPortOutTrafficProfileId},#{gponSrvProfileEthPortMcMaxGroup},#{gponSrvProfileEthPortDnMcMode},
+			#{gponSrvProfileEthPortDnMcTCI},#{gponSrvProfileEthPortMcMvlanList}
+		)
+	</insert>
+	
+	<insert id="insertGponSrvProfilePortNumProfile"  parameterType="gponSrvProfilePortNumProfile">
+		INSERT INTO 
+			GponSrvProfilePortNumProfile(entityId,ProfilePortNumProfileIndex,ProfileEthNum,ProfileCatvNum,ProfileWlanNum,ProfileVeipNum) 
+		VALUES (#{entityId},#{gponSrvProfilePortNumProfileIndex},#{gponSrvProfileEthNum},#{gponSrvProfileCatvNum},
+			#{gponSrvProfileWlanNum},#{gponSrvProfileVeipNum})
+	    ON DUPLICATE KEY UPDATE
+	        ProfileEthNum=#{gponSrvProfileEthNum},ProfileCatvNum=#{gponSrvProfileCatvNum},
+            ProfileWlanNum=#{gponSrvProfileWlanNum},ProfileVeipNum=#{gponSrvProfileVeipNum}
+	</insert>
+	
+	<insert id="insertGponSrvProfileInfo"  parameterType="gponSrvProfileInfo">
+		INSERT INTO GponSrvProfileInfo(
+			entityId,ProfileId,ProfileName,ProfileBindNum) 
+		VALUES (
+			#{entityId},#{gponSrvProfileId},#{gponSrvProfileName},#{gponSrvProfileBindNum}
+		)
+	</insert>
+	
+	<insert id="insertTopSIPAgentProfInfo"  parameterType="topSIPAgentProfInfo">
+        INSERT INTO topsipagentprofinfo(
+            entityId,topSIPAgtProfIdx,topSIPAgtProfName,
+            topSIPAgtProxyAddr,topSIPAgtProxyPort,topSIPAgtSecProxyAddr,topSIPAgtSecProxyPort,topSIPAgtReqExpTime,topSIPAgtBindCnt
+            ) 
+        VALUES (
+            #{entityId},#{topSIPAgtProfIdx},#{topSIPAgtProfName},
+            #{topSIPAgtProxyAddr},#{topSIPAgtProxyPort},#{topSIPAgtSecProxyAddr},#{topSIPAgtSecProxyPort},#{topSIPAgtReqExpTime},#{topSIPAgtBindCnt}
+        )
+    </insert>
+    
+    <insert id="insertGponSrvProfileCfg"  parameterType="gponSrvProfileCfg">
+		INSERT INTO 
+			GponSrvProfileCfg(entityId,ProfileIndex,ProfileMacLearning,ProfileMacAgeSeconds,ProfileLoopbackDetectCheck,
+					ProfileMcMode,ProfileMcFastLeave,ProfileUpIgmpFwdMode,ProfileUpIgmpTCI) 
+		VALUES (#{entityId},#{gponSrvProfileIndex},#{gponSrvProfileMacLearning},#{gponSrvProfileMacAgeSeconds},
+			#{gponSrvProfileLoopbackDetectCheck},#{gponSrvProfileMcMode},#{gponSrvProfileMcFastLeave},#{gponSrvProfileUpIgmpFwdMode},
+			#{gponSrvProfileUpIgmpTCI})
+		ON DUPLICATE KEY UPDATE
+		    ProfileMacLearning=#{gponSrvProfileMacLearning},ProfileMacAgeSeconds=#{gponSrvProfileMacAgeSeconds},
+            ProfileLoopbackDetectCheck=#{gponSrvProfileLoopbackDetectCheck},ProfileMcMode=#{gponSrvProfileMcMode},
+            ProfileMcFastLeave=#{gponSrvProfileMcFastLeave},ProfileUpIgmpFwdMode=#{gponSrvProfileUpIgmpFwdMode},
+            ProfileUpIgmpTCI=#{gponSrvProfileUpIgmpTCI}
+	</insert>
+
+	<delete id="deleteGponLineProfileGems" parameterType="long">
+		DELETE FROM GponLineProfileGem WHERE entityId=#{entityId}
+	</delete>
+	
+	<delete id="deleteGponDbaProfileInfos" parameterType="long">
+		DELETE FROM GponDbaProfileInfo WHERE entityId=#{entityId}
+	</delete>
+	
+	<delete id="deleteGponLineProfileGemMaps"  parameterType="long">
+		DELETE FROM GponLineProfileGemMap WHERE entityId=#{entityId}
+	</delete>
+	
+	<delete id="deleteGponSrvProfilePortVlanCfgs"  parameterType="long">
+		DELETE FROM GponSrvProfilePortVlanCfg WHERE entityId=#{entityId}
+	</delete>
+	
+	<delete id="deleteGponTrafficProfileInfos"  parameterType="long">
+		DELETE FROM GponTrafficProfileInfo WHERE entityId=#{entityId}
+	</delete>
+	
+	<delete id="deleteGponSrvProfilePortVlanTranslations"  parameterType="long">
+		DELETE FROM GponSrvProfilePortVlanTranslation WHERE entityId=#{entityId}
+	</delete>
+	
+	<delete id="deleteGponSrvProfilePortVlanTrunks"  parameterType="long">
+		DELETE FROM GponSrvProfilePortVlanTrunk WHERE entityId=#{entityId}
+	</delete>
+	
+	<delete id="deleteGponSrvProfilePortVlanAggregations"  parameterType="long">
+		DELETE FROM GponSrvProfilePortVlanAggregation WHERE entityId=#{entityId}
+	</delete>
+	
+	<delete id="deleteGponLineProfileInfos"  parameterType="long">
+		DELETE FROM GponLineProfileInfo WHERE entityId=#{entityId}
+	</delete>
+	
+	<delete id="deleteTopGponSrvProfiles"  parameterType="long">
+        DELETE FROM topgponsrvprofile WHERE entityId=#{entityId}
+    </delete>
+    
+    <delete id="deleteTopSIPAgentProfInfos"  parameterType="long">
+        DELETE FROM topsipagentprofinfo WHERE entityId=#{entityId}
+    </delete>
+	
+	<delete id="deleteGponLineProfileTconts"  parameterType="long">
+		DELETE FROM GponLineProfileTcont WHERE entityId=#{entityId}
+	</delete>
+	
+	<delete id="deleteGponSrvProfileEthPortConfigs"  parameterType="long">
+		DELETE FROM GponSrvProfileEthPortConfig WHERE entityId=#{entityId}
+	</delete>
+	
+	<delete id="deleteGponSrvProfilePortNumProfiles"  parameterType="long">
+		DELETE FROM GponSrvProfilePortNumProfile WHERE entityId=#{entityId}
+	</delete>
+	
+	<delete id="deleteGponSrvProfileInfos"  parameterType="long">
+		DELETE FROM GponSrvProfileInfo WHERE entityId=#{entityId}
+	</delete>
+	
+	<delete id="deleteGponSrvProfileCfgs"  parameterType="long">
+		DELETE FROM GponSrvProfileCfg WHERE entityId=#{entityId}
+	</delete>
+	
+	<delete id="deleteTcontsInProfile"  parameterType="map">
+		DELETE FROM GponLineProfileTcont WHERE entityId=#{entityId} and ProfileTcontProfileIndex = #{profileIndex}
+	</delete>
+	
+	<delete id="deleteGemsInProfile" parameterType="map">
+		DELETE FROM GponLineProfileGem WHERE entityId=#{entityId} and ProfileGemProfileIndex = #{profileIndex}
+	</delete>
+	
+	<delete id="deleteGemMapsInGem"  parameterType="map">
+		DELETE FROM GponLineProfileGemMap WHERE entityId=#{entityId} and ProfileGemMapProfileIndex = #{profileIndex}
+			and ProfileGemMapGemIndex = #{gemIndex}
+	</delete>
+	
+	<delete id="deleteEthPortConfigInProfile"  parameterType="map">
+		DELETE FROM GponSrvProfileEthPortConfig WHERE entityId=#{entityId} and ProfileEthPortProfileIndex = #{profileIndex}
+	</delete>
+	
+	<delete id="deletePortVlanCfgInProfile"  parameterType="map">
+		DELETE FROM GponSrvProfilePortVlanCfg WHERE entityId=#{entityId} and ProfilePortVlanProfileIndex = #{profileIndex}
+	</delete>
+	
+	<delete id="deleteTopGponSrvPotsInfos"  parameterType="long">
+        DELETE FROM topgponsrvpotsinfo WHERE entityId=#{entityId}
+    </delete>
+    
+    <delete id="deleteTopVoipMediaProfInfos"  parameterType="long">
+        DELETE FROM topvoipmediaprofinfo WHERE entityId=#{entityId}
+    </delete>
+    
+    <delete id="deleteTopSIPSrvProfInfos"  parameterType="long">
+        DELETE FROM topsipsrvprofinfo WHERE entityId=#{entityId}
+    </delete>
+    
+    <delete id="deleteTopDigitMapProfInfos"  parameterType="long">
+        DELETE FROM topdigitmapprofinfo WHERE entityId=#{entityId}
+    </delete>
+    
+   	<delete id="deletePotsInProfile"  parameterType="map">
+        DELETE FROM topgponsrvpotsinfo WHERE entityId=#{entityId} and topGponSrvPotsInfoProfIdx = #{profileIndex}
+    </delete>
+    
+    <insert id="insertTopGponSrvPotsInfo"  parameterType="topGponSrvPotsInfo">
+        INSERT INTO topgponsrvpotsinfo(
+            entityId,topGponSrvPotsInfoProfIdx,topGponSrvPotsInfoPotsIdx,
+            topGponSrvPotsInfoSIPAgtId,topGponSrvPotsInfoVoipMediaId,topGponSrvPotsInfoIpIdx
+            ) 
+        VALUES (
+            #{entityId},#{topGponSrvPotsInfoProfIdx},#{topGponSrvPotsInfoPotsIdx},
+            #{topGponSrvPotsInfoSIPAgtId},#{topGponSrvPotsInfoVoipMediaId},#{topGponSrvPotsInfoIpIdx}
+        )
+    </insert>
+    
+    <insert id="insertTopVoipMediaProfInfo"  parameterType="topVoipMediaProfInfo">
+        INSERT INTO topvoipmediaprofinfo(
+            entityId,topVoipMediaProfIdx,topVoipMediaProfName,
+            topVoipMediaFaxmode,topVoipMediaNegotiate,topVoipMediaBindCnt
+            ) 
+        VALUES (
+            #{entityId},#{topVoipMediaProfIdx},#{topVoipMediaProfName},
+            #{topVoipMediaFaxmode},#{topVoipMediaNegotiate},#{topVoipMediaBindCnt}
+        )
+    </insert>
+    
+    <insert id="insertTopSIPSrvProfInfo"  parameterType="topSIPSrvProfInfo">
+        INSERT INTO topsipsrvprofinfo(
+            entityId,topSIPSrvProfIdx,topSIPSrvProfName,
+            topSIPSrvProfCallWait,topSIPSrvProf3Way,topSIPSrvProfCallTransfer,topSIPSrvProfCallHold,topSIPSrvProfDND,topSIPSrvProfHotline,
+            topSIPSrvProfHotlineNum,topSIPSrvProfHotDelay,topSIPSrvProfBindCnt
+            ) 
+        VALUES (
+            #{entityId},#{topSIPSrvProfIdx},#{topSIPSrvProfName},
+            #{topSIPSrvProfCallWait},#{topSIPSrvProf3Way},#{topSIPSrvProfCallTransfer},#{topSIPSrvProfCallHold},#{topSIPSrvProfDND},
+            #{topSIPSrvProfHotline}, #{topSIPSrvProfHotlineNum}, #{topSIPSrvProfHotDelay}, #{topSIPSrvProfBindCnt}
+        )
+    </insert>
+    
+    <insert id="insertTopDigitMapProfInfo"  parameterType="topDigitMapProfInfo">
+        INSERT INTO topdigitmapprofinfo(
+            entityId,topDigitMapProfIdx,topDigitMapProfName,
+            topDigitMapCirtDialTime,topDigitMapPartDialTime,topDigitMapDialPlanToken,topDigitMapBindCnt
+            ) 
+        VALUES (
+            #{entityId},#{topDigitMapProfIdx},#{topDigitMapProfName},
+            #{topDigitMapCirtDialTime},#{topDigitMapPartDialTime},#{topDigitMapDialPlanToken},#{topDigitMapBindCnt}
+        )
+    </insert>
+	
+</mapper>

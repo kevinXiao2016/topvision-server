@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.report.domain.CcmtsDeviceListReport">
+
+	<select id="getDeviceListItem" parameterType="map" resultType="com.topvision.ems.cmc.ccmts.facade.domain.CmcAttribute">
+		select M.*,E.folderId,E.name folderName from (SELECT
+			A.cmcId,A.topCcmtsSysName,V.name nmName,A.topCcmtsSysLocation,A.cmcDeviceStyle,
+			A.topCcmtsSysMacAddr,A.topCcmtsSysContact,C.ip AS ipAddress,V.createTime, 
+			et.displayname as cmcDeviceStyleString
+		FROM
+			cmcattribute A,cmcentityrelation B, entity V, entity C, entitytype et
+		where
+			A.cmcDeviceStyle = et.typeId and
+			A.cmcId = B.cmcId and B.cmcId = V.entityId
+			and B.cmcEntityId=C.entityId
+			and V.entityId in (select entityId from ${Authority})
+			and V.typeId not in(select typeId from entitytyperelation where type = 40000)) M 
+		left join entityfolderrela D on M.cmcId = D.entityId 
+		LEFT JOIN topofolder E on D.folderId = E.folderId
+		ORDER BY ${sortName}
+	</select>
+
+</mapper>

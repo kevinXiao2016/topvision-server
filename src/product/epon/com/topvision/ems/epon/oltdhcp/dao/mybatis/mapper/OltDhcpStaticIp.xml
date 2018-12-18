@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="OltDhcpStaticIp">
+
+	<select id="getOltDhcpStaticIp" parameterType="map" resultType="topOltDhcpStaticIp">
+		select A.*,B.typeId from topOltDhcpStaticIp A
+		left join entity B on B.entityId=A.entityId
+		where A.entityId  = #{entityId}
+		<if test="staticIpSlot!=null">
+			and A.topOltDhcpStaticIpSlot = #{staticIpSlot}
+		</if>
+		<if test="staticIpPort!=null">
+			and A.topOltDhcpStaticIpPort = #{staticIpPort}
+		</if>
+		<if test="staticIpOnu!=null">
+			and A.topOltDhcpStaticIpOnu = #{staticIpOnu}
+		</if>
+		LIMIT ${start} , ${limit}
+	</select>
+	
+	<select id="getOltDhcpStaticIpCount" parameterType="map" resultType="long">
+		select count(*) from topOltDhcpStaticIp
+		where entityId = #{entityId}
+		<if test="staticIpSlot!=null">
+			and topOltDhcpStaticIpSlot = #{staticIpSlot}
+		</if>
+		<if test="staticIpPort!=null">
+			and topOltDhcpStaticIpPort = #{staticIpPort}
+		</if>
+		<if test="staticIpOnu!=null">
+			and topOltDhcpStaticIpOnu = #{staticIpOnu}
+		</if>
+	</select>
+	
+	<select id="getOnuStaticIpCount" parameterType="topOltDhcpStaticIp" resultType="long">
+		select count(*) from topOltDhcpStaticIp
+		where entityId = #{entityId}
+			and topOltDhcpStaticIpSlot = #{topOltDhcpStaticIpSlot}
+			and topOltDhcpStaticIpPort = #{topOltDhcpStaticIpPort}
+			and topOltDhcpStaticIpOnu = #{topOltDhcpStaticIpOnu}
+	</select>
+	
+	<insert id="insertOltDhcpStaticIp" parameterType="topOltDhcpStaticIp">
+        insert into topOltDhcpStaticIp
+            (entityId,ipIndex,maskIndex,topOltDhcpStaticIpSlot,
+            topOltDhcpStaticIpPort,topOltDhcpStaticIpOnu)
+        values
+            (#{entityId},#{ipIndex},#{maskIndex},#{topOltDhcpStaticIpSlot},
+            #{topOltDhcpStaticIpPort},#{topOltDhcpStaticIpOnu})
+    </insert>
+    
+    <delete id="deleteOltDhcpStaticIp" parameterType="map">
+		delete from topOltDhcpStaticIp 
+		where entityId = #{entityId} and ipIndex = #{ipIndex} 
+		and maskIndex = #{maskIndex}
+	</delete>
+	
+	<update id="updateOltDhcpSourceVerifyEnable" parameterType="topOltDhcpGlobalObjects">
+		update topOltDhcpGlobalObjects set
+		topOltDhcpSourceVerifyEnable = #{topOltDhcpSourceVerifyEnable}
+		where entityId = #{entityId}
+	</update>
+	
+	<select id="selectOltSlotIdList" parameterType="long" resultType="long">
+		SELECT DISTINCT slotNo
+		FROM oltslotattribute osa
+		INNER JOIN oltslotrelation osr ON osa.slotId = osr.slotId AND osa.entityId = osr.entityId
+		where osr.entityId = #{entityId}
+	</select>
+	
+	<select id="selectOltSlotPonIndexList" parameterType="map" resultType="long">
+		SELECT ponIndex
+		FROM oltponrelation opr
+		INNER JOIN oltslotattribute osa ON opr.slotId = osa.slotId AND opr.entityId = osa.entityId
+		WHERE osa.entityId = #{entityId} and osa.slotNo = #{slotNo}
+	</select>
+	
+	<select id="selectOltSlotPonOnuIndexList" parameterType="map" resultType="long">
+		SELECT
+			A.onuIndex
+		FROM 
+			oltonurelation A
+		INNER JOIN oltponrelation B ON A.entityId = B.entityId AND A.ponId = B.ponId
+		INNER JOIN oltslotattribute C ON B.slotId = C.slotId AND A.entityId = C.entityId
+		WHERE
+			A.entityId = #{entityId} AND C.slotNo = #{slotNo} AND #{ponNo} IN ((B.ponIndex &amp; 0x00FF000000) >> 24)
+	</select>
+	
+	<select id="selectUniqueStaticIp" parameterType="map" resultType="topOltDhcpStaticIp">
+		SELECT *  from topOltDhcpStaticIp 
+		where entityId = #{entityId} and ipIndex = #{ipIndex} 
+		and maskIndex = #{maskIndex}
+	</select>
+
+</mapper>

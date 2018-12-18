@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="portinfo" namespace="/epon/portinfo" extends="default">
+	    <action name="showOltPortInfo" class="oltPortInfoAction" method="showOltPortInfo">
+	        <result>/epon/portinfo/oltPortInfo.jsp</result>
+	    </action>
+	    
+	     <action name="loadSniOpticalInfoList" class="oltPortInfoAction" method="loadSniOpticalInfoList" />
+	     <action name="loadPonOpticalInfoList" class="oltPortInfoAction" method="loadPonOpticalInfoList" />
+	     <action name="refreshSniOpticalInfo" class="oltPortInfoAction" method="refreshSniOpticalInfo" />
+	     <action name="refreshAllSniOptical" class="oltPortInfoAction" method="refreshAllSniOptical" />
+	     <action name="refreshPonOpticalInfo" class="oltPortInfoAction" method="refreshPonOpticalInfo" />
+	     <action name="refreshAllPonOptical" class="oltPortInfoAction" method="refreshAllPonOptical" />
+	</package>
+</struts>

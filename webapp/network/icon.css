@@ -1,0 +1,80 @@
+/*
+ * @author: niejun
+ *
+ * icon css for report
+ */
+.entitySnapIcon {
+	background-image: url(../images/snap.gif) !important;
+	valign: middle;
+}
+
+.entityTabIcon {
+	background-image: url(../images/network/entity.gif) !important;
+	valign: middle;
+}
+
+.flowTabIcon {
+	background-image: url(../images/network/flow.gif) !important;
+}
+
+.networkIcon {
+	background-image: url(images/network/bt.gif) !important;
+	valign: middle;
+}
+
+.topoLeafIcon,.topo-tabicon {
+	background-image: url(../images/network/topoicon.gif) !important;
+}
+
+.linkIcon {
+	background-image: url(../images/network/link.gif) !important;
+}
+
+.physicalPaneIcon {
+	background-image: url(../images/network/physicalPane.gif) !important;
+}
+
+.mynetwork-tabicon {
+	background-image: url(../images/mynetwork.gif) !important;
+}
+
+.entityCategoryIcon {
+	background-image: url(../images/network/category_view.gif) !important;
+}
+
+.networkIcon {
+	background-image: url(../images/network/mynetwork.gif) !important;
+}
+
+.topoFolderIcon {
+	background-image: url(../images/network/topoFolder.gif) !important;
+}
+
+.lonelyFolderIcon {
+	background-image: url(../images/network/lonelyFolder.gif) !important;
+}
+
+.subnetIcon {
+	background-image: url(../images/network/subnet.gif) !important;
+}
+
+.topoRegionIcon {
+	background-image: url(../images/network/region.gif) !important;
+}
+
+.topoHrefIcon {
+	background-image: url(../images/network/href.png) !important;
+}
+
+.offManagementIcon {
+	background-image: url(../images/network/offManagement.gif) !important;
+}
+
+.ipTabIcon {
+	background-image: url(../images/resources/book.gif) !important;
+	valign: middle;
+}
+
+.cmdIcon {
+	background-image: url(../images/cmd.gif) !important;
+}

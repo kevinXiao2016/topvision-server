@@ -1,0 +1,37 @@
+<html>
+<head>
+    <title>File Upload</title>
+    <link rel="stylesheet" type="text/css" href="../css/default/dhtmlXVault.css" />
+    <link rel="stylesheet" type="text/css" href="../css/default/gui.css" />
+    <script language="JavaScript" type="text/javascript" src="../js/dhtmlx/dhtmlXVault.js"></script>
+
+    <script language="JavaScript" type="text/javascript">
+        var vault = null;
+        function doOnLoad() {
+            preLoadImages();
+            vault = new dhtmlXVaultObject();
+            vault.setServerHandlers("UploadHandler.jsp", "GetInfoHandler.jsp", "GetIdHandler.jsp");
+            vault.create("vault1");
+	}
+
+	function preLoadImages(){
+		var imSrcAr = new Array("btn_add.gif","btn_clean.gif","btn_upload.gif",
+		"ico_file.png","ico_image.png","ico_sound.png","ico_video.png",
+		"ico_zip.png","pb_back.gif","pb_demoUload.gif","pb_empty.gif");
+		var imAr = new Array(0);
+		for(var i=0;i<imSrcAr.length;i++){
+			imAr[imAr.length] = new Image();
+			imAr[imAr.length-1].src = "/images/upload/"+imSrcAr[i];
+		}
+	}
+    </script>
+
+    <style>
+	body {font-size:12px}
+	.{font-family:arial;font-size:12px}
+    </style>
+
+</head>
+<body class=MAIN_WND onload="doOnLoad()">
+<div id="vault1"></div>
+</body></html>

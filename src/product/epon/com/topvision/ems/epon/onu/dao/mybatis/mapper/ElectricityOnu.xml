@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.onu.domain.ElectricityOnu">
+	<select id="getComAttribute" parameterType="long" resultType="oltOnuComAttribute">
+		select entityId, onuComId, onuComIndex, onuComInfoComDesc,
+		onuComInfoComType,
+		onuComInfoBuad,
+		onuComInfoDataBits,
+		onuComInfoStartBits,
+		onuComInfoStopBits,
+		onuComInfoParityType,
+		onuComInfoMainRemoteIp,
+		onuComInfoMainRemotePort,
+		onuComInfoBackRemoteIp,
+		onuComInfoBackRemotePort,
+		onuComInfoSrvType,
+		onuComInfoSrvPort,
+		onuComInfoClientNum
+		from
+		oltonucomattribute
+		where
+		onuComId = #{onuComId}
+	</select>
+	
+	<select id="getOltComIdList" parameterType="long" resultType="long">
+		SELECT onuComId
+		FROM oltonucomrelation
+		WHERE onuId = #{onuId}
+	</select>
+	
+	<insert id="insertEntity" parameterType="oltOnuComAttribute">
+		insert into
+		oltonucomattribute
+		(entityId, onuComId, onuComIndex, onuComInfoComDesc,
+		onuComInfoComType,
+		onuComInfoBuad,
+		onuComInfoDataBits,
+		onuComInfoStartBits,
+		onuComInfoStopBits,
+		onuComInfoParityType,
+		onuComInfoMainRemoteIp,
+		onuComInfoMainRemotePort,
+		onuComInfoBackRemoteIp,
+		onuComInfoBackRemotePort,
+		onuComInfoSrvType,
+		onuComInfoSrvPort,
+		onuComInfoClientNum
+		)
+		values
+		(#{entityId}, #{onuComId},
+		#{onuComIndex}, #{onuComInfoComDesc}, #{onuComInfoComType},
+		#{onuComInfoBuad},
+		#{onuComInfoDataBits},
+		#{onuComInfoStartBits},
+		#{onuComInfoStopBits},
+		#{onuComInfoParityType},
+		#{onuComInfoMainRemoteIp},
+		#{onuComInfoMainRemotePort},
+		#{onuComInfoBackRemoteIp},
+		#{onuComInfoBackRemotePort},
+		#{onuComInfoSrvType},
+		#{onuComInfoSrvPort},
+		#{onuComInfoClientNum}
+		)
+	</insert>
+
+	<insert id="insertOnuComRelation" parameterType="oltOnuComAttribute"
+		useGeneratedKeys="true" keyProperty="onuComId">
+		insert into
+		OltOnuComRelation(onuId,onuComIndex,entityId) values
+		(#{onuId},#{onuComIndex},#{entityId})
+	</insert>
+
+	<insert id="insertOnuComVlan" parameterType="oltOnuComVlanConfig">
+		insert into
+		oltonucomvlanconfig
+		(entityId, onuComVlan)
+		values
+		(#{entityId},
+		#{onuComVlan})
+	</insert>
+
+	<update id="updateOnuComVlan" parameterType="oltOnuComVlanConfig">
+		update
+		oltonucomvlanconfig set onucomvlan=#{onuComVlan} where
+		entityId=#{entityId}
+	</update>
+
+	<update id="updateOnuIpMaskInfo" parameterType="oltTopOnuCapability">
+		update
+		OltOnuAttribute set
+		topOnuMgmtIp = #{topOnuMgmtIp},
+		topOnuNetMask =
+		#{topOnuNetMask},
+		topOnuGateway = #{topOnuGateway}
+		WHERE exists
+		(select 1
+		from OltOnuRelation where
+		OltOnuRelation.onuId =
+		OltOnuAttribute.onuId
+		and
+		OltOnuRelation.entityId=#{entityId} and
+		OltOnuRelation.onuIndex=#{onuIndex})
+	</update>
+
+
+	<update id="updateOnuComAttributeAll" parameterType="oltOnuComAttribute">
+		update
+		oltonucomattribute
+		set onuComInfoComDesc = #{onuComInfoComDesc},
+		onuComInfoComType= #{onuComInfoComType},
+		onuComInfoBuad=
+		#{onuComInfoBuad},
+		onuComInfoDataBits= #{onuComInfoDataBits},
+		onuComInfoStartBits= #{onuComInfoStartBits},
+		onuComInfoStopBits=
+		#{onuComInfoStopBits},
+		onuComInfoParityType= #{onuComInfoParityType},
+		onuComInfoMainRemoteIp= #{onuComInfoMainRemoteIp},
+		onuComInfoMainRemotePort= #{onuComInfoMainRemotePort},
+		onuComInfoBackRemoteIp= #{onuComInfoBackRemoteIp},
+		onuComInfoBackRemotePort= #{onuComInfoBackRemotePort},
+		onuComInfoSrvType= #{onuComInfoSrvType},
+		onuComInfoSrvPort=
+		#{onuComInfoSrvPort},
+		onuComInfoClientNum= #{onuComInfoClientNum}
+		where
+		entityId=#{entityId} and onuComIndex=#{onuComIndex}
+	</update>
+
+
+	<update id="updateOnuComAttribute" parameterType="oltOnuComAttribute">
+		update
+		oltonucomattribute set entityId = #{entityId}
+		<if test="onuComInfoComDesc != null and onuComInfoComDesc != ''">
+			,onuComInfoComDesc=#{onuComInfoComDesc} </if>
+		<if test="onuComInfoComType != null and onuComInfoComType != ''">
+			,onuComInfoComType=#{onuComInfoComType} </if>
+		<if test="onuComInfoBuad != null and onuComInfoBuad != ''">
+			,onuComInfoBuad=#{onuComInfoBuad} </if>
+		<if test="onuComInfoBuad != null and onuComInfoBuad != ''">
+			,onuComInfoBuad=#{onuComInfoBuad} </if>
+		<if test="onuComInfoDataBits != null and onuComInfoDataBits != ''">
+			,onuComInfoDataBits=#{onuComInfoDataBits} </if>
+		<if test="onuComInfoStopBits != null and onuComInfoStopBits != ''">
+			,onuComInfoStopBits=#{onuComInfoStopBits} </if>
+		<if test="onuComInfoParityType != null and onuComInfoParityType != ''">
+			,onuComInfoParityType=#{onuComInfoParityType} </if>
+		<if test="onuComInfoMainRemoteIp != null and onuComInfoMainRemoteIp != ''">
+			,onuComInfoMainRemoteIp=#{onuComInfoMainRemoteIp} </if>
+		<if
+			test="onuComInfoMainRemotePort != null and onuComInfoMainRemotePort != ''">
+			,onuComInfoMainRemotePort=#{onuComInfoMainRemotePort} </if>
+		<if test="onuComInfoBackRemoteIp != null and onuComInfoBackRemoteIp != ''">
+			,onuComInfoBackRemoteIp=#{onuComInfoBackRemoteIp} </if>
+		<if
+			test="onuComInfoBackRemotePort != null and onuComInfoBackRemotePort != ''">
+			,onuComInfoBackRemotePort=#{onuComInfoBackRemotePort} </if>
+		<if test="onuComInfoSrvType != null and onuComInfoSrvType != ''">
+			,onuComInfoSrvType=#{onuComInfoSrvType} </if>
+		<if test="onuComInfoSrvPort != null and onuComInfoSrvPort != ''">
+			,onuComInfoSrvPort=#{onuComInfoSrvPort} </if>
+		where entityId=#{entityId} and onuComIndex=#{onuComIndex}
+	</update>
+
+	<select id="getComVlanConfig" parameterType="long"
+		resultType="oltOnuComVlanConfig">
+		select entityId, onucomvlan from oltonucomvlanconfig where
+		entityId=#{entityId}
+	</select>
+
+
+
+	<select id="getOnuComMap" parameterType="long" resultType="java.util.HashMap">
+		select onuId OLTID , onuIndex OLTINDEX from OltOnuRelation where
+		entityId =
+		#{entityId}
+		union
+		select
+		onucomid OLTID , onucomindex OLTINDEX
+		from oltonucomrelation
+		where entityId
+		= #{entityId}
+    </select>
+
+	<select id="loadPonCutOverPort" parameterType="map" resultType="long">
+		SELECT ponIndex
+		FROM oltponrelation
+		WHERE entityId = #{entityId}
+		<if test="ponIndex != null">
+			AND ponIndex != #{ponIndex}	</if>
+	</select>
+
+	<select id="queryElecOnuCapability" parameterType="map"
+		resultType="oltTopOnuCapability">
+		SELECT
+		topOnuMgmtIp,
+		topOnuNetMask,
+		topOnuGateway
+		FROM
+		oltonuattribute a,oltonurelation b
+		WHERE
+		b.entityId = #{entityId}
+		AND
+		b.onuIndex = #{onuIndex}
+		AND a.onuId = b.onuId
+    </select>
+
+	<select id="getOnuMacMgmt" parameterType="map" resultType="oltOnuMacMgmt">
+		SELECT entityId, onuIndex, onuId, topOnuMacList, topOnuMacMark,
+		mgmtEnable
+		FROM oltOnuMacMgmt
+		where entityId = #{entityId} and onuIndex
+		=
+		#{onuIndex}
+    </select>
+	<insert id="insertOnuMacMgmt" parameterType="oltOnuMacMgmt">
+		insert into
+		oltOnuMacMgmt
+		(entityId, onuIndex, onuId, topOnuMacList, topOnuMacMark,
+		mgmtEnable)
+		values
+		(#{entityId}, #{onuIndex}, #{onuId},
+		#{topOnuMacList},
+		#{topOnuMacMark}, #{mgmtEnable})
+	</insert>
+	<update id="updateOnuMacMgmt" parameterType="oltOnuMacMgmt">
+		update
+		oltOnuMacMgmt
+		set
+		topOnuMacList = #{topOnuMacList},
+		onuId = #{onuId},
+		topOnuMacList =
+		#{topOnuMacList},
+		topOnuMacMark = #{topOnuMacMark},
+		mgmtEnable =
+		#{mgmtEnable}
+		where
+		entityId = #{entityId} and onuIndex =
+		#{onuIndex}
+	</update>
+</mapper>

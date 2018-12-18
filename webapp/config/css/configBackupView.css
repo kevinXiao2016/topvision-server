@@ -1,0 +1,13 @@
+.bmenu_reset {background-image: url(../../images/system/reset.gif) !important;}
+#compareText{ display:none;}
+.questionTipLink{ width:16px; height:16px; overflow:hidden; background:url(../../images/performance/Help.png); position:absolute; top:6px; right:6px;}
+#sideTip{ position:absolute; top : 40px; left:40px; width:264px;}
+.sideTipArrow{ width:17px; height:10px; overflow:hidden; background:url(../../css/white/sideTipArrow.png) no-repeat; z-index: 2; position:absolute; top:0px; left:50%; margin-left:-8px;}
+.sideTipContent{ position: absolute; top:9px; background: #fff; opacity:0.9; padding:10px; border:1px solid #939393; -webkit-border-radius: 8px; -moz-border-radius: 8px; -ms-border-radius: 8px; -o-border-radius: 8px; border-radius: 8px;
+ -webkit-box-shadow: 0px 2px 2px #999; -moz-box-shadow: 0px 2px 2px #999; -ms-box-shadow: 0px 2px 2px #999; -o-box-shadow: 0px 2px 2px #999; box-shadow: 0px 2px 2px #999;
+}
+.sideTipTitle{ font-weight: bold; color:#369; padding-bottom:8px; font-size:14px;}
+.sideTipClose{ position:absolute; top:18px; right:10px; background:url(../../css/white/winTitClose.png) no-repeat -14px -12px; width:16px; height:16px;}
+.sideTipText{ color:#f60; font-weight:bold; line-height:1.2em; padding-bottom:8px;}
+.sideTipTime{ color:#777;}
+.sideTipTime b{ font:18px Georgia,Arial; color:#f60;}

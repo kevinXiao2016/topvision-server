@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="optical" namespace="/epon/optical" extends="default">
+    	<action name="showOltSniOptical" class="oltOpticalAction" method="showOltSniOptical" >
+			<result>/epon/oltOpticalInfo.jsp</result>
+		</action>
+		<action name="showOltPonOptical" class="oltOpticalAction" method="showOltPonOptical" >
+			<result>/epon/oltOpticalInfo.jsp</result>
+		</action>
+		<action name="loadOltSniOptical" class="oltOpticalAction" method="loadOltSniOptical" />
+		<action name="loadOltPonOptical" class="oltOpticalAction" method="loadOltPonOptical" />
+		<action name="getOltAllPortOptical" class="oltOpticalAction" method="getOltAllPortOptical" />
+		<action name="showOnuPonOptical" class="oltOpticalAction" method="showOnuPonOptical">
+			<result>/epon/onuPonOptical.jsp</result>
+		</action>
+		<action name="loadOnuPonOptical" class="oltOpticalAction" method="loadOnuPonOptical"></action>
+		<action name="getAllOnuOptical" class="oltOpticalAction" method="getAllOnuOptical"></action>
+		
+    	<action name="showOltOpticalAlarm" class="oltOpticalAction" method="showOltOpticalAlarm" >
+			<result>/epon/oltOpticalAlarm.jsp</result>
+		</action>
+		<action name="showOltPonOpticalAlarm" class="oltOpticalAction" method="showOltPonOpticalAlarm" >
+			<result>/epon/oltPonOpticalAlarm.jsp</result>
+		</action>
+		<action name="showOltOnuOpticalAlarm" class="oltOpticalAction" method="showOltOnuOpticalAlarm" >
+			<result>/epon/oltOnuOpticalAlarm.jsp</result>
+		</action>
+		<action name="showOnuOpticalAlarm" class="oltOpticalAction" method="showOltOnuOpticalAlarm" >
+			<result>/epon/onuOpticalAlarm.jsp</result>
+		</action>
+		<action name="showOnuOpticalAlarmBack" class="oltOpticalAction" method="showOltOnuOpticalAlarmBack" >
+			<result>/epon/onuOpticalAlarmBack.jsp</result>
+		</action>
+		<action name="saveOltOptAlarm" class="oltOpticalAction" method="saveOltOptAlarm" />
+		<action name="saveOltPonOptAlarm" class="oltOpticalAction" method="saveOltPonOptAlarm" />
+		<action name="deletePonOpticalAlarm" class="oltOpticalAction" method="deletePonOpticalAlarm" />
+		<action name="saveOltOnuOptAlarm" class="oltOpticalAction" method="saveOltOnuOptAlarm" />
+		<action name="saveOnuOptAlarm" class="oltOpticalAction" method="saveOnuOptAlarm" />
+		<action name="saveOnuOptAlarmBack" class="oltOpticalAction" method="saveOnuOptAlarmBack" />
+		<action name="deleteOnuOpticalAlarm" class="oltOpticalAction" method="deleteOnuOpticalAlarm" />
+		<action name="refreshSysOpticalAlarm" class="oltOpticalAction" method="refreshSysOpticalAlarm" />
+		<action name="refreshPonOpticalAlarm" class="oltOpticalAction" method="refreshPonOpticalAlarm" />
+		<action name="refreshOnuOpticalAlarm" class="oltOpticalAction" method="refreshOnuOpticalAlarm" />
+    </package>
+</struts>

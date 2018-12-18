@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="google" namespace="/google" extends="default">
+        <!-- Google Maps -->
+        <action name="showPopGoogleMapKey" class="googleMapAction" method="showPopGoogleMapKey">
+            <result>/google/popGoogleMapKey.jsp</result>
+        </action>
+        <action name="saveGoogleMapKey" class="googleMapAction" method="saveGoogleMapKey">
+        </action>
+        <action name="saveGoogleLocation" class="googleMapAction" method="saveGoogleLocation">
+        </action>
+
+        <!-- entity -->
+        <!-- 虽然是调用networkGoogleMapAction的showGoogleMap方法，但是这个方法却是其父类GoogleMapAction的方法：@bravin -->
+        <action name="showEntityGoogleMap" class="networkGoogleMapAction" method="showGoogleMap">
+            <result name="google">/google/entityGoogleMap.jsp</result>
+            <result name="guide">/google/googleMapKey.jsp</result>
+        </action>
+
+        <action name="showEntityGoogleMapPreview" class="networkGoogleMapAction" method="showGoogleMapPreview">
+            <result>/google/printPreview.jsp</result>
+        </action>
+
+        <action name="add2GoogleMap" class="googleMapAction" method="add2GoogleMap">
+            <result>/google/add2GoogleMap.jsp</result>
+            <result name="guide">/google/googleMapKey.jsp</result>
+        </action>
+        <action name="saveEntity2GoogleMap" class="networkGoogleMapAction" method="save2GoogleMap">
+        </action>
+        <action name="deleteGoogleEntity" class="networkGoogleMapAction" method="deleteGoogleEntity">
+        </action>
+        <action name="loadGoogleEntities" class="networkGoogleMapAction" method="loadGoogleEntities">
+        </action>
+        <action name="searchGoogleEntity" class="networkGoogleMapAction" method="searchGoogleEntity">
+        </action>
+        <action name="showEntityProperty" class="networkGoogleMapAction" method="showEntityProperty">
+            <result>/google/entityProperty.jsp</result>
+        </action>
+         <action name="queryAvaibleDevice" class="networkGoogleMapAction" method="queryAvaibleDevice" />
+         <action name="fixlocation" class="networkGoogleMapAction" method="fixlocation" />
+         <action name="queryForGeoLocationFromLatLng" class="networkGoogleMapAction" method="queryForGeoLocationFromLatLng" />
+         <action name="queryForLatLngFromGeoLocation" class="networkGoogleMapAction" method="queryForLatLngFromGeoLocation" />
+         
+    </package>
+</struts>
+

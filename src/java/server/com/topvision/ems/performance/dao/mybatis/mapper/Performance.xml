@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.performance.domain.Performance">
+    <insert id="insertEntity" databaseId="MySQL" parameterType="scheduleMessage" useGeneratedKeys="true"
+        keyProperty="monitorId">
+        INSERT INTO PerfMonitor(
+        identifyKey,
+        category,
+        domain,
+        snmpParam,
+        initialDelay,
+        period,
+        scheduleType,
+        isStartUpWithServer,
+        createTime)
+        VALUES (
+        #{identifyKey},
+        #{category},
+        #{domainString},
+        #{snmpParamString},
+        #{initialDelay},
+        #{period},
+        #{scheduleType},
+        #{isStartUpWithServer},
+        now())
+    </insert>
+    <insert id="insertEntity" databaseId="Oracle" parameterType="scheduleMessage">
+        <selectKey keyProperty="monitorId" resultType="long" order="BEFORE">
+            SELECT PerfMonitor_Seq.nextval AS monitorId
+            from dual
+        </selectKey>
+        INSERT INTO PerfMonitor (
+        monitorId,
+        identifyKey,
+        category,
+        domain,
+        snmpParam,
+        initialDelay,
+        period,
+        scheduleType,
+        isStartUpWithServer,
+        createTime)
+        VALUES (
+        #{monitorId},
+        #{identifyKey},
+        #{category},
+        #{domainString},
+        #{snmpParamString},
+        #{initialDelay},
+        #{period},
+        #{scheduleType},
+        #{isStartUpWithServer},
+        sysdate)
+    </insert>
+
+    <select id="selectByMap" parameterType="map" resultType="scheduleMessage">
+        SELECT
+        monitorId,identifyKey,category,domain as
+        domainString,snmpParam
+        as
+        snmpParamString,initialDelay,period,scheduleType,isStartUpWithServer,createTime
+        from
+        PerfMonitor
+    </select>
+    <select id="selectByPrimaryKey" parameterType="long" resultType="scheduleMessage">
+        select
+        monitorId,identifyKey,category,domain
+        as
+        domainString,snmpParam
+        as
+        snmpParamString,initialDelay,period,scheduleType,isStartUpWithServer,createTime
+        from
+        PerfMonitor where
+        monitorId=#{monitorId}
+    </select>
+
+    <select id="getScheduleMessageForAdminAction" parameterType="long" resultType="scheduleMessage">
+        select
+        monitorId,identifyKey,category,domain
+        as
+        domainString,snmpParam
+        as
+        snmpParamString,initialDelay,period,scheduleType,isStartUpWithServer,createTime, 
+        if(lastCollectTime='0000-00-00 00:00:00', null, lastCollectTime) lastCollectTime
+        from
+        PerfMonitor where
+        monitorId=#{monitorId}
+    </select>
+
+
+    <select id="selectByIdentifyAndCategory" parameterType="map" resultType="scheduleMessage">
+        select
+        monitorId,identifyKey,category,domain as
+        domainString,snmpParam as
+        snmpParamString,initialDelay,period,scheduleType,isStartUpWithServer,createTime
+        from
+        PerfMonitor where
+        identifyKey=#{identifyKey} and
+        category=#{category}
+    </select>
+    <update id="updateEntity" parameterType="scheduleMessage">
+        update PerfMonitor set
+        period=#{period},snmpParam=#{snmpParamString}
+        where
+        monitorId=#{monitorId}
+    </update>
+    <update id="updateScheduleDomain" parameterType="scheduleMessage">
+        update
+        PerfMonitor set domain = #{domainString} where
+        monitorId=#{monitorId}
+    </update>
+    <delete id="deleteByPrimaryKey" parameterType="long">
+        delete from
+        PerfMonitor where monitorId=#{monitorId}
+    </delete>
+    <update id="updateScheduleModifyTime" parameterType="map">
+        update
+        perfmonitor set lastCollectTime = sysdate() where
+        identifyKey =
+        #{identifyKey} and category = #{category}
+    </update>
+
+    <update id="updateScheduleCollectTime" parameterType="map">
+        update
+        PerfMonitor set lastCollectTime =
+        #{lastCollectTime} where
+        monitorId=#{monitorId}
+    </update>
+    <update id="updateScheduleTaskRunTime" parameterType="map">
+        update
+        PerfMonitor set lastCollectTime =
+        #{scheduleRunTime} where
+        monitorId=#{monitorId}
+    </update>
+    <update id="updateSchedulePeriod" parameterType="map">
+        update
+        PerfMonitor set period = #{period} where category =
+        #{category}
+    </update>
+    <select id="selectByIdentifyAndCategoryAndPeriod" parameterType="map" resultType="scheduleMessage">
+        select
+        monitorId,identifyKey,category,domain as
+        domainString,snmpParam as
+        snmpParamString,initialDelay,period,scheduleType,isStartUpWithServer,createTime
+        from
+        PerfMonitor where
+        identifyKey=#{identifyKey} and
+        category=#{category} and period = #{period}
+    </select>
+
+    <select id="getRedundancyPerfMonitor" resultType="int">
+        select
+        monitorId from perfmonitor where not exists(select 1
+        from entity where
+        entityId = identifykey)
+    </select>
+
+    <delete id="cleanRedundancyPerfMonitor">
+        delete A from perfmonitor A inner join (select monitorId from perfmonitor B
+        where not exists(select
+        1 from entity where entityId = B.identifykey))
+        V
+        on A.monitorId = V.monitorId
+    </delete>
+    <select id="getCategoryCounts" resultType="map">
+        select category,count(*) AS counts from PerfMonitor group by
+        category
+    </select>
+    
+    <select id="queryScheduleByEntityId" parameterType="long" resultType="scheduleMessage">
+        SELECT
+        monitorId,identifyKey,category,domain as domainString,snmpParam as snmpParamString,
+        initialDelay,period,scheduleType,isStartUpWithServer,createTime
+        from
+        PerfMonitor
+        where identifyKey = #{entityId}
+    </select>
+    
+    <select id="queryScheduleByIdList" parameterType="map" resultType="scheduleMessage">
+        SELECT
+        monitorId,identifyKey,category,domain as domainString,snmpParam as snmpParamString,
+        initialDelay,period,scheduleType,isStartUpWithServer,createTime
+        from
+        PerfMonitor
+        where identifyKey in( ${entityIds} )
+    </select>
+    
+    <select id="queryScheduleByEntityType" parameterType="map" resultType="scheduleMessage">
+        SELECT
+        A.monitorId,A.identifyKey,A.category,A.domain as domainString,A.snmpParam as snmpParamString,
+        A.initialDelay,A.period,A.scheduleType,A.isStartUpWithServer,A.createTime
+        from
+        PerfMonitor A, entity B
+        WHERE A.identifyKey = B.entityId
+        <if test="typeId != null">
+            AND B.typeId = #{typeId} 
+        </if>
+    	<if test="typeId == null">
+    	    <if test="entityType != null">
+    	        AND B.typeId IN ( SELECT typeId from entitytyperelation WHERE type = #{entityType})
+    	    </if>
+    	</if>
+    </select>
+    
+    <select id="queryEngineThreadStatistic" parameterType="map" resultType="com.topvision.ems.performance.domain.ExecutorThreadSnap">
+    	SELECT *
+    	FROM 
+    		ExecutorThreadSnap
+    	where
+    		engineId = #{engineId}
+    	<if test="startTime != null">
+            AND collectTime >= #{startTime} 
+        </if>
+        <if test="endTime != null">
+            <![CDATA[AND collectTime <= #{endTime}]]>
+        </if>
+        ORDER BY collecttime asc
+    </select>
+    
+    <select id="loadDelayedPerfMonitors" parameterType="int" resultType="scheduleMessage">
+    	select 
+    		perfmonitor.monitorId, perfmonitor.identifyKey, perfmonitor.category, perfmonitor.period, perfmonitor.createTime, 
+    		if(perfmonitor.lastCollectTime='0000-00-00 00:00:00', null, lastCollectTime) lastCollectTime, 
+    		entity.name entityName, IF(entity.ip is null, pEntity.ip, entity.ip) entityIp,  entity.parentId, entity.createTime entityCreateTime,
+    		entitytype.displayName entityTypeName 
+    	from perfmonitor
+    	LEFT JOIN entity ON perfmonitor.identifyKey=entity.entityId
+    	LEFT JOIN entitysnap ON entity.entityId=entitysnap.entityId
+		LEFT JOIN entity pEntity ON entity.parentId = pEntity.entityId
+		LEFT JOIN entitytype ON entity.typeId=entitytype.typeId
+		where 
+			perfmonitor.identifyKey=entity.entityId and  (UNIX_TIMESTAMP() - unix_timestamp(lastCollectTime)) * 1000 > period * #{periodCount}
+			and entitysnap.state=1
+		order by lastCollectTime asc;
+    </select>
+</mapper>

@@ -1,0 +1,82 @@
+<vg:Gauge Type="Circular" Width="100" Height="100" DefaultTemplate="CircularGaugeQuarterNEStyle" 
+BackFrameThickness="10" 
+       OuterBackground="#4b4b4b" BorderThickness="2" ShadowEnabled="True"> 
+  <vg:Gauge.BorderBrush> 
+    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0"> 
+      <GradientStop Color="Black"/> 
+      <GradientStop Color="#FFFFDF0A" Offset="1"/> 
+    </LinearGradientBrush> 
+  </vg:Gauge.BorderBrush> 
+  <vg:Gauge.Background> 
+    <LinearGradientBrush StartPoint="0.149,0.144" EndPoint="0.851,0.856"> 
+      <GradientStop Color="#e4ddc9" Offset="0"/> 
+      <GradientStop Color="#FFFFFFFE" Offset="0.471"/> 
+      <GradientStop Color="#c6b58c" Offset="1"/> 
+    </LinearGradientBrush> 
+  </vg:Gauge.Background> 
+
+  <vg:Gauge.CircularScales> 
+    <vg:CircularScale ScaleThickness="0.06" BorderThickness="1" BorderBrush="Black" Radius="1.25" 
+    ShadowEnabled="False"> 
+      <vg:CircularScale.MajorTicks> 
+        <vg:MajorTicks Background="Black" Placement="Outside"/> 
+      </vg:CircularScale.MajorTicks> 
+      <vg:CircularScale.MinorTicks> 
+        <vg:MinorTicks Background="Black" Placement="Center"/> 
+      </vg:CircularScale.MinorTicks> 
+      <vg:CircularScale.ScaleLabels> 
+        <vg:ScaleLabels FontColor="Black" Placement="Outside"/> 
+      </vg:CircularScale.ScaleLabels> 
+    </vg:CircularScale> 
+  </vg:Gauge.CircularScales> 
+
+  <vg:Gauge.Indicators> 
+    <vg:NeedleIndicator Value="40" CapWidth="0.3" IndicatorWidth="0.02" DistanceFromScale="-0.03" 
+    BorderThickness="1" Background="Black"> 
+      <vg:NeedleIndicator.CapBackground> 
+        <RadialGradientBrush> 
+          <GradientStop Color="#252525" Offset="1"/> 
+          <GradientStop Color="#3e3e3e" Offset="0.95"/> 
+          <GradientStop Color="#4b4b4b" Offset="0.85"/> 
+          <GradientStop Color="#5d5d5d" Offset="0"/> 
+        </RadialGradientBrush> 
+      </vg:NeedleIndicator.CapBackground> 
+    </vg:NeedleIndicator> 
+    <vg:MarkerIndicator Value="80" Background="#c02903" BorderThickness="0"/> 
+    <vg:StateIndicator Value="100" Position="0.2,0.42" Background="#c4c4c4" 
+           Bevel="False" LabelEnabled="True" LabelText="Safe" LabelFontSize="11" ShadowEnabled="False" 
+            ToolTipText="{x:Null}"> 
+      <vg:StateIndicator.States> 
+        <vg:State StartValue="0" EndValue="35" Background="#4afac3"/> 
+      </vg:StateIndicator.States> 
+    </vg:StateIndicator> 
+    <vg:StateIndicator Value="40" Position="0.45,0.55" Background="#c4c4c4" 
+           Bevel="False" LightingEnabled="True" LabelEnabled="True" LabelText="Caution" LabelFontSize="11" 
+           ShadowEnabled="False" ToolTipText="{x:Null}"> 
+      <vg:StateIndicator.States> 
+        <vg:State StartValue="35" EndValue="70" Background="#fede0a"/> 
+      </vg:StateIndicator.States> 
+    </vg:StateIndicator> 
+    <vg:StateIndicator Value="0" Position="0.56,0.80" Background="#c4c4c4" 
+           Bevel="False" LabelEnabled="True" LabelText="Danger" LabelFontSize="11" ShadowEnabled="False" 
+            ToolTipText="{x:Null}"> 
+      <vg:StateIndicator.States> 
+        <vg:State StartValue="70" EndValue="100" Background="Red"/> 
+      </vg:StateIndicator.States> 
+    </vg:StateIndicator> 
+  </vg:Gauge.Indicators> 
+
+  <vg:Gauge.Ranges> 
+    <vg:Range StartValue="0" EndValue="100" Placement="Inside" DistanceFromScale="0.2" StartWidth="0.02" 
+    EndWidth="0.02"> 
+      <vg:Range.Background> 
+        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1"> 
+          <GradientStop Color="#FF1AFFC5"/> 
+          <GradientStop Color="#FFFFD200" Offset="0.557"/> 
+          <GradientStop Color="Red" Offset="1"/> 
+        </LinearGradientBrush> 
+      </vg:Range.Background> 
+    </vg:Range> 
+  </vg:Gauge.Ranges> 
+
+</vg:Gauge>

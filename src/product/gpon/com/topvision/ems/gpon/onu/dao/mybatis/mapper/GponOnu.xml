@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.gpon.onu.dao.GponOnuDao">
+
+	<insert id="syncGponOnuIpHosts" parameterType="gponOnuIpHost">
+		insert
+		into gpon_onuiphost
+		(onuId, onuIndex, entityId, onuIpHostIndex,
+		onuIpHostAddressConfigMode,
+		onuIpHostAddress,
+		onuIpHostSubnetMask,
+		onuIpHostGateway,
+		onuIpHostPrimaryDNS,
+		onuIpHostSecondaryDNS,
+		onuIpHostVlanTagPriority,
+		onuIpHostVlanPVid,
+		onuIpHostMacAddress
+		)
+		values
+		(#{onuId}, #{onuIndex}, #{entityId}, #{onuIpHostIndex},
+		#{onuIpHostAddressConfigMode},
+		#{onuIpHostAddress},
+		#{onuIpHostSubnetMask},
+		#{onuIpHostGateway},
+		#{onuIpHostPrimaryDNS},
+		#{onuIpHostSecondaryDNS},
+		#{onuIpHostVlanTagPriority},
+		#{onuIpHostVlanPVid},
+		#{onuIpHostMacAddress}
+		)
+		ON DUPLICATE KEY UPDATE
+		onuIpHostAddressConfigMode = #{onuIpHostAddressConfigMode},
+		onuIpHostAddress = #{onuIpHostAddress},
+		onuIpHostSubnetMask =
+		#{onuIpHostSubnetMask},
+		onuIpHostGateway = #{onuIpHostGateway},
+		onuIpHostPrimaryDNS = #{onuIpHostPrimaryDNS},
+		onuIpHostSecondaryDNS =
+		#{onuIpHostSecondaryDNS},
+		onuIpHostVlanTagPriority =
+		#{onuIpHostVlanTagPriority},
+		onuIpHostVlanPVid = #{onuIpHostVlanPVid},
+		onuIpHostMacAddress = #{onuIpHostMacAddress}
+	</insert>
+
+
+	<insert id="syncGponSoftware" parameterType="gponOnuInfoSoftware">
+		insert
+		into gpon_onuinfosoftware
+		(onuId, onuIndex, entityId,
+		onuSoftware0Version, onuSoftware0Valid,
+		onuSoftware0Active,
+		onuSoftware0Commited,
+		onuSoftware1Version,
+		onuSoftware1Valid,
+		onuSoftware1Active,
+		onuSoftware1Commited
+		)
+		values
+		(#{onuId}, #{onuIndex},
+		#{entityId}, #{onuSoftware0Version}, #{onuSoftware0Valid},
+		#{onuSoftware0Active},
+		#{onuSoftware0Commited},
+		#{onuSoftware1Version},
+		#{onuSoftware1Valid},
+		#{onuSoftware1Active},
+		#{onuSoftware1Commited}
+		)
+		ON DUPLICATE KEY UPDATE
+		onuSoftware0Version = #{onuSoftware0Version},
+		onuSoftware0Valid = #{onuSoftware0Valid},
+		onuSoftware0Active =
+		#{onuSoftware0Active},
+		onuSoftware0Commited = #{onuSoftware0Commited},
+		onuSoftware1Version = #{onuSoftware1Version},
+		onuSoftware1Valid =
+		#{onuSoftware1Valid},
+		onuSoftware1Active = #{onuSoftware1Active},
+		onuSoftware1Commited = #{onuSoftware1Commited}
+	</insert>
+	
+	
+	<insert id="syncGponOnuUniPvid" parameterType="gponOnuUniPvid">
+		insert into onuportvlan
+		(uniId, uniIndex, entityId,
+		vlanTagPriority, vlanPVid
+		)
+		values
+		(#{uniId}, #{uniIndex},
+		#{entityId}, #{gponOnuUniPri}, #{gponOnuUniPvid}
+		)
+		ON DUPLICATE KEY UPDATE
+		vlanTagPriority = #{gponOnuUniPri},
+		vlanPVid = #{gponOnuUniPvid}
+	</insert>
+
+	<update id="updateGponOnuCapability" parameterType="gponOnuCapability">
+		update gpon_onucapability set
+		onuOMCCVersion = #{onuOMCCVersion},
+		onuTotalEthNum= #{onuTotalEthNum},
+		onuTotalWlanNum= #{onuTotalWlanNum},
+		onuTotalCatvNum= #{onuTotalCatvNum},
+		onuTotalVeipNum= #{onuTotalVeipNum},
+		onuIpHostNum= #{onuIpHostNum},
+		onuTrafficMgmtOption= #{onuTrafficMgmtOption},
+		onuTotalGEMPortNum= #{onuTotalGEMPortNum},
+		onuTotalTContNum= #{onuTotalTContNum},
+		onuConnectCapbility = #{onuConnectCapbility},
+		onuQosFlexibility = #{onuQosFlexibility},
+		onuTotalPotsNum = #{onuTotalPotsNum},
+		onuCapabilityStr = #{onuCapabilityStr}
+		where onuId=#{onuId}
+	</update>
+	
+	<select id="queryForGponOnuCapability" parameterType="long" resultType="gponOnuCapability">
+		SELECT 
+			onuId,
+			onuIndex,
+			entityId,
+			onuOMCCVersion,
+			onuTotalEthNum,
+			onuTotalWlanNum,
+			onuTotalCatvNum,
+			onuTotalVeipNum,
+			onuIpHostNum,
+			onuTrafficMgmtOption,
+			onuTotalGEMPortNum,
+			onuTotalTContNum,
+			onuConnectCapbility,
+			onuQosFlexibility,
+			onuTotalPotsNum
+		FROM gpon_onucapability
+		WHERE onuId=#{onuId}
+	</select>
+	
+	<select id="queryForGponOnuSoftware" parameterType="long" resultType="gponOnuInfoSoftware">
+		SELECT * FROM gpon_onuinfosoftware
+		WHERE onuId=#{onuId}
+	</select>
+	
+	<select id="loadGponOnuIpHost" parameterType="map" resultType="gponOnuIpHost">
+		select * from gpon_onuiphost 
+		where onuId = #{onuId}
+		<if test="onuHostMode != null">
+			and onuIpHostAddressConfigMode = #{onuHostMode}
+		</if>
+		<if test="selectValue != null">
+			and (onuIpHostAddress like '%${selectValue}%' or onuIpHostSubnetMask like '%${selectValue}%'
+			or onuIpHostGateway like '%${selectValue}%' or onuIpHostPrimaryDNS like '%${selectValue}%'
+			or onuIpHostSecondaryDNS like '%${selectValue}%')
+		</if>
+		<if test="hostVlanPri != null">
+			and onuIpHostVlanTagPriority = #{hostVlanPri}
+		</if>
+		<if test="hostVlanId != null">
+			and onuIpHostVlanPVid = #{hostVlanId}
+		</if>
+		<if test="sort != null">
+			order by onuIpHostIndex ASC
+		</if>
+	</select>
+	
+	<select id="getGponOnuIpHost" parameterType="map" resultType="gponOnuIpHost">
+		select * from gpon_onuiphost where onuId = #{onuId} and onuIpHostIndex = #{onuIpHostIndex}
+	</select>
+	
+	<update id="delGponOnuIpHost" parameterType="map">
+		delete from gpon_onuiphost where onuId = #{onuId} and onuIpHostIndex =  #{onuIpHostIndex}
+	</update>
+	
+	<update id="delGponOnuIpHostByOnuId" parameterType="long">
+		delete from gpon_onuiphost where onuId = #{onuId}
+	</update>
+	
+	<select id="getUsedHostIpIndex" parameterType="long" resultType="int">
+		select onuIpHostIndex from gpon_onuiphost where onuId = #{onuId}
+	</select>
+	
+	<select id="loadGponOnuUniList" parameterType="long" resultType="gponUniAttribute">
+		SELECT B.entityId,B.uniIndex,A.uniId,A.uniOperationStatus ethOperationStatus,A.uniAdminStatus ethAdminStatus, 
+		A.PerfStats15minuteEnable ethPerfStats15minuteEnable,
+		E.vlanTagPriority  gponOnuUniPri,E.vlanPVid gponOnuUniPvid
+		FROM oltuniattribute A,oltunirelation B 
+		left join onuportvlan E on B.uniId = E.uniId and B.entityId = E.entityId
+		WHERE A.uniId=B.uniId 
+		AND B.onuId=#{onuId}
+	</select>
+	
+	<select id="loadUniVlanConfig" parameterType="long" resultType="gponUniAttribute">
+		select uniId,entityId,uniIndex,vlanTagPriority gponOnuUniPri,vlanPVid gponOnuUniPvid
+		from onuportvlan where uniId = #{uniId}
+	</select>
+	
+	<update id="updateUniVlanConfig" parameterType="map">
+		update onuportvlan set vlanTagPriority = #{gponOnuUniPri}, vlanPVid = #{gponOnuUniPvid}
+		where uniId = #{uniId}
+	</update>
+</mapper>

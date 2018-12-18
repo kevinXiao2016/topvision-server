@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.network.domain.TelnetLogin">
+	<!-- ################################## select start ####################################### -->
+    <select id="getTelnetLoginConfig" parameterType="map" resultType="telnetLogin">
+        select ip, userName, password, enablePassword, isAAA, ipString from telnetLoginConfig where 1 = 1
+        <if test="ipString != null">
+			and ipString LIKE '%${ipString}%'
+		</if>
+        limit ${start} , ${limit};
+    </select>
+    <select id="getTelnetLoginConfigCount" parameterType="map" resultType="long">
+        select count(*) from telnetLoginConfig where 1 = 1
+        <if test="ipString != null">
+			and ipString LIKE '%${ipString}%'
+		</if>
+    </select>
+    <select id="getTelnetLoginConfigByIp" parameterType="long" resultType="telnetLogin">
+        select ip, userName, password, enablePassword, isAAA, ipString from telnetLoginConfig where ip = #{ip}
+    </select>
+     
+    <update id="modifyTelnetLogin" parameterType="telnetLogin">
+    	update telnetLoginConfig set
+    	userName = #{userName}, password = #{password}, enablePassword = #{enablePassword}, isAAA = #{isAAA}
+    	where ip = #{ip}
+    </update>
+    
+	<!-- ################################## insert start ####################################### -->
+    <insert id="addTelnetLogin" parameterType="telnetLogin">
+        insert into telnetLoginConfig(ip, userName, password, enablePassword, isAAA, ipString)
+        values(#{ip}, #{userName}, #{password}, #{enablePassword}, #{isAAA}, #{ipString});
+    </insert>
+
+	<!-- ################################## delete start ####################################### -->
+    <delete id="deleteTelnetLogin" parameterType="long">
+        delete from telnetLoginConfig where ip = #{ip};
+    </delete>
+	
+</mapper>

@@ -1,0 +1,76 @@
+.vertical-middle {
+	vertical-align: middle;
+}
+
+.vertical-middle span,.vertical-middle input,.vertical-middle img {
+	vertical-align: middle;
+}
+#content{
+	margin: 20px 20px 10px 20px;
+}
+input#perfTemplateName{
+	border-style: solid;
+    border-width: 1px;
+    border-color: #CCCCCC #DDDDDD #DDDDDD #CCCCCC;
+    height: 18px;
+    padding-top:2px 0 0 5px;
+    font-size: 12px;
+}
+.contentTable {
+    border-collapse: collapse;
+    width: 100%;
+}
+.contentTable td {
+    border-bottom: 1px solid #D6D6D6;
+    height: 29px;
+    padding: 4px 3px;
+    vertical-align: middle;
+    font-family: "Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
+}
+.contentTable td input, .contentTable td span{
+	vertical-align: middle;
+	font-family: "Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
+}
+.labelTd{
+	font: 14px "Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
+	font-weight: bold;
+}
+.tipTd{
+	color: #FF0000;
+}
+select{
+	width: 180px;
+}
+.flag{
+	background: url("/images/performance/flag.png") no-repeat scroll right 0 transparent;
+    color: #FFFFFF;
+    display: inline-block;
+    font: bold 12px/2em "Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
+    padding: 3px 36px 3px 16px;
+    height: 20px;
+    overflow: hidden;
+    margin-left: 20px;
+}
+#perfGrid{
+	margin: 0 20px 10px 20px;
+}
+.bmenu_plus {
+	background-image: url(/images/add.png) !important;
+}
+.gridAlarmSpan{
+	margin-right: 10px;
+	background: url("/images/performance/frother_bg_sml.png") no-repeat scroll 0 -16px transparent;
+    display: inline-block;
+    height: 15px;
+    line-height: 0;
+    padding: 2px 3px 4px 2px;
+    white-space: nowrap;
+    color: #003366; 
+    font: 11px "Hiragino Sans GB","Microsoft YaHei","WenQuanYi Micro Hei",sans-serif;
+}
+.correctInput{
+	border:1px solid #CCCCCC #DDDDDD #DDDDDD #CCCCCC;
+}
+.errorInput{
+	border:2px solid #DB1111 #D91111 #D91111;
+}

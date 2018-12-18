@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.report.domain.ReportInstance">
+
+	<insert id="insertReportInstance" parameterType="com.topvision.ems.report.domain.ReportInstance">
+		INSERT INTO
+		reportInstances(instanceTitle, note,createTime,fileType,filePath,taskId,userId)
+		VALUES
+		(#{instanceTitle}, #{note}, #{createTime}, #{fileType}, #{filePath}, #{taskId}, #{userId})
+	</insert>
+
+	<delete id="deleteReport" parameterType="map">
+		DELETE FROM 
+			reportInstances
+		WHERE 
+			instanceId in
+		<foreach collection="reportIds" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<select id="getReportDetailByReportId" parameterType="long"	resultType="com.topvision.ems.report.domain.ReportInstance">
+		SELECT 
+		    A.instanceId, A.instanceTitle, A.note, A.createTime, A.fileType, A.filePath, A.taskId, b.taskName
+		from 
+		    reportinstances A
+		LEFT JOIN reporttask B ON A.taskId=B.taskId
+		where 
+			A.instanceId = #{reportId}
+	</select>
+
+	<select id="getReportInstanceList" parameterType="map" resultType="com.topvision.ems.report.domain.ReportInstance">
+		SELECT A.*, B.reportId, B.reportName, B.taskName
+		FROM reportinstances A
+		LEFT JOIN reporttask B ON A.taskId=B.taskId
+		WHERE 1=1
+		<if test="taskId != null">AND A.taskId = #{taskId}</if>
+		<if test="reportId != null">AND B.reportId = #{reportId}</if>
+		<if test="start != null and limit != null">limit ${start} , ${limit}</if>
+	</select>
+	
+	<select id="getReportInstanceNum" parameterType="map" resultType="int">
+		SELECT count(*)
+		FROM reportinstances A
+		LEFT JOIN reporttask B ON A.taskId=B.taskId
+		WHERE 1=1
+		<if test="taskId != null">AND A.taskId = #{taskId}</if>
+		<if test="reportId != null">AND B.reportId = #{reportId}</if>
+	</select>
+
+</mapper>

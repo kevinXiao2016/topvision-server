@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="batchautodiscovery" namespace="/batchautodiscovery"
+		extends="default">
+
+		<action name="showBatchTopo" class="batchAutoDiscoveryAction"
+			method="showBatchTopo">
+			<result>/network/batchAutoDiscovery/batchTopo.jsp</result>
+		</action>
+
+		<action name="loadNetSegments" class="batchAutoDiscoveryAction"
+			method="loadNetSegments"></action>
+
+		<action name="loadTopoFolder" class="batchAutoDiscoveryAction"
+			method="loadTopoFolder"></action>
+
+		<action name="scanNetSegment" class="batchAutoDiscoveryAction"
+			method="scanNetSegment"></action>
+
+		<action name="addNetSegment" class="batchAutoDiscoveryAction"
+			method="addNetSegment"></action>
+
+		<action name="showModifyNetSegment" class="batchAutoDiscoveryAction"
+			method="showModifyNetSegment">
+			<result>/network/batchAutoDiscovery/netSegment.jsp</result>
+		</action>
+
+		<action name="modifyNetSegment" class="batchAutoDiscoveryAction"
+			method="modifyNetSegment"></action>
+
+		<action name="deleteNetSegment" class="batchAutoDiscoveryAction"
+			method="deleteNetSegment"></action>
+
+		<action name="saveSnmpConfig" class="batchAutoDiscoveryAction"
+			method="saveSnmpConfig"></action>
+
+		<action name="saveScanConfig" class="batchAutoDiscoveryAction"
+			method="saveScanConfig"></action>
+
+		<action name="loadSnmpTabs" class="batchAutoDiscoveryAction"
+			method="loadSnmpTabs"></action>
+
+		<action name="addSnmpTab" class="batchAutoDiscoveryAction"
+			method="addSnmpTab"></action>
+
+		<action name="showModifySnmpTab" class="batchAutoDiscoveryAction"
+			method="showModifySnmpTab">
+			<result>/network/batchAutoDiscovery/snmpTabDetail.jsp</result>
+		</action>
+
+		<action name="modifySnmpTab" class="batchAutoDiscoveryAction"
+			method="modifySnmpTab"></action>
+
+		<action name="deleteSnmpTab" class="batchAutoDiscoveryAction"
+			method="deleteSnmpTab"></action>
+
+		<action name="modifyAutoDiscovery" class="batchAutoDiscoveryAction"
+			method="modifyAutoDiscovery"></action>
+
+	</package>
+</struts>

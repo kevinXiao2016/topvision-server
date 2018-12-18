@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Sat Nov 02 12:58:08 CST 2013 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.snmpV3.domain.SnmpV3">
+    <!-- SELECT -->
+    <select id="loadTarget" parameterType="long" resultType="snmpTargetTable">
+        Select
+        entityId,
+        targetName,
+        targetDomain,
+        targetAddress,
+        targetTimeout,
+        targetRetryCount,
+        targetTagList,
+        targetParams,
+        targetStorageType
+        From SnmpTargetTable
+        Where entityId = #{entityId}
+    </select>
+    <select id="loadTargetParams" parameterType="long" resultType="snmpTargetParams">
+        Select
+        entityId,
+        targetParamsName,
+        targetParamsMPModel,
+        targetParamsSecurityModel,
+        targetParamsSecurityName,
+        targetParamsSecurityLevel,
+        targetParamsStorageType
+        From SnmpTargetParams
+        Where entityId = #{entityId}
+    </select>
+    <select id="loadNotify" parameterType="long" resultType="snmpNotifyTable">
+        Select
+        entityId,
+        notifyName,
+        notifyTag,
+        notifyType,
+        notifyStorageType
+        From SnmpNotifyTable
+        Where entityId = #{entityId}
+    </select>
+    <select id="loadNotifyFilterProfile" parameterType="long" resultType="snmpNotifyFilterProfile">
+        Select
+        entityId,
+        targetParamsName,
+        notifyFilterProfileName,
+        notifyFilterProfileStorType
+        From SnmpNotifyFilterProfile
+        Where entityId = #{entityId}
+    </select>
+    <select id="loadNotifyFilter" parameterType="long" resultType="snmpNotifyFilterTable">
+        Select
+        entityId,
+        notifyFilterProfileName,
+        notifyFilterSubtree,
+        notifyFilterMask,
+        notifyFilterType,
+        notifyFilterStorType
+        From SnmpNotifyFilterTable
+        Where
+        entityId = #{entityId}
+    </select>
+
+    <!-- UPDATE -->
+    <update id="updateTarget" parameterType="snmpTargetTable">
+        UPDATE
+        SnmpTargetTable SET
+        targetDomain = #{targetDomain},
+        targetAddress = #{targetAddress},
+        targetTimeout = #{targetTimeout},
+        targetRetryCount = #{targetRetryCount},
+        targetTagList = #{targetTagList},
+        targetParams = #{targetParams},
+        targetStorageType = #{targetStorageType}
+        WHERE
+        entityId = #{entityId} AND targetName = #{targetName}
+    </update>
+    <update id="updateTargetParams" parameterType="snmpTargetParams">
+        UPDATE
+        SnmpTargetParams SET
+        targetParamsMPModel =
+        #{targetParamsMPModel},
+        targetParamsSecurityModel = #{targetParamsSecurityModel},
+        targetParamsSecurityName =
+        #{targetParamsSecurityName},
+        targetParamsSecurityLevel = #{targetParamsSecurityLevel},
+        targetParamsStorageType =
+        #{targetParamsStorageType}
+        WHERE
+        entityId = #{entityId} AND targetParamsName = #{targetParamsName}
+    </update>
+    <update id="updateNotify" parameterType="snmpNotifyTable">
+        UPDATE
+        SnmpNotifyTable SET
+        notifyTag = #{notifyTag},
+        notifyType =
+        #{notifyType},
+        notifyStorageType = #{notifyStorageType}
+        WHERE
+        entityId = #{entityId} AND notifyName = #{notifyName}
+    </update>
+    <update id="updateNotifyProfile" parameterType="snmpNotifyFilterProfile">
+        UPDATE
+        SnmpNotifyFilterProfile SET
+        notifyFilterProfileStorType =
+        #{notifyFilterProfileStorType}
+        WHERE
+        entityId = #{entityId} AND notifyFilterProfileName =
+        #{notifyFilterProfileName} AND targetParamsName = #{targetParamsName}
+    </update>
+    <update id="updateNotifyFilter" parameterType="snmpNotifyFilterTable">
+        UPDATE
+        SnmpNotifyFilterTable SET
+        notifyFilterMask =
+        #{notifyFilterMask},
+        notifyFilterType = #{notifyFilterType},
+        notifyFilterStorType = #{notifyFilterStorType}
+        WHERE
+        entityId = #{entityId} AND notifyFilterSubtree = #{notifyFilterSubtree} AND notifyFilterProfileName =
+        #{notifyFilterProfileName}
+    </update>
+
+    <!-- INSERT -->
+    <insert id="insertTarget" parameterType="snmpTargetTable">
+        INSERT INTO
+        SnmpTargetTable
+        (entityId,
+        targetName,
+        targetDomain,
+        targetAddress,
+        targetTimeout,
+        targetRetryCount,
+        targetTagList,
+        targetParams,
+        targetStorageType
+        )
+        VALUES
+        (#{entityId},
+        #{targetName},
+        #{targetDomain},
+        #{targetAddress},
+        #{targetTimeout},
+        #{targetRetryCount},
+        #{targetTagList},
+        #{targetParams},
+        #{targetStorageType})
+    </insert>
+    <insert id="insertTargetParams" parameterType="snmpTargetParams">
+        INSERT INTO
+        SnmpTargetParams
+        (entityId,
+        targetParamsName,
+        targetParamsMPModel,
+        targetParamsSecurityModel,
+        targetParamsSecurityName,
+        targetParamsSecurityLevel,
+        targetParamsStorageType)
+        VALUES
+        (#{entityId},
+        #{targetParamsName},
+        #{targetParamsMPModel},
+        #{targetParamsSecurityModel},
+        #{targetParamsSecurityName},
+        #{targetParamsSecurityLevel},
+        #{targetParamsStorageType})
+    </insert>
+    <insert id="insertNotify" parameterType="snmpNotifyTable">
+        INSERT INTO
+        SnmpNotifyTable
+        (entityId,
+        notifyName,
+        notifyTag,
+        notifyType,
+        notifyStorageType)
+        VALUES
+        (#{entityId},
+        #{notifyName},
+        #{notifyTag},
+        #{notifyType},
+        #{notifyStorageType})
+    </insert>
+    <insert id="insertNotifyProfile" parameterType="snmpNotifyFilterProfile">
+        INSERT INTO
+        SnmpNotifyFilterProfile
+        (entityId,
+        targetParamsName,
+        notifyFilterProfileName,
+        notifyFilterProfileStorType)
+        VALUES
+        (#{entityId},
+        #{targetParamsName},
+        #{notifyFilterProfileName},
+        #{notifyFilterProfileStorType})
+    </insert>
+    <insert id="insertNotifyFilter" parameterType="snmpNotifyFilterTable">
+        INSERT INTO
+        SnmpNotifyFilterTable
+        (entityId,
+        notifyFilterProfileName,
+        notifyFilterSubtree,
+        notifyFilterMask,
+        notifyFilterType,
+        notifyFilterStorType)
+        VALUES
+        (#{entityId},
+        #{notifyFilterProfileName},
+        #{notifyFilterSubtree},
+        #{notifyFilterMask},
+        #{notifyFilterType},
+        #{notifyFilterStorType})
+    </insert>
+    <!-- DELETE -->
+    <delete id="deleteTarget" parameterType="map">
+        DELETE FROM SnmpTargetTable
+        WHERE entityId = #{entityId} AND
+        targetName = #{targetName}
+    </delete>
+    <delete id="deleteAllTarget" parameterType="long">
+        DELETE FROM SnmpTargetTable
+        WHERE entityId = #{entityId}
+    </delete>
+    <delete id="deleteTargetParams" parameterType="map">
+        DELETE FROM SnmpTargetParams
+        WHERE entityId = #{entityId} AND
+        targetParamsName = #{targetParamsName}
+    </delete>
+    <delete id="deleteAllTargetParams" parameterType="long">
+        DELETE FROM SnmpTargetParams
+        WHERE entityId = #{entityId}
+    </delete>
+    <delete id="deleteNotify" parameterType="map">
+        DELETE FROM SnmpNotifyTable
+        WHERE entityId = #{entityId} AND
+        notifyName = #{notifyName}
+    </delete>
+    <delete id="deleteAllNotify" parameterType="long">
+        DELETE FROM SnmpNotifyTable
+        WHERE entityId = #{entityId}
+    </delete>
+    <delete id="deleteNotifyProfile" parameterType="map">
+        DELETE FROM SnmpNotifyFilterProfile
+        WHERE entityId =
+        #{entityId} AND targetParamsName = #{targetParamsName}
+    </delete>
+    <delete id="deleteAllNotifyProfile" parameterType="long">
+        DELETE FROM SnmpNotifyFilterProfile
+        WHERE entityId =
+        #{entityId}
+    </delete>
+    <delete id="deleteNotifyFilter" parameterType="map">
+        DELETE FROM SnmpNotifyFilterTable
+        WHERE entityId = #{entityId}
+        AND notifyFilterSubtree = #{notifyFilterSubtree} AND notifyFilterProfileName =
+        #{notifyFilterProfileName}
+    </delete>
+    <delete id="deleteAllNotifyFilter" parameterType="long">
+        DELETE FROM SnmpNotifyFilterTable
+        WHERE entityId =
+        #{entityId}
+    </delete>
+
+</mapper>

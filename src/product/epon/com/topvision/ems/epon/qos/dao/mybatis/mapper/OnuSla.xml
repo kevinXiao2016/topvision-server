@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.qos.domain.OnuSla">
+
+	<insert id="insertSlaTable" parameterType="slaTable">
+		insert into
+            oltslatable
+            ( entityId, onuIndex, slaDsFixedBW, slaDsPeakBW, slaDsCommittedBW, slaUsFixedBW, slaUsPeakBW, slaUsCommittedBW )
+        values
+            ( #{entityId}, #{onuIndex}, #{slaDsFixedBW}, #{slaDsPeakBW}, #{slaDsCommittedBW}, #{slaUsFixedBW}, #{slaUsPeakBW}, #{slaUsCommittedBW} )
+    </insert>
+    
+    <delete id="deleteSlaTable">
+    	delete from oltslatable where entityId = #{entityId} and onuIndex = #{onuIndex}
+    </delete>
+</mapper>

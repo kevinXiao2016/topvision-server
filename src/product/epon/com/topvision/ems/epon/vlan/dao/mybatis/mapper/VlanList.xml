@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.vlan.domain.OltSniPortVlan">
+	<select id="selectPonPortVlanList" parameterType="long" resultType="oltPortVlan">
+		SELECT 
+			A.entityId, A.sniId portId, A.sniIndex portIndex, vlanPVid,D.bName
+		FROM
+			oltportvlan A,oltponattribute B,oltponrelation C,oltslotattribute D
+		WHERE
+			A.entityId=#{entityId}  AND A.sniindex=C.ponIndex  AND A.entityid=C.entityId  AND B.ponId=C.ponId AND C.slotId=D.slotId
+	</select>
+	
+	<select id="selectSniPortVlanList" parameterType="long" resultType="oltPortVlan">
+		SELECT 
+		  	B.sniPortName,A.entityId, A.sniId portId, A.sniIndex portIndex, vlanTagTpid  tpid,vlanTagPriority priority,vlanPVid,vlanMode,D.bName,D.topSysBdPreConfigType slotType
+		FROM
+			oltportvlan A,oltsniattribute B,oltsnirelation C,oltslotattribute D
+		WHERE  
+			A.entityId=#{entityId} AND A.sniindex=C.sniindex AND A.entityid=C.entityId AND B.sniId=C.sniId AND C.slotId=D.slotId
+	</select>
+	
+	<select id="selectPortVlanRelation" parameterType="long" resultType="oltPortVlanRelation">
+		SELECT entityId,portIndex,vlanIndex,type
+		FROM oltPortVlanRelation
+		WHERE entityId=#{entityId}
+	</select>
+	
+	<select id="selectUniPortVlan" parameterType="long" resultType="uniPortVlan">
+		SELECT
+			A.entityId,
+			A.uniIndex,
+			A.uniId,
+			C.profileName,
+			A.vlanPVid,
+			A.vlanMode,
+			A.vlanTagPriority
+		FROM
+			OnuPortVlan A
+			LEFT JOIN uniVlanBindTable B ON A.entityId=B.entityId AND A.uniIndex=B.uniIndex
+			LEFT JOIN univlanprofile C ON B.bindProfileId=C.profileId AND A.entityId=C.entityId,
+			oltunirelation D
+		WHERE A.entityId=D.entityId AND D.onuId=#{onuId} AND A.uniIndex=d.uniIndex
+	</select>
+	
+	<select id="selectSlotPonList" parameterType="long" resultType="ponVlanPortLocation">
+		SELECT  A.ponid,A.ponindex,B.slotno,B.bname,B.topsysbdpreconfigtype 
+		FROM oltponrelation a LEFT JOIN oltslotattribute  b on a.slotid=b.slotid  
+		WHERE A.entityId=#{entityId}
+		ORDER BY  ponindex
+	</select>
+</mapper>

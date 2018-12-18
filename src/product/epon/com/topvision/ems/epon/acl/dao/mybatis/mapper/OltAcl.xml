@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.acl.domain.OltAcl">
+
+    <select id="getAclList" parameterType="long"
+		resultType="aclListTable">
+        SELECT
+            a.entityId,
+            a.topAclListIndex,
+            a.topAclDescription,
+            a.topAclRuleNum,
+            a.topAclRulePriority
+        FROM
+            oltacllisttable a
+        WHERE
+            a.entityId = #{entityId}
+    </select>
+    <select id="getAclPortACLList" parameterType="map"
+		resultType="aclPortACLListTable">
+        SELECT
+            a.entityId,
+            a.portIndex,
+            a.topPortAclListIndex,
+            a.topAclPortDirection
+        FROM
+            oltaclportacllisttable a
+        WHERE
+            a.entityId = #{entityId} AND
+            a.portIndex = #{portIndex} AND
+            a.topAclPortDirection = #{topAclPortDirection}
+    </select>
+    <select id="getAllAclPortACLList" parameterType="long"
+		resultType="aclPortACLListTable">
+        SELECT
+            a.entityId,
+            a.portIndex,
+            a.topPortAclListIndex,
+            a.topAclPortDirection
+        FROM
+            oltaclportacllisttable a
+        WHERE
+            a.entityId = #{entityId}
+    </select>
+     <select id="getAclListTable" parameterType="map"
+		resultType="aclListTable">
+        SELECT
+            a.entityId,
+            a.topAclDescription,
+            a.topAclListIndex,
+            a.topAclRuleNum,
+            a.topAclRulePriority
+        FROM
+            oltacllisttable a
+        WHERE
+            a.entityId = #{entityId} AND
+            a.topAclListIndex = #{aclIndex}
+    </select>
+    <select id="getAclPortByAclList" parameterType="map"
+		resultType="aclPortACLListTable">
+        SELECT
+            a.entityId,
+            a.portIndex,
+            a.topPortAclListIndex,
+            a.topAclPortDirection
+        FROM
+            oltaclportacllisttable a
+        WHERE
+            a.entityId = #{entityId} AND
+            a.topPortAclListIndex = #{topPortAclListIndex}
+    </select>
+    <select id="getAclRuleList" parameterType="map"
+		resultType="aclRuleTable">
+        SELECT
+            a.entityId,
+            a.topAclRuleListIndex,
+            a.topAclRuleIndex,
+            a.topMatchedFieldSelection,
+            a.topMatchedSrcMac as topMatchedSrcMacLong,
+            a.topMatchedSrcMacMask as topMatchedSrcMacMaskLong,
+            a.topMatchedDstMac as topMatchedDstMacLong,
+            a.topMatchedDstMacMask as topMatchedDstMacMaskLong,
+            a.topMatchedStartSVid,
+            a.topMatchedEndSVid,
+            a.topMatchedStartCVid,
+            a.topMatchedEndCVid,
+            a.topMatchedOuterCos,
+            a.topMatchedInnerCos,
+            a.topMatchedOuterTpid,
+            a.topMatchedInnerTpid,
+            a.topMatchedEthernetType,
+            a.topMatchedSrcIP as topMatchedSrcIPLong,
+            a.topMatchedSrcIPMask as topMatchedSrcIPMaskLong,
+            a.topMatchedDstIP as topMatchedDstIPLong,
+            a.topMatchedDstIPMask as topMatchedDstIPMaskLong,
+            a.topMatchedL3ProtocolClass,
+            a.topMatchedIpProtocol,
+            a.topMatchedDscp,
+            a.topMatchedTos,
+            a.topMatchedStartSrcPort,
+            a.topMatchedEndSrcPort,
+            a.topMatchedStartDstPort,
+            a.topMatchedEndDstPort,
+            a.topAclAction,
+            a.topAclActionParameter
+        FROM
+            oltaclruleentry a
+        WHERE
+            a.entityId = #{entityId} AND
+            a.topAclRuleListIndex = #{topAclRuleListIndex}
+    </select>
+    <select id="getAllAclRuleList" parameterType="long"
+		resultType="aclRuleTable">
+        SELECT
+            a.entityId,
+            a.topAclRuleListIndex,
+            a.topAclRuleIndex,
+            a.topMatchedFieldSelection,
+            a.topMatchedSrcMac as topMatchedSrcMacLong,
+            a.topMatchedSrcMacMask as topMatchedSrcMacMaskLong,
+            a.topMatchedDstMac as topMatchedDstMacLong,
+            a.topMatchedDstMacMask as topMatchedDstMacMaskLong,
+            a.topMatchedStartSVid,
+            a.topMatchedEndSVid,
+            a.topMatchedStartCVid,
+            a.topMatchedEndCVid,
+            a.topMatchedOuterCos,
+            a.topMatchedInnerCos,
+            a.topMatchedOuterTpid,
+            a.topMatchedInnerTpid,
+            a.topMatchedEthernetType,
+            a.topMatchedSrcIP as topMatchedSrcIPLong,
+            a.topMatchedSrcIPMask as topMatchedSrcIPMaskLong,
+            a.topMatchedDstIP as topMatchedDstIPLong,
+            a.topMatchedDstIPMask as topMatchedDstIPMaskLong,
+            a.topMatchedL3ProtocolClass,
+            a.topMatchedIpProtocol,
+            a.topMatchedDscp,
+            a.topMatchedTos,
+            a.topMatchedStartSrcPort,
+            a.topMatchedEndSrcPort,
+            a.topMatchedStartDstPort,
+            a.topMatchedEndDstPort,
+            a.topAclAction,
+            a.topAclActionParameter
+        FROM
+            oltaclruleentry a
+        WHERE
+            a.entityId = #{entityId}
+    </select>
+    <select id="getAclRule" parameterType="map"
+		resultType="aclRuleTable">
+        SELECT
+            a.entityId,
+            a.topAclRuleListIndex,
+            a.topAclRuleIndex,
+            a.topMatchedFieldSelection,
+            a.topMatchedSrcMac as topMatchedSrcMacLong,
+            a.topMatchedSrcMacMask as topMatchedSrcMacMaskLong,
+            a.topMatchedDstMac as topMatchedDstMacLong,
+            a.topMatchedDstMacMask as topMatchedDstMacMaskLong,
+            a.topMatchedStartSVid,
+            a.topMatchedEndSVid,
+            a.topMatchedStartCVid,
+            a.topMatchedEndCVid,
+            a.topMatchedOuterCos,
+            a.topMatchedInnerCos,
+            a.topMatchedOuterTpid,
+            a.topMatchedInnerTpid,
+            a.topMatchedEthernetType,
+            a.topMatchedSrcIP as topMatchedSrcIPLong,
+            a.topMatchedSrcIPMask as topMatchedSrcIPMaskLong,
+            a.topMatchedDstIP as topMatchedDstIPLong,
+            a.topMatchedDstIPMask as topMatchedDstIPMaskLong,
+            a.topMatchedL3ProtocolClass,
+            a.topMatchedIpProtocol,
+            a.topMatchedDscp,
+            a.topMatchedTos,
+            a.topMatchedStartSrcPort,
+            a.topMatchedEndSrcPort,
+            a.topMatchedStartDstPort,
+            a.topMatchedEndDstPort,
+            a.topAclAction,
+            a.topAclActionParameter
+        FROM
+            oltaclruleentry a
+        WHERE
+            a.entityId = #{entityId} AND
+            a.topAclRuleListIndex = #{aclIndex} AND
+            a.topAclRuleIndex = #{aclRuleIndex}
+    </select>
+    <update id="updateAclList" parameterType="aclListTable">
+        UPDATE
+            oltacllisttable a
+        SET
+            a.topAclDescription = #{topAclDescription},
+            a.topAclRuleNum = #{topAclRuleNum},
+            a.topAclRulePriority = #{topAclRulePriority}
+        WHERE
+            a.entityId = #{entityId} AND
+            a.topAclListIndex = #{topAclListIndex}
+	</update>
+    <update id="updateAclRuleList" parameterType="aclRuleTable">
+        UPDATE
+            oltaclruleentry a
+        SET
+            a.topMatchedFieldSelection = #{topMatchedFieldSelection},
+            a.topMatchedSrcMac = #{topMatchedSrcMacLong},
+            a.topMatchedSrcMacMask = #{topMatchedSrcMacMaskLong},
+            a.topMatchedDstMac = #{topMatchedDstMacLong},
+            a.topMatchedDstMacMask = #{topMatchedDstMacMaskLong},
+            a.topMatchedStartSVid = #{topMatchedStartSVid},
+            a.topMatchedEndSVid = #{topMatchedEndSVid},
+            a.topMatchedStartCVid = #{topMatchedStartCVid},
+            a.topMatchedEndCVid = #{topMatchedEndCVid},
+            a.topMatchedOuterCos = #{topMatchedOuterCos},
+            a.topMatchedInnerCos = #{topMatchedInnerCos},
+            a.topMatchedOuterTpid = #{topMatchedOuterTpid},
+            a.topMatchedInnerTpid = #{topMatchedInnerTpid},
+            a.topMatchedEthernetType = #{topMatchedEthernetType},
+            a.topMatchedSrcIP = #{topMatchedSrcIPLong},
+            a.topMatchedSrcIPMask = #{topMatchedSrcIPMaskLong},
+            a.topMatchedDstIP = #{topMatchedDstIPLong},
+            a.topMatchedDstIPMask = #{topMatchedDstIPMaskLong},
+            a.topMatchedL3ProtocolClass = #{topMatchedL3ProtocolClass},
+            a.topMatchedIpProtocol = #{topMatchedIpProtocol},
+            a.topMatchedDscp = #{topMatchedDscp},
+            a.topMatchedTos = #{topMatchedTos},
+            a.topMatchedStartSrcPort = #{topMatchedStartSrcPort},
+            a.topMatchedEndSrcPort = #{topMatchedEndSrcPort},
+            a.topMatchedStartDstPort = #{topMatchedStartDstPort},
+            a.topMatchedEndDstPort = #{topMatchedEndDstPort},
+            a.topAclAction = #{topAclAction},
+            a.topAclActionParameter = #{topAclActionParameter}
+        WHERE
+            a.entityId = #{entityId} AND
+            a.topAclRuleListIndex = #{topAclRuleListIndex} AND
+            a.topAclRuleIndex = #{topAclRuleIndex}
+	</update>
+    <delete id="deleteAclListAll" parameterType="long">
+		delete from
+		oltacllisttable where entityId = #{entityId}
+	</delete>
+    <delete id="deleteAclList" parameterType="map">
+		delete from
+		oltacllisttable where
+            entityId = #{entityId} AND
+            topAclListIndex = #{topAclListIndex}
+	</delete>
+    <delete id="deleteAclPortACLListAll" parameterType="long">
+		delete from
+		oltaclportacllisttable where entityId = #{entityId}
+	</delete>
+    <delete id="deleteAclPortACLList" parameterType="aclPortACLListTable">
+		delete from
+		oltaclportacllisttable where
+            entityId = #{entityId} AND
+            portIndex = #{portIndex} AND
+            topAclPortDirection = #{topAclPortDirection} AND
+            topPortAclListIndex = #{topPortAclListIndex}
+	</delete>
+    <delete id="deleteAclRuleListAll" parameterType="long">
+		delete from
+		oltaclruleentry where entityId = #{entityId}
+	</delete>
+    <delete id="deleteAclRuleList" parameterType="map">
+		delete from
+		oltaclruleentry where
+            entityId = #{entityId} AND
+            topAclRuleListIndex = #{topAclRuleListIndex} AND
+            topAclRuleIndex = #{topAclRuleIndex}
+	</delete>
+    <insert id="insertAclList" parameterType="aclListTable">
+        insert into
+        oltacllisttable (
+            entityId,
+            topAclListIndex,
+            topAclDescription,
+            topAclRuleNum,
+            topAclRulePriority
+        )
+        values (
+            #{entityId},
+            #{topAclListIndex},
+            #{topAclDescription},
+            #{topAclRuleNum},
+            #{topAclRulePriority}
+        )
+    </insert>
+    <insert id="insertAclPortACLList" parameterType="aclPortACLListTable">
+        insert into
+        oltaclportacllisttable (
+            entityId,
+            portIndex,
+            topPortAclListIndex,
+            topAclPortDirection
+        )
+        values (
+            #{entityId},
+            #{portIndex},
+            #{topPortAclListIndex},
+            #{topAclPortDirection}
+        )
+    </insert>
+    <insert id="insertAclRuleList" parameterType="aclRuleTable">
+        insert into
+        oltaclruleentry (
+            entityId,
+            topAclRuleListIndex,
+            topAclRuleIndex,
+            topMatchedFieldSelection,
+            topMatchedSrcMac,
+            topMatchedSrcMacMask,
+            topMatchedDstMac,
+            topMatchedDstMacMask,
+            topMatchedStartSVid,
+            topMatchedEndSVid,
+            topMatchedStartCVid,
+            topMatchedEndCVid,
+            topMatchedOuterCos,
+            topMatchedInnerCos,
+            topMatchedOuterTpid,
+            topMatchedInnerTpid,
+            topMatchedEthernetType,
+            topMatchedSrcIP,
+            topMatchedSrcIPMask,
+            topMatchedDstIP,
+            topMatchedDstIPMask,
+            topMatchedL3ProtocolClass,
+            topMatchedIpProtocol,
+            topMatchedDscp,
+            topMatchedTos,
+            topMatchedStartSrcPort,
+            topMatchedEndSrcPort,
+            topMatchedStartDstPort,
+            topMatchedEndDstPort,
+            topAclAction,
+            topAclActionParameter
+        )
+        values (
+            #{entityId},
+            #{topAclRuleListIndex},
+            #{topAclRuleIndex},
+            #{topMatchedFieldSelection},
+            #{topMatchedSrcMacLong},
+            #{topMatchedSrcMacMaskLong},
+            #{topMatchedDstMacLong},
+            #{topMatchedDstMacMaskLong},
+            #{topMatchedStartSVid},
+            #{topMatchedEndSVid},
+            #{topMatchedStartCVid},
+            #{topMatchedEndCVid},
+            #{topMatchedOuterCos},
+            #{topMatchedInnerCos},
+            #{topMatchedOuterTpid},
+            #{topMatchedInnerTpid},
+            #{topMatchedEthernetType},
+            #{topMatchedSrcIPLong},
+            #{topMatchedSrcIPMaskLong},
+            #{topMatchedDstIPLong},
+            #{topMatchedDstIPMaskLong},
+            #{topMatchedL3ProtocolClass},
+            #{topMatchedIpProtocol},
+            #{topMatchedDscp},
+            #{topMatchedTos},
+            #{topMatchedStartSrcPort},
+            #{topMatchedEndSrcPort},
+            #{topMatchedStartDstPort},
+            #{topMatchedEndDstPort},
+            #{topAclAction},
+            #{topAclActionParameter}
+        )
+    </insert>
+</mapper>

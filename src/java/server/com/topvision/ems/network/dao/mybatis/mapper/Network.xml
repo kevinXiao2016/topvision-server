@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.network.domain.Network">
+	<select id="getDeviceDelayTop" parameterType="map" resultType="entitySnap">
+		select distinct(A.entityId), A.entityId,
+		A.delay,
+		A.delayTime,
+		A.snapTime,
+		B.name,
+		B.typeId,
+		B.ip,
+		B.parentId,
+		C.displayName typeName,
+		B.mac
+		FROM (
+		select entityId, delay, delayTime,snapTime, 1 sortFlag from entitysnap where delay > 0
+		union
+		select entityId , delay, delayTime,snapTime, 2 sortFlag from entitysnap where delay != -1 order by delay desc) A,
+		entity B,entityType C
+		WHERE A.entityId = B.entityId and B.entityId in (select entityId from
+		${Authority}) and B.typeId = C.typeId and B.typeId in(select typeId from entityTypeRelation where type = #{entityType})
+		ORDER BY A.delay DESC LIMIT 0, 10
+	</select>
+	
+	<select id="getDeviceDelayList" parameterType="map" resultType="entitySnap">
+		select distinct(A.entityId),A.entityId,
+		A.delay,
+		A.delayTime,
+		A.snapTime,
+		B.name,
+		B.typeId,
+		B.ip,
+		B.parentId,
+		C.displayName typeName,
+		B.mac
+		FROM (
+		select entityId, delay, delayTime,snapTime, 1 sortFlag from entitysnap where delay > 0
+		union
+		select entityId , delay, delayTime,snapTime, 2 sortFlag from entitysnap where delay != -1 order by delay desc) A,
+		entity B,entityType C
+		WHERE A.entityId = B.entityId and B.typeId = C.typeId and B.entityId in (select entityId from ${Authority}) 
+		and B.typeId in(select typeId from entityTypeRelation where type = #{entityType})
+		<if test="name != null and name !=''">
+			and (B.name like '%${name}%' or B.ip like '%${name}%')
+		</if>
+		<if test="deviceType != -1 and deviceType != null">
+			and B.typeId = #{deviceType}
+		</if>
+		<if test="sort != null and dir != null">
+			order by ${sort} ${dir}
+		</if>
+		<if test="sort == null and dir == null">
+		 	ORDER BY A.delay DESC
+        </if>
+        <if test="start != -1 and limit != -1">
+		 	limit #{start},#{limit}
+        </if>
+	</select>
+	
+	<select id="getDeviceDelayNum" parameterType="map" resultType="int">
+		select count(distinct(A.entityId))
+		FROM (
+		select entityId, delay, delayTime,snapTime, 1 sortFlag from entitysnap where delay > 0
+		union
+		select entityId , delay, delayTime,snapTime, 2 sortFlag from entitysnap where delay != -1 order by delay desc) A,
+		entity B
+		WHERE A.entityId = B.entityId and B.entityId in (select entityId from
+		${Authority}) and B.typeId in(select typeId from entityTypeRelation where type = #{entityType} )
+		<if test="name != null and name !=''">
+			and (B.name like '%${name}%' or B.ip like '%${name}%')
+		</if>
+		<if test="deviceType != -1 and deviceType != null">
+			and B.typeId = #{deviceType}
+		</if>
+	</select>
+	
+	<select id="getDeviceDelayOut" parameterType="map" resultType="entitySnap">
+		select distinct(A.entityId),A.entityId,
+		A.delay,
+		A.delayTime,
+		A.snapTime,
+		B.name,
+		B.typeId,
+		B.ip,
+		B.parentId,
+		B.mac,
+		C.displayName typeName
+		FROM (
+		select entityId, delay, delayTime,snapTime, 1 sortFlag from entitysnap where delay = -1
+		union
+		select entityId , delay, delayTime,snapTime, 2 sortFlag from entitysnap where delay = -1 order by delay desc) A,
+		entity B,entityType C
+		WHERE A.entityId = B.entityId and B.typeId = C.typeId and B.entityId in (select entityId from
+		${Authority}) and B.typeId in(select typeId from entityTypeRelation where type = #{entityType})
+		ORDER BY A.sortFlag ASC , A.delay DESC 
+		limit #{start},#{limit}
+	</select>
+	
+	<select id="getDeviceDelayOutList" parameterType="map" resultType="entitySnap">
+		select distinct(A.entityId),A.entityId,
+		A.delay,
+		A.delayTime,
+		A.snapTime,
+		B.name,
+		B.typeId,
+		B.ip,
+		B.parentId,
+		B.mac,
+		C.displayName typeName
+		FROM (
+		select entityId, delay, delayTime,snapTime, 1 sortFlag from entitysnap where delay = -1
+		union
+		select entityId , delay, delayTime,snapTime, 2 sortFlag from entitysnap where delay = -1 order by delay desc) A,
+		entity B,entityType C
+		WHERE A.entityId = B.entityId and B.typeId = C.typeId and B.entityId in (select entityId from
+		${Authority}) and B.typeId in(select typeId from entityTypeRelation where type = #{entityType} )
+		<if test="name != null and name !=''">
+			and (B.name like '%${name}%' or B.ip like '%${name}%')
+		</if>
+		<if test="deviceType != -1 and deviceType != null">
+			and B.typeId = #{deviceType}
+		</if>
+		<if test="sort != null and dir != null">
+			order by ${sort} ${dir}
+		</if>
+		<if test="sort == null and dir == null">
+		 	ORDER BY A.delay DESC
+        </if>
+		<if test="start != -1 and limit != -1">
+		 	limit #{start},#{limit}
+        </if>
+	</select>
+	
+	<select id="getDeviceDelayOutNum" parameterType="map" resultType="int">
+		select count(distinct(A.entityId))
+		FROM (
+		select entityId, delay,snapTime, delayTime, 1 sortFlag from entitysnap where delay = -1
+		union
+		select entityId , delay,snapTime, delayTime, 2 sortFlag from entitysnap where delay = -1 order by delay desc) A,
+		entity B
+		WHERE A.entityId = B.entityId and B.entityId in (select entityId from
+		${Authority}) and B.typeId in(select typeId from entityTypeRelation where type = #{entityType} )
+		<if test="name != null and name !=''">
+			and (B.name like '%${name}%' or B.ip like '%${name}%')
+		</if>
+		<if test="deviceType != -1 and deviceType != null">
+			and B.typeId = #{deviceType}
+		</if>
+	</select>
+	
+	<select id="getDeviceAttentionList" parameterType="map" resultType="entitySnap">
+		SELECT
+		A.entityId,
+		A.name,
+		A.ip,
+		A.status,
+		B.snapTime,
+		B.state,
+		C.typeId,
+		C.displayName typeName
+		FROM entity A, entitysnap B,EntityType C ,userAttention D
+		WHERE A.typeId = C.typeId
+		AND A.entityId = B.entityId
+		AND D.entityId =
+		A.entityId
+		AND D.userId = ${userId}
+		and A.entityId in (select entityId from ${Authority})
+		<if test="name != null and name !=''">
+			and (A.name like '%${name}%' or A.ip like '%${name}%')
+		</if>
+		<if test="deviceType != -1 and deviceType != null">
+			and A.typeId = #{deviceType}
+		</if>
+		<if test="sort != null and dir != null">
+			order by ${sort} ${dir}
+		</if>
+		<if test="sort == null and dir == null">
+		 	ORDER BY A.entityId DESC
+        </if>
+		<if test="start != -1 and limit != -1">
+		 	limit #{start},#{limit}
+        </if>
+	</select>
+	
+	<select id="getDeviceAttentionNum" parameterType="map" resultType="int">
+		SELECT count(distinct(A.entityId))
+		FROM entity A, entitysnap B,EntityType C ,userAttention D
+		WHERE A.typeId = C.typeId
+		AND A.entityId = B.entityId
+		AND D.entityId =
+		A.entityId
+		AND D.userId = ${userId}
+		and A.entityId in (select entityId from ${Authority})
+		<if test="name != null and name !=''">
+			and (A.name like '%${name}%' or A.ip like '%${name}%')
+		</if>
+		<if test="deviceType != -1 and deviceType != null">
+			and A.typeId = #{deviceType}
+		</if>
+	</select>
+
+	<select id="getDeviceCpuLoadingTop" parameterType="map"
+		resultType="entitySnap">
+		SELECT A.entityId,
+		A.cpu,
+		A.snapTime,
+		B.name,
+		IFNULL(B.ip,e.ip),
+		B.parentId,
+		B.mac,
+		C.displayName typeName,
+		IFNULL(B.ip,CONCAT(E.name,'(',E.ip,')')) AS uplinkDevice
+		FROM 
+		EntitySnap A
+		left join entity B on A.entityId = B.entityId
+		left join entity E on B.parentId = E.entityId
+		left join entityType C on B.typeId = C.typeId
+		WHERE A.cpu >= 0 and A.state=1 and B.entityId in (select entityId from ${Authority})
+		<if test="name != null and name !=''">
+			and (B.name like '%${name}%' or IFNULL(B.ip,CONCAT(E.name,'(',E.ip,')')) like '%${name}%')
+		</if>
+		<if test="deviceType != -1 and deviceType != null">
+			and B.typeId = #{deviceType}
+		</if>
+		<if test="sort != null and dir != null">
+			order by ${sort} ${dir}
+		</if>
+		<if test="sort == null and dir == null">
+		 	ORDER BY A.cpu DESC
+        </if>
+		limit #{start},#{limit}
+	</select>
+	
+	<select id="getDeviceCpuLoadingList" parameterType="map"
+		resultType="entitySnap">
+		SELECT A.entityId,
+		A.cpu,
+		A.snapTime,
+		B.name,
+		IFNULL(B.ip,e.ip),
+		B.parentId,
+		B.mac,
+		C.displayName typeName,
+		IFNULL(B.ip,CONCAT(E.name,'(',E.ip,')')) AS uplinkDevice
+		FROM 
+		EntitySnap A
+		left join entity B on A.entityId = B.entityId
+		left join entity E on B.parentId = E.entityId
+		left join entityType C on B.typeId = C.typeId
+		WHERE A.cpu >= 0 and A.state=1 AND B.entityId in (select entityId from ${Authority})
+		<if test="name != null and name !=''">
+			and (B.name like '%${name}%' or IFNULL(B.ip,CONCAT(E.name,'(',E.ip,')')) like '%${name}%')
+		</if>
+		<if test="deviceType != -1 and deviceType != null">
+			and B.typeId = #{deviceType}
+		</if>
+		<if test="sort != null and dir != null">
+			order by ${sort} ${dir}
+		</if>
+		<if test="sort == null and dir == null">
+		 	ORDER BY A.cpu DESC
+        </if>
+		 <if test="start != -1 and limit != -1">
+		 	limit #{start},#{limit}
+        </if>
+	</select>
+
+	<select id="getDeviceMemLoadingTop" parameterType="map"
+		resultType="entitySnap">
+		SELECT A.entityId,
+		A.mem,
+		A.usedMem,
+		A.snapTime,
+		B.name,
+		IFNULL(B.ip,E.ip),
+		B.parentId,
+		B.mac,
+		C.displayName typeName,
+		IFNULL(B.ip,CONCAT(E.name,'(',E.ip,')')) AS uplinkDevice
+		FROM 
+		EntitySnap A
+		left join entity B on A.entityId = B.entityId
+		left join entity E on B.parentId = E.entityId
+		left join entityType C on B.typeId = C.typeId
+		WHERE A.mem >= 0 and A.state=1 and B.entityId in (select entityId from ${Authority})
+		<if test="name != null and name !=''">
+			and (B.name like '%${name}%' or IFNULL(B.ip,CONCAT(E.name,'(',E.ip,')')) like '%${name}%')
+		</if>
+		<if test="deviceType != -1 and deviceType != null">
+			and B.typeId = #{deviceType}
+		</if>
+		<if test="sort != null and dir != null">
+			order by ${sort} ${dir}
+		</if>
+		<if test="sort == null and dir == null">
+		 	ORDER BY A.mem DESC
+        </if>
+		limit #{start},#{limit}
+	</select>
+	
+	<select id="getDeviceMemLoadingList" parameterType="map"
+		resultType="entitySnap">
+		SELECT A.entityId,
+		A.mem,
+		A.usedMem,
+		A.snapTime,
+		B.name,
+		IFNULL(B.ip,E.ip),
+		B.parentId,
+		B.mac,
+		C.displayName typeName,
+		IFNULL(B.ip,CONCAT(E.name,'(',E.ip,')')) AS uplinkDevice
+		FROM 
+		EntitySnap A
+		left join entity B on A.entityId = B.entityId
+		left join entity E on B.parentId = E.entityId
+		left join entityType C on B.typeId = C.typeId
+		WHERE A.mem >= 0 and B.entityId in (select entityId from ${Authority})
+		<if test="name != null and name !=''">
+			and (B.name like '%${name}%' or IFNULL(B.ip,CONCAT(E.name,'(',E.ip,')')) like '%${name}%')
+		</if>
+		<if test="deviceType != -1 and deviceType != null">
+			and B.typeId = #{deviceType}
+		</if>
+		<if test="sort != null and dir != null">
+			order by ${sort} ${dir}
+		</if>
+		<if test="sort == null and dir == null">
+		 	ORDER BY A.mem DESC
+        </if>
+		 <if test="start != -1 and limit != -1">
+		 	limit #{start},#{limit}
+        </if>
+	</select>
+	
+	<select id="getNetWorkDeviceCount" parameterType="map"
+		resultType="int">
+		SELECT count(A.entityId)
+		FROM 
+		EntitySnap A
+		left join entity B on A.entityId = B.entityId
+		left join entity E on B.parentId = E.entityId
+		left join entityType C on B.typeId = C.typeId
+		WHERE B.entityId in (select entityId from ${Authority})
+		<if test="target == cpu">
+			and A.cpu >= 0
+		</if>
+		<if test="target == mem">
+			and A.mem >= 0
+		</if>
+		<if test="name != null and name !=''">
+			and (B.name like '%${name}%' or IFNULL(B.ip,CONCAT(E.name,'(',E.ip,')')) like '%${name}%')
+		</if>
+		<if test="deviceType != -1 and deviceType != null">
+			and B.typeId = #{deviceType}
+		</if>
+	</select>
+	
+	<select id="getDelayingTop" parameterType="string" resultType="entitySnap">
+		SELECT A.entityId,
+		A.delay,
+		A.snapTime,
+		B.name,
+		B.ip
+		FROM EntitySnap A,
+		Entity B
+		WHERE A.delay >= 0
+		AND A.entityId = B.entityId
+		ORDER BY A.delay DESC LIMIT 0, 10
+	</select>
+
+	<select id="getCpuLoadingTop" parameterType="string"
+		resultType="entitySnap">
+		SELECT A.entityId,
+		A.parentId,
+		A.cpu,
+		A.snapTime,
+		B.name,
+		B.ip
+		FROM EntitySnap A,
+		Entity B
+		WHERE A.cpu >= 0
+		AND A.entityId = B.entityId
+		ORDER BY A.cpu DESC LIMIT 0, 10
+	</select>
+
+	<select id="getMemLoadingTop" parameterType="string"
+		resultType="entitySnap">
+		SELECT A.entityId,
+		A.parentId,
+		A.mem,
+		A.usedMem,
+		A.snapTime,
+		B.name,
+		B.ip
+		FROM EntitySnap A,
+		Entity B
+		WHERE A.mem >= 0
+		AND A.entityId = B.entityId
+		ORDER BY A.mem DESC LIMIT 0, 10
+	</select>
+	<select id="statEntityCountByState" resultType="stateStat">
+		select state,
+		COUNT(entityId) as count
+		FROM EntitySnap
+		GROUP BY state
+		ORDER BY state DESC
+	</select>
+
+	<select id="statServerByOs" parameterType="map" resultType="serverTypeStat">
+		SELECT A.typeId,
+		COUNT(A.entityId)
+		FROM Entity A
+		GROUP BY A.typeId
+	</select>
+
+	<select id="statServerAvailable" resultType="entityAvailableStat">
+		SELECT A.state as available,
+		COUNT(A.entityId) as count
+		FROM EntitySnap A,
+		Entity B
+		WHERE A.entityId = B.entityId
+		GROUP By A.state
+	</select>
+</mapper>

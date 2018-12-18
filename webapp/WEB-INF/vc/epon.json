@@ -1,0 +1,48 @@
+{
+	OLT-1.6.9.10 : {
+		//PREVERSION : "OLT-168.0.0.0" ,
+		DESC: "该版本发布于XXX日,增加新功能XXX",
+		CONTROLS: {
+			ponProtected : {
+				STATUS : "IIS",
+				NODES : {
+					ponProtected : "DISABLED"
+				}
+			},
+			sniAgingTime : {
+				STATUS : "IIS",
+				NODES : {
+					sniAgingTime : "DISABLED"
+				}
+			},
+			SNMPV3 : {
+				STATUS : "IIS",
+				NODES : {
+					usmSnmpV3GroupList : "DISABLED",
+					usmSnmpV3ViewList : "DISABLED",
+					snmpV3Notify : "DISABLED"
+				}
+			},
+			QOS : {
+				STATUS : "IIS",
+				NODES : {
+					qosConfig : "DISABLED",
+					ponQosConfig : "DISABLED",
+					sniQos : "DISABLED",
+					oltQos : "DISABLED"
+				}
+			},
+			IGMP : {
+				STATUS : "IIS",
+				NODES : {
+					IgmpConfig : "DISABLED",
+					ponQosConfig : "DISABLED",
+					sniQos : "DISABLED",
+					oltQos : "DISABLED"
+				}
+			
+			}
+			
+		}
+	}
+}

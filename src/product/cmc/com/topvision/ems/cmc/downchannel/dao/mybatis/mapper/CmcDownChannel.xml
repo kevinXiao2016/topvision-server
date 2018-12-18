@@ -1,0 +1,546 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.downchannel.domain.CmcDownChannel">
+
+	<!-- ################################# select start ###################################### -->
+	<select id="getDownChannelBaseShowInfoList" parameterType="Long"
+     resultType="cmcDownChannelBaseShowInfo">
+        select
+        a.cmcPortId,
+        a.cmcId,
+        a.channelIndex,
+        a.docsIfDownChannelId,
+        b.ifName,
+        a.docsIfDownChannelFrequency,
+        a.docsIfDownChannelWidth,
+        b.ifSpeed,
+        b.ifDescr,
+        b.ifMtu,
+        b.ifAdminStatus,
+        b.ifOperStatus,
+        a.docsIfDownChannelModulation,
+        a.docsIfDownChannelInterleave,
+        a.docsIfDownChannelPower,
+        a.docsIfDownChannelAnnex,
+        a.docsIfDownChannelStorageType,
+		d.channelType
+        
+        from
+        cmcdownchannelbaseinfo a left join cmcportattribute b on
+        a.cmcPortId=b.cmcPortId left join cmcdsipqambaseinfo d on 
+        a.cmcPortId=d.cmcPortId
+        
+        WHERE
+        a.cmcId =#{cmcId}
+    </select>
+    <select id="getDownChannelBaseShowInfo" parameterType="Long"
+     resultType="cmcDownChannelBaseShowInfo">
+        select
+        a.cmcPortId,
+        a.cmcId,
+        a.channelIndex,
+        a.docsIfDownChannelId,
+        b.ifName,
+        a.docsIfDownChannelFrequency,
+        a.docsIfDownChannelWidth,
+        b.ifSpeed,
+        b.ifDescr,
+        b.ifMtu,
+        b.ifAdminStatus,
+        b.ifOperStatus,
+        a.docsIfDownChannelModulation,
+        a.docsIfDownChannelInterleave,
+        a.docsIfDownChannelPower,
+        a.docsIfDownChannelAnnex,
+        a.docsIfDownChannelStorageType
+        
+        from
+        cmcdownchannelbaseinfo a left join cmcportattribute b on
+        a.cmcPortId=b.cmcPortId
+        WHERE
+        a.cmcPortId =#{cmcPortId}
+    </select>
+    
+    <select id="getCmcDownChannelStaticInfo" parameterType="cmcDownChannelStaticInfo"
+		resultType="int">
+		select
+		count(*)
+		from
+		cmcdownchannelstaticinfo
+		WHERE cmcPortId
+		=
+		#{cmcPortId}
+	</select>
+    
+	<select id="getDSIPQAMInfoListByCmcId" parameterType="long" resultType="dsIpqamBaseInfo">
+		select 	
+			a.cmcPortId, 
+			a.cmcId,
+			a.docsIfDownChannelId,
+			a.docsIfDownChannelSymRate, 
+			a.ipqamTranspStreamID, 
+			a.ipqamOriginalNetworkID, 
+			a.ipqamQAMManager, 
+			a.ipqamQAMGroupName, 
+			a.ipqamAtten, 
+			a.ipqamDtsAdjust,
+			a.channelType,
+			b.channelIndex,
+			b.docsIfDownChannelFrequency,
+        	b.docsIfDownChannelWidth,
+			b.docsIfDownChannelModulation,
+	        b.docsIfDownChannelInterleave,
+	        b.docsIfDownChannelPower,
+	        b.docsIfDownChannelAnnex
+		from 
+			cmcdsipqambaseinfo a left join 
+			cmcdownchannelbaseinfo b on a.cmcPortId=b.cmcPortId 
+			
+		where a.cmcId=#{cmcId}
+	</select>
+    
+    <select id="getDSIPQAMInfoByCmcPortId" parameterType="long" resultType="dsIpqamBaseInfo">
+        select  
+            a.cmcPortId, 
+            a.cmcId,
+            a.docsIfDownChannelId,
+            a.docsIfDownChannelSymRate, 
+            a.ipqamTranspStreamID, 
+            a.ipqamOriginalNetworkID, 
+            a.ipqamQAMManager, 
+            a.ipqamQAMGroupName, 
+            a.ipqamAtten, 
+            a.ipqamDtsAdjust,
+            a.channelType,
+            b.docsIfDownChannelFrequency,
+            b.docsIfDownChannelWidth,
+            b.docsIfDownChannelModulation,
+            b.docsIfDownChannelInterleave,
+            b.docsIfDownChannelPower,
+            b.docsIfDownChannelAnnex
+        from 
+            cmcdsipqambaseinfo a left join 
+            cmcdownchannelbaseinfo b on a.cmcPortId=b.cmcPortId 
+            
+        where a.cmcPortId=#{cmcPortId}
+    </select>
+    <select id="getDownChannelIPQAMListSize" parameterType="long" resultType="dsIpqamBaseInfo">
+        select  count(cmcPortId)
+        from 
+            cmcdsipqambaseinfo 
+            
+        where cmcId=#{cmcId}
+    </select>	
+	<select id="queryCCIpqamOutPutStatusListByCmcId" parameterType="long" resultType="dsIpqamStatusInfo">
+		select 	* 
+		from 	cmcdsipqamstatusinfo
+		where 
+			cmcId=#{cmcId}
+	</select>
+	<select id="queryIpqamStreamMappingsListByCmcId" parameterType="long" resultType="dsIpqamMappingsInfo">
+		select 	* 
+		from 	cmcdsipqammappings
+		where 
+			cmcId=#{cmcId}
+	</select>
+	<select id="queryIpqamInputStreamInfoListByCmcId" parameterType="long" resultType="dsIpqamIsInfo">
+		select 	* 
+		from 	CmcDsIpqamisinfo
+		where 
+			cmcId=#{cmcId}
+	</select>
+	<select id="queryIpqamOutputStreamInfoListByCmcId" parameterType="long" resultType="dsIpqamOsInfo">
+		select 	* 
+		from 	CmcDsIpqamosinfo
+		where 
+			cmcId=#{cmcId}
+	</select>
+	<select id="queryIpqamStreamMappingsById" parameterType="long" resultType="dsIpqamMappingsInfo">
+		select 	* 
+		from 	cmcdsipqammappings
+		where 
+			mappingId=#{mappingId}
+	</select>
+	
+	<select id="getPortId" parameterType="map" resultType="long">
+    	SELECT 
+    		cmcPortId 
+    	FROM 
+    		cmcdownchannelbaseinfo 
+    	WHERE 
+    		cmcId=#{cmcId} 
+    		AND 
+    		channelIndex=#{channelIndex}
+    </select>
+    <select id="selectIpqamIpInfo" parameterType="long" resultType="cmcIpqamInfo">
+		select * from cmcIpqamInfo where cmcId=#{cmcId}
+	</select>
+	<select id="getCmcPortIdByIfIndexAndCmcId" parameterType="map"
+		resultType="long">
+		select cmcPortId from
+		cmcportrelation where channellIndex =
+		#{channelIndex} and cmcId=#{cmcId}
+	</select>
+	<select id="getCmcDownChannelBaseInfo" parameterType="cmcDownChannelBaseInfo"
+		resultType="int">
+		select
+		count(*)
+		from
+		cmcdownchannelbaseinfo where
+		cmcId=#{cmcId} and
+		channelIndex=#{channelIndex}
+	</select>
+	<select id="getTxPowerLimit" parameterType="map"
+		resultType="txPowerLimit">
+		select
+		entityId,cmcIndex,channelNum,maxPowerTenthdBmV,minPowerTenthdBmV
+		from
+		txPowerLimit where
+		entityId=#{entityId} and
+		cmcIndex=#{cmcIndex}
+	</select>
+	<!-- ################################# select end ######################################## -->
+	
+	<!-- ################################# insert start ###################################### -->
+	<insert id="insertCC8800BIpqamBase" parameterType="dsIpqamBaseInfo">
+    	insert into
+    		cmcdsipqambaseinfo
+    		(cmcPortId,
+    		cmcId,
+    		channelType,
+    		docsIfDownChannelId,
+    		docsIfDownChannelSymRate,
+    		ipqamTranspStreamID,
+    		ipqamOriginalNetworkID,
+    		ipqamQAMManager,
+    		ipqamQAMGroupName,
+    		ipqamAtten,
+    		ipqamDtsAdjust)
+    	values
+    	(#{cmcPortId},
+    		#{cmcId},
+    		#{channelType},
+    		#{docsIfDownChannelId},
+    		#{docsIfDownChannelSymRate},
+    		#{ipqamTranspStreamID},
+    		#{ipqamOriginalNetworkID},
+    		#{ipqamQAMManager},
+    		#{ipqamQAMGroupName},
+    		#{ipqamAtten},
+    		#{ipqamDtsAdjust})
+    </insert>    
+    <insert id="insertCC8800BIpqamMappings" parameterType="dsIpqamMappingsInfo">
+    	insert into
+    		cmcdsipqammappings
+    		(mappingId,
+    		cmcId,
+    		ipqamOutputQAMChannel,
+    		ipqamPidMapString,
+    		ipqamDestinationIPAddress,
+    		ipqamUDPPort,
+    		ipqamActive,
+    		ipqamStreamType,
+    		ipqamProgramNumberInput,
+    		ipqamProgramNumberOutput,
+    		ipqamPMV,
+    		ipqamDataRateEnable,
+    		ipqamDataRate)
+    	values
+    	(#{mappingId},
+    		#{cmcId},
+    		#{ipqamOutputQAMChannel},
+    		#{ipqamPidMapString},
+    		#{ipqamDestinationIPAddress},
+    		#{ipqamUDPPort},
+    		#{ipqamActive},
+    		#{ipqamStreamType},
+    		#{ipqamProgramNumberInput},
+    		#{ipqamProgramNumberOutput},
+    		#{ipqamPMV},
+    		#{ipqamDataRateEnable},
+    		#{ipqamDataRate})
+    </insert>
+    <insert id="insertCC8800BIpqamOsInfo" parameterType="dsIpqamOsInfo">
+    	insert into
+    		CmcDsIpqamosinfo
+    		(osProgramId,
+    		cmcId,
+    		ipqamType,
+    		ipqamQAMManager,
+    		ipqamOutputQAMChannel,
+    		ipqamDestinationIP,
+    		ipqamUDPPort,
+    		ipqamSYNC,
+    		ipqamOutputProgramNumber,
+    		ipqamOutputPMTID,
+    		ipqamOutputPCRID,
+    		ipqamOutputBitrate,
+    		ipqamActive)
+    	values
+    	(#{osProgramId},
+    		#{cmcId},
+    		#{ipqamType},
+    		#{ipqamQAMManager},
+    		#{ipqamOutputQAMChannel},
+    		#{ipqamDestinationIP},
+    		#{ipqamUDPPort},
+    		#{ipqamSYNC},
+    		#{ipqamOutputProgramNumber},
+    		#{ipqamOutputPMTID},
+    		#{ipqamOutputPCRID},
+    		#{ipqamOutputBitrate},
+    		#{ipqamActive})
+    </insert>
+	<insert id="insertCC8800BIpqamStatus" parameterType="dsIpqamStatusInfo">
+		insert into
+		cmcdsipqamstatusinfo
+		(cmcPortId,
+		cmcId,
+		ipqamOutputQAMChannel,
+		ipqamFrequency,
+		ipqamUsedUDPPorts,
+		ipqamUsedBandwidth,
+		ipqamBandwidthCapacity,
+		ipqamPercent,
+		ipqamAtten,
+		ipqamSymbolRate,
+		ipqamModulation)
+		values
+		(#{cmcPortId},
+		#{cmcId},
+		#{ipqamOutputQAMChannel},
+		#{ipqamFrequency},
+		#{ipqamUsedUDPPorts},
+		#{ipqamUsedBandwidth},
+		#{ipqamBandwidthCapacity},
+		#{ipqamPercent},
+		#{ipqamAtten},
+		#{ipqamSymbolRate},
+		#{ipqamModulation})
+	</insert>
+	<insert id="insertCC8800BIpqamIsInfo" parameterType="dsIpqamIsInfo">
+		insert into
+		CmcDsIpqamisinfo
+		(isProgramId,
+		cmcId,
+		ipqamDestinationIP,
+		ipqamSendMode,
+		ipqamSourceIP,
+		ipqamSourcePort,
+		ipqamUDPPort,
+		ipqamProgType,
+		ipqamSYNC,
+		ipqamType,
+		ipqamInputProgramNumber,
+		ipqamInputPMTID,
+		ipqamInputPCRID,
+		ipqamTotalESPIDs,
+		ipqamInputBitrate)
+		values
+		(#{isProgramId},
+		#{cmcId},
+		#{ipqamDestinationIP},
+		#{ipqamSendMode},
+		#{ipqamSourceIP},
+		#{ipqamSourcePort},
+		#{ipqamUDPPort},
+		#{ipqamProgType},
+		#{ipqamSYNC},
+		#{ipqamType},
+		#{ipqamInputProgramNumber},
+		#{ipqamInputPMTID},
+		#{ipqamInputPCRID},
+		#{ipqamTotalESPIDs},
+		#{ipqamInputBitrate})
+	</insert>
+	<insert id="insertIqamIPInfo" parameterType="cmcIpqamInfo">
+		insert into cmcipqaminfo
+		(cmcId, ipqamIpAddr, ipqamIpMask,ipqamGw, ipqamMacAddr)
+		values
+		(#{cmcId}, #{ipqamIpAddr}, #{ipqamIpMask}, #{ipqamGw},#{ipqamMacAddr})
+	</insert>
+    <insert id="insertCmcDownChannelStaticInfo" parameterType="cmcDownChannelStaticInfo">
+		insert into cmcdownchannelstaticinfo
+		(cmcPortId,
+		cmcId, channelIndex,
+		ctrId,
+		ctrTotalBytes,
+		ctrUsedBytes,
+		ctrExtTotalBytes,
+		ctrExtUsedBytes)
+		values
+		(#{cmcPortId},
+		#{cmcId},
+		#{channelIndex},
+		#{ctrId},
+		#{ctrTotalBytes},
+		#{ctrUsedBytes},
+		#{ctrExtTotalBytes},
+		#{ctrExtUsedBytes})
+	</insert>
+    <insert id="insertCmcTxPowerLimit" parameterType="txPowerLimit">
+		insert into txPowerLimit
+		(entityId,
+		cmcIndex,
+		channelNum,
+		maxPowerTenthdBmV,
+		minPowerTenthdBmV)
+		values
+		(#{entityId},
+		#{cmcIndex},
+		#{channelNum},
+		#{maxPowerTenthdBmV},
+		#{minPowerTenthdBmV})
+	</insert>
+	<!-- ################################# insert end ######################################## -->
+	
+	<!-- ################################# update start ###################################### -->
+	<update id="updateCmcDownChannelBaseInfo" parameterType="cmcDownChannelBaseInfo">
+		update
+		cmcdownchannelbaseinfo set
+		docsIfDownChannelId=#{docsIfDownChannelId},
+		docsIfDownChannelFrequency=#{docsIfDownChannelFrequency},
+		docsIfDownChannelWidth=#{docsIfDownChannelWidth},
+		docsIfDownChannelModulation=#{docsIfDownChannelModulation},
+		docsIfDownChannelInterleave=#{docsIfDownChannelInterleave},
+		docsIfDownChannelPower=#{docsIfDownChannelPower},
+		docsIfDownChannelAnnex=#{docsIfDownChannelAnnex},
+		docsIfDownChannelStorageType=#{docsIfDownChannelStorageType}
+		where
+		cmcId=#{cmcId} AND channelIndex=#{channelIndex}
+	</update>
+	<update id="updateDownChannelBaseInfo" parameterType="cmcDownChannelBaseInfo">
+        update
+        cmcdownchannelbaseinfo a
+        set
+        a.cmcPortId=#{cmcPortId},
+        a.cmcId=#{cmcId},
+        a.docsIfDownChannelFrequency =#{docsIfDownChannelFrequency},
+        a.docsIfDownChannelPower =#{docsIfDownChannelPower},
+        a.docsIfDownChannelAnnex =#{docsIfDownChannelAnnex},
+        a.docsIfDownChannelModulation =#{docsIfDownChannelModulation}
+        <if test="docsIfDownChannelInterleave != null">
+            , a.docsIfDownChannelInterleave =#{docsIfDownChannelInterleave}  
+        </if>
+        where
+        a.cmcPortId=#{cmcPortId}
+    </update>
+    <update id="updateIpqamIPInfo" parameterType="cmcIpqamInfo">
+		update	cmcipqaminfo
+		set
+		  ipqamIpAddr=#{ipqamIpAddr},
+		  ipqamIpMask=#{ipqamIpMask},
+		  ipqamGw = #{ipqamGw},
+		  ipqamMacAddr = #{ipqamMacAddr}
+		where 
+		  cmcId=#{cmcId}
+	</update>
+	<update id="updateCmcDownChannelStaticInfo" parameterType="cmcDownChannelStaticInfo">
+		update cmcdownchannelstaticinfo set
+		cmcId=#{cmcId},
+		channelIndex=#{channelIndex},
+		ctrId=#{ctrId},
+		ctrTotalBytes=#{ctrTotalBytes},
+		ctrUsedBytes=#{ctrUsedBytes},
+		ctrExtTotalBytes=#{ctrExtTotalBytes},
+		ctrExtUsedBytes=#{ctrExtUsedBytes}
+		WHERE cmcPortId = #{cmcPortId}
+	</update>
+    <select id="getDownChannelStaticInfoList" parameterType="Long"
+     resultType="cmcDownChannelStaticInfo">
+        select
+        cmcPortId, cmcId, channelIndex, ctrId,
+        ctrTotalBytes,
+        ctrUsedBytes,
+        ctrExtTotalBytes,
+        ctrExtUsedBytes
+        from
+        cmcdownchannelstaticinfo
+        WHERE cmcId =#{cmcId}
+    </select>
+    <select id="getDownChannelListByPortId" parameterType="Long"
+     resultType="cmcDownChannelBaseShowInfo">
+        select
+        a.docsIfDownChannelId,
+        a.docsIfDownChannelFrequency,
+        a.docsIfDownChannelWidth,
+        a.docsIfDownChannelPower,
+        c.ifAdminStatus        
+        from
+        cmcdownchannelbaseinfo a left join cmcportattribute c on
+        a.cmcPortId=c.cmcPortId left join cmcdsipqambaseinfo d on 
+        a.cmcPortId=d.cmcPortId
+        WHERE
+        a.cmcId = (SELECT b.cmcId FROM cmcdownchannelbaseinfo b
+        WHERE b.cmcPortId =#{cmcPortId}) AND a.cmcPortId !=#{cmcPortId} and (c.ifAdminStatus = 1 or d.channelType = 3)
+        ORDER BY a.docsIfDownChannelFrequency ASC
+    </select>
+    <select id="getDownChannelOnListByCmcId" parameterType="Long"
+     resultType="cmcDownChannelBaseShowInfo">
+        select
+        a.docsIfDownChannelId,
+        a.docsIfDownChannelFrequency,
+        a.docsIfDownChannelWidth,
+        a.docsIfDownChannelPower,
+        c.ifAdminStatus        
+        from
+        cmcdownchannelbaseinfo a left join cmcportattribute c on
+        a.cmcPortId=c.cmcPortId left join cmcdsipqambaseinfo d on 
+        a.cmcPortId=d.cmcPortId
+        WHERE
+        a.cmcId = #{cmcId} and (c.ifAdminStatus = 1 or d.channelType = 3)
+        ORDER BY a.docsIfDownChannelFrequency ASC
+    </select>
+    <select id="getDownChannelAdminStatusUpNum" parameterType="long"
+     resultType="long">
+        select count(*)
+        from
+        cmcdownchannelbaseinfo a left join cmcportattribute b on
+        a.cmcPortId=b.cmcPortId where a.cmcId =#{cmcId} and b.ifAdminStatus = 1
+    </select>
+    <select id="queryCmcPortIdByCmcIdAndChannelId" parameterType="map"
+		resultType="long">
+		SELECT cmcPortId
+		FROM
+		cmcdownchannelbaseinfo
+		WHERE
+		cmcId=#{cmcId}
+		AND docsIfDownChannelId = #{docsIfDownChannelId}
+	</select>
+	<!-- #################################} update end ########################################-->
+	
+	<!-- #################################} delete start ###################################### -->
+	<delete id="deleteCC8800BIpqamBase" parameterType="long">
+    	delete from 
+    		cmcdsipqambaseinfo
+    	where cmcId=#{cmcId}
+    </delete>
+    <delete id="deleteCC8800BIpqamMappings" parameterType="long">
+    	delete from 
+    		cmcdsipqammappings
+    	where cmcId=#{cmcId}
+    </delete>
+    <delete id="deleteCC8800BIpqamIsInfo" parameterType="long">
+    	delete from 
+    		CmcDsIpqamisinfo
+    	where cmcId=#{cmcId}
+    </delete>
+    <delete id="deleteCC8800BIpqamOsInfo" parameterType="long">
+    	delete from 
+    		CmcDsIpqamosinfo
+    	where cmcId=#{cmcId}
+    </delete>
+    <delete id="deleteCC8800BIpqamStatus" parameterType="long">
+		delete from
+		cmcdsipqamstatusinfo
+		where cmcId=#{cmcId}
+	</delete>
+    <delete id="deleteCmcTxPowerLimit" parameterType="map">
+		delete from
+		txPowerLimit
+		where entityId=#{entityId} and cmcIndex = #{cmcIndex}
+	</delete>
+	<!-- #################################} delete end ######################################## -->
+</mapper>

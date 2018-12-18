@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcPerfGraph" namespace="/cmcPerfGraph" extends="default">
+		<action name="showCmcCurPerf" class="cmcPerfGraphAction" method="showCmcCurPerf" >
+			<result>/cmc/cmcCurPerf.jsp</result>
+		</action>
+		<action name="loadCmcChannelList" class="cmcPerfGraphAction" method="loadCmcChannelList" />
+		<action name="loadCmcPerfTargetGroups" class="cmcPerfGraphAction" method="loadCmcPerfTargetGroups" />
+		<action name="loadPerfTargetsByGroup" class="cmcPerfGraphAction" method="loadPerfTargetsByGroup" />
+		<action name="loadBoardUsedData" class="cmcPerfGraphAction" method="loadBoardUsedData" />
+		<action name="loadChannelSingalQuality" class="cmcPerfGraphAction" method="loadChannelSingalQuality" />
+		<action name="loadChannelCmNumber" class="cmcPerfGraphAction" method="loadChannelCmNumber" />
+		<action name="loadCmcSubPerfTargets" class="cmcPerfGraphAction" method="loadCmcSubPerfTargets" />
+		<action name="loadTempData" class="cmcPerfGraphAction" method="loadTempData" />
+		<action name="loadOptLinkData" class="cmcPerfGraphAction" method="loadOptLinkData" />
+		<action name="loadFlowData" class="cmcPerfGraphAction" method="loadFlowData" />
+		<action name="loadPowerTempData" class="cmcPerfGraphAction" method="loadPowerTempData" />
+		<action name="loadCmcRelayPerfData" class="cmcPerfGraphAction" method="loadCmcRelayPerfData" />
+		<action name="loadcmcNetInfo" class="cmcPerfGraphAction" method="loadcmcNetInfo" />
+		<action name="loadcmcCmNum" class="cmcPerfGraphAction" method="loadcmcCmNum" />
+		<action name="loadOpticalReceiverReceivedPowerData" class="cmcPerfGraphAction" 
+		    method="loadOpticalReceiverReceivedPowerData" />
+		<action name="loadCmcDorVoltage" class="cmcPerfGraphAction" method="loadCmcDorVoltage"></action>
+	</package>
+</struts>

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.report.domain.CmcUserFlowReport">
+
+	<select id="statCmcNumAndUserNumReport" parameterType="map"	resultType="com.topvision.ems.cmc.report.domain.CmcUserFlowReportStatistics">
+		SELECT * 
+		from(
+			SELECT 
+			SUM(F.maxCmNumTotal) userNumTotal,
+			SUM(F.maxCmNumOnline) userNumOnline,
+			C.entityId,C.ccmtsTotal,D.name,D.ip 
+			FROM
+				(
+				SELECT count(*) ccmtsTotal,A.cmcEntityId
+				entityId from cmcentityrelation A
+				GROUP BY cmcEntityId
+				) C left join
+				(
+				SELECT entityId, MAX(cmNumTotal) maxCmNumTotal,MAX(cmNumOnline) maxCmNumOnline
+				FROM perfchannelcmnumSummary A WHERE ${channelSqlTime} GROUP BY entityId
+				) F on C.entityId = F.entityId
+				left join entity D on C.entityId = D.entityId
+			GROUP BY F.entityId
+			) E LEFT JOIN(
+			SELECT
+			c.stats15InOctets/112500000	uplinkPortRate, c.entityId, c.portIndex
+			FROM (
+				SELECT
+				max(A.stats15InOctetsMax) stats15InOctets, A.entityId, A.portIndex
+				FROM perfstats15tablesummary A, oltsnirelation B,oltsniattribute D
+				WHERE A.entityId = B.entityId AND ${oltPerfSqlTime} AND A.portIndex = B.sniIndex 
+				AND B.sniId = D.sniId AND D.sniOperationStatus = 1 
+				GROUP BY A.entityId, A.portIndex
+				) c
+			) F ON E.entityId = F.entityId
+	</select>
+
+	<select id="selectCcmtsChannelSnrAvg" parameterType="map" resultType="com.topvision.ems.cmc.report.domain.CcmtsChannelSnrAvg">
+		SELECT 
+			cmcId,ifindex,MIN(noise) snrAvg 
+		FROM 
+			perfnoisesummary 
+		WHERE 
+			entityId=#{entityId} AND noiseMin!=0
+			and (dt between #{stTime} and #{etTime}) 
+		GROUP BY cmcId,ifindex 
+		ORDER BY cmcId,ifindex
+	</select>
+
+	<select id="statCcmtsUserFlowDetail" parameterType="map" resultType="com.topvision.ems.cmc.report.domain.CmcUserFlowReportDetail">
+		SELECT 
+			G.cmcId, G.cmcIndex, G.sysLocation ccmtsLocation,
+			IF(G.opCount>0, CONCAT(K.displayName, '@report.optical@'), K.displayName) typeName,
+			G.ponIndex, H.ponMaxSend, G.cmNumTotal, G.name,
+			G.interactiveNum,G.broadbandNum,G.cpeInteractiveNum,G.cpeBroadbandNum,G.cpeNumTotal
+		from (
+			SELECT B.cmcid,B.cmcIndex cmcIndex, C.sysLocation, C.name, F.ponIndex,
+				(SELECT COUNT(*) FROM cmcopreceiverinputinfo WHERE cmcId=B.cmcId) as opCount,
+				C.typeId,
+					MAX(onlineNum+otherNum+offlineNum) cmNumTotal, MAX(onlineNum) cmNumOnline,
+					MAX(interactiveNum) interactiveNum,MAX(broadbandNum) broadbandNum,
+					MAX(cpeInteractiveNum) cpeInteractiveNum,MAX(cpeBroadbandNum) cpeBroadbandNum,
+					MAX(cpeNum) cpeNumTotal
+			FROM  cmcentityrelation B
+				LEFT JOIN (select * from usernumhisccmts where realtime between #{stTime} and #{etTime}) A on (B.cmcIndex is null and A.entityId = B.cmcEntityId )  or (A.entityId = B.cmcEntityId and A.ccIfIndex = B.cmcIndex)
+				LEFT JOIN entity C ON B.cmcId=C.entityId,oltonurelation E,oltponrelation F
+			WHERE
+				B.cmcEntityId=#{entityId}
+				AND B.cmcId=E.onuId AND E.ponId=F.ponId
+			GROUP BY B.cmcIndex
+			) G LEFT JOIN (
+			SELECT
+				max(stats15OutOctetsMax)/112500000 ponMaxSend,portIndex 
+			FROM
+				perfstats15tableSummary 
+			WHERE
+				entityId=#{entityId} AND (stats15EndTime BETWEEN #{stTime} AND #{etTime}) GROUP BY portIndex
+			) H ON H.portIndex=G.ponIndex
+		LEFT JOIN entitytype K ON G.typeId=K.typeId
+		ORDER BY G.cmcId,G.ponIndex
+	</select>
+	
+	<select id="getCcmtsFlowforDetail" parameterType="map" resultType="double">
+		<![CDATA[ 
+		SELECT MAX(b.speed)/1000000  from (
+		SELECT sum(channelOutSpeed) speed from perfcmcflowquality a 
+		where cmcId = #{cmcId} and ((channelIndex & 0x8000) >> 15)=1 and ((channelIndex & 0x7F00) >> 8) != 0 
+		GROUP BY collectTime having collectTime between #{stTime} and #{etTime}) b
+		]]>
+	</select>
+
+	<update id="migrateChannelCmHourly">
+		call migrateChannelCmHourly()
+	</update>
+	<update id="summaryChannelCmDaily">
+		call summaryChannelCmDaily()
+	</update>
+	
+</mapper>

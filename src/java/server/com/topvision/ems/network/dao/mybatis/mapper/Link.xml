@@ -1,0 +1,473 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.network.domain.Link">
+	<insert id="insertEntity" parameterType="link"
+		useGeneratedKeys="true" keyProperty="linkId">
+		INSERT INTO Link (name,
+		srcEntityId,
+		srcIfIndex,
+		destEntityId,
+		destIfIndex,
+		width,
+		type,
+		connectType,
+		dashed,
+		startArrow,
+		endArrow,
+		srcIfSpeed,
+		destIfSpeed,
+		srcIfOctets,
+		destIfOctets,
+		createTime,
+		modifyTime)
+		VALUES
+		(#{name},
+		#{srcEntityId},
+		#{srcIfIndex},
+		#{destEntityId},
+		#{destIfIndex},
+		#{width},
+		#{type},
+		#{connectType},
+		#{dashed},
+		#{startArrow},
+		#{endArrow},
+		#{srcIfSpeed},
+		#{destIfSpeed},
+		#{srcIfOctets},
+		#{destIfOctets},
+		#{createTime},
+		#{modifyTime})
+	</insert>
+	<update id="updateEntity" parameterType="link">
+		UPDATE Link
+		SET
+		name=#{name},
+		srcEntityId=#{srcEntityId},
+		srcIfIndex=#{srcIfIndex},
+		destEntityId=#{destEntityId},
+		destIfIndex=#{destIfIndex},
+		width=#{width},
+		type=#{type},
+		dashed=#{dashed},
+		startArrow=#{startArrow},
+		endArrow=#{endArrow},
+		createTime=#{createTime},
+		modifyTime=#{modifyTime}
+		WHERE
+		linkId=#{linkId}
+    </update>
+	<select id="getLinkFlowTop" parameterType="map" resultType="linkEx">
+		SELECT linkId,
+		name,
+		srcEntityId,
+		srcIfIndex as srcPortIndex,
+		destEntityId,
+		destIfIndex as destPortIndex,
+		srcIfOctets
+		FROM Link
+		WHERE
+		srcIfOctets > 0
+		ORDER BY srcIfOctets DESC LIMIT 0, 10
+	</select>
+
+	<select id="getLinkRateTop" parameterType="map" resultType="linkEx">
+		SELECT linkId,
+		name,
+		srcEntityId,
+		srcIfIndex as srcPortIndex,
+		destEntityId,
+		destIfIndex as destPortIndex,
+		srcIfOctetsRate
+		FROM Link
+		WHERE srcIfOctetsRate > 0
+		ORDER BY srcIfOctetsRate DESC LIMIT 0, 10
+	</select>
+	<select id="getLinkByFolderId" parameterType="long" resultType="link">
+		SELECT linkId,
+		name,
+		srcEntityId,
+		destEntityId,
+		srcIfOctets,
+		destIfOctets
+		FROM Link
+		WHERE srcEntityId IN(SELECT entityId FROM
+		EntityFolderRela
+		WHERE
+		folderId =
+		#{folderId})
+		AND destEntityId IN(SELECT
+		entityId From
+		EntityFolderRela WHERE folderId
+		= #{folderId})
+    </select>
+
+	<select id="hasLink" parameterType="link" resultType="link">
+		SELECT
+		linkId
+		FROM Link
+		WHERE srcEntityId = #{srcEntityId}
+		AND destEntityId =
+		#{destEntityId}
+		AND srcIfIndex = #{srcIfIndex}
+		AND destIfIndex =
+		#{destIfIndex}
+    </select>
+
+	<select id="selectByPrimaryKey" parameterType="long" resultType="linkEx">
+		SELECT linkId,
+		name,
+		note,
+		srcEntityId,
+		IFNULL(ifSpeed,0) as
+		ifSpeed,
+		srcIfIndex,
+		destEntityId,
+		destIfIndex,
+		width,
+		type,
+		dashed,
+		startArrow,
+		endArrow,
+		srcIfOctets,
+		destIfOctets,
+		createTime,
+		modifyTime,
+		srcEntityName,
+		srcIp,
+		IFNULL(srcPortIndex,0) AS srcPortIndex,
+		srcPortName,
+		srcPortMac,
+		IFNULL(srcPortSpeed,0) AS srcIfSpeed,
+		destEntityName,
+		destIp,
+		IFNULL(destPortIndex,0) AS
+		destPortIndex,
+		IFNULL(destPortSpeed,0) AS destIfSpeed,
+		destPortName,
+		destPortMac
+		FROM
+		Link A
+		LEFT JOIN (SELECT
+		entityId, name AS srcEntityName, ip AS srcIp
+		FROM
+		Entity) B
+		ON B.entityId = A.srcEntityId
+		LEFT JOIN (SELECT
+		entityId,
+		name AS destEntityName, ip AS destIp FROM
+		Entity) C
+		ON C.entityId =
+		A.destEntityId
+		LEFT JOIN (SELECT
+		entityId,
+		ifIndex AS srcPortIndex,
+		ifName AS srcPortName,
+		ifPhysAddress AS srcPortMac,
+		ifSpeed AS
+		srcPortSpeed
+		FROM
+		Port) D
+		ON D.entityId = A.srcEntityId
+		AND
+		D.srcPortIndex
+		= A.srcIfIndex
+		LEFT JOIN (SELECT entityId,
+		ifIndex AS
+		destPortIndex,
+		ifName AS destPortName,
+		ifPhysAddress AS destPortMac,
+		ifSpeed AS
+		destPortSpeed
+		FROM Port) E
+		ON
+		E.entityId = A.destEntityId
+		AND
+		E.destPortIndex = A.destIfIndex
+		WHERE A.linkId = #{linkId}
+    </select>
+
+
+	<select id="getLinkTableByEntity" parameterType="long"
+		resultType="portEx">
+		SELECT G.*,
+		H.*
+		FROM (SELECT ifAdminStatus,
+		ifOperStatus,
+		ifIndex,
+		ifName
+		FROM Port
+		WHERE entityId = #{entityId}) G
+		LEFT JOIN
+		(SELECT
+		E.ifIndex,
+		E.mac,
+		E.ip,
+		E.name
+		as destName,
+		E.destType,
+		F.ifIndex as
+		destIfIndex,
+		F.name as destIfName
+		FROM (SELECT B.ifAdminStatus,
+		B.ifOperStatus,
+		B.ifIndex,
+		B.ifName,
+		C.mac,
+		C.ip,
+		C.name,
+		C.typeId AS
+		destType,
+		A.destEntityId,
+		A.destIfIndex as destIfIndex
+		FROM Link A,
+		Port
+		B,
+		Entity C
+		WHERE A.srcEntityId = #{entityId}
+		AND C.typeId != 127
+		AND
+		A.srcEntityId = B.entityId
+		AND A.srcIfIndex =
+		B.ifIndex
+		AND
+		A.destEntityId = C.entityId) E
+		LEFT JOIN Port F
+		ON E.destEntityId =
+		F.entityId
+		AND E.destIfIndex =
+		F.ifIndex
+		UNION SELECT E.ifIndex,
+		E.mac,
+		E.ip,
+		E.name,
+		E.destType,
+		F.ifIndex as destIfIndex,
+		F.name as destIfName
+		FROM
+		(SELECT B.ifAdminStatus,
+		B.ifOperStatus,
+		B.ifIndex,
+		B.ifName,
+		C.mac,
+		C.ip,
+		C.name,
+		C.typeId AS destType,
+		A.destEntityId,
+		A.destIfIndex as
+		destIfIndex
+		FROM Link A,
+		Port B,
+		Entity C
+		WHERE A.destEntityId =
+		#{entityId}
+		AND C.typeId != 127
+		AND
+		A.destEntityId = B.entityId
+		AND
+		A.destIfIndex = B.ifIndex
+		AND A.destEntityId = C.entityId) E
+		LEFT JOIN
+		Port F
+		ON
+		E.destEntityId = F.entityId
+		AND E.destIfIndex = F.ifIndex
+		UNION
+		SELECT ifIndex,
+		mac,
+		ip,
+		name,
+		127 AS destType,
+		null as
+		destIfIndex,
+		null as
+		destIfName
+		FROM IpAddressBook
+		WHERE entityId = #{entityId}) H
+		ON
+		G.ifIndex = H.ifIndex
+		ORDER BY
+		destType ASC
+    </select>
+
+
+	<delete id="deleteByPrimaryKey" parameterType="long">
+		DELETE FROM Link
+		WHERE linkId = #{linkId}
+    </delete>
+
+	<delete id="deleteLinkByEntityId" parameterType="long">
+		DELETE FROM
+		Link
+		WHERE srcEntityId = #{entityId} OR
+		destEntityId = #{entityId}
+    </delete>
+
+	<delete id="emptyLinkByRecyle" parameterType="long">
+		DELETE FROM Link
+		WHERE srcEntityId NOT IN (SELECT DISTINCT
+		entityId FROM
+		EntityFolderRela)
+		OR destEntityId NOT IN (SELECT DISTINCT entityId FROM
+		EntityFolderRela)
+    </delete>
+
+	<update id="updateOutline" parameterType="link">
+		UPDATE Link SET name =
+		#{name}, note =
+		#{note}, ifSpeed =
+		#{ifSpeed} WHERE linkId = #{linkId}
+	</update>
+
+	<select id="queryLink" parameterType="string" resultType="linkEx">
+		SELECT
+		linkId,
+		srcIfIndex,
+		destIfIndex,
+		width,
+		type,
+		srcEntityName,
+		srcIp,
+		IFNULL(srcPortIndex,0) AS srcPortIndex,
+		IFNULL(srcPortName,'') AS
+		srcPortName,
+		destEntityName,
+		destIp,
+		IFNULL(destPortIndex,0) AS
+		destPortIndex,
+		IFNULL(destPortName,'') AS destPortName
+		FROM Link A
+		LEFT
+		JOIN
+		(SELECT entityId, name AS srcEntityName, ip AS srcIp FROM
+		Entity)
+		B
+		ON B.entityId = A.srcEntityId
+		LEFT JOIN (SELECT
+		entityId, name AS
+		destEntityName, ip AS destIp FROM
+		Entity) C
+		ON C.entityId =
+		A.destEntityId
+		LEFT JOIN (SELECT
+		entityId, ifIndex AS srcPortIndex,
+		ifName AS srcPortName
+		FROM Port) D
+		ON D.entityId = A.srcEntityId
+		AND
+		D.srcPortIndex = A.srcIfIndex
+		LEFT JOIN (SELECT entityId, ifIndex AS
+		destPortIndex, ifName AS
+		destPortName FROM
+		Port) E
+		ON E.entityId =
+		A.destEntityId
+		AND E.destPortIndex = A.destIfIndex
+		WHERE srcIp = #{name}
+		OR destIp = #{name}
+		OR
+		srcEntityName = #{name}
+		OR destEntityName =
+		#{name}
+    </select>
+
+	<select id="getLinkIdByFolderId" parameterType="long"
+		resultType="long">
+		SELECT linkId
+		FROM Link
+		WHERE srcEntityId IN
+		(SELECT
+		entityId
+		FROM EntityFolderRela WHERE folderId
+		= #{folderId})
+		AND
+		destEntityId IN
+		(SELECT entityId From
+		EntityFolderRela WHERE folderId
+		= #{folderId})
+	</select>
+
+	<select id="selectByMap" parameterType="map" resultType="linkEx">
+		SELECT
+		linkId, srcIfSpeed, destIfSpeed,
+		srcIfOctetsRate, srcIfOctets
+		FROM Link
+	</select>
+
+	<select id="getAllLink" parameterType="map" resultType="linkEx">
+        <![CDATA[ 
+        SELECT linkId,
+               srcEntityId,
+               srcIfIndex,
+               destEntityId,
+               destIfIndex,
+               srcEntityName,
+               srcIp,
+               IFNULL(srcPortIndex,0) AS srcPortIndex,
+               srcPortName,
+               IFNULL(destEntityName,'') AS destEntityName,
+               destIp,
+               IFNULL(destPortIndex,0) AS destPortIndex,
+               IFNULL(destPortName,'') destPortName
+          FROM (SELECT * FROM Link
+        ]]>
+		<if test="typeId != null and entityId != ''">
+			WHERE srcEntityId = #{entityId} OR
+			destEntityId =
+			#{entityId}
+        </if>
+        <![CDATA[ ) A
+        LEFT JOIN (SELECT entityId, name AS srcEntityName, ip AS srcIp FROM Entity) B ON B.entityId = A.srcEntityId
+        LEFT JOIN (SELECT entityId, name AS destEntityName, ip AS destIp FROM Entity) C ON C.entityId = A.destEntityId 
+        LEFT JOIN (SELECT entityId,
+                          ifIndex AS srcPortIndex,
+                          ifName AS srcPortName,
+                          ifPhysAddress AS srcPortMac, 
+                          ifSpeed AS srcPortSpeed
+                     FROM Port) D
+               ON D.entityId = A.srcEntityId
+              AND D.srcPortIndex = A.srcIfIndex
+        LEFT JOIN (SELECT entityId,
+                          ifIndex AS destPortIndex,
+                          ifName AS destPortName,
+                          ifPhysAddress AS destPortMac,
+                          ifSpeed AS destPortSpeed
+                     FROM Port) E
+               ON E.entityId = A.destEntityId
+              AND E.destPortIndex = A.destIfIndex
+        ORDER BY srcIp ASC, destIp ASC
+        ]]>
+	</select>
+
+	<select id="getLinkByPort" parameterType="link" resultType="link">
+		SELECT linkId,
+		srcIfSpeed,
+		destIfSpeed,
+		srcIfIndex,
+		srcEntityId,
+		destEntityId,
+		destIfIndex
+		FROM Link
+		WHERE (srcEntityId = #{srcEntityId}
+		AND srcIfIndex =
+		#{srcIfIndex})
+		or (destEntityId = #{srcEntityId} AND
+		destIfIndex = #{srcIfIndex})
+    </select>
+
+	<select id="isLinkExists" parameterType="link" resultType="long">
+		select linkId from link where srcEntityId =
+		#{srcEntityId} and
+		srcIfIndex = #{srcIfIndex} and destEntityId = #{destEntityId} and
+		destIfIndex = #{destIfIndex}
+    </select>
+    
+    <select id="getLinkIdByEntityIds" parameterType="map" resultType="long">
+		<foreach item="entityId" index="index" collection="list" separator="union">
+			SELECT linkId FROM link WHERE srcEntityId=#{entityId} OR destEntityId=#{entityId}
+        </foreach>
+    </select>
+
+</mapper>

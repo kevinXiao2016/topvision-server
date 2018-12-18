@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.iproute.domain.IpRoute">
+	<insert id="insertEntity" parameterType="ipRoute">
+		insert into oltiproute
+		(entityId, ipAddressDst, ipMaskDst, nextHop, distance, track,
+		routeType, flag
+		)
+		values
+		(#{entityId}, #{ipAddressDst}, #{ipMaskDst},
+		#{nextHop}, #{distance}, #{track}, #{routeType}, #{flag}
+		)
+	</insert>
+
+	<delete id="deleteEntity" parameterType="long">
+		delete from oltiproute
+		where entityId = #{entityId}
+	</delete>
+
+	<select id="selectIpRouteByEntityId" parameterType="long"
+		resultType="ipRoute">
+		select entityId, ipAddressDst, ipMaskDst, nextHop,
+		distance, track, flag
+		routeType from oltiproute where entityId = #{entityId} 
+	</select> 
+	
+	<select id="queryIpRouteList" parameterType="map" resultType="ipRoute">
+		select entityId, ipAddressDst, ipMaskDst, nextHop,distance, track, routeType, flag 
+		from oltiproute 
+		where entityId = #{entityId} and routeType = #{routeType} limit ${start} , ${limit}
+	</select>
+	
+	<select id="queryIpRouteCount" parameterType="map" resultType="int">
+		select count(*) from oltiproute where entityId = #{entityId} and routeType = #{routeType}
+	</select>
+	
+	<delete id="deleteIpRoute" parameterType="ipRoute">
+		delete from oltiproute
+		where entityId = #{entityId} and ipAddressDst = #{ipAddressDst} 
+		and ipMaskDst = #{ipMaskDst} and nextHop = #{nextHop} and routeType = #{routeType}
+	</delete>
+	
+	<update id="updateIpRoute" parameterType="ipRoute">
+		update oltiproute
+		set distance = #{distance}, track = #{track}
+		where entityId = #{entityId} and ipAddressDst = #{ipAddressDst} 
+		and ipMaskDst = #{ipMaskDst} and nextHop = #{nextHop} and routeType = #{routeType}
+	</update>
+	
+</mapper>

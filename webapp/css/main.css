@@ -1,0 +1,584 @@
+/*
+ * @author: niejun
+ *
+ * main css.
+ */
+BODY,BUTTON,INPUT,SELECT,OPTION,TABLE,TR,TD,A,DIV,SPAN,LI {
+	font-size: 12px;
+	font-family: Arial, Helvetica, Sans-Serif;
+}
+
+A {
+	color: #000;
+	text-decoration: none;
+}
+
+A:hover {
+	color: #000;
+	text-decoration: underline;
+}
+
+#loading-mask {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 20000;
+	background-color: #FFF;
+}
+/*用于等待框的图标显示*/
+.waitingMsg{
+	background:url('/images/blue_loading.gif') no-repeat
+}
+
+#loadingText {
+	margin-top: 150px;
+}
+
+#loadingText span {
+	font-size: 12pt;
+	font-weight: bold;
+	padding-left: 15px;
+}
+
+#loadingProgressBar {
+	margin-top: 10px;
+	padding: 1px 1px 0px 1px;
+	border: solid 1px gray;
+	width: 360px !important;
+	width: 364px;
+	height: 11px !important;
+	height: 14px;
+}
+
+#loading-indicator {
+	float: left;
+	font-size: 0px;
+	width: 0;
+	height: 10px;
+	padding: 0;
+	margin: 0;
+	background: #d3e6ea;
+}
+
+#headerbar {
+	width: 100%;
+	height: 56px;
+}
+
+#statusbar {
+	cursor: default;
+	width: 100%;
+	height: 27px;
+}
+
+#statusbar a {
+	line-height: 22px;
+	text-decoration: none;
+}
+
+.HEADER_BAR a {
+	line-height: 22px;
+	padding-right: 5px;
+	padding-left: 5px;
+	text-decoration: none;
+}
+
+.STATUS-SEPARATOR {
+	width: 2px;
+	height: 27px;
+}
+
+.MAIN_WND {
+	overflow: hidden;
+	border: 0;
+	margin: 0;
+}
+
+.NAVI_WND {
+	padding-bottom: 15px;
+	border: 0;
+	margin: 0;
+}
+
+.FULLSCREEN-BT {
+	cursor: pointer;
+	position: absolute;
+	right: 0px;
+	top: 1px;
+	z-index: 9999;
+	width: 24px;
+	height: 24px;
+	background: url(fullscreen.gif) 0 0 no-repeat;
+}
+
+.FULLSCREEN-BT1 {
+	cursor: pointer;
+	position: absolute;
+	right: 0;
+	top: 1px;
+	z-index: 9999;
+	width: 24px;
+	height: 24px;
+	background: url(fullscreen.gif) 0 -24px no-repeat;
+}
+
+.BUTTON75 {
+	border: 0;
+	background: url(default/button75.gif) 0 0;
+	width: 75px;
+	height: 21px;
+	line-height: 16px;
+}
+
+.BUTTON_OVER75 {
+	border: 0;
+	background: url(default/button75.gif) 0 -21px;
+	width: 75px;
+	height: 21px;
+	line-height: 16px;
+}
+
+.BUTTON_PRESSED75 {
+	border: 0;
+	background: url(default/button75.gif) 0 -42px;
+	width: 75px;
+	height: 21px;
+	line-height: 16px;
+}
+
+.BUTTON95 {
+	border: 0;
+	background: url(default/button95.gif) 0 0;
+	width: 95px;
+	height: 21px;
+	line-height: 16px;
+}
+
+.BUTTON_OVER95 {
+	border: 0;
+	background: url(default/button95.gif) 0 -21px;
+	width: 95px;
+	height: 21px;
+	line-height: 16px;
+}
+
+.BUTTON_PRESSED95 {
+	border: 0;
+	background: url(default/button95.gif) 0 -42px;
+	width: 95px;
+	height: 21px;
+	line-height: 16px;
+}
+
+.upHelpTip {
+	z-index: 999;
+	height: 13px;
+	background: url(images/tooltip-up-right.gif) no-repeat right top;
+	padding-top: 13px;
+	color: #000;
+	position: absolute;
+}
+
+.upHelpTip .tipcon {
+	border: solid #666;
+	background: #ffffe5;
+	width: 180px;
+	word-wrap: break-word;
+	word-break: break-all;
+	border-width: 0 1px 1px;
+	padding: 12px 10px 10px 10px;
+}
+
+.searchBox {
+	height: 20px;
+	width: 225px;
+	border: 1px solid #6593CF;
+	border-right: 0;
+	background: #FFF;
+}
+
+.search_input_gray {
+	color: gray;
+	width: 224px;
+	height: 18px;
+	border: 0;
+	padding-top: 2px;
+	padding-left: 2px;
+	line-height: 16px;
+}
+
+.search_input_focused {
+	color: #00156E;
+	width: 224px;
+	height: 18px;
+	border: 0;
+	padding-top: 2px;
+	padding-left: 2px;
+	line-height: 16px;
+	font-style: nomal;
+}
+
+.search-bt-focused {
+	width: 15px;
+	height: 22px;
+	border: 1px solid #6593CF;
+	border-right: 0;
+	background: #BFDBFF;
+}
+
+.search-bt {
+	width: 16px;
+	height: 22px;
+	border: 1px solid #6593CF;
+	border-right: 0;
+	background: #FFF;
+	border-left: 0;
+}
+
+.search-arrow {
+	width: 14px;
+	height: 22px;
+	border: 1px solid #6593CF;
+	border-left: 0;
+	padding-left: 1px;
+	background: #FFF;
+}
+
+.search-arrow-focused {
+	width: 14px;
+	height: 22px;
+	border: 1px solid #6593CF;
+	padding-left: 0;
+	background: #BFDBFF;
+}
+
+.NAVI_DIVIDER_UP {
+	cursor: pointer;
+	font-size: 1px;
+	width: 35px;
+	height: 7px;
+	background: url(bg_divider.gif) 0 0 no-repeat;
+}
+
+.NAVI_DIVIDER_DOWN {
+	cursor: pointer;
+	font-size: 1px;
+	width: 35px;
+	height: 7px;
+	background: url(bg_divider.gif) 0 -7px no-repeat;
+}
+
+.NAVI_EXPANDER {
+	cursor: pointer;
+	font-weight: 700;
+	padding-left: 7px;
+	padding-right: 3px;
+	height: 22px;
+}
+
+.NAVI_EXPANDER_OVER {
+	cursor: pointer;
+	padding-left: 7px;
+	padding-right: 3px;
+	height: 22px;
+}
+
+.NAVI_EXPANDER_CENTER {
+	padding-top: 1px;
+}
+
+.NAVI_EXPANDER_CENTER a:hover {
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.NAVI_EXPANDER_DOWN {
+	width: 15px;
+	height: 15px;
+	background: url(up.gif) 0 2px;
+}
+
+.NAVI_EXPANDER_UP {
+	width: 15px;
+	height: 15px;
+	background: url(up.gif) 0 -14px;
+}
+
+.NAVI_SPACING {
+	display: none;
+	height: 0;
+	border: 0;
+}
+
+.NAVI_SEPARATOR {
+	height: 3px;
+	background: #ADD1FF;
+}
+
+.NAVI_ACTION {
+	height: 20px;
+	/* padding-left: 30px; */
+	white-space: nowrap;
+}
+
+.NAVI_TREE_CONTAINER {
+	width: 100%;
+	height: 100%;
+	background: #FFF;
+}
+
+.search-bt-over,.search-bt-down {
+	width: 15px;
+	height: 22px;
+	border: 1px solid #6593CF;
+	border-right: 0;
+	background: red;
+}
+
+.search-arrow-over,.search-arrow-down {
+	width: 14px;
+	height: 22px;
+	border: 1px solid #6593CF;
+	padding-left: 0;
+	background: red;
+}
+
+.NAVI_BAR,.NAVI_BAR_OVER,.NAVI_BAR_PRESSED,.NAVI_BAR_SELECTED {
+	cursor: default;
+	height: 32px;
+}
+
+.NAVI_BAR td,.NAVI_BAR_OVER td,.NAVI_BAR_PRESSED td,.NAVI_BAR_SELECTED td{
+	white-space: nowrap;
+}
+
+.NAVI_BT_CONTAINER,.NAVI_BT,.NAVI_BT_OVER,.NAVI_BT_PRESSED,.NAVI_BT_SELECTED
+	{
+	height: 30px;
+	white-space: nowrap;
+}
+
+.NAVI_DIVIDER,.NAVI_DIVIDER_OVER {
+	cursor: s-resize;
+	border-top: 1px solid #8db2e3;
+	height: 7px !important;
+}
+
+.NAVI_TASK,.NAVI_TASK_OVER,.NAVI_TASK_PRESSED {
+	cursor: default;
+	height: 21px;
+}
+
+.NAVI_TASK td,.NAVI_TASK_OVER td,.NAVI_TASK_PRESSED td {
+	white-space: nowrap;
+}
+
+.NAVI_TASK .NAVI_TASK_L,.NAVI_TASK .NAVI_TASK_R,.NAVI_TASK_OVER .NAVI_TASK_L,.NAVI_TASK_OVER .NAVI_TASK_R,.NAVI_TASK_PRESSED .NAVI_TASK_L,.NAVI_TASK_PRESSED .NAVI_TASK_R
+	{
+	width: 0;
+	height: 21px;
+}
+
+.NAVI_TASK .NAVI_TASK_C,.NAVI_TASK_OVER .NAVI_TASK_C,.NAVI_TASK_PRESSED .NAVI_TASK_C
+	{
+	height: 21px;
+	padding: 1px;
+}
+
+.NAVI_TASK .NAVI_TASK_C a,.NAVI_TASK .NAVI_TASK_C a:hover,.NAVI_TASK_OVER .NAVI_TASK_C a,.NAVI_TASK_OVER .NAVI_TASK_C a:hover,.NAVI_TASK_PRESSED .NAVI_TASK_C a:hover
+	{
+	cursor: default;
+	text-decoration: none;
+}
+
+.NAVI_EXPANDER td,.NAVI_EXPANDER_OVER td {
+	font-weight: bold;
+}
+
+.ultab {
+	float: left;
+	width: 100%;
+	line-height: normal;
+	background: url(images/tab/tab_bg.png) repeat-x 50% bottom;
+}
+
+.ultab-box {
+	border: solid 1px #1a74b5;
+	border-top: 0;
+}
+
+.ultab ul {
+	float: left;
+	list-style: none;
+	margin: 0 0 0 5px;
+	padding: 0;
+}
+
+.ultab li {
+	line-height: 1.2em;
+	font-size: 1.4em;
+	float: left;
+	background: url(images/tab/tab_l_off.png) no-repeat left top;
+	margin: 0 0 0 1px;
+	padding: 0 2px;
+}
+
+.ultab a {
+	display: block;
+	float: left;
+	color: #024B6F;
+	text-decoration: none;
+	background: url(images/tab/tab_r_off.png) no-repeat right top;
+	padding: 0 1.5em;
+}
+
+.ultab a:hover {
+	color: #f30;
+	text-decoration: none;
+}
+
+.ultab .selected {
+	background-image: url(images/tab/tab_l_on.png);
+}
+
+.ultab .selected a {
+	padding-bottom: 1px;
+	color: #f60;
+	font-weight: 700;
+	background-image: url(images/tab/tab_r_on.png);
+}
+
+.hseparator {
+	border-top: solid 1px gray;
+}
+
+.ext-mb-waiting {
+	background: transparent url(../images/waiting.gif) no-repeat top left;
+	height: 48px;
+}
+
+.defaulttabIcon {
+	background-image: url(../images/default.gif) !important;
+}
+
+.naviIcon {
+	background-image: url(../images/navi.gif) !important;
+}
+
+.propertyIcon {
+	background-image: url(../images/property.gif) !important;
+}
+
+.googleIcon {
+	background-image: url(../images/google_new.png) !important;
+}
+
+.mydesktopIcon {
+	background-image: url(../images/workbench/mydesktop.gif);
+}
+
+.monitorIcon {
+	background-image: url(../images/silk/eye.png) !important
+}
+
+.eponDeviceMonitorIcon {
+	background-image: url(../images/system/department.gif) !important
+}
+
+.eponFastConfigIcon {
+	background-image: url(../images/silk/calculator_edit.png) !important
+}
+
+.eponTemplateIcon {
+	background-image: url(../images/silk/brick_edit.png) !important
+}
+
+.eponCollectorIcon {
+	background-image: url(../images/silk/cart_edit.png) !important
+}
+
+.welcome-tabicon {
+	background-image: url(../images/welcome.gif) !important;
+}
+
+.searchTabIcon {
+	background-image: url(../images/query.gif) !important;
+}
+
+.gmIcon {
+	background-image: url(../images/system/gm.gif) !important;
+}
+
+.dashboardIcon {
+	background-image: url(../images/dashboard.gif) !important;
+}
+
+.apListIcon {
+	background-image: url( ../images/default.gif ) !important;
+}
+
+.alarmTabIcon {
+	background-image: url(../images/fault/alertFolder.gif) !important;
+}
+
+.bmenu_maxview {
+	background-image: url(../images/maxview.gif) !important;
+}
+
+.bmenu_locate {
+	background-image: url(../images/resources/locate.gif) !important;
+}
+
+.bmenu_back {
+	background-image: url(../images/back.gif) !important;
+}
+
+.bmenu_forward {
+	background-image: url(../images/forward.gif) !important;
+}
+
+.bmenu_refresh {
+	background-image: url(../images/refresh.gif) !important;
+}
+
+.bmenu_preference {
+	background-image: url(../css/treeview/icoD1.png);
+}
+
+.bmenu_exit {
+	background-image: url(../images/logoff.gif) !important;
+}
+
+.bmenu_find {
+	background-image: url(../images/aquery.gif) !important;
+}
+
+.bmenu_home {
+	background-image: url(../images/home.gif) !important;
+}
+
+.bmenu_startPage {
+	background-image: url(../images/startpage.gif) !important;
+}
+
+.bmenu_f5 {
+	background-image: url(../images/f5.gif) !important;
+}
+
+.bmenu_moreitem {
+	background-image: url(../images/moreitem.gif) !important;
+}
+
+.bmenu_more {
+	background-image: url(../images/moreup.gif) !important;
+}
+
+.bmenu_less {
+	background-image: url(../images/moredown.gif) !important;
+}
+.snap{
+	background-image: url(../images/snap.gif) !important;
+}
+

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.topvision.ems.cmc.cm.domain.CmRefresh">
+ 
+ 	<insert id="insertCmCmcRelation" parameterType="com.topvision.ems.cmc.domain.CmCmcRelation">
+		insert into cmccmRelation(cmcId,upPortId,downPortId,mac,maclong,entityId,docsIfCmtsCmStatusIndex)
+		values
+		(#{cmcId},#{upPortId},#{downPortId},#{mac},#{maclong},#{entityId},#{cmIndex})
+		<selectKey resultType="long" keyProperty="cmId">
+			SELECT @@IDENTITY
+			AS cmId
+		</selectKey>
+	</insert>
+	
+	<select id="selectCmCmcRelationByCmcIdFirst" parameterType="long" resultType="com.topvision.ems.cmc.domain.CmCmcRelation">
+		select * from CmcCmRelation where cmcId=#{cmcId};
+	</select>
+	
+	<select id="selectCmCmcRelationByCmcId" parameterType="long" resultType="com.topvision.ems.cmc.domain.CmCmcRelation">
+		select * from CmcCmRelation where cmcId=#{cmcId};
+	</select>
+	
+	<select id="selectCmAttributeByCmcId" parameterType="long" resultType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+		select * from CmAttribute where cmcId=#{cmcId};
+	</select>
+	
+	<select id="selectChannelIndexToIdByCmcId" parameterType="long" resultType="com.topvision.ems.cmc.domain.CmcPortRelation">
+        select cmcPortId,channellIndex as channelIndex from CmcPortRelation where cmcId=#{cmcId}
+	</select>
+	
+	<delete id="deleteCmCmcRelation" parameterType="com.topvision.ems.cmc.domain.CmCmcRelation">
+		delete from cmccmRelation where cmId=#{cmId}
+	</delete>
+	
+	<update id="updateCmCmcRelation" parameterType="com.topvision.ems.cmc.domain.CmCmcRelation">
+		update
+        cmccmRelation
+        set
+        upPortId = #{upPortId},
+        downPortId = #{downPortId},
+        docsIfCmtsCmStatusIndex=#{cmIndex}
+		where cmId=#{cmId}
+	</update>
+	<update id="refreshCmPortId" parameterType="map">
+		update
+        cmccmRelation
+        set
+        upPortId = #{upPortId},
+        downPortId = #{downPortId}
+		where mac=#{mac}
+	</update>
+	<update id="updateCmAttribute" parameterType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+		update
+		CmAttribute
+		set
+		cmcId=#{cmcId},
+		statusIndex=#{statusIndex},
+		statusMacAddress=#{statusMacAddress},
+		statusIpAddress=#{statusIpAddress},
+		statusDownChannelIfIndex=#{statusDownChannelIfIndex},
+		statusUpChannelIfIndex=#{statusUpChannelIfIndex},
+		statusRxPower=#{statusRxPower},
+		statusTimingOffset=#{statusTimingOffset},
+		statusEqualizationData=#{statusEqualizationData},
+		statusValue=#{statusValue},
+		statusUnerroreds=#{statusUnerroreds},
+		statusCorrecteds=#{statusCorrecteds},
+		statusUncorrectables=#{statusUncorrectables},
+		statusExtUnerroreds=#{statusExtUnerroreds},
+		statusExtCorrecteds=#{statusExtCorrecteds},
+		statusExtUncorrectables=#{statusExtUncorrectables},
+		statusSignalNoise=#{statusSignalNoise},
+		statusMicroreflections=#{statusMicroreflections},
+		statusDocsisRegMode=#{statusDocsisRegMode},
+		statusModulationType=#{statusModulationType},
+		statusInetAddressType=#{statusInetAddressType},
+		statusInetAddress=#{statusInetAddress},
+		statusValueLastUpdate=#{statusValueLastUpdate},
+		<if test="fileName != null and fileName != ''">
+			fileName=#{fileName},
+		</if>
+		<if test="v6FileName != null and v6FileName != ''">
+			v6FileName=#{v6FileName},
+		</if>
+        <if test="preStatus != null">preStatus=#{preStatus}, </if>
+        <if test="docsisMode != null">docsisMode=#{docsisMode}, </if>
+        statusHighResolutionTO=#{statusHighResolutionTO}
+		where cmId=#{cmId}
+	</update>
+	<insert id="insertCmAttribute" parameterType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+		insert into
+		CmAttribute
+		(cmId, cmcId, statusIndex,
+		statusMacAddress,
+		statusIpAddress,
+		statusDownChannelIfIndex,
+		statusUpChannelIfIndex,
+		statusRxPower,
+		statusTimingOffset,
+		statusEqualizationData,
+		statusValue,
+		statusUnerroreds,
+		statusCorrecteds,
+		statusUncorrectables,
+		statusExtUnerroreds,
+		statusExtCorrecteds,
+		statusExtUncorrectables,
+		statusSignalNoise,
+		statusMicroreflections,
+		statusDocsisRegMode,
+		statusModulationType,
+		statusInetAddressType,
+		statusInetAddress,
+		statusValueLastUpdate,
+		preStatus,
+		docsisMode,
+		fileName,
+		v6FileName,
+        statusHighResolutionTO
+		)
+		values(
+		#{cmId}, 
+		#{cmcId},
+		#{statusIndex}, 
+		#{statusMacAddress},
+		#{statusIpAddress},
+		#{statusDownChannelIfIndex},
+		#{statusUpChannelIfIndex},
+		#{statusRxPower},
+		#{statusTimingOffset},
+		#{statusEqualizationData},
+		#{statusValue},
+		#{statusUnerroreds},
+		#{statusCorrecteds},
+		#{statusUncorrectables},
+		#{statusExtUnerroreds},
+		#{statusExtCorrecteds},
+		#{statusExtUncorrectables},
+		#{statusSignalNoise},
+		#{statusMicroreflections},
+		#{statusDocsisRegMode},
+		#{statusModulationType},
+		#{statusInetAddressType},
+		#{statusInetAddress},
+		#{statusValueLastUpdate},
+        <choose>
+            <when test="preStatus != null">
+                #{preStatus},
+            </when>
+            <otherwise>
+                -1,
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="docsisMode != null">
+                #{docsisMode},
+            </when>
+            <otherwise>
+                -1,
+            </otherwise>
+        </choose>
+        #{fileName},
+        #{v6FileName},
+        #{statusHighResolutionTO}
+		)
+	</insert>
+</mapper>

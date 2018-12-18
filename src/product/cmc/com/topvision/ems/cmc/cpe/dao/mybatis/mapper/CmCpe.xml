@@ -1,0 +1,698 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.cpe.domain.CmCpe">
+
+	<!-- ################################## select start ####################################### -->
+	<select id="selectAllUserNumHis" resultType="com.topvision.ems.cmc.domain.CmcUserNumHisPerf" parameterType="map">
+		select 
+			time as collectTime, 
+			onlineNum, 
+			otherNum, 
+			offlineNum, 
+			interactiveNum, 
+			broadbandNum,
+			mtaNum,
+			integratedNum, 
+			cpeNum,
+            cpeInteractiveNum,
+            cpeBroadbandNum,
+            cpeMtaNum,
+			realtime 
+		from 
+			usernumhisall 
+		where 1 = 1
+			<if test="startTime != null">AND <![CDATA[ time >= #{startTime} ]]></if>
+			<if test="endTime != null">AND <![CDATA[time <= #{endTime}]]></if>
+		order by time ASC
+	</select>
+	
+	<select id="selectUserNumHisByArea" resultType="com.topvision.ems.cmc.domain.CmcUserNumHisPerf"	parameterType="map">
+		select 
+			time as collectTime, 
+			onlineNum, 
+			otherNum, 
+			offlineNum, 
+			interactiveNum, 
+			broadbandNum,
+			mtaNum,
+			integratedNum, 
+			cpeNum,
+            cpeInteractiveNum,
+            cpeBroadbandNum,
+            cpeMtaNum,
+			realtime 
+		from 
+			usernumhisarea
+		where  
+			areaId = #{regionId}
+			<if test="startTime != null">AND <![CDATA[ time >= #{startTime} ]]></if>
+			<if test="endTime != null">AND <![CDATA[time <= #{endTime}]]></if>
+		order by time ASC
+	</select>
+	
+	<select id="selectUserNumHisByDevice" resultType="com.topvision.ems.cmc.domain.CmcUserNumHisPerf" parameterType="map">
+		select 
+			time as collectTime, 
+			onlineNum, 
+			otherNum, 
+			offlineNum, 
+			interactiveNum, 
+			broadbandNum,
+			mtaNum,
+			integratedNum, 
+			cpeNum,
+            cpeInteractiveNum,
+            cpeBroadbandNum,
+            cpeMtaNum,
+			realtime 
+			from 
+			usernumhisdevice
+		where 
+			entityId = #{entityId}
+			<if test="startTime != null">AND <![CDATA[ time >= #{startTime} ]]></if>
+			<if test="endTime != null">AND <![CDATA[time <= #{endTime}]]></if>
+		order by time ASC
+	</select>
+	
+	<select id="selectUserNumHisByCmc" resultType="com.topvision.ems.cmc.domain.CmcUserNumHisPerf" parameterType="long">
+		select 
+			time as collectTime, 
+			onlineNum, 
+			otherNum, 
+			offlineNum, 
+			interactiveNum, 
+			broadbandNum,
+			mtaNum,
+			integratedNum, 
+			cpeNum,
+            cpeInteractiveNum,
+            cpeBroadbandNum,
+            cpeMtaNum,
+			realtime 
+			from 
+			usernumhisccmts 
+		where 
+			entityId = #{entityId}
+			<if test="startTime != null">AND <![CDATA[ time >= #{startTime} ]]></if>
+			<if test="endTime != null">AND <![CDATA[time <= #{endTime}]]></if>
+		order by time ASC
+	</select>
+
+	<select id="selectUserNumHisByChannel" resultType="com.topvision.ems.cmc.domain.CmcUserNumHisPerf" parameterType="map">
+		select 
+			time as collectTime, 
+			onlineNum, 
+			otherNum, 
+			offlineNum, 
+			interactiveNum, 
+			broadbandNum,
+			mtaNum,
+			integratedNum, 
+			cpeNum,
+            cpeInteractiveNum,
+            cpeBroadbandNum,
+            cpeMtaNum,
+			realtime
+			from 
+			usernumhisport 
+		where 
+			entityId = #{entityId} and
+			portIfIndex = #{channelIndex}
+			<if test="startTime != null">AND <![CDATA[ time >= #{startTime} ]]></if>
+			<if test="endTime != null">AND <![CDATA[time <= #{endTime}]]></if>
+		order by time ASC
+	</select>
+	
+	<select id="selectUserNumHisByCmcWithOutAgent" resultType="com.topvision.ems.cmc.domain.CmcUserNumHisPerf" parameterType="map">
+		select 
+			time as collectTime, 
+			onlineNum, 
+			otherNum, 
+			offlineNum, 
+			interactiveNum, 
+			broadbandNum,
+			mtaNum,
+			integratedNum, 
+			cpeNum,
+            cpeInteractiveNum,
+            cpeBroadbandNum,
+            cpeMtaNum,
+			realtime 
+		from 
+			usernumhisccmts 
+		where 
+			entityId = #{entityId} and
+			ccIfIndex = #{cmcIndex}
+			<if test="startTime != null">AND <![CDATA[ time >= #{startTime} ]]></if>
+			<if test="endTime != null">AND <![CDATA[time <= #{endTime}]]></if>
+		order by time ASC
+	</select>
+
+    <select id="selectUserNumHisByCmcNew" resultType="com.topvision.ems.cmc.domain.CmcUserNumHisPerf" parameterType="map">
+        select
+        time as collectTime,
+        onlineNum,
+        otherNum,
+        offlineNum,
+        interactiveNum,
+        broadbandNum,
+        mtaNum,
+        integratedNum,
+        cpeNum,
+        cpeInteractiveNum,
+        cpeBroadbandNum,
+        cpeMtaNum,
+        realtime
+        from
+        usernumhisccmts
+        where
+        entityId = #{entityId}
+        and ccIfIndex = #{ccIfIndex}
+        <if test="startTime != null">AND <![CDATA[ realtime >= #{startTime} ]]></if>
+        <if test="endTime != null">AND <![CDATA[realtime <= #{endTime}]]></if>
+        order by realtime ASC
+    </select>
+
+    <select id="selectUserNumHisByPon" resultType="com.topvision.ems.cmc.domain.CmcUserNumHisPerf" parameterType="map">
+        select
+        time as collectTime,
+        onlineNum,
+        otherNum,
+        offlineNum,
+        interactiveNum,
+        broadbandNum,
+        mtaNum,
+        integratedNum,
+        cpeNum,
+        cpeInteractiveNum,
+        cpeBroadbandNum,
+        cpeMtaNum,
+        realtime
+        from
+        usernumhispon
+        where
+        entityId = #{entityId} and
+        ponIndex = #{ponIndex}
+        <if test="startTime != null">AND <![CDATA[ realtime >= #{startTime} ]]></if>
+        <if test="endTime != null">AND <![CDATA[realtime <= #{endTime}]]></if>
+        order by realtime ASC
+    </select>
+
+    <select id="selectPonIndexByPonId" resultType="long" parameterType="long">
+        select ponIndex from oltponrelation where ponId = #{ponId}
+    </select>
+
+    <select id="selectCmcIndexByCmcId" resultType="long" parameterType="long">
+          select cmcIndex from cmcentityrelation where cmcId = #{cmcId}
+    </select>
+	
+	<select id="selectCpuHisPerf" resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="map">
+		select 
+			collectTime as xTime,
+			collectValue as y 
+		from 
+			perfcmccpuquality 
+		where 
+			cmcId = #{cmcId}
+			<if test="startTime != null">AND <![CDATA[ collectTime >= #{startTime} ]]></if>
+			<if test="endTime != null">AND <![CDATA[collectTime <= #{endTime}]]></if>
+		ORDER BY collectTime ASC
+	</select>
+	
+	<select id="selectSnrHisPerf" resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="map">
+		select 
+			collectTime as xTime,
+			collectValue as y 
+		from 
+			perfcmcsnrquality 
+		where 
+			cmcId = #{cmcId}
+			and channelIndex = #{channelIndex}
+			<if test="startTime != null">AND <![CDATA[ collectTime >= #{startTime} ]]></if>
+			<if test="endTime != null">AND <![CDATA[collectTime <= #{endTime}]]></if>
+		ORDER BY collectTime ASC
+	</select>
+	
+	<select id="selectUpChannelFlowHisPerf" resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="map">
+		select 
+			collectTime as xTime,
+			channelInSpeed as y 
+		from 
+			perfcmcflowquality 
+		where 
+			cmcId = #{cmcId}
+			and channelIndex = #{channelIndex}
+			<if test="startTime != null">AND <![CDATA[ collectTime >= #{startTime} ]]></if>
+			<if test="endTime != null">AND <![CDATA[collectTime <= #{endTime}]]></if>
+		ORDER BY collectTime ASC
+	</select> 
+	
+	<select id="selectDownChannelFlowHisPerf" resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="map">
+		select 
+			collectTime as xTime,
+			channelOutSpeed as y 
+		from 
+			perfcmcflowquality 
+		where 
+			cmcId = #{cmcId}
+			and channelIndex = #{channelIndex}
+			<if test="startTime != null">AND <![CDATA[ collectTime >= #{startTime} ]]></if>
+			<if test="endTime != null">AND <![CDATA[collectTime <= #{endTime}]]></if>
+		ORDER BY collectTime ASC
+	</select>
+	
+	<select id="selectCmtsDownChannelFlowHisPerf" resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="map">
+		select 
+			collectTime as xTime,
+			channelOutSpeed as y 
+		from 
+			perfcmtsflowquality 
+		where 
+			cmcId = #{cmcId}
+			and channelIndex = #{channelIndex}
+			<if test="startTime != null">AND <![CDATA[ collectTime >= #{startTime} ]]></if>
+			<if test="endTime != null">AND <![CDATA[collectTime <= #{endTime}]]></if>
+		ORDER BY collectTime ASC
+	</select>
+	
+	<select id="selectBitErrorRateHisPerf" resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="map">
+		select 
+			collectTime as xTime,
+			ccerRate as y 
+		from 
+			perfcmcerrorcodequality 
+		where 
+			cmcId = #{cmcId}
+			and channelIndex = #{channelIndex}
+			<if test="startTime != null">AND <![CDATA[ collectTime >= #{startTime} ]]></if>
+			<if test="endTime != null">AND <![CDATA[collectTime <= #{endTime}]]></if>
+		ORDER BY collectTime ASC
+	</select>
+	
+	<select id="selectCmtsBitErrorRateHisPerf" resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="map">
+		select 
+			collectTime as xTime,
+			ccerRate as y 
+		from 
+			perfcmtserrorcodequality 
+		where 
+			cmcId = #{cmcId}
+			and channelIndex = #{channelIndex}
+			<if test="startTime != null">AND <![CDATA[ collectTime >= #{startTime} ]]></if>
+			<if test="endTime != null">AND <![CDATA[collectTime <= #{endTime}]]></if>
+		ORDER BY collectTime ASC
+	</select>
+	
+	<select id="selectUnBitErrorRateHisPerf" resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="map">
+		select 
+			collectTime as xTime,
+			ucerRate as y 
+		from 
+			perfcmcerrorcodequality 
+		where 
+			cmcId = #{cmcId}	and channelIndex = #{channelIndex}
+			<if test="startTime != null">AND <![CDATA[ collectTime >= #{startTime} ]]></if>
+			<if test="endTime != null">AND <![CDATA[collectTime <= #{endTime}]]></if>
+		ORDER BY collectTime ASC
+	</select>
+	
+	<select id="selectCmtsUnBitErrorRateHisPerf" resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="map">
+		select 
+			collectTime as xTime,
+			ucerRate as y 
+		from 
+			perfcmtserrorcodequality 
+		where 
+			cmcId = #{cmcId}	and channelIndex = #{channelIndex}
+			<if test="startTime != null">AND <![CDATA[ collectTime >= #{startTime} ]]></if>
+			<if test="endTime != null">AND <![CDATA[collectTime <= #{endTime}]]></if>
+		ORDER BY collectTime ASC
+	</select>
+	
+	<select id="selectCmOnlineNumHisPerf" resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="map">
+		select 
+			time as xTime,
+			onlineNum as y 
+		from 
+			usernumhisport 
+		where 
+			entityId = #{entityId} and portIfIndex = #{channelIndex}
+			<if test="startTime != null">AND <![CDATA[ time >= #{startTime} ]]></if>
+			<if test="endTime != null">AND <![CDATA[time <= #{endTime}]]></if>
+		ORDER BY time ASC
+	</select>
+	
+	<select id="selectCmOfflineNumHisPerf" resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="map">
+		select 
+			time as xTime,
+			offlineNum as y 
+		from 
+			usernumhisport 
+		where 
+			entityId = #{entityId} and portIfIndex = #{channelIndex}
+			<if test="startTime != null">AND <![CDATA[ time >= #{startTime} ]]></if>
+			<if test="endTime != null">AND <![CDATA[time <= #{endTime}]]></if>
+		ORDER BY time ASC
+	</select> 
+	
+	<select id="selectAllAreas" resultType="com.topvision.ems.cmc.domain.Area">
+		SELECT folderId, superiorId, categoryId, name, type	FROM topofolder
+	</select>
+	
+	<select id="selectEntityWithIp" resultType="com.topvision.ems.facade.domain.Entity" parameterType="long">
+		select 
+			a.entityId, 
+			a.name, 
+			a.ip, 
+			a.typeId, 
+			b.entityId, 
+			b.folderId,
+			c.displayName as typeName
+		from 
+			entity a 
+			left join entityfolderrela b on a.entityId = b.entityId 
+			left join entityType c on a.typeId = c.typeId   
+		where 
+			a.typeId in (select typeId from entitytyperelation where type = #{type})
+		group by a.entityId
+	</select>
+	
+	<select id="selectCcmstWithOutAgent" resultType="com.topvision.ems.cmc.domain.CmcEntity" parameterType="map">
+		select 
+			cmcId, 
+			cmcIndex, 
+			cmcType, 
+			cmcEntityId 
+		from 
+			cmcentityrelation
+		where cmcType in (select typeId from entitytyperelation where type = #{type}) AND cmcId in (select entityId from ${Authority})
+	</select>
+	
+	<select id="selectCmCpeNumInRegion" resultType="com.topvision.ems.cmc.domain.CmCpeNumInArea" parameterType="map">
+		select 
+			time as collectTime, 
+			max(time),
+			a.areaId, 
+			a.onlineNum, 
+			a.otherNum, 
+			a.offlineNum,
+			a.interactiveNum, 
+			a.broadbandNum, 
+			a.mtaNum,
+			a.integratedNum, 
+			a.cpeNum,
+            a.cpeInteractiveNum,
+            a.cpeBroadbandNum,
+            a.cpeMtaNum,
+			a.realtime, 
+			b.folderId, 
+			b.name 
+		from 
+			usernumhisarea a 
+			right join topofolder b on a.areaId = b.folderId
+	</select>
+	
+	<select id="selectAllAllDeviceCmNum" resultType="com.topvision.ems.cmc.performance.domain.CmNum">
+		select 
+			a.time,
+			a.onlineNum,
+			a.otherNum,
+			a.offlineNum,
+			a.interactiveNum,
+	        a.broadbandNum,
+	        a.mtaNum,
+	        a.integratedNum,
+	        a.cpeNum,
+            a.cpeInteractiveNum,
+            a.cpeBroadbandNum,
+            a.cpeMtaNum,
+	        a.realtime, 
+	        d.name as entityName,
+	        d.entityId, 
+	        d.ip as entityIp, 
+	        ifnull(e.cpu,-1) as cpuRate 
+        from
+            (select * from entity where typeId in (select typeId from entitytyperelation where type = #{type})) d
+        	left join usernumlastdevice a  on a.entityId = d.entityId
+			left join entitysnap e on d.entityId = e.entityId
+		where 1 = 1 AND d.entityId in (select entityId from ${Authority})
+		<if test="name != null">AND d.name LIKE '%${name}%'</if>
+		<if test="entityType != null">AND d.typeId = #{entityType}</if>
+		<if test="cmMac != null">
+			AND d.entityId in
+			(select c.cmcEntityId from cmattribute b left join cmcentityrelation c on
+			b.cmcId = c.cmcId where StatusMacAddress Like '%${cmMac}%')
+		</if>
+		GROUP BY d.entityId order by a.onlineNum desc
+	</select>
+	 
+	<select id="selectCmcByIndexAndEntityId" resultType="com.topvision.ems.cmc.facade.domain.CmcEntityRelation"	parameterType="map">
+		select 
+			cmcId, 
+			onuId, 
+			cmcIndex, 
+			cmcType, 
+			cmcEntityId
+		from 
+			cmcentityrelation 
+		where 
+			cmcEntityId = #{entityId} and cmcIndex = #{cmcIndex}
+	</select>
+	
+	<select id="selectCcmtsCmNumInfo" resultType="com.topvision.ems.cmc.domain.CmcCmReatimeNum" parameterType="long">
+		select  
+			a.cmcId, 
+			a.channelIndex as portIfIndex, 
+			a.ChannelFrequency , 
+			a.ChannelModulationProfile, 
+			b.docsIfSigQSignalNoise as snr,
+			c.cmcIndex as ccIfIndex, 
+			c.cmcEntityId as entityId, 
+			d.onlineNum, 
+			d.otherNum, 
+			d.offlineNum, 
+			d.interactiveNum,
+			d.broadbandNum, 
+			d.mtaNum, 
+			d.integratedNum, 
+			d.cpeNum,
+            d.cpeInteractiveNum,
+            d.cpeBroadbandNum,
+            d.cpeMtaNum,
+			d.time, 
+			d.realtime, 
+			e.ifDescr
+		from 
+			cmcupchannelbaseinfo a 
+			left join cmcupchannelsignalqualityinfo b on a.cmcPortId = b.cmcPortId
+			left join cmcportattribute e on e.cmcPortId = a.cmcPortId
+			left join cmcentityrelation c on a.cmcId = c.cmcId 
+			left join usernumlastport d	on d.entityId = c.cmcEntityId and a.channelIndex = d.portIfIndex
+		where 
+			c.cmcEntityId = #{entityId} order by c.cmcIndex
+	</select>
+	
+    <select id="queryCmCpeListByCondition" resultType="com.topvision.ems.cmc.performance.domain.CmCpeAttribute" parameterType="map">
+        select 
+	        a.entityId,a.mac,a.cmAlias,b.cmcId,a.cmId,b.statusIndex,c.name,c.ip,
+	        d.name cmcName,e.typeId,e.displayName typeName,
+            b.statusMacAddress,b.statusInetAddress,b.statusDownChannelIfIndex,b.StatusIpAddress,
+            b.statusUpChannelIfIndex,a.topCmCpeCcmtsIfIndex,a.topCmCpeIpAddress,
+            a.topCmCpeMacAddress,a.topCmCpeType,a.updateTime,h.cmcIndex,j.ifDescr as cmtsUpDescr,k.ifName, k.ifDescr as cmtsDownDescr
+        from 
+        	(select 
+	        	f.entityId,
+	        	f.mac,
+	        	i.userAddr cmAlias,
+	        	f.cmId,g.topCmCpeCcmtsIfIndex,
+	            g.topCmCpeIpAddress,
+	            g.topCmCpeMacAddress,
+	            g.topCmCpeType,
+	            g.updateTime
+			from 
+				cmccmrelation f
+				left join cmcpe g on g.cmId = f.cmId
+				LEFT JOIN cmbossinfo i on f.mac = i.CmMac
+            where 1=1 AND f.cmcId in (select entityId from ${Authority})
+            	<if test="statusMacAddress != null">
+					AND (mac LIKE '%${statusMacAddress}%'
+					<if test="cmMacWithoutSplit != null">
+					OR REPLACE(mac, ':', '') LIKE '%${cmMacWithoutSplit}%'
+					</if>
+					)
+				</if>
+                <if test="cmAlias != null">AND i.userAddr like concat('%',#{cmAlias},'%')</if>
+			) a
+			INNER JOIN cmattribute b ON a.cmId = b.cmId
+			LEFT JOIN entity c ON a.entityId = c.entityId
+			LEFT JOIN entity d on b.cmcId = d.entityId
+			LEFT JOIN entitytype e on c.typeId = e.typeId
+			LEFT JOIN cmcentityrelation h on b.cmcId = h.cmcId
+			LEFT JOIN port j on a.entityId = j.entityId and b.statusUpChannelIfIndex = j.ifIndex
+			LEFT JOIN port k on a.entityId = k.entityId and b.statusDownChannelIfIndex = k.ifIndex
+			GROUP BY a.entityId,b.statusIndex
+    </select>
+
+
+    <select id="queryCmCpeListByConditionHis" resultType="com.topvision.ems.cmc.performance.domain.CmCpeAttribute" parameterType="map">
+        select
+        a.entityId,a.mac,a.cmAlias,b.cmcId,a.cmId,b.statusIndex,c.name,c.ip,
+        d.name cmcName,e.typeId,e.displayName typeName,
+        b.statusMacAddress,b.statusInetAddress,b.statusDownChannelIfIndex,b.StatusIpAddress,
+        b.statusUpChannelIfIndex,h.cmcIndex topCmCpeCcmtsIfIndex,a.cpeip,
+        a.cpemac,a.updateTime,h.cmcIndex,j.ifDescr as cmtsUpDescr,k.ifDescr as cmtsDownDescr
+        from
+        (select
+        f.entityId,
+        f.mac,
+        i.userAddr cmAlias,
+        f.cmId,
+        g.cpeip,
+        g.cpemac,
+        g.updateTime
+        from
+        cmccmrelation f
+        left join (
+            select cmId,cpea.entityId,cpemac,cpeip,cmIndex topCmCpeStatusIndex,mac topCmCpeToCmMacAddr,realtime updateTime
+            from cpeaction cpea LEFT JOIN cmccmrelation ccr on cpea.entityId = ccr.entityId and cpea.cmIndex = ccr.docsIfCmtsCmStatusIndex
+        ) g on g.cmId = f.cmId
+        LEFT JOIN cmbossinfo i on f.mac = i.CmMac
+        where 1=1 AND f.cmcId in (select entityId from ${Authority})
+        <if test="statusMacAddress != null">
+            AND (mac LIKE '%${statusMacAddress}%'
+            <if test="cmMacWithoutSplit != null">
+                OR REPLACE(mac, ':', '') LIKE '%${cmMacWithoutSplit}%'
+            </if>
+            )
+        </if>
+        
+        <if test="cpeMacLong != null">
+            AND cpemac =  #{cpeMacLong}
+        </if>
+        <if test="cpeIpLong != null">AND cpeip = #{cpeIpLong} </if>
+        <if test="cmAlias != null">AND i.userAddr like concat('%',#{cmAlias},'%')</if>
+
+        ) a
+        INNER JOIN cmattribute b ON a.cmId = b.cmId
+        LEFT JOIN entity c ON a.entityId = c.entityId
+        LEFT JOIN entity d on b.cmcId = d.entityId
+        LEFT JOIN entitytype e on c.typeId = e.typeId
+        LEFT JOIN cmcentityrelation h on b.cmcId = h.cmcId
+        LEFT JOIN port j on a.entityId = j.entityId and b.statusUpChannelIfIndex = j.ifIndex
+        LEFT JOIN port k on a.entityId = k.entityId and b.statusDownChannelIfIndex = k.ifIndex
+        GROUP BY a.entityId,b.statusIndex
+    </select>
+	<select id="selectCmCmcRunningInfo" resultType="com.topvision.ems.cmc.domain.CmCmcRunningInfo" parameterType="long">
+		select a.cmcId, a.cmId, a.upPortId,b.cmcType as cmcTypeId, b.cmcIndex, c.ChannelId,
+		c.channelIndex, d.collectValue as snr, e.ccerRate as bitErrorRate, i.ucerRate as unBitErrorRate,
+		f.channelInSpeed as channelInOctetsRate, g.onlineNum as cmOnlineNum, g.offlineNum as cmOfflineNum, h.displayname as cmcTypeName
+		from cmccmrelation a
+		left join cmcentityrelation b on a.cmcId = b.cmcId
+		left join cmcupchannelbaseinfo c on a.upPortId = c.cmcPortId
+		left join (select cmcId, channelIndex, collectValue from perfcmcsnrqualitylast) d on a.cmcId = d.cmcId and c.channelIndex =
+		d.channelIndex
+		left join (select cmcId, channelIndex, ccerRate from perfcmcerrorcodequalitylast) e on a.cmcId = e.cmcId and c.channelIndex
+		= e.channelIndex
+		left join (select cmcId, channelIndex, ucerRate from perfcmcerrorcodequalitylast) i on a.cmcId = i.cmcId and i.channelIndex
+		= e.channelIndex
+		left join perfcmcflowqualitylast f on a.cmcId = f.cmcId and
+		c.channelIndex = f.channelIndex
+		left join usernumlastport g on b.cmcEntityId = g.entityId and b.cmcIndex =	g.ccIfIndex and c.channelIndex =
+		g.portIfIndex
+		left join entitytype h on b.cmcType = h.typeId
+		where cmId = #{cmId}
+	</select>
+	
+	<select id="selectCmCmtsRunningInfo" resultType="com.topvision.ems.cmc.domain.CmCmcRunningInfo" parameterType="long">
+		select a.cmcId, a.cmId, a.upPortId,b.cmcType as cmcTypeId, b.cmcIndex, c.ChannelId,
+		c.channelIndex, d.collectValue as snr, e.ccerRate, e.ucerRate,
+		f.channelInSpeed, g.onlineNum as cmOnlineNum, g.offlineNum as cmOfflineNum, h.displayname as cmcTypeName
+		from cmccmrelation a
+		left join cmcentityrelation b on a.cmcId = b.cmcId
+		left join cmcupchannelbaseinfo c on a.upPortId = c.cmcPortId
+		left join perfcmcsnrqualitylast d on a.cmcId = d.cmcId and c.channelIndex =
+		d.channelIndex
+		left join perfcmcerrorcodequalitylast e on a.cmcId = e.cmcId and c.channelIndex
+		= e.channelIndex
+		left join perfcmcflowqualitylast f on a.cmcId = f.cmcId and
+		c.channelIndex = f.channelIndex
+		left join usernumlastport g on b.cmcEntityId = g.entityId  and c.channelIndex =
+		g.portIfIndex
+		left join entitytype h on b.cmcType = h.typeId
+		where cmId = #{cmId}
+	</select>
+	
+	<select id="selectCmOltRunningInfo" resultType="com.topvision.ems.cmc.domain.CmOltRunningInfo" parameterType="long">
+	select
+	a.cmId,
+	a.cmcId,
+	a.entityId,
+    c.onuId,
+    c.cmcEntityId,
+	f.optTxPower as txPower,
+	f.optRePower as rxPower,
+	c.cmcIndex,
+	d.ponId
+	from
+	cmccmrelation a
+	left join cmcentityrelation c on a.cmcId = c.cmcId
+	left join oltonurelation d on c.onuId = d.onuId
+	left join oltponrelation e on d.ponId = e.ponId
+	left join perfeponlinkqualitylast f on f.entityId = c.cmcEntityId and f.portIndex = e.ponIndex
+	where a.cmId = #{cmId}
+	</select>
+	<select id="selectCmtsSnrHisPerf" resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="map">
+		select 
+			collectTime as xTime,
+			collectValue as y 
+		from 
+			perfcmtssnrquality 
+		where 
+			cmcId = #{cmcId}
+			and channelIndex = #{channelIndex}
+			<if test="startTime != null">AND <![CDATA[ collectTime >= #{startTime} ]]></if>
+			<if test="endTime != null">AND <![CDATA[collectTime <= #{endTime}]]></if>
+		ORDER BY collectTime ASC
+	</select> 
+	<select id="selectCmtsUpChannelFlowHisPerf" resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="map">
+		select 
+			collectTime as xTime,
+			channelInSpeed as y 
+		from 
+			perfcmtsflowquality 
+		where 
+			cmcId = #{cmcId}
+			and channelIndex = #{channelIndex}
+			<if test="startTime != null">AND <![CDATA[ collectTime >= #{startTime} ]]></if>
+			<if test="endTime != null">AND <![CDATA[collectTime <= #{endTime}]]></if>
+		ORDER BY collectTime ASC
+	</select>
+	<select id="getAllOnlineIds" resultType="long">
+        select entityId from entitysnap where state = 1;
+	</select>
+    <select id="getCpeListByCmId" parameterType="long" resultType="com.topvision.ems.cmc.facade.domain.CmCpe">
+        select 
+	    	cmId,
+	    	entityId,
+	    	topCmCpeType,
+	    	topCmCpeIpAddress,
+	    	topCmCpeCcmtsIfIndex,
+	    	topCmCpeCmStatusIndex,
+	    	topCmCpeToCmMacAddr,
+	    	topCmCpeMacAddress as topCmCpeMacAddressString
+    	from cmcpe
+    	where cmId = #{cmId}
+	</select>
+	<!-- ################################## select end ######################################### -->
+	
+	<!-- ################################## insert start ####################################### -->
+	<!-- ################################## insert end ######################################### -->
+	
+	<!-- ################################## update start ####################################### -->
+	<!-- ################################## update end ######################################### -->
+	
+	<!-- ################################## delete start ####################################### -->
+	<!-- ################################## delete end ######################################### -->
+</mapper>

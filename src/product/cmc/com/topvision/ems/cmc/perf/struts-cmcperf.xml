@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcperf" namespace="/cmcperf" extends="default">
+		<action name="showCmcCurPerf" class="cmcPerfAction" method="showCmcCurPerf">
+			<result>/cmc/cmcCurPerf.jsp</result>
+		</action>
+		<action name="getSnrPerfStatic" class="cmcPerfAction" method="getSnrPerfStatic">
+		</action>
+		<action name="getTopCcmtsCpuLoading" class="cmcPerfAction"
+			method="getTopCcmtsCpuLoading" />
+		<action name="getTopPortletErrorCodesLoading" class="cmcPerfAction"
+			method="getTopPortletErrorCodesLoading" />
+		<action name="showCmtsBerRate" class="cmcPerfAction" method="showCmtsBerRate">
+			<result>/cmc/cmtsBerRate.jsp</result>
+		</action>
+		<action name="loadCmtsBerRate" class="cmcPerfAction" method="loadCmtsBerRate" />
+		<action name="getTopPortletFlapInsGrowthLoading" class="cmcPerfAction"
+			method="getTopPortletFlapInsGrowthLoading" />
+		<action name="showCmFlapIns" class="cmcPerfAction" method="showCmFlapIns">
+			<result>/cmc/cmtsCmFlapIns.jsp</result>
+		</action>
+		<action name="loadCmFlapIns" class="cmcPerfAction" method="loadCmFlapIns" />
+			
+		<action name="getTopLowNoiseLoading" class="cmcPerfAction"
+			method="getTopLowNoiseLoading" />
+		<action name="showNoiseRate" class="cmcPerfAction" method="showNoiseRate">
+			<result>/cmc/loadNoiseRate.jsp</result>
+		</action>
+	    <action name="loadNoiseRate" class="cmcPerfAction" method="loadNoiseRate" />
+		<action name="getTopCcmtsMemLoading" class="cmcPerfAction"
+			method="getTopCcmtsMemLoading" />
+		<action name="getTopChnlUtiliLoading" class="cmcPerfAction"
+			method="getTopChnlUtiliLoading" />
+		<action name="getMoreChannelUsed" class="cmcPerfAction" method="getMoreChannelUsed">
+			<result>/cmc/cmtsChannelUsed.jsp</result>
+		</action>
+		<action name="loadChannelUsed" class="cmcPerfAction" method="loadChannelUsed" />
+		<action name="refreshCmcSnrPerf" class="cmcPerfAction" method="refreshCmcSnrPerf">
+		</action>
+		<action name="showSnrPerfConf" class="cmcPerfAction" method="showSnrPerfConf">
+			<result>/cmc/cmcMonitorConfig.jsp</result>
+		</action>
+		<action name="showDolPerfConf" class="cmcPerfAction" method="showDolPerfConf">
+			<result>/cmc/cmcMonitorConfig.jsp</result>
+		</action>
+		<action name="showCcmtsPerfConf" class="cmcPerfAction" method="showCcmtsPerfConf">
+			<result>/cmc/cmcPerfMonitorConfig.jsp</result>
+		</action>
+		<action name="perfConf" class="cmcPerfAction" method="perfConf">
+		</action>
+		<action name="ccmtsPerfConf" class="cmcPerfAction" method="ccmtsPerfConf">
+		</action>
+		<action name="showCmcHisPerf" class="cmcPerfAction" method="showCmcHisPerf">
+			<result>/cmc/hisPerf.jsp</result>
+		</action>
+		<action name="seriesRead" class="cmcPerfAction" method="seriesRead">
+		</action>
+		<action name="getTopUpChnUsersLoading" class="cmcPerfAction" method="getTopUpChnUsersLoading" />
+		<action name="getTopDownChnUsersLoading" class="cmcPerfAction" method="getTopDownChnUsersLoading" />
+		<action name="getTopCcUsersLoading" class="cmcPerfAction" method="getTopCcUsersLoading" />
+		<action name="showCmtsUser" class="cmcPerfAction" method="showCmtsUser">
+			<result>/cmc/cmtsUser.jsp</result>
+		</action>
+		<action name="showCmtsUpChannelUser" class="cmcPerfAction" method="showCmtsUpChannelUser">
+			<result>/cmc/cmtsUpChannelUser.jsp</result>
+		</action>
+		<action name="showCmtsDownChannelUser" class="cmcPerfAction" method="showCmtsDownChannelUser">
+			<result>/cmc/cmtsDownChannelUser.jsp</result>
+		</action>
+		<action name="loadCmtsUsers" class="cmcPerfAction"	method="loadCmtsUsers" />
+		<action name="showCmcCpuAndMemGraph" class="cmcPerfAction"	method="showCmcCpuAndMemGraph">
+			<result>/cmc/cmcCpuAndMemGraph.jsp</result>
+		</action>
+		<action name="seriesCpuAndMemRead" class="cmcPerfAction"
+			method="seriesCpuAndMemRead">
+		</action>
+		<action name="seriesNoiseRead" class="cmcPerfAction"
+			method="seriesNoiseRead">
+		</action>
+		<action name="seriesErrorRateRead" class="cmcPerfAction"
+			method="seriesErrorRateRead">
+		</action>
+		<action name="seriesChannelUtilizationRead" class="cmcPerfAction"
+			method="seriesChannelUtilizationRead">
+		</action>
+		<action name="seriesChannelCmNumRead" class="cmcPerfAction"
+			method="seriesChannelCmNumRead">
+		</action>
+		
+		<action name="loadCmcOpticalTop10" class="cmcOpticalAction"  method="loadCmcOpticalTop10" />
+		<action name="showCmcOpticalInfo" class="cmcOpticalAction"  method="showCmcOpticalInfo">
+			<result>/cmc/cmcOpticalInfo.jsp</result>
+		</action>
+		<action name="loadCmcOpticalInfo" class="cmcOpticalAction" method="loadCmcOpticalInfo" />
+		
+		<action name="getTopCmcOpticalTempLoading" class="cmcOpticalAction" method="getTopCmcOpticalTempLoading" />
+		<action name="showCmcOpticalTempInfo" class="cmcOpticalAction"  method="showCmcOpticalTempInfo">
+			<result>/cmc/cmcOpticalTempInfo.jsp</result>
+		</action>
+		<action name="loadCmcOpticalTempInfo" class="cmcOpticalAction" method="loadCmcOpticalTempInfo" />
+	</package>
+</struts>

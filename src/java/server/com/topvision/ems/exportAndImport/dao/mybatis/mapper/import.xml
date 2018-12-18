@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.exportAndImport.dao.mybatis.ImportDaoImpl">
+	<insert id="importRole" parameterType="role">
+    	INSERT INTO 
+    	Role (roleId, superiorId, name, note) 
+    	VALUES
+		(#{roleId}, #{superiorId}, #{name}, #{note})
+		ON DUPLICATE KEY UPDATE
+		name = #{name}
+    </insert>
+    
+    <insert id="importRoleFunctionRela" parameterType="roleFunctionRela">
+		INSERT IGNORE INTO
+		rolefunctionrela (roleId, functionId) 
+		VALUES 
+		(#{roleId}, #{functionId})
+    </insert>
+    
+    <insert id="importTopoFolder" parameterType="topoFolder">
+    	INSERT INTO topofolder
+    	(folderId, superiorId, categoryId, name, type, note, createTime, displayGrid,
+		backgroundImg, backgroundColor, backgroundFlag, backgroundPosition,
+		linkColor, linkSelectedColor, linkWidth, linkStartArrow, linkEndArrow, linkShadow, 
+		markerAlertMode,  width, height, zoom, refreshInterval, icon, url, path, fixed, 
+		entityLabel, linkLabel, displayLinkLabel, displayLink, displayName, displayCluetip,
+		displayAlertIcon, displayNoSnmp, displayRouter, displaySwitch, displayL3switch, displayServer,
+		displayDesktop, displayOthers, entityForOrgin, depthForOrgin, extend1, extend2,
+		subnetIp, subnetMask, displayEntityLabel)
+		VALUES
+		(#{folderId}, #{superiorId}, #{categoryId}, #{name}, #{type}, #{note}, #{createTime}, #{displayGrid},
+		#{backgroundImg}, #{backgroundColor}, #{backgroundFlag}, #{backgroundPosition},
+		#{linkColor}, #{linkSelectedColor}, #{linkWidth}, #{linkStartArrow}, #{linkEndArrow}, 
+		#{linkShadow}, #{markerAlertMode},  #{width}, #{height}, #{zoom}, #{refreshInterval}, 
+		#{icon}, #{url}, #{path}, #{fixed}, #{entityLabel}, #{linkLabel}, #{displayLinkLabel}, 
+		#{displayLink}, #{displayName}, #{displayCluetip}, #{displayAlertIcon}, #{displayNoSnmp}, 
+		#{displayRouter}, #{displaySwitch}, #{displayL3switch}, #{displayServer}, 
+		#{displayDesktop}, #{displayOthers}, #{entityForOrgin}, #{depthForOrgin}, #{extend1}, 
+		#{extend2}, #{subnetIp}, #{subnetMask}, #{displayEntityLabel})
+		ON DUPLICATE KEY UPDATE 
+		superiorId = #{superiorId}, categoryId = #{categoryId}, name = #{name},
+		type = #{type}, note = #{note}, createTime = #{createTime}, displayGrid = #{displayGrid},
+		backgroundImg = #{backgroundImg}, backgroundColor = #{backgroundColor}, 
+		backgroundFlag = #{backgroundFlag}, backgroundPosition = #{backgroundPosition}, 
+		linkColor = #{linkColor}, linkSelectedColor = #{linkSelectedColor}, 
+		linkWidth = #{linkWidth}, linkStartArrow = #{linkStartArrow}, 
+		linkEndArrow = #{linkEndArrow}, width = #{width}, height = #{height}, 
+		zoom = #{zoom}, refreshInterval = #{refreshInterval}, icon = #{icon}, 
+		url = #{url}, path = #{path}, fixed = #{fixed}, entityLabel = #{entityLabel},
+		linkLabel = #{linkLabel}, displayLinkLabel = #{displayLinkLabel}, 
+		displayLink = #{displayLink}, displayName = #{displayName}, 
+		displayCluetip = #{displayCluetip}, displayAlertIcon = #{displayAlertIcon},
+		displayNoSnmp = #{displayNoSnmp}, displayRouter = #{displayRouter}, 
+		displaySwitch = #{displaySwitch}, displayL3switch = #{displayL3switch}, 
+		displayServer = #{displayServer}, displayDesktop = #{displayDesktop},
+		displayOthers = #{displayOthers}, entityForOrgin = #{entityForOrgin}, 
+		extend1 = #{extend1}, extend2 = #{extend2}, subnetIp = #{subnetIp}, 
+		subnetMask = #{subnetMask}, displayEntityLabel = #{displayEntityLabel};
+    </insert>
+    
+    <insert id="importMapNode" parameterType="mapNode">
+		INSERT INTO mapNode
+    	(nodeId, name, folderId, type, url, text, href, x, y, width, height, icon,
+		fixed, dashed, startArrow, endArrow, strokeColor, strokeWeight, fillColor,
+		shadow, shadowColor, shadowOffset, gradient, textColor,
+		fontSize, fontStyle, fontWeight, points, expanded, groupId, userObjType, userObjId, 
+		gradientColor)
+		VALUES
+		(#{nodeId}, #{name}, #{folderId}, #{type}, #{url}, #{text}, #{href}, #{x}, #{y}, 
+		#{width}, #{height}, #{icon}, #{fixed}, #{dashed}, #{startArrow}, #{endArrow}, 
+		#{strokeColor}, #{strokeWeight}, #{fillColor}, #{shadow}, #{shadowColor}, 
+		#{shadowOffset}, #{gradient}, #{textColor}, #{fontSize}, 
+		#{fontStyle}, #{fontWeight}, #{points}, #{expanded}, #{groupId}, #{userObjType}, 
+		#{userObjId}, #{gradientColor})
+		ON DUPLICATE KEY UPDATE 
+		name = #{name}, folderId = #{folderId}, type = #{type}, url = #{url}, text = #{text}, 
+		href = #{href}, x = #{x}, y = #{y}, width = #{width}, height = #{height}, 
+		icon = #{icon}, fixed = #{fixed}, dashed = #{dashed}, startArrow = #{startArrow}, 
+		endArrow = #{endArrow}, strokeColor = #{strokeColor}, strokeWeight = #{strokeWeight}, 
+		fillColor = #{fillColor}, shadow = #{shadow}, shadowColor = #{shadowColor}, 
+		shadowOffset = #{shadowOffset}, gradient = #{gradient}, textColor = #{textColor}, 
+		fontSize = #{fontSize}, 
+		fontStyle = #{fontStyle}, fontWeight = #{fontWeight}, points = #{points}, 
+		expanded = #{expanded}, groupId = #{groupId}, userObjType = #{userObjType}, 
+		userObjId = #{userObjId}, gradientColor = #{gradientColor};
+	</insert>
+	
+	<insert id="importUser" parameterType="userEx">
+		INSERT INTO users
+    	(userId, userName, familyName, passwd, lastLoginTime, lastLoginIp, ipLoginActive, 
+    	bindIp, limitIp, status, createTime, userGroupId, departmentId, placeId, 
+    	allowMutliIpLogin, timeout)
+		VALUES
+		(#{userId}, #{userName}, #{familyName}, #{passwd}, #{lastLoginTime}, #{lastLoginIp}, 
+		#{ipLoginActive}, #{bindIp}, #{limitIp}, #{status}, #{createTime}, #{userGroupId}, 
+		#{departmentId}, #{placeId}, #{allowMutliIpLogin}, #{timeout})
+		ON DUPLICATE KEY UPDATE 
+		userName = #{userName}, familyName = #{familyName}, passwd = #{passwd}, 
+		lastLoginTime = #{lastLoginTime}, lastLoginIp = #{lastLoginIp}, 
+		ipLoginActive = #{ipLoginActive}, bindIp = #{bindIp}, limitIp = #{limitIp}, 
+		status = #{status}, createTime = #{createTime}, userGroupId = #{userGroupId}, 
+		departmentId = #{departmentId}, placeId = #{placeId}, 
+		allowMutliIpLogin = #{allowMutliIpLogin}, 
+		timeout = #{timeout};
+	</insert>
+	
+	<insert id="importUserRoleRela" parameterType="userRoleRela">
+		INSERT IGNORE INTO userrolerela
+    	(userId, roleId)
+		VALUES
+		(#{userId}, #{roleId})
+	</insert>
+	
+	<insert id="importUserAuthFolder" parameterType="userAuthFolder">
+		INSERT IGNORE INTO userAuthFolder
+    	(userId, folderId)
+		VALUES
+		(#{userId}, #{folderId})
+	</insert>
+	
+	<insert id="importUserPortletRela" parameterType="portletItem">
+		INSERT INTO userportletrela
+    	(userId, itemId, gridX, gridY, param)
+		VALUES
+		(#{userId}, #{itemId}, #{gridX}, #{gridY}, #{param})
+		ON DUPLICATE KEY UPDATE 
+		gridX = #{gridX}, gridY = #{gridY}, param = #{param};
+	</insert>
+	
+	<insert id="importUserPreferences" parameterType="UserPreferences">
+		INSERT INTO userpreferences
+    	(name, value, module, userId)
+		VALUES
+		(#{name}, #{value}, #{module}, #{userId})
+		ON DUPLICATE KEY UPDATE 
+		value = #{value};
+	</insert>
+	
+	<insert id="importEntityFolderRela" parameterType="entityFolderRela">
+		INSERT INTO entityfolderrela
+    	(entityId, folderId, x, y, nameInFolder, iconInFolder, fixed, visible, groupId)
+		VALUES
+		(#{entityId}, #{folderId}, #{x}, #{y}, #{nameInFolder}, #{iconInFolder}, #{fixed}, #{visible}, #{groupId})
+		ON DUPLICATE KEY UPDATE 
+		x = #{x}, y = #{y}, nameInFolder = #{nameInFolder}, iconInFolder = #{iconInFolder}, fixed = #{fixed}, 
+		visible = #{visible}, groupId = #{groupId};
+	</insert>
+	
+	<update id="importEntityAlias" parameterType="entity">
+		UPDATE entity
+		SET name = #{name}
+		WHERE entityId = #{entityId}
+		
+	</update>
+</mapper>

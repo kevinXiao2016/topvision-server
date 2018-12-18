@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="cmcRoute" namespace="/cmc_b/route" extends="default">
+        <action name="showRouteViewList" class="cmcRouteAction" method="showRouteViewList">
+            <result>/cmc/cmc_bRouteList.jsp</result>
+        </action>
+        <action name="getRouteViewData" class="cmcRouteAction" method="getRouteViewData">
+        </action>
+        <action name="addRouteConfig" class="cmcRouteAction" method="addRouteConfig">
+        </action> 
+        <action name="modifyRouteconfig" class="cmcRouteAction" method="modifyRouteconfig">
+        </action>
+        <action name="deleteRouteConfig" class="cmcRouteAction" method="deleteRouteConfig">
+        </action> 
+        <action name="showModifyRouteView" class="cmcRouteAction" method="showModifyRouteView">
+            <result>/cmc/cmc_bModifyRoute.jsp</result>
+        </action>     
+    </package>
+</struts>

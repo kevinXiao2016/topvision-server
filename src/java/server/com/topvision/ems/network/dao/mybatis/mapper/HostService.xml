@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.network.domain.HostService">
+
+	<select id="getNetworkServices" resultType="services">
+		SELECT name, port, scaned, type FROM Services ORDER BY name ASC
+	</select>
+
+	<update id="setServicesScanned" parameterType="services">
+		UPDATE Services SET scaned = #{scaned} WHERE port = #{port}
+	</update>
+
+</mapper>

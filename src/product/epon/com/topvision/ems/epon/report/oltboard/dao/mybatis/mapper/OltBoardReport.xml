@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.report.domain.OltBoardReport">
+
+	<select id="getEponBoardList" resultType="com.topvision.ems.epon.domain.EponBoardStatistics" parameterType="map">
+		select
+			b.Ip as ip,b.name,a.entityId,
+			sum(case a.slotId when 1 then 1 else 1 end) allSlot,
+			ifnull(sum(case a.bPresenceStatus when 1 then 1 end),0) online,
+			ifnull(sum(case a.bPresenceStatus when 2 then 1 end),0) outline,
+			ifnull(sum(case a.topSysBdActualType when 1	then 1 end),0) mpua,
+			ifnull(sum(case a.topSysBdActualType when 2	then 1 end),0) mpub,
+			ifnull(sum(case a.topSysBdActualType when 3 then 1 end),0) epua,
+			ifnull(sum(case a.topSysBdActualType when 4 then 1 end),0) epub,
+			ifnull(sum(case a.topSysBdActualType when 5 then 1 end),0) geua,
+			ifnull(sum(case a.topSysBdActualType when 6 then 1 end),0) geub,
+			ifnull(sum(case a.topSysBdActualType when 7 then 1 end),0) xgua,
+			ifnull(sum(case a.topSysBdActualType when 8 then 1 end),0) xgub,
+			ifnull(sum(case a.topSysBdActualType when 9 then 1 end),0) xguc,
+			ifnull(sum(case a.topSysBdActualType when 10 then 1 end),0) xpua
+		from
+			oltslotattribute a , entity b
+		where
+			a.entityId=b.entityId
+			and b.entityId in (select entityId from ${Authority})
+		group by a.entityId
+		order by inet_aton(${sortName})
+	</select>
+
+</mapper>

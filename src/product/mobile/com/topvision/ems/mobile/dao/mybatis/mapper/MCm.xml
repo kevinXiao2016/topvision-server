@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.mobile.domain.CmtsCm">
+	<select id="getCmListByCmcId" parameterType="map" resultType="com.topvision.ems.mobile.domain.CmtsCm">
+		SELECT
+		ca.statusIndex cmIndex,
+		ca.cmId,
+		ca.cmcId cmtsId,
+		ca.displayIp ip,
+		ca.StatusMacAddress mac,
+		ca.StatusValue state,
+		cii.userAddr alias,
+		cii.classification classified,
+  	    ca.StatusDownChannelIfIndex downChanId,
+		ca.StatusUpChannelIfIndex upChanId,
+		cs.downChannelSnr downSnr,
+		cs.upChannelTx upPower,
+	    IFNULL(d3cmstatus.cmUsStatusSignalNoise ,ca.StatusSignalNoise) upSNR,
+		cs.downChannelTx downPower
+		FROM
+			cmattribute ca
+		LEFT JOIN cmbossinfo cii ON ca.StatusMacAddress = cii.CmMac
+		LEFT JOIN docsif3cmtscmusstatus d3cmstatus ON ca.cmId=d3cmstatus.cmId AND ca.StatusUpChannelIfIndex=d3cmstatus.cmUsStatusChIfIndex
+		LEFT JOIN cmsignal cs ON cs.cmId = ca.cmId
+		WHERE cmcId = #{cmtsId}
+        <if test="screeningstr != null">
+            AND ca.StatusMacAddress Like '%${screeningstr}%'
+        </if>
+		<if test="queryMacWithoutSplit != null">
+		AND (ca.StatusMacAddress Like '%${queryMacWithoutSplit}%' 
+		OR REPLACE(ca.StatusMacAddress, ':', '') LIKE '%${queryMacWithoutSplit}%')
+		</if>
+        <if test="sortType != null">
+            ORDER BY ${sortType} DESC
+        </if>
+		LIMIT #{start},#{limit}
+	</select>
+
+	<select id="getCmListSizeByCmtsId" parameterType="map"
+		resultType="long">
+		SELECT
+			count(ca.cmId)
+		FROM
+			cmattribute ca
+		LEFT JOIN docsif3cmtscmusstatus d3cmstatus
+		ON ca.cmId=d3cmstatus.cmId AND ca.StatusUpChannelIfIndex=d3cmstatus.cmUsStatusChIfIndex
+		WHERE cmcId = #{cmtsId}
+        <if test="screeningstr != null">
+            AND ca.StatusMacAddress Like '%${screeningstr}%'
+        </if>
+        <if test="queryMacWithoutSplit != null">
+            AND (ca.StatusMacAddress Like '%${queryMacWithoutSplit}%'
+            OR REPLACE(ca.StatusMacAddress, ':', '') LIKE '%${queryMacWithoutSplit}%')
+        </if>
+	</select>
+
+	<select id="getOnlineCmListSizeByCmtsId" parameterType="map"
+		resultType="long">
+		SELECT
+			count(ca.cmId)
+		FROM
+			cmattribute ca
+		LEFT JOIN docsif3cmtscmusstatus d3cmstatus
+		ON ca.cmId=d3cmstatus.cmId AND ca.StatusUpChannelIfIndex=d3cmstatus.cmUsStatusChIfIndex
+		WHERE cmcId = #{cmtsId} and ca.StatusValue in(6,21,26,27,30,31)
+        <if test="screeningstr != null">
+            AND ca.StatusMacAddress Like '%${screeningstr}%'
+        </if>
+        <if test="queryMacWithoutSplit != null">
+            AND (ca.StatusMacAddress Like '%${queryMacWithoutSplit}%'
+            OR REPLACE(ca.StatusMacAddress, ':', '') LIKE '%${queryMacWithoutSplit}%')
+        </if>
+	</select>
+
+	<select id="getCmByCmId" parameterType="long"
+		resultType="com.topvision.ems.mobile.domain.Cm">
+		SELECT 
+			ca.cmId id,
+			ca.StatusValue state,
+			IFNULL(ca.StatusSignalNoise,d3cmstatus.cmUsStatusSignalNoise) upSnr,
+			ca.StatusRxPower upRx,  
+			sig.upChannelFrequency upFre,
+			sig.downChannelFrequency downFre,
+			sig.downChannelSnr downSnr, 
+			sig.upChannelTx upTx,  
+			sig.downChannelTx downRx,
+			di.docsIfDownChannelPower downTx,
+			ca.StatusDownChannelIfIndex downChanId,
+			ca.StatusUpChannelIfIndex upChanId
+		FROM cmattribute ca
+		LEFT JOIN docsif3cmtscmusstatus d3cmstatus ON ca.cmId=d3cmstatus.cmId AND ca.StatusUpChannelIfIndex=d3cmstatus.cmUsStatusChIfIndex
+		LEFT JOIN cmsignal sig ON ca.cmId = sig.cmId
+		LEFT JOIN cmcdownchannelbaseinfo di ON di.channelIndex = ca.StatusDownChannelIfIndex AND ca.cmcId = di.cmcId
+		WHERE ca.cmId = #{cmId}
+	</select>
+	
+	<select id="getCmCmtsRelation" parameterType="long"
+	resultType="com.topvision.ems.mobile.domain.CmCmtsRelation">
+		SELECT 
+			cm.cmId cmId,
+			cm.cmcId cmtsId,
+			cm.statusIndex cmStatusIndex,
+			StatusMacAddress cmMac,
+			cmc.cmcDeviceStyle cmtsDeviceStyle
+		FROM cmattribute cm LEFT JOIN cmcattribute cmc ON cm.cmcId = cmc.cmcId
+		WHERE cm.cmId = #{cmId}    
+	</select>
+	
+	<select id="getCmList" parameterType="map" resultType="com.topvision.ems.mobile.domain.CmInCmList">
+	     SELECT 
+			cmId cmId,
+			StatusMacAddress mac,
+			displayIp ip,
+			userAddr alias,
+			StatusValue state,
+			cmcId cmtsId
+		FROM cmattribute  cm
+		LEFT JOIN cmbossinfo ci ON cm.StatusMacAddress = ci.CmMac
+		WHERE 
+			userAddr LIKE '%${cmMacOrIp}%' OR StatusMacAddress LIKE '%${queryContentMac}%' OR displayIp LIKE '%${cmMacOrIp}%'
+        	<if test="queryMacWithoutSplit != null">
+                OR REPLACE(StatusMacAddress, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            </if>
+		LIMIT #{start},#{limit}
+	</select>
+	
+	<select id="getCmListWithRegion" parameterType="map" resultType="com.topvision.ems.mobile.domain.CmInCmList">
+         SELECT 
+            cmId cmId,
+            StatusMacAddress mac,
+            displayIp ip,
+            userAddr alias,
+            StatusValue state,
+            cmcId cmtsId
+        FROM cmattribute  cm
+        LEFT JOIN cmbossinfo ci ON cm.StatusMacAddress = ci.CmMac
+        WHERE cmcId IN (select entityId from ${Authority}) and 
+            userAddr LIKE '%${cmMacOrIp}%' OR StatusMacAddress LIKE '%${queryContentMac}%' OR displayIp LIKE '%${cmMacOrIp}%'
+            <if test="queryMacWithoutSplit != null">
+                OR REPLACE(StatusMacAddress, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            </if>
+        LIMIT #{start},#{limit}
+    </select>
+	
+	<select id="getCmListCount" parameterType="map" resultType="long">
+	     SELECT 
+			count(cmId)
+		FROM cmattribute  cm
+		LEFT JOIN cmbossinfo ci ON cm.StatusMacAddress = ci.CmMac
+		WHERE 
+			userAddr LIKE '%${cmMacOrIp}%' OR StatusMacAddress LIKE '%${queryContentMac}%' OR displayIp LIKE '%${cmMacOrIp}%'
+        	<if test="queryMacWithoutSplit != null">
+                OR REPLACE(StatusMacAddress, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            </if> 
+	</select>
+	
+	<select id="getCmListCountWithRegion" parameterType="map" resultType="long">
+         SELECT 
+            count(cmId)
+        FROM cmattribute  cm
+        LEFT JOIN cmbossinfo ci ON cm.StatusMacAddress = ci.CmMac
+        WHERE cm.cmcId IN (select entityId from ${Authority}) and 
+            userAddr LIKE '%${cmMacOrIp}%' OR StatusMacAddress LIKE '%${queryContentMac}%' OR displayIp LIKE '%${cmMacOrIp}%'
+            <if test="queryMacWithoutSplit != null">
+                OR REPLACE(StatusMacAddress, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            </if> 
+    </select>
+	
+	<select id="getCmBaseInfo" parameterType="long" resultType="com.topvision.ems.mobile.domain.CmtsCm">
+	    select ca.cmId, ca.cmcId cmtsId, ca.StatusValue state, ca.StatusMacAddress mac, 
+	    ca.displayIp ip, ca.StatusDownChannelIfIndex downChanId, ca.StatusUpChannelIfIndex upChanId, 
+	    ca.docsisMode, info.userAddr alias
+	    from cmattribute ca left join cmbossinfo info on ca.StatusMacAddress = info.CmMac
+	    where cmId = #{cmId}
+	</select>
+	
+	<select id="getCmtsCmList" parameterType="map" resultType="com.topvision.ems.mobile.domain.CmtsCm">
+	    SELECT
+		ca.statusIndex cmIndex,
+		ca.cmId,
+		ca.cmcId cmtsId,
+		ca.displayIp ip,
+		ca.StatusMacAddress mac,
+		ca.StatusValue state,
+		cii.userAddr alias
+		FROM
+			cmattribute ca
+		LEFT JOIN cmbossinfo cii ON ca.StatusMacAddress = cii.cmMac
+		WHERE ca.cmcId = #{cmtsId}
+		<if test="cmMacOrIp != null">
+			AND (ca.StatusMacAddress Like '%${cmMacOrIp}%' 
+				OR REPLACE(ca.StatusMacAddress, ':', '') LIKE '%${cmMacOrIp}%' 
+				OR ca.displayIp Like '%${cmMacOrIp}%' 
+				OR cii.userAddr Like '%${cmMacOrIp}%')
+		</if>
+		<choose>
+          <when test="sortType == 'state'">
+              ORDER BY case when find_in_set(statusValue, '6,21,26,27,30,31') then 100 else statusValue end ${dir},
+              ip ${dir}
+          </when>
+          <otherwise>
+              ORDER BY ${sortType} ${dir}
+          </otherwise>
+        </choose>
+		LIMIT #{start},#{limit} 	    
+	</select>
+	
+	<select id="getCmtsCmOnlineCount" parameterType="map" resultType="int">
+	    SELECT count(ca.cmId)
+		FROM
+			cmattribute ca
+		LEFT JOIN cmbossinfo cii ON ca.StatusMacAddress = cii.cmMac
+		WHERE ca.cmcId = #{cmtsId}
+		    AND ca.StatusValue in (6,21,26,27)
+		<if test="cmMacOrIp != null">
+			AND (ca.StatusMacAddress Like '%${cmMacOrIp}%' 
+				OR REPLACE(ca.StatusMacAddress, ':', '') LIKE '%${cmMacOrIp}%' 
+				OR ca.displayIp Like '%${cmMacOrIp}%' 
+				OR cii.userAddr Like '%${cmMacOrIp}%')
+		</if>
+	</select>
+	
+	<select id="getCmtsCmTotalCount" parameterType="map" resultType="int">
+	    SELECT count(ca.cmId)
+		FROM
+			cmattribute ca
+		LEFT JOIN cmbossinfo cii ON ca.StatusMacAddress = cii.cmMac
+		WHERE ca.cmcId = #{cmtsId}
+		<if test="cmMacOrIp != null">
+			AND (ca.StatusMacAddress Like '%${cmMacOrIp}%' 
+				OR REPLACE(ca.StatusMacAddress, ':', '') LIKE '%${cmMacOrIp}%' 
+				OR ca.displayIp Like '%${cmMacOrIp}%' 
+				OR cii.userAddr Like '%${cmMacOrIp}%')
+		</if>
+	</select>
+	
+	<select id="getRelavtiveCm" parameterType="map" resultType="com.topvision.ems.mobile.domain.CmRelative">
+        select 
+        B.mtr,
+        B.upSnr,
+        B.cmMac,
+        C.userAddr cmAddress,
+        C.userPhoneNo cmContact
+        from cmattribute A
+        left join pnmpcmdatalast B on A.cmcId=B.cmcId and A.StatusMacAddress=B.cmMac
+        left join cmbossinfo C on A.StatusMacAddress=C.cmMac
+        where A.cmcId=#{cmcId} 
+        and A.StatusUpChannelIfIndex=(select StatusUpChannelIfIndex from cmattribute where cmId=#{cmId})
+        and A.statusvalue in('6,21,26,27,30,31')
+    </select>
+    
+    <select id="getMtrSnrGraph" parameterType="map" resultType="com.topvision.ems.mobile.domain.MtrSnrOverlap">
+        select mtr,
+        upSnr,
+        collecttime xTime
+        from pnmpcmdatahis where cmMac=#{cmMac}
+        and <![CDATA[collecttime<=#{endTime}]]>
+        and <![CDATA[collecttime>=#{startTime}]]>
+        group by xTime
+        order by xTime
+    </select>
+    
+    <select id="getUpchannelList" parameterType="Long" resultType="int">
+        select A.channelId from
+        cmcupchannelbaseinfo A 
+        left join cmcportattribute B 
+        on A.cmcportId=B.cmcportId where A.cmcId=#{cmtsId} and B.ifAdminstatus=1 and B.ifOperStatus=1
+    </select>
+    
+    <select id="getMtrThresholds" resultType="PnmpTargetThreshold">
+        SELECT * from PnmpTargetThreshold where targetname='mtr'
+    </select>
+	
+	<insert id="updateOrInsertImg" parameterType="com.topvision.ems.mobile.domain.Cm">
+		insert into cmprogramimg(mac,url) values (#{cmMac},#{cmImgUrl})
+		ON DUPLICATE KEY 
+		UPDATE url = #{cmImgUrl}
+	</insert>
+	
+	<select id="getCmProgramImg" parameterType="string" resultType="string">
+		select url from cmprogramimg where mac = #{cmMac}
+	</select>
+	
+	<select id="getCmBossInfo" parameterType="string" resultType="com.topvision.ems.cmc.domain.CmImportInfo">
+        select userAddr cmAlias, 
+        userPhoneNo cmPhoneNo
+        from cmBossInfo where cmMac = #{cmMac}
+    </select>
+	
+</mapper>

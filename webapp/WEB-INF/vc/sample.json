@@ -1,0 +1,24 @@
+{
+	OLT-169.0.0.1 : {
+		//PREVERSION : "OLT-168.0.0.0" ,
+		DESC: "该版本发布文档详见xxxx",
+		CONTROLS: {
+			IGMP : {
+				STATUS : "IIS",DESC : "XXX",
+				NODES : {
+					onuIgmp : "DISABLED DISPLAY",
+					igmpUni : "DISABLED DISPLAY",
+					IgmpConfig : "DISABLED DISPLAY"
+				}
+			},
+			QOS : {
+				STATUS : "IIS",DESC : "XXX",
+				NODES : {
+					oltQos : "DISABLED DISPLAY", // #["DISABLED" , "DISPLAY"],
+					sniQos : "DISABLED DISPLAY",
+					ponQosConfig : "DISABLED DISPLAY"
+				}
+			}
+		}
+	}
+}

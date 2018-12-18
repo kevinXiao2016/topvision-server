@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.autoclear.dao.AutoClearDao">
+
+	<insert id="insertAutoClearRecord" parameterType="autoClearRecord">
+		insert into
+		autoclearrecord
+		values
+		(#{oltName}, #{oltIp}, #{onuName}, #{onuMac},
+		#{onuType},
+		#{onuIndex}, #{offlineTime},
+		#{clearTime})
+	</insert>
+
+	<insert id="insertAutoClearCmciRecord" parameterType="autoClearCmciRecord"> 
+		INSERT INTO autoclearcmcirecord
+		(
+			cmcId,
+			cmcIndex,
+			cmcType,
+			cmcEntityId,
+			alias,
+			typeName,
+			ipAddress,
+			macAddr,
+			offlineTime,
+			clearTime
+		)
+		VALUES
+		(
+			#{cmcId},
+			#{cmcIndex},
+			#{cmcType},
+			#{cmcEntityId},
+			#{alias},
+			#{typeName},
+			#{ipAddress},
+			#{macAddr},
+			#{offlineTime},
+			#{clearTime}
+		)
+	</insert>
+	
+	<select id="loadAutoClearRecord" resultType="autoClearRecord">
+		select oltName,
+		oltIp, onuName, onuMac, onuType, onuIndex, offlineTime, clearTime
+		from
+		autoclearrecord order by clearTime desc limit #{start}, #{limit}
+	</select>
+
+	<select id="loadAutoClearCmciRecord" resultType="autoClearCmciRecord">
+		SELECT cmcId, cmcIndex, cmcType, cmcEntityId, alias, typeName, ipAddress, macAddr, offlineTime, clearTime
+		FROM 
+		autoclearcmcirecord
+		ORDER BY clearTime DESC LIMIT #{start}, #{limit}
+	</select>
+	
+	<select id="loadAutoClearRecordCount" resultType="int">
+		select count(*)
+		from autoclearrecord
+	</select>
+	
+	<select id="loadAutoClearCmciRecordCount" resultType="int">
+		select count(cmcId)
+		from autoclearcmcirecord
+	</select>
+
+</mapper>

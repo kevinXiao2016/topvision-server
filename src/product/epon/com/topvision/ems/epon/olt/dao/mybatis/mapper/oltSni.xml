@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.olt.domain.OltSni">
+	<update id="updateSniOperationStatus" parameterType="map">
+		UPDATE
+		OltSniAttribute SET sniOperationStatus = #{sniOperationStatus} WHERE
+		sniId =
+		#{sniId} 
+	</update>
+	
+	<select id="getSniIdByIndex" parameterType="map" resultType="long">
+		SELECT sniId FROM OltSniRelation WHERE sniIndex = #{sniIndex} and
+		entityId = #{entityId}
+	</select>
+	
+	<select id="getSniIndex" parameterType="long" resultType="long">
+		SELECT
+		sniIndex FROM OltSniRelation WHERE sniId = #{sniId}
+	</select>
+	
+	<select id="getSniAttribute" parameterType="long" resultType="oltSniAttribute">
+		SELECT
+		A.sniPortName,
+		A.sniOperationStatus,
+		A.sniAdminStatus,
+		B.sniIndex ,
+		A.sniMediaType,
+		A.sniAutoNegotiationStatus,
+		A.sniAutoNegotiationMode,
+		A.sniPerfStats15minuteEnable,
+		A.sniPerfStats24hourEnable,
+		A.sniLastStatusChangeTime,
+		A.sniMacAddrLearnMaxNum,
+		A.sniIsolationEnable,
+		A.topSniAttrFlowCtrlEnable,
+		A.topSniAttrIngressRate,
+		A.topSniAttrEgressRate,
+		A.topSniAttrActualSpeed,
+		A.topSniAttrPortType,
+		A.sniDisplayName
+		FROM
+		OltSniAttribute A ,
+		oltsnirelation B
+		WHERE
+		A.sniId = #{sniId} and A.sniId = B.sniId
+	</select>
+	
+	<select id="getSniAttributeByIndex" parameterType="map"
+		resultType="oltSniAttribute">
+		select A.* , B.sniIndex sniIndex from oltsniattribute A ,
+		oltsnirelation B where A.sniId=B.sniId and B.sniIndex=#{sniIndex} and
+		B.entityId=#{entityId} 
+	</select>
+	
+	<select id="getSniAttrList" parameterType="map" resultType="oltSniAttribute">
+	    select A.* , B.sniIndex sniIndex 
+	    from oltsniattribute A , oltsnirelation B 
+		where A.sniId=B.sniId and B.entityId=#{entityId} 
+		<if test="indexList != null">
+			and B.sniIndex in
+			<foreach item="item" index="index" collection="indexList" open="(" separator="," close=")">
+				#{item}
+ 			</foreach>
+		</if>
+	</select>
+	
+	<select id="querySniDisplayName" parameterType="map" resultType="string">
+		select A.sniDisplayName
+		FROM oltsniattribute A , oltsnirelation B 
+		WHERE A.sniId = B.sniId AND B.sniIndex = #{sniIndex} AND B.entityId = #{entityId} 
+	</select>
+	
+	<update id="updateSniPortName" parameterType="oltSniAttribute">
+		UPDATE
+		OltSniAttribute SET sniPortName = #{sniPortName} WHERE sniId =
+		#{sniId}
+	</update>
+	
+	<update id="updateSniIngressRateAndEgressRate" parameterType="oltSniAttribute">
+		UPDATE
+		OltSniAttribute
+		SET
+		topSniAttrIngressRate = #{topSniAttrIngressRate},
+		topSniAttrEgressRate = #{topSniAttrEgressRate}
+		WHERE sniId = #{sniId}
+	</update>
+	
+	<update id="updateSniAdminStatus" parameterType="oltSniAttribute">
+		UPDATE
+		OltSniAttribute SET sniAdminStatus = #{sniAdminStatus} WHERE sniId =
+		#{sniId}
+	</update>
+	
+	<update id="updateSniIsolationStatus" parameterType="oltSniAttribute">
+		UPDATE
+		OltSniAttribute SET sniIsolationEnable = #{sniIsolationEnable} WHERE
+		sniId = #{sniId}
+	</update>
+	
+	<update id="updateSniMacAddressAgingTime" parameterType="java.util.Map">
+		UPDATE
+		OltAttribute
+		SET
+		sniMacAddrTableAgingTime = #{sniAddressAgingTime},
+		topSysArpAgingTime = #{topSysArpAgingTime}
+		WHERE entityId = #{entityId}
+	</update>
+	<update id="updateSniMacAddrLearnMaxNum" parameterType="java.util.Map">
+		UPDATE
+		OltSniAttribute SET sniMacAddrLearnMaxNum = #{sniMacAddrLeranMaxNum}
+		WHERE sniId = #{sniId}
+	</update>
+	<update id="updateSniFlowControl" parameterType="oltSniAttribute">
+		UPDATE
+		OltSniAttribute
+		set 
+		<if test="topSniAttrIngressRate != null">
+			topSniAttrIngressRate = #{topSniAttrIngressRate},
+		</if>
+		<if test="topSniAttrEgressRate != null">
+			topSniAttrEgressRate = #{topSniAttrEgressRate},
+		</if>
+		<if test="topSniAttrFlowCtrlEnable != null">
+			topSniAttrFlowCtrlEnable = #{topSniAttrFlowCtrlEnable},
+		</if>
+		entityId = #{entityId}
+		WHERE sniId = #{sniId} and entityId = #{entityId}
+	</update>
+	
+	<update id="updateSniAutoNegotiationMode" parameterType="oltSniAttribute">
+		UPDATE
+		OltSniAttribute SET sniAutoNegotiationMode = #{sniAutoNegotiationMode}
+		WHERE sniId = #{sniId}
+	</update>
+	
+	<update id="updateSni15MinPerfStatus" parameterType="oltSniAttribute">
+		UPDATE
+		OltSniAttribute SET sniPerfStats15minuteEnable =
+		#{sniPerfStats15minuteEnable} WHERE sniId = #{sniId}
+	</update>
+	
+	<update id="updateSni24HourPerfStatus" parameterType="oltSniAttribute">
+		UPDATE
+		OltSniAttribute SET sniPerfStats24hourEnable =
+		#{sniPerfStats24hourEnable} WHERE sniId = #{sniId}
+	</update>
+	
+	<select id="getSniMacAddress" parameterType="long" resultType="oltSniMacAddress">
+		SELECT entityId,
+		sniId,
+		sniMacAddrIndex AS sniMacAddrIndexLong,
+		sniMacAddrVlanIdIndex,
+		sniMacAddrType,
+		sniMacAddrPortId
+		FROM
+		OltSniMacAddressManagement
+		WHERE sniId = #{sniId}
+	</select>
+	<select id="getSniStormSuppression" parameterType="long"
+		resultType="oltSniStormInfo">
+		SELECT sniId,
+		sniUnicastStormEnable AS unicastStormEnable,
+		sniUnicastStormInPacketRate AS unicastStormInPacketRate,
+		sniMulticastStormEnable AS multicastStormEnable,
+		sniMulticastStormInPacketRate AS multicastStormInPacketRate,
+		sniBroadcastStormEnable AS broadcastStormEnable,
+		sniBroadcastStormInPacketRate AS broadcastStormInPacketRate
+		FROM
+		OltSniStormInfo
+		WHERE sniId = #{sniId}
+	</select>
+	<select id="getSniRedirect" parameterType="long" resultType="oltSniRedirect">
+		SELECT A.sniId AS topSniRedirectGroupSrcPortId,
+		A.topSniRedirectGroupDirection,
+		A.topSniRedirectGroupName,
+		A.topSniRedirectGroupDstPortId,
+		B.sniIndex AS
+		srcIndex,
+		C.sniIndex AS
+		dstIndex
+		FROM oltsniredirect A
+		LEFT JOIN
+		oltsnirelation B ON A.sniId =
+		B.sniId
+		LEFT
+		JOIN oltsnirelation C ON
+		A.topSniRedirectGroupDstPortId =
+		C.sniId
+		WHERE A.entityId = #{entityId}
+	</select>
+	<select id="getAvailableSniRedirect" parameterType="long"
+		resultType="oltSniRedirect">
+		SELECT A.sniId AS topSniRedirectGroupSrcPortId,
+		A.sniIndex
+		AS srcIndex
+		FROM OltSniRelation A
+		WHERE A.entityId = #{entityId} AND
+		A.sniId
+		NOT IN(SELECT B.sniId
+		FROM OltSniRedirect B,
+		OltSniRelation C
+		WHERE
+		B.sniId = C.sniId
+		AND C.entityId = #{entityId}
+		)
+	</select>
+	<select id="getAllSniRedirect" parameterType="long" resultType="oltSniRedirect">
+		SELECT A.sniId AS topSniRedirectGroupSrcPortId, A.sniIndex AS srcIndex
+		FROM OltSniRelation A
+		WHERE A.entityId = #{entityId}
+	</select>
+	
+	<insert id="insertOltSniMacAddress" parameterType="oltSniMacAddress">
+		insert into
+		oltsnimacaddressmanagement
+		(entityId, sniId, sniMacAddrIndex,
+		sniMacAddrVlanIdIndex,
+		sniMacAddrType,
+		sniMacAddrPortId
+		)
+		values
+		(#{entityId}, #{sniId}, #{sniMacAddrIndexLong},
+		#{sniMacAddrVlanIdIndex},
+		#{sniMacAddrType},
+		#{sniMacAddrPortId}
+		)
+	</insert>
+	
+	<delete id="deleteOltSniMacAddress" parameterType="oltSniMacAddress">
+		DELETE
+		FROM
+		oltsnimacaddressmanagement where entityId = #{entityId}
+		and
+		sniMacAddrVlanIdIndex=#{sniMacAddrVlanIdIndex}
+		and
+		sniMacAddrIndex=#{sniMacAddrIndex}
+	</delete>
+	<delete id="deleteSniStormInfo" parameterType="Long">
+		DELETE FROM
+		oltsnistorminfo
+		WHERE
+		sniId = #{sniId}
+	</delete>
+	<delete id="deleteSniRedirect" parameterType="Long">
+		DELETE FROM
+		oltsniredirect
+		WHERE
+		sniId = #{sniId}			
+	</delete>
+	
+	<update id="updateSniStormSuppression" parameterType="oltSniStormInfo">
+		UPDATE
+		OltSniStormInfo
+		SET sniId = #{sniId},
+		sniUnicastStormEnable =
+		#{unicastStormEnable},
+		sniUnicastStormInPacketRate =
+		#{unicastStormInPacketRate},
+		sniMulticastStormEnable =
+		#{multicastStormEnable},
+		sniMulticastStormInPacketRate =
+		#{multicastStormInPacketRate},
+		sniBroadcastStormEnable =
+		#{broadcastStormEnable},
+		sniBroadcastStormInPacketRate =
+		#{broadcastStormInPacketRate}
+		WHERE sniId = #{sniId}
+	</update>
+	
+	<insert id="insertOltSniStormInfo" parameterType="oltSniStormInfo">
+		INSERT INTO
+		oltsnistorminfo
+		(
+		sniId,
+		sniUnicastStormEnable,
+		sniUnicastStormInPacketRate,
+		sniMulticastStormEnable,
+		sniMulticastStormInPacketRate,
+		sniBroadcastStormEnable,
+		sniBroadcastStormInPacketRate,
+		entityId
+		)
+		VALUES
+		(
+		#{sniId},
+		#{unicastStormEnable},
+		#{unicastStormInPacketRate},
+		#{multicastStormEnable},
+		#{multicastStormInPacketRate},
+		#{broadcastStormEnable},
+		#{broadcastStormInPacketRate},
+		#{entityId}
+		)
+	</insert>
+	
+	<insert id="insertOltSniRedirect" parameterType="oltSniRedirect">
+		INSERT INTO
+		oltsniredirect
+		(sniId,
+		topSniRedirectGroupDirection,
+		topSniRedirectGroupName,
+		topSniRedirectGroupDstPortId,
+		entityId
+		)
+		VALUES
+		(
+		#{topSniRedirectGroupSrcPortId},
+		#{topSniRedirectGroupDirection},
+		#{topSniRedirectGroupName},
+		#{topSniRedirectGroupDstPortId},
+		#{entityId}
+		)
+	</insert>
+	
+	<select id="getOltSniCount" parameterType="OltSniAttribute"
+		resultType="int">
+		select
+		count(B.sniId)
+		from
+		OltSniRelation B
+		where B.entityId =
+		#{entityId} and B.sniIndex = #{sniIndex}
+	</select>
+	
+	<update id="updateOltSniAttribute" parameterType="oltSniAttribute">
+		UPDATE
+		OltSniAttribute SET
+		sniPortName = #{sniPortName},
+		sniOperationStatus = #{sniOperationStatus},
+		sniAdminStatus = #{sniAdminStatus},
+		sniMediaType = #{sniMediaType},
+		sniAutoNegotiationStatus = #{sniAutoNegotiationStatus},
+		sniAutoNegotiationMode = #{sniAutoNegotiationMode},
+		sniPerfStats15minuteEnable = #{sniPerfStats15minuteEnable},
+		sniPerfStats24hourEnable = #{sniPerfStats24hourEnable},
+		sniLastStatusChangeTime = #{sniLastStatusChangeTime},
+		sniMacAddrLearnMaxNum = #{sniMacAddrLearnMaxNum},
+		sniIsolationEnable = #{sniIsolationEnable},
+		topSniAttrFlowCtrlEnable = #{topSniAttrFlowCtrlEnable},
+		topSniAttrIngressRate = #{topSniAttrIngressRate},
+		topSniAttrEgressRate = #{topSniAttrEgressRate},
+		topSniAttrActualSpeed =#{topSniAttrActualSpeed},
+		topSniAttrPortType = #{topSniAttrPortType},
+		sniPortType = #{sniPortType}
+		<if test="sniDisplayName != null">
+		    ,sniDisplayName = #{sniDisplayName}
+		</if>
+		WHERE exists
+		(select 1 from OltSniRelation where
+		OltSniRelation.sniId =
+		OltSniAttribute.sniId and
+		OltSniRelation.entityId=#{entityId} and
+		OltSniRelation.sniIndex=#{sniIndex})
+	</update>
+	
+	<insert id="insertOltSniRelation" databaseId="MySQL"
+		parameterType="oltSniAttribute" useGeneratedKeys="true" keyProperty="sniId">
+		insert into
+		OltSniRelation(slotId,sniIndex,entityId) values
+		(#{slotId},#{sniIndex},#{entityId})
+	</insert>
+	<insert id="insertOltSniRelation" databaseId="Oracle"
+		parameterType="oltSniAttribute">
+		<selectKey keyProperty="sniId" resultType="long" order="BEFORE">
+			SELECT
+			OltSniRelation_Seq.nextval AS sniId from dual
+        </selectKey>
+		insert into OltSniRelation(sniId,slotId,sniIndex,entityId) values
+		(#{sniId},#{slotId#},#{sniIndex},#{entityId})
+	</insert>
+	
+	<insert id="insertOltSniAttribute" parameterType="oltSniAttribute">
+		insert into
+		OltSniAttribute
+		(sniId, sniPortName, sniOperationStatus,
+		sniAdminStatus, sniMediaType,
+		sniAutoNegotiationStatus,
+		sniAutoNegotiationMode,
+		sniPerfStats15minuteEnable,
+		sniPerfStats24hourEnable,
+		sniLastStatusChangeTime,
+		sniMacAddrLearnMaxNum,
+		sniIsolationEnable,
+		topSniAttrFlowCtrlEnable,
+		topSniAttrIngressRate,
+		topSniAttrEgressRate,
+		topSniAttrActualSpeed,
+		topSniAttrPortType,
+		entityId,
+		sniDisplayName,
+		sniPortType
+		)
+		values
+		(#{sniId},
+		#{sniPortName},
+		#{sniOperationStatus}, #{sniAdminStatus},
+		#{sniMediaType},
+		#{sniAutoNegotiationStatus},
+		#{sniAutoNegotiationMode},
+		#{sniPerfStats15minuteEnable},
+		#{sniPerfStats24hourEnable},
+		#{sniLastStatusChangeTime},
+		#{sniMacAddrLearnMaxNum},
+		#{sniIsolationEnable},
+		#{topSniAttrFlowCtrlEnable},
+		#{topSniAttrIngressRate},
+		#{topSniAttrEgressRate},
+		#{topSniAttrActualSpeed},
+		#{topSniAttrPortType},
+		#{entityId},
+		#{sniDisplayName},
+		#{sniPortType}
+		)
+	</insert>
+	
+	<select id="getSniId" parameterType="oltSniAttribute"
+		resultType="long">
+		SELECT
+		sniId
+		FROM
+		OltSniRelation
+		WHERE
+		entityId = #{entityId}
+		and sniIndex = #{sniIndex}    
+	</select>
+	
+	<delete id="deleteAllOltSniRedirect" parameterType="long">
+		DELETE FROM
+		oltsniredirect where entityId = #{entityId}	
+	</delete>
+	<delete id="deleteAllOltSniMacAddress" parameterType="long">
+		DELETE
+		FROM
+		oltsnimacaddressmanagement where entityId = #{entityId}	
+	</delete>
+	
+	<select id="getSniPortList" parameterType="map" resultType="oltSniAttribute">
+		select
+		A.sniId,
+		A.sniMediaType,
+		A.sniPortName,
+		A.sniAdminStatus,
+		A.sniOperationStatus,
+		B.ip AS entityIp,
+		B.name AS entityName,
+		C.sniIndex
+		from
+		oltsniattribute A ,entity B,oltsnirelation C
+		where A.entityId =
+		B.entityId AND A.sniId = C.sniId and B.entityId in (select entityId
+		from ${Authority})
+		<if test="entityType != null and entityType != ''">
+			and B.typeId =
+			#{entityType}</if>
+		<if test="entityIp != null and entityIp != ''">
+			and B.ip = #{entityIp}</if>
+		<if test="adminState != null and adminState != ''">
+			and A.sniAdminStatus =
+			#{adminState} </if>
+		<if test="operationState != null and operationState != ''">
+			and A.sniOperationStatus =
+			#{operationState}</if>
+	</select>
+	
+	<select id="getAvailableSniListForTrunkGroupBySniAttribute"
+		parameterType="oltSniAttribute" resultType="oltSniAttribute">
+		select A.* , B.sniIndex
+		from oltsniattribute A , oltsnirelation B where
+		A.sniId=B.sniId
+		and
+		A.entityId = B.entityId
+		and
+		A.entityId = #{entityId}
+	</select>
+	
+	<select id="getAllSniList" parameterType="long" resultType="oltSniAttribute">
+		select A.* , B.sniIndex from oltsniattribute A , oltsnirelation B
+		where A.sniId=B.sniId and B.entityId=#{entityId}
+		ORDER BY B.sniIndex
+	</select>
+	
+	<select id="getSlotIdAndTypeMap" parameterType="long" resultType="java.util.HashMap">
+	    SELECT slotId, topSysBdPreConfigType AS slotType 
+	    FROM oltslotattribute
+	    WHERE entityId = #{entityId}
+	</select>
+	
+</mapper>

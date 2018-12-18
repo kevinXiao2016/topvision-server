@@ -1,0 +1,114 @@
+div#x-tip-window {
+	position: absolute;
+	padding: 0px;
+	z-index: 999;
+}
+
+#x-tip-window #x-tip-header {
+	position: relative;
+	height: 25px;
+}
+
+#x-tip-window #x-tip-header h2 {
+	height: 33px;
+	line-height: 33px;
+	padding: 2px 18px;
+	font-size: 14px;
+	color: #fff;
+	margin: 0;
+	text-align: left;
+	background: url(images/messanger/icon_dialog.gif) 0 50% no-repeat;
+}
+
+#x-tip-window #x-tip-header #x-tip-close {
+	cursor: pointer;
+	position: absolute;
+	top: 4px;
+	right: 5px;
+	width: 28px;
+	height: 17px;
+	background: url(images/messanger/dialog_closebtn.png) 0 0 no-repeat;
+}
+
+#x-tip-window #x-tip-header #x-tip-close :hover {
+	background: url(images/messanger/dialog_closebtn_over.png);
+}
+
+.x-tip-close {
+	cursor: pointer;
+	position: absolute;
+	top: 4px;
+	right: 5px;
+	width: 28px;
+	height: 17px;
+	background: url(images/messanger/dialog_closebtn.png) 0 0 no-repeat;
+}
+.x-tip-close-hover {
+	background: url(images/messanger/dialog_closebtn_over.png);
+}
+
+#x-tip-window #x-tip-content {
+	padding: 0px;
+	overflow: auto;
+	background: #FFF;
+}
+
+table.x-window-table {
+	border: none;
+	border-collapse: collapse;
+	border-spacing: 0px;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	display: none;
+}
+
+table.x-window-table td {
+	padding: 0;
+	margin: 0px;
+	border: none;
+}
+
+table.x-window-table td.x-window-lt {
+	width: 13px;
+	height: 33px;
+	background: transparent url(images/messanger/dialog_lt.png) no-repeat;
+}
+
+table.x-window-table td.x-window-ct {
+	height: 33px;
+	background: transparent url(images/messanger/dialog_ct.png) repeat-x;
+}
+
+table.x-window-table td.x-window-rt {
+	width: 13px;
+	height: 33px;
+	background: transparent url(images/messanger/dialog_rt.png) repeat-x;
+}
+
+table.x-window-table td.x-window-lc {
+	width: 13px;
+	background: transparent url(images/messanger/dialog_mlm.png) repeat-y;
+}
+
+table.x-window-table td.x-window-rc {
+	width: 13px;
+	background: transparent url(images/messanger/dialog_mrm.png) repeat-y;
+}
+
+table.x-window-table td.x-window-lb {
+	width: 13px;
+	height: 13px;
+	background: transparent url(images/messanger/dialog_lb.png) no-repeat;
+}
+
+table.x-window-table td.x-window-cb {
+	height: 13px;
+	background: transparent url(images/messanger/dialog_cb.png) repeat-x;
+}
+
+table.x-window-table td.x-window-rb {
+	width: 13px;
+	height: 13px;
+	background: transparent url(images/messanger/dialog_rb.png) repeat-x;
+}

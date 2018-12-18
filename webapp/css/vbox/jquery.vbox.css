@@ -1,0 +1,61 @@
+.vbox-invalid{
+	border: 1px solid red !important;
+}
+
+.vbox-focusin{
+	background-color: #FFFFBE;
+	/*
+	border:1px solid #68acFF;
+	outline:1px solid aqua;
+	*/
+}
+
+.vbox-tip{
+    position: absolute;
+    z-index: 999;
+}
+
+.vbox-tip-top{
+	padding-bottom: 4px;
+	background: url("images/tipbg_top.gif") no-repeat scroll left bottom transparent;
+}
+.vbox-tip-bottom{
+	padding-top: 4px;
+	background: url("images/tipbg_bottom.gif") no-repeat scroll left top transparent;
+}
+.vbox-tip-left{
+	padding-right: 4px;
+	background: url("images/tipbg_left.gif") no-repeat scroll right top transparent;
+}
+.vbox-tip-right{
+	padding-left: 4px;
+	background: url("images/tipbg_right.gif") no-repeat scroll left top transparent;
+}
+
+
+.vbox-tip-content {
+	background: none repeat scroll 0 0 #FFFFCC;
+    padding: 2px;
+    white-space: nowrap;
+}
+.vbox-tip-content-top{
+    border-left: 1px solid #000000;
+    border-right: 1px solid #000000;
+    border-top: 1px solid #000000;
+}
+.vbox-tip-content-bottom{
+    border-left: 1px solid #000000;
+    border-right: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+}
+.vbox-tip-content-left{
+    border-left: 1px solid #000000;
+    border-top: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+}
+.vbox-tip-content-right{
+    border-right: 1px solid #000000;
+    border-top: 1px solid #000000;
+    border-bottom: 1px solid #000000;
+}
+

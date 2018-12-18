@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.6.0_24" class="java.beans.XMLDecoder">
+    <object class="com.topvision.ems.epon.domain.Room">
+        <void property="cnName">
+            <string>武汉市洪山区光谷软件园A9栋2楼</string>
+        </void>
+        <void property="doorPosition">
+            <object class="com.topvision.ems.epon.domain.Vertex">
+                <void property="x">
+                    <int>0</int>
+                </void>
+                <void property="y">
+                    <int>0</int>
+                </void>
+            </object>
+        </void>
+        <void property="enName">
+            <string>topvision</string>
+        </void>
+        <void property="roomWidth">
+            <int>2500</int>
+        </void>
+        <void property="roomHeight">
+            <int>2500</int>
+        </void>
+        <void property="rightWidth">
+            <int>1500</int>
+        </void>
+        <void property="rowMargin">
+            <int>100</int>
+        </void>
+        <void property="roomMargin">
+            <int>100</int>
+        </void>
+        <void property="rackIcon">
+            <string>../../epon/image/olt-back.JPG</string>
+        </void>
+        <void property="maxRow">
+            <int>4</int>
+        </void>
+        <void property="maxCol">
+            <int>4</int>
+        </void>
+        <void property="rackList">
+            <object class="java.util.ArrayList">
+                <void method="add">
+                    <object class="com.topvision.ems.epon.domain.Rack">
+                        <void property="rackName">
+                            <string>机架1</string>
+                        </void>
+                        <void property="rackNum">
+                            <int>1</int>
+                        </void>
+                        <void property="row">
+                            <int>1</int>
+                        </void>
+                        <void property="col">
+                            <int>1</int>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.epon.domain.Rack">
+                        <void property="rackName">
+                            <string>机架2</string>
+                        </void>
+                        <void property="rackNum">
+                            <int>2</int>
+                        </void>
+                        <void property="row">
+                            <int>1</int>
+                        </void>
+                        <void property="col">
+                            <int>2</int>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.epon.domain.Rack">
+                        <void property="rackName">
+                            <string>机架3</string>
+                        </void>
+                        <void property="rackNum">
+                            <int>3</int>
+                        </void>
+                        <void property="row">
+                            <int>1</int>
+                        </void>
+                        <void property="col">
+                            <int>3</int>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.epon.domain.Rack">
+                        <void property="rackName">
+                            <string>机架4</string>
+                        </void>
+                        <void property="rackNum">
+                            <int>4</int>
+                        </void>
+                        <void property="row">
+                            <int>1</int>
+                        </void>
+                        <void property="col">
+                            <int>4</int>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.epon.domain.Rack">
+                        <void property="rackName">
+                            <string>机架5</string>
+                        </void>
+                        <void property="rackNum">
+                            <int>5</int>
+                        </void>
+                        <void property="row">
+                            <int>2</int>
+                        </void>
+                        <void property="col">
+                            <int>1</int>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.epon.domain.Rack">
+                        <void property="rackName">
+                            <string>机架6</string>
+                        </void>
+                        <void property="rackNum">
+                            <int>6</int>
+                        </void>
+                        <void property="row">
+                            <int>2</int>
+                        </void>
+                        <void property="col">
+                            <int>2</int>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.epon.domain.Rack">
+                        <void property="rackName">
+                            <string>机架7</string>
+                        </void>
+                        <void property="rackNum">
+                            <int>7</int>
+                        </void>
+                        <void property="row">
+                            <int>2</int>
+                        </void>
+                        <void property="col">
+                            <int>3</int>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.epon.domain.Rack">
+                        <void property="rackName">
+                            <string>机架8</string>
+                        </void>
+                        <void property="rackNum">
+                            <int>8</int>
+                        </void>
+                        <void property="row">
+                            <int>2</int>
+                        </void>
+                        <void property="col">
+                            <int>4</int>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.epon.domain.Rack">
+                        <void property="rackName">
+                            <string>机架9</string>
+                        </void>
+                        <void property="rackNum">
+                            <int>9</int>
+                        </void>
+                        <void property="row">
+                            <int>3</int>
+                        </void>
+                        <void property="col">
+                            <int>2</int>
+                        </void>
+                    </object>
+                </void>
+            </object>
+        </void>
+        <void property="vertexList">
+            <object class="java.util.ArrayList">
+                <void method="add">
+                    <object class="com.topvision.ems.epon.domain.Vertex">
+                        <void property="x">
+                            <int>0</int>
+                        </void>
+                        <void property="y">
+                            <int>0</int>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.epon.domain.Vertex">
+                        <void property="x">
+                            <int>4000</int>
+                        </void>
+                        <void property="y">
+                            <int>0</int>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.epon.domain.Vertex">
+                        <void property="x">
+                            <int>4000</int>
+                        </void>
+                        <void property="y">
+                            <int>2500</int>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.epon.domain.Vertex">
+                        <void property="x">
+                            <int>0</int>
+                        </void>
+                        <void property="y">
+                            <int>2500</int>
+                        </void>
+                    </object>
+                </void>
+            </object>
+        </void>
+    </object>
+</java> 

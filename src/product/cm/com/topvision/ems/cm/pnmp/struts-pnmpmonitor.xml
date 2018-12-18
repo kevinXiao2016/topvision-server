@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+    
+<struts>
+	<package name="pnmpmonitor" namespace="/pnmp/monitor" extends="default">
+        <action name="queryHighMonitorCmList" class="pnmpMonitorCmAction" method="queryHighMonitorCmList"></action>
+        <action name="showHighMonitorCmList" class="pnmpMonitorCmAction" method="showHighMonitorCmList">
+            <result>/terminal/pnmp/pnmp-high-monitor.jsp</result>
+        </action>
+        <action name="showAddHighMonitorCm" class="pnmpMonitorCmAction" method="showAddHighMonitorCm">
+        	<result>/terminal/pnmp/pnmp-high-monitor-add.jsp</result>
+        </action>
+        <action name="addHighMonitorCm" class="pnmpMonitorCmAction" method="addHighMonitorCm"></action>
+        <action name="checkCmMac" class="pnmpMonitorCmAction" method="checkCmMac"></action>
+        <action name="removeHighMonitorCm" class="pnmpMonitorCmAction" method="removeHighMonitorCm"></action>
+        <action name="batchRemoveHighMonitorCm" class="pnmpMonitorCmAction" method="batchRemoveHighMonitorCm"></action>
+    </package>
+</struts>

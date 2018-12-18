@@ -1,0 +1,29 @@
+var CmcTrapTypeId = {
+	//下行信道参数变化
+	DS_PARM_CHANGE: "101010",
+	//关闭下行信道
+	DS_SHUTDOWN: "101011",
+	//打开下行信道
+	DS_ENABLE: "101012",
+	//关闭上行信道
+	US_SHUTDOWN: "101013",
+	//打开上行信道
+	US_ENABLE: "101014",
+	//上行信道参数变化
+	US_PARM_CHANGE: "101015",
+	//CMC复位
+	CMC_RESET: "101025",
+	//信道上线
+	CMTS_LINK_UP: "102005",
+	//信道下线
+	CMTS_LINK_DOWN: "102006",
+	//系统手动重启
+	DOL_REBOOT: "101029",
+	//CCMTS断电
+	CMTS_POWER_OFF: "101003",
+	//CCMTS断纤
+	CMTS_LINK_LOSE: "1016435",
+	//CCMTS下线
+	CMTS_OFFLINE: "1016433",
+	CMTS_ONLINE: "1016434"
+};

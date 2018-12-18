@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmtsPerfTarget" namespace="/cmts/perfTarget" extends="default">
+		<!-- 添加操作日志拦截器配置  -->
+		
+        <!-- 重构后的 -->
+        <action name="showCmtsPerfManage" class="cmtsPerfTargetManageAction" method="showCmtsPerfManage" >
+        	<result>/performance/perfTarget/cmtsPerfTargetManage.jsp</result>
+        </action>
+        
+        <action name="loadCmtsTargetList" class="cmtsPerfTargetManageAction" method="loadCmtsTargetList" />
+        <action name="loadCmtsPerfTarget" class="cmtsPerfTargetManageAction" method="loadCmtsPerfTarget" />
+        <action name="modifyCmtsPerfTarget" class="cmtsPerfTargetManageAction" method="modifyCmtsPerfTarget" />
+        <action name="saveAsCmtsGlobalTarget" class="cmtsPerfTargetManageAction" method="saveAsCmtsGlobalTarget" />
+        <action name="applyCurrentTargetToAllCmts" class="cmtsPerfTargetManageAction" method="applyCurrentTargetToAllCmts" />
+        <action name="showCmtsGlobalPerfTarget" class="cmtsPerfTargetManageAction" method="showCmtsGlobalPerfTarget" >
+        	<result>/performance/perfTarget/cmtsGlobalPerfTarget.jsp</result>
+        </action>
+        <action name="modifyCmtsGlobalTarget" class="cmtsPerfTargetManageAction" method="modifyCmtsGlobalTarget" />
+        <action name="loadAllArea" class="cmtsPerfTargetManageAction" method="loadAllArea" />
+        
+        <action name="saveCmtsPerfCollect" class="cmtsPerfTargetManageAction" method="saveCmtsPerfCollect" />
+        <action name="useCmtsGolbalPerf" class="cmtsPerfTargetManageAction" method="useCmtsGolbalPerf" />
+	</package>
+</struts>

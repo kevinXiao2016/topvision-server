@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="template" namespace="/template" extends="default">
+		<action name="loadEntityDriver" class="entityDriverAction"
+			method="loadEntityDriver" />
+
+		<action name="showEntityDriver">
+			<result>/system/driver/entityDriverList.jsp</result>
+		</action>
+
+		<action name="showNewEntityDriver">
+			<result>/system/driver/newEntityDriver.jsp</result>
+		</action>
+
+		<action name="showPollingStrategy">
+			<result>/system/template/pollingStrategyList.jsp</result>
+		</action>
+
+		<action name="loadPollingStrategy" class="pollingStrategyAction"
+			method="loadPollingStrategy" />
+
+		<action name="getPollingStrategy" class="pollingStrategyAction"
+			method="getPollingStrategy">
+			<result>/system/template/popPollingStrategy.jsp</result>
+		</action>
+
+		<action name="showResourceCategory">
+			<result>/system/template/resourceCategory.jsp</result>
+		</action>
+
+		<action name="executeWorks"
+			class="configWorkAction" method="executeWorks" />
+
+		<action name="showQuickSet"
+			class="configWorkAction" method="showQuickSet" />
+	</package>
+</struts>

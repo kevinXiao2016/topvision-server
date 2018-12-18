@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.report.domain.OltResponseReport">
+
+	<select id="getEponDelayRank" resultType="com.topvision.ems.epon.domain.PerforamanceRank" parameterType="map">
+		select
+			s.entityId,s.delay,s.snapTime,e.ip ,e.name
+		from
+			(
+			select entityId, delay, snapTime, delayTime, 1 sortFlag 
+			from entitysnap where delay = -1
+			union
+			select entityId, delay, snapTime,delayTime, 2 sortFlag 
+			from entitysnap	where delay != -1 
+			order by delay desc
+			) s , entity e
+		where
+			s.entityId=e.entityId and e.typeId in (select typeId from entityTypeRelation where type = #{type} )
+			and	e.entityId in (select entityId from ${Authority})
+		order by s.sortFlag	ASC, s.delay desc
+	</select>
+
+</mapper>

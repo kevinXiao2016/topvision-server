@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.trunk.domain.OltTrunk">
+	<select id="getTrunkConfigList" parameterType="long"
+		resultType="oltSniTrunkConfig">
+		SELECT
+		portTrunkGroupConfigName AS sniTrunkGroupConfigName,
+		portTrunkGroupConfigMember AS sniTrunkGroupConfigMember,
+		portTrunkGroupConfigPolicy AS sniTrunkGroupConfigPolicy,
+		portTrunkGroupConfigIndex AS sniTrunkGroupConfigIndex,
+		portTrunkGroupOperationStatus AS sniTrunkGroupOperationStatus,
+		portTrunkGroupActualSpeed AS sniTrunkGroupActualSpeed,
+		portTrunkGroupAdminStatus AS sniTrunkGroupAdminStatus
+		FROM
+		oltporttrunkconfig
+		WHERE
+		entityId = #{entityId}						
+	</select>
+	
+	<insert id="insertOltSniTrunkConfig" parameterType="oltSniTrunkConfig">
+		INSERT INTO
+		oltporttrunkconfig
+		(
+		entityId,
+		portType,
+		portTrunkGroupConfigName,
+		portTrunkGroupConfigMember,
+		portTrunkGroupConfigPolicy,
+		portTrunkGroupConfigIndex,
+		portTrunkGroupOperationStatus,
+		portTrunkGroupActualSpeed,
+		portTrunkGroupAdminStatus
+		)
+		VALUES
+		(
+		#{entityId},
+		'sni',
+		#{sniTrunkGroupConfigName},
+		#{sniTrunkGroupConfigMember},
+		#{sniTrunkGroupConfigPolicy},
+		#{sniTrunkGroupConfigIndex},
+		#{sniTrunkGroupOperationStatus},
+		#{sniTrunkGroupActualSpeed},
+		#{sniTrunkGroupAdminStatus}
+		)
+	</insert>
+	
+	<update id="updateOltSniTrunk" parameterType="oltSniTrunkConfig">
+		update
+		oltporttrunkconfig
+		set
+		portTrunkGroupConfigName =
+		#{sniTrunkGroupConfigName},
+		portTrunkGroupConfigMember =
+		#{sniTrunkGroupConfigMember},
+		portTrunkGroupConfigPolicy =
+		#{sniTrunkGroupConfigPolicy}
+		where
+		portTrunkGroupConfigIndex=#{sniTrunkGroupConfigIndex}
+	</update>
+
+	<delete id="deleteAllOltSniTrunkConfig" parameterType="long">
+		DELETE
+		FROM
+		oltporttrunkconfig where entityId = #{entityId}		
+	</delete>
+	
+	<delete id="deleteOltSniTrunkConfig" parameterType="oltSniTrunkConfig">
+		DELETE FROM
+		oltporttrunkconfig where
+		portTrunkGroupConfigIndex=#{sniTrunkGroupConfigIndex} and
+		entityId=#{entityId}
+	</delete>
+	
+	<delete id="deleteAllOltSniTrunkGroup" parameterType="long">
+		DELETE
+		FROM
+		oltporttrunkgroup where entityId = #{entityId}  
+	</delete>
+	
+	<insert id="insertOltSniTrunkGroup" parameterType="oltSniTrunkGroup">
+		INSERT INTO
+		oltporttrunkgroup
+		(
+		entityId,
+		portTrunkGroupOperationStatus,
+		portTrunkGroupActualSpeed,
+		portTrunkGroupAdminStatus,
+		portTrunkGroupIndex
+		)
+		VALUES(
+		#{entityId},
+		#{sniTrunkGroupOperationStatus},
+		#{sniTrunkGroupActualSpeed},
+		#{sniTrunkGroupAdminStatus},
+		#{sniTrunkGroupIndex}
+		)
+	</insert>
+</mapper>

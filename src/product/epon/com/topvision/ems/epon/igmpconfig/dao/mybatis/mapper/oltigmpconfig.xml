@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.igmpconfig.domain.IgmpGlobalParam">
+    <insert id="insertOrUpdateGlobalParam" parameterType="IgmpGlobalParam">
+        INSERT INTO igmpglobalparam(entityId, igmpVersion, igmpMode, v2Timeout, v3RespTime, v2RespTime,commonInterval,
+        specialInterval, squeryNum, squeryRespV3, squeryRespV2, robustVariable, querySrcIp, globalBW, snpAgingTime)
+        VALUES(#{entityId},#{igmpVersion},#{igmpMode},#{v2Timeout},#{v3RespTime},#{v2RespTime},#{commonInterval},#{specialInterval},
+        #{squeryNum},#{squeryRespV3},#{squeryRespV2},#{robustVariable},#{querySrcIp},#{globalBW},#{snpAgingTime})
+        ON DUPLICATE KEY UPDATE
+        igmpVersion = #{igmpVersion}, igmpMode = #{igmpMode}, v2Timeout = #{v2Timeout}, v3RespTime = #{v3RespTime}, v2RespTime = #{v2RespTime}, 
+        commonInterval = #{commonInterval}, specialInterval = #{specialInterval}, squeryNum = #{squeryNum}, squeryRespV3 = #{squeryRespV3}, squeryRespV2 = #{squeryRespV2},
+        robustVariable = #{robustVariable}, querySrcIp = #{querySrcIp}, globalBW = #{globalBW}, snpAgingTime = #{snpAgingTime}
+    </insert>
+    
+    <select id="queryGloablParam" parameterType="long" resultType="IgmpGlobalParam">
+        SELECT * FROM igmpglobalparam
+        WHERE entityId = #{entityId}
+    </select>
+    
+    <select id="queryIgmpMode" parameterType="long" resultType="int">
+        SELECT igmpMode FROM igmpglobalparam
+        WHERE entityId = #{entityId}
+    </select>
+    
+    <update id="updateIgmpMode" parameterType="map">
+        UPDATE igmpglobalparam
+        SET igmpMode = #{igmpMode}
+        WHERE entityId = #{entityId}
+    </update>
+    
+    <update id="updateGlobalParam"  parameterType="IgmpGlobalParam">
+         UPDATE igmpglobalparam
+         SET igmpVersion = #{igmpVersion},v2Timeout = #{v2Timeout},v3RespTime = #{v3RespTime},v2RespTime = #{v2RespTime},commonInterval = #{commonInterval},
+         specialInterval = #{specialInterval},squeryNum = #{squeryNum},squeryRespV3 = #{squeryRespV3},squeryRespV2 = #{squeryRespV2},
+         robustVariable = #{robustVariable},querySrcIp = #{querySrcIp},globalBW = #{globalBW},snpAgingTime = #{snpAgingTime}
+         WHERE entityId = #{entityId}
+    </update>
+    
+    <insert id="insertCascadePort" parameterType="IgmpCascadePort">
+        INSERT INTO igmpcascadeport(entityId, portIndex, portType, slotNo, portNo)
+        VALUES(#{entityId},#{portIndex},#{portType},#{slotNo},#{portNo})
+    </insert>
+    
+    <select id="queryCascadePortList" parameterType="long" resultType="IgmpCascadePort">
+        SELECT A.*, C.sniDisplayName AS portName
+		FROM igmpcascadeport A 
+		LEFT JOIN oltsnirelation B ON A.entityId = B.entityId AND A.portIndex = B.sniIndex
+		LEFT JOIN oltsniattribute C ON B.sniId = C.sniId
+        WHERE A.entityId = #{entityId}
+    </select>
+    
+    <delete id="deleteCascadePort" parameterType="IgmpCascadePort">
+        DELETE FROM igmpcascadeport
+        WHERE entityId = #{entityId} AND portIndex = #{portIndex}
+    </delete>
+    
+    <delete id="deleteAllCascadePort" parameterType="long">
+        DELETE FROM igmpcascadeport
+        WHERE entityId = #{entityId}
+    </delete>
+    
+    <insert id="insertOrUpdateSnpUpLinkPort" parameterType="IgmpSnpUplinkPort">
+        INSERT INTO igmpsnpuplinkport(entityId, portType, slotNo, portNo, uplinkAggId)
+        VALUES(#{entityId},#{portType},#{slotNo},#{portNo},#{uplinkAggId})
+        ON DUPLICATE KEY UPDATE
+        portType = #{portType}, slotNo = #{slotNo}, portNo = #{portNo}, uplinkAggId = #{uplinkAggId}
+    </insert>
+    
+    <select id="querySnpUplinkPort" parameterType="long" resultType="IgmpSnpUplinkPort">
+        SELECT * FROM igmpsnpuplinkport
+        WHERE entityId = #{entityId} 
+    </select>
+    
+    <update id="updateSnpUplinkPort" parameterType="IgmpSnpUplinkPort">
+        UPDATE igmpsnpuplinkport
+        SET portType = #{portType},slotNo = #{slotNo},portNo = #{portNo},uplinkAggId = #{uplinkAggId}
+        WHERE entityId = #{entityId} 
+    </update>
+    
+    <insert id="insertSnpStaticFwd" parameterType="IgmpSnpStaticFwd">
+        INSERT INTO igmpsnpstaticfwd(entityId, portIndex, portType, groupIp, groupVlan, groupSrcIp)
+        VALUES(#{entityId},#{portIndex},#{portType},#{groupIp}, #{groupVlan}, #{groupSrcIp})
+    </insert>
+    
+    <select id="queryAllStaticFwdList" parameterType="long" resultType="IgmpSnpStaticFwd">
+        SELECT * FROM igmpsnpstaticfwd
+        WHERE entityId = #{entityId}
+    </select>
+    
+    <select id="querySnpStaticFwdList" parameterType="map" resultType="IgmpSnpStaticFwd">
+		SELECT A.* , C.sniDisplayName AS portName
+		FROM igmpsnpstaticfwd A
+		LEFT JOIN oltsnirelation B ON A.entityId = B.entityId AND A.portIndex = B.sniIndex
+		LEFT JOIN oltsniattribute C ON B.sniId = C.sniId
+        WHERE A.entityId = #{entityId}
+        LIMIT #{start}, #{limit} 
+    </select>
+    
+    <select id="querySnpStaticFwdNum" parameterType="map" resultType="int">
+        SELECT COUNT(*) FROM igmpsnpstaticfwd
+        WHERE entityId = #{entityId}
+    </select>
+    
+    <delete id="deleteSnpStaticFwd" parameterType="IgmpSnpStaticFwd">
+        DELETE FROM igmpsnpstaticfwd
+        WHERE entityId = #{entityId} AND portIndex = #{portIndex} AND portType = #{portType}
+        AND groupIp = #{groupIp} AND groupVlan = #{groupVlan} AND groupSrcIp = #{groupSrcIp}
+    </delete>
+    
+    <delete id="deleteAllSnpStaticFwd" parameterType="long">
+        DELETE FROM igmpsnpstaticfwd
+        WHERE entityId = #{entityId}
+    </delete>
+    
+    <insert id="insertVlanInfo" parameterType="IgmpVlanInfo">
+        INSERT INTO igmpvlaninfo(vlanId, entityId, portType, slotNo, portNo, uplinkAggId, vlanVrfName)
+        VALUES(#{vlanId},#{entityId},#{portType},#{slotNo},#{portNo},#{uplinkAggId}, #{vlanVrfName})
+    </insert>
+    
+     <select id="queryVlanInfoList" parameterType="long" resultType="IgmpVlanInfo">
+        SELECT * FROM igmpvlaninfo
+        WHERE entityId = #{entityId}
+    </select>
+    
+    <update id="updateVlanInfo" parameterType="IgmpVlanInfo">
+        update igmpvlaninfo
+        SET portType = #{portType},slotNo = #{slotNo},portNo = #{portNo},uplinkAggId = #{uplinkAggId} 
+        WHERE entityId = #{entityId} AND vlanId = #{vlanId}
+    </update>
+    
+    <delete id="deleteVlanInfo" parameterType="map">
+        DELETE FROM igmpvlaninfo
+        WHERE entityId = #{entityId} AND vlanId = #{vlanId}
+    </delete>
+    
+    <delete id="deleteAllVlanInfo" parameterType="long">
+        DELETE FROM igmpvlaninfo
+        WHERE entityId = #{entityId}
+    </delete>
+    
+    <insert id="insertVlanGroup" parameterType="IgmpVlanGroup">
+        INSERT INTO igmpvlangroup(groupId, vlanId, entityId, groupDesc,groupIp, groupSrcIp, groupMaxBW, joinMode)
+        VALUES(#{groupId}, #{vlanId},#{entityId},#{groupDesc},#{groupIp},#{groupSrcIp}, #{groupMaxBW}, #{joinMode})
+    </insert>
+    
+    <update id="updateVlanGroup" parameterType="IgmpVlanGroup">
+        UPDATE igmpvlangroup
+        SET groupDesc = #{groupDesc},groupMaxBW = #{groupMaxBW},joinMode = #{joinMode}
+        WHERE entityId = #{entityId} AND groupId = #{groupId} 
+    </update>
+    
+    <update id="updateGroupPreJoin" parameterType="IgmpVlanGroup">
+    	UPDATE igmpvlangroup
+        SET joinMode = #{joinMode}
+        WHERE entityId = #{entityId} AND groupId = #{groupId} 
+    </update>
+    
+    <select id="queryAllVlanGroup" parameterType="long" resultType="IgmpVlanGroup">
+        SELECT * FROM igmpvlangroup
+        WHERE entityId = #{entityId}
+    </select>
+    
+    <select id="queryVlanGroupList" parameterType="map" resultType="IgmpVlanGroup">
+        SELECT * FROM igmpvlangroup
+        WHERE entityId = #{entityId} AND vlanId = #{vlanId}
+    </select>
+    
+    <select id="queryGroupWithPage" parameterType="map" resultType="IgmpVlanGroup">
+        SELECT A.*, B.groupName, C.groupState
+        FROM igmpvlangroup A 
+        LEFT JOIN igmpgroupname B ON A.entityId = B.entityId AND A.groupId = B.groupId
+        LEFT JOIN igmpglobalgroup C ON A.entityId = C.entityId AND A.groupId = C.groupId
+        WHERE A.entityId = #{entityId} 
+        <if test="joinMode != null">
+        	AND A.joinMode = #{joinMode}
+        </if>
+        <if test="groupState != null">
+	        <choose>
+				<when test="groupState == 0">
+					AND C.groupState = 0
+				</when>
+				<otherwise>
+					AND C.groupState != 0
+				</otherwise>
+			</choose>
+        </if>
+        ORDER BY A.groupId, A.vlanId
+        LIMIT #{start}, #{limit}
+    </select>
+    
+    <select id="queryGroupNum" parameterType="map" resultType="int">
+        SELECT count(*)
+        FROM igmpvlangroup A 
+        LEFT JOIN igmpglobalgroup C ON A.entityId = C.entityId AND A.groupId = C.groupId
+        WHERE A.entityId = #{entityId} 
+        <if test="joinMode != null">
+        	AND A.joinMode = #{joinMode}
+        </if>
+        <if test="groupState != null">
+	        <choose>
+				<when test="groupState == 0">
+					AND C.groupState = 0
+				</when>
+				<otherwise>
+					AND C.groupState != 0
+				</otherwise>
+			</choose>
+        </if>
+    </select>
+    
+    <select id="queryGroupIdList" parameterType="long" resultType="int">
+        SELECT groupId FROM igmpvlangroup
+        WHERE entityId = #{entityId}
+    </select>
+    
+    <select id="queryWithSrcGroup" parameterType="long" resultType="IgmpVlanGroup">
+    	SELECT groupId, vlanId, entityId, groupIp, groupSrcIp 
+    	FROM igmpvlangroup
+    	WHERE entityId = #{entityId} AND groupSrcIp != '0.0.0.0'
+    </select>
+    
+    <select id="queryWithoutSrcGroup" parameterType="long" resultType="IgmpVlanGroup">
+    	SELECT groupId, vlanId, entityId, groupIp, groupSrcIp 
+    	FROM igmpvlangroup
+    	WHERE entityId = #{entityId} AND groupSrcIp = '0.0.0.0'
+    </select>
+    
+    <delete id="deleteVlanGroup" parameterType="map">
+        DELETE FROM igmpvlangroup
+        WHERE entityId = #{entityId} AND groupId = #{groupId} 
+    </delete>
+    
+    <delete id="deleteAllVlanGroup" parameterType="long">
+        DELETE FROM igmpvlangroup
+        WHERE entityId = #{entityId}
+    </delete>
+    
+    <update id="insertOrUpdateGroupName" parameterType="IgmpVlanGroup">
+    	INSERT INTO igmpgroupname(groupId, entityId, groupName)
+        VALUES(#{groupId}, #{entityId},#{groupName})
+        ON DUPLICATE KEY UPDATE
+    	groupName = #{groupName}
+    </update>
+    
+    <delete id="deleteGroupName" parameterType="IgmpVlanGroup">
+    	DELETE FROM igmpgroupname
+    	WHERE entityId = #{entityId} AND groupId = #{groupId} 
+    </delete>
+    
+    <insert id="insertGlobalGroup" parameterType="IgmpGlobalGroup">
+        INSERT INTO igmpglobalgroup(groupId, entityId, groupIp, vlanId, groupSrcIp, groupState, portList)
+        VALUES(#{groupId},#{entityId},#{groupIp},#{vlanId},#{groupSrcIp}, #{groupState}, #{portList})
+    </insert>
+    
+    <select id="queryGlobalGroupList" parameterType="map" resultType="IgmpGlobalGroup">
+        SELECT * FROM igmpglobalgroup
+        WHERE entityId = #{entityId} ORDER BY groupId, vlanId
+        LIMIT #{start}, #{limit}
+    </select>
+    
+    <select id="queryGlobalGroupNum" parameterType="map" resultType="int">
+        SELECT COUNT(*) FROM igmpglobalgroup
+        WHERE entityId = #{entityId}
+    </select>
+    
+    <delete id="deleteAllGlobalGroup" parameterType="long">
+        DELETE FROM igmpglobalgroup
+        WHERE entityId = #{entityId}
+    </delete>
+    
+    <insert id="insertOrUpdateCtcParam" parameterType="IgmpCtcParam">
+        INSERT INTO igmpctcparam(entityId, ctcEnable, cdrInterval, cdrNum, cdrReport, autoResetTime, recognitionTime, onuFwdMode)
+        VALUES(#{entityId}, #{ctcEnable},#{cdrInterval},#{cdrNum},#{cdrReport},#{autoResetTime},#{recognitionTime}, #{onuFwdMode})
+        ON DUPLICATE KEY UPDATE
+        ctcEnable = #{ctcEnable}, cdrInterval = #{cdrInterval}, cdrNum = #{cdrNum}, cdrReport = #{cdrReport}, 
+        autoResetTime = #{autoResetTime}, recognitionTime = #{recognitionTime}, onuFwdMode = #{onuFwdMode}
+    </insert>
+    
+    <select id="queryCtcParam"  parameterType="long" resultType="IgmpCtcParam">
+        SELECT * FROM igmpctcparam
+        WHERE entityId = #{entityId}
+    </select>
+    
+    <update id="updateCtcParam" parameterType="IgmpCtcParam">
+        UPDATE igmpctcparam
+        SET ctcEnable = #{ctcEnable}, cdrInterval = #{cdrInterval}, cdrNum = #{cdrNum},
+        autoResetTime = #{autoResetTime}, recognitionTime = #{recognitionTime}, onuFwdMode = #{onuFwdMode}
+        WHERE entityId = #{entityId}
+    </update>
+    
+    <insert id="insertCtcProfile" parameterType="IgmpCtcProfile">
+        INSERT INTO igmpctcprofile(profileId, entityId, profileDesc, profileAuth, previewTime, previewInterval, previewCount)
+        VALUES(#{profileId}, #{entityId},#{profileDesc},#{profileAuth},#{previewTime},#{previewInterval}, #{previewCount})
+    </insert>
+    
+    <select id="queryCtcProfile" parameterType="map" resultType="IgmpCtcProfile">
+        SELECT * FROM igmpctcprofile
+        WHERE entityId = #{entityId} AND profileId = #{profileId}
+    </select>
+    
+    <select id="queryCtcProfileList" parameterType="map" resultType="IgmpCtcProfile">
+        SELECT A.*, B.profileName
+        FROM igmpctcprofile A LEFT JOIN igmpprofilename B ON A.entityId = B.entityId AND A.profileId = B.profileId
+        WHERE A.entityId = #{entityId}
+        ORDER BY A.profileId
+        LIMIT #{start}, #{limit}
+    </select>
+    
+    <select id="queryCtcProfileNum" parameterType="map" resultType="int">
+        SELECT COUNT(*) FROM igmpctcprofile
+        WHERE entityId = #{entityId}
+    </select>
+    
+    <select id="queryAllCtcProfile" parameterType="long" resultType="IgmpCtcProfile">
+        SELECT * FROM igmpctcprofile
+        WHERE entityId = #{entityId}
+    </select>
+    
+    <select id="queryProfileIdList" parameterType="long" resultType="int">
+        SELECT profileId FROM igmpctcprofile
+        WHERE entityId = #{entityId}
+    </select>
+    
+    <update id="updateCtcProfile" parameterType="IgmpCtcProfile">
+        UPDATE igmpctcprofile 
+        SET profileDesc = #{profileDesc}, profileAuth = #{profileAuth}, 
+        previewTime = #{previewTime}, previewInterval = #{previewInterval}, previewCount = #{previewCount}
+        WHERE entityId = #{entityId} AND profileId = #{profileId}
+    </update>
+    
+    <delete id="deleteCtcProfile" parameterType="map">
+        DELETE FROM igmpctcprofile
+        WHERE entityId = #{entityId} AND profileId = #{profileId}
+    </delete>
+    
+    <delete id="deleteAllCtcProfile" parameterType="long">
+        DELETE FROM igmpctcprofile
+        WHERE entityId = #{entityId}
+    </delete>
+    
+    <insert id="insertProfileName" parameterType="IgmpCtcProfile">
+    	INSERT INTO igmpprofilename(profileId, entityId, profileName)
+        VALUES(#{profileId}, #{entityId},#{profileName})
+        ON DUPLICATE KEY UPDATE
+    	profileName = #{profileName}
+    </insert>
+    
+    <update id="insertOrUpdateProfileName" parameterType="IgmpCtcProfile">
+    	INSERT INTO igmpprofilename(profileId, entityId, profileName)
+        VALUES(#{profileId}, #{entityId},#{profileName})
+    	ON DUPLICATE KEY UPDATE
+    	profileName = #{profileName}
+    </update>
+    
+    <delete id="deleteProfileName" parameterType="map">
+    	DELETE FROM igmpprofilename
+    	WHERE entityId = #{entityId} AND profileId = #{profileId} 
+    </delete>
+    
+    <insert id="insertProfileGroupRela" parameterType="IgmpCtcProfileGroupRela">
+        INSERT INTO igmpctcprofilegrouprela(profileId, groupId, entityId)
+        VALUES(#{profileId}, #{groupId},#{entityId})
+    </insert>
+    
+    <select id="queryProfileGroupRelaList" parameterType="map" resultType="igmpControlGroupBindRelation">
+		SELECT A.groupId,A.vlanId,A.groupDesc,C.groupName,B.profileId FROM igmpvlangroup A 
+		LEFT JOIN igmpctcprofilegrouprela B ON A.entityId = B.entityId AND  A.groupId = B.groupId
+		LEFT JOIN igmpgroupname C ON A.groupId=C.groupId AND A.entityId=C.entityId
+    	WHERE A.entityId = #{entityId} 
+    </select>
+    
+    <select id="queryAllProfileGroupRela" parameterType="long" resultType="IgmpCtcProfileGroupRela">
+    	SELECT * FROM igmpctcprofilegrouprela
+    	WHERE entityId = #{entityId}
+    </select>
+    
+    <select id="queryWithSrcGroupRela" parameterType="long" resultType="IgmpCtcProfileGroupRela">
+    	SELECT A.* FROM igmpctcprofilegrouprela A
+		WHERE A.entityId = #{entityId} 
+		AND A.groupId IN (
+			SELECT B.groupId FROM igmpvlangroup B
+			WHERE  A.entityId = B.entityId AND B.groupSrcIp != '0.0.0.0'
+		)
+    </select>
+    
+    <select id="queryWithoutSrcGroupRela" parameterType="long" resultType="IgmpCtcProfileGroupRela">
+    	SELECT A.* FROM igmpctcprofilegrouprela A
+		WHERE A.entityId = #{entityId} 
+		AND A.groupId IN (
+			SELECT B.groupId FROM igmpvlangroup B
+			WHERE  A.entityId = B.entityId AND B.groupSrcIp = '0.0.0.0'
+		)
+    </select>
+    
+    <delete id="deleteProfileGroupRela" parameterType="map">
+        DELETE FROM igmpctcprofilegrouprela
+        WHERE entityId = #{entityId} AND profileId = #{profileId} AND groupId = #{groupId} 
+    </delete>
+    
+    <delete id="deleteAllProfileGroupRela" parameterType="long">
+        DELETE FROM igmpctcprofilegrouprela
+        WHERE entityId = #{entityId}
+    </delete>
+    
+    <insert id="insertCtcRecord" parameterType="IgmpCtcRecord">
+        INSERT INTO igmpctcrecord(cdrSequence, entityId, cdrType, cdrSlot, cdrPon, cdrOnu, cdrUni, cdrReqType, 
+        cdrReqTime, cdrReqGrpId, cdrGrpAuth, cdrReqResult, cdrLeaveType, cdrRecordTime)
+        VALUES(#{cdrSequence}, #{entityId},#{cdrType},#{cdrSlot},#{cdrPon},#{cdrOnu},#{cdrUni}, #{cdrReqType}, 
+        #{cdrReqTime}, #{cdrReqGrpId}, #{cdrGrpAuth}, #{cdrReqResult}, #{cdrLeaveType}, #{cdrRecordTime})
+    </insert>
+
+    <select id="queryCtcRecordList" parameterType="map" resultType="IgmpCtcRecord">
+        SELECT * FROM igmpctcrecord
+        WHERE entityId = #{entityId}
+        ORDER BY cdrSequence DESC
+        LIMIT #{start}, #{limit}
+    </select>
+    
+    <select id="queryCtcRecordNum" parameterType="map" resultType="int">
+        SELECT COUNT(*) FROM igmpctcrecord
+        WHERE entityId = #{entityId}
+    </select>
+    
+    <delete id="deleteAllCtcRecord" parameterType="long">
+        DELETE FROM igmpctcrecord
+        WHERE entityId = #{entityId}
+    </delete>
+    
+    <select id="querySniPortByType" parameterType="map" resultType="IgmpPortInfo">
+        SELECT A.sniIndex AS portIndex, B.sniPortType AS portType, B.sniDisplayName AS portName
+        FROM oltsnirelation A JOIN oltsniattribute B ON A.sniId = B.sniId
+		WHERE A.entityId = #{entityId} 
+		<if test="typeList != null">
+		    AND B.sniPortType IN 
+			<foreach item="item" index="index" collection="typeList" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+    </select>
+    
+     <select id="querySniPort" parameterType="long" resultType="IgmpPortInfo">
+        SELECT A.sniIndex AS portIndex, B.topSniAttrPortType AS portType, B.sniDisplayName AS portName
+        FROM oltsnirelation A JOIN oltsniattribute B ON A.sniId = B.sniId
+		WHERE A.entityId = #{entityId} 
+		AND B.topSniAttrPortType IN (1,2,3)
+    </select>
+    
+    <select id="querySniAggList" parameterType="long" resultType="IgmpPortInfo">
+        SELECT portTrunkGroupConfigName AS portName, portTrunkGroupConfigIndex AS portIndex 
+        FROM oltporttrunkconfig
+		WHERE entityId = #{entityId} 
+    </select>
+    
+    <select id="queryPonPortByType" parameterType="map" resultType="IgmpPortInfo">
+        SELECT A.ponIndex AS portIndex, B.ponPortType AS portType 
+        FROM oltponrelation A JOIN oltponattribute B ON A.ponId = B.ponId
+		WHERE A.entityId = #{entityId} AND B.ponPortType = #{portType}
+    </select>
+    
+    <select id="queryCascadePortByType" parameterType="map" resultType="IgmpCascadePort">
+       	SELECT A.* , C.sniDisplayName AS portName
+        FROM igmpcascadeport A 
+        LEFT JOIN oltsnirelation B ON A.entityId = B.entityId AND A.portIndex = B.sniIndex
+        LEFT JOIN oltsniattribute C ON B.sniId = C.sniId
+        WHERE A.entityId = #{entityId} and A.portType = #{portType}
+    </select>
+    
+</mapper>

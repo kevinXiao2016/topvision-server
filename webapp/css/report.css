@@ -1,0 +1,128 @@
+.buttonDiv{
+	padding-top: 20px;
+}
+.queryDiv{
+	width: 960px;
+	margin: 20px auto;
+	background: #FFF;
+	border: solid 1px #BDBDBD;
+	padding: 30px 50px 20px !important;
+}
+.report-content-div{
+	width: 960px;
+	background: #FFF;
+	border: solid 1px #BDBDBD;
+	padding: 50px;
+	margin: 20px auto;
+	clear:both;
+}
+.report-content-div h1{
+	text-align: center;
+	font-size: 32px;
+    line-height: 40px
+}
+.report-content-div h2{
+	font-size: 20px;
+    line-height: 22px;
+    height: 30px;
+}
+#queryTime{
+    font-size: 14px;
+    text-align: right;
+}
+.reportTable {
+  	width: 100%;
+  	margin: 20px auto;
+  	border-collapse: collapse;
+  	border-spacing: 0;
+}
+.reportTable > thead > tr > th,
+.reportTable > tbody > tr > th,
+.reportTable > tfoot > tr > th,
+.reportTable > thead > tr > td,
+.reportTable > tbody > tr > td,
+.reportTable > tfoot > tr > td {
+  	height: 29px;
+	text-align: center;
+	border: 1px solid #D6D6D6;
+	padding: 1px 3px;
+	word-wrap: break-word;
+	word-break:break-all;
+}
+.reportTable > thead > tr > th,
+.reportTable > tbody > tr > th {
+  	background-color: #F5F5DC;
+	font-weight: bold;
+	font-size: 12px;
+}
+.reportTable a, .reportTable a:HOVER{
+	color: red;
+}
+.reportTable caption{
+	font-weight: bold;
+	font: 14px;
+	width: 100%;
+}
+th.nowrap, td.nowrap{
+	white-space:nowrap;
+}
+.summaryTd{
+	background-color: #E5E5E5;
+}
+.vertical-middle{
+	vertical-align: middle;
+}
+.vertical-middle input, .vertical-middle span, .vertical-middle label{
+	vertical-align: middle;
+}
+.floatLeftDiv{
+	float: left;
+	margin: 2px 5px;
+	vertical-align: middle;
+	white-space: nowrap;
+	word-spacing: normal;
+	word-break:keep-all;
+}
+.floatLeftDiv input,  
+.floatLeftDiv select, 
+.floatLeftDiv span,
+.floatLeftDiv label{
+	vertical-align: middle;
+}
+
+body {
+	border: 0;
+	font-size: 10.5pt;
+	font-family: Arial, Helvetica, Sans-Serif;
+	padding: 0;
+}
+
+TD,DIV {
+	font-size: 10.5pt;
+	font-family: Arial, Helvetica, Sans-Serif;
+}
+
+#extGridContainer {
+	width: 600px;
+}
+
+.x-toolbar,#extPagingBar {
+	display: none;
+}
+
+.x-grid3-hd-row td,#extGridContainer thead td {
+	font-weight: bold;
+}
+
+.x-grid3-row td a {
+	text-decoration: none;
+	color: #000;
+}
+
+.x-grid3-hd-row td,.x-grid3-row td,.x-grid3-summary-row td,.x-grid-group-hd div,.x-grid3-cell div,.x-grid-empty
+	{
+	font-size: 10.5pt;
+	font-family: Arial, Helvetica, Sans-Serif;
+}
+#stTime, #etTime{ width:150px;}
+#stTime .x-form-field-wrap, #etTime .x-form-field-wrap{width:auto !important;}

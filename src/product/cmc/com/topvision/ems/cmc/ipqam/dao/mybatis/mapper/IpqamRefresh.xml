@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.ipqam.domain.IpqamRefresh">
+    <select id="getCmcPortIdByIfIndexAndCmcId" parameterType="map"
+		resultType="long">
+		select cmcPortId from
+		cmcportrelation where channellIndex =
+		#{ifIndex} and cmcId=#{cmcId}
+	</select>
+	
+    <select id="getCmcIdByCmcIndexAndEntityId" parameterType="map"
+		resultType="long">
+		select cmcId from
+		cmcentityrelation where cmcIndex =
+		#{cmcIndex} and cmcEntityId=#{entityId}
+	</select>
+	
+    <select id="getCmcEqamProgram" parameterType="cmcEqamProgram" resultType="cmcEqamProgram">
+		select cmcId, portId, mpegVideoSessionIndex, mpegVideoSessionBitRate, mpegVideoSessionID
+		from cmceqamprogram where cmcId =
+		#{cmcId} and mpegVideoSessionIndex=#{mpegVideoSessionIndex}
+	</select>
+	
+    <update id="updateCmcEqamProgram" parameterType="cmcEqamProgram">
+		Update
+		cmceqamprogram
+		set
+		cmcId = #{cmcId},
+		portId = #{portId},
+		mpegVideoSessionIndex = #{mpegVideoSessionIndex},
+		mpegVideoSessionID = #{mpegVideoSessionID}
+		where
+		cmcId =
+		#{cmcId} and mpegVideoSessionIndex=#{mpegVideoSessionIndex}
+	</update>
+	
+    <delete id="deleteCmcEqamProgram" parameterType="long">
+		delete from
+		cmceqamprogram
+		where
+		cmcId = #{cmcId}
+	</delete>
+	
+    <delete id="deleteOltEqamProgram" parameterType="long">
+		delete from
+		cmceqamprogram
+		where
+		cmcId = 
+		(select cmcId from cmcentityrelation where cmcEntityId = #{entityId} and cmcIndex = #{cmcIndex})
+	</delete>
+	
+    <insert id="insertCmcEqamProgram" parameterType="cmcEqamProgram">
+		INSERT INTO
+		cmceqamprogram
+		(cmcId, portId, mpegVideoSessionIndex, mpegVideoSessionBitRate, mpegVideoSessionID)
+		VALUES
+		(#{cmcId},
+		#{portId},
+		#{mpegVideoSessionIndex},
+		#{mpegVideoSessionBitRate},
+		#{mpegVideoSessionID})
+	</insert>
+	
+    <select id="getCmcEqamStatus" parameterType="cmcEqamStatus" resultType="cmcEqamStatus">
+		select cmcId, portId, ifIndex, 
+		qamChannelFrequency, qamChannelModulationFormat, qamChannelInterleaverMode, qamChannelPower,
+		qamChannelSquelch, qamChannelContWaveMode, qamChannelAnnexMode,
+		qamChannelCommonOutputBw, qamChannelCommonUtilization, qamChannelSymbolRate
+		from cmceqamstatus where cmcId =
+		#{cmcId} and ifIndex=#{ifIndex}
+	</select>
+	
+    <update id="updateCmcEqamStatus" parameterType="cmcEqamStatus">
+		Update
+		cmceqamstatus
+		set
+		cmcId = #{cmcId},
+		portId = #{portId},
+		ifIndex = #{ifIndex},
+		qamChannelFrequency = #{qamChannelFrequency},
+		qamChannelModulationFormat = #{qamChannelModulationFormat},
+		qamChannelInterleaverMode = #{qamChannelInterleaverMode},
+		qamChannelPower = #{qamChannelPower},
+		qamChannelSquelch = #{qamChannelSquelch},
+		qamChannelContWaveMode = #{qamChannelContWaveMode},
+		qamChannelAnnexMode = #{qamChannelAnnexMode},
+		qamChannelCommonOutputBw = #{qamChannelCommonOutputBw},
+		qamChannelCommonUtilization = #{qamChannelCommonUtilization},
+		qamChannelSymbolRate = #{qamChannelSymbolRate}
+		where
+		cmcId =
+		#{cmcId} and ifIndex=#{ifIndex}
+	</update>
+	
+    <delete id="deleteCmcEqamStatus" parameterType="long">
+		delete from
+		cmceqamstatus
+		where
+		cmcId = #{cmcId}
+	</delete>
+	
+    <delete id="deleteOltEqamStatus" parameterType="long">
+		delete from
+		cmceqamstatus
+		where
+		cmcId in 
+		(select cmcId from cmcentityrelation where cmcEntityId = #{entityId} and cmcIndex = #{cmcIndex})
+	</delete>
+	
+    <insert id="insertCmcEqamStatus" parameterType="cmcEqamStatus">
+		INSERT INTO
+		CmcEqamStatus
+		(cmcId, portId, ifIndex,
+		qamChannelFrequency, qamChannelModulationFormat, qamChannelInterleaverMode, qamChannelPower,
+		qamChannelSquelch, qamChannelContWaveMode, qamChannelAnnexMode,
+		qamChannelCommonOutputBw, qamChannelCommonUtilization, qamChannelSymbolRate)
+		VALUES
+		(#{cmcId},
+		#{portId},
+		#{ifIndex},#{qamChannelFrequency},
+		#{qamChannelModulationFormat},
+		#{qamChannelInterleaverMode},
+		#{qamChannelPower},
+		#{qamChannelSquelch},
+		#{qamChannelContWaveMode},#{qamChannelAnnexMode},
+		#{qamChannelCommonOutputBw},
+		#{qamChannelCommonUtilization},
+		#{qamChannelSymbolRate})
+	</insert>
+	
+    <select id="getCmcProgramIn" parameterType="programIn" resultType="programIn">
+		select cmcId, portId, sessionId, mpegInputUdpOriginationIndex, mpegInputUdpOriginationId,
+		mpegInputUdpOriginationSrcInetAddr, mpegInputUdpOriginationDestInetAddr, mpegInputUdpOriginationDestPort,
+		mpegInputUdpOriginationActive, mpegInputUdpOriginationPacketsDetected
+		from programin where cmcId=#{cmcId} and mpegInputUdpOriginationIndex = #{mpegInputUdpOriginationIndex}
+	</select>
+	
+    <update id="updateCmcProgramIn" parameterType="programIn">
+		Update
+		programin
+		set
+		cmcId = #{cmcId},
+		portId = #{portId},
+		sessionId = #{sessionId},
+		mpegInputUdpOriginationIndex = #{mpegInputUdpOriginationIndex},
+		mpegInputUdpOriginationId = #{mpegInputUdpOriginationId},
+		mpegInputUdpOriginationSrcInetAddr = #{mpegInputUdpOriginationSrcInetAddr},
+		mpegInputUdpOriginationDestInetAddr = #{mpegInputUdpOriginationDestInetAddr},
+		mpegInputUdpOriginationDestPort = #{mpegInputUdpOriginationDestPort},
+		mpegInputUdpOriginationActive = #{mpegInputUdpOriginationActive},
+		mpegInputUdpOriginationPacketsDetected = #{mpegInputUdpOriginationPacketsDetected}
+		where cmcId=#{cmcId} and mpegInputUdpOriginationIndex = #{mpegInputUdpOriginationIndex}
+	</update>
+	
+    <delete id="deleteCmcProgramIn" parameterType="long">
+		delete from
+		programin
+		where
+		cmcId = #{cmcId}
+	</delete>
+	
+    <delete id="deleteOltProgramIn" parameterType="long">
+		delete from
+		programin
+		where
+		cmcId in 
+		(select cmcId from cmcentityrelation where cmcEntityId = #{entityId} and cmcIndex = #{cmcIndex})
+	</delete>
+	
+    <insert id="insertCmcProgramIn" parameterType="programIn">
+		INSERT INTO
+		programin
+		(cmcId, portId, sessionId, mpegInputUdpOriginationIndex, mpegInputUdpOriginationId,
+		mpegInputUdpOriginationSrcInetAddr, mpegInputUdpOriginationDestInetAddr, mpegInputUdpOriginationDestPort,
+		mpegInputUdpOriginationActive, mpegInputUdpOriginationPacketsDetected)
+		VALUES
+		(#{cmcId},
+		#{portId},
+		#{sessionId},
+		#{mpegInputUdpOriginationIndex},
+		#{mpegInputUdpOriginationId},#{mpegInputUdpOriginationSrcInetAddr},
+		#{mpegInputUdpOriginationDestInetAddr},
+		#{mpegInputUdpOriginationDestPort},
+		#{mpegInputUdpOriginationActive},
+		#{mpegInputUdpOriginationPacketsDetected})
+	</insert>
+	
+    <select id="getCmcProgramOut" parameterType="programOut" resultType="programOut">
+		select cmcId, portId, sessionId, mpegOutputTSIndex, mpegOutputProgIndex,
+		mpegOutputProgNo, mpegOutputProgPmtVersion, mpegOutputProgPmtPid,
+		mpegOutputProgPcrPid, mpegOutputProgNumElems
+		from programout where 
+		cmcId = #{cmcId} and mpegOutputTSIndex = #{mpegOutputTSIndex} and mpegOutputProgIndex = #{mpegOutputProgIndex}
+	</select>
+	
+    <update id="updateCmcProgramOut" parameterType="programOut">
+		Update
+		programout
+		set
+		cmcId = #{cmcId},
+		portId = #{portId},
+		sessionId = #{sessionId},
+		mpegOutputTSIndex = #{mpegOutputTSIndex},
+		mpegOutputProgIndex = #{mpegOutputProgIndex},
+		mpegOutputProgNo = #{mpegOutputProgNo},
+		mpegOutputProgPmtVersion = #{mpegOutputProgPmtVersion},
+		mpegOutputProgPmtPid = #{mpegOutputProgPmtPid},
+		mpegOutputProgPcrPid = #{mpegOutputProgPcrPid},
+		mpegOutputProgNumElems = #{mpegOutputProgNumElems}
+		where
+		cmcId = #{cmcId} and mpegOutputTSIndex = #{mpegOutputTSIndex} and mpegOutputProgIndex = #{mpegOutputProgIndex}
+	</update>
+	
+    <delete id="deleteCmcProgramOut" parameterType="long">
+		delete from
+		programout
+		where
+		cmcId = #{cmcId}
+	</delete>
+	
+    <delete id="deleteOltProgramOut" parameterType="long">
+		delete from
+		programout
+		where
+		cmcId in 
+		(select cmcId from cmcentityrelation where cmcEntityId = #{entityId} and cmcIndex = #{cmcIndex})
+	</delete>
+	
+    <insert id="insertCmcProgramOut" parameterType="programOut">
+		INSERT INTO
+		programout
+		(cmcId, portId, sessionId, mpegOutputTSIndex, mpegOutputProgIndex,
+		mpegOutputProgNo, mpegOutputProgPmtVersion, mpegOutputProgPmtPid,
+		mpegOutputProgPcrPid, mpegOutputProgNumElems)
+		VALUES
+		(#{cmcId},
+		#{portId},
+		#{sessionId},
+		#{mpegOutputTSIndex},
+		#{mpegOutputProgIndex},#{mpegOutputProgNo},
+		#{mpegOutputProgPmtVersion},
+		#{mpegOutputProgPmtPid},
+		#{mpegOutputProgPcrPid},
+		#{mpegOutputProgNumElems})
+	</insert>
+	
+	<delete id="deleteCC8800BFpgaSpecification" parameterType="long">
+        delete from
+        cmcfpgainfo
+        where cmcId=#{cmcId}
+    </delete>
+    
+    <insert id="insertCC8800BFpgaSpecification" parameterType="fpgaSpecification">
+        insert into
+        cmcfpgainfo
+        (fpgaId,
+        cmcId,
+        ipqamChannelCount,
+        subnetVlanCount,
+        aclUplinkEgress,
+        aclUplinkIngress,
+        aclCableEgress,
+        aclCableIngress,
+        aclUplinkEgressCopy2cpu,
+        aclUplinkIngressCopy2cpu,
+        aclCableEgressCopy2cpu,
+        aclCableIngressCopy2cpu,
+        vipSupportCount,
+        cosCmCount,
+        cosCountPerCm,
+        macTblHashLen,
+        macTblHashDeep,
+        srcVerifyHashLen,
+        srcVerifyHashDeep,
+        itemNum)
+        values
+        (#{fpgaId},
+        #{cmcId},
+        #{ipqamChannelCount},
+        #{subnetVlanCount},
+        #{aclUplinkEgress},
+        #{aclUplinkIngress},
+        #{aclCableEgress},
+        #{aclCableIngress},
+        #{aclUplinkEgressCopy2cpu},
+        #{aclUplinkIngressCopy2cpu},
+        #{aclCableEgressCopy2cpu},
+        #{aclCableIngressCopy2cpu},
+        #{vipSupportCount},
+        #{cosCmCount},
+        #{cosCountPerCm},
+        #{macTblHashLen},
+        #{macTblHashDeep},
+        #{srcVerifyHashLen},
+        #{srcVerifyHashDeep},
+        #{itemNum})
+    </insert>
+    
+</mapper>

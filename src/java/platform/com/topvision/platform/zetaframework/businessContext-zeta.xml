@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<!-- 资源文件路径搜索与解析 -->
+    <bean id="zetaResourcePathMatchResolver" class="com.topvision.platform.zetaframework.resource.ZetaResourcePathMatchResolver"
+        init-method="initialize">
+        <property name="resourceList">
+        	<list>
+        		<!-- <value>classpath*:com/topvision/**/resources_*_*.properties</value> -->
+        		<value>classpath*:com/topvision/**/*_zh_CN.properties</value>
+        		<value>classpath*:com/topvision/**/*_en_US.properties</value>
+        	</list>
+        </property>
+    </bean>
+
+    <bean id="zetaResourceLoader" class="com.topvision.platform.zetaframework.resource.ZetaResourceLoader">
+        <property name="resolver" ref="zetaResourcePathMatchResolver" />
+    </bean>
+    
+    <bean id="resourceWareHouse" class="com.topvision.platform.zetaframework.resource.ResourceRepository"
+        init-method="initialize">
+        <property name="zetaResourceLoader" ref="zetaResourceLoader" />
+    </bean>
+    
+</beans>

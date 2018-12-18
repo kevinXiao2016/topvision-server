@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.qos.domain.OltQos">
+
+    <select id="getOnuQosMapRule" parameterType="map"
+		resultType="qosDeviceBaseQosMapTable">
+        SELECT
+            a.entityId,
+            a.onuIndex,
+            a.deviceBaseQosMapRuleIndex,
+            a.deviceBaseQosMapOctet
+        FROM
+            oltqosdevicebaseqosmapentry a
+        WHERE
+            a.entityId = #{entityId} AND
+            a.onuIndex = #{onuIndex}
+    </select>
+    <select id="getOnuQosPolicy" parameterType="map"
+		resultType="qosDeviceBaseQosPolicyTable">
+        SELECT
+            a.entityId,
+            a.onuIndex,
+            a.policyMode,
+            a.weightOctet
+        FROM
+            oltqosdevicebaseqospolicyentry a
+        WHERE
+            a.entityId = #{entityId} AND
+            a.onuIndex = #{onuIndex}
+    </select>
+    <select id="getOnuSlaList" parameterType="map"
+		resultType="slaTable">
+        SELECT
+            a.entityId,
+            a.onuIndex,
+            a.slaDsPeakBW,
+            a.slaDsCommittedBW,
+            a.slaUsFixedBW,
+            a.slaUsPeakBW,
+            a.slaUsCommittedBW
+        FROM
+            oltslatable a
+        WHERE
+            a.entityId = #{entityId} AND
+            a.onuIndex = #{onuIndex}
+    </select>
+    <select id="getPortQosMapRule" parameterType="map"
+		resultType="qosPortBaseQosMapTable">
+        SELECT
+            a.entityId,
+            a.portIndex,
+            a.portBaseQosMapRuleIndex,
+            a.portBaseQosMapOctet
+        FROM
+            oltqosportbaseqosmapentry a
+        WHERE
+            a.entityId = #{entityId} AND
+            a.portIndex = #{portIndex}
+    </select>
+    <select id="getPortQosPolicy" parameterType="map"
+		resultType="qosPortBaseQosPolicyTable">
+        SELECT
+            a.entityId,
+            a.portIndex,
+            a.policyMode,
+            a.weightOctet,
+            a.spBandwidthRange
+        FROM
+            oltqosportbaseqospolicyentry a
+        WHERE
+            a.entityId = #{entityId} AND
+            a.portIndex = #{portIndex}
+    </select>
+    <select id="getOnuIndexList" parameterType="map" resultType="long">
+    	SELECT B.onuIndex FROM oltonurelation B WHERE B.ponId in 
+    	(SELECT A.ponId FROM oltonurelation A WHERE A.onuIndex = #{onuIndex} AND A.entityId = #{entityId})
+    </select>
+    <update id="updateOnuQosMapRule" parameterType="qosDeviceBaseQosMapTable">
+		UPDATE
+		oltqosdevicebaseqosmapentry a
+		SET
+		    a.deviceBaseQosMapRuleIndex = #{deviceBaseQosMapRuleIndex},
+		    a.deviceBaseQosMapOctet = #{deviceBaseQosMapOctet}
+        WHERE
+            a.entityId = #{entityId} AND
+            a.onuIndex = #{onuIndex}
+	</update>
+    <update id="updateOnuQosPolicy" parameterType="qosDeviceBaseQosPolicyTable">
+		UPDATE
+		oltqosdevicebaseqospolicyentry a
+		SET
+		    a.policyMode = #{policyMode},
+		    a.weightOctet = #{weightOctet},
+		    a.spBandwidthRange = #{spBandwidthRange}
+        WHERE
+            a.entityId = #{entityId} AND
+            a.onuIndex = #{onuIndex}
+	</update>
+    <update id="updateOnuSlaList" parameterType="slaTable">
+		UPDATE
+		oltslatable a
+		SET
+            a.slaDsPeakBW = #{slaDsPeakBW},
+            a.slaDsCommittedBW = #{slaDsCommittedBW},
+            a.slaUsFixedBW = #{slaUsFixedBW},
+            a.slaUsPeakBW = #{slaUsPeakBW},
+            a.slaUsCommittedBW = #{slaUsCommittedBW}
+        WHERE
+            a.entityId = #{entityId} AND
+            a.onuIndex = #{onuIndex}
+	</update>
+    <update id="updatePortQosMapRule" parameterType="qosPortBaseQosMapTable">
+		UPDATE
+		oltqosportbaseqosmapentry a
+		SET
+            a.portBaseQosMapRuleIndex = #{portBaseQosMapRuleIndex},
+            a.portBaseQosMapOctet = #{portBaseQosMapOctet}
+        WHERE
+            a.entityId = #{entityId} AND
+            a.portIndex = #{portIndex}
+	</update>
+    <update id="updatePortQosPolicy" parameterType="qosPortBaseQosPolicyTable">
+		UPDATE
+		oltqosportbaseqospolicyentry a
+		SET
+            a.policyMode = #{policyMode},
+            a.weightOctet = #{weightOctet},
+            a.spBandwidthRange = #{spBandwidthRange}
+        WHERE
+            a.entityId = #{entityId} AND
+            a.portIndex = #{portIndex}
+	</update>
+    <delete id="deleteQosDeviceBaseQosMapTable" parameterType="long">
+		delete from
+		oltqosdevicebaseqosmapentry where entityId = #{entityId}
+	</delete>
+    <delete id="deleteQosDeviceBaseQosPolicyTable" parameterType="long">
+		delete from
+		oltqosdevicebaseqospolicyentry where entityId = #{entityId}
+	</delete>
+    <delete id="deleteSlaTable" parameterType="long">
+		delete from
+		oltslatable where entityId = #{entityId}
+	</delete>
+    <delete id="deleteQosPortBaseQosMapTable" parameterType="long">
+		delete from
+		oltqosportbaseqosmapentry where entityId = #{entityId}
+	</delete>
+    <delete id="deleteQosPortBaseQosPolicyTable" parameterType="long">
+		delete from
+		oltqosportbaseqospolicyentry where entityId = #{entityId}
+	</delete>
+    <insert id="insertQosDeviceBaseQosMapTable" parameterType="qosDeviceBaseQosMapTable">
+		insert into
+            oltqosdevicebaseqosmapentry
+            ( entityId, onuIndex, deviceBaseQosMapRuleIndex, deviceBaseQosMapOctet )
+        values
+            (#{entityId}, #{onuIndex}, #{deviceBaseQosMapRuleIndex}, #{deviceBaseQosMapOctet} )
+	</insert>
+    <insert id="insertQosDeviceBaseQosPolicyTable" parameterType="qosDeviceBaseQosPolicyTable">
+		insert into
+            oltqosdevicebaseqospolicyentry
+            ( entityId, onuIndex, policyMode, weightOctet, spBandwidthRange )
+        values
+            ( #{entityId}, #{onuIndex}, #{policyMode}, #{weightOctet}, #{spBandwidthRange} )
+    </insert>
+    <insert id="insertSlaTable" parameterType="slaTable">
+		insert into
+            oltslatable
+            ( entityId, onuIndex, slaDsFixedBW, slaDsPeakBW, slaDsCommittedBW, slaUsFixedBW, slaUsPeakBW, slaUsCommittedBW )
+        values
+            ( #{entityId}, #{onuIndex}, #{slaDsFixedBW}, #{slaDsPeakBW}, #{slaDsCommittedBW}, #{slaUsFixedBW}, #{slaUsPeakBW}, #{slaUsCommittedBW} )
+    </insert>
+    <insert id="insertQosPortBaseQosMapTable" parameterType="qosPortBaseQosMapTable">
+		insert into
+            oltqosportbaseqosmapentry
+            ( entityId, portIndex, portBaseQosMapRuleIndex, portBaseQosMapOctet )
+        values
+            ( #{entityId}, #{portIndex}, #{portBaseQosMapRuleIndex}, #{portBaseQosMapOctet})
+    </insert>
+    <insert id="insertQosPortBaseQosPolicyTable" parameterType="qosPortBaseQosPolicyTable">
+		insert into
+            oltqosportbaseqospolicyentry
+            (entityId, portIndex, policyMode, weightOctet, spBandwidthRange)
+        values
+            (#{entityId}, #{portIndex}, #{policyMode}, #{weightOctet}, #{spBandwidthRange})
+    </insert>
+</mapper>

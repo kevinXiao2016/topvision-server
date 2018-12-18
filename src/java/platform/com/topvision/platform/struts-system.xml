@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="system" namespace="/system" extends="default">
+    	<action name="showUserList" class="userAction" method="showUserList">
+            <result name="success">/system/userList.jsp</result>
+            <result name="forbidden">/forbidden.jsp</result>
+        </action>
+    	
+        <action name="loadUserList" class="userAction" method="loadUserList" />
+
+        <action name="showNewUser" class="userAction" method="showNewUser">
+            <result>/system/newUser.jsp</result>
+            <result name="forbidden">/forbidden.jsp</result>
+        </action>
+                
+        <action name="licenseAbout" class="licenseAboutAction" method="licenseAbout" > 
+        <result>/system/licenseAbout.jsp</result>
+        </action>
+
+        <action name="userOutofLimit" class="userAction" method="userOutofLimit" />
+
+        <action name="showModifyUser" class="userAction" method="showModifyUser">
+            <result>/system/modifyUser.jsp</result>
+            <result name="forbidden">/forbidden.jsp</result>
+        </action>
+
+        <!-- department -->
+        <action name="showNewDepartment" class="departmentAction" method="showNewDepartment">
+            <result>/system/newDepartment.jsp</result>
+        </action>
+        <action name="createDepartment" class="departmentAction" method="createDepartment" />
+        <action name="deleteDepartment" class="departmentAction" method="deleteDepartment">
+        </action>
+        <action name="loadAllRegion" class="topoFolderAction" method="loadTopoFolder" />
+        <action name="loadAllDepartment" class="departmentAction" method="loadAllDepartment" />
+        <!-- post -->
+        <action name="loadAllPost" class="postAction" method="loadAllPost" />
+        <action name="showNewPost" class="postAction" method="showNewPost">
+            <result>/system/newPost.jsp</result>
+        </action>
+        <action name="createPost" class="postAction" method="createPost" />
+        <action name="deletePost" class="postAction" method="deletePost" />
+
+        <!-- role start -->
+        <action name="showNewRole" class="roleAction" method="showNewRole">
+            <result>/system/newRole.jsp</result>
+        </action>
+        <action name="loadAllRole" class="roleAction" method="loadAllRole" />
+        <action name="loadUserRole" class="roleAction" method="loadUserRole" />
+        <action name="loadPowerByRole" class="roleAction" method="loadPowerByRole" />
+        <action name="createRole" class="roleAction" method="createRole" />
+        <action name="isRoleNameExist" class="roleAction" method="isRoleNameExist" />
+        <action name="deleteRole" class="roleAction" method="deleteRole" />
+        <action name="savePower" class="roleAction" method="savePower" />
+        <action name="showNaviBarsForRole" class="roleAction" method="showNaviBarsForRole">
+            <result>/system/roleListForNavi.jsp</result>
+        </action>
+        <action name="showPowerForRole" class="roleAction" method="showPowerForRole">
+            <result>/system/roleList.jsp</result>
+        </action>
+        <action name="loadNaviButtonByRole" class="roleAction" method="loadNaviButtonByRole" />
+        <action name="saveRoleNaviPower" class="roleAction" method="saveRoleNaviPower" />
+        <!-- role end -->
+
+        <action name="createUser" class="userAction" method="createUser"></action>
+        <action name="deleteUser" class="userAction" method="deleteUser"></action>
+        <action name="isUserNameExist" class="userAction" method="isUserNameExist"></action>
+
+        <action name="startUser" class="userAction" method="startUser">
+        </action>
+        <action name="stopUser" class="userAction" method="stopUser">
+        </action>
+        <action name="showSetRole" class="userAction" method="showSetRole">
+            <result>/system/popRole.jsp</result>
+            <result name="forbidden">/forbidden.jsp</result>
+        </action>
+        <action name="setUserRole" class="userAction" method="setUserRole">
+        </action>
+        <action name="allowMutliIpLogin" class="userAction" method="allowMutliIpLogin"/>
+        <action name="resetUserPasswd" class="userAction" method="resetUserPasswd">
+        </action>
+        <action name="loadModifyPwd" class="userAction" method="loadModifyPwd">
+            <result>/system/modifyUserPwd.jsp</result>
+            <result name="forbidden">/forbidden.jsp</result>
+        </action>
+        <action name="modifyUserPwd" class="userAction" method="modifyUserPwd"></action>
+
+        <action name="showLicense" class="licenseAction" method="showLicense">
+            <result>/system/license.jsp</result>
+        </action>
+        <action name="showLicenseApply" class="licenseAction" method="showLicenseApply">
+            <result>/system/licenseApply.jsp</result>
+        </action>
+        <action name="getCuLicView" class="licenseAction" method="getCuLicView">
+        </action>
+
+        <action name="getProductKey" class="licenseAction" method="getProductKey" />
+        <action name="onlineApply" class="licenseAction" method="onlineApply" />
+
+        <action name="importLicense" class="licenseAction" method="importLicense">
+            <result>/system/licenseImportResult.jsp</result>
+        </action>
+        <action name="showLicenseTip" class="licenseAction" method="showLicenseTip">
+            <result>/system/licenseTip.jsp</result>
+        </action>
+        <action name="showAbout" class="licenseAction" method="showAbout">
+            <result>/system/about.jsp</result>
+        </action>
+        <action name="uploadLicense" class="licenseUploadAction" method="uploadLicense">
+            <result name="licenseOk">/system/licenseOk.jsp</result>
+            <result name="licenseError">
+                /system/licenseError.jsp
+            </result>
+        </action>
+        <action name="loadAllDeviceTypes" class="licenseAction" method="loadAllDeviceTypes">
+        </action>
+        <action name="loadAllReports" class="licenseAction" method="loadAllReports">
+        </action>
+
+        <!-- log -->
+        <action name="showLogList">
+            <result>/system/logList.jsp</result>
+        </action>
+
+        <action name="loadLogList" class="logAction" method="loadLogList" />
+        <action name="loadOperationLogList" class="logAction" method="loadOperationLogList" />
+        <action name="setPasswd" class="passwdAction" method="setPasswd" />
+        <action name="popModifyPasswd" class="passwdAction" method="popModifyPasswd">
+            <result>/system/popModifyPasswd.jsp</result>
+        </action>
+
+        <action name="showPersonalInfo" class="userAction" method="showPersonalInfo">
+            <result>/system/popPersonalInfo.jsp</result>
+        </action>
+
+        <action name="showUserProperty" class="userAction" method="showUserProperty">
+            <result>/system/popPersonalInfo.jsp</result>
+        </action>
+
+        <action name="showOperationList" class="logAction" method="showOperationList">
+            <result>/system/operationLog.jsp</result>
+        </action>
+        
+        <action name="updateUserDetail" class="userAction" method="updateUserDetail" />
+
+        <action name="updateUserPersonaInfo" class="userAction" method="updateUserPersonaInfo" />
+
+        <!-- user group -->
+        <action name="createUserGroup" class="userGroupAction" method="createUserGroup" />
+        <action name="deleteUserGroup" class="userGroupAction" method="deleteUserGroup" />
+        <action name="loadUserGroups" class="userGroupAction" method="loadUserGroups" />
+        <action name="loadGroupFolders" class="userGroupAction" method="loadGroupFolders" />
+        <action name="saveGroupFolderPower" class="userGroupAction" method="saveGroupFolderPower" />
+
+        <action name="getProperties" class="environmentAction" method="getProperties">
+            <result name="environment">/system/environment.jsp</result>
+        </action>
+        <action name="getenv" class="environmentAction" method="getenv">
+            <result name="environment">/system/environment.jsp</result>
+        </action>
+
+        <action name="showRuntimeInfo" class="systemMonitorAction" method="getJobs">
+            <result>/system/popRuntimeInfo.jsp</result>
+        </action>
+
+        <action name="restartSystem" class="systemAction" method="restart" />
+        <action name="showGmView" class="systemAction" method="showGmView">
+            <result>/system/gmView.jsp</result>
+        </action>
+        <action name="showDatabaseParam" class="databaseAction" method="showDatabaseParam">
+            <result name="success">
+                /system/popDatabaseManager.jsp
+            </result>
+        </action>
+
+
+        <action name="reInitDatabase" class="databaseAction" method="reInitDatabase" />
+        <action name="databaseExportFull" class="databaseAction" method="databaseExportFull" />
+        <action name="databaseExportInCategory" class="databaseAction" method="databaseExportInCategory" />
+        <action name="databaseImportInCategory" class="databaseAction" method="databaseImportInCategory" />
+        <!--<action name="cycleHistoryAlertDataClean" class="databaseAction" method="cycleHistoryAlertDataClean" />  -->
+        <action name="cycleHistoryDataClean" class="databaseAction" method="cycleHistoryDataClean" />
+
+        <!-- FTP服务器管理 -->
+        <action name="showFtpServer" class="ftpServerAction" method="showFtpServer">
+            <result name="success">/system/ftpServerManagement.jsp</result>
+        </action>
+        <action name="getServerIpAddress" class="ftpServerAction" method="loadIpAddress"></action>
+        <action name="getFtpServerDirectories" class="ftpServerAction" method="loadFtpServerDirectories"></action>
+        <action name="getFtpServerStatus" class="ftpServerAction" method="loadFtpServerStatus"></action>
+        <action name="updateFtpServer" class="ftpServerAction" method="modifyFtpServerAttr"></action>
+        <action name="startFtpServer" class="ftpServerAction" method="startFtpServer"></action>
+        <action name="stopFtpServer" class="ftpServerAction" method="stopFtpServer"></action>
+        <action name="reStartFtpServer" class="ftpServerAction" method="reStartFtpServer"></action>
+
+        <!-- FTP连接管理 -->
+        <action name="showFtpConnect" class="ftpConnectAction" method="showFtpConnect">
+            <result name="success">/system/ftpConnectManagement.jsp</result>
+        </action>
+        <action name="checkFtpAvailable" class="ftpConnectAction" method="checkFtpAvailable" />
+        <action name="getFtpConnectStatus" class="ftpConnectAction" method="loadFtpConnectStatus"></action>
+        <action name="updateFtpConnect" class="ftpConnectAction" method="modiftyFtpConnectAttr"></action>
+        <action name="showFtpFiles" class="ftpConnectAction" method="showFileManage">
+            <result>/system/ftpFileManagement.jsp</result>
+        </action>
+        <action name="getConnectIpAddress" class="ftpConnectAction" method="loadIpAddress"></action>
+        <action name="getWorkDir" class="ftpConnectAction" method="loadWorkingDirectory"></action>
+        <action name="getFtpFileList" class="ftpConnectAction" method="loadFileList"></action>
+        <action name="showFtpFileUpload" class="ftpConnectAction" method="showFileUpload">
+            <result>/system/ftpFileUpload.jsp</result>
+        </action>
+        <action name="uploadFileToFtp" class="ftpConnectAction" method="uploadFile" />
+        <action name="loadFtpFileToServer" class="ftpConnectAction" method="loadFtpFileToServer" />
+        <action name="downloadFtpFile" class="ftpConnectAction" method="downloadFile" />
+        <action name="deleteFtpFile" class="ftpConnectAction" method="deleteFile" />
+        <action name="newFolder" class="ftpConnectAction" method="newFolder" />
+
+        <action name="showTftpServer" class="tftpServerAction" method="showTftpServer">
+            <result name="success">/system/tftpServerManagement.jsp</result>
+        </action>
+        <action name="getTftpServerIpAddress" class="tftpServerAction" method="loadIpAddress"></action>
+        <action name="getTftpServerDirectories" class="tftpServerAction" method="loadTftpServerDirectories"></action>
+        <action name="getPortOccupancy" class="tftpServerAction" method="loadPortOccupancy"></action>
+        <action name="updateTftpServer" class="tftpServerAction" method="modifyTftpServerAttr"></action>
+        <action name="startTftpServer" class="tftpServerAction" method="startTftpServer"></action>
+        <action name="stopTftpServer" class="tftpServerAction" method="stopTftpServer"></action>
+        <action name="reStartTftpServer" class="tftpServerAction" method="reStartTftpServer"></action>
+        <action name="getTftpServerStatus" class="tftpServerAction" method="loadTftpServerStatus"></action>
+        <action name="showTftpFiles" class="tftpServerAction" method="showFileManage">
+            <result>/system/tftpFileManagement.jsp</result>
+        </action>
+        <action name="getTftpFileList" class="tftpServerAction" method="loadFileList"></action>
+        <action name="showTftpFileUpload" class="tftpServerAction" method="showFileUpload">
+            <result>/system/tftpFileUpload.jsp</result>
+        </action>
+        <action name="uploadFileToTftp" class="tftpServerAction" method="uploadFile" />
+        <action name="downloadTftpFile" class="tftpServerAction" method="downloadFile" />
+        <action name="deleteTftpFile" class="tftpServerAction" method="deleteTftpFile" />
+
+        <action name="showTftpClient" class="tftpClientAction" method="showTftpClient">
+            <result name="success">/system/tftpClientManagement.jsp</result>
+        </action>
+        <action name="modifyTftpClient" class="tftpClientAction" method="modifyTftpClient" />
+        <action name="loadTftpFileToServer" class="tftpClientAction" method="loadTftpFileToServer" />
+        <action name="tftpFileDownload" class="tftpClientAction" method="downloadTftpFile" />
+        <action name="upLoadFileToTftpServer" class="tftpClientAction" method="upLoadFileToTftpServer" />
+        
+        <!-- 分布式采集器管理 -->
+        <action name="getEngineServerList" class="engineServerAction" method="loadEngineServerList"></action>
+        <action name="showAddEngineServer" class="engineServerAction" method="showAddEngineServer">
+            <result>/system/addEngineServer.jsp</result>
+        </action>
+        <action name="addEngineServer" class="engineServerAction" method="addEngineServer"></action>
+        <action name="addEngineServerSuccess" class="engineServerAction" method="addEngineServerSuccess"></action>
+        <action name="showModifyEngineServer" class="engineServerAction" method="showModifyEngineServer">
+            <result>/system/modifyEngineServer.jsp</result>
+        </action>
+        <action name="modifyEngineServer" class="engineServerAction" method="modifyEngineServer"></action>
+        <action name="deleteEngineServer" class="engineServerAction" method="deleteEngineServer" />
+        <action name="startEngineServer" class="engineServerAction" method="startEngineServer" />
+        <action name="reStartEngineServer" class="engineServerAction" method="reStartEngineServer" />
+        <action name="stopEngineServer" class="engineServerAction" method="stopEngineServer" />
+        <action name="loadEngineServerStatuss" class="engineServerAction" method="loadEngineServerStatuss" />
+
+        <!-- Ping 系统选项设置 -->
+        <action name="showPingConfig" class="pingConfig" method="showPingConfig">
+            <result>/system/pingConfig.jsp</result>
+        </action>
+        <action name="savePingConfig" class="pingConfig" method="savePingConfig"></action>
+
+        <!-- trap监听端口配置 -->
+        <action name="showTrapListenports" class="trapListenports" method="showTrapListenports">
+            <result>/system/trapListenports.jsp</result>
+        </action>
+        <action name="loadTrapListenports" class="trapListenports" method="loadTrapListenports"></action>
+        <action name="saveTrapListenports" class="trapListenports" method="saveTrapListenports"></action>
+
+        <!-- syslog监听端口设置 -->
+        <action name="showSyslogListenports" class="syslogListenports" method="showSyslogListenports">
+            <result>/system/syslogListenports.jsp</result>
+        </action>
+        <action name="loadSyslogListenports" class="syslogListenports" method="loadSyslogListenports"></action>
+        <action name="saveSyslogListenports" class="syslogListenports" method="saveSyslogListenports"></action>
+        <action name="unlockUser" class="userAction" method="unlockUser" />
+        
+        <action name="showSetPassword" class="userAction" method="showSetPassword">
+            <result>/setPassword.jsp</result>
+            <result name="forbidden">/forbidden.jsp</result>
+        </action>
+        
+        <action name="showSwitchRootFolder" class="userAction" method="showSwitchRootFolder">
+        	<result>/system/switchRootFolder.jsp</result>
+        </action>
+        <action name="switchRoorFolder" class="userAction" method="switchRoorFolder" />
+        
+        <action name="exportGridToExcel" class="exportGridToExcelAction" method="exportGridToExcel"></action>
+        <action name="downloadExcel" class="exportGridToExcelAction" method="downloadExcel"></action>
+		<action name="updateUserSession" class="userAction" method="updateUserSession" />
+		<action name="showSessionTime" class="userAction" method="showSessionTime">
+            <result>/system/setSessionTime.jsp</result>
+            <result name="forbidden">/forbidden.jsp</result>
+		</action>
+		
+		<action name="saveCustomColumns" class="columnModelAction" method="saveCustomColumns" />
+		<action name="saveCustomSortInfo" class="columnModelAction" method="saveCustomSortInfo" />
+		<action name="getColumnModelConfig" class="columnModelAction" method="getColumnModelConfig" />
+    </package>
+</struts>

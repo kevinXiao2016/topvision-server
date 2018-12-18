@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcUpgrade" namespace="/cmc" extends="default">
+	    <!-- 添加操作日志拦截器配置 -->
+
+        <action name="showCmcUpdate" class="cmcUpgradeAction" method="showCmcUpdate">        
+            <result name="image">/cmc/cmcUpdateImage.jsp</result>
+            <result name="config">/cmc/cmcUpdateConfig.jsp</result>
+            <result>/cmc/cmcUpdate.jsp</result>
+        </action>
+        <action name="updateCmc" class="cmcUpgradeAction" method="updateCmc">
+        </action>
+        <action name="getCmcUpdateProgress" class="cmcUpgradeAction" method="getCmcUpdateProgress">
+        </action>
+        <action name="showDownloadConfig" class="cmcUpgradeAction" method="showDownloadConfig">
+            <result>/cmc/downloadCmcConfig.jsp</result>
+        </action>
+        <action name="uploadConfigFile" class="cmcUpgradeAction" method="uploadConfigFile">
+        </action>
+        <action name="downloadConfigFile" class="cmcUpgradeAction" method="downloadConfigFile">
+        </action>
+	</package>
+</struts>

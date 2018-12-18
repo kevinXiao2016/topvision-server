@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.network.domain.EntityAddress">
+	<insert id="insertEntity" parameterType="entityAddress">
+		INSERT INTO EntityAddress (entityId, ip) VALUES ( #{entityId}, #{ip})
+	</insert>
+	<update id="updateEntity" parameterType="entityAddress">
+		UPDATE EntityAddress SET entityId = #{entityId} WHERE ip = #{ip}
+	</update>
+	<select id="selectByAddress" parameterType="String" resultType="entityAddress">
+		SELECT entityId, ip FROM EntityAddress WHERE ip = #{ip}
+	</select>
+	
+	<select id="selectByAddressList" parameterType="String" resultType="entityAddress">
+		SELECT entityId, ip FROM EntityAddress WHERE ip = #{ip}
+	</select>
+	
+	<delete id="deleteByEntityId" parameterType="long">
+		DELETE FROM EntityAddress WHERE entityId = #{entityId}
+	</delete>
+	<update id="updateAddress" parameterType="entityAddress">
+		UPDATE EntityAddress
+		   SET ip = #{ip}
+		 WHERE entityId = #{entityId}
+		   AND ip = #{oldIp}
+	</update>
+	
+	<delete id="deleteEntityAddressWithoutEntityIp" parameterType="long">
+		<![CDATA[ delete from entityaddress where entityid = #{entityid} and ip <> (select ip from entity where entityId = #{entityid}) ]]>
+	</delete>
+	
+	
+	
+</mapper>

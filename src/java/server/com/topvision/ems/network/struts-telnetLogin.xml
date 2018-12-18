@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="telnetLogin" namespace="/entity/telnetLogin" extends="default">
+		<action name="getTelnetLoginConfig" class="telnetLoginAction" method="getTelnetLoginConfig">
+        </action>
+		<action name="getTelnetLoginConfigByIp" class="telnetLoginAction" method="getTelnetLoginConfigByIp">
+        </action>
+		<action name="getGlobalTelnetLogin" class="telnetLoginAction" method="getGlobalTelnetLogin">
+        </action>
+        <action name="showAddTelnetLogin" class="telnetLoginAction" method="showAddTelnetLogin">
+        	<result>/config/addTelnetLogin.jsp</result>
+        </action>
+        <action name="addTelnetLogin" class="telnetLoginAction" method="addTelnetLogin">
+        </action>
+        <action name="deleteTelnetLogin" class="telnetLoginAction" method="deleteTelnetLogin">
+        </action>
+        <action name="modifyTelnetLogin" class="telnetLoginAction" method="modifyTelnetLogin">
+        </action>
+        <action name="showModifyGlobalTelnetLogin" class="telnetLoginAction" method="showModifyGlobalTelnetLogin">
+        	<result>/config/modifyGlobalTelnetLogin.jsp</result>
+        </action>
+        <action name="showModifyTelnetLogin" class="telnetLoginAction" method="showModifyTelnetLogin">
+        	<result>/config/modifyTelnetLogin.jsp</result>
+        </action>
+        <action name="showTelnetLoginList" class="telnetLoginAction" method="showTelnetLoginList">
+        	<result>/config/telnetLoginList.jsp</result>
+        </action>
+        <action name="modifyGlobalTelnetLogin" class="telnetLoginAction" method="modifyGlobalTelnetLogin">
+        </action>
+        <action name="exportToExcel" class="telnetLoginAction" method="exportToExcel">
+        </action>
+        <action name="showTelnetLoginImport" class="telnetLoginAction" method="showTelnetLoginImport">
+        	<result>/config/telnetLoginImport.jsp</result>
+        </action>
+        <action name="downLoadTemplate" class="telnetLoginAction" method="downLoadTemplate">
+        </action>
+        <action name="importTelnetLogin" class="telnetLoginAction" method="importTelnetLogin">
+        </action>
+	</package>
+</struts>

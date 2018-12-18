@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.optical.domain.Optical">
+
+	<select id="getOltSniOptical" parameterType="long" resultType="oltSniOptical">
+		Select
+			A.entityId,
+			A.sniId,
+			A.portIndex,
+			A.identifier,
+			A.vendorName ,
+			A.waveLength,
+			A.vendorPN,
+			A.vendorSN,
+			A.dateCode,
+			A.workingTemp,
+			A.workingVoltage,
+			A.biasCurrent,
+			A.txPower,
+			A.rxPower,
+			A.bitRate,
+			B.sniDisplayName
+		From OltSniOptical A left join oltsniattribute B on A.sniId = B.sniId
+		Where A.sniId = #{sniId}
+	</select>
+	<select id="getOltPonOptical" parameterType="long" resultType="oltPonOptical">
+		Select
+			entityId,
+			ponId,
+			portIndex,
+			identifier,
+			vendorName,
+			waveLength,
+			vendorPN,
+			vendorSN,
+			dateCode,
+			workingTemp,
+			workingVoltage,
+			biasCurrent,
+			txPower,
+			rxPower,
+			bitRate
+		From OltPonOptical
+		Where ponId = #{ponId}
+	</select>
+	<select id="getAllSniOptical" parameterType="long" resultType="oltSniOptical">
+		Select
+			entityId,
+			sniId,
+			portIndex,
+			identifier,
+			vendorName,
+			waveLength,
+			vendorPN,
+			vendorSN,
+			dateCode,
+			workingTemp,
+			workingVoltage,
+			biasCurrent,
+			txPower,
+			rxPower,
+			bitRate
+		From OltSniOptical
+		Where entityId = #{entityId}
+	</select>
+	<select id="getAllPonOptical" parameterType="long" resultType="oltPonOptical">
+		Select
+			entityId,
+			ponId,
+			portIndex,
+			identifier,
+			vendorName,
+			waveLength,
+			vendorPN,
+			vendorSN,
+			dateCode,
+			workingTemp,
+			workingVoltage,
+			biasCurrent,
+			txPower,
+			rxPower,
+			bitRate
+		From OltPonOptical
+		Where entityId = #{entityId}
+	</select>
+	
+	<insert id="addOltPonOptical" parameterType="oltPonOptical">
+		INSERT INTO
+		OltPonOptical
+			(entityId,
+			ponId,
+			portIndex,
+			identifier,
+			vendorName,
+			waveLength,
+			vendorPN,
+			vendorSN,
+			dateCode,
+			workingTemp,
+			workingVoltage,
+			biasCurrent,
+			txPower,
+			rxPower,
+			bitRate)
+		VALUES
+			(#{entityId},
+			#{ponId},
+			#{portIndex},
+			#{identifier},
+			#{vendorName},
+			#{waveLength},
+			#{vendorPN},
+			#{vendorSN},
+			#{dateCode},
+			#{workingTemp},
+			#{workingVoltage},
+			#{biasCurrent},
+			#{txPower},
+			#{rxPower},
+			#{bitRate})
+	</insert>
+	<update id="updateOltPonOptical" parameterType="oltPonOptical">
+		UPDATE
+		OltPonOptical SET
+			entityId = #{entityId},
+			ponId = #{ponId},
+			portIndex = #{portIndex},
+			identifier = #{identifier},
+			vendorName = #{vendorName},
+			waveLength = #{waveLength},
+			vendorPN = #{vendorPN},
+			vendorSN = #{vendorSN},
+			dateCode = #{dateCode},
+			workingTemp = #{workingTemp},
+			workingVoltage = #{workingVoltage},
+			biasCurrent = #{biasCurrent},
+			txPower = #{txPower},
+			rxPower = #{rxPower},
+			bitRate = #{bitRate}
+		WHERE 
+			entityId = #{entityId} AND ponId = #{ponId} AND portIndex = #{portIndex}
+	</update>
+	
+	<insert id="addOltSniOptical" parameterType="oltSniOptical">
+		INSERT INTO
+		OltSniOptical
+			(entityId,
+			sniId,
+			portIndex,
+			identifier,
+			vendorName,
+			waveLength,
+			vendorPN,
+			vendorSN,
+			dateCode,
+			workingTemp,
+			workingVoltage,
+			biasCurrent,
+			txPower,
+			rxPower,
+			bitRate)
+		VALUES
+			(#{entityId},
+			#{sniId},
+			#{portIndex},
+			#{identifier},
+			#{vendorName},
+			#{waveLength},
+			#{vendorPN},
+			#{vendorSN},
+			#{dateCode},
+			#{workingTemp},
+			#{workingVoltage},
+			#{biasCurrent},
+			#{txPower},
+			#{rxPower},
+			#{bitRate})
+	</insert>
+	<update id="updateOltSniOptical" parameterType="oltSniOptical">
+		UPDATE
+		OltSniOptical SET
+			entityId = #{entityId},
+			sniId = #{sniId},
+			portIndex = #{portIndex},
+			identifier = #{identifier},
+			vendorName = #{vendorName},
+			waveLength = #{waveLength},
+			vendorPN = #{vendorPN},
+			vendorSN = #{vendorSN},
+			dateCode = #{dateCode},
+			workingTemp = #{workingTemp},
+			workingVoltage = #{workingVoltage},
+			biasCurrent = #{biasCurrent},
+			txPower = #{txPower},
+			rxPower = #{rxPower},
+			bitRate = #{bitRate} 
+		WHERE 
+			entityId = #{entityId} AND sniId = #{sniId} AND portIndex = #{portIndex}
+	</update>
+	
+
+	<select id="getOnuPonOptical" parameterType="long" resultType="onuPonOptical">
+		Select
+			entityId,
+			onuPonId,
+			onuPonIndex,
+			workingTemp,
+			workingVoltage,
+			biasCurrent,
+			txPower,
+			rxPower
+		From OnuPonOptical
+		Where onuPonId = #{onuPonId}
+	</select>
+	<select id="getAllOnuOptical" parameterType="long" resultType="onuPonOptical">
+		Select
+			entityId,
+			onuPonId,
+			onuPonIndex,
+			workingTemp,
+			workingVoltage,
+			biasCurrent,
+			txPower,
+			rxPower
+		From OnuPonOptical
+		Where entityId = #{entityId}
+	</select>
+	<insert id="addOnuPonOptical" parameterType="onuPonOptical">
+		INSERT INTO
+		OnuPonOptical
+			(entityId,
+			onuPonId,
+			onuPonIndex,
+			workingTemp,
+			workingVoltage,
+			biasCurrent,
+			txPower,
+			rxPower)
+		VALUES
+			(#{entityId},
+			#{onuPonId},
+			#{onuPonIndex},
+			#{workingTemp},
+			#{workingVoltage},
+			#{biasCurrent},
+			#{txPower},
+			#{rxPower})
+	</insert>
+	<update id="updateOnuPonOptical" parameterType="onuPonOptical">
+		UPDATE
+		OnuPonOptical SET
+			entityId = #{entityId},
+			onuPonId = #{onuPonId},
+			onuPonIndex = #{onuPonIndex},
+			workingTemp = #{workingTemp},
+			workingVoltage = #{workingVoltage},
+			biasCurrent = #{biasCurrent},
+			txPower = #{txPower},
+			rxPower = #{rxPower}
+		WHERE 
+			entityId = #{entityId} AND onuPonId = #{onuPonId} AND onuPonIndex = #{onuPonIndex}
+	</update>
+	
+	<select id="getOnuPonId" parameterType="onuPonOptical" resultType="long">
+		Select onuPonId
+		From OltOnuPonRelation
+		Where entityId = #{entityId} AND onuPonIndex = #{onuPonIndex}
+	</select>
+	
+	<select id="getSysOpticalAlarm" parameterType="oltSysOpticalAlarm" resultType="oltSysOpticalAlarm">
+		select * from oltsysopticalalarm where entityId = #{entityId} and topSysOptAlarmIndex = #{topSysOptAlarmIndex}
+	</select>
+	
+	<select id="getSysOpticalAlarmList" parameterType="long" resultType="oltSysOpticalAlarm">
+		select * from oltsysopticalalarm where entityId = #{entityId}
+	</select>
+	
+	<insert id="insertSysOpticalAlarm" parameterType="oltSysOpticalAlarm">
+		insert into oltsysopticalalarm(topSysOptAlarmIndex, topSysOptAlarmSwitch, topSysOptAlarmSoapTime, entityId)
+		values(#{topSysOptAlarmIndex}, #{topSysOptAlarmSwitch}, #{topSysOptAlarmSoapTime}, #{entityId})	
+	</insert>
+	
+	<update id="updateSysOpticalAlarm" parameterType="oltSysOpticalAlarm">
+		update oltsysopticalalarm
+		set topSysOptAlarmSwitch = #{topSysOptAlarmSwitch}, topSysOptAlarmSoapTime = #{topSysOptAlarmSoapTime}
+		where entityId = #{entityId} and topSysOptAlarmIndex = #{topSysOptAlarmIndex}
+	</update>
+	
+	<delete id="delSysOpticalAlarm" parameterType="oltSysOpticalAlarm">
+		delete from oltsysopticalalarm where entityId = #{entityId} and topSysOptAlarmIndex = #{topSysOptAlarmIndex}
+	</delete>
+	
+	<select id="getOnuOpticalAlarm" parameterType="oltOnuOpticalAlarm" resultType="oltOnuOpticalAlarm">
+		select * from oltonuopticalalarm 
+		where entityId = #{entityId} and topOnuOptCardIndex = #{topOnuOptCardIndex} and topOnuOptPonIndex = #{topOnuOptPonIndex} 
+		and topOnuOptOnuIndex = #{topOnuOptOnuIndex} and topOnuOptAlarmIndex = #{topOnuOptAlarmIndex}
+	</select>
+	
+	<select id="getOnuOpticalAlarmList" parameterType="oltOnuOpticalAlarm" resultType="oltOnuOpticalAlarm">
+		select * from oltonuopticalalarm 
+		where entityId = #{entityId} and topOnuOptCardIndex = #{topOnuOptCardIndex} and topOnuOptPonIndex = #{topOnuOptPonIndex} and topOnuOptOnuIndex = #{topOnuOptOnuIndex}
+	</select>
+	
+	<insert id="insertOnuOpticalAlarm" parameterType="oltOnuOpticalAlarm">
+		insert into oltonuopticalalarm
+		(topOnuOptCardIndex,topOnuOptPonIndex,topOnuOptOnuIndex,topOnuOptAlarmIndex,topOnuOptThresholdValue,topOnuOptAlarmState,topOnuOptAlarmCount,entityId)
+		values(#{topOnuOptCardIndex},#{topOnuOptPonIndex},#{topOnuOptOnuIndex},#{topOnuOptAlarmIndex},#{topOnuOptThresholdValue},#{topOnuOptAlarmState},#{topOnuOptAlarmCount},#{entityId})
+	</insert>
+	
+	<update id="updateOnuOpticalAlarm" parameterType="oltOnuOpticalAlarm">
+		update oltonuopticalalarm
+		set topOnuOptThresholdValue = #{topOnuOptThresholdValue}, topOnuOptAlarmState = #{topOnuOptAlarmState}, topOnuOptAlarmCount = #{topOnuOptAlarmCount}
+		where entityId = #{entityId} and topOnuOptCardIndex = #{topOnuOptCardIndex} and topOnuOptPonIndex = #{topOnuOptPonIndex} 
+		and topOnuOptOnuIndex = #{topOnuOptOnuIndex} and topOnuOptAlarmIndex = #{topOnuOptAlarmIndex}
+	</update>
+
+	<delete id="delOnuOpticalAlarm" parameterType="oltOnuOpticalAlarm">
+		delete from oltonuopticalalarm
+		where entityId = #{entityId} and topOnuOptCardIndex = #{topOnuOptCardIndex} and topOnuOptPonIndex = #{topOnuOptPonIndex} 
+		and topOnuOptOnuIndex = #{topOnuOptOnuIndex} and topOnuOptAlarmIndex = #{topOnuOptAlarmIndex}
+	</delete>
+	
+	<select id="getPonOpticalAlarm" parameterType="oltPonOpticalAlarm" resultType="oltPonOpticalAlarm">
+		select * from oltponopticalalarm 
+		where entityId = #{entityId} and topPonOptCardIndex = #{topPonOptCardIndex} and topPonOptPonIndex = #{topPonOptPonIndex} and topPonOptAlarmIndex = #{topPonOptAlarmIndex}
+	</select>
+	
+	<select id="getPonOpticalAlarmList" parameterType="oltPonOpticalAlarm" resultType="oltPonOpticalAlarm">
+		select * from oltponopticalalarm where entityId = #{entityId} and topPonOptCardIndex = #{topPonOptCardIndex} and topPonOptPonIndex = #{topPonOptPonIndex}
+	</select>
+	
+	<insert id="insertPonOpticalAlarm" parameterType="oltPonOpticalAlarm">
+		insert into oltponopticalalarm
+		(topPonOptCardIndex,topPonOptPonIndex,topPonOptAlarmIndex,topPonOptThresholdValue,topPonOptAlarmState,topPonOptAlarmCount,entityId)
+		values(#{topPonOptCardIndex},#{topPonOptPonIndex},#{topPonOptAlarmIndex},#{topPonOptThresholdValue},#{topPonOptAlarmState},#{topPonOptAlarmCount},#{entityId})
+	</insert>
+	
+	<update id="updatePonOpticalAlarm" parameterType="oltPonOpticalAlarm">
+		update oltponopticalalarm
+		set topPonOptThresholdValue = #{topPonOptThresholdValue}, topPonOptAlarmState = #{topPonOptAlarmState}, topPonOptAlarmCount = #{topPonOptAlarmCount}
+		where entityId = #{entityId} and topPonOptCardIndex = #{topPonOptCardIndex} and topPonOptPonIndex = #{topPonOptPonIndex} and topPonOptAlarmIndex = #{topPonOptAlarmIndex}
+	</update>
+	
+	<delete id="delPonOpticalAlarm" parameterType="oltPonOpticalAlarm">
+		delete from oltponopticalalarm
+		where entityId = #{entityId} and topPonOptCardIndex = #{topPonOptCardIndex} and topPonOptPonIndex = #{topPonOptPonIndex} and topPonOptAlarmIndex = #{topPonOptAlarmIndex}
+	</delete>
+	
+	<update id="deleteAllOltOptical" parameterType="long">
+		DELETE FROM oltSysOpticalAlarm WHERE entityId=#{entityId} 
+	</update>
+	
+	<update id="deletePonOpticalAlarm" parameterType="oltPonOpticalAlarm">
+		DELETE FROM OltPonOpticalAlarm
+		WHERE
+			entityId = #{entityId} AND
+			topPonOptCardIndex = #{topPonOptCardIndex} AND
+			topPonOptPonIndex = #{topPonOptPonIndex} AND
+			topPonOptAlarmIndex = #{topPonOptAlarmIndex}
+	</update>
+	<update id="deleteOltOnuOptAlarm" parameterType="oltOnuOpticalAlarm">
+		DELETE FROM oltonuopticalalarm
+		WHERE
+			entityId = #{entityId} AND
+			topOnuOptPonIndex = #{topOnuOptPonIndex} AND
+			topOnuOptOnuIndex = #{topOnuOptOnuIndex} AND
+			topOnuOptAlarmIndex = #{topOnuOptAlarmIndex}
+	</update>
+	<update id="deleteAllPonOpticalAlarm" parameterType="long">
+		DELETE FROM oltPonOpticalAlarm WHERE entityId=#{entityId}
+	</update>
+	<update id="deleteAllOnuOpticalAlarm" parameterType="long">
+		DELETE FROM oltOnuOpticalAlarm	WHERE entityId=#{entityId}
+	</update>
+	
+</mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.onu.dao.OnuOnOffRecord">
+	
+	<select id="getOnuOnOffRecords" parameterType="map" resultType="onuOnOffRecord">
+		SELECT 
+		entityId, 
+		onuId, 
+		onuIndex,
+		onTime, 
+		offTime, 
+		offReason, 
+		collectTime 
+		FROM onuonoffrecord
+		WHERE onuId = #{onuId} AND
+		DATE_SUB(CURDATE(), INTERVAL 30 DAY) <![CDATA[ <= onTime ]]>
+		ORDER BY onTime DESC
+		LIMIT ${start},${limit}
+	</select>
+	
+	<select id="getRecordCounts" parameterType="long" resultType="int">
+		SELECT 
+		COUNT(onuId)
+		FROM onuonoffrecord
+		WHERE onuId = #{onuId} AND
+		DATE_SUB(CURDATE(), INTERVAL 30 DAY) <![CDATA[ <= onTime ]]>
+	</select>
+
+	<insert id="insertOrUpdateOnuOnOffRecord" parameterType="onuOnOffRecord">
+		INSERT INTO onuOnOffRecord
+			(entityId, 
+			onuId, 
+			onuIndex,
+			onTime,
+			offTime,
+			offReason,
+			collectTime,
+			onOffRecordByteList)
+		VALUES
+			(#{entityId}, 
+			#{onuId}, 
+			#{onuIndex},
+			#{onTime},
+			#{offTime},
+			#{offReason},
+			#{collectTime},
+			#{onOffRecordByteList})
+		ON DUPLICATE KEY UPDATE
+			entityId =#{entityId},
+			onuId = #{onuId}, 
+			onuIndex = #{onuIndex},
+			onTime = #{onTime},
+			offTime = #{offTime},
+			offReason = #{offReason},
+			collectTime = #{collectTime},
+			onOffRecordByteList = #{onOffRecordByteList}
+	</insert>
+	
+	<delete id="deleteOnuOnOffRecord">
+		DELETE FROM onuOnOffRecord WHERE DATE_SUB(CURDATE(), INTERVAL 30 DAY) <![CDATA[ > onTime ]]>
+	</delete>
+</mapper>

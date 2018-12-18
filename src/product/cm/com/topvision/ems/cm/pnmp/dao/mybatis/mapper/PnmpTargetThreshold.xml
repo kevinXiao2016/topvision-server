@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cm.pnmp.facade.domain.PnmpTargetThreshold">
+
+	<select id="selectAllPnmpTargetThresholds" resultType="pnmpTargetThreshold">
+		SELECT * from PnmpTargetThreshold
+	</select>
+	
+	<select id="selectLevelPnmpTargetThresholds" resultType="pnmpTargetThreshold">
+		SELECT * from PnmpTargetThreshold where thresholdName = #{level}
+	</select>
+	
+	<select id="selectThresholdsByTargetName"  parameterType="String" resultType="pnmpTargetThreshold">
+		SELECT * from PnmpTargetThreshold where targetName = #{targetName}
+	</select>
+	
+	<select id="selectThresholdByTargetAndName" parameterType="map" resultType="pnmpTargetThreshold">
+		SELECT * from PnmpTargetThreshold where targetName = #{targetName} and thresholdName = #{thresholdName}
+	</select>
+	
+	<update id="updatePnmpTargetThreshold" parameterType="pnmpTargetThreshold">
+		update PnmpTargetThreshold
+        set lowValue=#{lowValue},highValue=#{highValue}
+        where targetName = #{targetName} and thresholdName = #{thresholdName}
+	</update>
+	
+	<update id="updateThreshold" parameterType="pnmpTargetThreshold">
+		update PnmpTargetThreshold 
+        set lowValue=#{lowValue},highValue=#{highValue}
+        where targetName = #{targetName} and thresholdName = #{thresholdName}
+	</update>
+	
+</mapper>

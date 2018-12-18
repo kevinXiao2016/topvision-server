@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="camera" namespace="/camera" extends="default">
+		<action name="uploadCameraPlan" class="cameraPlanAction" method="uploadCameraPlan" />
+		<action name="uploadPhysicalInfo" class="cameraPlanAction" method="uploadPhysicalInfo" />
+		<action name="loadCameraPlanList" class="cameraPlanAction" method="loadCameraPlanList" />
+		<action name="loadCameraPhyList" class="cameraPlanAction" method="loadCameraPhyList" />
+		<action name="downloadPlanTemplate" class="cameraPlanAction" method="downloadPlanTemplate" />
+		<action name="downloadPhyTemplate" class="cameraPlanAction" method="downloadPhyTemplate" />
+		<action name="deleteCameraPlan" class="cameraPlanAction" method="deleteCameraPlan" />
+		<action name="deletePhyInfo" class="cameraPlanAction" method="deletePhyInfo" />
+		<action name="modifyCameraPlan" class="cameraPlanAction" method="modifyCameraPlan" />
+		<action name="modifyPhyInfo" class="cameraPlanAction" method="modifyPhyInfo" />
+				
+		<action name="showGlobalCameraList" class="cameraAction" method="showGlobalCameraList">
+			<result>/epon/camera/cameraList.jsp</result>
+		</action>
+		<action name="loadCameraList" class="cameraAction" method="loadCameraList" />
+		<action name="showOltCamereList" class="cameraAction" method="showOltCamereList">
+			<result>/epon/camera/oltCameraList.jsp</result>
+		</action>
+		<action name="getOltSlotList" class="cameraAction" method="getOltSlotList" />
+		<action name="getOltPonList" class="cameraAction" method="getOltPonList" />
+		<action name="getPonOnuList" class="cameraAction" method="getPonOnuList" />
+		<action name="getAllCameraType" class="cameraAction" method="getAllCameraType" />
+		
+		<action name="refreshCameraData" class="cameraAction" method="refreshCameraData" />
+		<action name="refreshAllCamera" class="cameraAction" method="refreshAllCamera" />
+		<action name="saveCameraConfig" class="cameraAction" method="saveCameraConfig" />
+		<action name="replaceCamera" class="cameraAction" method="replaceCamera" />
+		<action name="deleteCameraConfig" class="cameraAction" method="deleteCameraConfig" />
+		
+		<action name="showCameraPlan" class="cameraPlanAction" method="showCameraPlan">
+			<result>/epon/camera/showCameraPlan.jsp</result>
+		</action>
+		<action name="showCameraPhyInfo" class="cameraPlanAction" method="showCameraPhyInfo">
+			<result>/epon/camera/showCameraPhy.jsp</result>
+		</action>
+		<action name="addCameraPlan"  class="cameraPlanAction" method="addCameraPlan"/>
+		<action name="addCameraPhy" class="cameraPlanAction" method="addCameraPhy"/>
+	</package> 
+</struts>
+

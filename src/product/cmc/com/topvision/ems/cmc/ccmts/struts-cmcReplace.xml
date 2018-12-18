@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="cmcReplace" namespace="/cmc/replace" extends="default">
+        
+        <action name="showCmcReplaceIIView" class="cmcReplaceAction" method="showCmcIIReplaceView">
+            <result>/cmc/replaceCmcII.jsp</result>
+        </action>
+        
+        <action name="showCmcReplaceIView" class="cmcReplaceAction" method="showCmcIReplaceView">
+            <result>/cmc/replaceCmcI.jsp</result>
+        </action>
+       
+        <action name="loadCmcReplaceList" class="cmcReplaceAction" method="loadCmcReplaceList">
+        </action>
+        
+        <action name="loadCmcReplaceConfigFile" class="cmcReplaceAction" method="loadCmcReplaceConfigFile">
+        </action>
+       
+        <action name="replaceCmcII" class="cmcReplaceAction" method="replaceCmcII">
+        </action>
+        
+        <action name="replaceCmcI" class="cmcReplaceAction" method="replaceCmcI">
+        </action>
+       
+    </package>
+</struts>

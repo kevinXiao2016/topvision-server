@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.config.domain.OltConfigInfo">
+	
+	<update id="updateInbandParamInfo" parameterType="oltAttribute">
+		UPDATE 
+			oltattribute
+		SET
+			inbandIpAddress = #{inbandIpAddress},
+			inbandIpSubnetMask = #{inbandIpSubnetMask},
+			inbandVlanId = #{inbandVlanId},
+			inbandPortIndex = #{inbandPortIndex},
+			topSysInBandMaxBW = #{topSysInBandMaxBw}
+		WHERE
+			entityId = #{entityId}
+	</update>
+	
+	<update id="updateOutbandParamInfo" parameterType="oltAttribute">
+		UPDATE
+			oltattribute
+		SET
+			outbandIpAddress = #{outbandIpAddress},
+			outbandIpSubnetMask = #{outbandIpSubnetMask}
+		WHERE
+			entityId = #{entityId}
+	</update>
+	
+	
+	<update id="updateGate" parameterType="oltAttribute">
+		UPDATE
+			oltattribute
+		SET
+			entityId = #{entityId},
+			inbandIpGateway = #{inbandIpGateway},
+			outbandIpGateway = #{outbandIpGateway}	
+		WHERE
+			entityId = #{entityId}
+	</update>
+	
+	<select id="selectVlanInterfaceList" parameterType="long" resultType="oltVlanInterface">
+	   SELECT 
+	        entityId,
+	        topOltVifPriIpVlanIdx as vlanIndex,
+	        topOltVifPriIpMask as vlanIpMask,
+	        topOltVifPriIpAddr as vlanIpAddress
+		FROM
+	        oltvifpriipconfig
+		WHERE
+	        entityId = #{entityId}
+		UNION
+		SELECT
+	        entityId,
+	        topOltVifSubIpVlanIdx  as vlanIndex,
+	        topOltVifSubIpAddr as vlanIpAddress,
+	        topOltVifSubIpMask as vlanIpMask
+		FROM
+	        oltvifsubipconfig
+		WHERE
+	       entityId = #{entityId}
+	</select>
+	
+	<select id="selectAvailableVlanIndexList" parameterType="long" resultType="vlanAttribute">
+		SELECT 
+            oltVlanIndex as vlanIndex,oltVlanName 
+        FROM 
+            oltvlanconfig A
+        WHERE  
+            NOT EXISTS (SELECT * FROM oltvifpriipconfig B where A.entityId=B.entityId
+                          AND A.oltVlanIndex = B.topOltVifPriIpVlanIdx)
+        AND
+            A.entityId = #{entityId}
+	</select>
+	
+	<update id="updateInBandConfig" parameterType="oltAttribute">
+		UPDATE
+		oltattribute
+		SET
+		inbandIpAddress = #{inbandIpAddress},
+		inbandIpSubnetMask
+		= #{inbandIpSubnetMask},
+		inbandIpGateway =
+		#{inbandIpGateway},
+		topSysInBandMaxBw = #{topSysInBandMaxBw},
+		inbandPortIndex =
+		#{inbandPortIndex},
+		inbandVlanId = #{inbandVlanId}
+		WHERE
+		entityId =
+		#{entityId}
+	</update>
+	
+	<update id="updateOutBandConfig" parameterType="oltAttribute">
+		UPDATE
+		oltattribute
+		SET
+		outbandIpAddress = #{outbandIpAddress},
+		outbandIpSubnetMask = #{outbandIpSubnetMask},
+		outbandIpGateway =
+		#{outbandIpGateway}
+		WHERE
+		entityId = #{entityId}
+	</update>
+	
+	<update id="modifyOltSnmpConfig" parameterType="oltAttribute">
+		UPDATE
+		OltAttribute
+		SET
+		topSysSnmpHostIp = #{topSysSnmpHostIp},
+		topSysSnmpHostIpMask = #{topSysSnmpHostIpMask},
+		topSysSnmpVersion
+		=#{topSysSnmpVersion}
+		WHERE
+		entityId =
+		#{entityId}					
+	</update>
+	
+	<update id="modifyOltSnmpV2CConfig" parameterType="oltAttribute">
+		UPDATE
+		OltAttribute
+		SET
+		topSysReadCommunity = #{topSysReadCommunity},
+		topSysWriteCommunity = #{topSysWriteCommunity}
+		WHERE
+		entityId =
+		#{entityId}					
+	</update>
+	
+	
+</mapper>

@@ -1,0 +1,4 @@
+.pbar .ui-progressbar-value {display:block !important}
+.pbar {overflow: hidden}
+.percent {position:relative;text-align: right;}
+.elapsed {position:relative;text-align: right;}

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+    <!-- ========================= GENERAL DEFINITIONS ========================= -->
+    <!-- Configurer that replaces ${...} placeholders with values from properties files -->
+    <!-- (in this case, mail and JDBC related properties) -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="locations">
+            <list>
+                <value>WEB-INF/conf/*.properties</value>
+            </list>
+        </property>
+    </bean>
+    
+    <bean class="com.topvision.framework.utils.ApplicationContextUtil"></bean>
+
+    <!-- ========================= RESOURCE DEFINITIONS ========================= -->
+    <!-- Local C3p0 DataSource that refers to a combined database -->
+    <bean id="serverDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.driverClassName}" />
+        <property name="jdbcUrl" value="${jdbc.url}" />
+        <property name="user" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+
+        <property name="autoCommitOnClose" value="true" />
+        <property name="checkoutTimeout" value="${cpool.checkoutTimeout}" />
+        <property name="initialPoolSize" value="${cpool.initialPoolSize}" />
+        <property name="minPoolSize" value="${cpool.minPoolSize}" />
+        <property name="maxPoolSize" value="${cpool.maxPoolSize}" />
+        <property name="maxIdleTime" value="${cpool.maxIdleTime}" />
+        <property name="acquireIncrement" value="${cpool.acquireIncrement}" />
+        <property name="maxIdleTimeExcessConnections" value="${cpool.maxIdleTimeExcessConnections}" />
+    </bean>
+
+    <bean id="engineDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${jdbc.driverClassName}" />
+        <property name="jdbcUrl" value="${jdbc.engine.url:jdbc:mysql://localhost:3003/ems}" />
+        <property name="user" value="${jdbc.engine.username:root}" />
+        <property name="password" value="${jdbc.engine.password:ems}" />
+
+        <property name="autoCommitOnClose" value="true" />
+        <property name="checkoutTimeout" value="${cpool.engine.checkoutTimeout:0}" />
+        <property name="initialPoolSize" value="${cpool.engine.initialPoolSize:120}" />
+        <property name="minPoolSize" value="${cpool.engine.minPoolSize:110}" />
+        <property name="maxPoolSize" value="${cpool.engine.maxPoolSize:200}" />
+        <property name="maxIdleTime" value="${cpool.engine.maxIdleTime:3600}" />
+        <property name="acquireIncrement" value="${cpool.engine.acquireIncrement:5}" />
+        <property name="maxIdleTimeExcessConnections" value="${cpool.engine.maxIdleTimeExcessConnections:1800}" />
+    </bean>
+
+    <bean id="dataSource" class="com.topvision.framework.datasource.DynamicDataSource">
+        <property name="targetDataSources">
+            <map>
+                <entry key="engine" value-ref="engineDataSource" />
+            </map>
+        </property>
+        <property name="defaultTargetDataSource" ref="serverDataSource"></property>
+    </bean>
+
+    <!--SqlMap setup for MyBatis Database Layer -->
+    <bean id="databaseIdProvider" class="org.apache.ibatis.mapping.VendorDatabaseIdProvider"></bean>
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="databaseIdProvider" ref="databaseIdProvider" />
+        <property name="mapperLocations" value="classpath*:com/topvision/**/mybatis/mapper/*.xml" />
+        <property name="typeAliasesPackage" value="com.topvision" />
+        <property name="typeAliasesSuperType" value="com.topvision.framework.dao.mybatis.AliasesSuperType" />
+    </bean>
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg index="0" ref="sqlSessionFactory" />
+    </bean>
+
+
+    <!-- Transaction manager for a single JDBC DataSource -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+
+    <!-- ========================= ASPECT CONFIGURATION ======================== -->
+    <!-- Transaction advice definition, based on method name patterns. Defaults to PROPAGATION_REQUIRED for all methods whose 
+        name starts with "tx" or "trans*", and to PROPAGATION_REQUIRED with read-only hint for all other methods. -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="add*" propagation="SUPPORTS" />
+            <tx:method name="create*" propagation="SUPPORTS" />
+            <tx:method name="insert*" propagation="SUPPORTS" />
+            <tx:method name="save*" propagation="SUPPORTS" />
+            <tx:method name="modify*" propagation="SUPPORTS" />
+            <tx:method name="update*" propagation="SUPPORTS" />
+            <tx:method name="delete*" propagation="REQUIRED" />
+            <tx:method name="remove*" propagation="REQUIRED" />
+            <tx:method name="tx*" propagation="REQUIRED" />
+            <tx:method name="trans*" propagation="REQUIRED" />
+            <tx:method name="*" propagation="NOT_SUPPORTED" read-only="true" />
+        </tx:attributes>
+    </tx:advice>
+
+
+    <!-- Transaction Aop Config -->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+
+    <bean id="dbContextAdvice" class="com.topvision.framework.datasource.DbContextAdvice" />
+    <aop:config>
+        <aop:aspect ref="dbContextAdvice">
+            <aop:around pointcut="
+			    execution(* com.topvision..service.*Service.*(..))" method="dbContextAround" />
+        </aop:aspect>
+    </aop:config>
+
+
+    <!-- This definition creates auto-proxy infrastructure based on the given pointcut, expressed in AspectJ pointcut language. 
+        Here: applying the advice named "txAdvice" to all methods on classes named *Service*. -->
+    <aop:config>
+        <aop:advisor pointcut="execution(* com.topvision..service.*Service.*(..))" advice-ref="txAdvice" />
+    </aop:config>
+
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="protocol">
+            <value>smtp</value>
+        </property>
+    </bean>
+    <bean id="bakMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="protocol">
+            <value>smtp</value>
+        </property>
+    </bean>
+    <!-- 发送信息对象，可以在发送前设置值 -->
+    <bean id="mailMessage" class="org.springframework.mail.SimpleMailMessage">
+        <property name="subject">
+            <value>From Topvision</value>
+        </property>
+    </bean>
+
+    <bean id="versionManager" class="com.topvision.framework.version.service.VersionManager" init-method="initialize">
+        <property name="versionDao" ref="versionDao"></property>
+        <property name="db">
+            <list>
+                <!-- platform sql define -->
+                <value>
+                    classpath:/com/topvision/platform/database-table-${database.type}.sql
+                </value>
+                <value>
+                    classpath:/com/topvision/ems/database-table-${database.type}.sql
+                </value>
+                <value>
+                    classpath*:/com/topvision/ems/**/database-table-${database.type}.sql
+                </value>
+
+                <value>
+                    classpath:/com/topvision/ems/database-autorun-${database.type}.sql
+                </value>
+
+                <!-- procedure define -->
+                <value>
+                    classpath:/com/topvision/ems/database-proc-${database.type}.sql
+                </value>
+                <value>
+                    classpath*:/com/topvision/ems/**/database-proc-${database.type}.sql
+                </value>
+                <value>
+                    classpath:/com/topvision/platform/database-proc-${database.type}.sql
+                </value>
+
+                <!-- trigger define -->
+                <value>
+                    classpath:/com/topvision/platform/database-tri-${database.type}.sql
+                </value>
+                <value>
+                    classpath:/com/topvision/ems/database-tri-${database.type}.sql
+                </value>
+                <value>
+                    classpath*:/com/topvision/ems/**/database-tri-${database.type}.sql
+                </value>
+
+                <!-- base sql data -->
+                <value>
+                    classpath:/com/topvision/platform/database-data-${database.type}.sql
+                </value>
+                <value>
+                    classpath:/com/topvision/ems/database-data-${database.type}.sql
+                </value>
+                <value>
+                    classpath*:/com/topvision/ems/**/database-data-${database.type}.sql
+                </value>
+                <!-- Only for english version sql data -->
+                <value>
+                    classpath*:/com/topvision/**/database-${language}-${database.type}.sql
+                </value>
+                <!-- Only for oem build sql data -->
+                <value>
+                    classpath*:/com/topvision/**/database-oem-${oem:topvision}-${database.type}.sql
+                </value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 载入注解方式的bean -->
+    <context:annotation-config />
+    <context:component-scan base-package="com.topvision" />
+</beans>

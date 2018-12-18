@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="oltdhcp" namespace="/epon/oltdhcp" extends="default">
+		<!-- DHCP/PPPOE 界面跳转-->
+		<action name="showOltDhcp" class="oltDhcpBaseAction" method="showOltDhcp">
+            <result>/epon/dhcp/dhcp.jsp</result>
+        </action>
+        <action name="showOltPppoe" class="oltDhcpBaseAction" method="showOltPppoe">
+            <result>/epon/pppoe/pppoe.jsp</result>
+        </action>
+	
+		<!-- 获取全局配置参数，Option82/PPPoE/防静态IP开关/全局开关通用-->
+		<action name="loadOltDhcpGlobalCfg" class="oltDhcpBaseAction" method="loadOltDhcpGlobalCfg" />
+		
+		<!-- DHCP全局开关与刷新 -->
+		<action name="modifyOltDhcpEnable" class="oltDhcpBaseAction" method="modifyOltDhcpEnable" />
+		<action name="refreshOltDhcpData" class="oltDhcpBaseAction" method="refreshOltDhcpData" />
+		
+		<!-- PPPOE全局开关与刷新 -->
+		<action name="refreshOltPppoeData" class="oltDhcpBaseAction" method="refreshOltPppoeData" />
+		<action name="modifyOltPppoeEnable" class="oltDhcpBaseAction" method="modifyOltPppoeEnable" />
+		
+		<!--DHCP OPTION82 CONFIG -->
+        <action name="showOltDhcpOption82Cfg" class="oltDhcpBaseAction" method="showOltDhcpOption82Cfg">
+            <result>/epon/dhcp/option82.jsp</result>
+        </action>
+        <action name="modifyOltDhcpOption82Cfg" class="oltDhcpBaseAction" method="modifyOltDhcpOption82Cfg" />
+        <action name="refreshOltDhcpOption82Cfg" class="oltDhcpBaseAction" method="refreshOltDhcpOption82Cfg" />
+		
+		<!--PPPOE CONFIG -->
+        <action name="showOltDhcpPppoeCfg" class="oltDhcpBaseAction" method="showOltDhcpPppoeCfg">
+            <result>/epon/pppoe/pppoeConfig.jsp</result>
+        </action>
+        <action name="modifyOltPppoeCfg" class="oltDhcpBaseAction" method="modifyOltPppoeCfg" />
+        <action name="refreshOltPppoeCfg" class="oltDhcpBaseAction" method="refreshOltPppoeCfg" />
+		
+	 	<!--DHCP VLAN -->
+		<action name="showOltDhcpVlanList" class="oltDhcpVlanAction" method="showOltDhcpVlanList">
+            <result>/epon/dhcp/dhcpMode.jsp</result>
+        </action>
+        <action name="loadOltDhcpVlanList" class="oltDhcpVlanAction" method="loadOltDhcpVlanList" />
+        <action name="showModifyOltDhcpVlan" class="oltDhcpVlanAction" method="showModifyOltDhcpVlan">
+            <result>/epon/dhcp/dhcpModeEdit.jsp</result>
+        </action>
+        <action name="loadOltDhcpVlan" class="oltDhcpVlanAction" method="loadOltDhcpVlan" />
+        <action name="modifyOltDhcpVlan" class="oltDhcpVlanAction" method="modifyOltDhcpVlan" />
+        <action name="refreshOltDhcpVlanList" class="oltDhcpVlanAction" method="refreshOltDhcpVlanList" />
+        
+        <!--DHCP VIF -->
+        <action name="showOltDhcpVifList" class="oltDhcpVifAction" method="showOltDhcpVifList">
+            <result>/epon/dhcp/dhcpRelay.jsp</result>
+        </action>
+        <action name="loadOltDhcpVifList" class="oltDhcpVifAction" method="loadOltDhcpVifList" />
+        <action name="showAddOltDhcpVif" class="oltDhcpVifAction" method="showAddOltDhcpVif">
+            <result>/epon/dhcp/addRelay.jsp</result>
+        </action>
+        <action name="addOltDhcpVif" class="oltDhcpVifAction" method="addOltDhcpVif" />
+        <action name="showModifyOltDhcpVif" class="oltDhcpVifAction" method="showModifyOltDhcpVif">
+            <result>/epon/dhcp/addRelay.jsp</result>
+        </action>
+        <action name="loadOltDhcpVif" class="oltDhcpVifAction" method="loadOltDhcpVif" />
+        <action name="modifyOltDhcpVif" class="oltDhcpVifAction" method="modifyOltDhcpVif" />
+        <action name="deleteOltDhcpVif" class="oltDhcpVifAction" method="deleteOltDhcpVif" />
+        <action name="refreshOltDhcpVifList" class="oltDhcpVifAction" method="refreshOltDhcpVifList" />
+        <action name="loadOltVifList" class="oltDhcpVifAction" method="loadOltVifList" />
+        <action name="loadOltVifIpList" class="oltDhcpVifAction" method="loadOltVifIpList" />
+        
+        <!--DHCP GROUP -->
+        <action name="loadOltDhcpGroupList" class="oltDhcpGroupAction" method="loadOltDhcpGroupList" />
+        <action name="showAddOltDhcpGroup" class="oltDhcpGroupAction" method="showAddOltDhcpGroup">
+            <result>/epon/dhcp/addServerGroup.jsp</result>
+        </action>
+        <action name="addOltDhcpGroup" class="oltDhcpGroupAction" method="addOltDhcpGroup" />
+        <action name="showModifyOltDhcpGroup" class="oltDhcpGroupAction" method="showModifyOltDhcpGroup">
+            <result>/epon/dhcp/addServerGroup.jsp</result>
+        </action>
+        <action name="loadOltDhcpGroup" class="oltDhcpGroupAction" method="loadOltDhcpGroup" />
+        <action name="modifyOltDhcpGroup" class="oltDhcpGroupAction" method="modifyOltDhcpGroup" />
+        <action name="deleteOltDhcpGroup" class="oltDhcpGroupAction" method="deleteOltDhcpGroup" />
+        <action name="refreshOltDhcpGroupList" class="oltDhcpGroupAction" method="refreshOltDhcpGroupList" />
+        
+        <!--DHCP/PPPOE PORT -->
+        <action name="showPortAttributeList" class="oltDhcpPortAction" method="showPortAttributeList">
+            <result>/epon/dhcp/port.jsp</result>
+        </action>
+        <action name="loadOltDhcpPortList" class="oltDhcpPortAction" method="loadOltDhcpPortList" />
+        <action name="showModifyOltDhcpPort" class="oltDhcpPortAction" method="showModifyOltDhcpPort">
+            <result>/epon/dhcp/portEdit.jsp</result>
+        </action>
+        <action name="loadOltDhcpPort" class="oltDhcpPortAction" method="loadOltDhcpPort" />
+        <action name="modifyOltDhcpPort" class="oltDhcpPortAction" method="modifyOltDhcpPort" />
+        <action name="refreshOltDhcpPortList" class="oltDhcpPortAction" method="refreshOltDhcpPortList" />
+        
+        <!--DHCP STATIC IP -->
+        <action name="modifySourceVerifyEnable" class="oltDhcpBaseAction" method="modifySourceVerifyEnable" />
+        <action name="showOltDhcpStaticIpList" class="oltDhcpStaticIpAction" method="showOltDhcpStaticIpList">
+            <result>/epon/dhcp/antiStaticIp.jsp</result>
+        </action>
+        <action name="loadOltDhcpStaticIpList" class="oltDhcpStaticIpAction" method="loadOltDhcpStaticIpList" />
+        <action name="addOltDhcpStaticIp" class="oltDhcpStaticIpAction" method="addOltDhcpStaticIp" />
+        <action name="deleteOltDhcpStaticIp" class="oltDhcpStaticIpAction" method="deleteOltDhcpStaticIp" />
+        <action name="refreshOltDhcpStaticIpList" class="oltDhcpStaticIpAction" method="refreshOltDhcpStaticIpList" />
+        <action name="loadOltSlotIdList" class="oltDhcpStaticIpAction" method="loadOltSlotIdList"/>
+        <action name="loadOltSlotPonIdList" class="oltDhcpStaticIpAction" method="loadOltSlotPonIdList"/>
+        <action name="loadOltSlotPonOnuIdList" class="oltDhcpStaticIpAction" method="loadOltSlotPonOnuIdList"/>
+        
+        
+        <!--DHCP CPE -->
+		<action name="showOltDhcpCpeList" class="oltDhcpCpeAction" method="showOltDhcpCpeList">
+            <result>/epon/dhcp/cpeInfo.jsp</result>
+        </action>
+        <action name="loadOltDhcpCpeList" class="oltDhcpCpeAction" method="loadOltDhcpCpeList" />
+        <action name="refreshOltDhcpCpeList" class="oltDhcpCpeAction" method="refreshOltDhcpCpeList" />
+        
+        <!--DHCP STATISTICS -->
+		<action name="showOltDhcpStatistics" class="oltDhcpStatisticsAction" method="showOltDhcpStatistics">
+            <result>/epon/dhcp/message.jsp</result>
+        </action>
+        <action name="loadltDhcpStatistics" class="oltDhcpStatisticsAction" method="loadltDhcpStatistics" />
+        <action name="clearOltDhcpStatistics" class="oltDhcpStatisticsAction" method="clearOltDhcpStatistics" />
+        <action name="refreshOltDhcpStatistics" class="oltDhcpStatisticsAction" method="refreshOltDhcpStatistics" />
+        
+        <!--PPPOE STATISTICS -->
+        <action name="showOltPppoeStatistics" class="oltDhcpStatisticsAction" method="showOltPppoeStatistics">
+            <result>/epon/pppoe/message.jsp</result>
+        </action>
+        <action name="loadOltPppoeStatistics" class="oltDhcpStatisticsAction" method="loadOltPppoeStatistics" />
+        <action name="clearPppoeDhcpStatistics" class="oltDhcpStatisticsAction" method="clearPppoeDhcpStatistics" />
+        <action name="refreshOltPppoeStatistics" class="oltDhcpStatisticsAction" method="refreshOltPppoeStatistics" />
+		
+	</package>
+</struts>

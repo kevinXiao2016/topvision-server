@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.camera.domain.Camera">
+	<delete id="deleteCameraInfo" parameterType="long">
+		DELETE FROM camerafilter WHERE entityId = #{entityId}
+	</delete>
+	
+	<insert id="batchInsertCamera" parameterType="cameraFilterTable">
+		INSERT INTO camerafilter(entityId,eponIndex,cameraIndex,ip,mac)
+		VALUES(
+			#{entityId}, #{eponIndex}, #{cameraIndex}, #{ip}, #{mac}
+		)
+	</insert>
+	<select id="checkExisted" parameterType="cameraFilterTable" resultType="cameraFilterTable">
+		SELECT * FROM camerafilter
+		WHERE entityId=#{entityId} AND eponIndex=#{eponIndex} AND  ip=#{ip} AND mac=#{mac} 
+	</select>
+	<select id="checkIpDuplicatd" parameterType="cameraFilterTable" resultType="cameraFilterTable">
+		SELECT * FROM camerafilter
+		WHERE entityId=#{entityId} AND eponIndex=#{eponIndex} AND ip=#{ip}
+	</select>
+	<select id="checkMacDuplicatd" parameterType="cameraFilterTable" resultType="cameraFilterTable">
+		SELECT * FROM camerafilter
+		WHERE entityId=#{entityId} AND eponIndex=#{eponIndex} AND mac=#{mac}
+	</select>
+	<select id="queryAllCameraList" parameterType="map" resultType="cameraFilterTable">
+		select C.cameraNo,A.entityId, A.eponIndex, A.cameraIndex, A.mac, A.ip, B.type as cameraType, 
+			B.note as noteInfo, C.location as location, E.ip as entityIp
+		from entity E, camerafilter A
+		left join cameraphysicalinfo B on A.mac = B.mac
+		left join cameraPlan C on A.ip = C.ip 
+		where 1=1  
+		<if test="entityId != null">
+			and A.entityId = #{entityId}
+		</if>
+		<if test="queryInfo != null">
+			and (A.mac like concat('%',#{queryInfo},'%') or A.ip like concat('%',#{queryInfo},'%') 
+				or B.note like concat('%',#{queryInfo},'%') or C.location like concat('%',#{queryInfo},'%'))
+		</if>
+		<if test="eponIndex != null">
+			and A.eponIndex in (${eponIndex})
+		</if>
+		
+		<if test="ip != null">
+			and A.ip like concat('%',#{ip},'%')
+		</if>
+		<if test="mac != null">
+			and A.mac like concat('%',#{mac},'%')
+		</if>
+		<if test="noteInfo != null">
+			and B.note like concat('%',#{noteInfo},'%')
+		</if>
+		<if test="location != null">
+			and C.location like concat('%',#{location},'%')
+		</if>
+		<if test="cameraType != null">
+			and B.type like concat('%',#{cameraType},'%')
+		</if>
+		and A.entityId = E.entityId
+		limit ${start} , ${limit}
+	</select>
+	
+	<select id="queryCameraCount" parameterType="map" resultType="int">
+		select count(*) from camerafilter A
+		left join cameraphysicalinfo B on A.mac = B.mac
+		left join cameraPlan C on A.ip = C.ip 
+		where 1=1 
+		<if test="entityId != null">
+			and A.entityId = #{entityId}
+		</if>
+		<if test="queryInfo != null">
+			and (A.mac like concat('%',#{queryInfo},'%') or A.ip like concat('%',#{queryInfo},'%') 
+				or B.note like concat('%',#{queryInfo},'%') or C.location like concat('%',#{queryInfo},'%') )
+		</if>
+		<if test="eponIndex != null">
+			and A.eponIndex in (${eponIndex})
+		</if>
+		<if test="ip != null">
+			and A.ip like concat('%',#{ip},'%')
+		</if>
+		<if test="mac != null">
+			and A.mac like concat('%',#{mac},'%')
+		</if>
+		<if test="note != null">
+			and B.note like concat('%',#{note},'%')
+		</if>
+		<if test="location != null">
+			and C.location like concat('%',#{location},'%')
+		</if>
+		<if test="cameraType != null">
+			and B.type like concat('%',#{cameraType},'%')
+		</if>
+	</select>
+	
+	<update id="updateCameraConfig" parameterType="cameraFilterTable">
+		update camerafilter
+		set mac = ${mac}, ip = ${ip}
+		where entityId = ${entityId} and eponIndex = ${eponIndex}
+	</update>
+	
+	<delete id="deleteCameraConfig" parameterType="cameraFilterTable">
+		delete from camerafilter
+		where entityId = ${entityId} and eponIndex = ${eponIndex} and cameraIndex = #{cameraIndex}
+	</delete>
+	
+	<select id="insertPlan" parameterType="cameraPlanTable">
+		INSERT INTO cameraPlan(cameraNo,location,ip)
+		VALUES(
+			#{cameraNo},#{location},#{ip}
+		)
+	</select>
+	
+	<select id="insertPhyInfo" parameterType="cameraPhysicalInfo">
+		INSERT INTO cameraPhysicalInfo(mac,type,note)
+		VALUES(
+			#{mac},#{type},#{note}
+		)
+	</select>
+	<select id="selectCameraPlanList" parameterType="map" resultType="cameraPlanTable">
+		SELECT cameraNo,location,ip FROM cameraPlan A
+		WHERE 1=1
+		<if test="ip != null">
+			AND ip like '%${ip}%'
+		</if>
+		<if test="location != null">
+			AND location like '%${location}%'
+		</if>
+		<if test="cameraNo != null">
+			AND cameraNo like '%${cameraNo}%'
+		</if>
+		<if test="entityId != null">
+			AND NOT EXISTS (
+				SELECT 1 FROM camerafilter B
+				WHERE  B.entityId =#{entityId} AND B.eponIndex =#{eponIndex} AND A.ip=B.ip
+			)
+		</if>
+		<if test="limit > 0">
+			limit ${start},${limit}
+		</if>
+	</select>
+	
+	<select id="queryPlanCount" parameterType="map" resultType="int">
+		SELECT count(*) FROM cameraPlan
+		WHERE 1=1
+		<if test="ip != null">
+			AND ip like '%${ip}%'
+		</if>
+		<if test="location != null">
+			AND location like '%${location}%'
+		</if>
+		<if test="cameraNo != null">
+			AND cameraNo like '%${cameraNo}%'
+		</if>
+	</select>
+	
+	<select id="selectCameraPhyList" parameterType="map" resultType="cameraPhysicalInfo">
+		SELECT mac,type,note FROM cameraPhysicalInfo A
+		WHERE 1=1
+		<if test="type != null">
+			AND type like '%${type}%'
+		</if>
+		<if test="mac != null">
+			AND mac like '%${mac}%'
+		</if>
+		<if test="note != null">
+			AND note like '%${note}%'
+		</if>
+		<if test="entityId != null">
+			AND NOT EXISTS (
+				SELECT 1 FROM camerafilter B
+				WHERE  B.entityId =#{entityId} AND B.eponIndex =#{eponIndex} AND A.mac=B.mac
+			)
+		</if>
+		<if test="limit > 0">
+			limit ${start},${limit}
+		</if>
+	</select>
+	
+	<select id="queryPhyCount" parameterType="map" resultType="int">
+		SELECT count(*) FROM cameraPhysicalInfo
+		WHERE 1=1
+		<if test="type != null">
+			AND type like '%${type}%'
+		</if>
+		<if test="mac != null">
+			AND mac like '%${mac}%'
+		</if>
+		<if test="note != null">
+			AND note like '%${note}%'
+		</if>
+	</select>
+	
+	<delete id="deleteCameraPlan" parameterType="string">
+		DELETE FROM cameraPlan WHERE cameraNo = #{cameraNo}
+	</delete>
+	<delete id="deletePhyInfo" parameterType="string">
+		DELETE FROM cameraPhysicalInfo WHERE mac = #{mac}
+	</delete>
+	<update id="modifyCameraPlan" parameterType="cameraPlanTable">
+		UPDATE cameraPlan
+		SET ip = #{ip}, location = #{location}
+		WHERE cameraNo = #{cameraNo}
+	</update>
+	<update id="modifyPhyInfo" parameterType="cameraPhysicalInfo">
+		UPDATE cameraPhysicalInfo
+		SET note = #{note}
+		WHERE mac = #{mac}
+	</update>
+	
+	<select id="queryAllCameraType" resultType="string">
+		select distinct type from cameraphysicalinfo 
+	</select>
+</mapper>

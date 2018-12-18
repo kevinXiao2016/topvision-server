@@ -1,0 +1,50 @@
+1.jShine():
+	参数项：sec  speed	
+	sec默认取值为3秒 
+		当sec取值大于100时，持续时间将为永久
+	speed默认为500毫秒
+		speed取值为'fast'时，闪动间隔为100毫秒
+		speed取值为'slow'时，闪动间隔为1000毫秒
+		speed取值为非整数时，闪动间隔为500毫秒
+		speed取值为整数时，闪动间隔为整数值（单位：毫秒） 
+2.jShineColor():
+	参数项：sec ,speed ,shColor, fadeColor, fontColor
+	sec默认取值为3秒 
+		当sec取值大于100时，持续时间将为永久
+	speed默认为500毫秒
+		speed取值为'fast'时，闪动间隔为100毫秒
+		speed取值为'slow'时，闪动间隔为1000毫秒
+		speed取值为非整数时，闪动间隔为500毫秒
+		speed取值为整数时，闪动间隔为整数值（单位：毫秒） 
+	shColor：闪动时的背景颜色，默认为红色
+	fadeColor: 闪动暗淡时的背景颜色，默认为黄色
+	fontColor: 闪动元素内字体的颜色，默认为黄色
+	举例：
+		$("#sid").jShineColor({
+			shColor : '#FF1250',
+			fadeColor : '#f49f08',
+		});
+3.jShineBorder():
+	参数项：sec, speed, shineColor,fadeColor
+	sec默认取值为3秒 
+		当sec取值大于100时，持续时间将为永久
+	speed默认为500毫秒
+		speed取值为'fast'时，闪动间隔为100毫秒
+		speed取值为'slow'时，闪动间隔为1000毫秒
+		speed取值为非整数时，闪动间隔为500毫秒
+		speed取值为整数时，闪动间隔为整数值（单位：毫秒） 
+	shineColor:闪动时边框的颜色，默认为红色
+	fadeColor：闪动暗淡时的边框颜色，默认为黄色
+4.animate();
+	参数项：
+	 backgroundColor :背景色
+	 borderBottomColor：边框底部颜色
+	 borderLeftColor：边框左边颜色
+	 borderRightColor ：边框右边颜色
+	 borderTopColor：边框顶部颜色 
+	 borderColor ：边框颜色
+	 color：元素内部字体颜色
+	 outlineColor：
+	 width：宽度
+	 height：高度	 
+	 opacity：不透明度

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC 
+    "-//SPRING//DTD BEAN//EN" 
+    "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+    <bean id="noiseViewer" class="com.topvision.ems.cmc.performance.viewer.NoiseViewer" init-method="initialize">
+        <property name="performanceService" ref="performanceService" />
+        <property name="cmcPerfDao" ref="cmcPerfDao" />
+    </bean>
+    <bean id="cpuViewer" class="com.topvision.ems.cmc.performance.viewer.CpuViewer" init-method="initialize">
+        <property name="performanceService" ref="performanceService" />
+        <property name="cmcPerfDao" ref="cmcPerfDao" />
+    </bean>
+    <bean id="memViewer" class="com.topvision.ems.cmc.performance.viewer.MemViewer" init-method="initialize">
+        <property name="performanceService" ref="performanceService" />
+        <property name="cmcPerfDao" ref="cmcPerfDao" />
+    </bean>
+    <bean id="bitErrorRateView" class="com.topvision.ems.cmc.performance.viewer.BitErrorRateView" init-method="initialize">
+        <property name="performanceService" ref="performanceService" />
+        <property name="cmcPerfDao" ref="cmcPerfDao" />
+    </bean>
+    <bean id="unBitErrorRateView" class="com.topvision.ems.cmc.performance.viewer.UnBitErrorRateView" init-method="initialize">
+        <property name="performanceService" ref="performanceService" />
+        <property name="cmcPerfDao" ref="cmcPerfDao" />
+    </bean>
+    <bean id="cmNumTotalView" class="com.topvision.ems.cmc.performance.viewer.CmNumTotalView" init-method="initialize">
+        <property name="performanceService" ref="performanceService" />
+        <property name="cmcPerfDao" ref="cmcPerfDao" />
+    </bean>
+    <bean id="cmNumOnlineView" class="com.topvision.ems.cmc.performance.viewer.CmNumOnlineView" init-method="initialize">
+        <property name="performanceService" ref="performanceService" />
+        <property name="cmcPerfDao" ref="cmcPerfDao" />
+    </bean>
+    <bean id="cmNumActiveView" class="com.topvision.ems.cmc.performance.viewer.CmNumActiveView" init-method="initialize">
+        <property name="performanceService" ref="performanceService" />
+        <property name="cmcPerfDao" ref="cmcPerfDao" />
+    </bean>
+    <bean id="cmNumUnRegisteredView" class="com.topvision.ems.cmc.performance.viewer.CmNumUnRegisteredView"
+        init-method="initialize">
+        <property name="performanceService" ref="performanceService" />
+        <property name="cmcPerfDao" ref="cmcPerfDao" />
+    </bean>
+    <bean id="cmNumOfflineNum" class="com.topvision.ems.cmc.performance.viewer.CmNumOfflineNum" init-method="initialize">
+        <property name="performanceService" ref="performanceService" />
+        <property name="cmcPerfDao" ref="cmcPerfDao" />
+    </bean>
+    <bean id="ponCmNumTotalView" class="com.topvision.ems.cmc.performance.viewer.PonCmNumTotalView" init-method="initialize">
+        <property name="performanceService" ref="performanceService" />
+        <property name="cmcPerfDao" ref="cmcPerfDao" />
+    </bean>
+    <bean id="ponCmNumOnlineView" class="com.topvision.ems.cmc.performance.viewer.PonCmNumOnlineView" init-method="initialize">
+        <property name="performanceService" ref="performanceService" />
+        <property name="cmcPerfDao" ref="cmcPerfDao" />
+    </bean>
+    <bean id="ponCmNumActiveView" class="com.topvision.ems.cmc.performance.viewer.PonCmNumActiveView" init-method="initialize">
+        <property name="performanceService" ref="performanceService" />
+        <property name="cmcPerfDao" ref="cmcPerfDao" />
+    </bean>
+    <bean id="ponCmNumOfflineNum" class="com.topvision.ems.cmc.performance.viewer.PonCmNumOfflineNum" init-method="initialize">
+        <property name="performanceService" ref="performanceService" />
+        <property name="cmcPerfDao" ref="cmcPerfDao" />
+    </bean>
+    <bean id="cmNumRegisteredView" class="com.topvision.ems.cmc.performance.viewer.CmNumRegisteredView"
+        init-method="initialize">
+        <property name="performanceService" ref="performanceService" />
+        <property name="cmcPerfDao" ref="cmcPerfDao" />
+    </bean>
+    <bean id="dsSpeedViewer" class="com.topvision.ems.cmc.performance.viewer.DsSpeedViewer" init-method="initialize">
+        <property name="performanceService" ref="performanceService" />
+        <property name="cmcPerfDao" ref="cmcPerfDao" />
+    </bean>
+    <bean id="usSpeedViewer" class="com.topvision.ems.cmc.performance.viewer.UsSpeedViewer" init-method="initialize">
+        <property name="performanceService" ref="performanceService" />
+        <property name="cmcPerfDao" ref="cmcPerfDao" />
+    </bean>
+    <bean id="channelUtilizationViewer" class="com.topvision.ems.cmc.performance.viewer.ChannelUtilizationViewer"
+        init-method="initialize">
+        <property name="performanceService" ref="performanceService" />
+        <property name="cmcPerfDao" ref="cmcPerfDao" />
+    </bean>
+
+    <!-- NEW PERFORMANCE -->
+
+    <bean id="cmc8800BSnapChange" class="com.topvision.ems.cmc.performance.Cmc8800BSnapChange" init-method="init">
+        <property name="entityService" ref="entityService" />
+        <property name="cmcPerfDao" ref="cmcPerfDao" />
+        <property name="cmcService" ref="cmcService" />
+        <property name="messageService" ref="messageService" />
+        <property name="EntityTypeService" ref="entityTypeService" />
+        <property name="cmcDao" ref="cmcDao" />
+    </bean>
+
+    <bean id="cmcVersionConvert" class="com.topvision.ems.cmc.dbconvert.CmcVersionConvert" init-method="initialize"
+        destroy-method="destroy">
+        <property name="dataManageParser" ref="dataManageParser" />
+    </bean>
+
+    <!-- <bean id="cmCpeAnalyseService" class="com.topvision.ems.cmc.service.impl.CmCpeAnalyseServiceImpl" init-method="initialize"
+        destroy-method="destroy">
+        <property name="entityService" ref="entityService" />
+        <property name="cpeService" ref="cpeService" />
+        <property name="cmCpeAnalyseDao" ref="cmCpeAnalyseDao" />
+        <property name="messageService" ref="messageService" />
+        <property name="schedulerService" ref="schedulerService" />
+    </bean> -->
+
+
+    <!-- CCMTS Spectrum Group Config -->
+   <!--  <bean id="ccmtsSpectrumGpService" class="com.topvision.ems.cmc.service.impl.CcmtsSpectrumGpServiceImpl">
+        <property name="ccmtsSpectrumGpDao" ref="ccmtsSpectrumGpDao" />
+        <property name="entityDao" ref="entityDao" />
+        <property name="schedulerService" ref="schedulerService" />
+        <property name="facadeFactory" ref="facadeFactory" />
+        <property name="cmcDao" ref="cmcDao" />
+    </bean> -->
+    
+    <bean id="cmcOpticalReveiverInfoView" class="com.topvision.ems.cmc.performance.viewer.CmcOpticalReveiverInfoView" init-method="initialize">
+        <property name="performanceService" ref="performanceService" />
+        <property name="cmcPerfDao" ref="cmcPerfDao" />
+        <property name="cmcOpticalReceiverDao" ref="cmcOpticalReceiverDao" />
+    </bean>
+</beans>

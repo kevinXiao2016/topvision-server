@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GponSrvProfile">
+
+	<select id="selectGponSrvProfileInfoList" parameterType="long" resultType="gponSrvProfileInfo">
+		SELECT 
+			a.entityId,
+			a.ProfileId  gponSrvProfileId,
+			a.ProfileName  gponSrvProfileName,
+			a.ProfileBindNum  gponSrvProfileBindNum,
+			
+			b.ProfileMacLearning  gponSrvProfileMacLearning,
+			b.ProfileMacAgeSeconds  gponSrvProfileMacAgeSeconds,
+			b.ProfileLoopbackDetectCheck  gponSrvProfileLoopbackDetectCheck,
+			b.ProfileMcMode  gponSrvProfileMcMode,
+			b.ProfileMcFastLeave  gponSrvProfileMcFastLeave,
+			b.ProfileUpIgmpFwdMode  gponSrvProfileUpIgmpFwdMode,
+			b.ProfileUpIgmpTCI  gponSrvProfileUpIgmpTCI,
+			
+			c.ProfileEthNum  gponSrvProfileEthNum,
+			c.ProfileCatvNum  gponSrvProfileCatvNum,
+			c.ProfileWlanNum  gponSrvProfileWlanNum,
+			c.ProfileVeipNum  gponSrvProfileVeipNum,
+			
+			d.topGponSrvProfilePotsNum 
+		FROM GponSrvProfileInfo a
+			left join gponsrvprofilecfg b on a.entityId = b.entityId and a.ProfileId = b.ProfileIndex
+			left join gponsrvprofileportnumprofile c on a.entityId = c.entityId and a.ProfileId = c.ProfilePortNumProfileIndex
+			left join topgponsrvprofile d on a.entityId = d.entityId and a.ProfileId = d.topGponSrvProfileIndex
+		WHERE a.entityId=#{entityId}
+	</select>
+	
+	<select id="selectGponSrvProfileEthPortConfigList" parameterType="map" resultType="gponSrvProfileEthPortConfig">
+		SELECT 
+			entityId  entityId,
+			ProfileEthPortProfileIndex  gponSrvProfileEthPortProfileIndex,
+			ProfileEthPortIdIndex  gponSrvProfileEthPortIdIndex,
+			ProfileEthPortMacLimited  gponSrvProfileEthPortMacLimited,
+			ProfileEthPortMtu  gponSrvProfileEthPortMtu,
+			ProfileEthPortFlowCtrl  gponSrvProfileEthPortFlowCtrl,
+			ProfileEthPortInTrafficProfileId  gponSrvProfileEthPortInTrafficProfileId,
+			ProfileEthPortOutTrafficProfileId  gponSrvProfileEthPortOutTrafficProfileId,
+			ProfileEthPortMcMaxGroup  gponSrvProfileEthPortMcMaxGroup,
+			ProfileEthPortDnMcMode  gponSrvProfileEthPortDnMcMode,
+			ProfileEthPortDnMcTCI  gponSrvProfileEthPortDnMcTCI,
+			ProfileEthPortMcMvlanList  gponSrvProfileEthPortMcMvlanList 
+		FROM GponSrvProfileEthPortConfig 
+		WHERE entityId=#{entityId} and ProfileEthPortProfileIndex = #{profileIndex}
+	</select>
+	
+	<select id="selectGponSrvProfilePortVlanCfgList" parameterType="map" resultType="gponSrvProfilePortVlanCfg">
+		SELECT 
+			entityId  entityId,
+			ProfilePortVlanProfileIndex  gponSrvProfilePortVlanProfileIndex,
+			ProfilePortVlanPortTypeIndex  gponSrvProfilePortVlanPortTypeIndex,
+			ProfilePortVlanPortIdIndex  gponSrvProfilePortVlanPortIdIndex,
+			ProfilePortVlanPvid  gponSrvProfilePortVlanPvid,
+			ProfilePortVlanPvidPri  gponSrvProfilePortVlanPvidPri,
+			ProfilePortVlanMode  gponSrvProfilePortVlanMode 
+		FROM GponSrvProfilePortVlanCfg 
+		WHERE entityId=#{entityId} and ProfilePortVlanProfileIndex = #{profileIndex}
+	</select>
+	
+	<select id="selectTopGponSrvPotsInfoList" parameterType="map" resultType="topGponSrvPotsInfo">
+		SELECT 
+			entityId,
+			topGponSrvPotsInfoProfIdx,
+			topGponSrvPotsInfoPotsIdx,
+			topGponSrvPotsInfoSIPAgtId,
+			topGponSrvPotsInfoVoipMediaId,
+			topGponSrvPotsInfoIpIdx
+		FROM topgponsrvpotsinfo 
+		WHERE entityId=#{entityId} and topGponSrvPotsInfoProfIdx = #{profileIndex}
+	</select>
+	
+	<select id="selectTopGponSrvPotsInfo" parameterType="map" resultType="topGponSrvPotsInfo">
+		SELECT 
+			entityId,
+			topGponSrvPotsInfoProfIdx,
+			topGponSrvPotsInfoPotsIdx,
+			topGponSrvPotsInfoSIPAgtId,
+			topGponSrvPotsInfoVoipMediaId,
+			topGponSrvPotsInfoIpIdx
+		FROM topgponsrvpotsinfo 
+		WHERE entityId=#{entityId} and topGponSrvPotsInfoProfIdx = #{profileIndex} and topGponSrvPotsInfoPotsIdx = #{potsIndex}
+	</select>
+	
+	<select id="selectGponSrvProfileInfo" parameterType="map" resultType="gponSrvProfileInfo">
+		SELECT 
+			a.entityId,
+			a.ProfileId  gponSrvProfileId,
+			a.ProfileName  gponSrvProfileName,
+			a.ProfileBindNum  gponSrvProfileBindNum,
+			
+			b.ProfileMacLearning  gponSrvProfileMacLearning,
+			b.ProfileMacAgeSeconds  gponSrvProfileMacAgeSeconds,
+			b.ProfileLoopbackDetectCheck  gponSrvProfileLoopbackDetectCheck,
+			b.ProfileMcMode  gponSrvProfileMcMode,
+			b.ProfileMcFastLeave  gponSrvProfileMcFastLeave,
+			b.ProfileUpIgmpFwdMode  gponSrvProfileUpIgmpFwdMode,
+			b.ProfileUpIgmpTCI  gponSrvProfileUpIgmpTCI,
+			
+			c.ProfileEthNum  gponSrvProfileEthNum,
+			c.ProfileCatvNum  gponSrvProfileCatvNum,
+			c.ProfileWlanNum  gponSrvProfileWlanNum,
+			c.ProfileVeipNum  gponSrvProfileVeipNum,
+			         
+            d.topGponSrvProfilePotsNum 
+		FROM GponSrvProfileInfo a
+			left join gponsrvprofilecfg b on a.entityId = b.entityId and a.ProfileId = b.ProfileIndex
+			left join gponsrvprofileportnumprofile c on a.entityId = c.entityId and a.ProfileId = c.ProfilePortNumProfileIndex
+			left join topgponsrvprofile d on a.entityId = d.entityId and a.ProfileId = d.topGponSrvProfileIndex
+		WHERE a.entityId=#{entityId} and a.ProfileId = #{profileId}
+	</select>
+	
+	<select id="selectGponSrvProfileEthPortConfig" parameterType="map" resultType="gponSrvProfileEthPortConfig">
+		SELECT 
+			entityId  entityId,
+			ProfileEthPortProfileIndex  gponSrvProfileEthPortProfileIndex,
+			ProfileEthPortIdIndex  gponSrvProfileEthPortIdIndex,
+			ProfileEthPortMacLimited  gponSrvProfileEthPortMacLimited,
+			ProfileEthPortMtu  gponSrvProfileEthPortMtu,
+			ProfileEthPortFlowCtrl  gponSrvProfileEthPortFlowCtrl,
+			ProfileEthPortInTrafficProfileId  gponSrvProfileEthPortInTrafficProfileId,
+			ProfileEthPortOutTrafficProfileId  gponSrvProfileEthPortOutTrafficProfileId,
+			ProfileEthPortMcMaxGroup  gponSrvProfileEthPortMcMaxGroup,
+			ProfileEthPortDnMcMode  gponSrvProfileEthPortDnMcMode,
+			ProfileEthPortDnMcTCI  gponSrvProfileEthPortDnMcTCI,
+			ProfileEthPortMcMvlanList  gponSrvProfileEthPortMcMvlanList 
+		FROM GponSrvProfileEthPortConfig 
+		WHERE entityId=#{entityId} and ProfileEthPortProfileIndex = #{profileIndex} and ProfileEthPortIdIndex = #{ethPortIdIndex}
+	</select>
+	
+	<select id="selectGponSrvProfilePortVlanCfg" parameterType="map" resultType="gponSrvProfilePortVlanCfg">
+		SELECT 
+			entityId  entityId,
+			ProfilePortVlanProfileIndex  gponSrvProfilePortVlanProfileIndex,
+			ProfilePortVlanPortTypeIndex  gponSrvProfilePortVlanPortTypeIndex,
+			ProfilePortVlanPortIdIndex  gponSrvProfilePortVlanPortIdIndex,
+			ProfilePortVlanPvid  gponSrvProfilePortVlanPvid,
+			ProfilePortVlanPvidPri  gponSrvProfilePortVlanPvidPri,
+			ProfilePortVlanMode  gponSrvProfilePortVlanMode 
+		FROM GponSrvProfilePortVlanCfg 
+		WHERE entityId=#{entityId} and ProfilePortVlanProfileIndex = #{profileIndex}
+			and ProfilePortVlanPortTypeIndex = #{portTypeIndex} and ProfilePortVlanPortIdIndex = #{portIndex}
+	</select>
+	
+	<select id="selectGponSrvProfilePortVlanTranslation" parameterType="map" resultType="gponSrvProfilePortVlanTranslation">
+		SELECT 
+			entityId,
+			ProfilePortVlanTransProfileIndex  gponSrvProfilePortVlanTransProfileIndex,
+			ProfilePortVlanTransPortTypeIndex  gponSrvProfilePortVlanTransPortTypeIndex,
+			ProfilePortVlanTransPortIdIndex  gponSrvProfilePortVlanTransPortIdIndex,
+			ProfilePortVlanTransVlanIndex  gponSrvProfilePortVlanTransVlanIndex,
+			ProfilePortVlanTransNewVlan  gponSrvProfilePortVlanTransNewVlan 
+		FROM GponSrvProfilePortVlanTranslation 
+		WHERE entityId=#{entityId} and ProfilePortVlanTransProfileIndex =#{profileIndex} 
+			and ProfilePortVlanTransPortTypeIndex=#{portTypeIndex}  and ProfilePortVlanTransPortIdIndex=#{portIndex} 
+	</select>
+	
+	<select id="selectGponSrvProfilePortVlanAggregation" parameterType="map" resultType="gponSrvProfilePortVlanAggregation">
+		SELECT 
+			entityId,
+			ProfilePortVlanAggrProfileIndex  gponSrvProfilePortVlanAggrProfileIndex,
+			ProfilePortVlanAggrPortTypeIndex  gponSrvProfilePortVlanAggrPortTypeIndex,
+			ProfilePortVlanAggrPortIdIndex  gponSrvProfilePortVlanAggrPortIdIndex,
+			ProfilePortVlanAggrVlanIndex  gponSrvProfilePortVlanAggrVlanIndex,
+			ProfilePortVlanAggrVlanList  gponSrvProfilePortVlanAggrVlanList 
+		FROM GponSrvProfilePortVlanAggregation 
+		WHERE entityId=#{entityId} and ProfilePortVlanAggrProfileIndex = #{profileIndex}
+			and ProfilePortVlanAggrPortTypeIndex =#{portTypeIndex} and ProfilePortVlanAggrPortIdIndex = #{portIndex}
+	</select>
+	
+	<select id="selectGponSrvProfilePortVlanTrunk" parameterType="map" resultType="gponSrvProfilePortVlanTrunk">
+		SELECT 
+			entityId,
+			ProfilePortVlanTrunkProfileIndex  gponSrvProfilePortVlanTrunkProfileIndex,
+			ProfilePortVlanTrunkPortTypeIndex  gponSrvProfilePortVlanTrunkPortTypeIndex,
+			ProfilePortVlanTrunkPortIdIndex  gponSrvProfilePortVlanTrunkPortIdIndex,
+			ProfilePortVlanTrunkVlanList  gponSrvProfilePortVlanTrunkVlanList 
+		FROM GponSrvProfilePortVlanTrunk 
+		WHERE entityId=#{entityId} and ProfilePortVlanTrunkProfileIndex = #{profileIndex}
+			and ProfilePortVlanTrunkPortTypeIndex =#{portTypeIndex} and ProfilePortVlanTrunkPortIdIndex=#{portIndex}
+	</select>
+	
+	<insert id="insertGponSrvProfileInfo"  parameterType="gponSrvProfileInfo">
+		INSERT INTO 
+			GponSrvProfileInfo(entityId,ProfileId,ProfileName,ProfileBindNum) 
+		VALUES (#{entityId},#{gponSrvProfileId},#{gponSrvProfileName},#{gponSrvProfileBindNum})
+	</insert>
+	
+	<insert id="insertGponSrvProfileEthPortConfig"  parameterType="gponSrvProfileEthPortConfig">
+		INSERT INTO 
+			GponSrvProfileEthPortConfig(entityId,ProfileEthPortProfileIndex,ProfileEthPortIdIndex,ProfileEthPortMacLimited,
+				ProfileEthPortMtu,ProfileEthPortFlowCtrl,ProfileEthPortInTrafficProfileId,ProfileEthPortOutTrafficProfileId,
+				ProfileEthPortMcMaxGroup,ProfileEthPortDnMcMode,ProfileEthPortDnMcTCI,ProfileEthPortMcMvlanList) 
+		VALUES (#{entityId},#{gponSrvProfileEthPortProfileIndex},#{gponSrvProfileEthPortIdIndex},#{gponSrvProfileEthPortMacLimited},
+			#{gponSrvProfileEthPortMtu},#{gponSrvProfileEthPortFlowCtrl},#{gponSrvProfileEthPortInTrafficProfileId},
+			#{gponSrvProfileEthPortOutTrafficProfileId},#{gponSrvProfileEthPortMcMaxGroup},#{gponSrvProfileEthPortDnMcMode},
+			#{gponSrvProfileEthPortDnMcTCI},#{gponSrvProfileEthPortMcMvlanList})
+	</insert>
+	
+	<insert id="insertGponSrvProfilePortVlanCfg"  parameterType="gponSrvProfilePortVlanCfg">
+		INSERT INTO 
+			GponSrvProfilePortVlanCfg(entityId,ProfilePortVlanProfileIndex,ProfilePortVlanPortTypeIndex,ProfilePortVlanPortIdIndex,
+			ProfilePortVlanPvid,ProfilePortVlanPvidPri,ProfilePortVlanMode) 
+		VALUES (#{entityId},#{gponSrvProfilePortVlanProfileIndex},#{gponSrvProfilePortVlanPortTypeIndex},
+			#{gponSrvProfilePortVlanPortIdIndex},#{gponSrvProfilePortVlanPvid},#{gponSrvProfilePortVlanPvidPri},
+			#{gponSrvProfilePortVlanMode})
+	</insert>
+
+	<insert id="insertGponSrvProfilePortVlanTranslation"  parameterType="gponSrvProfilePortVlanTranslation">
+		INSERT INTO GponSrvProfilePortVlanTranslation(
+			entityId,ProfilePortVlanTransProfileIndex,ProfilePortVlanTransPortTypeIndex,ProfilePortVlanTransPortIdIndex,
+			ProfilePortVlanTransVlanIndex,ProfilePortVlanTransNewVlan) 
+		VALUES (
+			#{entityId},#{gponSrvProfilePortVlanTransProfileIndex},#{gponSrvProfilePortVlanTransPortTypeIndex},
+			#{gponSrvProfilePortVlanTransPortIdIndex},#{gponSrvProfilePortVlanTransVlanIndex},#{gponSrvProfilePortVlanTransNewVlan}
+			)
+	</insert>
+	
+	<insert id="insertGponSrvProfilePortVlanAggregation"  parameterType="gponSrvProfilePortVlanAggregation">
+		INSERT INTO GponSrvProfilePortVlanAggregation(
+			entityId,ProfilePortVlanAggrProfileIndex,ProfilePortVlanAggrPortTypeIndex,ProfilePortVlanAggrPortIdIndex,
+			ProfilePortVlanAggrVlanIndex,ProfilePortVlanAggrVlanList) 
+		VALUES (
+			#{entityId},#{gponSrvProfilePortVlanAggrProfileIndex},#{gponSrvProfilePortVlanAggrPortTypeIndex},
+			#{gponSrvProfilePortVlanAggrPortIdIndex},#{gponSrvProfilePortVlanAggrVlanIndex},#{gponSrvProfilePortVlanAggrVlanList}
+		)
+	</insert>
+	
+	<insert id="insertGponSrvProfilePortVlanTrunk"  parameterType="gponSrvProfilePortVlanTrunk">
+		INSERT INTO GponSrvProfilePortVlanTrunk(
+			entityId,ProfilePortVlanTrunkProfileIndex,ProfilePortVlanTrunkPortTypeIndex,ProfilePortVlanTrunkPortIdIndex,
+			ProfilePortVlanTrunkVlanList) 
+		VALUES (
+			#{entityId},#{gponSrvProfilePortVlanTrunkProfileIndex},#{gponSrvProfilePortVlanTrunkPortTypeIndex},
+			#{gponSrvProfilePortVlanTrunkPortIdIndex},#{gponSrvProfilePortVlanTrunkVlanList}
+		)
+	</insert>
+	
+	<update id="updateGponSrvProfileInfo" parameterType="gponSrvProfileInfo">
+		UPDATE GponSrvProfileInfo 
+		SET ProfileName=#{gponSrvProfileName}
+		WHERE  entityId=#{entityId} AND ProfileId=#{gponSrvProfileId}
+	</update>
+	
+	<update id="updateGponSrvProfileCfg" parameterType="gponSrvProfileCfg">
+		UPDATE GponSrvProfileCfg 
+		SET ProfileMacLearning=#{gponSrvProfileMacLearning},ProfileMacAgeSeconds=#{gponSrvProfileMacAgeSeconds},
+			ProfileLoopbackDetectCheck=#{gponSrvProfileLoopbackDetectCheck},ProfileMcMode=#{gponSrvProfileMcMode},
+			ProfileMcFastLeave=#{gponSrvProfileMcFastLeave},ProfileUpIgmpFwdMode=#{gponSrvProfileUpIgmpFwdMode},
+			ProfileUpIgmpTCI=#{gponSrvProfileUpIgmpTCI}
+		WHERE entityId=#{entityId} AND ProfileIndex=#{gponSrvProfileIndex}
+	</update>
+	
+	<update id="updateGponSrvProfilePortNumProfile" parameterType="gponSrvProfilePortNumProfile">
+		UPDATE GponSrvProfilePortNumProfile 
+		SET ProfileEthNum=#{gponSrvProfileEthNum},ProfileCatvNum=#{gponSrvProfileCatvNum},
+			ProfileWlanNum=#{gponSrvProfileWlanNum},ProfileVeipNum=#{gponSrvProfileVeipNum}
+		WHERE entityId=#{entityId} AND ProfilePortNumProfileIndex=#{gponSrvProfilePortNumProfileIndex}
+	</update>
+	
+	<update id="updateTopGponSrvProfile" parameterType="topGponSrvProfile">
+	   UPDATE topgponsrvprofile
+	   SET topGponSrvProfilePotsNum = #{topGponSrvProfilePotsNum}
+	   WHERE entityId = #{entityId} AND topGponSrvProfileIndex = #{topGponSrvProfileIndex}
+	</update>
+	
+	<update id="updateGponSrvProfileEthPortConfig" parameterType="gponSrvProfileEthPortConfig">
+		UPDATE GponSrvProfileEthPortConfig 
+		SET ProfileEthPortMacLimited=#{gponSrvProfileEthPortMacLimited},
+			ProfileEthPortMtu=#{gponSrvProfileEthPortMtu},
+			ProfileEthPortFlowCtrl=#{gponSrvProfileEthPortFlowCtrl},
+			ProfileEthPortInTrafficProfileId = #{gponSrvProfileEthPortInTrafficProfileId},
+			ProfileEthPortOutTrafficProfileId = #{gponSrvProfileEthPortOutTrafficProfileId}
+		WHERE entityId=#{entityId} AND ProfileEthPortProfileIndex=#{gponSrvProfileEthPortProfileIndex} 
+			AND ProfileEthPortIdIndex=#{gponSrvProfileEthPortIdIndex} 
+	</update>
+	
+	<update id="updateGponSrvProfilePortVlanCfg" parameterType="gponSrvProfilePortVlanCfg">
+		UPDATE GponSrvProfilePortVlanCfg 
+		SET ProfilePortVlanPvid=#{gponSrvProfilePortVlanPvid},ProfilePortVlanPvidPri=#{gponSrvProfilePortVlanPvidPri},
+			ProfilePortVlanMode=#{gponSrvProfilePortVlanMode}
+		WHERE entityId=#{entityId} AND ProfilePortVlanProfileIndex=#{gponSrvProfilePortVlanProfileIndex} 
+			AND ProfilePortVlanPortTypeIndex=#{gponSrvProfilePortVlanPortTypeIndex} 
+			AND ProfilePortVlanPortIdIndex=#{gponSrvProfilePortVlanPortIdIndex}
+	</update>
+	
+	<update id="updateGponSrvProfilePortVlanMode" parameterType="gponSrvProfilePortVlanCfg">
+		UPDATE GponSrvProfilePortVlanCfg 
+		SET 
+			ProfilePortVlanMode=#{gponSrvProfilePortVlanMode}
+		WHERE entityId=#{entityId} AND ProfilePortVlanProfileIndex=#{gponSrvProfilePortVlanProfileIndex} 
+			AND ProfilePortVlanPortTypeIndex=#{gponSrvProfilePortVlanPortTypeIndex} 
+			AND ProfilePortVlanPortIdIndex=#{gponSrvProfilePortVlanPortIdIndex}
+	</update>
+	
+	<update id="updateGponSrvProfilePortVlanAggregation" parameterType="gponSrvProfilePortVlanAggregation">
+		UPDATE GponSrvProfilePortVlanAggregation 
+		SET ProfilePortVlanAggrVlanList=#{gponSrvProfilePortVlanAggrVlanList}
+		WHERE  entityId=#{entityId} AND 
+			ProfilePortVlanAggrProfileIndex=#{gponSrvProfilePortVlanAggrProfileIndex} 
+			AND ProfilePortVlanAggrPortTypeIndex=#{gponSrvProfilePortVlanAggrPortTypeIndex} 
+			AND ProfilePortVlanAggrPortIdIndex=#{gponSrvProfilePortVlanAggrPortIdIndex} 
+			AND ProfilePortVlanAggrVlanIndex=#{gponSrvProfilePortVlanAggrVlanIndex}
+	</update>
+	
+	<update id="updateGponSrvProfilePortVlanTrunk" parameterType="gponSrvProfilePortVlanTrunk">
+		UPDATE GponSrvProfilePortVlanTrunk 
+		SET ProfilePortVlanTrunkVlanList=#{gponSrvProfilePortVlanTrunkVlanList}
+		WHERE  entityId=#{entityId} 
+			AND ProfilePortVlanTrunkProfileIndex=#{gponSrvProfilePortVlanTrunkProfileIndex} 
+			AND ProfilePortVlanTrunkPortTypeIndex=#{gponSrvProfilePortVlanTrunkPortTypeIndex} 
+			AND ProfilePortVlanTrunkPortIdIndex=#{gponSrvProfilePortVlanTrunkPortIdIndex}
+	</update>
+	
+	<update id="updateGponSrvProfilePortVlanTranslation" parameterType="gponSrvProfilePortVlanTranslation">
+		UPDATE GponSrvProfilePortVlanTranslation 
+		SET ProfilePortVlanTransNewVlan=#{gponSrvProfilePortVlanTransNewVlan}
+		WHERE  entityId=#{entityId} 
+			AND ProfilePortVlanTransProfileIndex=#{gponSrvProfilePortVlanTransProfileIndex} 
+			AND ProfilePortVlanTransPortTypeIndex=#{gponSrvProfilePortVlanTransPortTypeIndex} 
+			AND ProfilePortVlanTransPortIdIndex=#{gponSrvProfilePortVlanTransPortIdIndex} 
+			AND ProfilePortVlanTransVlanIndex=#{gponSrvProfilePortVlanTransVlanIndex}
+	</update>
+	
+	<update id="updateTopGponSrvPotsInfo" parameterType="topGponSrvPotsInfo">
+		UPDATE topgponsrvpotsinfo 
+		SET topGponSrvPotsInfoSIPAgtId=#{topGponSrvPotsInfoSIPAgtId},
+			topGponSrvPotsInfoVoipMediaId=#{topGponSrvPotsInfoVoipMediaId},
+			topGponSrvPotsInfoIpIdx=#{topGponSrvPotsInfoIpIdx}
+		WHERE  entityId=#{entityId} AND topGponSrvPotsInfoProfIdx=#{topGponSrvPotsInfoProfIdx} AND topGponSrvPotsInfoPotsIdx=#{topGponSrvPotsInfoPotsIdx}
+	</update>
+
+	<delete id="deleteGponSrvProfileInfo"  parameterType="map">
+		DELETE FROM GponSrvProfileInfo 
+		WHERE entityId=#{entityId} and ProfileId = #{profileId}
+	</delete>
+	
+	<delete id="deleteGponSrvProfilePortVlanTranslation" parameterType="map">
+		DELETE FROM GponSrvProfilePortVlanTranslation 
+		WHERE entityId=#{entityId} AND ProfilePortVlanTransProfileIndex=#{profileIndex} 
+			AND ProfilePortVlanTransPortTypeIndex=#{portTypeIndex} 
+			AND ProfilePortVlanTransPortIdIndex=#{portIndex} 
+			<if test="vlanIndex!=null">
+				AND ProfilePortVlanTransVlanIndex=#{vlanIndex}
+			</if>
+	</delete>
+	
+	<delete id="deleteGponSrvProfilePortVlanAggregation" parameterType="map">
+		DELETE FROM GponSrvProfilePortVlanAggregation 
+		WHERE  entityId=#{entityId} AND ProfilePortVlanAggrProfileIndex=#{profileIndex} 
+			AND ProfilePortVlanAggrPortTypeIndex=#{portTypeIndex} 
+			AND ProfilePortVlanAggrPortIdIndex=#{portIndex} 
+			<if test="vlanIndex!=null">
+				AND ProfilePortVlanAggrVlanIndex=#{vlanIndex}
+			</if>
+	</delete>
+	
+	<delete id="deleteGponSrvProfilePortVlanTrunk" parameterType="map">
+		DELETE FROM GponSrvProfilePortVlanTrunk 
+		WHERE entityId=#{entityId} AND ProfilePortVlanTrunkProfileIndex=#{profileIndex} 
+			AND ProfilePortVlanTrunkPortTypeIndex=#{portTypeIndex} 
+			AND ProfilePortVlanTrunkPortIdIndex=#{portIndex}
+	</delete>
+	
+</mapper>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cm.pnmp.facade.domain.PnmpCmtsReport">
+	<select id="selectCmtsReports" resultType="pnmpCmtsReport">
+		SELECT 
+			A.cmcId,
+			A.totalCmNum,
+			A.onlineCmNum,
+			A.offlineCmNum,
+			A.healthCmNum,
+			A.marginalCmNum,
+			A.badCmNum,
+			A.updateTime,
+			B.cmcIndex,
+			C.name cmcName,
+			D.ip entityIp,
+			C.mac cmcMac,
+			D.name entityName
+		FROM pnmpcmtsreport A 
+		LEFT JOIN cmcentityrelation B ON A.cmcId = B.cmcId
+		LEFT JOIN entity C ON A.cmcId = C.entityId
+		LEFT JOIN entity D ON B.cmcEntityId = D.entityId
+	</select>
+	
+	<select id="selectCmtsReportByMap" parameterType="map" resultType="pnmpCmtsReport">
+		SELECT 
+			cmcId,
+			totalCmNum,
+			onlineCmNum,
+			offlineCmNum,
+			healthCmNum,
+			marginalCmNum,
+			badCmNum,
+			updateTime,
+		FROM pnmpcmtsreport 
+		WHERE cmcId = #{cmcId}
+	</select>
+	
+	<select id="selectCmtsReportsNums" resultType="int">
+		SELECT COUNT(cmcId)	
+		FROM pnmpcmtsreport
+	</select>
+	
+	<select id="selectOnlineCmNums" resultType="int">
+		SELECT SUM(onlineCmNum)
+		FROM pnmpcmtsreport
+	</select>
+	
+	<select id="selectHealthCmNums" resultType="int">
+		SELECT SUM(healthCmNum)
+		FROM pnmpcmtsreport
+	</select>
+	
+	<select id="selectMarginalCmNums" resultType="int">
+		SELECT SUM(marginalCmNum)
+		FROM pnmpcmtsreport
+	</select>
+	
+	<select id="selectBadCmNums" resultType="int">
+		SELECT SUM(badCmNum)
+		FROM pnmpcmtsreport
+	</select>
+	
+	<insert id="insertOrUpdateCmtsReport" parameterType="pnmpCmtsReport">
+		INSERT INTO PnmpCmtsReport 
+            (cmcId, totalCmNum, onlineCmNum, offlineCmNum, healthCmNum, marginalCmNum, badCmNum,updateTime) 
+        VALUES 
+            (#{cmcId},#{totalCmNum}, #{onlineCmNum}, #{offlineCmNum},#{healthCmNum}, #{marginalCmNum},#{badCmNum},#{updateTime})
+        ON DUPLICATE KEY UPDATE
+            totalCmNum = #{totalCmNum}, 
+            onlineCmNum = #{onlineCmNum}, 
+            offlineCmNum = #{offlineCmNum}, 
+            healthCmNum = #{healthCmNum}, 
+            marginalCmNum = #{marginalCmNum}, 
+            badCmNum = #{badCmNum},
+            updateTime = #{updateTime}
+	</insert>
+	
+	<update id="summaryCmtsReport">
+		INSERT INTO pnmpcmtsreport(cmcId, totalCmNum, onlineCmNum, offlineCmNum, healthCmNum, marginalCmNum, badCmNum, updateTime)
+		SELECT 
+			allTable.cmcId,
+			IFNULL(allTable.totalCmNum, 0) totalCmNum,
+			IFNULL(onlineTable.onlineCmNum, 0) onlineCmNum,
+			IFNULL(offlineTable.offlineCmNum, 0) offlineCmNum,
+			IFNULL(healthTable.healthCmNum, 0) healthCmNum,
+			IFNULL(marginalTable.marginalCmNum, 0) marginalCmNum,
+			IFNULL(badTable.badCmNum, 0) badCmNum,
+			NOW() updateTime
+		FROM
+			(SELECT cmcId, count(*) AS totalCmNum FROM pnmpcmdatalast GROUP BY entityId, cmcId) allTable
+		LEFT JOIN (SELECT cmcId, count(*) AS onlineCmNum FROM pnmpcmdatalast WHERE checkStatus=0 GROUP BY cmcId) onlineTable ON allTable.cmcId=onlineTable.cmcId
+		LEFT JOIN (SELECT cmcId, count(*) AS offlineCmNum FROM pnmpcmdatalast WHERE checkStatus!=0 GROUP BY cmcId) offlineTable ON allTable.cmcId=offlineTable.cmcId
+		<![CDATA[LEFT JOIN (SELECT cmcId, count(*) AS healthCmNum FROM pnmpcmdatalast WHERE checkStatus=0 and mtr > (SELECT lowValue FROM pnmptargetthreshold WHERE TargetName='mtr' AND thresholdName='health') GROUP BY cmcId) healthTable ON allTable.cmcId=healthTable.cmcId]]>
+		LEFT JOIN (SELECT cmcId, count(*) AS marginalCmNum FROM pnmpcmdatalast WHERE checkStatus=0 AND (mtr BETWEEN (SELECT lowValue FROM pnmptargetthreshold WHERE TargetName='mtr' AND thresholdName='marginal') AND (SELECT highValue FROM pnmptargetthreshold WHERE TargetName='mtr' AND thresholdName='marginal')) GROUP BY cmcId) marginalTable ON allTable.cmcId=marginalTable.cmcId
+		<![CDATA[LEFT JOIN (SELECT cmcId, count(*) AS badCmNum FROM pnmpcmdatalast WHERE checkStatus=0 AND mtr < (SELECT highValue FROM pnmptargetthreshold WHERE TargetName='mtr' AND thresholdName='bad') GROUP BY cmcId) badTable ON allTable.cmcId=badTable.cmcId]]>
+		ON DUPLICATE KEY UPDATE
+		totalCmNum=IFNULL(allTable.totalCmNum, 0), onlineCmNum=IFNULL(onlineTable.onlineCmNum, 0), offlineCmNum=IFNULL(offlineTable.offlineCmNum, 0), healthCmNum=IFNULL(healthTable.healthCmNum, 0), marginalCmNum=IFNULL(marginalTable.marginalCmNum, 0), badCmNum=IFNULL(badTable.badCmNum, 0), updateTime=NOW();
+	</update>
+</mapper>

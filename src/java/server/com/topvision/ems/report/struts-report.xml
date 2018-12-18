@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="report" namespace="/report" extends="default">
+		<!-- ReportTemplate Related -->
+		<action name="loadDisplayReportTemplate" class="reportTemplateAction"
+			method="loadDisplayReportTemplate" />
+		<action name="loadAllReportTemplate" class="reportTemplateAction"
+			method="loadAllReportTemplate" />
+		<action name="loadReportTaskTemplate" class="reportTemplateAction"
+			method="loadReportTaskTemplate" />
+		<action name="loadReportTaskTreeData" class="reportTemplateAction"
+			method="loadReportTaskTreeData" />
+		<action name="updateReportDisplay" class="reportTemplateAction"
+			method="updateReportDisplay" />
+
+		<!-- ReportTask Related -->
+		<action name="createReportTask" class="reportTaskAction"
+			method="createReportTask" />
+		<action name="showTaskReportConfig" class="reportTaskAction"
+			method="showTaskReportConfig" />
+		<action name="showTaskSchedule" class="reportTaskAction"
+			method="showTaskSchedule">
+			<result>/report/scheduleReportTask.jsp</result>
+		</action>
+		<action name="showNewReportTask">
+			<result>/report/newReportTask.jsp</result>
+		</action>
+		<action name="showAllReportTask" class="reportTaskAction"
+			method="showAllReportTask">
+			<result>/report/allReportTask.jsp</result>
+		</action>
+		<action name="showModifyReportTask" class="reportTaskAction"
+			method="showModifyReprotTask">
+			<result>/report/modifyReportTask.jsp</result>
+		</action>
+		<action name="modifyReportTask" class="reportTaskAction"
+			method="modifyReportTask"></action>
+		<action name="getReportTaskByDetail" class="reportTaskAction"
+			method="getReportTaskByDetail" />
+		<action name="enableReportTask" class="reportTaskAction"
+			method="enableReportTask" />
+		<action name="deleteReprotTask" class="reportTaskAction"
+			method="deleteReprotTask" />
+		<action name="disableReportTask" class="reportTaskAction"
+			method="disableReportTask" />
+		<action name="showReportTaskCondition" class="reportTaskAction"
+			method="showReportTaskCondition">
+			<result>/report/reportTaskCondition.jsp</result>
+		</action>
+
+		<!-- ReportInstance Related -->
+		<action name="showAllReport" class="reportInstanceAction"
+			method="showAllReport">
+			<result>/report/allReport.jsp</result>
+		</action>
+		<action name="isFileExist" class="reportInstanceAction" method="isFileExist" />
+		<action name="downloadReport" class="reportInstanceAction"
+			method="downloadReport" />
+		<action name="getReportInstanceList" class="reportInstanceAction"
+			method="getReportInstanceList" />
+		<action name="deleteReport" class="reportInstanceAction"
+			method="deleteReport" />
+		<action name="loadReportWithTask" class="reportInstanceAction"
+			method="loadReportWithTask"></action>
+			
+		<action name="showSingleReport" class="reportCoreAction" method="showSingleReport">
+			<result>/report/generalReportTemplate.jsp</result>
+		</action>
+		<action name="fetchConditionAndColumn" class="reportCoreAction" method="fetchConditionAndColumn"></action>
+		<action name="initContent" class="reportCoreAction" method="initContent"></action>
+		<action name="initReport" class="reportCoreAction" method="initReport"></action>
+		<action name="loadAvailableReports" class="reportCoreAction" method="loadAvailableReports"></action>
+		<action name="loadReportContent" class="reportCoreAction" method="loadReportContent"></action>
+		<action name="generateExcelFile" class="reportCoreAction" method="generateExcelFile"></action>
+		<action name="downloadGenerateFile" class="reportCoreAction" method="downloadGenerateFile"></action>
+		
+		<action name="fetchSelectConditionList" class="reportCoreAction" method="fetchSelectConditionList"></action>
+	</package>
+</struts>

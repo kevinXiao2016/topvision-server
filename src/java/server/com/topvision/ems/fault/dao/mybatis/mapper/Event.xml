@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.fault.domain.Event">
+	<insert id="insertEntity" databaseId="MySQL" parameterType="event"
+		useGeneratedKeys="true" keyProperty="eventId">
+		INSERT INTO Event (alertId,
+		typeId, name, monitorId, entityId, host,
+		source, value, message,
+		createTime, orginalCode, userObjectString)
+		VALUES (#{alertId},
+		#{typeId}, #{name}, #{monitorId}, #{entityId},
+		#{host}, #{source},
+		#{value},
+		#{message}, #{createTime},
+		#{orginalCode},
+		#{userObjectString})
+	</insert>
+	<insert id="insertEntity" databaseId="Oracle" parameterType="event">
+		<selectKey keyProperty="eventId" resultType="long" order="BEFORE">
+			select Event_Seq.nextval as eventId from dual
+		</selectKey>
+		INSERT INTO Event (eventId, alertId, typeId, name, monitorId,
+		entityId, host,
+		source, value, message, createTime) VALUES (#{eventId},
+		#{alertId},
+		#{typeId}, #{name}, #{monitorId}, #{entityId}, #{host}, #{source},
+		#{value},
+		#{message}, #{createTime})
+	</insert>
+
+	<select id="selectByPrimaryKey" parameterType="string"
+		resultType="event">
+		SELECT A.eventId, A.typeId, B.displayName AS typeName,
+		A.name,
+		A.monitorId, A.entityId, A.host, A.source, A.value, A.message,
+		A.createTime FROM Event A, EventType B WHERE A.eventId =
+		#{eventId} AND
+		A.typeId = B.typeId
+	</select>
+
+	<select id="selectByMap" parameterType="map" resultType="event">
+		SELECT A.eventId, A.typeId, B.displayName AS typeName, A.name,
+		A.monitorId, A.entityId, A.host, A.source, A.value, A.message,
+		A.createTime FROM Event A, EventType B WHERE A.typeId = B.typeId
+		<if test="typeId != null ">
+			and (A.typeId = #{typeId} OR B.parentId =
+			#{typeId})
+		</if>
+		ORDER BY A.createTime DESC
+	</select>
+
+	<select id="selectCount" parameterType="map" resultType="integer">
+		SELECT count(eventId) FROM Event A, entity V WHERE A.entityId =
+		V.entityId
+		and V.entityId in (select entityId from ${Authority})
+		<if test="typeId != null ">
+			and A.typeId = #{typeId}
+		</if>
+	</select>
+
+	<select id="selectWithPage" databaseId="MySQL" parameterType="map"
+		resultType="event">
+		SELECT A.eventId, A.typeId, B.displayName AS typeName, A.name,
+		A.monitorId, A.entityId, A.host, A.source, A.value, A.message,
+		A.createTime FROM Event A, EventType B, entity V WHERE A.typeId =
+		B.typeId
+		and A.entityId = V.entityId and V.entityId in (select entityId
+		from ${Authority})
+		<if test="typeId != null">
+			and A.typeId = #{typeId}
+		</if>
+		ORDER BY A.createTime DESC LIMIT ${offset}, ${pageSize}
+	</select>
+	<select id="selectWithPage" databaseId="Oracle" parameterType="map"
+		resultType="event">
+		select tt.* from (select rownum rn , t.* from (
+		SELECT A.eventId,
+		A.typeId, B.displayName AS typeName, A.name,
+		A.monitorId, A.entityId,
+		A.host, A.source, A.value, A.message,
+		A.createTime FROM Event A,
+		EventType B, entity V WHERE A.typeId = B.typeId
+		and A.entityId = V.entityId and V.entityId in (select entityId
+		from
+		${Authority})
+		<if test="typeId != null">
+			and A.typeId = #{typeId}
+		</if>
+		ORDER BY A.createTime DESC
+		) t) tt where rn <![CDATA[>]]>
+		${offset} and rn <![CDATA[<=]]>
+		(${offset}+${pageSize})
+	</select>
+
+
+	<delete id="deleteByMap" parameterType="map">
+		delete from event where eventId in
+		<foreach item="eventIdIds" index="index" collection="list"
+			open="(" separator="," close=")">
+			#{eventIdIds}
+	   </foreach>
+	</delete>
+
+
+	<select id="isAlertClearByEvent" parameterType="int" resultType="int">
+		select  distinct(type)  from event2alert where eventTypeId = #{eventTypeId}
+	</select>
+
+	<select id="queryEventList" databaseId="MySQL" parameterType="map" resultType="event">
+		SELECT
+		A.eventId, A.typeId,A.name,A.host,A.source,A.entityId,A.source,A.createTime,A.message,V.typeId entityType
+		FROM
+		event A , eventType B, entity V
+		WHERE
+		A.entityId = V.entityId and A.typeId = B.typeId and V.entityId in (select entityId from ${Authority})
+		<if test="source != null">
+			and A.source = #{source}
+		</if>
+		<if test="message != null">
+			and A.message like '%${message}%'
+		</if>
+		<if test="entityId != null">
+			and A.entityId = #{entityId}
+		</if>
+		<if test="sql != null">
+			and ${sql}
+		</if>
+		<if test="host != null and ip != null">
+			and (A.host like concat('%',#{host},'%') or A.host like concat('%',#{ip},'%'))
+		</if>
+		<if test="host != null and ip == null">
+			and A.host like concat('%',#{host},'%')
+		</if>
+		<if test="typeId != null">
+			<!-- and (A.typeId = #{typeId} OR B.parentId =#{typeId}) -->
+			and FIND_IN_SET(A.typeId,topoEventFun(#{typeId},'eventtype'))
+	    </if>
+		ORDER BY A.createTime DESC
+		limit ${start},${limit}
+	</select>
+	<select id="queryEventList" databaseId="Oracle" parameterType="map" resultType="event">
+		select tt.* from (select rownum rn , t.* from (
+		SELECT
+		A.eventId,
+		A.typeId,A.name,A.host,A.source,A.entityId,A.source,A.createTime,A.message,v.typeId as entityType
+		FROM
+		event A , eventType B, entity V,entity C
+		WHERE
+		A.entityId
+		= V.entityId and A.typeId = B.typeId and a.entityId = c.entityId
+		and
+		V.entityId in (select entityId from ${Authority})
+		<if test="source != null">
+			and A.source = #{source}
+		</if>
+		<if test="message != null">
+			and A.message like '%${message}%'
+		</if>
+		<if test="entityId != null">
+			and A.entityId = #{entityId}
+		</if>
+		<if test="sql != null">
+			and ${sql}
+		</if>
+		<if test="host != null and ip != null">
+			and (A.host like concat('%',#{host},'%') or A.host like concat('%',#{ip},'%'))
+		</if>
+		<if test="host != null and ip == null">
+			and A.host like concat('%',#{host},'%')
+		</if>
+		<if test="typeId != null">
+			and (A.typeId = #{typeId} OR B.parentId =#{typeId})
+	    </if>
+		ORDER BY A.createTime DESC
+		) t) tt where rn <![CDATA[>]]>
+		${start} and rn <![CDATA[<=]]>
+		(${start}+${limit})
+	</select>
+
+	<select id="getEventType" parameterType="string" resultType="alertType">
+		SELECT typeId, name, displayName FROM eventType
+	</select>
+
+	<select id="queryEventListSize" parameterType="map" resultType="int">
+		SELECT
+		count(A.eventId)
+		FROM
+		event A , eventType B, entity V
+		WHERE
+		A.entityId = V.entityId and A.typeId = B.typeId
+		and V.entityId in
+		(select entityId from ${Authority})
+		<if test="source != null">
+			and A.source = #{source}
+		</if>
+		<if test="message != null">
+			and A.message like
+			'%${message}%'
+		</if>
+		<if test="entityId != null">
+			and A.entityId = #{entityId}
+		</if>
+		<if test="sql != null">
+			and ${sql}
+		</if>
+		<if test="host != null and ip != null">
+			and (A.host like concat('%',#{host},'%') or A.host like concat('%',#{ip},'%'))
+		</if>
+		<if test="host != null and ip == null">
+			and A.host like concat('%',#{host},'%')
+		</if>
+		<if test="typeId != null">
+			<!-- and (A.typeId = #{typeId} OR
+			B.parentId = #{typeId}) -->
+			and FIND_IN_SET( A.typeId,topoEventFun(#{typeId},'eventtype'))
+		</if>
+	</select>
+
+	<delete id="deleteEvent" parameterType="int">
+		DELETE FROM
+		event
+		WHERE
+		eventId = #{eventId}
+ 	</delete>
+ 	
+ 	<delete id="batchDeleteEvent" parameterType="map">
+ 		DELETE FROM event
+		WHERE eventId in ( ${eventIds} )
+ 	</delete>
+
+</mapper>

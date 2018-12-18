@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GponUniFilterMac">
+    <select id="loadGponUniFilterMac" parameterType="map" resultType="gponUniFilterMac">
+        SELECT gufm.entityId,gufm.uniId,gufm.macAddressString,our.uniIndex
+        FROM GponUniFilterMac gufm
+        LEFT JOIN oltunirelation our on gufm.uniId = our.uniId WHERE gufm.uniId=#{uniId} and gufm.macAddressString = #{mac}
+    </select>
+    <select id="loadGponUniFilterMacList" parameterType="long" resultType="gponUniFilterMac">
+        SELECT gufm.entityId,gufm.uniId,gufm.macAddressString,our.uniIndex
+        FROM GponUniFilterMac gufm
+        LEFT JOIN oltunirelation our on gufm.uniId = our.uniId WHERE gufm.uniId=#{uniId}
+    </select>
+    <insert id="addGponUniFilterMac" parameterType="gponUniFilterMac">
+		INSERT INTO
+			GponUniFilterMac(entityId,uniId,macAddressString)
+		VALUES (#{entityId},#{uniId},#{macAddressString})
+	</insert>
+    <delete id="deleteGponUniFilterMacForEntity" parameterType="long">
+        DELETE FROM GponUniFilterMac WHERE  entityId=#{entityId}
+    </delete>
+    <delete id="deleteGponUniFilterMacForUni" parameterType="long">
+        DELETE FROM GponUniFilterMac WHERE  uniId=#{uniId}
+    </delete>
+    <delete id="deleteGponUniFilterMac" parameterType="gponUniFilterMac">
+        DELETE FROM GponUniFilterMac WHERE  uniId=#{uniId} and macAddressString=#{macAddressString}
+    </delete>
+</mapper>

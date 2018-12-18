@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="onuOnOffRecord" namespace="/onu/onoffrecord" extends="default">
+		<action name="showOnOffRecordConfig" class="onuOnOffRecordAction" method="showOnOffRecordConfig">
+			<result>/epon/onu/onOffRecordConfig.jsp</result>
+		</action>
+		<action name="saveOnOffRecordConfig" class="onuOnOffRecordAction" method="saveOnOffRecordConfig"></action>
+		
+		<action name="showOnOffRecords" class="onuOnOffRecordAction" method="showOnOffRecords">
+			<result>/epon/onu/onOffRecordView.jsp</result>
+		</action>
+		<action name="loadOnOffRecords" class="onuOnOffRecordAction" method="loadOnOffRecords"></action>
+		<action name="refreshOnOffRecords" class="onuOnOffRecordAction" method="refreshOnOffRecords"></action>
+ 	</package>
+</struts>

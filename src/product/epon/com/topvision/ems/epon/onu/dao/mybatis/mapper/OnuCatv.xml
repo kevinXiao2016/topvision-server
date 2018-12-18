@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.onu.domain.OnuCatvConfig">
+
+	<select id="getOnuCatvConfig" parameterType="long" resultType="onuCatvConfig">
+		select 
+		onuId,
+		entityId,
+		onuIndex,
+		onuCatvOrConfigSwitch,
+		onuCatvOrConfigGainControlType,
+		onuCatvOrConfigAGCUpValue,
+		onuCatvOrConfigAGCRange,
+		onuCatvOrConfigMGCTxAttenuation,
+		onuCatvOrConfigInputLO,
+		onuCatvOrConfigInputHI,
+		onuCatvOrConfigOutputLO,
+		onuCatvOrConfigOutputHI,
+		onuCatvOrConfigVoltageHI,
+		onuCatvOrConfigVoltageLO,
+		onuCatvOrConfigTemperatureHI,
+		onuCatvOrConfigTemperatureLO,
+		DATE_FORMAT(collectTime,'%Y-%c-%d %H:%i:%s') AS collectTime
+		from onucatvconfig where onuId = #{onuId}
+	</select>
+	
+	<select id="getOnuCatvInfo" parameterType="long" resultType="onuCatvInfo">
+		select * from perfonucatvqualitylast where onuId = #{onuId}
+	</select>
+	
+	<insert id="insertOrUpdateOnuCatvConfig" parameterType="onuCatvConfig">
+		insert into onucatvconfig
+			(entityId,
+			onuId,
+			onuIndex,
+			onuCatvOrConfigSwitch,
+			onuCatvOrConfigGainControlType,
+			onuCatvOrConfigAGCUpValue,
+			onuCatvOrConfigAGCRange,
+			onuCatvOrConfigMGCTxAttenuation,
+			onuCatvOrConfigInputLO,
+			onuCatvOrConfigInputHI,
+			onuCatvOrConfigOutputLO,
+			onuCatvOrConfigOutputHI,
+			onuCatvOrConfigVoltageHI,
+			onuCatvOrConfigVoltageLO,
+			onuCatvOrConfigTemperatureHI,
+			onuCatvOrConfigTemperatureLO)
+        values
+        	(#{entityId},
+			#{onuId},
+			#{onuIndex},
+			#{onuCatvOrConfigSwitch},
+			#{onuCatvOrConfigGainControlType},
+			#{onuCatvOrConfigAGCUpValue},
+			#{onuCatvOrConfigAGCRange},
+			#{onuCatvOrConfigMGCTxAttenuation},
+			#{onuCatvOrConfigInputLO},
+			#{onuCatvOrConfigInputHI},
+			#{onuCatvOrConfigOutputLO},
+			#{onuCatvOrConfigOutputHI},
+			#{onuCatvOrConfigVoltageHI},
+			#{onuCatvOrConfigVoltageLO},
+			#{onuCatvOrConfigTemperatureHI},
+			#{onuCatvOrConfigTemperatureLO})
+		ON DUPLICATE KEY UPDATE
+			entityId = #{entityId},
+			onuIndex = #{onuIndex},
+			onuCatvOrConfigSwitch = #{onuCatvOrConfigSwitch},
+			onuCatvOrConfigGainControlType = #{onuCatvOrConfigGainControlType},
+			onuCatvOrConfigAGCUpValue = #{onuCatvOrConfigAGCUpValue},
+			onuCatvOrConfigAGCRange = #{onuCatvOrConfigAGCRange},
+			onuCatvOrConfigMGCTxAttenuation = #{onuCatvOrConfigMGCTxAttenuation},
+			onuCatvOrConfigInputLO = #{onuCatvOrConfigInputLO},
+			onuCatvOrConfigInputHI = #{onuCatvOrConfigInputHI},
+			onuCatvOrConfigOutputLO = #{onuCatvOrConfigOutputLO},
+			onuCatvOrConfigOutputHI = #{onuCatvOrConfigOutputHI},
+			onuCatvOrConfigVoltageHI = #{onuCatvOrConfigVoltageHI},
+			onuCatvOrConfigVoltageLO = #{onuCatvOrConfigVoltageLO},
+			onuCatvOrConfigTemperatureHI = #{onuCatvOrConfigTemperatureHI},
+			onuCatvOrConfigTemperatureLO = #{onuCatvOrConfigTemperatureLO}
+	</insert>
+
+</mapper>

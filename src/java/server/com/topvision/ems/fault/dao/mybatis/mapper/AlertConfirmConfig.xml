@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.fault.domain.AlertConfirmConfig">
+	<select id="getConfirmEventByEventTypeId" parameterType="map"
+		resultType="eventType">
+		select a.typeId, a.parentId, a.name, a.displayName, a.note
+		from
+		eventType a, event2alert b where a.typeId=b.eventTypeId and
+		b.alertTypeId =
+		#{alertTypeId} and b.type=0 
+	</select>
+	
+	<select id="getOriginEventByEventTypeId" parameterType="map"
+		resultType="eventType">
+		select a.typeId, a.parentId, a.name, a.displayName, a.note
+		from
+		eventType a, event2alert b where a.typeId=b.eventTypeId and
+		b.alertTypeId =
+		#{alertTypeId} and b.type=1 
+	</select>
+
+	<select id="getAllEventTypeNoAlert" parameterType="int"
+		resultType="eventType">
+		select a.typeId, a.parentId, a.name, a.displayName, a.note
+		from eventtype a where not
+		exists (select 1 from event2alert b where a.typeId = b.eventTypeId)
+	</select>
+
+	<insert id="insertConfirmAlert" parameterType="map">
+		insert into
+		event2alert(eventTypeId,alertTypeId,type)
+		values(#{eventTypeId},#{alertTypeId},0)
+    </insert>
+    
+    <insert id="insertOriginAlert" parameterType="map">
+		insert into
+		event2alert(eventTypeId,alertTypeId,type)
+		values(#{eventTypeId},#{alertTypeId},1)
+    </insert>
+
+	<delete id="deleteConfirmAlert" parameterType="map">
+		delete from
+		event2alert where eventTypeId=#{eventTypeId} and
+		alertTypeId=#{alertTypeId} and type=0
+    </delete>
+    
+    <delete id="deleteOriginAlert" parameterType="map">
+		delete from
+		event2alert where eventTypeId=#{eventTypeId} and
+		alertTypeId=#{alertTypeId} and type=1
+    </delete>
+
+    <select id="getAlertConfirmConfig" resultType="boolean">
+		select alertConfirmConfig from alertConfirmConfig
+	</select>
+    
+    
+    <update id="updateAlertConfirmConfig" parameterType="boolean">
+		update alertConfirmConfig set alertConfirmConfig = #{alertConfirmConfig}
+	</update>
+</mapper>

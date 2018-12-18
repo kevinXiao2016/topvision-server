@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmpoll" namespace="/cmpoll" extends="default">
+		<action name="showCmPollCollectList" class="cmPollConfigAction" method="showCmPollCollectList">
+            <result>/performance/cmPollCollectList.jsp</result>
+        </action>
+        <action name="getCmPollCollectList" class="cmPollConfigAction" method="getCmPollCollectList">
+		</action>
+		<action name="getCmPollCompleteTime" class="cmPollConfigAction" method="getCmPollCompleteTime">
+		</action>
+		<action name="changeSwitchForCmPoll" class="cmPollConfigAction" method="changeSwitchForCmPoll">
+		</action>
+		<action name="importSpecifiedCmList" class="cmPollConfigAction" method="importSpecifiedCmList">
+		</action>
+		<action name="generateSpecifiedCmListFile" class="cmPollConfigAction" method="generateSpecifiedCmListFile">
+		</action>
+        <action name="exportSpecifiedCmListFile" class="cmPollConfigAction" method="exportSpecifiedCmListFile">
+        </action>
+        <action name="downLoadTemplate" class="cmPollConfigAction" method="downLoadTemplate">
+        </action>
+        <action name="loadSpecifiedCmListCount" class="cmPollConfigAction" method="loadSpecifiedCmListCount">
+        </action>
+        <action name="loadCmPollInterval" class="cmPollConfigAction" method="loadCmPollInterval">
+        </action>
+        <action name="showSpecifiedCmListImport" class="cmPollConfigAction" method="showSpecifiedCmListImport">
+            <result>/cmc/cmPollImport.jsp</result>
+        </action>
+        <action name="loadSwitchName" class="cmPollConfigAction" method="loadSwitchName">
+        </action>
+	</package>
+</struts>

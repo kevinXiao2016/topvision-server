@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.platform.domain.User">
+	<insert id="insertEntity" parameterType="user" useGeneratedKeys="true"
+		keyProperty="userId">
+		INSERT INTO Users
+		(userName, passwd, status, note,
+		familyName,
+		firstName, workTelphone, homeTelphone, mobile, email,
+		ipLoginActive, bindIp,
+		limitIp, createTime, userGroupId, placeId,
+		departmentId) VALUES
+		(#{userName}, #{passwd},
+		#{status}, #{note},
+		#{familyName}, #{firstName},
+		#{workTelphone},#{homeTelphone},
+		#{mobile},
+		#{email}, #{ipLoginActive},
+		#{bindIp},
+		#{limitIp},
+		#{createTime}, #{userGroupId}, #{placeId},
+		#{departmentId})
+	</insert>
+
+	<delete id="deleteCustomMyDesk">
+		DELETE FROM
+		userCustomlization
+		WHERE
+		userId = #{userId}
+	</delete>
+
+	<insert id="insertCustomMyDesck" parameterType="map">
+		INSERT INTO
+		userCustomlization(userId,functionName,functionAction,icon)
+		VALUES
+		(#{userId},#{functionName},#{functionAction},#{icon})
+	</insert>
+
+	<select id="loadCustomMyDesk" parameterType="long" resultType="String">
+		SELECT
+		functionName
+		FROM
+		userCustomlization
+		WHERE
+		userId = #{userId}
+	</select>
+
+	<update id="updateUser" parameterType="user">
+		UPDATE Users SET userId =
+		#{userId},departmentId=#{departmentId},placeId=#{placeId}
+		<if test="familyName != null">
+			, familyName = #{familyName}
+		</if>
+		<if test="email != null">, email = #{email}</if>
+		<if test="mobile != null">, mobile = #{mobile}</if>
+		<if test="homeTelphone != null">
+			, homeTelphone = #{homeTelphone}
+		</if>
+		<if test="workTelphone != null">
+			, workTelphone = #{workTelphone}
+		</if>
+		<if test="limitIp != null">
+			, limitIp = #{limitIp}
+		</if>
+		<if test="userGroupId != null">
+			, userGroupId = #{userGroupId}
+		</if>
+		<if test="timeout != null">
+			, timeout = #{timeout}
+		</if>
+		<if test="allowMutliIpLogin != null">
+			, allowMutliIpLogin = #{allowMutliIpLogin}
+		</if>
+		WHERE userId = #{userId}
+	</update>
+
+	<update id="updateEntity" parameterType="user">
+		UPDATE Users SET userId = #{userId}
+		<if test="familyName != null">
+			, familyName = #{familyName}
+		</if>
+		<if test="email != null">, email = #{email}</if>
+		<if test="mobile != null">, mobile = #{mobile}</if>
+		<if test="homeTelphone != null">
+			, homeTelphone = #{homeTelphone}
+		</if>
+		<if test="workTelphone != null">
+			, workTelphone = #{workTelphone}
+		</if>
+		WHERE userId = #{userId}
+	</update>
+	<delete id="deleteByPrimaryKey" parameterType="long">
+		DELETE FROM Users
+		WHERE userId = #{userId} AND userId > 2
+	</delete>
+
+	<delete id="deleteUserByUsername" parameterType="string">
+		DELETE FROM
+		Users WHERE userName = #{userName} AND userId > 2
+	</delete>
+
+	<select id="selectByPrimaryKey" parameterType="long" resultType="userEx">
+		SELECT
+		A.userId,
+		A.userName,
+		A.familyName,
+		A.homeTelphone,
+		A.allowMutliIpLogin, A.timeout,
+		A.workTelphone,
+		A.mobile,
+		A.email,
+		A.limitIp,
+		A.departmentId,
+		A.placeId,
+		A.userGroupId,
+		ifnull(B.name,'') AS
+		departmentName,
+		ifnull(C.name,'') AS placeName,
+		ifnull(D.name,'') AS
+		userGroupName
+		FROM
+		users
+		AS A
+		LEFT JOIN department AS B ON A.departmentId
+		= B.departmentId
+		LEFT JOIN place AS C ON A.placeId = C.placeId
+		LEFT JOIN
+		topofolder AS D ON A.userGroupId = D.folderId
+		WHERE
+		userId = #{userId}
+	</select>
+
+	<select id="selectByUserId" parameterType="long" resultType="user">
+		SELECT A.userId, A.userName,
+		A.familyName,A.homeTelPhone,A.workTelPhone,
+		A.mobile,A.allowMutliIpLogin,A.timeout,
+		A.email,A.limitIp, FROM
+		Users A
+		WHERE userId = #{userId}
+	</select>
+
+	<select id="selectByUsername" parameterType="string" resultType="user">
+		SELECT userId, userName, passwd, status,
+		familyName,
+		firstName,createTime,allowMutliIpLogin,timeout,
+		lastLoginTime,
+		lastLoginIp, ipLoginActive, bindIp, limitIp,
+		userGroupId,
+		language FROM
+		Users WHERE userName = #{userName}
+	</select>
+
+	<select id="selectByIp" parameterType="string" resultType="user">
+		SELECT userId, userName, passwd, status,
+		familyName, firstName,
+		lastLoginTime, lastLoginIp, ipLoginActive, bindIp, limitIp,
+		userGroupId FROM Users WHERE
+		ipLoginActive = 1 AND bindIp =
+		#{bindIp}
+	</select>
+
+	<select id="selectCount" parameterType="map" resultType="integer">
+		SELECT
+		COUNT(userId) FROM Users
+	</select>
+
+
+	<select id="selectRoleUsedCount" parameterType="long"
+		resultType="integer">
+		SELECT count(distinct(userId)) FROM
+		userrolerela where
+		roleId = #{roleId}
+	</select>
+
+	<select id="selectDepartmentUsedCount" parameterType="long"
+		resultType="integer">
+		SELECT COUNT(userId) FROM Users where
+		departmentId =
+		#{departmentId}
+	</select>
+
+	<select id="selectPostUsedCount" parameterType="long"
+		resultType="integer">
+		SELECT COUNT(userId) FROM Users where
+		placeId = #{placeId}
+	</select>
+
+	<select id="selectByMap" parameterType="map" resultType="userEx">
+		SELECT
+		A.userId, A.userName, A.familyName,A.allowMutliIpLogin,A.timeout,
+		A.homeTelPhone, A.workTelPhone, A.mobile, A.status,
+		A.email,A.limitIp,A.createTime,A.bindIp, ifnull(B.name,'')
+		as
+		departmentName , ifnull(C.name,'') as placeName ,ifnull(D.name,'') AS
+		userGroupName, A.lastLoginTime,
+		A.lastLoginIp FROM Users A
+		LEFT JOIN
+		Department B ON A.departmentId=B.departmentId
+		LEFT JOIN Place C ON
+		A.placeId=C.placeId
+		LEFT JOIN topofolder AS D ON A.userGroupId =
+		D.folderId
+		WHERE userId > 1 order by lastLoginTime
+	</select>
+
+	<select id="selectWithPage" parameterType="map" resultType="userEx">
+		SELECT C.*, D.name AS departmentName FROM (SELECT
+		A.userId,A.allowMutliIpLogin,A.timeout,
+		A.userName, A.familyName,
+		A.status, A.mobile, A.email,
+		A.createTime, ifnull(B.departmentId,0)
+		departmentId FROM Users A
+		left join UserDepartmentRela B ON A.userId =
+		B.userId) C left
+		join Department D on
+		C.departmentId = D.departmentId
+		ORDER BY
+		userName
+	</select>
+
+	<select id="loadUserWorkbence" parameterType="long" resultType="functionItem">
+		SELECT
+		functionName as displayName,
+		functionAction,
+		icon
+		FROM
+		userCustomlization
+		WHERE
+		userId = #{userId}
+	</select>
+
+	<update id="updateLastLoginTime" parameterType="user">
+		UPDATE Users SET
+		lastLoginTime = #{lastLoginTime}, lastLoginIp
+		=#{lastLoginIp} WHERE
+		userId = #{userId}
+	</update>
+
+	<update id="updateUserStatus" parameterType="user">
+		UPDATE Users SET
+		status = #{status} WHERE userId = #{userId} AND
+		userName != 'admin'
+	</update>
+
+	<update id="updateStatusByUserName" parameterType="user">
+		UPDATE Users
+		SET status = #{status} WHERE userName =
+		#{userName}
+		AND userName !=
+		'admin'
+	</update>
+
+	<update id="updateUserPasswd" parameterType="user">
+		UPDATE Users SET
+		passwd = #{passwd} WHERE userId = #{userId}
+	</update>
+
+	<update id="updatePasswd" parameterType="user">
+		UPDATE Users SET passwd
+		= #{passwd} WHERE userId = #{userId}
+	</update>
+
+	<update id="updateUserIpBind" parameterType="user">
+		UPDATE Users SET
+		bindIp = #{bindIp} WHERE userId = #{userId}
+	</update>
+
+	<update id="updateLanguage" parameterType="user">
+		UPDATE Users SET
+		language = #{language} WHERE userId = #{userId}
+	</update>
+
+	<select id="hasBindByIp" parameterType="string" resultType="user">
+		SELECT userId, userName FROM Users WHERE bindIp =
+		#{bindIp}
+	</select>
+	<select id="getFolderIdByUserId" parameterType="long"
+		resultType="long">
+		select userGroupId from users where userId =
+		#{userId}
+	</select>
+
+	<select id="selectUserSoundStatus" parameterType="long"
+		resultType="userPreferences">
+		SELECT
+		value ,name,module,userId
+		FROM
+		userpreferences
+		WHERE
+		name = 'userSoundStatus' AND module = 'core' AND
+		userId = #{userId}
+	</select>
+	<insert id="insertUserSoundStatus" parameterType="map">
+		INSERT INTO
+		userpreferences(name,module,value,userId)
+		VALUES
+		('userSoundStatus','core',#{userSoundStatus},#{userId})
+	</insert>
+	<update id="updateUserSoundStatus" parameterType="map">
+		UPDATE
+		userpreferences
+		SET
+		value = #{userSoundStatus}
+		WHERE
+		userId = #{userId}
+		AND name = 'userSoundStatus' AND module = 'core'
+	</update>
+
+	<select id="selectUserPreferences" parameterType="map"
+		resultType="userPreferences">
+		SELECT
+		value ,name,module,userId
+		FROM
+		userpreferences
+		WHERE
+		name = #{name} AND module = #{module} AND
+		userId = #{userId}
+	</select>
+	<insert id="insertUserPreferences" parameterType="map">
+		INSERT INTO
+		userpreferences(name,module,value,userId)
+		VALUES
+		(#{name},#{module},#{value},#{userId})
+	</insert>
+	<update id="updateUserPreferences" parameterType="map">
+		UPDATE
+		userpreferences
+		SET
+		value = #{value}
+		WHERE
+		userId =
+		#{userId} AND name =
+		#{name} AND module = #{module}
+	</update>
+
+	<delete id="deleteUserAuthFolder" parameterType="long">
+		DELETE FROM
+		userauthfolder WHERE userId = #{userId}
+	</delete>
+
+	<insert id="insertUserAuthFolder" parameterType="map">
+		INSERT INTO
+		userauthfolder(userId,folderId)
+		VALUES
+		(#{userId},#{folderId})
+	</insert>
+
+	<update id="switchRoorFolder" parameterType="map">
+		update users set
+		userGroupId=#{folderId} where userId=#{userId}
+	</update>
+
+	<update id="updateMutilIpLogin" parameterType="map">
+		UPDATE Users
+		SET
+		allowMutliIpLogin = #{allowMutliIpLoginStatus}
+		WHERE userId = #{userId}
+	</update>
+	<update id="updateUserSession" parameterType="map">
+		UPDATE Users
+		SET
+		timeout = #{timeout}
+		WHERE userId = #{userId}
+	</update>
+
+	<select id="getUserAuthFolderIds" parameterType="long"
+		resultType="long">
+		select folderId from userauthfolder where userId=#{userId}
+	</select>
+
+	<select id="getAllUser" resultType="user">
+		SELECT * FROM users;
+	</select>
+
+	<select id="getAllUserAuthFolder" resultType="userAuthFolder">
+		SELECT * FROM
+		userauthfolder;
+	</select>
+
+
+	<select id="getUserAlertTypeId" parameterType="long" resultType="int">
+		select alertTypeId from userAlert where userId=#{userId}
+	</select>
+
+	<insert id="insertUserAlertType" parameterType="map">
+		insert into
+		userAlert values(#{userId}, #{alertTypeId})
+	</insert>
+
+	<delete id="deleteUserAlertType" parameterType="long">
+		delete from
+		userAlert where userId=#{userId}
+	</delete>
+
+
+
+</mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="upgrade" namespace="/upgrade" extends="default">
+		<action name="showEntityVersionList" class="entityVersionAction" method="showEntityVersionList">
+			<result>/upgrade/entityVersionList.jsp</result>
+		</action>
+		<action name="showUpgradeParam" class="upgradeParamAction" method="showUpgradeParam">
+			<result>/upgrade/paramConfig.jsp</result>
+		</action>
+		<action name="modifyUpgradeParam" class="upgradeParamAction" method="modifyUpgradeParam"></action>
+		<action name="showUpgradeJob" class="upgradeJobAction" method="showUpgradeJob">
+			<result>/upgrade/upgradeJob.jsp</result>
+		</action>
+		<action name="getUpgradeJob" class="upgradeJobAction" method="getUpgradeJob"></action>
+		<action name="showUpgradeRecord" class="upgradeRecordAction" method="showUpgradeRecord">
+			<result>/upgrade/upgradeRecord.jsp</result>
+		</action>
+		<action name="getUpgradeRecord" class="upgradeRecordAction" method="getUpgradeRecord"></action>
+		<action name="deleteUpgradeRecord" class="upgradeRecordAction" method="deleteUpgradeRecord"></action>
+		<action name="addUpgradeJob" class="upgradeJobAction" method="addUpgradeJob"></action>
+		<action name="showAddJob" class="upgradeJobAction" method="showAddJob">
+			<result>/upgrade/newJob.jsp</result>
+		</action>
+		<action name="deleteUpgradeJob" class="upgradeJobAction" method="deleteUpgradeJob"></action>
+		<action name="showDeleteJob" class="upgradeJobAction" method="showDeleteJob">
+			<result>/upgrade/deleteJob.jsp</result>
+		</action>
+		<action name="getEntity" class="upgradeJobAction" method="getEntity"></action>
+		<action name="getUpgradeEntity" class="upgradeJobAction" method="getUpgradeEntity"></action>
+		<action name="showEntityList" class="upgradeJobAction" method="showEntityList">
+		    <result>/upgrade/entityList.jsp</result>
+		</action>
+		<action name="addEntityToJob" class="upgradeJobAction" method="addEntityToJob"></action>
+		<action name="deleteJobEntity" class="upgradeJobAction" method="deleteJobEntity"></action>
+		<action name="upLoadFile" class="entityVersionAction" method="upLoadFile"></action>
+		<action name="getEntityVersionList" class="entityVersionAction" method="getEntityVersionList"></action>
+		<action name="deleteEntityVersion" class="entityVersionAction" method="deleteEntityVersion"></action>
+		<action name="getEntityVersionProperty" class="entityVersionAction" method="getEntityVersionProperty"></action>
+		<action name="showUpgradeResult" class="upgradeJobAction" method="showUpgradeResult">
+		    <result>/upgrade/upgradeResult.jsp</result>
+		</action>
+		<action name="getUpgradeResult" class="upgradeJobAction" method="getUpgradeResult"></action>
+		<action name="upgradeNow" class="upgradeJobAction" method="upgradeNow"></action>
+		<action name="upgradeAllNow" class="upgradeJobAction" method="upgradeAllNow"></action>
+		<action name="upgradeSingleNow" class="upgradeJobAction" method="upgradeSingleNow"></action>
+		<action name="getUpgradeJobList" class="upgradeJobAction" method="getUpgradeJobList"></action>
+		<action name="getUpgradeStatusTree" class="upgradeJobAction" method="getUpgradeStatusTree"></action>
+		<action name="showUpgradeStatusParam" class="upgradeJobAction" method="showUpgradeStatusParam">
+		    <result>/upgrade/upgradeStatusParam.jsp</result>
+		</action>
+	</package>
+</struts>

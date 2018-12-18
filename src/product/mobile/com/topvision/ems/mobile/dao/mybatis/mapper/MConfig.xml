@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.mobile.domain.MobileDeviceType">
+	<select id="getMobileDeviceTypeList" 
+		resultType="com.topvision.ems.mobile.domain.MobileDeviceType">
+		SELECT
+		mdt.typeId,mdt.deviceType,mdt.corporation,mdt.frequency,mdt.powerlevel,IF(mddt.typeId is not null,1,0) as isDefault
+		FROM
+			mobileDeviceType mdt LEFT JOIN mobiledefaultdevicetype mddt on mdt.typeId = mddt.typeId
+	</select>
+	<select id="getMobileDeviceTypeByTypeId" parameterType="long"
+		resultType="com.topvision.ems.mobile.domain.MobileDeviceType">
+		SELECT
+		mdt.typeId,mdt.deviceType,mdt.corporation,mdt.frequency,mdt.powerlevel,IF(mddt.typeId is not null,1,0) as isDefault
+		FROM
+			mobileDeviceType mdt LEFT JOIN mobiledefaultdevicetype mddt on mdt.typeId = mddt.typeId 
+		where mdt.typeId = #{typeId}
+	</select>
+	<select id="isDefaultExist" 
+		resultType="int">
+		SELECT
+		count(*)
+		FROM
+			mobiledefaultdevicetype
+	</select>
+	<insert id="addMobileDeviceType" 
+		 parameterType="map">
+		insert into 
+		mobileDeviceType
+		(deviceType,corporation,frequency,powerlevel)
+		values(#{deviceType},#{corporation},#{frequency},#{powerlevel})
+	</insert>
+	<insert id="insertDefaultMobileDeviceType" 
+		 parameterType="map">
+		insert into 
+		mobiledefaultdevicetype
+		(typeId)
+		values(#{typeId})
+	</insert>
+	<update id="modifyMobileDeviceType" 
+		 parameterType="map">
+		update
+		mobileDeviceType
+		set
+		frequency=#{frequency},
+		powerlevel=#{powerlevel}
+		where typeId=#{typeId}
+	</update>
+	<update id="updateDefaultMobileDeviceType" 
+		 parameterType="long">
+		update
+		mobiledefaultdevicetype
+		set
+		typeId=#{typeId}
+	</update>
+	<delete id="delMobileDeviceType" 
+		 parameterType="long">
+		delete from
+		mobileDeviceType
+		where typeId=#{typeId}
+	</delete>
+	<delete id="delDefaultMobileDeviceType" 
+		 parameterType="long">
+		delete from
+		mobiledefaultdevicetype
+		where typeId=#{typeId}
+	</delete>
+
+</mapper>

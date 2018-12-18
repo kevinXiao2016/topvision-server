@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.performance.domain.OnuPerfGraph">
+    <select id="getOnuOptRePowerPoints" parameterType="map"
+        resultType="point">
+  		select collectTime xTime,onuPonRevPower y  from perfonulinkquality 
+  		where onuId = #{onuId}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    <select id="getOnuOptTxPowerPoints" parameterType="map"
+        resultType="point">
+  		select collectTime xTime,onuPonTransPower y  from perfonulinkquality 
+  		where onuId = #{onuId}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    <select id="getOltPonRePowerPoints" parameterType="map"
+        resultType="point">
+  		select collectTime xTime,oltPonRevPower y  from perfonulinkquality 
+  		where onuId = #{onuId}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    <select id="getOnuCATVRePowerPoints" parameterType="map"
+        resultType="point">
+        select collectTime xTime,onuCatvOrInfoRxPower/10 y  from perfonucatvquality 
+        where onuId = #{onuId} and onuCatvOrInfoRxPower/10>-20
+        and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+        order by xTime
+    </select>
+    <select id="getOnuPortInSpeed" parameterType="map" resultType="point">
+        select collectTime xTime, portInSpeed y  
+        from perfonuflowquality 
+  		where onuId = #{onuId} and portIndex = #{portIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    
+    <select id="getOnuPortOutSpeed" parameterType="map" resultType="point">
+        select collectTime xTime, portOutSpeed y  
+        from perfonuflowquality 
+  		where onuId = #{onuId} and portIndex = #{portIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+</mapper>

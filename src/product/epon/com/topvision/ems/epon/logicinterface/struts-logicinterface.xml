@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="logicinterface" namespace="/epon/logicinterface" extends="default">
+		<action name="showLogicInterfaceView" class="logicInterfaceAction" method="showLogicInterfaceView">
+			<result>/epon/logicinterface/logicInterface.jsp</result>
+		</action>
+		<action name="loadLogicInterfaceList" class="logicInterfaceAction" method="loadLogicInterfaceList" />
+		<action name="addLogicInterfaceView" class="logicInterfaceAction" method="addLogicInterfaceView">
+			<result>/epon/logicinterface/addLogicInterface.jsp</result>
+		</action>
+		<action name="addLogicInterface" class="logicInterfaceAction" method="addLogicInterface" />
+		<action name="deleteLogicInterface" class="logicInterfaceAction" method="deleteLogicInterface" />
+		<action name="deleteLogicInterfaceList" class="logicInterfaceAction" method="deleteLogicInterfaceList" />
+		<action name="editLogicInterfaceView" class="logicInterfaceAction" method="editLogicInterfaceView">
+			<result>/epon/logicinterface/editLogicInterface.jsp</result>
+		</action>
+		<action name="modifyLogicInterface" class="logicInterfaceAction" method="modifyLogicInterface" />
+		<action name="refreshLogicInterface" class="logicInterfaceAction" method="refreshLogicInterface" />
+		
+		<action name="showInterfaceIpV4ConfigView" class="logicInterfaceAction" method="showInterfaceIpV4ConfigView" >
+			<result>/epon/logicinterface/interfaceIpV4Config.jsp</result>
+		</action>
+		<action name="loadInterfaceIpV4Config" class="logicInterfaceAction" method="loadInterfaceIpV4Config" />
+		<action name="addInterfaceIpV4View" class="logicInterfaceAction" method="addInterfaceIpV4View" >
+			<result>/epon/logicinterface/addInterfaceIp.jsp</result>
+		</action>
+		<action name="addInterfaceIpV4" class="logicInterfaceAction" method="addInterfaceIpV4" />
+		<action name="deleteInterfaceIpV4" class="logicInterfaceAction" method="deleteInterfaceIpV4" />
+		<action name="refreshInterfaceIpV4Config" class="logicInterfaceAction" method="refreshInterfaceIpV4Config" />
+	</package>
+</struts>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="autoclear" namespace="/autoclear" extends="default">
+		<action name="showAutoClearHistory" class="autoClearAction"
+			method="showAutoClearHistory">
+			<result>/system/autoClearRecord.jsp</result>
+		</action>
+
+		<action name="loadAutoClearHistory" class="autoClearAction"
+			method="loadAutoClearHistory">
+		</action>
+		
+		<action name="loadAutoClearCmciHistory" class="autoClearAction"
+			method="loadAutoClearCmciHistory">
+		</action>
+
+		<action name="showAutoClearConfig" class="autoClearAction"
+			method="showAutoClearConfig">
+			<result>/system/autoClearConfig.jsp</result>
+		</action>
+		<action name="saveAutoClearConfig" class="autoClearAction"
+			method="saveAutoClearConfig"></action>
+	</package>
+</struts>

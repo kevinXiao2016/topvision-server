@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="businessTemplate" namespace="/epon/businessTemplate" extends="default">
+         <action name="showOnuProfile" class="businessTemplateAction" method="showOnuProfile">
+            <result>/epon/onutemplate/onuProfile.jsp</result>
+        </action>
+        <action name="addOnuProfle" class="businessTemplateAction" method="addOnuProfle" /> 
+        <action name="loadOnuProfile" class="businessTemplateAction" method="loadOnuProfile" /> 
+        <action name="modifyOnuProfile" class="businessTemplateAction" method="modifyOnuProfile" /> 
+        <action name="deleteOnuProfile" class="businessTemplateAction" method="deleteOnuProfile" /> 
+        <action name="refreshOnuProfile" class="businessTemplateAction" method="refreshOnuProfile" /> 
+        
+        <action name="showVlanProfile" class="businessTemplateAction" method="showVlanProfile">
+			<result>/epon/onutemplate/onuVlanProfile.jsp</result>
+		</action>
+        <action name="addVlanProfile" class="businessTemplateAction" method="addVlanProfile" /> 
+        <action name="loadVlanProfile" class="businessTemplateAction" method="loadVlanProfile" />
+        <action name="modifyVlanProfile" class="businessTemplateAction" method="modifyVlanProfile" /> 
+        <action name="deleteVlanProfile" class="businessTemplateAction" method="deleteVlanProfile" /> 
+        <action name="refreshVlanProfile" class="businessTemplateAction" method="refreshVlanProfile" /> 
+		
+        <action name="showIgmpProfile" class="businessTemplateAction" method="showIgmpProfile">
+			<result>/epon/onutemplate/onuIgmpProfile.jsp</result>
+		</action>
+        <action name="addIgmpProfile" class="businessTemplateAction" method="addIgmpProfile" /> 
+        <action name="loadIgmpProfile" class="businessTemplateAction" method="loadIgmpProfile" />
+        <action name="modifyIgmpProfile" class="businessTemplateAction" method="modifyIgmpProfile" /> 
+        <action name="deleteIgmpProfile" class="businessTemplateAction" method="deleteIgmpProfile" /> 
+        <action name="refreshIgmpProfile" class="businessTemplateAction" method="refreshIgmpProfile" /> 
+        
+        <action name="showCapabilityProfile" class="businessTemplateAction" method="showCapabilityProfile">
+			<result>/epon/onutemplate/onuCapabilityProfile.jsp</result>
+		</action>
+        <action name="addCapabilityProfile" class="businessTemplateAction" method="addCapabilityProfile" /> 
+        <action name="loadCapabilityProfile" class="businessTemplateAction" method="loadCapabilityProfile" />
+        <action name="deleteCapabilityProfile" class="businessTemplateAction" method="deleteCapabilityProfile" /> 
+        <action name="refreshCapabilityProfile" class="businessTemplateAction" method="refreshCapabilityProfile" /> 
+        
+        <action name="loadIgmpVlanList" class="businessTemplateAction" method="loadIgmpVlanList" /> 
+        <action name="getIgmpVlanTransIds" class="businessTemplateAction" method="getIgmpVlanTransIds" /> 
+        <action name="unBindCapability" class="businessTemplateAction" method="unBindCapability" /> 
+    	
+        <action name="showProfileVlanConfig" class="businessTemplateAction" method="showProfileVlanConfig">
+			<result>/epon/onutemplate/vlanProfileConfig.jsp</result>
+		</action>
+        <action name="showProfileIgmpConfig" class="businessTemplateAction" method="showProfileIgmpConfig">
+			<result>/epon/onutemplate/igmpProfileConfig.jsp</result>
+		</action>
+		
+		<action name="showOnuIgmpVlanTrans" class="businessTemplateAction" method="showOnuIgmpVlanTrans">
+			<result>/epon/onutemplate/onuIgmpVlanTrans.jsp</result>
+		</action>
+		<action name="loadOnuIgmpVlanTrans" class="businessTemplateAction" method="loadOnuIgmpVlanTrans" /> 
+        <action name="addOnuIgmpVlanTrans" class="businessTemplateAction" method="addOnuIgmpVlanTrans" /> 
+        <action name="deleteOnuIgmpVlanTrans" class="businessTemplateAction" method="deleteOnuIgmpVlanTrans" />
+        <action name="refreshOnuIgmpVlanTrans" class="businessTemplateAction" method="refreshOnuIgmpVlanTrans" /> 
+    </package>
+</struts>

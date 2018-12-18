@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcinfo" namespace="/cmc" extends="default">
+        <action name="showCmcUptimeByEntity" class="cmcInfoAction" method="showCmcUptimeByEntity">
+            <result>/cmc/showCmcUptime.jsp</result>
+        </action>
+        <action name="getCmcUptimeByEntity" class="cmcInfoAction" method="getCmcUptimeByEntity">
+        </action>
+        <action name="loadCmcBaseInfo" class="cmcInfoAction" method="loadCmcBaseInfo">
+        </action>
+        
+        <!-- Ip段展示 -->
+        <action name="showIpSegmentPage" class="ipSegmentDisplayAction" method="showIpSegmentPage" >
+        	<result>/cmc/batchTopoIp.jsp</result>
+        </action>
+        <action name="loadIpSegmentTree" class="ipSegmentDisplayAction" method="loadIpSegmentTree" />
+        <action name="loadTreeRootByIpSegment" class="ipSegmentDisplayAction" method="loadTreeRootByIpSegment" />
+        <action name="loadDeviceListByIpSegment" class="ipSegmentDisplayAction" method="loadDeviceListByIpSegment" />
+        <action name="batchRestartCmc" class="ipSegmentDisplayAction" method="batchRestartCmc" />
+        <action name="showModifyTopFolder" class="ipSegmentDisplayAction" method="showModifyTopFolder">
+        	<result>/cmc/modifyTopoFolder.jsp</result>
+        </action>
+        <action name="batchModifyTopFolder" class="ipSegmentDisplayAction" method="batchModifyTopFolder" />
+        <action name="showEditDevice" class="ipSegmentDisplayAction" method="showEditDevice" >
+          	<result>/cmc/modifyDeviceInfo.jsp</result>
+        </action>
+        <action name="modifyDeviceInfo" class="ipSegmentDisplayAction" method="modifyDeviceInfo" />
+        
+        <action name="showIpSegmentDeviceList" class="ipSegmentDisplayAction" method="showIpSegmentDeviceList" >
+          	<result>/cmc/batchTopoIpDeviceList.jsp</result>
+        </action>
+        <action name="showCmDeviceList" class="ipSegmentDisplayAction" method="showCmDeviceList" >
+          	<result>/cmc/showBatchTopoCmList.jsp</result>
+        </action>
+        
+        <!-- 分地域展示 -->
+        <action name="showTopoFolderPage" class="topoFolderDisplayAction" method="showTopoFolderPage" >
+        	<result>/cmc/topoFolderDisplay.jsp</result>
+        </action>
+        <action name="showCmView" class="topoFolderDisplayAction" method="showCmView" >
+        	<result>/cmc/topoCmFolderDisplay.jsp</result>
+        </action>
+        
+        <action name="loadDeviceListByFolder" class="topoFolderDisplayAction" method="loadDeviceListByFolder"></action>
+        <action name="loadTopoFolder" class="topoFolderDisplayAction" method="loadTopoFolder" />
+        <action name="loadDeviceByFolderId" class="topoFolderDisplayAction" method="loadDeviceByFolderId" />
+        <action name="showTopoFolderCmcList" class="topoFolderDisplayAction" method="showTopoFolderCmcList" >
+        	<result>/cmc/topoFolderCmcList.jsp</result>
+        </action>
+        <action name="showCmcSubCmList" class="topoFolderDisplayAction" method="showCmcSubCmList" >
+        	<result>/cmc/showCmcSubCmList.jsp</result>
+        </action>
+        <action name="loadCmcSubInfo" class="cmcInfoAction" method="loadCmcSubInfo"></action>
+	</package>
+</struts>

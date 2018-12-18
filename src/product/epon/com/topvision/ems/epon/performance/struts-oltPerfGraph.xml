@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="oltPerfGraph" namespace="/epon/oltPerfGraph" extends="default">
+    	<action name="showOltPerfViewJsp" class="oltPerfGraphAction" method="showOltPerfViewJsp">
+			<result>/epon/oltPerfView.jsp</result>
+		</action>
+    	<action name="loadOltPerfTargetGroups" class="oltPerfGraphAction" method="loadOltPerfTargetGroups"/>
+    	<action name="loadPerfTargetsByGroup" class="oltPerfGraphAction" method="loadPerfTargetsByGroup"/>
+    	
+    	<action name="loadOltSlotList" class="oltPerfGraphAction" method="loadOltSlotList"/>
+    	<action name="loadOltFanList" class="oltPerfGraphAction" method="loadOltFanList"/>
+    	<action name="loadSniPortList" class="oltPerfGraphAction" method="loadSniPortList"/>
+    	<action name="loadPonPortList" class="oltPerfGraphAction" method="loadPonPortList"/>
+    	<action name="loadOnuPonPortList" class="oltPerfGraphAction" method="loadOnuPonPortList"/>
+    	<action name="loadOnuUniPortList" class="oltPerfGraphAction" method="loadOnuUniPortList"/>
+    	<action name="loadFirberPortList" class="oltPerfGraphAction" method="loadFirberPortList"/>
+    	<action name="loadPortFlowPerfData" class="oltPerfGraphAction" method="loadPortFlowPerfData"/>
+    	<action name="loadOltServicePerfData" class="oltPerfGraphAction" method="loadOltServicePerfData"/>
+    	<action name="loadFirberPortPerfData" class="oltPerfGraphAction" method="loadFirberPortPerfData"/>
+    	<action name="loadOltOptSubPerfTargets" class="oltPerfGraphAction" method="loadOltOptSubPerfTargets"/>
+    	<action name="loadOltRelayPerfData" class="oltPerfGraphAction" method="loadOltRelayPerfData"/>
+	</package>
+</struts>

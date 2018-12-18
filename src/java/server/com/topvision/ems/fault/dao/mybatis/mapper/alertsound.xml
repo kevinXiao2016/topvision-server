@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.fault.domain.AlertSound">
+	
+	<select id="fetchAllSounds" resultType="alertSound">
+		SELECT * FROM alertsound;
+	</select>
+	
+	<update id="editSoundDescription" parameterType="map">
+		UPDATE alertsound SET description=#{description} WHERE id=#{id};
+	</update>
+	
+	<insert id="insertAlertSound" parameterType="alertSound">
+		insert into alertsound(name,description,deletable) values(#{name},#{description},#{deletable});
+	</insert>
+	
+	<select id="getAlertSoundById" parameterType="int" resultType="alertSound">
+		SELECT * FROM alertsound WHERE id=#{soundId};
+	</select>
+	
+	<delete id="deleteAlertSoundById" parameterType="int">
+		DELETE FROM alertsound WHERE id=#{soundId};
+	</delete>
+	
+	<select id="fetchAllAlertLevels" resultType="level">
+		SELECT levelId, A.name, soundId, B.name soundName, B.description soundDesc 
+		FROM levels A
+		LEFT JOIN alertsound B ON A.soundId=B.id;
+	</select>
+	
+	<select id="getSoundIdByLevelId" parameterType="int" resultType="int">
+		SELECT soundId from levels WHERE levelId=#{levelId};
+	</select>
+	
+	<update id="saveLevelSound" parameterType="map">
+		UPDATE levels SET soundId=#{soundId} WHERE levelId=#{levelId};
+	</update>
+	
+	<update id="resetLevelSoundById" parameterType="int">
+		UPDATE levels SET soundId=levelId WHERE soundId=#{soundId};
+	</update>
+</mapper>

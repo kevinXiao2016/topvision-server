@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.ccmts.domain.CmcChannel">
+
+	<!-- ################################## select start ####################################### -->
+	<select id="selectCmtsPort" parameterType="map" resultType="com.topvision.ems.network.domain.Port">
+		select a.portId, a.entityId, a.ifIndex, a.ifDescr,a.ifType
+		from port a where a.entityId = #{entityId} and a.ifIndex = #{ifIndex}
+	</select>
+	<select id="getChannelIndexByPortId" parameterType="long"
+     resultType="long">
+        select channellIndex
+        from
+        cmcportrelation where cmcPortId = #{cmcPortId}
+    </select>
+    <select id="getCmcChannelPerfInfoList" parameterType="long" resultType="channelPerfInfo">
+     <![CDATA[
+     	select
+        a.cmcId entityId,
+        a.cmcId,
+        a.channelIndex,
+        c.channelType,
+      	if(a.channelInSpeed < 0, 0, a.channelInSpeed) channelInOctetsRate,
+        if(a.channelOutSpeed < 0, 0, a.channelOutSpeed) channelOutOctetsRate,
+        if((a.channelUtilization < 0 || a.channelUtilization >= 100), 0, a.channelUtilization) channelUtilization,
+        c.cmcPortId,
+        d.ifSpeed,
+        d.ifAdminStatus channelStatus,
+        d.ifOperStatus,
+        d.ifDescr
+        from
+        cmcportrelation c left join perfcmcflowqualitylast a on c.cmcId 
+        = a.cmcId  and c.channellIndex =a.channelIndex left join cmcportattribute d on c.cmcPortId = d.cmcPortId
+        where
+        a.cmcId = #{cmcId}  and a.channelIndex != 1
+        ORDER BY a.channelIndex
+        ]]>
+    </select>
+    <select id="getChannelCmNumList" parameterType="map"
+     resultType="channelCmNum">
+        select
+        unlp.entityId,
+        cer.cmcId,
+        unlp.portIfIndex channelIndex,
+        unlp.portType channelType,
+        unlp.onlineNum + unlp.offlineNum + unlp.otherNum cmNumTotal,
+        unlp.onlineNum cmNumOnline,
+        unlp.otherNum cmNumActive,
+        unlp.otherNum cmNumUnregistered,
+        unlp.offlineNum cmNumOffline,
+        unlp.onlineNum  CmNumRregistered,
+        cpr.cmcPortId
+        from
+        usernumlastport unlp
+        LEFT JOIN cmcentityrelation cer on (cer.cmcIndex is null and unlp.entityId = cer.cmcEntityId )  or (unlp.entityId = cer.cmcEntityId and unlp.ccIfIndex = cer.cmcIndex)
+        LEFT JOIN cmcportrelation cpr on cer.cmcId = cpr.cmcId and unlp.portIfIndex = cpr.channellIndex
+        where 
+        cer.cmcId = #{cmcId} and channelType = #{channelType}
+    </select>
+	<!-- ################################## select end ######################################### -->
+	
+	<!-- ################################## insert start ####################################### -->
+	
+	<!-- ################################## insert end ######################################### -->
+	
+	<!-- ################################## update start ####################################### -->
+	<update id="updateChannelAdminStatus" parameterType="map">
+        UPDATE
+        cmcportattribute
+        SET
+        ifAdminStatus=#{status},
+        ifOperStatus=#{status}
+        WHERE
+        cmcId=#{cmcId} AND ifIndex=#{ifIndex}
+    </update>
+    <update id="updatePortInfo" parameterType="com.topvision.ems.cmc.ccmts.facade.domain.CmcPort">
+        update
+        cmcportattribute
+        set
+            cmcId=#{cmcId},            
+            ifIndex=#{ifIndex},          
+            ifDescr=#{ifDescr},          
+            ifPhysAddress=#{ifPhysAddress},   
+            ifAdminStatus=#{ifAdminStatus},   
+            ifOperStatus=#{ifOperStatus},    
+            ifLastChange=#{ifLastChange},
+            ifName = #{ifName}
+        where
+            cmcPortId=#{cmcPortId}
+    </update>
+    
+    <update id="updateCmcPortIfName" parameterType="map">
+        update
+        cmcportattribute
+        set
+            ifName = #{ifName}
+        where
+            cmcPortId=#{cmcPortId}
+    </update>
+    
+    <update id="updatePortIfName" parameterType="map">
+        update
+        port
+        set
+            ifName = #{ifName}
+        where
+            entityId=#{cmcId}
+            and ifIndex = #{channelIndex}
+    </update>
+    
+	<!-- ################################## update end ######################################### -->
+	
+	<!-- ################################## delete start ####################################### -->
+	
+	<!-- ################################## delete end ######################################### -->
+</mapper>

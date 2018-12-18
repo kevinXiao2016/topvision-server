@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.report.domain.CcmtsChannelListReport">
+
+	<select id="getCcmtsChannelUsageReport" parameterType="map"	resultType="com.topvision.ems.cmc.report.domain.CcmtsChannelUsageDetail">
+		SELECT 
+			e1.entityId oltId, e1.name oltName, e1.ip oltIp,
+			oltponrelation.ponId ponId, oltponrelation.ponIndex ponIndex,
+			cmcattribute.cmcId cmcId, e2.name ccmtsName,
+			cmcattribute.topCcmtsSysMacAddr ccmtsMAC, 
+			cmcattribute.cmcDeviceStyle	ccmtsType,
+			cmcportattribute.ifAdminStatus ccmtsIfAdminStatus,
+			max(cmcdownchannelbaseinfo.docsIfDownChannelModulation) ccmtsDownChannelModule,
+			max(cmcupchannelbaseinfo.ChannelModulationProfile) ccmtsUpChannelModule,
+			sum(case when docsIfDownChannelModulation is not null then 1 else 0 end) ccmtsDownChannelNum,
+			sum(case when ChannelModulationProfile is not null then 1 else 0 end) ccmtsUpChannelNum
+		FROM 
+			oltponrelation
+			LEFT JOIN entity e1 ON e1.entityId = oltponrelation.entityId
+			LEFT JOIN oltonurelation ON	oltponrelation.ponId = oltonurelation.ponId
+			LEFT JOIN cmcattribute ON oltonurelation.onuId = cmcattribute.cmcId
+			LEFT JOIN cmcportattribute ON cmcattribute.cmcId = cmcportattribute.cmcId
+			LEFT JOIN cmcdownchannelbaseinfo ON cmcportattribute.cmcPortId = cmcdownchannelbaseinfo.cmcPortId
+			LEFT JOIN cmcupchannelbaseinfo ON cmcportattribute.cmcPortId = cmcupchannelbaseinfo.cmcPortId
+			LEFT JOIN entity e2 ON e2.entityId = cmcattribute.cmcId
+		WHERE
+			e1.typeId in (select typeId from entitytyperelation where type = #{oltType})
+			AND	cmcportattribute.ifOperStatus = 1
+			AND cmcportattribute.ifAdminStatus = 1
+			AND cmcattribute.cmcDeviceStyle in (select typeId from entitytyperelation where type = #{ccWithOutAgentType})
+			AND e1.entityId in (select entityId from ${Authority})
+		GROUP BY
+			cmcId
+			having(ccmtsDownChannelNum is not null and ccmtsUpChannelNum is	not	null)
+		ORDER BY
+			e1.ip ASC,
+			oltponrelation.ponId ASC,
+			cmcattribute.cmcId ASC
+	</select>
+
+</mapper>

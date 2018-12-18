@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.ccmts.domain.Cmc">
+
+    <!-- ################################## select start ####################################### -->
+    <select id="getCmcIdByOnuId" parameterType="long" resultType="long">
+       select cmcId from cmcentityrelation where onuId = #{onuId}
+    </select>
+    <select id="getEntityIdByCmcId" parameterType="long" resultType="long">
+        select cmcEntityId from cmcentityrelation where
+        cmcId=#{cmcId}
+    </select>
+
+    <select id="getCmcAttributeByCmcId" parameterType="map" resultType="cmcAttribute">
+        SELECT
+        a.cmcId,a.cmcDeviceStyle,a.topCcmtsSysDescr,a.topCcmtsSysObjectId,x.sysUpTime
+        topCcmtsSysUpTime,
+        a.topCcmtsSysContact,a.topCcmtsSysName,a.topCcmtsSysLocation,a.topCcmtsSysService,
+        a.topCcmtsSysORLastChange,a.topCcmtsDocsisBaseCapability,a.topCcmtsSysRAMRatio,
+        a.topCcmtsSysCPURatio,a.topCcmtsSysMacAddr,
+        a.topCcmtsSysMacAddrLong,a.topCcmtsSysFlashRatio,a.topCcmtsSysStatus,
+        a.topCcmtsSysSwVersion, a.topCcmtsSysDorType, h.name
+        nmName,b.cmcIndex,
+        c.ponId,b.cmcEntityId,b.cmcEntityId as entityId,f.ip AS manageIp,x.snapTime dt,i.bSoftwareVersion
+        oltVersion, f.name AS manageName, et.displayname as
+        cmcDeviceStyleString,
+        if(a.statusChangeTime='0000-00-00 00:00:00', sysdate(), a.statusChangeTime) statusChangeTime,
+        G.userId attention
+        FROM
+        oltponrelation d RIGHT JOIN oltonurelation c ON
+        d.ponId = c.ponId
+        RIGHT JOIN cmcentityrelation b ON
+        c.onuId = b.onuId
+        RIGHT JOIN entity f ON f.entityId = b.cmcEntityId
+        RIGHT JOIN cmcattribute a ON b.cmcId = a.cmcId
+        RIGHT JOIN entity h ON h.entityId = b.cmcId
+        LEFT JOIN entitysnap x ON x.entityId = h.entityId
+        LEFT JOIN (select * from userAttention where entityId = #{cmcId} 
+		<if test="userId != null ">
+			and userId = #{userId}
+		</if>) G  ON a.cmcId = G.entityId
+        RIGHT JOIN entityType et ON a.cmcDeviceStyle = et.typeId
+        LEFT JOIN oltslotattribute i ON (i.entityId = b.cmcEntityId AND
+        i.bAttribute=1 )
+        WHERE a.cmcId = #{cmcId}
+    </select>
+
+    <select id="getCmcIdByEntityId" parameterType="long" resultType="long">
+        select cmcId from cmcentityrelation where cmcEntityId =
+        #{entityId}
+    </select>
+    <select id="getCmcTypeByCmcId" parameterType="long" resultType="Integer">
+        select cmcType from cmcentityrelation where cmcId =
+        #{cmcId}
+    </select>
+    <select id="getCmcIndexByCmcId" parameterType="long" resultType="long">
+        select cmcIndex from cmcentityrelation where cmcId=#{cmcId}
+    </select>
+    <select id="getDeviceListItem" parameterType="map" resultType="cmcAttribute">
+        SELECT A.cmcId,A.topCcmtsSysName,V.name
+        nmName, A.topCcmtsSysLocation,
+        A.cmcDeviceStyle,A.topCcmtsSysMacAddr,
+        A.topCcmtsSysContact, C.ip AS
+        ipAddress,C.createTime
+        FROM
+        cmcattribute A
+        , cmcentityrelation B
+        , entity V, Entity C where A.cmcId = B.cmcId
+        and
+        B.cmcId = V.entityId
+        and B.cmcEntityId=C.entityId
+        and V.entityId in (select entityId from ${Authority})
+        ORDER BY
+        ${sortName}
+    </select>
+    <select id="getCmcNotRelated" resultType="java.util.HashMap">
+        select a.entityId cmcEntityId, a.ip cmcIp
+        from entity a , cmcentityrelation b
+        where
+        a.entityid = b.cmcEntityId and b.onuid is null and cmctype=2
+    </select>
+    <select id="getCmcByOnuId" parameterType="long" resultType="cmc">
+        select
+        a.cmcEntityId,
+        a.cmcIndex,
+        a.onuId,
+        a.cmcId,
+        a.cmcType,
+        b.topCcmtsSysDescr,
+        b.topCcmtsSysObjectId,
+        d.sysUpTime topCcmtsSysUpTime,
+        b.topCcmtsSysContact,
+        b.topCcmtsSysName,
+        c.name as nmName,
+        b.topCcmtsSysStatus,
+        b.topCcmtsSysLocation,
+        b.topCcmtsSysService,
+        b.topCcmtsSysORLastChange,
+        b.topCcmtsDocsisBaseCapability,
+        b.topCcmtsSysRAMRatio,
+        b.topCcmtsSysCPURatio,
+        b.topCcmtsSysFlashRatio,
+        b.topCcmtsSysMacAddr,
+        b.topCcmtsSysMacAddrLong,
+        b.topCcmtsCmNumTotal,
+        b.topCcmtsCmNumOutline,
+        b.topCcmtsCmNumOnline,
+        b.topCcmtsCmNumReg,
+        b.topCcmtsCmNumRanged,
+        b.topCcmtsCmNumRanging,
+        b.dt,
+        e.lastDeregisterTime
+        from cmcattribute b , cmcentityrelation a ,entity c,entitysnap d, oltonuattribute e
+        where
+        a.cmcid = b.cmcid and a.cmcid = c.entityId and a.cmcId = d.entityId and a.cmcId = e.onuId and
+        a.onuid=#{onuId}
+    </select>
+    <select id="getOnuIdByCmcId" parameterType="long" resultType="long">
+        select onuId from cmcentityrelation where cmcId=#{cmcId}
+    </select>
+    <select id="isCmcExistsInTopo" parameterType="map" resultType="long">
+        select count(*)
+        from entityType a,entityfolderrela b,
+        entity c
+        where c.entityId = #{cmcId}
+        and b.folderId=#{folderId}
+        and b.entityId = c.entityId and a.typeId = c.typeId and a.module='cmc'
+    </select>
+    <select id="getCmcIdByFolder" parameterType="map" resultType="long">
+        select
+        B.parentId
+        from
+        entityfolderrela A,entity B
+        where
+        A.entityId =
+        B.entityId AND B.typeId in ((select typeId from entitytyperelation where type =
+        #{type}))
+        AND folderId = #{folderId}
+    </select>
+    <select id="getCmcAttribute" parameterType="long" resultType="long">
+        select cmcId
+        from cmcattribute where cmcId=#{cmcId}
+    </select>
+    <select id="getCmcEntityRelationByCmcId" parameterType="Long"
+        resultType="cmcEntityRelation">
+        SELECT
+        cmcId,
+        onuId,
+        cmcIndex,
+        cmcType,
+        cmcEntityId
+        FROM
+        cmcentityrelation
+        WHERE cmcId = #{cmcId}
+    </select>
+    
+    <select id="getCmcEntityRelationByEntityId" parameterType="Long" resultType="cmcEntityRelation">
+    	SELECT
+        cmcId,
+        onuId,
+        cmcIndex,
+        cmcType,
+        cmcEntityId
+        FROM
+        cmcentityrelation
+        WHERE cmcEntityId = #{entityId}
+    </select>
+    
+    <select id="getCmcIdsByEntityId" parameterType="long"
+        resultType="long">
+        select cmcId
+        from cmcentityrelation
+        where cmcEntityId = #{entityId}
+    </select>
+    <select id="getCmcIdListByEntityIdExt" parameterType="long"
+        resultType="long">
+        select cmcId from cmcentityrelation where cmcentityid = #{entityId};
+    </select>
+    <select id="getCmcNameByMac" parameterType="string" resultType="string">
+        select name
+        from entity
+        where mac = #{cmcMacString}
+    </select>
+    <select id="getCmcMacByEntityIdAndChannelIndex" parameterType="map"
+        resultType="long">
+        select
+        a.topCcmtsSysMacAddrLong
+        from
+        cmcattribute a,cmcportrelation b,cmcentityrelation c
+        where
+        a.cmcid=b.cmcId AND b.cmcId=c.cmcId AND c.cmcentityId=#{entityId} and
+        b.channellIndex=#{channelIndex}
+    </select>
+    <select id="getCmcIdListByChannelIfindex" parameterType="long"
+        resultType="long">
+        select cmcid from cmcportrelation where channellIndex =
+        #{ifIndex}
+    </select>
+    <select id="getCmcNameByCmcId" parameterType="map" resultType="string">
+        select name
+        from entity
+        where entityId = #{onuId}
+    </select>
+    <select id="getFPGASpecInfoByCmcId" parameterType="long"
+        resultType="fpgaSpecification">
+        select *
+        from cmcfpgainfo
+        where cmcId = #{cmcId}
+    </select>
+    <select id="getOnuIndexByCmcId" parameterType="long" resultType="long">
+        select onuIndex from oltonurelation where onuId = #{cmcId}
+    </select>
+    <select id="getCmcByTrapInfo" parameterType="map" resultType="entity">
+        select A.entityId, A.name from entity A, entity B where A.parentId =
+        B.entityId
+        and B.ip = #{ip} and A.mac = #{address}
+        union
+        select A.entityId, A.name from entity A where A.ip=#{ip} and
+        A.mac=#{address}
+    </select>
+
+    <select id="getCmcIdByEntityIdAndCmcIndex" parameterType="map" resultType="long">
+        select cmcId from cmcentityrelation where 
+        cmcentityId = #{entityId} and cmcIndex = #{cmcIndex}	
+    </select>
+
+    <!-- ################################## select end ######################################### -->
+
+    <!-- ################################## insert start ####################################### -->
+    <!-- ################################## insert end ######################################### -->
+
+    <!-- ################################## update start ####################################### -->
+    <update id="relateCmcToOnu" parameterType="map">
+        UPDATE
+        CmcEntityRelation
+        SET onuId = #{onuId},
+        vnEntityId = (SELECT A.entityId
+        FROM OltOnuRelation A WHERE A.onuId = #{onuId})
+        WHERE cmcEntityId =
+        #{cmcEntityId}
+    </update>
+    <update id="updateCmcAttribute" parameterType="cmcAttribute">
+        update
+        cmcattribute
+        set
+        cmcDeviceStyle=#{cmcDeviceStyle},
+        topCcmtsSysDescr=#{topCcmtsSysDescr},
+        topCcmtsSysObjectId=#{topCcmtsSysObjectId},
+        topCcmtsSysUpTime=#{topCcmtsSysUpTime},
+        topCcmtsSysContact=#{topCcmtsSysContact},
+        topCcmtsSysName=#{topCcmtsSysName},
+        topCcmtsSysLocation=#{topCcmtsSysLocation},
+        topCcmtsSysService=#{topCcmtsSysService},
+        topCcmtsSysORLastChange=#{topCcmtsSysORLastChange},
+        topCcmtsDocsisBaseCapability=#{topCcmtsDocsisBaseCapability},
+        topCcmtsSysRAMRatio=#{topCcmtsSysRAMRatio},
+        topCcmtsSysCPURatio=#{topCcmtsSysCPURatio},
+        topCcmtsSysMacAddrLong=#{topCcmtsSysMacAddrLong},
+        topCcmtsSysFlashRatio=#{topCcmtsSysFlashRatio},
+        topCcmtsSysMacAddr = #{topCcmtsSysMacAddr},
+        topCcmtsSysStatus = #{topCcmtsSysStatus},
+        topCcmtsSysSwVersion =#{topCcmtsSysSwVersion}
+        where cmcId=#{cmcId}
+    </update>
+    <update id="modifyOnuName" parameterType="map">
+        UPDATE
+        OLTONUATTRIBUTE
+        SET onuName = #{onuName}
+        WHERE onuId = #{onuId}
+    </update>
+    <update id="updateCcmtsBasicInfo"
+        parameterType="com.topvision.ems.cmc.facade.domain.CmcSystemBasicInfo">
+        UPDATE
+        cmcattribute
+        SET topCcmtsSysName =
+        #{topCcmtsSysName},topCcmtsSysContact=#{topCcmtsSysContact},topCcmtsSysLocation=#{topCcmtsSysLocation}
+        WHERE cmcId = #{cmcId}
+    </update>
+    <update id="updateStatusChangeTime" parameterType="map">
+        UPDATE cmcAttribute
+        SET statusChangeTime = #{updateStatusChangeTime}
+        WHERE cmcId = #{cmcId}
+    </update>
+
+    <!-- ################################## update end ######################################### -->
+
+    <!-- ################################## delete start ####################################### -->
+    <delete id="deleteOnuCmcRelationByCmcId" parameterType="long">
+        delete from oltonurelation where onuId=#{onuId}
+    </delete>
+
+    <!-- ################################## delete end ######################################### -->
+
+    <select id="querySubCountInfo" resultType="subDeviceCount"
+        parameterType="map">
+        SELECT IFNULL(count(a.cmcId),0) cmcTotal,
+        IFNULL(sum(case WHEN a.topCcmtsSysStatus = 4 THEN 1 END),0) cmcOnline
+        FROM cmcattribute a, cmcentityrelation b where a.cmcId = b.cmcId
+        and b.cmcEntityId = #{entityId} and b.cmcId in(select entityId from
+        ${Authority})
+    </select>
+
+    <update id="updateCmcBaseInfo" parameterType="cmcBfsxSnapInfo">
+        update
+        cmcattribute
+        set
+        topCcmtsSysObjectId = #{cmcSysObjectId},
+        topCcmtsSysUpTime = #{cmcSysUpTime},
+        topCcmtsSysName = #{cmcSysName},
+        topCcmtsSysLocation = #{cmcSysLocation},
+        topCcmtsSysRAMRatio = #{cmcSysRAMRatio},
+        topCcmtsSysCPURatio = #{cmcSysCPURatio},
+        topCcmtsSysMacAddrLong = #{macAddrLong},
+        topCcmtsSysFlashRatio = #{cmcSysFlashRatio},
+        topCcmtsSysMacAddr = #{cmcSysMacAddr},
+        topCcmtsSysStatus = #{cmcSysStatus},
+        topCcmtsSysSwVersion = #{cmcSysSwVersion}
+        where cmcId = #{entityId}
+    </update>
+
+    <select id="getCmcUpChannelBaseInfosForDiscovery" parameterType="long"
+        resultType="cmcUpChannelBaseInfo">
+        select * from cmcupchannelbaseinfo where cmcId
+        = #{cmcId}
+    </select>
+    <select id="getCmcDownChannelBaseInfosForDiscovery"
+        parameterType="long" resultType="cmcDownChannelBaseInfo">
+        select * from cmcdownchannelbaseinfo
+        where
+        cmcId = #{cmcId}
+    </select>
+
+    <delete id="deleteCmcSystemIpInfo" parameterType="long">
+        delete from
+        cmcsystemipinfo where
+        entityId=#{entityId}
+    </delete>
+
+    <insert id="insertCmcSystemIpInfo" parameterType="cmcSystemIpInfo">
+        insert into
+        cmcsystemipinfo
+        (entityId, topCcmtsEthIpAddr,
+        topCcmtsEthIpMask,
+        topCcmtsEthGateway,
+        topCcmtsEthVlanId,
+        topCcmtsEthVlanIpAddr,
+        topCcmtsEthVlanIpMask,
+        topCcmtsEthVlanGateway
+        )
+        values
+        (#{entityId},
+        #{topCcmtsEthIpAddr}, #{topCcmtsEthIpMask}, #{topCcmtsEthGateway},
+        #{topCcmtsEthVlanId},
+        #{topCcmtsEthVlanIpAddr},
+        #{topCcmtsEthVlanIpMask},
+        #{topCcmtsEthVlanGateway}
+        )
+    </insert>
+
+    <update id="modifyCmcMac" parameterType="map">
+        UPDATE
+        Entity
+        SET mac = #{mac}
+        WHERE entityId = #{cmcId}
+    </update>
+    
+    <update id="updateCmcStatus" parameterType="map">
+        UPDATE cmcattribute
+        SET topCcmtsSysStatus = #{status}
+        WHERE cmcId = #{cmcId}
+    </update>
+
+	<select id="getCmciForAutoClean" resultType="cmciAttribute">
+		SELECT A.cmcId, A.topCcmtsSysMacAddr AS macAddr, A.statusChangeTime AS offLineTime, B.cmcIndex, B.cmcType, B.cmcEntityId, c.ip AS ipAddress, c.name AS alias, D.displayName AS typeName
+		FROM cmcattribute A
+		LEFT JOIN cmcentityrelation B ON A.cmcId = B.cmcId
+		LEFT JOIN entity C ON B.cmcEntityId = C.entityId
+		LEFT JOIN entitytype D ON C.typeId = D.typeId
+		WHERE A.topCcmtsSysStatus = 2
+	</select>
+
+    <select id="getAllCmcForAutoClean" resultType="cmcAttribute">
+        select cmcAttribute.cmcId, cmcentityrelation.cmcIndex, oltOnuAttribute.lastDeregisterTime, oltOnuAttribute.entityId from 
+        cmcAttribute, 
+        cmcentityrelation,
+        oltOnuAttribute
+        where 
+        cmcAttribute.cmcId = oltOnuAttribute.onuId
+        and
+        cmcAttribute.cmcId = cmcentityrelation.cmcId
+        and
+        cmcAttribute.topCcmtsSysStatus = 2
+    </select>
+    
+    
+    <select id="selectCmcCMclearTime" resultType="Integer" parameterType="long">
+        select clearTime from cmcclearcmtime where deviceId=#{deviceId}
+    </select>
+    
+    <insert id="insertOrupdateCmcCmClearTime" parameterType="map">
+        insert into cmcclearcmtime (deviceId,clearTime) values (#{cmcId},#{time}) ON DUPLICATE KEY UPDATE clearTime=#{time}
+    </insert>
+    
+    <select id="getContainOptDorCmcList" resultType="cmcAttribute">
+        select * from cmcAttribute
+        where cmcDeviceStyle in (30005,30006,30010,30011,30012,30013,30014,30015,30020,30021,30022,30023)
+    </select>
+</mapper>

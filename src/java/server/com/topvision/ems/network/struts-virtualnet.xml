@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="virtualnet" namespace="/virtualnet" extends="default">
+        <action name="createVirtualNet" class="virtualNetAction" method="createVirtualNet" />
+        <action name="createProduct" class="virtualNetAction" method="createProduct" />
+        <action name="deleteProduct" class="virtualNetAction" method="deleteProduct"/>
+        <action name="deleteVirtualNet" class="virtualNetAction" method="deleteVirtualNet" />
+        <action name="getAllProductsInVirtualNet" class="virtualNetAction" method="getAllProductsInVirtualNet" />
+        <action name="renameVirtualNet" class="virtualNetAction" method="renameVirtualNet" />
+        <action name="relateProductToTopoGraph" class="virtualNetAction" method="relateProductToTopoGraph" />
+        <action name="removeProductFromTopoGraph" class="virtualNetAction" method="removeProductFromTopoGraph"/>
+        <action name="createEntityInVirtualNet" class="virtualNetAction" method="createEntityInVirtualNet"/>
+        <action name="saveVirtualNetCoordinate" class="virtualNetAction" method="saveVirtualNetCoordinate"/> 
+        <action name="isProductExistsInTopo" class="virtualNetAction" method="isProductExistsInTopo"/>
+        <action name="renameProductInVirtualNet" class="virtualNetAction" method="renameProductInVirtualNet" />
+	</package>
+</struts>

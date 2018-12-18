@@ -1,0 +1,79 @@
+img {
+	border: none;
+}
+
+/* dock - top */
+.dock {
+	height: 50px;
+	text-align: center;
+	z-index: 100000;
+}
+
+.dock-container {
+	position: absolute;
+	height: 50px;
+	background: url(images/fisheye/dock-bg2.gif);
+	padding-left: 20px;
+}
+
+a.dock-item {
+	display: block;
+	width: 40px;
+	color: white;
+	position: absolute;
+	top: 0px;
+	text-align: center;
+	text-decoration: none;
+	font: bold 12px Arial, Helvetica, sans-serif;
+}
+
+.dock-item img {
+	border: none;
+	margin: 5px 10px 0px;
+	width: 100%;
+}
+
+.dock-item span {
+	display: none;
+	padding-left: 20px;
+}
+
+/* dock2 - bottom */
+#dock2 {
+	width: 100%;
+	bottom: 50%;
+	position: absolute;
+	left: 0px;
+	z-index: 100000;
+}
+
+.dock-container2 {
+	background: url(dock-bg.gif);
+	position: absolute;
+	height: 50px;
+	background: gray;
+	padding-left: 20px;
+	z-index: 100000;
+}
+
+a.dock-item2 {
+	display: block;
+	font: bold 12px Arial, Helvetica, sans-serif;
+	width: 40px;
+	color: white;
+	bottom: 0px;
+	position: absolute;
+	text-align: center;
+	text-decoration: none;
+}
+
+.dock-item2 span {
+	display: none;
+	padding-left: 20px;
+}
+
+.dock-item2 img {
+	border: none;
+	margin: 5px 10px 0px;
+	width: 100%;
+}

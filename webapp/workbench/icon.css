@@ -1,0 +1,13 @@
+/*
+ * @author: niejun
+ *
+ * icon css for workbench
+ */
+
+.favouriteFolderIcon {
+	background-image: url(../images/workbench/folder.gif) !important;
+}
+
+.favouriteLinkIcon {
+	background-image: url(../images/workbench/link.gif) !important;
+}

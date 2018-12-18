@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcAlert" namespace="/cmc/alert" extends="default">
+		<action name="showCmcAlert" class="cmcAlertAction" method="showCmcAlert">
+			<result>/cmc/showCmcAlert.jsp</result>
+		</action>
+		<action name="showCmcHistoryAlert" class="cmcAlertAction"
+			method="showCmcHistoryAlert">
+			<result>/cmc/showCmcHistoryAlert.jsp</result>
+		</action>
+		<action name="showAlertSetting" class="cmcAlertAction" method="showAlertSetting">
+			<result>/cmc/alertSetting.jsp</result>
+		</action>
+		<action name="getCmcAlertList" class="cmcAlertAction" method="getCmcAlertList">
+		</action>
+		<action name="getCmcHistoryAlertList" class="cmcAlertAction"
+			method="getCmcHistoryAlertList">
+		</action>
+		<action name="getCmcAlertType" class="cmcAlertAction" method="getCmcAlertType">
+		</action>
+		<action name="getAllCmcAlertType" class="cmcAlertAction" method="getAllCmcAlertType" />
+		
+	</package>
+</struts>

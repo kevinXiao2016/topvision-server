@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="topology" namespace="/topology" extends="default">
+		<action name="discoveryEntityAgain" class="topologyDiscoveryAction" method="discoveryEntityAgain" />
+		<action name="refreshEntity" class="topologyDiscoveryAction" method="refreshEntity" />
+		<action name="getTopoMapByFolderId" class="topologyAction"
+			method="getTopoMapByFolderId">
+			<result name="map">/network/topoMap.jsp</result>
+			<result name="zetaframework">/network/topoGraph.jsp</result>
+			<result name="detail">/network/topoDetailView.jsp</result>
+		</action>
+		
+		<action name="showNewTopoDemo" class="topologyAction"
+			method="showNewTopoDemo">
+			<result name="map">/network/topoMap.jsp</result>
+			<result name="zetaframework">/network/topoDemo.jsp</result>
+			<result name="detail">/network/topoDetailView.jsp</result>
+		</action>
+
+		<action name="getTopologyStateNewly" class="topologyStateAction"
+			method="getTopologyStateNewly" />
+
+		<action name="getTopologyStateFirstly" class="topologyStateAction"
+			method="getTopologyStateFirstly" />
+
+		<action name="cutEntityById" class="topologyAction" method="cutEntityById">
+		</action>
+		<action name="copyEntityById" class="topologyAction" method="copyEntityById">
+		</action>
+
+		<action name="loadVertexByFolderId" class="topologyAction"
+			method="loadVertexByFolderId" />
+
+		<action name="getEntityByIconView" class="topologyAction"
+			method="getEntityByIconView" />
+		<action name="getEntityByDetail" class="topologyAction" method="getEntityByDetail" />
+
+		<action name="arrangeEntityByFolderId" class="topologyAction"
+			method="arrangeEntityByFolderId" />
+		<action name="saveTopoAsPicture" class="topologyAction" method="saveTopoAsPicture" />
+
+		<action name="fetchLogonUserAuthFolders" class="topoFolderAction" method="fetchLogonUserAuthFolders" />
+		<action name="fetchUserSwithableFolders" class="topoFolderAction" method="fetchUserSwithableFolders" />
+		<action name="fetchNetSegmentFolders" class="topoFolderAction" method="fetchNetSegmentFolders" />
+		<action name="fetchEntityLocatedFolders" class="topoFolderAction" method="fetchEntityLocatedFolders"></action>
+		<action name="fetchUserCurRootFolders" class="topoFolderAction" method="fetchUserCurRootFolders" />
+		<action name="fetchSwithRootFolders" class="topoFolderAction" method="fetchSwithRootFolders" />
+		<action name="loadFolder" class="topoFolderAction" method="loadMyFolder" />
+		<action name="loadTopoFolder" class="topoFolderAction" method="loadTopoFolder" />
+
+		<action name="createTopoFolder" class="topoFolderAction"
+			method="createTopoFolder">
+		</action>
+		<action name="deleteTopoFolder" class="topoFolderAction"
+			method="deleteTopoFolder">
+		</action>
+		<action name="renameTopoFolder" class="topoFolderAction"
+			method="renameTopoFolder">
+		</action>
+		
+		<action name="showRenameFolder" class="topoFolderAction" method="showRenameFolder">
+			<result>/network/modifyFolderName.jsp</result>
+		</action>
+		
+		<action name="getTopoFolderProperty" class="topoFolderAction"
+			method="getTopoFolderProperty">
+			<result>/network/topoFolderProperty.jsp</result>
+			<result name="hrefTopoFolder">
+				/network/hrefFolderProperty.jsp
+			</result>
+			<result name="subnet">/network/subnetProperty.jsp</result>
+		</action>
+
+		<action name="getRecyle" class="topologyAction" method="getRecyle">
+			<result>/network/recyle.jsp</result>
+		</action>
+		<action name="newTopoFolderJsp" class="networkAction" method="newTopoFolderJsp">
+			<result>/network/newTopoFolder.jsp</result>
+		</action>
+		<action name="showDeleteFolder" class="networkAction" method="showDeleteFolder">
+			<result>/network/deleteTopoFolder.jsp</result>
+		</action>
+		<action name="newSubnetJsp" class="networkAction" method="newSubnetJsp">
+			<result>/network/newSubnet.jsp</result>
+		</action>
+
+		<action name="getPhysicalPane" class="networkAction" method="getPhysicalPane">
+			<result>/network/physicalPane.jsp</result>
+		</action>
+		<action name="execNetCmd" class="networkAction" method="execNetCmd">
+		</action>
+
+		<action name="showVmlPropertyJsp" class="mapNodeAction" method="showVmlProperty">
+			<result>/network/mapNodeProperty.jsp</result>
+			<result name="picture">
+				/network/pictureNodeProperty.jsp
+			</result>
+		</action>
+
+		<action name="showTopoLabelJsp" class="topoLabelAction" method="showTopoLabelJsp">
+			<result>/network/topoLabel.jsp</result>
+		</action>
+		<action name="updateFlowThreshold" class="linkAction" method="updateFlowThreshold">
+		</action>
+
+		<action name="addHrefFolder" class="topoFolderAction" method="addHrefFolder" />
+		<action name="addCloudy" class="topoFolderAction" method="addCloudy" />
+		<action name="addSubnet" class="topoFolderAction" method="addSubnet" />
+
+		<action name="updateMapNodeGroup" class="mapNodeAction" method="setMapNodeGroup" />
+
+		<!-- TopoFolder -->
+		<action name="updateFolderBgFlag" class="topoFolderAction"
+			method="updateFolderBgFlag" />
+		<action name="updateFolderLinkWidth" class="topoFolderAction"
+			method="updateFolderLinkWidth" />
+		<action name="updateFolderRefreshInterval" class="topoFolderAction"
+			method="updateFolderRefreshInterval" />
+		<action name="updateFolderLinkColor" class="topoFolderAction"
+			method="updateFolderLinkColor" />
+		<action name="updateFolderBgColor" class="topoFolderAction"
+			method="updateFolderBgColor" />
+		<action name="updateFolderBgPosition" class="topoFolderAction"
+			method="updateFolderBgPosition" />
+		<action name="updateFolderBgImg" class="topoFolderAction"
+			method="updateFolderBgImg" />
+		<action name="updateTopoFolderOutline" class="topoFolderAction"
+			method="updateTopoFolderOutline" />
+		<action name="updateTopoFolderIcon" class="topoFolderAction"
+			method="updateTopoFolderIcon" />
+		<action name="updateFolderFixed" class="topoFolderAction"
+			method="updateFolderFixed" />
+		<action name="setTopoMapZoom" class="topoFolderAction" method="setTopoMapZoom" />
+		<action name="setTopoMapDisplayName" class="topoFolderAction"
+			method="setTopoMapDisplayName" />
+		<action name="setTopoMapDisplayGrid" class="topoFolderAction"
+			method="updateFolderDisplayGrid" />
+		<action name="setTopoMapDisplayNoSnmp" class="topoFolderAction"
+			method="setTopoMapDisplayNoSnmp" />
+		<action name="updateTopoLabel" class="topoFolderAction" method="updateTopoLabel" />
+		<action name="updateTopoFolderDisplay" class="topoFolderAction"
+			method="updateTopoFolderDisplay" />
+		<action name="updateTopoMapLinkShadow" class="topoFolderAction"
+			method="updateTopoMapLinkShadow" />
+		<action name="updateDisplayLinkLabel" class="topoFolderAction"
+			method="updateDisplayLinkLabel" />
+		<action name="updateDisplayEntityLabel" class="topoFolderAction"
+			method="updateDisplayEntityLabel" />
+		<action name="updateDisplayEntityForOrgin" class="topoFolderAction"
+			method="updateDisplayEntityForOrgin" />
+		<action name="updateDisplayAlertIcon" class="topoFolderAction"
+			method="updateDisplayAlertIcon" />
+		<action name="updateDisplayLink" class="topoFolderAction"
+			method="updateDisplayLink" />
+		<action name="updateDisplayAllEntity" class="topoFolderAction"
+			method="updateDisplayAllEntity" />
+		<action name="updateDisplayCluetip" class="topoFolderAction"
+			method="updateDisplayCluetip" />
+		<action name="updateMarkerAlertMode" class="topoFolderAction"
+			method="updateMarkerAlertMode" />
+
+		<!-- Map Node -->
+		<action name="insertMapNode" class="mapNodeAction" method="insertMapNode" />
+		<action name="setMapNodeText" class="mapNodeAction" method="setMapNodeText" />
+		<action name="setMapNodeFontSize" class="mapNodeAction" method="setMapNodeFontSize" />
+		<action name="setMapNodeFontColor" class="mapNodeAction"
+			method="setMapNodeFontColor" />
+		<action name="setMapNodeSize" class="mapNodeAction" method="setMapNodeSize" />
+		<action name="setMapNodeFillColor" class="mapNodeAction"
+			method="setMapNodeFillColor" />
+		<action name="setMapNodeStrokeColor" class="mapNodeAction"
+			method="setMapNodeStrokeColor" />
+		<action name="setMapNodeShadow" class="mapNodeAction" method="setMapNodeShadow" />
+		<action name="setMapNodeDashedBorder" class="mapNodeAction"
+			method="setMapNodeDashedBorder" />
+		<action name="setMapNodeStrokeWeight" class="mapNodeAction"
+			method="setMapNodeStrokeWeight" />
+		<action name="setMapNodeInfo" class="mapNodeAction" method="setMapNodeInfo" />
+		<action name="setMapNodeUrl" class="mapNodeAction" method="setMapNodeUrl" />
+		<action name="setMapNodeFixed" class="mapNodeAction" method="setMapNodeFixed" />
+		<action name="setMapNodeIcon" class="mapNodeAction" method="setMapNodeIcon" />
+		<action name="setMapNodeExpanded" class="mapNodeAction" method="setMapNodeExpanded" />
+
+		<action name="showTopoDiscoveryGuide" class="topologyDiscoveryAction"
+			method="showTopoDiscoveryGuide">
+			<result>/network/topoDiscovery.jsp</result>
+		</action>
+		<action name="startTopologyDiscovery" class="topologyDiscoveryAction"
+			method="startTopologyDiscovery" />
+		<action name="getDiscoveryProgress" class="topologyDiscoveryAction"
+			method="getDiscoveryProgress" />
+		<action name="getDiscoveryState" class="topologyDiscoveryAction"
+			method="getDiscoveryState" />
+
+		<action name="statTopoFolder" class="topoFolderAction" method="statTopoFolder" />
+		<action name="statTopoFolderCols" class="topoFolderAction"
+			method="statTopoFolderCols" />
+
+		<action name="saveCoordinateByIds" class="topologyAction"
+			method="saveCoordinateByIds" />
+
+		<action name="updateVertexFixed" class="mapNodeAction" method="updateVertexFixed" />
+
+		<action name="deleteCellByIds" class="topologyAction" method="deleteCellByIds" />
+
+		<action name="loadNodeTip" class="mapNodeAction" method="loadNodeTip" />
+		<action name="showVitualDevice" class="topologyAction" method="showVitualDevice">
+			<result>/network/showVirtualDeviceList.jsp</result>
+		</action>
+
+		<action name="saveToolView" class="topologyAction" method="saveToolView" />
+		
+		<!-- <action name="editTopoFolder" class="topoFolderAction" method="editTopoFolder">
+			<result>/network/editTopoFolder.jsp</result>
+		</action> -->
+		
+	</package>
+</struts>

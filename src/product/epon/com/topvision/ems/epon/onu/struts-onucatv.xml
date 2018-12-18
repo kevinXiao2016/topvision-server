@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="onucatv" namespace="/onu/catv" extends="default">
+        
+        <action name="showOnuCatvConfig" class="onuCatvAction" method="showOnuCatvConfig">
+            <result>/epon/onucatv/onuCatvConfig.jsp</result>
+            <result name="GponOnu">/gpon/gponOnuCatvConfig.jsp</result>
+        </action>
+        <action name="getOnuCatvConfigInfo"  class="onuCatvAction"  method="getOnuCatvConfigInfo"></action>
+        <action name="refreshOnuCatvConfig"  class="onuCatvAction"  method="refreshOnuCatvConfig"></action>
+        <action name="modifyOnuCatvConfig"  class="onuCatvAction"  method="modifyOnuCatvConfig"></action>
+        
+    </package>
+</struts>

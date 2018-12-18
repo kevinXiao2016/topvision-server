@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.platform.domain.NavigationButton">
+	<select id="selectByMap" resultType="navigationButton">
+		SELECT naviId, name,
+		displayName, icon16, action FROM
+		NavigationButton
+    </select>
+	<select id="selectNaviByName" parameterType="string" resultType="navigationButton">
+		SELECT naviId, name, displayName, icon16,
+		action FROM
+		NavigationButton
+		where name = #{name}
+    </select>
+	<insert id="insertEntity" parameterType="navigationButton">
+		insert into
+		navigationbutton(naviId,name,displayName,icon16,icon24,action)
+		values(#{naviId},#{name},#{displayName},#{icon16},#{icon24},#{action})
+	</insert>
+</mapper>

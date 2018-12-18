@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.mobile.domain.CmtsInfo">
+	<select id="getCmtsInfoById" parameterType="long"
+		resultType="com.topvision.ems.mobile.domain.CmtsInfo">
+		SELECT
+		a.cmcId cmtsId,
+		j.displayName type,
+		j.typeId,
+		h.name name,
+		if(a.statusChangeTime='0000-00-00 00:00:00', sysdate(),
+		a.statusChangeTime) statusChangeTime,
+		x.snapTime dt,
+		x.sysUpTime sysUpTime,
+		f.ip as ip,
+		a.topCcmtsSysMacAddr mac,
+		x.state state,
+		a.topCcmtsSysSwVersion softVer,
+		b.cmcIndex,
+		a.topCcmtsSysDorType,
+		be.location cmtsLocation,
+		temp.usTemp,
+		temp.dsTemp,
+		temp.outsideTemp
+		FROM
+		oltponrelation d
+		RIGHT JOIN oltonurelation c ON d.ponId = c.ponId
+		RIGHT JOIN cmcentityrelation b ON c.onuId = b.onuId
+		RIGHT JOIN entity f ON f.entityId = b.cmcEntityId
+		RIGHT JOIN cmcattribute a ON b.cmcId = a.cmcId
+		RIGHT JOIN entity h ON h.entityId = b.cmcId
+		LEFT  JOIN oltslotattribute i ON (i.entityId = b.cmcEntityId AND i.bAttribute=1 )
+		LEFT  JOIN entitytype j ON j.typeId = a.cmcDeviceStyle
+		RIGHT JOIN entitysnap x on x.entityId = b.cmcId
+		LEFT JOIN baiduentity be on a.cmcId=be.entityId
+		LEFT JOIN perfcmctempqualitylast temp ON a.cmcId = temp.cmcId
+		WHERE f.typeId in
+		(select typeId from entitytyperelation where type = 30000
+		or type =
+		10000)
+		AND a.cmcId = #{cmtsId}
+	</select>
+
+	<select id="getDownChannelsById" parameterType="long"
+		resultType="com.topvision.ems.mobile.domain.CmtsDownChannel">
+		SELECT
+			a.cmcId cmtsId,
+			a.docsIfDownChannelId chanId,
+			a.docsIfDownChannelFrequency freq,
+			a.docsIfDownChannelWidth width,
+			a.docsIfDownChannelModulation model,
+			a.docsIfDownChannelAnnex annex,
+			a.docsIfDownChannelPower,
+			b.ifAdminStatus,
+			b.ifOperStatus,
+			c.cmcDeviceStyle cmcType
+		FROM
+			cmcdownchannelbaseinfo a
+			left join cmcportattribute b on a.cmcPortId = b.cmcPortId
+			left join cmcattribute c on b.cmcId = c.cmcId
+		WHERE
+			a.cmcId = #{cmtsId}
+		ORDER BY
+			a.docsIfDownChannelId ASC
+	</select>
+	
+	<select id="getDownChannelsInfoById" parameterType="long"
+        resultType="com.topvision.ems.mobile.domain.CmtsDownChannelWithPortId">
+        SELECT
+	        a.cmcId cmtsId,
+	        a.cmcPortId,
+	        a.channelIndex,
+	        a.docsIfDownChannelId chanId,
+	        a.docsIfDownChannelFrequency freq,
+	        a.docsIfDownChannelWidth width,
+	        a.docsIfDownChannelModulation model,
+	        a.docsIfDownChannelAnnex annex,
+	        a.docsIfDownChannelPower,
+	        b.ifAdminStatus,
+	        b.ifOperStatus,
+	        c.cmcDeviceStyle cmcType
+        FROM
+        	cmcdownchannelbaseinfo a
+        left join cmcportattribute b on a.cmcPortId = b.cmcPortId
+        left join cmcattribute c on b.cmcId = c.cmcId
+        WHERE
+        	a.cmcId = #{cmtsId}
+        ORDER BY
+        	a.docsIfDownChannelId ASC
+    </select>
+
+	<select id="getUpChannelsById" parameterType="long"
+		resultType="com.topvision.ems.mobile.domain.CmtsUpChannel">
+		SELECT
+		a.channelId chanId,
+		a.channelFrequency freq,
+		a.channelWidth width,
+		a.channelModulationProfile model,
+		a.channelModulationProfile,
+		b.docsIfSigQSignalNoise snr,
+		b.docsIf3SignalPower,
+		c.ifAdminStatus,
+		c.ifOperStatus,
+		d.ccerRate,
+		d.ucerRate,
+		d.noerRate
+		FROM
+		cmcupchannelbaseinfo a
+		LEFT JOIN cmcupchannelsignalqualityinfo b ON
+		a.cmcPortId=b.cmcPortId
+		left join cmcportattribute c on a.cmcPortId =
+		c.cmcPortId
+		left join perfcmcerrorcodequalitylast d on a.cmcId = d.cmcId and
+		a.channelIndex = d.channelIndex
+		WHERE
+		a.cmcId = #{cmtsId}
+	</select>
+	
+	<select id="getUpChannelsInfoById" parameterType="long"
+        resultType="com.topvision.ems.mobile.domain.CmtsUpChannelWithPortId">
+        SELECT
+        a.cmcPortId,
+        a.channelId chanId,
+        a.channelFrequency freq,
+        a.channelWidth width,
+        a.channelModulationProfile model,
+        a.channelModulationProfile,
+        b.docsIfSigQSignalNoise snr,
+        b.docsIf3SignalPower,
+        c.ifAdminStatus,
+        c.ifOperStatus,
+        d.ccerRate,
+        d.ucerRate,
+        d.noerRate
+        FROM
+        cmcupchannelbaseinfo a
+        LEFT JOIN cmcupchannelsignalqualityinfo b ON
+        a.cmcPortId=b.cmcPortId
+        left join cmcportattribute c on a.cmcPortId =
+        c.cmcPortId
+        left join perfcmcerrorcodequalitylast d on a.cmcId = d.cmcId and
+        a.channelIndex = d.channelIndex
+        WHERE
+        a.cmcId = #{cmtsId}
+    </select>
+	
+	<select id="getErrorRateInterval" parameterType="long" resultType="long">
+		SELECT
+		collectInterval
+		FROM
+		deviceperfcollecttime
+		WHERE
+		entityId = #{entityId} and perfTargetName = 'cmc_ber'
+	</select>
+	
+	<select id="getBaiduMapInfo" parameterType="long" resultType="com.topvision.ems.mobile.domain.BaiduMapInfo">
+        SELECT
+        entityId,
+        longitude,
+        latitude
+        FROM
+        baiduentity
+        WHERE
+        entityId = #{cmtsId}
+    </select>
+	
+	<select id="getCmtsList" parameterType="map" resultType="com.topvision.ems.mobile.domain.CmtsInCmtsList">
+	    SELECT 
+			cmc.cmcId cmtsId,
+			cmc.topCcmtsSysMacAddr mac,
+			e3.state state,
+			IFNULL(e2.ip,e1.ip) ip,
+			e1.name name,
+			cmc.topCcmtsSysDorType
+ 		FROM cmcattribute cmc 
+		LEFT JOIN entity e1 ON cmc.cmcId = e1.entityId
+		LEFT JOIN entity e2 ON e1.parentId = e2.entityId
+		left join entitySnap e3 ON cmc.cmcId = e3.entityId
+	    WHERE  e1.typeId like '300__' 
+	    <if test="cmtsNameOrMac != null">
+	    	AND (
+        	e1.name LIKE '%${cmtsNameOrMac}%' OR e1.mac LIKE '%${queryContentMac}%' OR IFNULL(e2.ip,e1.ip) LIKE '%${cmtsNameOrMac}%'
+        	<if test="queryMacWithoutSplit != null">
+                OR REPLACE(e1.mac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            </if>
+        	)
+	    </if>
+        LIMIT #{start},#{limit}
+	</select>
+	
+	<select id="getCmtsListWithRegion" parameterType="map" resultType="com.topvision.ems.mobile.domain.CmtsInCmtsList">
+        SELECT 
+            cmc.cmcId cmtsId,
+            cmc.cmcDeviceStyle typeId,
+            cmc.topCcmtsSysMacAddr mac,
+            e3.state state,
+            IFNULL(e2.ip,e1.ip) ip,
+            e1.name name,
+            cmc.topCcmtsSysDorType
+        FROM cmcattribute cmc 
+        LEFT JOIN entity e1 ON cmc.cmcId = e1.entityId
+        LEFT JOIN entity e2 ON e1.parentId = e2.entityId
+        left join entitySnap e3 ON cmc.cmcId = e3.entityId
+        WHERE  e1.typeId like '300__' AND 
+        cmc.cmcId IN (select entityId from ${Authority})
+        <if test="cmtsNameOrMac != null">
+	    	AND (
+        	e1.name LIKE '%${cmtsNameOrMac}%' OR e1.mac LIKE '%${queryContentMac}%' OR IFNULL(e2.ip,e1.ip) LIKE '%${cmtsNameOrMac}%'
+        	<if test="queryMacWithoutSplit != null">
+                OR REPLACE(e1.mac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            </if>
+        	)
+	    </if>
+        LIMIT #{start},#{limit}
+    </select>
+    
+	<select id="selectCmtsOptRecPower" parameterType="map" resultType="Double">
+        select optRePower
+        from perfcmclinkqualitylast where cmcId=#{cmcId} and portIndex = #{portIndex}
+    </select>
+    
+	<select id="getCmtsListCount" parameterType="map" resultType="long">
+	    SELECT 
+			COUNT(cmc.cmcId)
+ 		FROM cmcattribute cmc 
+		LEFT JOIN entity e1 ON cmc.cmcId = e1.entityId
+		LEFT JOIN entity e2 ON e1.parentId = e2.entityId
+	    WHERE  e1.typeId like '300__' 
+	    <if test="cmtsNameOrMac != null">
+	    	AND (
+        	e1.name LIKE '%${cmtsNameOrMac}%' OR e1.mac LIKE '%${queryContentMac}%' OR IFNULL(e2.ip,e1.ip) LIKE '%${cmtsNameOrMac}%'
+        	<if test="queryMacWithoutSplit != null">
+                OR REPLACE(e1.mac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            </if>
+        	)
+	    </if>
+	</select>
+	
+	<select id="getCmtsListCountWithRegion" parameterType="map" resultType="long">
+        SELECT 
+            COUNT(cmc.cmcId)
+        FROM cmcattribute cmc 
+        LEFT JOIN entity e1 ON cmc.cmcId = e1.entityId
+        LEFT JOIN entity e2 ON e1.parentId = e2.entityId
+        WHERE  e1.typeId like '300__' AND 
+        cmc.cmcId IN (select entityId from ${Authority}) 
+        <if test="cmtsNameOrMac != null">
+	    	AND (
+        	e1.name LIKE '%${cmtsNameOrMac}%' OR e1.mac LIKE '%${queryContentMac}%' OR IFNULL(e2.ip,e1.ip) LIKE '%${cmtsNameOrMac}%'
+        	<if test="queryMacWithoutSplit != null">
+                OR REPLACE(e1.mac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            </if>
+        	)
+	    </if>
+    </select>
+	
+	<insert id="insertOrUpdataMapInfoOfCc" parameterType="map">
+	   insert into baiduentity (entityId,typeId,longitude,latitude,location) 
+	   values (#{entityId},#{typeId},#{longitude},#{latitude},#{address}) 
+	   ON DUPLICATE KEY UPDATE 
+	   typeId=#{typeId},longitude=#{longitude},latitude=#{latitude},location=#{address}
+	</insert>
+	
+	<insert id="updateCmtsLocation" parameterType="map">
+	   insert into baiduentity (entityId,longitude,latitude,location) 
+       values (#{entityId},#{longitude},#{latitude},#{address}) 
+       ON DUPLICATE KEY UPDATE 
+       longitude=#{longitude},latitude=#{latitude},location=#{address}
+	</insert>
+
+</mapper>

@@ -1,0 +1,60 @@
+.required {font: 0.8em Verdana !important; color: #CC0000;}
+
+input {font-family: Arial, Helvetica, sans-serif; font-size: 12px;}
+
+.basicDl {width: 670px;	padding-top: 15px;}
+.basicDl dt {width: 170px; height: 23px;float: left;text-indent: 70px;padding-top: 10px;padding-bottom: 10px;}
+.basicDl dd {width: 498px;height: 40px;float: left;	padding-top: 7px;padding-bottom: 7px;}
+
+.tips {line-height: 16px; padding: 2px 0 4px;}
+.txt-tips {color: #999999;}
+
+.normalInput {
+	width: 370px;
+	padding-top: 2px;
+	border: 1px solid #7F9EB9; 
+	border-radius: 3px 3px 3px 3px;
+	box-shadow: 2px 2px 3px #EDEDED inset;
+	background: #FFF;
+	height: 18px;
+	text-indent: 5px;
+}
+textarea{
+	width: 370px;
+	height: 50px;
+	padding-top: 2px;
+	border: 1px solid #7F9EB9;
+	background: #FFF;
+	text-indent: 5px;
+}
+
+div.submit {text-align: right; clear:both;padding-top: 5px;padding-right: 70px;}
+
+
+.statusTable{
+	border-collapse:collapse;
+}
+/* .statusTable th{ 
+	height:26px;
+	width:100px;
+	color:#00156e;
+	text-align: right;
+	background:#f0f1f3;
+} */
+td.statusTd{
+	background:#fff;
+	vertical-align:middle;
+	text-align:center;
+	width: 190px;
+}
+.edge10{ padding:0px 10px; float:left;}
+.blueHeader{ 
+	height:18px; 
+	padding-top:8px; 
+	background:url(/images/system/blueHeader.gif) repeat-x; 
+	display:block; 
+	border-bottom:1px solid #6593cf;
+	border-top:1px solid #6593cf; 
+	text-indent: 10px;
+	text-align: center;
+}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="commonConfig" namespace="/entity/commonConfig" extends="default">
+        <action name="showCommonConfigFileManage" class="commonConfigAction" method="showCommonConfigFileManage">
+        	<result>/config/commonConfigFileManage.jsp</result>
+        </action>
+        <action name="showParamConfig" class="commonConfigAction" method="showParamConfig">
+        	<result>/config/commonConfigParam.jsp</result>
+        </action>
+        <action name="modifyParamConfig" class="commonConfigAction" method="modifyParamConfig">
+        </action>
+        <action name="importCommonConfig" class="commonConfigAction" method="importCommonConfig">
+        </action>
+        <action name="readCommonConfig" class="commonConfigAction" method="readCommonConfig">
+        </action>
+        <action name="saveCommonConfig" class="commonConfigAction" method="saveCommonConfig">
+        </action>
+	</package>
+</struts>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.network.domain.TelnetRecord">
+	<insert id="insertRecord" parameterType="telnetRecord">
+		INSERT INTO
+		telnetRecords(ip, command, userId)
+		VALUES (#{ip}, #{command}, #{userId});
+	</insert>
+	
+	<select id="selectTelnetRecordList" parameterType="map" resultType="telnetRecord">
+	   SELECT 
+		    A.*,
+		    B.userName
+		FROM
+		    telnetrecords A
+		LEFT JOIN users B ON A.userId=B.userId
+		WHERE 1=1
+		<if test="ip != null and ip != ''">
+            AND A.ip LIKE '%${ip}%'
+        </if>
+        <if test="command != null and command != ''">
+            AND A.command LIKE '%${command}%'
+        </if>
+        <if test="userName != null and userName != ''">
+            AND B.userName LIKE '%${userName}%'
+        </if>
+        <if test="startTime != null and startTime != ''">
+            <![CDATA[AND A.createTime >= #{startTime}]]>
+        </if>
+        <if test="endTime != null and endTime != ''">
+            <![CDATA[AND A.createTime <= #{endTime}]]>
+        </if>
+        <if test="start != null and limit != null">
+        LIMIT #{start}, #{limit}
+        </if>
+	</select>
+	
+	<select id="selectTelnetRecordCount" parameterType="map" resultType="int">
+	   SELECT 
+            count(*)
+        FROM
+            telnetrecords A
+        LEFT JOIN users B ON A.userId=B.userId
+        WHERE 1=1
+        <if test="ip != null and ip != ''">
+            AND A.ip LIKE '%${ip}%'
+        </if>
+        <if test="command != null and command != ''">
+            AND A.command LIKE '%${command}%'
+        </if>
+        <if test="userName != null and userName != ''">
+            AND B.userName LIKE '%${userName}%'
+        </if>
+        <if test="startTime != null and startTime != ''">
+            <![CDATA[AND A.createTime >= #{startTime}]]>
+        </if>
+        <if test="endTime != null and endTime != ''">
+            <![CDATA[AND A.createTime <= #{endTime}]]>
+        </if>
+	</select>
+
+</mapper>

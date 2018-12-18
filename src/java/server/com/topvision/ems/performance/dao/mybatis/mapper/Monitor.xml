@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.performance.domain.Monitor">
+
+	<insert id="insertEntity" databaseId="MySQL" parameterType="monitor"
+		useGeneratedKeys="true" keyProperty="monitorId">
+		INSERT INTO Monitor (
+		category,
+		createTime,
+		modifyTime,
+		content,
+		intervalOfNormal,
+		intervalAfterError,
+		lastCollectTime,
+		entityId,
+		jobClass,
+		status)
+		VALUES (#{category},
+		#{createTime},
+		#{modifyTime},
+		#{content},
+		#{intervalOfNormal},
+		#{intervalAfterError},
+		#{lastCollectTime},
+		#{entityId},
+		#{jobClass},
+		#{enabled})
+	</insert>
+	<insert id="insertEntity" databaseId="Oracle" parameterType="monitor">
+		<selectKey keyProperty="monitorId" resultType="long" order="BEFORE">
+			SELECT Monitor_Seq.nextval AS monitorId from dual
+		</selectKey>
+		INSERT INTO Monitor (
+		monitorId,
+		category,
+		createTime,
+		modifyTime,
+		content,
+		intervalOfNormal,
+		intervalAfterError,
+		lastCollectTime,
+		entityId,
+		jobClass,
+		status)
+		VALUES (#{monitorId},#{category},
+		#{createTime},
+		#{modifyTime},
+		#{content},
+		#{intervalOfNormal},
+		#{intervalAfterError},
+		#{lastCollectTime},
+		#{entityId},
+		#{jobClass},
+		#{enabled})
+	</insert>
+
+
+
+	<update id="updateEntity" parameterType="monitor">
+		UPDATE Monitor
+		SET status
+		= #{enabled},
+		available = #{available},
+		healthy = #{healthy},
+		reason =
+		#{reason},
+		lastCollectTime = #{lastCollectTime}
+		WHERE monitorId =
+		#{monitorId}
+	</update>
+
+	<update id="updateHealthy" parameterType="monitor">
+		UPDATE Monitor
+		SET
+		available = #{available},
+		healthy = #{healthy},
+		reason = #{reason},
+		lastCollectTime = #{lastCollectTime}
+		WHERE monitorId = #{monitorId}
+	</update>
+
+
+	<select id="selectByPrimaryKey" parameterType="long" resultType="monitor">
+		SELECT monitorId,
+		category,
+		A.createTime,
+		A.modifyTime,
+		content,
+		intervalOfNormal,
+		intervalAfterError,
+		lastCollectTime,
+		jobClass,
+		A.entityId,
+		A.status AS enabled,
+		B.ip
+		FROM Monitor A,
+		Entity B
+		WHERE
+		A.monitorId = #{monitorId}
+		AND A.entityId = B.entityId
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="long">
+		DELETE FROM
+		Monitor
+		WHERE monitorId = #{monitorId}
+	</delete>
+
+	<select id="selectByMap" parameterType="map" resultType="monitor">
+		SELECT monitorId,
+		category,
+		A.createTime,
+		A.modifyTime,
+		content,
+		intervalOfNormal,
+		intervalAfterError,
+		lastCollectTime,
+		jobClass,
+		A.entityId,
+		A.status AS enabled,
+		B.ip
+		FROM Monitor A,
+		Entity B
+		WHERE
+		A.entityId = B.entityId
+		<if test="entityId != null">
+			<![CDATA[ AND A.entityId = #{entityId}]]>
+		</if>
+		<if test="category != null">
+			<![CDATA[ AND category = #{category}]]>
+		</if>
+		ORDER BY A.lastCollectTime desc
+	</select>
+
+	<select id="existMonitor" resultType="monitor" parameterType="monitor">
+		SELECT monitorId
+		FROM Monitor
+		WHERE entityId = #{entityId}
+		AND category =
+		#{category}
+	</select>
+
+	<insert id="insertValue" databaseId="MySQL" parameterType="monitorValue"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO MonitorValue (
+		entityId,
+		itemName,
+		itemIndex,
+		itemValue,
+		extValue,
+		note,
+		collectTime)
+		VALUES (#{entityId},
+		#{itemName},
+		#{itemIndex},
+		#{itemValue},
+		#{extValue},
+		#{note},
+		#{collectTime})
+	</insert>
+	<insert id="insertValue" databaseId="Oracle" parameterType="monitorValue">
+		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+			SELECT
+			MonitorValue_seq.nextval AS id from dual
+		</selectKey>
+		INSERT INTO MonitorValue (
+		id,
+		entityId,
+		itemName,
+		itemIndex,
+		itemValue,
+		extValue,
+		note,
+		collectTime)
+		VALUES (#{id},#{entityId},
+		#{itemName},
+		#{itemIndex},
+		#{itemValue},
+		#{extValue},
+		#{note},
+		#{collectTime})
+	</insert>
+
+	<insert id="insertConnectivity" databaseId="MySQL"
+		parameterType="monitorValue" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO Connectivity (
+		entityId,
+		itemValue,
+		collectTime)
+		VALUES
+		(#{entityId},
+		#{itemValue},
+		#{collectTime})
+	</insert>
+	<insert id="insertConnectivity" databaseId="Oracle"
+		parameterType="monitorValue">
+		<selectKey keyProperty="id" resultType="long" order="BEFORE">
+			SELECT
+			Connectivity_Seq.nextval AS id from dual
+		</selectKey>
+		INSERT INTO Connectivity (id,
+		entityId,
+		itemValue,
+		collectTime)
+		VALUES
+		(#{id},#{entityId},
+		#{itemValue},
+		#{collectTime})
+	</insert>
+
+	<select id="getLastValuesByMonitor" databaseId="MySQL"
+		parameterType="long" resultType="monitorValue">
+		SELECT *
+		FROM MonitorValue
+		WHERE
+		entityId = #{entityId}
+		AND collectTime = (SELECT collectTime
+		FROM
+		MonitorValue
+		WHERE entityId = #{entityId}
+		ORDER BY id desc LIMIT 1)
+	</select>
+	<select id="getLastValuesByMonitor" databaseId="Oracle"
+		parameterType="long" resultType="monitorValue">
+		SELECT *
+		FROM MonitorValue
+		WHERE
+		entityId = #{entityId}
+		AND collectTime = (select tt.collectTime from
+		(select rownum rn , t.collectTime from
+		(SELECT collectTime FROM
+		MonitorValue WHERE entityId = #{entityId} ORDER BY
+		id desc) t) tt
+		where
+		rn = 1)
+	</select>
+
+
+	<update id="updatePollingInterval" parameterType="map">
+		UPDATE Monitor
+		SET intervalOfNormal = #{intervalOfNormal}
+		<if test="intervalAfterError != null and intervalAfterError != ''">
+			<![CDATA[, intervalAfterError = #{intervalAfterError}]]>
+		</if>
+		WHERE monitorId = #{monitorId}
+	</update>
+
+	<update id="updateStatus" parameterType="map">
+		UPDATE Monitor
+		SET status
+		= #{enabled}
+		WHERE monitorId = #{monitorId}
+	</update>
+
+	<select id="getPollingInterval" parameterType="long" resultType="monitor">
+		SELECT monitorId,
+		entityId,
+		category,
+		intervalOfNormal,
+		intervalAfterError
+		FROM Monitor
+		WHERE entityId = 1
+	</select>
+
+	<select id="getMonitorByEntity" parameterType="long" resultType="monitor">
+		SELECT A.monitorId, A.category, A.modifyTime,
+		A.intervalOfNormal,
+		A.intervalAfterError, A.lastCollectTime,
+		A.entityId, A.status AS
+		enabled, A.jobClass, B.ip FROM Monitor
+		A, Entity B WHERE A.entityId =
+		#{entityId} AND A.entityId =
+		B.entityId ORDER BY A.lastCollectTime DESC
+	</select>
+
+	<select id="getMonitorByType" parameterType="string" resultType="monitor">
+		SELECT monitorId,
+		category,
+		A.modifyTime,
+		intervalOfNormal,
+		intervalAfterError,
+		lastCollectTime,
+		A.entityId,
+		A.status AS enabled,
+		B.ip
+		FROM Monitor A,
+		Entity B
+		WHERE A.entityId = B.entityId
+		AND category =
+		#{category}
+		ORDER BY A.lastCollectTime DESC
+	</select>
+
+	<select id="getMonitorByEntityType" parameterType="int"
+		resultType="monitor">
+		SELECT A.monitorId,
+		A.category,
+		A.modifyTime,
+		A.intervalOfNormal,
+		A.intervalAfterError,
+		A.lastCollectTime,
+		A.entityId,
+		A.status AS enabled,
+		B.ip
+		FROM Monitor A,
+		Entity B
+		WHERE B.type = #{type}
+		AND A.entityId = B.entityId
+		ORDER BY A.lastCollectTime DESC
+	</select>
+
+	<select id="getAllMonitor" resultType="monitor">
+		SELECT monitorId,
+		category,
+		A.modifyTime,
+		intervalOfNormal,
+		intervalAfterError,
+		lastCollectTime,
+		A.entityId,
+		A.status AS enabled,
+		B.ip
+		FROM Monitor A,
+		Entity B
+		WHERE A.entityId = B.entityId
+	</select>
+
+	<update id="batchUpdatePollingInterval" parameterType="map">
+		UPDATE Monitor SET intervalOfNormal = #{intervalOfNormal} WHERE 1=1
+		<if test="category != null">
+			and category = #{category}
+		</if>
+		<if test="folderId != null">
+			and entityId IN (SELECT entityId
+			FROM EntityFolderRela
+			WHERE folderId = #{folderId})
+		</if>
+	</update>
+
+	<select id="getMonitorByCategory" parameterType="string"
+		resultType="monitor">
+		SELECT
+		monitorId,
+		category,
+		modifyTime,
+		intervalOfNormal,
+		intervalAfterError,
+		lastCollectTime,
+		entityId,
+		status AS enabled,
+		jobClass
+		FROM
+		Monitor
+		WHERE
+		category = #{category}
+	</select>
+
+	<insert id="insertPerfConnectivity" parameterType="map">
+		insert into
+		perfConnectivity(entityId, collectValue, collectTime)
+		values (#{entityId},#{collectValue},#{collectTime})
+	</insert>
+
+</mapper>

@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="entity" namespace="/entity" extends="default">
+		<action name="moveEntityById" class="entityAction" method="moveEntityById">
+		</action>
+
+		<action name="loadEntityInLonely" class="entityViewAction"
+			method="loadEntityInLonely">
+		</action>
+		<action name="emptyRecyle" class="entityAction" method="emptyRecyle">
+		</action>
+		<action name="deleteEntityFromRecyle" class="entityAction"
+			method="deleteEntityFromRecyle">
+		</action>
+		<action name="moveEntityFromRecyle" class="entityAction"
+			method="moveEntityFromRecyle">
+		</action>
+		<action name="moveEntiyToRecyle" class="entityAction" method="moveEntiyToRecyle">
+		</action>
+		<action name="replaceEntity" class="entityAction" method="replaceEntity">
+		</action>
+		<action name="showEntityPropertyJsp" class="entityAction"
+			method="showEntityPropertyJsp">
+			<result>/network/entityProperty.jsp</result>
+		</action>
+		<action name="saveEntityDetail" class="entityAction" method="saveEntityDetail">
+			<result>/network/entityPortal.jsp</result>
+		</action>
+
+		<action name="loadMyEntityJsp" class="entityViewAction" method="loadMyEntityJsp">
+			<result>/network/allEntityDetailView.jsp</result>
+			<result name="icon">/network/allEntityIconView.jsp</result>
+		</action>
+
+		<action name="loadMyEntityByIcon" class="entityViewAction"
+			method="loadMyEntityByIcon">
+		</action>
+		<action name="loadEntitySnapList" class="entityViewAction" method="loadEntitySnapList" />
+		<action name="showRenameEntity" class="entityAction" method="showRenameEntity">
+			<result>/network/renameEntity.jsp</result>
+		</action>
+		<action name="renameEntityByEntityId" class="entityAction"
+			method="renameEntityByEntityId">
+		</action>
+		<action name="changeEntityInfoByEntityId" class="entityAction"
+			method="changeEntityInfoByEntityId">
+		</action>
+		<action name="loadSnmpEntityByDetail" class="entityViewAction"
+			method="loadSnmpEntityByDetail">
+		</action>
+		<action name="loadSnmpEntityByIcon" class="entityViewAction"
+			method="loadSnmpEntityByIcon">
+		</action>
+		<action name="showSnmpEntityJsp" class="entityViewAction"
+			method="showSnmpEntityJsp">
+			<result name="detail">
+				/network/snmpEntityDetailView.jsp
+			</result>
+			<result name="icon">/network/snmpEntityIconView.jsp</result>
+		</action>
+
+		<action name="loadEntityByTypeByDetail" class="entityViewAction"
+			method="loadEntityByTypeByDetail">
+		</action>
+		<action name="loadEntityByTypeByIcon" class="entityViewAction"
+			method="loadEntityByTypeByIcon">
+		</action>
+		<action name="showEntityByTypeJsp" class="entityViewAction"
+			method="showEntityByTypeJsp">
+			<result>/network/entityByTypeDetailView.jsp</result>
+			<result name="icon">
+				/network/entityByTypeIconView.jsp
+			</result>
+		</action>
+
+		<action name="showEditEntityJsp" class="entityAction" method="showEditEntityJsp">
+			<result>/network/entityConfig.jsp</result>
+			<result name="cmc" type='chain'>showCmcEditEntityJsp</result>
+		</action>
+
+		<action name="showCmcEditEntityJsp" class="cmcAction"
+			method="showCmcEditEntityJsp">
+			<result>/cmc/cmcEntityConfig.jsp</result>
+		</action>
+
+		<action name="savePaneCoord" class="entityPaneAction" method="savePaneCoord" />
+		<action name="showPhysicalPane" class="entityPaneAction"
+			method="showPhysicalPane">
+			<result>/network/entityPhysicalPane.jsp</result>
+		</action>
+		<action name="showLogicPane" class="entityPaneAction" method="showLogicPane">
+			<result>/network/entityLogicPane.jsp</result>
+		</action>
+
+		<action name="showAssetDetail">
+			<result>/network/assetDetail.jsp</result>
+		</action>
+		<action name="showSoftwareInstalled">
+			<result>/network/showSoftwareInstalled.jsp</result>
+		</action>
+		<action name="renameEntity" class="entityAction" method="renameEntity">
+		</action>
+
+		<action name="showNewEntity" class="entityCreatorAction"
+			method="showNewEntity">
+			<result>/network/popNewEntity.jsp</result>
+		</action>
+
+		<action name="entityOutofLimit" class="entityCreatorAction"
+			method="entityOutofLimit" />
+
+
+		<action name="showBatchNewEntity" class="entityCreatorAction"
+			method="showBatchNewEntity">
+			<result>/network/popBatchEntity.jsp</result>
+		</action>
+		
+		<action name="showBatchTopo" class="entityCreatorAction"
+			method="showBatchTopo">
+			<result>/network/batchAutoDiscovery/batchTopo.jsp</result>
+		</action>
+		
+		<action name="showUserEntity" class="entityCreatorAction"
+			method="showUserEntity">
+			<result>/network/testUserMamt.jsp</result>
+		</action>
+		
+		<action name="scanEntity" class="entityCreatorAction" method="scanEntity"></action>
+		<action name="showScanEntityResult" class="entityCreatorAction" method="showScanEntityResult">
+			<result>/network/scanEntity.jsp</result>
+		</action>
+		<action name="downLoadBatchFileTemplate" class="entityCreatorAction" method="downLoadBatchFileTemplate">
+		</action>
+		<action name="checkBatchActionAvailable" class="entityCreatorAction" method="checkBatchActionAvailable"/>
+		<action name="getIpListByFlash" class="entityCreatorAction" method="getIpListByFlash"></action>
+		<action name="stopTopo" class="entityCreatorAction" method="stopTopo">
+		</action>
+
+		<action name="pushNewEntityFromVirtual" class="entityCreatorAction"
+			method="pushNewEntityFromVirtual">
+			<result>/network/pushNewEntityFromVirtual.jsp</result>
+		</action>
+
+		<!-- fanzhong begin for ems104 -->
+		<action name="addNewEntity" class="entityCreatorAction" method="addNewEntity">
+			<result>/network/addNewEntity.jsp</result>
+		</action>
+		<action name="updateEntitySnmpInfo" class="entityCreatorAction" method="updateEntitySnmpInfo" />
+		<!-- fanzhong end for ems104 -->
+		<action name="newEntity" class="entityCreatorAction" method="newEntity" />
+		<action name="createEntityByTypeId" class="entityCreatorAction"
+			method="createEntityByTypeId" />
+
+		<action name="updateEntityOutline" class="entityAction" method="updateEntityOutline" />
+
+		<action name="updateEntityIcon" class="entityAction" method="updateEntityIcon" />
+
+		<action name="updateIconInFolder" class="entityAction" method="updateEntityIcon" />
+
+		<action name="updateEntityFixed" class="entityAction" method="updateEntityFixed" />
+
+		<action name="updateEntityUrl" class="entityAction" method="updateEntityUrl" />
+
+		<action name="getEntityState" class="entityViewAction" method="getEntityState" />
+		<action name="getSnmpEntityState" class="entityViewAction"
+			method="getSnmpEntityState" />
+		<action name="getAgentEntityState" class="entityViewAction"
+			method="getAgentEntityState" />
+		<action name="getTypeEntityState" class="entityViewAction"
+			method="getTypeEntityState" />
+
+		<action name="showIconChooser" class="imageChooserAction"
+			method="showIconChooser">
+			<result>/network/popIconChooserDlg.jsp</result>
+		</action>
+		<action name="updateEntityType" class="entityAction" method="updateEntityType">
+		</action>
+
+		<action name="runCmd" class="entityAction" method="runCmd">
+			<result>/network/tool/cmd.jsp</result>
+		</action>
+		<action name="snmpPing" class="entityAction" method="snmpPing">
+			<result>/network/tool/snmpPing.jsp</result>
+		</action>
+		
+		<action name="ping" class="entityAction" method="ping"></action>
+		<action name="getRunCmdResult" class="entityAction" method="getRunCmdResult">
+		</action>
+		<action name="getRunSnmpResult" class="entityAction" method="getRunSnmpResult">
+		</action>
+
+		<action name="loadEntityCanceled" class="entityViewAction"
+			method="loadEntityCanceled" />
+
+		<action name="cancelManagement" class="entityAction" method="cancelManagement" />
+
+		<action name="enableManagement" class="entityAction" method="enableManagement" />
+
+		<action name="cancelAttention" class="entityAction" method="cancelAttention" />
+
+		<action name="getAttentionEntityList" class="entityAction"
+			method="getAttentionEntityList" />
+
+		<action name="pushAttention" class="entityAction" method="pushAttention" />
+
+		<action name="showPollingInterval" class="entityPreferencesAction"
+			method="showPollingInterval">
+			<result>/network/popDevicePollingInterval.jsp</result>
+		</action>
+		<action name="savePollingInterval" class="entityPreferencesAction"
+			method="savePollingInterval">
+		</action>
+
+		<action name="loadAllEntityForCombox" class="entitySearchAction"
+			method="loadAllEntityForCombox">
+		</action>
+
+		<action name="showInstalledSoftwareJsp" class="entityAssetAction"
+			method="showInstalledSoftwareJsp">
+			<result>/network/entityInstalled.jsp</result>
+		</action>
+
+		<action name="showActiveProcessJsp" class="entityAssetAction"
+			method="showActiveProcessJsp">
+			<result>/network/entityProcess.jsp</result>
+		</action>
+		<action name="loadEntityTip" class="mapNodeAction" method="loadEntityTip">
+		</action>
+		<action name="updateEntityRelationUser" class="entityAction"
+			method="updateEntityRelationUser">
+		</action>
+		<action name="loadEntityRelationUser" class="entityAction"
+			method="loadEntityRelationUser">
+			<result>/cmc/showPerson.jsp</result>
+		</action>
+		<action name="loadEntityType" class="entityTypeAction"
+			method="loadEntityType">
+		</action>
+		<action name="loadSubEntityType" class="entityTypeAction"
+			method="loadSubEntityType">
+		</action>
+		
+		<action name="getEntityLocatedFolderIds" class="entityAction" method="getEntityLocatedFolderIds" />
+		<action name="setEntityLocatedFolders" class="entityAction" method="setEntityLocatedFolders" />
+		<action name="setEntitiesLocatedFolders" class="entityAction" method="setEntitiesLocatedFolders" />
+		<action name="addEntitiesToFolders" class="entityAction" method="addEntitiesToFolders" />
+		<action name="removeEntitiesFromFolders" class="entityAction" method="removeEntitiesFromFolders" />
+		
+		<action name="loadEntityList" class="entityViewAction" method="loadEntityList" />
+
+		<action name="editTopoFolder" class="entityAction" method="editTopoFolder">
+			<result>/network/editTopoFolder.jsp</result>
+		</action>
+		
+		<action name="loadAllSubType" class="entityTypeAction" method="loadAllSubType" />
+		
+		<action name="showUserAttention" class="entityViewAction" method="showUserAttention">
+			<result>/network/userAttention.jsp</result>
+		</action>
+		<action name="loadUserAttentionList" class="entityViewAction" method="loadUserAttentionList"></action>
+	</package>
+</struts>

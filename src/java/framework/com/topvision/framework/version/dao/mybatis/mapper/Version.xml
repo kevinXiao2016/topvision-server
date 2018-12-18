@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.framework.version.domain.Version">
+    <cache />
+    
+    <select id="isVersionRecordTableExists" resultType="int">
+    	SELECT COUNT(*) FROM information_schema.TABLES WHERE TABLE_NAME='versionrecords';
+    </select>
+    
+    <insert id="createVersionRecordTable">
+    	create table VersionRecords
+		(
+		  moduleName varchar(64) NOT NULL,
+		  versionNum varchar(16) NOT NULL,
+		  versionDate timestamp NOT NULL,
+		  currentVersion varchar(32) NOT NULL,
+		  content MEDIUMTEXT NOT NULL,
+		  lastTime timestamp default CURRENT_TIMESTAMP,
+		  PRIMARY KEY (moduleName, versionNum, versionDate)
+		);
+    </insert>
+    
+    <insert id="insertEntity" parameterType="version">
+        INSERT INTO VersionControl(moduleName, versionNum, versionDate,
+        note)
+        values(#{moduleName}, #{versionNum}, #{versionDate}, #{note,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="updateEntity" parameterType="version">
+        UPDATE VersionControl SET versionNum = #{versionNum}, versionDate =
+        #{versionDate},
+        lastTime = #{lastTime}, note = #{note,jdbcType=VARCHAR} WHERE moduleName = #{moduleName}
+    </update>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultType="version">
+        SELECT moduleName, versionNum,
+        versionDate, lastTime, note FROM
+        VersionControl WHERE moduleName = #{moduleName}
+    </select>
+
+    <select id="selectByMap" parameterType="map" resultType="version">
+        SELECT moduleName, versionNum, versionDate,
+        lastTime,
+        note FROM VersionControl
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+        DELETE FROM VersionControl WHERE moduleName = #{moduleName}
+    </delete>
+
+    <select id="desc" resultType="int">
+        <![CDATA[select count(*) from VersionControl]]>
+    </select>
+
+    <select id="getVariables" resultType="mysqlVariable">
+        <![CDATA[show variables]]>
+    </select>
+
+    <update id="executeSql" parameterType="java.lang.String">
+        <![CDATA[${value}]]>
+    </update>
+    <insert id="saveRecord" parameterType="versionRecord">
+        INSERT INTO VersionRecords(moduleName, versionNum, versionDate,
+        currentVersion, content) values(#{moduleName}, #{versionNum}, #{versionDate}, #{currentVersion}, #{content})
+    </insert>
+    <select id="getRecords" resultType="versionRecord">
+        SELECT moduleName, versionNum, versionDate, currentVersion, content,
+        lastTime
+        FROM VersionRecords
+    </select>
+</mapper>

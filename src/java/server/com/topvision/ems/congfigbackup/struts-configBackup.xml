@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="configBackup" namespace="/configBackup" extends="default">
+		<action name="showConfigBackupView" class="configBackupAction" method="showConfigBackupView" >
+			<result>/config/configBackupView.jsp</result>
+		</action>
+		<action name="showAutoWriteConfig" class="configBackupAction" method="showAutoWriteConfig">
+    		<result>/system/fileAutoWriteConfig.jsp</result>
+		</action>
+		<action name="saveAutoWriteConfig" class="configBackupAction" method="saveAutoWriteConfig" >
+		</action>
+		<action name="getAllDeviceList" class="configBackupAction" method="getAllDeviceList" />
+		<action name="loadStartConfigList" class="configBackupAction" method="loadStartConfigList" />
+		<action name="loadFileText" class="configBackupAction" method="loadFileText" />
+		<action name="deleteFile" class="configBackupAction" method="deleteFile" />
+		<action name="saveConfig" class="configBackupAction" method="saveConfigFile" />
+		<action name="downLoadConfig" class="configBackupAction" method="downConfigFile" />
+		<action name="applyConfigToDevice" class="configBackupAction" method="applyConfigToDevice" />
+		<action name="downFile" class="configBackupAction" method="downFile" />
+		<action name="showConfigFileUsedList" class="configBackupAction" method="showConfigFileUsedList" >
+			<result>/config/configAndBackupRecords.jsp</result>
+		</action>
+		<action name="queryHistroyRecords" class="configBackupAction" method="queryHistroyRecords" />
+		
+	</package>
+</struts>

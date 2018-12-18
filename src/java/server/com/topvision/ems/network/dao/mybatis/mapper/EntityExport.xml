@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.network.domain.EntityExport">
+	<select id="selectEntity" parameterType="map" databaseId="MySQL"
+		resultType="com.topvision.ems.facade.domain.Entity">
+		select * from( 
+		select distinct(a.entityId), a.name, a.sysName,
+		a.typeId, a.ip, a.mac,
+		b.folderId, c.name as location, d.displayName as
+		typeName from 
+		(select * from entity e where e.typeId in (
+        select typeId from entitytyperelation where type in
+        (select typeId from entitytyperelation where type = 4 or type = -1)
+        ) )a
+		left join entityfolderrela b on a.entityId =
+		b.entityId	left join topofolder c on b.folderId = c.folderId
+		left join	entityType d on a.typeId = d.typeId
+		where 1=1
+		<if test="ipString != null">and INET_ATON(A.ip) BETWEEN INET_ATON(#{startIp}) and INET_ATON(#{endIp})</if>
+		<if test="macString != null">and A.mac BETWEEN #{startMac} and #{endMac}</if>
+		<if test="regionId != null">and (B.folderId IN (${regionId}))</if>
+		<if test="typeIdString != null">and (A.typeId IN (${typeIdString}))
+		</if>
+		) tmp inner join entity v on tmp.entityId = v.entityId 
+		where
+		v.entityId in (select entityId from ${Authority}) 
+		GROUP BY tmp.entityId
+		order by tmp.ip, tmp.mac 
+		limit ${start} , ${limit}
+	</select>
+	<select id="selectEntityNum" parameterType="map" databaseId="MySQL"
+		resultType="long">
+		select count(distinct(tmp.entityId)) from(
+		select distinct(a.entityId), a.name, a.sysName,
+		a.typeId, a.ip,
+		a.mac from
+		(select * from entity e where e.typeId in (
+        select typeId from entitytyperelation where type in
+        (select typeId from entitytyperelation where type = 4 or type = -1)
+        ) )a
+		left join entityfolderrela b on a.entityId =
+		b.entityId
+		left join topofolder c on b.folderId = c.folderId
+		left join
+		entityType d on a.typeId = d.typeId
+		where 1=1
+		<if test="ipString != null">and INET_ATON(A.ip) BETWEEN INET_ATON(#{startIp}) and INET_ATON(#{endIp})</if>
+		<if test="macString != null">and A.mac BETWEEN #{startMac} and #{endMac}</if>
+		<if test="regionId != null">and (B.folderId IN (${regionId}))</if>
+		<if test="typeIdString != null">and (A.typeId IN (${typeIdString}))
+		</if>
+		) tmp inner join ${Authority} v  on tmp.entityId = v.entityId
+	</select>
+	<select id="selectEntityFolder" parameterType="long" resultType="string">
+		select a.name from topofolder a left join entityfolderrela b on 
+		a.folderId = b.folderId where b.entityId = #{entityId}
+	</select>
+</mapper>

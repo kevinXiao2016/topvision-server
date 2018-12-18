@@ -1,0 +1,115 @@
+/**
+ * Ext for column tree and portal.
+ */
+.x-column-tree .x-tree-node {
+	zoom: 1;
+}
+
+.x-column-tree .x-tree-node-el {
+	border-bottom: 1px solid #e3efff;
+	zoom: 1;
+}
+
+.x-column-tree .x-tree-selected {
+	background: #B8CFEE;
+}
+
+.x-column-tree  .x-tree-node a {
+	line-height: 18px;
+	vertical-align: middle;
+}
+
+.x-column-tree  .x-tree-node a:hover {
+	TEXT-DECORATION: underline
+}
+
+.x-column-tree  .x-tree-node a span {
+	
+}
+
+.x-column-tree  .x-tree-node .x-tree-selected a span {
+	background: transparent;
+	color: #000;
+}
+
+.x-tree-col {
+	float: left;
+	overflow: hidden;
+	padding: 0 1px;
+	zoom: 1;
+}
+
+.x-tree-col-text,.x-tree-hd-text {
+	overflow: hidden;
+	-o-text-overflow: ellipsis;
+	text-overflow: ellipsis;
+	padding: 3px 3px 3px 5px;
+	white-space: nowrap;
+	font: normal 12px arial, tahoma, helvetica, sans-serif;
+}
+
+.x-tree-headers {
+	background: #f9f9f9 url(default/grid/grid3-hrow.gif) repeat-x 0 bottom;
+	cursor: default;
+	zoom: 1;
+}
+
+.x-tree-hd {
+	float: left;
+	overflow: hidden;
+	border-right: 1px solid #9bc6ff
+}
+
+.x-portal .x-panel-dd-spacer {
+	margin-bottom: 10px;
+}
+
+.x-portlet {
+	margin-bottom: 10px;
+}
+
+/* Clean up the look of the portlets */
+.x-portlet .x-panel-ml {
+	padding-left: 2px;
+}
+
+.x-portlet .x-panel-mr {
+	padding-right: 2px;
+}
+
+.x-portlet .x-panel-bl {
+	padding-left: 2px;
+}
+
+.x-portlet .x-panel-br {
+	padding-right: 2px;
+}
+
+.x-portlet .x-panel-body {
+	background: white;
+}
+
+.x-portlet .x-panel-mc {
+	padding-top: 2px;
+	background: white;
+}
+
+.x-portlet .x-panel-bc .x-panel-footer {
+	padding-bottom: 2px;
+}
+
+.x-portlet .x-panel-nofooter .x-panel-bc {
+	height: 2px;
+}
+
+/* portlet table */
+.portletTable {
+}
+.portletTable th {
+	font-weight: bold;
+	height: 22px;
+	white-space: nowrap;
+}
+.portletTable td {
+	height: 20px;
+}

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.platform.domain.ImageDirectory">
+	<insert id="insertEntity" parameterType="imageDirectory"
+		useGeneratedKeys="true" keyProperty="directoryId">
+		insert into
+		ImageDirectory(superiorId, name, module, path)
+		values(#{superiorId},
+		#{name},
+		#{module}, '')
+    </insert>
+
+	<select id="selectByMap" parameterType="map" resultType="imageDirectory">
+		SELECT
+		directoryId,
+		superiorId, name, path, module
+		FROM
+		ImageDirectory ORDER BY
+		superiorId ASC, directoryId ASC
+    </select>
+
+	<select id="getImageDirectoryByModule" parameterType="string"
+		resultType="imageDirectory">
+		SELECT directoryId, superiorId,
+		name, path, module FROM
+		ImageDirectory WHERE module =
+		#{module} ORDER BY superiorId ASC,
+		directoryId ASC
+    </select>
+
+	<select id="getImageFiles" parameterType="long" resultType="imageFile">
+		SELECT fileId, name,
+		path, format FROM ImageFile
+		WHERE
+		directoryId =
+		#{directoryId} ORDER BY name asc
+    </select>
+
+	<select id="getPath" parameterType="long" resultType="string">
+		SELECT path
+		FROM ImageDirectory
+		WHERE directoryId =
+		#{directoryId}
+    </select>
+
+	<update id="updatePath" parameterType="imageDirectory">
+		update ImageDirectory set
+		path = #{path} WHERE
+		directoryId =
+		#{directoryId}
+    </update>
+
+	<insert id="insertImageFile" parameterType="imageFile"
+		useGeneratedKeys="true" keyProperty="fileId">
+		insert into ImageFile(directoryId,
+		name, format)
+		values(#{directoryId}, #{name},#{format})
+    </insert>
+	<update id="updateImagePath" parameterType="imageFile">
+		update ImageFile set
+		path = #{path} WHERE
+		fileId = #{fileId}
+    </update>
+</mapper>

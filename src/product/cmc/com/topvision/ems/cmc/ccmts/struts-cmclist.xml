@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmclist" namespace="/cmc" extends="default">
+		<action name="showAllCmcList" class="cmcListAction" method="showAllCmcList">
+            <result>/cmc/queryForAllCmcList.jsp</result>
+        </action>
+        <action name="queryCmcList" class="cmcListAction" method="queryCmcList">
+        </action>
+        <action name="seachCMCNameList" class="cmcListAction" method="seachCMCNameList">
+        </action>
+        <action name="queryCmcFromOnu" class="cmcListAction" method="queryCmcFromOnu" />
+        <action name="relateCmc" class="cmcListAction" method="relateCmc">
+            <result>/cmc/CmcEntityOnuRelationBind.jsp</result>
+        </action>
+        <action name="createCmc" class="cmcListAction" method="createCmc">
+            <result>/cmc/cmcEntityAdd.jsp</result>
+        </action>
+	</package>
+</struts>

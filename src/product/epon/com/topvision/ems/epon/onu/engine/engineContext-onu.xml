@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<bean id="elecOnuFacade"
+		class="com.topvision.ems.epon.onu.engine.ElecOnuFacadeImpl">
+		<property name="snmpExecutorService" ref="snmpExecutorService" />
+	</bean>
+	<bean id="onuFacade"
+		class="com.topvision.ems.epon.onu.engine.OnuFacadeImpl">
+		<property name="snmpExecutorService" ref="snmpExecutorService" />
+	</bean>
+	<bean id="uniFacade"
+		class="com.topvision.ems.epon.onu.engine.UniFacadeImpl">
+		<property name="snmpExecutorService" ref="snmpExecutorService" />
+	</bean>
+	
+</beans>

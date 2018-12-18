@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="igmp" namespace="/epon/igmp" extends="default">
+		<action name="showIgmpProxy" class="oltIgmpProxyAction" method="showIgmpProxy">
+			<result>/epon/igmpProxy.jsp</result>
+		</action>
+		<action name="showIgmpProtocol" class="oltIgmpAction" method="showIgmpProtocol">
+			<result>/epon/igmpProtocol.jsp</result>
+		</action>
+		<action name="showIgmpMvlan" class="oltIgmpMvlanAction" method="showIgmpMvlan">
+			<result>/epon/igmpMvlan.jsp</result>
+		</action>
+		<action name="showIgmpProxyDetail" class="oltIgmpProxyAction" method="showIgmpProxyDetail">
+			<result>/epon/igmpProxyDetail.jsp</result>
+		</action>
+		<action name="showIgmpUniMvlan" class="oltIgmpMvlanAction" method="showIgmpUniMvlan">
+			<result>/epon/igmpUniMvlan.jsp</result>
+		</action>
+		<action name="showIgmpUniMgmt" class="onuIgmpAction" method="showIgmpUniMgmt">
+			<result>/epon/igmpUniMgmt.jsp</result>
+		</action>
+		<action name="showIgmpHistory" class="oltIgmpAction" method="showIgmpHistory">
+			<result>/epon/igmpHistory.jsp</result>
+		</action>
+		<action name="showIgmpTranslation" class="oltIgmpMvlanAction" method="showIgmpTranslation">
+			<result>/epon/igmpTranslations.jsp</result>
+		</action>
+		<action name="showOnuIgmp" class="onuIgmpAction" method="showOnuIgmp">
+			<result>/epon/igmpOnu.jsp</result>
+		</action>
+		<action name="showUniIgmp" class="onuIgmpAction" method="showUniIgmp">
+			<result>/epon/igmpUni.jsp</result>
+		</action>
+		<action name="addMvlanJsp" class="oltIgmpMvlanAction" method="addMvlanJsp">
+			<result>/epon/addIgmpMvlan.jsp</result>
+		</action>
+		<action name="showIgmpForwarding" class="oltIgmpAction" method="showIgmpForwarding">
+			<result>/epon/igmpForwarding.jsp</result>
+		</action>
+		<action name="getIgmpForwarding" class="oltIgmpAction" method="getIgmpForwarding" />
+		<action name="getIgmpMode" class="oltIgmpAction" method="getIgmpMode" />
+		<action name="addIgmpUniPort" class="onuIgmpAction" method="addIgmpUniPort" />
+		<action name="deleteIgmpUniPort" class="onuIgmpAction" method="deleteIgmpUniPort" />
+		<action name="deleteIgmpVlanTrans" class="oltIgmpMvlanAction" method="deleteIgmpVlanTrans" />
+		<action name="loadCdrList" class="oltIgmpAction" method="loadCdrList" />
+		<action name="modifyIgmpProxyInfo" class="oltIgmpProxyAction" method="modifyIgmpProxyInfo" />
+		<action name="addIgmpProxy" class="oltIgmpProxyAction" method="addIgmpProxy" />
+		<action name="deleteIgmpProxy" class="oltIgmpProxyAction" method="deleteIgmpProxy" />	
+		<action name="modifyIgmpGlobalInfo" class="oltIgmpAction" method="modifyIgmpGlobalInfo" />
+		<action name="addMvlan" class="oltIgmpMvlanAction" method="addMvlan" />
+		<action name="modifyMvlan" class="oltIgmpMvlanAction" method="modifyMvlan" />
+		<action name="deleteMvlan" class="oltIgmpMvlanAction" method="deleteMvlan" />
+		<action name="modifyIgmpMvlanInfo" class="oltIgmpAction" method="modifyIgmpMvlanInfo" />
+		<action name="addIgmpVlanTrans" class="oltIgmpMvlanAction" method="addIgmpVlanTrans" />
+		<action name="modifyIgmpVlanTrans" class="oltIgmpMvlanAction" method="modifyIgmpVlanTrans" />
+		<action name="modifyIgmpMcOnuInfo" class="onuIgmpAction" method="modifyIgmpMcOnuInfo" />
+		<action name="modifyIgmpMcUniConfig" class="onuIgmpAction" method="modifyIgmpMcUniConfig" />
+		<action name="modifyIgmpUniPort" class="onuIgmpAction" method="modifyIgmpUniPort" />
+        <action name="refreshIgmpProxy" class="oltIgmpProxyAction" method="refreshIgmpProxy" />
+        <action name="refreshIgmpProtocol" class="oltIgmpAction" method="refreshIgmpProtocol" />
+		<action name="refreshMvlan" class="oltIgmpMvlanAction" method="refreshMvlan" />
+		<action name="refreshIgmpHistory" class="oltIgmpAction" method="refreshIgmpHistory" />
+		<action name="refreshIgmpUni" class="onuIgmpAction" method="refreshIgmpUni" />
+		<action name="refreshIgmpTranslation" class="oltIgmpMvlanAction" method="refreshIgmpTranslation" />
+		<action name="refreshIgmpForwarding" class="oltIgmpAction" method="refreshIgmpForwarding" />
+		  
+		<!-- IGMP SNOOPING SEGMENT -->
+		<action name="showIgmpSnooping" class="oltIgmpSnoopingAction" method="showIgmpSnooping" >
+		  <result>/epon/igmpSnooping.jsp</result>
+		</action>
+		<action name="loadIgmpSnoopingData" class="oltIgmpSnoopingAction" method="loadIgmpSnoopingData" />
+		<action name="refreshIgmpSnooping" class="oltIgmpSnoopingAction" method="refreshIgmpSnooping" />
+	</package>
+</struts>

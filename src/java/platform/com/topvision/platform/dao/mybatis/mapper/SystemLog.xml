@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.platform.domain.SystemLog">
+	<insert id="insertEntity" parameterType="systemLog">
+		INSERT INTO SystemLog ( userName, description, ip, appName,
+		operationType, createTime) VALUES ( #{userName},
+		#{description}, #{ip},
+		#{appName}, #{operationType},
+		#{createTime})
+    </insert>
+
+	<delete id="deleteByPrimaryKey" parameterType="long">
+		DELETE FROM SystemLog WHERE logId = #{logId}
+    </delete>
+
+	<select id="selectByPrimaryKey" parameterType="long" resultType="systemLog">
+		SELECT * FROM SystemLog WHERE logId =
+		#{logId}
+    </select>
+
+	<select id="selectCount" parameterType="map" resultType="integer">
+		SELECT COUNT(*) FROM SystemLog
+    </select>
+
+	<select id="getAllUserLog" resultType="systemLog">
+		select logId, userName, description, ip, appName, operationType,
+		createTime
+		from
+		systemlog
+    </select>
+
+	<select id="getUserLogByParams" parameterType="map" resultType="systemLog">
+		select logId, userName, description, ip,
+		appName, operationType,
+		createTime
+		from
+		systemlog
+		ORDER BY createTime DESC limit ${start},${limit}
+    </select>
+
+	<select id="selectWithPage" parameterType="map" resultType="systemLog">
+		SELECT logId, userName, description, ip, appName,
+		operationType,
+		createTime FROM SystemLog order by createTime desc LIMIT
+		${offset}, ${pageSize}
+    </select>
+</mapper>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cm.topofolder.dao.CmTopoFolderDao">
+      <select id="queryTopoDisplayInfo" parameterType="map" resultType="topoFolderDisplayInfo" flushCache="true">
+            SELECT  
+				count(*) totalNum,
+			    ifnull(sum(CASE WHEN (cm.statusValue IN (6,21,26,27,30,31)) THEN 1 ELSE 0 END),0) onlineNum,
+                ifnull(sum(CASE WHEN (cm.statusValue IN (6,21,26,27,30,31)) THEN 0 ELSE 1 END),0) offineNum
+			FROM cmattribute cm
+			LEFT JOIN ${folderTable} t ON cm.cmcId = t.entityId
+			LEFT JOIN entity e ON e.entityId = t.entityId
+			WHERE e.typeId IN (SELECT typeId FROM entitytyperelation WHERE type = 30000) 
+	</select>
+	
+    <select id="loadCmListByFolder" parameterType="map" resultType="com.topvision.ems.cmc.facade.domain.CmAttribute" >
+        select 
+			cm.displayIp,
+			cm.statusMacAddress,
+			cm.statusValue,
+			e.name cmcName,
+    	 	e.ip cmcIp,
+			cm.StatusUpChannelIfIndex,
+			cm.StatusDownChannelIfIndex,
+			ci.userAddr CmAlias,
+			ci.classification CmClassified,
+			cm.cmcId cmcId,
+			e.typeId cmcDeviceStyle,
+			<![CDATA[((cm.StatusUpChannelIfIndex & 0x7F00) >> 8) upchannelId]]>,
+			<![CDATA[((cm.StatusDownChannelIfIndex & 0x7F00) >> 8) downchannelId]]>
+		from cmattribute cm
+		STRAIGHT_JOIN entity e ON cm.cmcId=e.entityId
+		LEFT JOIN cmcattribute cmc ON cmc.cmcId = cm.cmcId
+		LEFT JOIN cmbossinfo ci ON cm.StatusMacAddress=ci.CmMac
+		INNER JOIN ${folderTable} t ON e.entityid = t.entityId
+		where e.typeId in (select typeId from entitytyperelation where type = 30000)
+		and e.entityId in (select entityId from ${Authority})
+		<if test="sort != null and dir != null">
+			 <if test="sort != 'displayIp'">
+				ORDER BY ${sort} ${dir}
+			 </if>
+			 <if test="sort == 'displayIp'">
+				 ORDER BY inet_aton(displayIp) ${dir}
+			 </if>
+			 <if test="sort == 'statusValue'">
+				 order by case cm.statusValue when find_in_set(statusValue, '6,21,26,27,30,31') then 1 else 2 end, cm.StatusValue, StatusIpAddress DESC
+			 </if>
+		</if>
+		<if test="sort == null">
+				order by case cm.statusValue when find_in_set(statusValue, '6,21,26,27,30,31') then 1 else 2 end, cm.StatusValue, StatusIpAddress DESC
+		</if>
+		limit ${start} , ${limit}
+	</select>
+	
+    <select id="loadCmListByFolderNum" parameterType="map" resultType="long" >
+        select 
+			count(*)
+		from cmattribute cm
+		STRAIGHT_JOIN entity e ON cm.cmcId=e.entityId
+		LEFT JOIN cmbossinfo ci ON cm.StatusMacAddress=ci.CmMac
+		LEFT JOIN cmcattribute cmc ON cmc.cmcId = cm.cmcId
+		INNER JOIN ${folderTable} t ON e.entityid = t.entityId
+		where e.typeId in (select typeId from entitytyperelation where type = 30000)
+		and e.entityId in (select entityId from ${Authority})
+	</select>
+      
+</mapper>

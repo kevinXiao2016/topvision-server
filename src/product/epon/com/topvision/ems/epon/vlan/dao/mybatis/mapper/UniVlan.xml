@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.vlan.domain.UniVlan">
+
+	<select id="getUniId" parameterType="oltUniAttribute"
+		resultType="long">
+		SELECT
+		uniId
+		FROM
+		OltUniRelation
+		WHERE
+		entityId = #{entityId}
+		and uniIndex = #{uniIndex}    
+	</select>
+	<insert id="insertOnuPortVlan" parameterType="portVlanAttribute">
+		insert into onuportvlan
+		(uniId, vlanTagTpid, vlanTagCfi, vlanTagPriority, vlanPVid,
+		vlanMode,
+		uniIndex,
+		entityId
+		)
+		values
+		(#{portId}, #{vlanTagTpid}, #{vlanTagCfi}, #{vlanTagPriority}, #{vlanPVid},
+		#{vlanMode},
+		#{portIndex},
+		#{entityId}
+		)
+		ON DUPLICATE KEY UPDATE
+		vlanTagTpid = #{vlanTagTpid},
+		vlanTagCfi = #{vlanTagCfi},
+		vlanTagPriority = #{vlanTagPriority},
+		vlanPVid = #{vlanPVid},
+		vlanMode = #{vlanMode}
+	</insert>
+	<insert id="insertOnuVlanTranslation" parameterType="vlanTranslationRule">
+		insert into onuvlantranslation
+		(uniId, vlanIndex, translationNewVid, uniIndex, entityId)
+		values
+		(#{portId}, #{vlanIndex}, #{translationNewVid}, #{portIndex}, #{entityId})
+	</insert>
+	<insert id="insertOnuVlanTrunk" parameterType="vlanTrunkRule">
+		insert into onuvlantrunk
+		(uniId, trunkVidList, uniIndex, entityId)
+		values
+		(#{portId}, #{trunkVidList}, #{portIndex}, #{entityId})
+	</insert>
+	<insert id="insertOnuVlanAgg" parameterType="vlanAggregationRule">
+		insert into onuvlanagg
+		(uniId, portAggregationVidIndex, aggregationVidList, uniIndex,
+		entityId
+		)
+		values
+		(#{portId}, #{portAggregationVidIndex}, #{aggregationVidList}, #{portIndex},
+		#{entityId}
+		)
+	</insert>
+
+	<update id="updateOnuPortVlan" parameterType="portVlanAttribute">
+		UPDATE
+		onuportvlan
+		SET
+		uniIndex = #{portIndex},
+		entityId = #{entityId}
+		<if test="vlanTagTpid != null and vlanTagTpid != ''">
+			,vlanTagTpid = #{vlanTagTpid}
+		</if>
+		<if test="vlanPVid != null">
+			,vlanPVid = #{vlanPVid}
+		</if>
+		<if test="vlanMode != null">
+			,vlanMode = #{vlanMode}
+		</if>
+		WHERE
+		uniId = #{portId}
+	</update>
+	<update id="updateOnuVlanTranslation" parameterType="vlanTranslationRule">
+		UPDATE
+		onuvlantranslation
+		SET
+		vlanIndex = #{portIndex},
+		translationNewVid = #{translationNewVid},
+		uniIndex = #{portIndex},
+		entityId = #{entityId}
+		WHERE
+		uniId = #{portId} and vlanIndex = #{vlanIndex}
+    </update>
+	<insert id="updateOnuVlanTrunk" parameterType="vlanTrunkRule">
+	    INSERT IGNORE INTO onuvlantrunk
+	    (uniId, trunkVidList,uniIndex,entityId)
+	    VALUES
+		(#{portId}, #{trunkVidList},#{portIndex},#{entityId}) 
+	    ON DUPLICATE KEY UPDATE
+	    trunkVidList = #{trunkVidList}
+	</insert>
+	<update id="updateOnuVlanAgg" parameterType="vlanAggregationRule">
+		UPDATE
+		onuvlanagg
+		SET
+		portAggregationVidIndex = #{portAggregationVidIndex},
+		aggregationVidList = #{aggregationVidList},
+		uniIndex = #{portIndex},
+		entityId = #{entityId}
+		WHERE
+		uniId = #{portId} and portAggregationVidIndex =
+		#{portAggregationVidIndex}
+	</update>
+	<update id="modifyCvlanAggrRule" parameterType="vlanAggregationRule">
+		UPDATE
+		onuvlanagg
+		SET
+		aggregationVidList = #{aggregationVidList}
+		WHERE
+		uniId = #{portId},
+		portAggregationVidIndex = #{portAggregationVidIndex}
+	</update>
+	<select id="getPortVlanAttribute" parameterType="long"
+		resultType="portVlanAttribute">
+		SELECT
+		entityId,
+		uniIndex portIndex,
+		uniId portId,
+		vlanTagTpid,
+		vlanTagCfi,
+		vlanTagPriority,
+		vlanPVid,
+		vlanMode
+		FROM
+		OnuPortVlan
+		WHERE uniId = #{portId}
+	</select>
+	<select id="getVlanTranslationRuleList" parameterType="long"
+		resultType="vlanTranslationRule">
+		SELECT
+		entityId,
+		uniIndex portIndex,
+		uniId portId,
+		vlanIndex,
+		translationNewVid
+		FROM
+		onuvlantranslation
+		WHERE uniId = #{portId}
+	</select>
+	<select id="getVlanTranslationRule" parameterType="vlanTranslationRule"
+		resultType="vlanTranslationRule">
+		SELECT
+		entityId,
+		uniIndex portIndex,
+		uniId portId,
+		vlanIndex,
+		translationNewVid
+		FROM
+		onuvlantranslation
+		WHERE uniId = #{portId} and
+		vlanIndex = #{vlanIndex}
+	</select>
+	<select id="getVlanTranslationRuleByAfter" parameterType="vlanTranslationRule"
+		resultType="vlanTranslationRule">
+		SELECT
+		entityId,
+		uniIndex portIndex,
+		uniId portId,
+		vlanIndex,
+		translationNewVid
+		FROM
+		onuvlantranslation
+		WHERE uniId = #{portId} and
+		(translationNewVid = #{translationNewVid} or vlanIndex = #{vlanIndex})
+	</select>
+	<select id="getVlanAggregationRuleList" parameterType="long"
+		resultType="vlanAggregationRule">
+		SELECT
+		entityId,
+		uniIndex portIndex,
+		uniId portId,
+		portAggregationVidIndex,
+		aggregationVidList
+		FROM
+		onuvlanagg
+		WHERE uniId =
+		#{portId}
+	</select>
+	<select id="getVlanAggregationRule" parameterType="vlanAggregationRule"
+		resultType="vlanAggregationRule">
+		SELECT
+		entityId,
+		uniIndex portIndex,
+		uniId portId,
+		portAggregationVidIndex,
+		aggregationVidList
+		FROM
+		onuvlanagg
+		WHERE uniId =
+		#{portId} and portAggregationVidIndex = #{portAggregationVidIndex}
+	</select>
+	<select id="getVlanTrunkRules" parameterType="long" resultType="vlanTrunkRule">
+		SELECT
+		entityId,
+		uniIndex portIndex,
+		uniId portId,
+		trunkVidList
+		FROM
+		onuvlantrunk
+		WHERE uniId = #{portId}
+	</select>
+
+	<delete id="deleteAllOnuPortVlan" parameterType="long">
+		delete from onuportvlan where entityId = #{entityId}  
+	</delete>
+	<delete id="deleteAllOnuVlanTranslation" parameterType="long">
+		delete from onuvlantranslation where entityId = #{entityId}
+	</delete>
+	<delete id="deleteAllOnuVlanTrunk" parameterType="long">
+		delete from onuvlantrunk where entityId = #{entityId}
+	</delete>
+	<delete id="deleteAllOnuVlanAgg" parameterType="long">
+		delete from onuvlanagg where entityId = #{entityId}
+	</delete>
+	<delete id="deleteOnuPortVlan" parameterType="long">
+		delete from onuportvlan where uniId=#{portId} 
+	</delete>
+	<delete id="deleteOnuVlanTranslation" parameterType="vlanTranslationRule">
+		delete from onuvlantranslation where uniId=#{portId} and
+		vlanIndex=#{vlanIndex}
+	</delete>
+	<delete id="deleteUniVlanTranslation" parameterType="long">
+		delete from onuvlantranslation where uniId=#{portId}
+	</delete>
+	<delete id="deleteOnuVlanTrunk" parameterType="long">
+		delete from onuvlantrunk where uniId=#{portId}  
+	</delete>
+	<delete id="deleteOnuVlanAgg" parameterType="vlanAggregationRule">
+		delete from onuvlanagg where uniId=#{portId} and
+		portAggregationVidIndex=#{portAggregationVidIndex}
+	</delete>
+	<delete id="deleteUniPortVlanAgg" parameterType="long">
+		delete from onuvlanagg where uniId=#{portId}
+	</delete>
+	
+	<select id="getOnuPortVlanList" parameterType="long"
+		resultType="portVlanAttribute">
+		select
+		A.entityId,
+		A.uniIndex portIndex,
+		A.uniId portId,
+		A.vlanTagTpid,
+		A.vlanTagCfi,
+		A.vlanTagPriority,
+		A.vlanPVid,
+		A.vlanMode,
+		C.uniOperationStatus portStatus
+		from onuportvlan A left join oltunirelation B on A.uniId = B.uniId 
+		left join oltUniattribute C on B.uniId = C.uniId
+		where B.onuId = #{onuId} 
+		order by A.uniId limit 0,4;
+	</select>
+</mapper>

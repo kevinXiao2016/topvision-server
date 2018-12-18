@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Sat Nov 02 12:58:09 CST 2013 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.snmpV3.domain.SnmpV3User">
+    <select id="selectSnmpV3UserList" parameterType="long" resultType="usmSnmpV3User">
+        SELECT
+        entityId,
+        snmpUserEngineId,
+        snmpUserName,
+        snmpSecurityName,
+        snmpAuthProtocol,
+        snmpAuthKeyChange,
+        snmpPrivProtocol,
+        snmpPrivKeyChange,
+        snmpUserPublic,
+        snmpGroupName,
+        snmpSecurityMode
+        FROM
+        snmpv3usertable
+        WHERE
+        entityId = #{entityId}
+    </select>
+    <select id="selectUserByName" parameterType="map" resultType="usmSnmpV3User">
+        SELECT
+        entityId,
+        snmpUserName,
+        snmpUserEngineId,
+        snmpSecurityName,
+        snmpAuthProtocol,
+        snmpAuthKeyChange,
+        snmpPrivProtocol,
+        snmpPrivKeyChange,
+        snmpUserPublic,
+        snmpGroupName,
+        snmpSecurityMode
+        FROM
+        snmpv3usertable
+        WHERE
+        entityId = #{entityId}
+        AND
+        snmpSecurityName = #{cloneUser}
+        AND
+        snmpUserEngineId = #{snmpUserEngineId}
+    </select>
+    <select id="selectSnmpV3AccessList" parameterType="map" resultType="vacmSnmpV3Access">
+        SELECT
+        snmpGroupName,
+        snmpContextPrefix,
+        snmpSecurityLevel,
+        snmpSecurityMode,
+        snmpContextMatch,
+        snmpReadView,
+        snmpWriteView,
+        snmpNotifyView
+        FROM
+        snmpv3accesstable
+        WHERE
+        entityId = #{entityId}
+
+        <if test="snmpSecurityLevel != null">AND
+            snmpSecurityLevel = #{snmpSecurityLevel}
+        </if>
+
+    </select>
+    <select id="selectSnmpV3ViewList" parameterType="long" resultType="vacmSnmpV3View">
+        SELECT
+        snmpViewName,
+        snmpViewSubtree,
+        snmpViewMask,
+        snmpViewMode
+        FROM
+        snmpv3viewtable
+        WHERE
+        entityId = #{entityId}
+    </select>
+    <select id="selectSnmpV3ViewNameList" parameterType="long" resultType="vacmSnmpV3View">
+        SELECT
+        DISTINCT snmpViewName
+        FROM
+        snmpv3viewtable
+        WHERE
+        entityId = #{entityId}
+    </select>
+    <select id="selectSnmpAccessInfo" parameterType="map" resultType="vacmSnmpV3Access">
+        SELECT
+        snmpGroupName,
+        snmpContextPrefix,
+        snmpSecurityLevel,
+        snmpSecurityMode,
+        snmpContextMatch,
+        snmpReadView,
+        snmpWriteView,
+        snmpNotifyView
+        FROM
+        snmpv3accesstable
+        WHERE
+        entityId = #{entityId}
+        AND
+        snmpGroupName = #{snmpGroupName}
+        AND
+        snmpSecurityLevel =
+        #{snmpSecurityLevel}
+    </select>
+
+    <delete id="deleteAllUsmSnmpV3User" parameterType="long">
+        DELETE FROM
+        snmpv3usertable
+        WHERE
+        entityId = #{entityid}
+    </delete>
+    <delete id="deleteAllUsmSnmpV3Access" parameterType="long">
+        DELETE FROM
+        snmpv3Accesstable
+        WHERE
+        entityId = #{entityid}
+    </delete>
+    <delete id="deleteAllUsmSnmpV3View" parameterType="long">
+        DELETE FROM
+        snmpv3viewtable
+        WHERE
+        entityId = #{entityid}
+    </delete>
+    <insert id="batchInsertSnmpV3UserList" parameterType="usmSnmpV3User">
+        INSERT INTO snmpv3usertable(
+        entityId,
+        snmpUserEngineId,
+        snmpUserName,
+        snmpSecurityName,
+        snmpAuthProtocol,
+        snmpAuthKeyChange,
+        snmpPrivProtocol,
+        snmpPrivKeyChange,
+        snmpUserPublic)
+        VALUES(
+        #{entityId},
+        #{snmpUserEngineId},
+        #{snmpUserName},
+        #{snmpSecurityName},
+        #{snmpAuthProtocol},
+        #{snmpAuthKeyChange},
+        #{snmpPrivProtocol},
+        #{snmpPrivKeyChange},
+        #{snmpUserPublic}
+        )
+    </insert>
+    <update id="batchUpdateSnmpV3GroupList" parameterType="vacmSnmpV3Group">
+        UPDATE
+        snmpv3usertable
+        SET
+        snmpSecurityMode =
+        #{snmpSecurityMode},
+        snmpGroupName = #{snmpGroupName}
+        WHERE
+        entityId = #{entityId} and
+        snmpSecurityName =
+        #{snmpSecurityName}
+    </update>
+    <insert id="batchInsertSnmpV3ViewList" parameterType="vacmSnmpV3View">
+        INSERT INTO snmpv3viewtable(
+        entityId,
+        snmpViewName,
+        snmpViewSubtree,
+        snmpViewMask,
+        snmpViewMode)
+        VALUES(
+        #{entityId},
+        #{snmpViewName},
+        #{snmpViewSubtree},
+        #{snmpViewMask},
+        #{snmpViewMode})
+    </insert>
+    <insert id="batchInsertSnmpV3AccessList" parameterType="vacmSnmpV3Access">
+        INSERT INTO
+        snmpv3AccessTable(
+        entityId,
+        snmpGroupName,
+        snmpContextPrefix,
+        snmpSecurityLevel,
+        snmpSecurityMode,
+        snmpContextMatch,
+        snmpReadView,
+        snmpWriteView,
+        snmpNotifyView)
+        VALUES(
+        #{entityId},
+        #{snmpGroupName},
+        #{snmpContextPrefix},
+        #{snmpSecurityLevel},
+        #{snmpSecurityMode},
+        #{snmpContextMatch},
+        #{snmpReadView},
+        #{snmpWriteView},
+        #{snmpNotifyView})
+    </insert>
+
+    <delete id="deleteView" parameterType="vacmSnmpV3View">
+        DELETE FROM
+        snmpv3viewtable
+        WHERE
+        entityId = #{entityId}
+        AND
+        snmpViewName =
+        #{snmpViewName}
+        AND
+        snmpViewSubtree = #{snmpViewSubtree}
+    </delete>
+    <delete id="deleteAccess" parameterType="vacmSnmpV3Access">
+        DELETE FROM
+        snmpv3accesstable
+        WHERE
+        entityId = #{entityId}
+        AND
+        snmpGroupName = #{snmpGroupName}
+        AND
+        snmpSecurityLevel = #{snmpSecurityLevel}
+    </delete>
+    <delete id="deleteUser" parameterType="usmSnmpV3User">
+        DELETE FROM
+        snmpv3usertable
+        WHERE
+        entityId = #{entityId}
+        AND
+        snmpUserName =
+        #{snmpUserName}
+        AND
+        snmpUserEngineId = #{snmpUserEngineId}
+    </delete>
+    <update id="updateSnmpV3UserParameters" parameterType="usmSnmpV3User">
+        UPDATE
+        snmpv3usertable
+        SET
+        snmpAuthProtocol =
+        #{snmpAuthProtocol},
+        snmpAuthKeyChange = #{snmpAuthKeyChange},
+        snmpPrivProtocol = #{snmpPrivProtocol},
+        snmpPrivKeyChange = #{snmpPrivKeyChange}
+        WHERE
+        entityId = #{entityId}
+        AND
+        snmpUserName = #{snmpUserName}
+        AND
+        snmpUserEngineId = #{snmpUserEngineId}
+    </update>
+    <select id="queryAvaiableCloneUserList" parameterType="usmSnmpV3User" resultType="usmSnmpV3User">
+        SELECT
+        snmpUserEngineId,
+        snmpUserName
+        FROM
+        snmpv3usertable
+        WHERE
+        entityId = #{entityId}
+        AND
+        snmpAuthProtocol != 'NOAUTH'
+        AND
+        snmpPrivProtocol != 'NOPRIV'
+        <if test="snmpUserName != null">
+            snmpUserName = #{snmpUserName}
+        </if>
+        <if test="snmpUserEngineId != null">
+            snmpUserEngineId = #{snmpUserEngineId}
+        </if>
+    </select>
+    <select id="queryAvaiableCloneEngineList" parameterType="usmSnmpV3User" resultType="usmSnmpV3User">
+        SELECT
+        DISTINCT snmpUserEngineId
+        FROM
+        snmpv3usertable
+        WHERE
+        entityId = #{entityId}
+        AND
+        snmpAuthProtocol != 'NOAUTH'
+        AND
+        snmpPrivProtocol != 'NOPRIV'
+        <if test="snmpUserName != null">
+            snmpUserName = #{snmpUserName}
+        </if>
+    </select>
+    <update id="updateVacmAccess" parameterType="vacmSnmpV3Access">
+        UPDATE
+        snmpv3accesstable
+        SET
+        snmpContextMatch = #{snmpContextMatch},
+        snmpReadView = #{snmpReadView},
+        snmpWriteView = #{snmpWriteView},
+        snmpNotifyView = #{snmpNotifyView}
+        WHERE
+        entityId
+        = #{entityId}
+        AND
+        snmpGroupName = #{snmpGroupName}
+        AND
+        snmpSecurityLevel = #{snmpSecurityLevel}
+    </update>
+    <update id="updateSnmpV3User" parameterType="usmSnmpV3User">
+        UPDATE
+        snmpv3usertable
+        SET
+        snmpAuthProtocol = #{snmpAuthProtocol},
+        snmpAuthKeyChange = #{snmpAuthKeyChange},
+        snmpPrivProtocol = #{snmpPrivProtocol},
+        snmpPrivKeyChange =
+        #{snmpPrivKeyChange},
+        snmpUserPublic = #{snmpUserPublic},
+        snmpGroupName = #{snmpGroupName}
+        WHERE
+        entityId =
+        #{entityId}
+        AND
+        snmpUserEngineId = #{snmpUserEngineId}
+        AND
+        snmpUserName = #{snmpUserName}
+    </update>
+    <select id="querySnmpViewInfo" parameterType="vacmSnmpV3View" resultType="vacmSnmpV3View">
+        SELECT
+        snmpViewName,
+        snmpViewMask,
+        snmpViewSubtree,
+        snmpViewMask,
+        snmpViewMode
+        FROM
+        snmpv3viewtable
+        WHERE
+        entityId = #{entityId}
+        AND
+        snmpViewName =
+        #{snmpViewName}
+        AND
+        snmpViewSubtree = #{snmpViewSubtree}
+    </select>
+</mapper>

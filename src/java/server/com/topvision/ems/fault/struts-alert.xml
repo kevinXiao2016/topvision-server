@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+	"http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="alert" namespace="/alert" extends="default">
+		<action name="showEntityAlertJsp" class="entityAlertAction"
+			method="showEntityAlertJsp">
+			<result>/fault/entityAlert.jsp</result>
+			<result name="olt">/epon/oltAlert.jsp</result>
+			<result name="cmc" type="redirect">/cmc/alert/showCmcAlert.tv?cmcId=${cmcId}
+			</result>
+		</action>
+		<action name="showEntityHistoryAlertJsp" class="entityAlertAction"
+			method="showEntityAlertJsp">
+			<result>/fault/entityHistoryAlert.jsp</result>
+			<result name="olt">/epon/oltAlertHistory.jsp</result>
+		</action>
+		<action name="loadFloatingAlert" class="entityAlertAction"
+			method="loadFloatingAlert" />
+		<action name="loadEntityAlert" class="entityAlertAction"
+			method="loadEntityAlert" />
+		<action name="loadEntityHistoryAlert" class="entityAlertAction"
+			method="loadEntityHistoryAlert" />
+
+		<action name="loadHistoryAlertList" class="historyAlertAction"
+			method="loadHistoryAlertList" />
+		<action name="showHistoryAlertList" class="historyAlertAction"
+			method="showHistoryAlertList">
+			<result>/fault/historyAlertList.jsp</result>
+		</action>
+
+		<action name="loadUserAlertType" class="userAlertAction"
+			method="loadUserAlertType" />
+
+		<action name="updateUserAlertType" class="userAlertAction"
+			method="updateUserAlertType" />
+ 
+		<action name="showCurrentAlertList" class="alertAction"
+			method="showCurrentAlertList">
+			<result>/fault/currentAlertList.jsp</result>
+		</action>
+		<action name="showAttentionAlert" class="alertAction"
+			method="showAttentionAlert">
+			<result>/fault/attentionAlert.jsp</result>
+		</action>
+		<action name="getCurrentAlertList" class="alertAction" method="getCurrentAlertList" />
+		<action name="saveCurrentAlertQueryModel" class="alertAction" method="saveCurrentAlertQueryModel" />
+
+		<action name="showHistoryAlertDetail" class="historyAlertAction"
+			method="showHistoryAlertDetail">
+			<result>/fault/popHistoryAlert.jsp</result>
+		</action>
+
+		<action name="showAlertDetail" class="alertAction" method="showAlertDetail">
+			<result name="noCurrentAlert">/fault/noCurrentAlert.jsp</result>
+			<result>/fault/popAlert.jsp</result>
+		</action>
+
+		<action name="loadRecentAlert" class="alertAction" method="loadRecentAlert" />
+
+		<action name="loadEntityAvailability" class="alertAction"
+			method="loadEntityAvailability">
+			<result>/cmc/detail/showPing.jsp</result>
+		</action>
+		<action name="loadChart" class="alertAction" method="loadChart" />
+
+		<action name="getAllAlertType" class="alertAction" method="getAllAlertType" />
+		<action name="getAlertTypeTree" class="alertAction" method="getAlertTypeTree" />
+	</package>
+</struts>

@@ -1,0 +1,179 @@
+.nm3kPlayBar, .nm3kpalyerFakeBar{
+	width:18px; 
+	height:18px; 
+	position:absolute; 
+	top:0px; 
+	left:0px; 
+	z-index:3; 
+	background:url(/images/spectrum/sliderBar.png) no-repeat; 
+	-moz-user-select:none; 
+	-webkit-user-select:none; 
+	-ms-user-select:none;
+}
+.nm3kpalyerFakeBar{ 
+	opacity:0.8; 
+	filter:alpha(opacity=80); 
+	z-index:1000;
+}
+.nm3kPlayer{ 
+	border:1px solid #EBE9EA; 
+	background:#F3F7F8; 
+	padding:10px; 
+	position:relative; 
+	min-width:300px; 
+	-moz-border-radius: 6px;
+	-khtml-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px; 
+	-moz-user-select:none; 
+	-webkit-user-select:none; 
+	-ms-user-select:none;
+}
+.nm3kPlayWrap{
+	width:100%; 
+	height:18px; 
+	position:relative; 
+	top:0px; 
+	left:0px; 
+	-moz-user-select:none; 
+	-webkit-user-select:none; 
+	-ms-user-select:none;
+}
+.nm3kPlayBarProgress{
+	width:0px; 
+	height:7px; 
+	overflow:hidden; 
+	background:#A3DBF2; 
+	border:1px solid #51BEE7; 
+	overflow:hidden; 
+	position:absolute; 
+	top:4px; 
+	left:0; 
+	z-index:2; 
+	-moz-border-radius: 15px;
+	-khtml-border-radius: 15px;
+	-webkit-border-radius: 15px;
+	border-radius: 15px;
+}
+.nm3kPlayBarBg{ 
+	width:100%; 
+	height:7px; 
+	border-top:1px solid #BFC0C2; 
+	border-bottom:1px solid #BFC0C2; 
+	overflow:hidden; 
+	background:#CCD5DC; 
+	position:absolute; 
+	z-index:1; 
+	top:4px;
+	-moz-border-radius: 15px;
+	-khtml-border-radius: 15px;
+	-webkit-border-radius: 15px;
+	border-radius: 15px;
+}
+.nm3kPlayerBtn{ 
+	width:140px; 
+	height:52px; 
+	overflow:hidden; 
+	margin:5px auto 0px; 
+	position:relative; 
+	-moz-user-select:none; 
+	-webkit-user-select:none; 
+	-ms-user-select:none;
+}
+.nm3kPlayerBtn a{ 
+	z-index:2;  
+	-moz-user-select:none; 
+	-webkit-user-select:none; 
+	-ms-user-select:none;
+}
+.nm3kPlayerBtnBack{ 
+	width:30px; 
+	height:30px; 
+	overflow:hidden; 
+	background:url(/images/spectrum/nm3kPlayerBtn.png) no-repeat; 
+	display:block; 
+	position:absolute; 
+	top:13px; 
+	left:2px;
+}
+.nm3kPlayerBtnBackDisabled{ 
+	width:30px; 
+	height:30px; 
+	overflow:hidden; 
+	background:url(/images/spectrum/nm3kPlayerBtn.png) no-repeat; 
+	display:block; 
+	position:absolute; 
+	top:13px; 
+	left:2px;
+}
+.nm3kPlayerBtnBack:hover{ 
+	background:url(/images/spectrum/nm3kPlayerBtn.png) no-repeat -30px 0px;
+}
+.nm3kPlayerBtnPlay{ 
+	width:48px; 
+	height:48px; 
+	overflow:hidden; 
+	display:block; 
+	background:url(/images/spectrum/nm3kPlayerBtn.png) no-repeat -60px 0px; 
+	position:absolute; 
+	top:2px; 
+	left:46px;
+}
+.nm3kPlayerBtnPlay:hover{ 
+	background:url(/images/spectrum/nm3kPlayerBtn.png) no-repeat -108px 0px;
+}
+.nm3kPlayerBtnForward{ 
+	width:30px; 
+	height:30px; 
+	overflow:hidden; 
+	background:url(/images/spectrum/nm3kPlayerBtn.png) no-repeat 0px -30px; 
+	display:block; 
+	position:absolute; 
+	top:13px; 
+	left:108px;
+}
+.nm3kPlayerBtnForwardDisabled{ 
+	width:30px; 
+	height:30px; 
+	overflow:hidden; 
+	background:url(/images/spectrum/nm3kPlayerBtn.png) no-repeat; 
+	display:block; 
+	position:absolute; 
+	top:13px; 
+	left:2px;
+}
+.nm3kPlayerBtnForward:hover{
+	background:url(/images/spectrum/nm3kPlayerBtn.png) no-repeat -30px -30px;
+}
+.nm3kPlayerBtnPause{ 
+	width:48px; 
+	height:48px; 
+	overflow:hidden; 
+	display:block; 
+	background:url(/images/spectrum/nm3kPlayerBtn.png) no-repeat -156px 0px; 
+	position:absolute; 
+	top:2px; 
+	left:46px;
+}
+.nm3kPlayerBtnPause:hover{
+	background:url(/images/spectrum/nm3kPlayerBtn.png) no-repeat -204px 0px;
+}
+.nm3kFrameTip{ 
+	top:30px; 
+	left:10px; 
+	position:absolute; 
+	-moz-user-select:none; 
+	-webkit-user-select:none; 
+	-ms-user-select:none;
+}
+.nm3kSpeedTip{
+	top:50px;
+	right:100px;
+	position:absolute; 
+	-moz-user-select:none; 
+	-webkit-user-select:none; 
+	-ms-user-select:none;
+}
+.speedNumber, .speedInterval{
+	color: #E07628;
+}

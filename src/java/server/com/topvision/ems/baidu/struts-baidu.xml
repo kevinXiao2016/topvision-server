@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="baidu" namespace="/baidu" extends="default">
+        <action name="showAddEntity" class="baiduMapAction" method="showAddEntity">
+            <result name="modify">
+				/baidu/modifyEntity.jsp
+			</result>
+            <result>/baidu/addEntity.jsp</result>
+        </action>
+        <action name="showBaiduMap" class="baiduMapAction" method="showBaiduMap">
+            <result>/baidu/baiduMap.jsp</result>
+        </action>
+        <action name="addEntityToBaiduMap" class="baiduMapAction" method="addEntityToBaiduMap">
+        </action>
+        <action name="getBaiduMapEntity" class="baiduMapAction" method="getBaiduMapEntity">
+        </action>
+        <action name="deleteEntityFromBaiduMap" class="baiduMapAction" method="deleteEntityFromBaiduMap">
+        </action>
+        <action name="modifyBaiduEntity" class="baiduMapAction" method="modifyBaiduEntity">
+        </action>
+        <action name="searchEntity" class="baiduMapAction" method="searchEntity">
+        </action>
+        <action name="saveBaiduMapCenter" class="baiduMapAction" method="saveBaiduMapCenter">
+        </action>
+    </package>
+</struts>
+

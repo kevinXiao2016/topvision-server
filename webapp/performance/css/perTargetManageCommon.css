@@ -1,0 +1,10 @@
+body,html{width:100%; height:100%; overflow:hidden;}
+#modifyDiv{ width:100%; height:100%; overflow:hidden; position:absolute; top:0; left:0; z-index: 2; background:#F3F3F3;}
+#modifyMainPart{ padding:10px; overflow:auto;}
+#contrastDiv{width:100%; height:100%; overflow:hidden; position:absolute; top:0; left:0; z-index: 10; background:#F3F3F3;}
+#step3Body{ padding:10px; overflow: auto;}
+.myImg{ position: relative; top:4px; left:4px;}
+.putUl{ width:100%; float:left;}
+.putUl li{ float:left;}
+.putNumLi {width:45%; text-align: right; padding:5px 4px 0px 0px;}
+table.contrastTable tr.redBg{ background:#FFAEA1;}

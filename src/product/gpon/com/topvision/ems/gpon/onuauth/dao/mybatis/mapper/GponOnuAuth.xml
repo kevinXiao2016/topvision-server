@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GponOnuAuth">
+	<delete id="deleteOnuAutoAuthConfig" parameterType="long">
+		DELETE FROM GponAutoAuthConfig WHERE entityId=#{entityId}
+	</delete>	
+	<delete id="deleteOnuAutoFind" parameterType="long">
+		DELETE FROM GponOnuAutoFind WHERE entityId=#{entityId}
+	</delete>	
+	<delete id="deleteOnuAuthConfig" parameterType="long">
+		DELETE FROM GponOnuAuthConfig WHERE entityId=#{entityId}
+	</delete>	
+	<delete id="deleteOnuAuthMode" parameterType="long">
+		DELETE FROM GponOnuAuthMode WHERE entityId=#{entityId}
+	</delete>	
+	
+	<insert id="insertOnuAutoAuthConfig" parameterType="gponAutoAuthConfig">
+		INSERT INTO GponAutoAuthConfig
+		(entityId,authIndex,onuType,onuAutoAuthenPortlist,catvNum,ethNum,veipNum,wlanNum,lineProfileId,srvProfileId) 
+		VALUES(#{entityId},#{authIndex},#{onuType},#{onuAutoAuthenPortlist},#{catvNum},#{ethNum},#{veipNum},#{wlanNum},#{lineProfileId},#{srvProfileId})
+	</insert>
+	
+	<select id="getOnuAuthIdList" parameterType="long" resultType="long">
+		SELECT authenOnuId
+		FROM GponOnuAuthConfig
+		WHERE ponId = #{ponId}
+	</select>
+	
+	<update id="updateOnuAutoAuthConfig" parameterType="gponAutoAuthConfig">
+		UPDATE GponAutoAuthConfig
+		SET 
+		onuType = #{onuType},
+		onuAutoAuthenPortlist = #{onuAutoAuthenPortlist},
+		catvNum = #{catvNum},
+		ethNum = #{ethNum},
+		veipNum = #{veipNum},
+		wlanNum = #{wlanNum},
+		lineProfileId = #{lineProfileId},
+		srvProfileId = #{srvProfileId}
+		WHERE entityId=#{entityId} AND authIndex=#{authIndex}
+	</update>
+	
+	<insert id="insertOnuAuthConfig" parameterType="gponOnuAuthConfig">
+		INSERT INTO GponOnuAuthConfig
+		(entityId,ponId,ponIndex,authenOnuId,loid,loidPassword,password,sn,srvProfileId,lineProfileId) 
+		VALUES(#{entityId},#{ponId},#{ponIndex},#{authenOnuId},#{loid},#{loidPassword},#{password},#{sn},#{srvProfileId},#{lineProfileId})
+	</insert>
+	<insert id="insertOnuAutoFind" parameterType="gponOnuAutoFind">
+		INSERT INTO GponOnuAutoFind
+		(entityId,ponIndex,onuIndex,autoFindTime,hardwareVersion,loid,loidPassword,onuType,password,serialNumber,softwareVersion) 
+		VALUES(#{entityId},#{ponIndex},#{onuIndex},#{autoFindTime},#{hardwareVersion},#{loid},#{loidPassword},#{onuType},#{password},#{serialNumber},#{softwareVersion})
+	</insert>
+	<insert id="insertOnuAuthMode" parameterType="gponOnuAuthMode">
+		INSERT INTO GponOnuAuthMode
+		(entityId,ponId,ponIndex,ponOnuAuthenMode,ponAutoFindEnable) 
+		VALUES(#{entityId},#{ponId},#{ponIndex},#{ponOnuAuthenMode},#{ponAutoFindEnable})
+	</insert>
+	<select id="selectPonAuthMode" parameterType="long" resultType="gponOnuAuthMode">
+		SELECT entityId,ponId,ponIndex,ponOnuAuthenMode,ponAutoFindEnable FROM GponOnuAuthMode WHERE entityId=#{entityId}
+	</select>
+	<select id="selectOnuAuthConfigList" parameterType="map" resultType="gponOnuAuthConfig">
+		SELECT entityId,ponIndex,authenOnuId,ponId,loid,loidPassword,password,sn,srvProfileId,lineProfileId
+		FROM GponOnuAuthConfig
+		WHERE entityId=#{entityId} 
+		<if test="ponIndex != null">
+			AND ponIndex=#{ponIndex}
+		</if>
+	</select>
+	<select id="selectOnuAuthConfig" parameterType="map" resultType="gponOnuAuthConfig">
+		SELECT entityId,ponIndex,authenOnuId,ponId,loid,loidPassword,password,sn,srvProfileId,lineProfileId
+		FROM GponOnuAuthConfig
+		WHERE entityId=#{entityId} AND REPLACE(sn, ':', '') = #{sn}
+	</select>
+	
+	<select id="selectOnuAuthConfigSn" parameterType="map" resultType="String">
+		SELECT sn FROM GponOnuAuthConfig
+		WHERE entityId=#{entityId} AND authenOnuId = #{authenOnuId}
+	</select>
+	
+	<select id="selectAutoFindOnuList" parameterType="map" resultType="gponOnuAutoFind">
+		SELECT entityId,onuIndex,autoFindTime,hardwareVersion,loid,loidPassword,onuType,password,serialNumber,softwareVersion
+		FROM GponOnuAutoFind
+		WHERE entityId=#{entityId}
+		<if test="ponIndex != null">
+			AND ponIndex=#{ponIndex}
+		</if>
+	</select>
+	
+	<select id="selectAutoFindOnu" parameterType="map" resultType="gponOnuAutoFind">
+		SELECT G.entityId,G.onuIndex,G.autoFindTime,G.hardwareVersion,G.loid,G.loidPassword,G.onuType,G.password,G.serialNumber,G.softwareVersion,
+		M.ponOnuAuthenMode AS ponOnuAuthenMode
+		FROM GponOnuAutoFind G LEFT JOIN GponOnuAuthMode M on G.entityId = M.entityId and G.ponIndex = M.ponIndex
+		WHERE G.entityId=#{entityId}
+		<if test="ponIndex != null">
+			AND G.ponIndex=#{ponIndex}
+		</if>
+		<if test="sn != null">
+			AND REPLACE(G.serialNumber, ':', '') like '%${sn}%'
+		</if>
+		<if test="authMode != null">
+			AND M.ponOnuAuthenMode = #{authMode}
+		</if>
+		<if test="onuType != null">
+			AND G.onuType like '%${onuType}'
+		</if>
+		<if test="start != null and limit != null">
+			limit ${start} , ${limit}
+		</if>
+	</select>
+	
+	<select id="getAutoFindOnuNum" parameterType="map" resultType="Integer">
+		SELECT count(*)
+		FROM GponOnuAutoFind G LEFT JOIN GponOnuAuthMode M on G.entityId = M.entityId and G.ponIndex = M.ponIndex
+		WHERE G.entityId=#{entityId}
+		<if test="ponIndex != null">
+			AND G.ponIndex=#{ponIndex}
+		</if>
+		<if test="sn != null">
+			AND REPLACE(G.serialNumber, ':', '') like '%${sn}%'
+		</if>
+		<if test="authMode != null">
+			AND M.ponOnuAuthenMode = #{authMode}
+		</if>
+		<if test="onuType != null">
+			AND G.onuType like '%${onuType}'
+		</if>
+	</select>
+	
+	<select id="selectPonId" parameterType="map" resultType="Long">
+		select ponId from oltponrelation where entityId = #{entityId} and ponIndex = #{ponIndex}
+	</select>
+	
+	<select id="selectAutoAuthConfigList" parameterType="long" resultType="gponAutoAuthConfig">
+		SELECT entityId,authIndex,onuType,catvNum,ethNum,veipNum,wlanNum,lineProfileId,srvProfileId,onuAutoAuthenPortlist
+		FROM GponAutoAuthConfig
+		WHERE entityId=#{entityId}
+	</select>
+	
+	<select id="selectAutoAuthConfig" parameterType="gponAutoAuthConfig" resultType="gponAutoAuthConfig">
+		SELECT entityId,authIndex,onuType,catvNum,ethNum,veipNum,wlanNum,lineProfileId,srvProfileId,onuAutoAuthenPortlist
+		FROM GponAutoAuthConfig
+		WHERE entityId=#{entityId} AND authIndex=#{authIndex} AND onuType=#{onuType}
+	</select>
+	
+	<delete id="deleteGponOnuAuth" parameterType="gponOnuAuthConfig">
+		DELETE FROM GponOnuAuthConfig WHERE entityId=#{entityId} AND authenOnuId = #{authenOnuId} 
+	</delete>
+	<select id="queryGponOnuAutoFindList" parameterType="map" resultType="gponOnuAutoFind">
+		SELECT A.*,C.name entityName,M.ponOnuAuthenMode  ponOnuAuthenMode FROM gpononuautofind A
+		LEFT JOIN oltponrelation B on A.entityId=B.entityId AND A.ponIndex=B.ponIndex
+		LEFT JOIN entity C ON A.entityId=C.entityId
+		LEFT JOIN GponOnuAuthMode M on A.entityId = M.entityId and A.ponIndex = M.ponIndex
+		WHERE 1=1
+		<if test="entityId != null">
+			AND A.entityId = #{entityId}
+		</if>
+		<if test="slotId != null">
+			AND B.slotId = #{slotId}
+		</if>
+		<if test="ponId != null">
+			AND B.ponId = #{ponId}
+		</if>
+		<if test="sn != null">
+			AND REPLACE(A.serialNumber, ':', '') like '%${sn}%'
+		</if>
+		<if test="sort != null">
+		 ORDER BY A.${sort} ${dir}
+		</if>
+		LIMIT ${start},${limit}
+	</select>
+	<select id="queryGponOnuAutoFindCount" parameterType="map" resultType="int">
+		SELECT count(*) FROM gpononuautofind A
+		LEFT JOIN oltponrelation B on A.entityId=B.entityId AND A.ponIndex=B.ponIndex
+		LEFT JOIN entity C ON A.entityId=C.entityId
+		LEFT JOIN GponOnuAuthMode M on A.entityId = M.entityId and A.ponIndex = M.ponIndex
+		WHERE 1=1
+		<if test="entityId != null">
+			AND A.entityId = #{entityId}
+		</if>
+		<if test="slotId != null">
+			AND B.slotId = #{slotId}
+		</if>
+		<if test="ponId != null">
+			AND B.ponId = #{ponId}
+		</if>
+		<if test="sn != null">
+			AND REPLACE(A.serialNumber, ':', '') like '%${sn}%'
+		</if>
+	</select>
+	<select id="queryGponOnuAutoFind" parameterType="map" resultType="gponOnuAutoFind">
+		SELECT * FROM gpononuautofind WHERE entityId = #{entityId} AND onuIndex = #{onuIndex}
+	</select>
+	<select id="selectGponOnuAutoFind" parameterType="map" resultType="gponOnuAutoFind">
+		SELECT A.*,B.name entityName,C.ponOnuAuthenMode FROM gpononuautofind A
+		LEFT JOIN entity B ON A.entityId=B.entityId
+		LEFT JOIN gpononuauthmode C ON A.entityId = C.entityId AND A.ponIndex = C.ponIndex
+		WHERE A.entityId = #{entityId} AND A.onuIndex = #{onuIndex}
+	</select>
+	<delete id="deleteGponAutoAuth" parameterType="gponAutoAuthConfig">
+		DELETE FROM GponAutoAuthConfig WHERE entityId=#{entityId} AND authIndex=#{authIndex}
+	</delete>
+	<delete id="deleteGponAutoAuthBySn" parameterType="map">
+		DELETE FROM gpononuautofind WHERE entityId=#{entityId} AND serialNumber=#{sn}
+	</delete>
+</mapper>
+

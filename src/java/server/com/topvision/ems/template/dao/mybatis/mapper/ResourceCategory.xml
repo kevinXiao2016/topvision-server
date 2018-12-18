@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Sat Nov 02 12:51:04 CST 2013 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.template.domain.ResourceCategory">
+    <insert id="insertEntity" parameterType="resourceCategory">
+        insert into ResourceCategory(parentId, categoryCode, name,
+        displayName, note) values(#{parentId},
+        #{categoryCode}, #{name},
+        #{displayName}, #{note})
+        <selectKey keyProperty="categoryId" resultType="long">
+            SELECT @@IDENTITY AS categoryId
+        </selectKey>
+    </insert>
+
+    <select id="selectByMap" resultType="resourceCategory">
+        select categoryId, parentId, categoryCode, name, displayName
+        from
+        ResourceCategory order by parentId asc, categoryId asc
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="long" resultType="resourceCategory">
+        select categoryId, parentId, categoryCode,
+        name, displayName,
+        note from ResourceCategory
+    </select>
+
+    <select id="getCategoryPath" parameterType="long" resultType="string">
+        select path from ResourceCategory where
+        categoryId =
+        #{categoryId}
+    </select>
+
+    <update id="updateCategoryPath" parameterType="resourceCategory">
+        update ResourceCategory set path = #{path} where categoryId =
+        #{categoryId}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="long">
+        DELETE FROM ResourceCategory WHERE categoryId = #{categoryId}
+    </delete>
+</mapper>

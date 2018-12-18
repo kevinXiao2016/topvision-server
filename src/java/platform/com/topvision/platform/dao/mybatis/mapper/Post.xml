@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.platform.domain.Post">
+	<insert id="insertEntity" parameterType="post" useGeneratedKeys="true"
+		keyProperty="postId">
+		INSERT INTO Place (superiorId, name, note) VALUES
+		(#{superiorId}, #{name}, #{note})
+    </insert>
+
+	<update id="updateEntity" parameterType="post">
+		UPDATE Place SET name = #{name} WHERE placeId =
+		#{postId}
+    </update>
+
+	<delete id="deleteByPrimaryKey" parameterType="long">
+		DELETE FROM Place WHERE placeId = #{placeId}
+    </delete>
+
+	<select id="selectByMap" parameterType="map" resultType="post">
+		SELECT placeId AS postId, superiorId, name FROM Place WHERE 1=1
+		<if test="name != null">AND
+			name = #{name}
+        </if>
+		<if test="superiorId != null">AND
+			superiorId = #{superiorId}
+        </if>
+		ORDER BY placeId ASC
+	</select>
+</mapper>

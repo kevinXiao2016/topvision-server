@@ -1,0 +1,805 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.cm.domain.CmList">
+	<select id="loadDeviceListByType" parameterType="map" resultType="map">
+		SELECT 
+			e.entityId, e.name, e.ip 
+		FROM 
+			${Authority} t,entity e
+		WHERE
+			e.typeId in (select typeId from entitytyperelation where type = #{type}) and t.entityId = e.entityId
+	</select> 
+	
+	<select id="loadDeviceListByTypeId" parameterType="map" resultType="map">
+		SELECT 
+			e.entityId, e.name , e.ip 
+		FROM 
+			${Authority} t, entity e
+		WHERE
+			e.typeId=#{typeId} and t.entityId = e.entityId 
+	</select> 
+		
+	<select id="loadCcmtsOfPon" parameterType="map" resultType="map">
+		SELECT 
+			cmcId, name
+		FROM 
+			cmcentityrelation, entity, oltonurelation
+		WHERE
+			cmcentityrelation.cmcId=entity.entityId
+			AND cmcentityrelation.onuId=oltonurelation.onuId
+			AND oltonurelation.ponId=#{ponId}
+			AND oltonurelation.entityId=#{entityId}
+	</select>
+	
+	<select id="selectCmcPortIfDescr" parameterType="map" resultType="String">
+		SELECT 
+			ifDescr 
+		FROM 
+			cmcportattribute
+		WHERE
+			cmcId=#{cmcId} AND ifIndex=#{channelIndex}
+	</select>
+		
+	<select id="getCmTopos" parameterType="long" resultType="com.topvision.ems.cmc.cm.domain.CmTopo">
+		SELECT 
+			b.folderId,
+			c.name as folderName
+		from 
+		    entityfolderrela b , topofolder c
+        where 
+            b.folderId = c.folderId
+            and b.entityId = #{cmcId}
+	</select>
+
+	<select id="selectCmcIdByCmId" parameterType="long" resultType="long">
+		select cmcId from cmccmrelation where cmId = #{cmId}
+	</select>
+	
+	<select id="selectOltIdByCmcId" parameterType="long" resultType="long">
+		select cmcEntityId from cmcEntityRelation where cmcId = #{cmcId}
+	</select>
+	
+	<select id="selectOnuIndex" parameterType="map" resultType="long">
+		select onuIndex from oltonurelation where entityId = #{entityId} and onuId = #{cmcId}
+	</select>
+	
+	<select id="selectPonIndex" parameterType="map" resultType="long">
+		select ponIndex from oltponrelation where 
+		ponId in(select ponId from oltonurelation where onuId = #{cmcId} 
+ 		and entityId = #{entityId})
+	</select>
+	
+	<select id="selectOltLocation" parameterType="map" resultType="com.topvision.ems.cmc.cm.domain.OltLocation">
+		select a.ip,a.name,b.state from entity a,entitysnap b where a.entityId = b.entityId and a.entityId = #{oltEntityId}
+	</select>
+	
+	<select id="selectPonOutSpeed" parameterType="map" resultType="double">
+		select portOutSpeed from perfeponflowqualitylast where entityId=#{entityId} and portIndex = #{ponIndex}
+	</select>
+	
+	<select id="selectOltCcmtsRelaForOnuPon" parameterType="map" resultType="com.topvision.ems.cmc.cm.domain.OltCcmtsRela">
+		select optTxPower as onuPonOutPower,optRePower as onuPonInPower
+		from perfcmclinkqualitylast where cmcId=#{cmcId} and portIndex = #{onuPonIndex}
+	</select>
+	
+	<select id="selectOltCcmtsRelaForPon" parameterType="map" resultType="com.topvision.ems.cmc.cm.domain.OltCcmtsRela">
+		select optTxPower as ponOutPower, optRePower as ponInPower
+		from perfeponlinkqualitylast where entityId=#{entityId} and portIndex = #{ponIndex}
+	</select>
+	
+	<select id="selectMaxAlarmLevel" parameterType="map" resultType="int">
+		select max(levelId) from alert where entityId = #{oltEntityId} 
+	</select>
+	
+	<select id="getCcmtsLocation" parameterType="map" resultType="com.topvision.ems.cmc.cm.domain.CcmtsLocation">
+		SELECT
+			e.ip,
+			e.name,
+			e.mac,
+			cca.topCcmtsSysStatus as state,
+			pcsq.collectValue as upChannelSnr,
+			pcfq.channelInspeed as upChannelInSpeed
+		FROM
+			cmcattribute cca
+		LEFT JOIN
+			entity e ON cca.cmcId=e.entityId
+		LEFT JOIN
+			perfcmcsnrqualitylast pcsq ON cca.cmcId=pcsq.cmcId 
+			AND pcsq.channelIndex in (select StatusUpChannelIfIndex from cmattribute where cmId = #{cmId}) 
+		LEFT JOIN
+			perfcmcflowqualitylast pcfq ON cca.cmcId=pcfq.cmcId 
+			AND pcfq.channelIndex=pcsq.channelIndex
+		WHERE
+			cca.cmcId=#{cmcId}
+	</select>
+	
+	<select id="getCcmtsMaxAlarmLevel" parameterType="map" resultType="int">
+		select max(levelId) from alert a where a.entityId = #{cmcId} or a.source like '%${mac}%'
+	</select>
+	
+	<select id="selectCcmtsOutPower" parameterType="map" resultType="long">
+		SELECT a.docsIfDownChannelPower from cmcdownchannelbaseinfo a where a.cmcId = #{cmcId} 
+		and channelIndex in (SELECT StatusDownChannelIfIndex from cmattribute where cmId = #{cmId})
+	</select>
+	
+	<select id="selectCcmtsInPower" parameterType="long" resultType="long">
+		SELECT statusRxPower from cmattribute where cmId = #{cmId}
+	</select>
+	
+	<select id="selectCmsignal" parameterType="long" resultType="com.topvision.ems.cmc.cm.domain.CmSignal">
+		SELECT * from cmsignal where cmId = #{cmId}
+	</select>
+	
+	<select id="selectCmLocation" parameterType="long" resultType="com.topvision.ems.cmc.cm.domain.CmLocation">
+		SELECT 
+			IF(StatusIpAddress='noSuchObject' || StatusIpAddress is NULL,StatusInetAddress,StatusIpAddress) as ip,
+			StatusMacAddress as mac,
+			StatusValue as state,
+			StatusSignalNoise as upChannelSnr
+		from cmattribute where cmId = #{cmId}
+	</select>
+	
+	<select id="selectCpeNum" parameterType="long" resultType="long">
+		SELECT count(*) from cmcpe where cmId = #{cmId}
+	</select>
+	
+	<select id="getCmMaxAlarmLevel" parameterType="string" resultType="int">
+		SELECT max(levelId) from alert where host like '%${value}%'
+	</select>
+	
+	<select id="selectOneCmByCmId" parameterType="long" resultType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+		SELECT 
+			opr.entityId as oltId,
+			opr.ponId,
+			ca.cmcId,
+			cca.cmcDeviceStyle,
+			(SELECT name FROM entity WHERE entity.entityId=cca.cmcId) as cmcName,
+			ca.cmId,
+			ca.StatusIndex,
+			ca.StatusMacAddress,
+			IF(ca.StatusIpAddress='noSuchObject' || ca.StatusIpAddress is NULL,ca.StatusInetAddress,ca.StatusIpAddress) 
+			as StatusIpAddress,
+			ca.StatusDownChannelIfIndex,
+			ca.StatusUpChannelIfIndex,
+			ca.StatusRxPower,
+			IFNULL(d3cmstatus.cmUsStatusSignalNoise ,ca.StatusSignalNoise) as StatusSignalNoise,
+			ca.StatusValue,
+			ci.userAddr cmAlias,
+	        ci.classification cmClassified,
+			cf.topCmFlapInsertionFailNum,
+			d3cmstatus.*,
+			cs.*,
+			scn.cpeNum,
+			ca.displayIp
+		FROM
+			cmattribute ca
+		LEFT JOIN
+			cmcattribute cca ON ca.cmcId=cca.cmcId
+		LEFT JOIN
+			cmbossinfo ci ON ca.StatusMacAddress=ci.CmMac
+		LEFT JOIN
+			cmflap cf ON ca.StatusMacAddress=cf.topCmFlapMacAddr AND ca.cmId=cf.cmId
+		LEFT JOIN
+			docsif3cmtscmusstatus d3cmstatus ON ca.cmId=d3cmstatus.cmId 
+			AND ca.StatusUpChannelIfIndex=d3cmstatus.cmUsStatusChIfIndex
+		LEFT JOIN
+			cmcentityrelation cer ON ca.cmcId=cer.cmcId
+		LEFT JOIN
+			oltonurelation oor ON cer.onuId=oor.onuId
+		LEFT JOIN
+			oltponrelation opr ON oor.ponId=opr.ponId
+		LEFT JOIN
+			cmsignal cs ON ca.cmId=cs.cmId
+		LEFT JOIN
+			staticCpeNum scn ON ca.cmId = scn.cmId
+		WHERE
+			ca.cmId=#{cmId}
+	</select>
+	
+	<select id="getCmByCmcId" parameterType="map" resultType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+		SELECT
+			ca.cmId,
+			ca.cmcId,
+			ca.preStatus,
+			ca.docsisMode,
+			statusIndex,
+			statusMacAddress,
+			ca.displayIp,
+			ca.displayStatus,
+			statusIpAddress,
+			statusDownChannelIfIndex,
+			statusUpChannelIfIndex,
+			partialUpChannels,
+			partialDownChannels,
+			statusRxPower,
+			statusTimingOffset,
+			statusEqualizationData,
+			statusValue,
+			statusUnerroreds,
+			statusCorrecteds,
+			statusUncorrectables,
+			statusExtUnerroreds,
+			statusExtCorrecteds,
+			statusExtUncorrectables,
+			statusSignalNoise,
+			statusMicroreflections,
+			statusDocsisRegMode,
+			statusModulationType,
+			statusInetAddressType,
+			statusInetAddress,
+			statusValueLastUpdate,
+			statusHighResolutionTO,
+			b.userId,
+			b.userName,
+			b.userAddr cmAlias,
+			b.userPhoneNo,
+			b.offerName,
+			DATE_FORMAT(b.effDate,'%Y-%c-%d %H:%i:%s') effDate,
+			DATE_FORMAT(b.expDate,'%Y-%c-%d %H:%i:%s') expDate,
+			b.configFile,
+			b.extension,
+	        b.classification cmClassified,
+			c.topCmFlapInsertionFailNum,
+			d.downChannelSnr,
+			d.downChannelTx,
+			d.upChannelTx,
+			d.collectTime,
+			scn.cpeNum,
+			e.name name,
+			cst.serviceType cmServiceType,
+			ca.fileName,
+            e.typeId cmcDeviceStyle
+		FROM 
+			cmattribute ca 
+		INNER JOIN cmcattribute cca ON  ca.cmcId=cca.cmcId
+		INNER JOIN cmccmrelation ccr ON ca.cmId=ccr.cmId
+		left join entity e on e.entityId = cca.cmcId
+		left join cmbossinfo b on ca.StatusMacAddress = b.cmMac
+		left join cmflap c on ca.StatusMacAddress = c.topCmFlapMacAddr  and ca.cmId = c.cmId
+		left join cmsignal d on ca.cmId = d.cmId
+		LEFT JOIN staticCpeNum scn ON ca.cmId = scn.cmId
+		LEFT JOIN cmServiceType cst on ca.fileName = cst.fileName
+		WHERE
+			ca.cmcId = ${cmcId}
+			<if test="upChannelIndex != null">
+	        	AND ca.StatusUpChannelIfIndex = #{upChannelIndex}
+	        </if>
+	        <if test="downChannelIndex != null">
+	        	AND ca.StatusDownChannelIfIndex = #{downChannelIndex}
+	        </if>
+			<if test="upChannelId != null">
+	        	<![CDATA[AND ((ca.StatusUpChannelIfIndex & 0x7F00) >> 8) = #{upChannelId}]]>
+	        </if>
+	        <if test="downChannelId != null">
+	            <![CDATA[AND ((ca.StatusDownChannelIfIndex & 0x7F00) >> 8) = #{downChannelId}]]>
+	        </if>
+			<if test="cmMac != null">
+	            AND (ca.StatusMacAddress LIKE '%${cmMac}%'
+	            <if test="queryMacWithoutSplit != null">
+	                OR REPLACE(ca.StatusMacAddress, ':', '') LIKE '%${queryMacWithoutSplit}%'
+	            </if>
+	            )
+       		</if>
+			<if test="statusValue != null">
+	            <choose>
+	                <when test="statusValue == 1 || statusValue == 6 || statusValue == 21 || statusValue == 26 || statusValue == 27 || statusValue == 30 || statusValue == 31">
+	                    AND ca.StatusValue = #{statusValue}
+	                </when>
+	                <when test="statusValue == 10000">
+	                    AND (ca.StatusValue != 1 and ca.StatusValue != 6 and ca.StatusValue != 21 and ca.StatusValue != 26 and ca.StatusValue != 27 and ca.StatusValue != 30 and ca.StatusValue != 31)
+	                </when>
+	            </choose>
+	        </if>
+			<if test="docsisMode != null">
+		    	AND ca.docsisMode = #{docsisMode}
+			</if>
+			<if test="userId != null">
+				AND (b.userId LIKE '%${userId}%')
+			</if>
+			<if test="userName != null">
+				AND (b.userName LIKE '%${userName}%')
+			</if>
+			<if test="userAddr != null">
+				AND (b.userAddr LIKE '%${userAddr}%')
+			</if>
+			<if test="userPhoneNo != null">
+				AND (b.userPhoneNo LIKE '%${userPhoneNo}%')
+			</if>
+			<if test="offerName != null">
+				AND (b.offerName LIKE '%${offerName}%')
+			</if>
+			<if test="configFile != null">
+				AND (b.configFile LIKE '%${configFile}%')
+			</if>
+			<if test="upSnrMin != null">
+				<![CDATA[AND d.upChannelSnr >= #{upSnrMin}]]>
+			</if>
+			<if test="upSnrMax != null">
+				<![CDATA[AND d.upChannelSnr < #{upSnrMax}]]>
+			</if>
+			<if test="downSnrMin != null">
+				<![CDATA[AND d.downChannelSnr >= #{downSnrMin}]]>
+			</if>
+			<if test="downSnrMax != null">
+				<![CDATA[AND d.downChannelSnr < #{downSnrMax}]]>
+			</if>
+			<if test="upPowerMin != null">
+				<![CDATA[AND d.upChannelTx >= #{upPowerMin}]]>
+			</if>
+			<if test="upPowerMax != null">
+				<![CDATA[AND d.upChannelTx < #{upPowerMax}]]>
+			</if>
+			<if test="downPowerMin != null">
+				<![CDATA[AND d.downChannelTx >= #{downPowerMin}]]>
+			</if>
+			<if test="downPowerMax != null">
+				<![CDATA[AND d.downChannelTx < #{downPowerMax}]]>
+			</if>
+			<if test="sort != null and dir != null">
+			<choose>
+	          <when test="sort == 'displayIp'">
+	              ORDER BY inet_aton(displayIp) ${dir}, case when find_in_set(statusValue, '6,21,26,27,30,31') then 1 else 2 end, statusMacAddress
+	          </when>
+	          <when test="sort == 'lastRefreshTime'">
+	              ORDER BY collectTime ${dir}, inet_aton(displayIp), statusMacAddress
+	          </when>
+	          <when test="sort == 'statusValue'">
+	              ORDER BY case when find_in_set(statusValue, '6,21,26,27,30,31') then 1 else 2 end, ca.StatusValue, StatusIpAddress DESC, statusMacAddress
+	          </when>
+	          <when test="sort == 'topCmFlapInsertionFailNum'">
+	          	  ORDER BY topCmFlapInsertionFailNum  ${dir}, inet_aton(displayIp), statusMacAddress
+	          </when> 
+	          <otherwise>
+	                ORDER BY ${sort} ${dir}, statusMacAddress ${dir}
+	          </otherwise>
+	        </choose>
+			</if>
+			<if test="sort == null or dir == null"> 
+				order by case when find_in_set(statusValue, '6,21,26,27,30,31') then 1 else 2 end, ca.StatusValue, StatusIpAddress DESC
+			</if>	
+		LIMIT ${start} , ${limit}
+	</select>
+	
+	<select id="getCmNumByCmcId" parameterType="map" resultType="int">
+		SELECT
+			count(*)
+		FROM 
+			cmattribute ca 
+			INNER JOIN cmcattribute cca ON  ca.cmcId=cca.cmcId
+			INNER JOIN cmccmrelation ccr ON ca.cmId=ccr.cmId
+			left join cmbossinfo b on ca.StatusMacAddress = b.cmMac
+			left join cmflap c on ca.StatusMacAddress = c.topCmFlapMacAddr  and ca.cmId = c.cmId
+			left join cmsignal d on ca.cmId = d.cmId
+		WHERE
+			ca.cmcId = ${cmcId} 
+			<if test="upChannelIndex != null">
+	        	AND ca.StatusUpChannelIfIndex = #{upChannelIndex}
+	        </if>
+	        <if test="downChannelIndex != null">
+	        	AND ca.StatusDownChannelIfIndex = #{downChannelIndex}
+	        </if>
+			<if test="upChannelId != null">
+	        	<![CDATA[AND ((ca.StatusUpChannelIfIndex & 0x7F00) >> 8) = #{upChannelId}]]>
+	        </if>
+	        <if test="downChannelId != null">
+	            <![CDATA[AND ((ca.StatusDownChannelIfIndex & 0x7F00) >> 8) = #{downChannelId}]]>
+	        </if>
+			<if test="cmMac != null">
+	            AND (ca.StatusMacAddress LIKE '%${cmMac}%'
+	            <if test="queryMacWithoutSplit != null">
+	                OR REPLACE(ca.StatusMacAddress, ':', '') LIKE '%${queryMacWithoutSplit}%'
+	            </if>
+	            )
+       		</if>
+			<if test="statusValue != null">
+	            <choose>
+	                <when test="statusValue == 1 || statusValue == 6 || statusValue == 21 || statusValue == 26 || statusValue == 27|| statusValue == 30 || statusValue == 31">
+	                    AND ca.StatusValue = #{statusValue}
+	                </when>
+	                <when test="statusValue == 10000">
+	                    AND (ca.StatusValue != 1 and ca.StatusValue != 6 and ca.StatusValue != 21 and ca.StatusValue != 26 and ca.StatusValue != 27 and ca.StatusValue != 30 and ca.StatusValue != 31)
+	                </when>
+	            </choose>
+	        </if>
+	        <if test="statusValues != null">
+	            AND FIND_IN_SET(ca.StatusValue, #{statusValues})
+	        </if>
+			<if test="docsisMode != null">
+		    	AND ca.docsisMode = #{docsisMode}
+			</if>
+			<if test="userId != null">
+				AND (b.userId LIKE '%${userId}%')
+			</if>
+			<if test="userName != null">
+				AND (b.userName LIKE '%${userName}%')
+			</if>
+			<if test="userAddr != null">
+				AND (b.userAddr LIKE '%${userAddr}%')
+			</if>
+			<if test="userPhoneNo != null">
+				AND (b.userPhoneNo LIKE '%${userPhoneNo}%')
+			</if>
+			<if test="offerName != null">
+				AND (b.offerName LIKE '%${offerName}%')
+			</if>
+			<if test="configFile != null">
+				AND (b.configFile LIKE '%${configFile}%')
+			</if>
+			<if test="upSnrMin != null">
+				<![CDATA[AND d.upChannelSnr >= #{upSnrMin}]]>
+			</if>
+			<if test="upSnrMax != null">
+				<![CDATA[AND d.upChannelSnr < #{upSnrMax}]]>
+			</if>
+			<if test="downSnrMin != null">
+				<![CDATA[AND d.downChannelSnr >= #{downSnrMin}]]>
+			</if>
+			<if test="downSnrMax != null">
+				<![CDATA[AND d.downChannelSnr < #{downSnrMax}]]>
+			</if>
+			<if test="upPowerMin != null">
+				<![CDATA[AND d.upChannelTx >= #{upPowerMin}]]>
+			</if>
+			<if test="upPowerMax != null">
+				<![CDATA[AND d.upChannelTx < #{upPowerMax}]]>
+			</if>
+			<if test="downPowerMin != null">
+				<![CDATA[AND d.downChannelTx >= #{downPowerMin}]]>
+			</if>
+			<if test="downPowerMax != null">
+				<![CDATA[AND d.downChannelTx < #{downPowerMax}]]>
+			</if>
+	</select>
+	
+	<select id="getCmtsStateById" parameterType="long" resultType="int">
+		SELECT state from entitysnap where entityId = #{cmcId}
+	</select>
+	
+	<select id="selectCmList" parameterType="map" resultType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+		SELECT 
+			A.*,
+			B.userId,
+			B.userName,
+			B.userAddr,
+			B.userPhoneNo,
+			B.offerName,
+			DATE_FORMAT(B.effDate,'%Y-%c-%d %H:%i:%s') effDate,
+			DATE_FORMAT(B.expDate,'%Y-%c-%d %H:%i:%s') expDate,
+			B.configFile,
+			B.extension
+		FROM (SELECT
+			oor.entityId oltId,
+			oor.ponId,
+			ca.cmcId,
+			ca.cmId,
+			ca.statusIndex,
+			ca.displayIp,
+			ca.StatusMacAddress,
+			ca.displayStatus,
+			ca.StatusValue,
+			ca.StatusUpChannelIfIndex,
+			ca.StatusDownChannelIfIndex,
+			ca.partialUpChannels,
+			ca.partialDownChannels,
+			ca.preStatus,
+			ca.docsisMode,
+			<![CDATA[((ca.StatusUpChannelIfIndex & 0x7F00) >> 8) upchannelId]]>,
+			<![CDATA[((ca.StatusDownChannelIfIndex & 0x7F00) >> 8) downchannelId]]>,
+			e.typeId cmcDeviceStyle,
+			e.name cmcName,
+			ca.StatusSignalNoise,
+			cs.downChannelSnr,
+			cs.upChannelTx,
+			cs.downChannelTx,
+			cs.collectTime,
+			cf.topCmFlapInsertionFailNum,
+			sc.cpeNum,
+			ci.userAddr CmAlias,
+			ci.classification CmClassified,
+			cpaU.ifDescr upChannelIfDescr,
+			cpaD.ifDescr downChannelIfDescr,
+			cpaU.ifName upChannelIfName,
+			cpaD.ifName downChannelIfName,
+			cst.serviceType cmServiceType,
+			ca.fileName
+		FROM
+			cmattribute ca
+		STRAIGHT_JOIN entity e ON ca.cmcId=e.entityId
+		LEFT JOIN cmsignal cs ON ca.cmId=cs.cmId
+		LEFT JOIN cmflap cf ON ca.cmId=cf.cmId
+		LEFT JOIN staticcpenum sc ON ca.cmId=sc.cmId
+		LEFT JOIN cmbossinfo ci ON ca.StatusMacAddress=ci.CmMac
+		LEFT JOIN cmcportattribute cpaU on ca.cmcId = cpaU.cmcId and  cpaU.ifIndex=ca.StatusUpChannelIfIndex
+		LEFT JOIN cmcportattribute cpaD on ca.cmcId = cpaD.cmcId and  cpaD.ifIndex=ca.StatusDownChannelIfIndex
+		LEFT JOIN oltonurelation oor ON ca.cmcId=oor.onuId
+		LEFT JOIN cmServiceType cst on ca.fileName = cst.fileName
+		WHERE e.entityId IN (SELECT entityId FROM ${Authority})
+		<if test="queryContent != null">
+            AND ((ca.displayIp REGEXP #{queryContent} AND find_in_set(ca.statusValue, '6,21,26,27,30,31'))
+            OR ca.StatusMacAddress REGEXP #{queryContent}
+            OR REPLACE(ca.StatusMacAddress, ':', '') REGEXP #{queryContent}
+            OR e.name REGEXP #{queryContent})
+        </if>
+		<choose>
+			<when test="deviceType == 10000">
+				AND oor.entityId IS NOT NULL
+			</when>
+			<when test="deviceType == 40000">
+				AND e.typeId BETWEEN 40000 AND 49999
+			</when>
+			<when test="deviceType != null">
+				AND e.typeId = ${deviceType}
+			</when>
+		</choose>
+		<if test="entityId != null">
+            AND oor.entityId=#{entityId}
+        </if>
+        <if test="ponId != null">
+            AND oor.ponId=#{ponId}
+        </if>
+		<if test="cmtsId != null">
+            AND ca.cmcId=#{cmtsId}
+        </if>
+        <if test="cmcId != null">
+            AND ca.cmcId=#{cmcId}
+        </if>
+        <if test="upChannelId != null">
+        	<![CDATA[AND ((ca.StatusUpChannelIfIndex & 0x7F00) >> 8) = #{upChannelId}]]>
+        </if>
+        <if test="downChannelId != null">
+            <![CDATA[AND ((ca.StatusDownChannelIfIndex & 0x7F00) >> 8) = #{downChannelId}]]>
+        </if>
+        <if test="upChannelIndex != null">
+        	AND ca.StatusUpChannelIfIndex = #{upChannelIndex}
+        </if>
+        <if test="downChannelIndex != null">
+        	AND ca.StatusDownChannelIfIndex = #{downChannelIndex}
+        </if>
+        <if test="statusValue != null">
+	        <choose>
+	            <when test="statusValue == 1 || statusValue == 6 || statusValue == 21 || statusValue == 26 || statusValue == 27|| statusValue == 30 || statusValue == 31">
+	                AND ca.StatusValue = #{statusValue}
+	            </when>
+	            <when test="statusValue == 10000">
+                    AND (ca.StatusValue != 1 and ca.StatusValue != 6 and ca.StatusValue != 21 and ca.StatusValue != 26 and ca.StatusValue != 27 and ca.StatusValue != 30 and ca.StatusValue != 31)
+                </when>
+	        </choose>
+        </if>
+		<if test="docsisMode != null">
+		    AND ca.docsisMode = #{docsisMode}
+		</if>
+		<if test="cmServiceType != null">
+			AND (cst.serviceType like '%${cmServiceType}%' OR ca.fileName like '%${cmServiceType}%')
+		</if>
+		<if test="cmIp != null">
+			AND (ca.displayIp LIKE '%${cmIp}%')
+		</if>
+		<if test="cmMac != null">
+         AND (ca.StatusMacAddress LIKE '%${cmMac}%'
+         <if test="queryMacWithoutSplit != null">
+             OR REPLACE(ca.StatusMacAddress, ':', '') LIKE '%${queryMacWithoutSplit}%'
+         </if>
+         )
+   		</if>
+   		<if test="upSnrMin != null">
+			<![CDATA[AND cs.upChannelSnr >= #{upSnrMin}]]>
+		</if>
+		<if test="upSnrMax != null">
+			<![CDATA[AND cs.upChannelSnr < #{upSnrMax}]]>
+		</if>
+		<if test="downSnrMin != null">
+			<![CDATA[AND cs.downChannelSnr >= #{downSnrMin}]]>
+		</if>
+		<if test="downSnrMax != null">
+			<![CDATA[AND cs.downChannelSnr < #{downSnrMax}]]>
+		</if>
+		<if test="upPowerMin != null">
+			<![CDATA[AND cs.upChannelTx >= #{upPowerMin}]]>
+		</if>
+		<if test="upPowerMax != null">
+			<![CDATA[AND cs.upChannelTx < #{upPowerMax}]]>
+		</if>
+		<if test="downPowerMin != null">
+			<![CDATA[AND cs.downChannelTx >= #{downPowerMin}]]>
+		</if>
+		<if test="downPowerMax != null">
+			<![CDATA[AND cs.downChannelTx < #{downPowerMax}]]>
+		</if>
+		limit 0 , 100000) A
+		LEFT JOIN cmbossinfo B ON A.statusMacAddress=B.cmMac
+		WHERE 1=1 
+		<if test="userId != null">
+			AND (B.userId LIKE '%${userId}%')
+		</if>
+		<if test="userName != null">
+			AND (B.userName LIKE '%${userName}%')
+		</if>
+		<if test="userAddr != null">
+			AND (B.userAddr LIKE '%${userAddr}%')
+		</if>
+		<if test="userPhoneNo != null">
+			AND (B.userPhoneNo LIKE '%${userPhoneNo}%')
+		</if>
+		<if test="offerName != null">
+			AND (B.offerName LIKE '%${offerName}%')
+		</if>
+		<if test="configFile != null">
+			AND (B.configFile LIKE '%${configFile}%')
+		</if>
+		<if test="sort != null and dir != null">
+		<choose>
+		  <when test="sort == 'displayIp'">
+		      ORDER BY inet_aton(displayIp) ${dir}
+		  </when>
+		  <when test="sort == 'lastRefreshTime'">
+              ORDER BY collectTime ${dir}
+          </when>
+          <when test="sort == 'statusValue'">
+              ORDER BY case when find_in_set(statusValue, '6,21,26,27,30,31') then 1 else 2 end, StatusValue, displayIp DESC
+          </when>
+          <when test="sort == 'topCmFlapInsertionFailNum'">
+          	  ORDER BY topCmFlapInsertionFailNum ${dir}, inet_aton(displayIp), statusMacAddress
+          </when>
+          <otherwise>
+                ORDER BY ${sort} ${dir}
+          </otherwise>
+		</choose>
+        </if>
+        <if test="sort == null">
+            order by case when find_in_set(statusValue, '6,21,26,27,30,31') then 1 else 2 end, StatusValue, displayIp DESC
+        </if>
+		limit ${start} , ${limit}
+	</select>
+	
+	<select id="selectCmListNum" parameterType="map" resultType="int">
+		SELECT
+		    count(*)
+		FROM
+		    cmattribute ca
+	    STRAIGHT_JOIN entity e ON ca.cmcId=e.entityId
+		LEFT JOIN cmsignal cs ON ca.cmId=cs.cmId
+		LEFT JOIN oltonurelation oor ON ca.cmcId=oor.onuId
+		LEFT JOIN cmbossinfo B ON ca.statusMacAddress=B.cmMac
+		LEFT JOIN cmServiceType cst on ca.fileName = cst.fileName
+		WHERE e.entityId IN (SELECT entityId FROM ${Authority})
+		<if test="queryContent != null">
+            AND ((ca.displayIp REGEXP #{queryContent} AND find_in_set(ca.statusValue, '6,21,26,27,30,31'))
+            OR ca.StatusMacAddress REGEXP #{queryContent}
+            OR REPLACE(ca.StatusMacAddress, ':', '') REGEXP #{queryContent}
+            OR e.name REGEXP #{queryContent})
+        </if>
+		<choose>
+			<when test="deviceType == 10000">
+				AND oor.entityId IS NOT NULL
+			</when>
+			<when test="deviceType == 40000">
+				AND e.typeId BETWEEN 40000 AND 49999
+			</when>
+			<when test="deviceType != null">
+				AND e.typeId = ${deviceType}
+			</when>
+		</choose>
+		<if test="entityId != null">
+            AND oor.entityId=#{entityId}
+        </if>
+        <if test="ponId != null">
+            AND oor.ponId=#{ponId}
+        </if>
+		<if test="cmtsId != null">
+            AND ca.cmcId=#{cmtsId}
+        </if>
+        <if test="cmcId != null">
+            AND ca.cmcId=#{cmcId}
+        </if>
+        <if test="upChannelId != null">
+        	<![CDATA[AND ((ca.StatusUpChannelIfIndex & 0x7F00) >> 8) = #{upChannelId}]]>
+        </if>
+        <if test="downChannelId != null">
+            <![CDATA[AND ((ca.StatusDownChannelIfIndex & 0x7F00) >> 8) = #{downChannelId}]]>
+        </if>
+        <if test="upChannelIndex != null">
+        	AND ca.StatusUpChannelIfIndex = #{upChannelIndex}
+        </if>
+        <if test="downChannelIndex != null">
+        	AND ca.StatusDownChannelIfIndex = #{downChannelIndex}
+        </if>
+		<if test="statusValue != null">
+            <choose>
+                <when test="statusValue == 1 || statusValue == 6 || statusValue == 21 || statusValue == 26 || statusValue == 27|| statusValue == 30 || statusValue == 31">
+                    AND ca.StatusValue = #{statusValue}
+                </when>
+                <when test="statusValue == 10000">
+                    AND (ca.StatusValue != 1 and ca.StatusValue != 6 and ca.StatusValue != 21 and ca.StatusValue != 26 and ca.StatusValue != 27 and ca.StatusValue != 30 and ca.StatusValue != 31)
+                </when>
+            </choose>
+        </if>
+        <if test="statusValues != null">
+            AND FIND_IN_SET(ca.StatusValue, #{statusValues})
+        </if>
+		<if test="docsisMode != null">
+		    AND ca.docsisMode = #{docsisMode}
+		</if>
+		<if test="cmServiceType != null">
+			AND (cst.serviceType like '%${cmServiceType}%' OR ca.fileName like '%${cmServiceType}%')
+		</if>
+		<if test="cmIp != null">
+			AND (ca.displayIp LIKE '%${cmIp}%')
+		</if>
+		<if test="cmMac != null">
+            AND (ca.StatusMacAddress LIKE '%${cmMac}%'
+            <if test="queryMacWithoutSplit != null">
+                OR REPLACE(ca.StatusMacAddress, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            </if>
+            )
+     	</if>
+     	<if test="upSnrMin != null">
+			<![CDATA[AND cs.upChannelSnr >= #{upSnrMin}]]>
+		</if>
+		<if test="upSnrMax != null">
+			<![CDATA[AND cs.upChannelSnr < #{upSnrMax}]]>
+		</if>
+		<if test="downSnrMin != null">
+			<![CDATA[AND cs.downChannelSnr >= #{downSnrMin}]]>
+		</if>
+		<if test="downSnrMax != null">
+			<![CDATA[AND cs.downChannelSnr < #{downSnrMax}]]>
+		</if>
+		<if test="upPowerMin != null">
+			<![CDATA[AND cs.upChannelTx >= #{upPowerMin}]]>
+		</if>
+		<if test="upPowerMax != null">
+			<![CDATA[AND cs.upChannelTx < #{upPowerMax}]]>
+		</if>
+		<if test="downPowerMin != null">
+			<![CDATA[AND cs.downChannelTx >= #{downPowerMin}]]>
+		</if>
+		<if test="downPowerMax != null">
+			<![CDATA[AND cs.downChannelTx < #{downPowerMax}]]>
+		</if>
+		<if test="userId != null">
+			AND (B.userId LIKE '%${userId}%')
+		</if>
+		<if test="userName != null">
+			AND (B.userName LIKE '%${userName}%')
+		</if>
+		<if test="userAddr != null">
+			AND (B.userAddr LIKE '%${userAddr}%')
+		</if>
+		<if test="userPhoneNo != null">
+			AND (B.userPhoneNo LIKE '%${userPhoneNo}%')
+		</if>
+		<if test="offerName != null">
+			AND (B.offerName LIKE '%${offerName}%')
+		</if>
+		<if test="configFile != null">
+			AND (B.configFile LIKE '%${configFile}%')
+		</if>
+	</select>
+	
+	<select id="getCmSignalByCmIds" parameterType="java.util.ArrayList" resultType="cm3Signal">
+	    select * FROM cm3signal 
+	    <where>  
+	        cmId in (  
+	        <foreach item="cmId" index="index" collection="list" separator=","> #{cmId} </foreach>  
+	        )  
+	    </where>  
+	    ORDER BY cmId, channelId
+	</select>
+	
+	<update id="deleteCmPartialByEntityId" parameterType="long">
+		update cmattribute SET 
+		partialUpChannels=null, 
+		partialDownChannels = NULL 
+		WHERE cmcId IN (SELECT cmcId from cmcentityrelation WHERE cmcEntityId=#{entityId})
+	</update>
+	
+	<update id="updateCmPartialState" parameterType="cmPartialSvcState">
+		update cmattribute SET 
+		partialUpChannels=#{partialUpChannels},
+		partialDownChannels = #{partialDownChannels} 
+		WHERE cmcId = #{cmcId} AND statusIndex = #{cmPartialSvcIndex}
+	</update>
+	
+</mapper>

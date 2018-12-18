@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.cpe.domain.CmCpeAnalyse">
+	<!-- ################################## select start ####################################### -->
+	<select id="getCmLastStatus" parameterType="map" resultType="com.topvision.ems.cmc.performance.domain.CmAct">
+		select * from CmAction where entityId = #{entityId} and CmMac = #{cmmac} order by RealTime DESC limit 0 , 1
+	</select>
+	
+	<select id="getCpeLastStatus" parameterType="map" resultType="com.topvision.ems.cmc.performance.domain.CpeAct">
+		select * from CpeAction where entityId = #{entityId} and cmmac = #{cmmac} and CpeMac = #{cpemac} order by RealTime DESC limit 0 , 1
+	</select>
+	
+	<select id="selectAllDeviceLastCmNum" resultType="com.topvision.ems.cmc.performance.domain.CmNum">
+		select * from usernumlastdevice
+	</select>
+	
+	<select id="getInitialDataCmActionByTimeRange" parameterType="com.topvision.framework.common.CollectTimeRange"
+		resultType="com.topvision.ems.cmc.performance.domain.InitialDataCmAction">
+		select * from initialDataCmAction where RealTime between #{startTime} and #{endTime}
+	</select>
+	
+	<select id="getInitialDataCpeActionByTimeRange" parameterType="com.topvision.framework.common.CollectTimeRange"
+		resultType="com.topvision.ems.cmc.performance.domain.InitialDataCpeAction">
+		select * from initialDataCpeAction where RealTime between #{startTime} and #{endTime}
+	</select>
+
+	<select id="getCmLastStatusByEntityId" parameterType="long" resultType="com.topvision.ems.cmc.performance.domain.CmAct">
+		select * from (select * from CmAction where entityId = #{entityId} ORDER BY RealTime DESC) a GROUP BY entityId,CmIndex,CmMac
+	</select>
+
+	<select id="getCpeLastStatusByEntityId" parameterType="long" resultType="com.topvision.ems.cmc.performance.domain.CpeAct">
+		select * from (select * from CpeAction where entityId = #{entityId}  ORDER BY RealTime DESC) a GROUP BY entityId,CmIndex,CmMac,CpeMac
+	</select>
+
+	<select id="isAllCmMonitorHasCollect"  parameterType="map" resultType="int">
+		select count(*) from PerfMonitor where category = 'CC_CMSTATUS' and lastCollectTime <![CDATA[<]]> #{endTime}
+	</select>
+	
+	<select id="getCmMonitorMaxCollectTime"	resultType="com.topvision.ems.cmc.performance.domain.Monitor">
+		select MAX(lastCollectTime) as lastCollectTime from PerfMonitor where category = 'CC_CMSTATUS';
+	</select>
+	
+	<select id="selectPortCmNumLast" parameterType="map" resultType="long">
+		select count(*) from usernumlastport where entityId = #{entityId} and portIfIndex = #{channelIndex};
+	</select>
+	
+	<select id="getCmcIdByEntityIdAndIndex" parameterType="map" resultType="long">
+		select cmcId from CmcEntityRelation where cmcEntityId = #{entityId} and cmcIndex = #{cmcIndex};
+	</select>
+
+	<select id="selectCmtsCmNumByEntityId" parameterType="map" resultType="com.topvision.ems.cmc.performance.domain.CmNum">
+		select * from usernumlastccmts where entityId = #{entityId};
+	</select>
+    <!-- ################################## select end ######################################### -->
+
+	<!-- ################################## insert start ####################################### -->
+	<insert id="insertAllCmNum" parameterType="com.topvision.ems.cmc.performance.domain.CmNum">
+	   INSERT
+	   INTO userNumHisAll
+	   VALUES (
+        #{time} , #{onlineNum}, #{otherNum}, #{offlineNum} , #{interactiveNum},
+        #{broadbandNum}, #{mtaNum}, #{integratedNum}, #{cpeNum}, #{realTime} ,
+        #{cpeInteractiveNum} , #{cpeBroadbandNum} , #{cpeMtaNum}
+       )
+	</insert>
+	<insert id="insertAreaCmNum" parameterType="com.topvision.ems.cmc.performance.domain.CmNum">
+	   INSERT
+	   INTO userNumHisArea
+	   VALUES ( 
+	    #{areaId} ,
+        #{time} , #{onlineNum}, #{otherNum}, #{offlineNum} , #{interactiveNum},
+        #{broadbandNum}, #{mtaNum}, #{integratedNum}, #{cpeNum} , #{realTime},
+        #{cpeInteractiveNum} , #{cpeBroadbandNum} , #{cpeMtaNum}
+        )
+	</insert>
+	<insert id="insertDeviceCmNum" parameterType="com.topvision.ems.cmc.performance.domain.CmNum">
+	   INSERT
+	   INTO userNumHisDevice
+	   VALUES ( 
+	   #{entityId},
+        #{time} , #{onlineNum}, #{otherNum}, #{offlineNum} , #{interactiveNum},
+        #{broadbandNum}, #{mtaNum}, #{integratedNum}, #{cpeNum} , #{realTime},
+        #{cpeInteractiveNum} , #{cpeBroadbandNum} , #{cpeMtaNum}
+        )
+	</insert>
+	
+	<insert id="insertDeviceCmNumSummary" parameterType="com.topvision.ems.cmc.performance.domain.CmNum">
+        INSERT INTO perfchannelcmnumSummary(
+			entityId,cmNumTotal,cmNumTotalMax,cmNumOnline,cmNumOnlineMax,dt,summarized)
+		values(
+			#{entityId},(#{onlineNum}+#{otherNum}+#{offlineNum}),(#{onlineNum}+#{otherNum}+#{offlineNum}),
+			#{onlineNum},#{onlineNum},#{realTime},0)
+	</insert>
+	
+	<insert id="insertPonCmNum" parameterType="com.topvision.ems.cmc.performance.domain.CmNum">
+	   INSERT
+	   INTO userNumHisPon
+	   VALUES ( 
+	   #{entityId},#{ponIndex},
+        #{time} , #{onlineNum}, #{otherNum}, #{offlineNum} , #{interactiveNum},
+        #{broadbandNum}, #{mtaNum}, #{integratedNum}, #{cpeNum} , #{realTime},
+        #{cpeInteractiveNum} , #{cpeBroadbandNum} , #{cpeMtaNum}
+        )
+	</insert>
+	<insert id="insertCmtsCmNum" parameterType="com.topvision.ems.cmc.performance.domain.CmNum">
+	   INSERT
+	   INTO userNumHisCcmts
+	   VALUES (
+	   #{entityId},#{ccIfIndex},
+        #{time} , #{onlineNum}, #{otherNum}, #{offlineNum} , #{interactiveNum},
+        #{broadbandNum}, #{mtaNum}, #{integratedNum}, #{cpeNum} , #{realTime},
+        #{cpeInteractiveNum} , #{cpeBroadbandNum} , #{cpeMtaNum}
+        )
+	</insert>
+	<insert id="insertPortCmNum" parameterType="com.topvision.ems.cmc.performance.domain.CmNum">
+	   INSERT
+	   INTO userNumHisPort
+	   VALUES ( #{entityId}, #{ccIfIndex}, #{portIfIndex}, #{portType},
+        #{time} , #{onlineNum}, #{otherNum}, #{offlineNum} , #{interactiveNum},
+        #{broadbandNum}, #{mtaNum}, #{integratedNum}, #{cpeNum} , #{realTime},
+        #{cpeInteractiveNum} , #{cpeBroadbandNum} , #{cpeMtaNum}
+        )
+	</insert>
+	<insert id="insertCmAct" parameterType="com.topvision.ems.cmc.performance.domain.CmAct">
+	   INSERT
+	   INTO cmAction
+	   VALUES ( #{entityId} , #{cmIndex}, #{cmmac}, #{cmip},
+        #{action}, #{time}, #{realtime})
+	</insert>
+	<insert id="insertCpeAct" parameterType="com.topvision.ems.cmc.performance.domain.CpeAct">
+	   INSERT
+	   INTO cpeAction
+	   VALUES ( #{entityId} , #{cmIndex}, #{cmmac}, #{cpemac}, #{cpeip},
+        #{action} , #{time}, #{realtime})
+	</insert>
+    <insert id="insertDeviceCmNumLast" parameterType="com.topvision.ems.cmc.performance.domain.CmNum">
+	   INSERT
+	   INTO userNumLastDevice
+	   VALUES (
+	   #{entityId},
+        #{time} , #{onlineNum}, #{otherNum}, #{offlineNum} , #{interactiveNum},
+        #{broadbandNum}, #{mtaNum}, #{integratedNum}, #{cpeNum} , #{realTime},
+        #{cpeInteractiveNum} , #{cpeBroadbandNum} , #{cpeMtaNum}
+        )
+	</insert>
+    <insert id="insertPonCmNumLast" parameterType="com.topvision.ems.cmc.performance.domain.CmNum">
+	   INSERT
+	   INTO userNumLastPon
+	   VALUES (
+	   #{entityId},#{ponIndex},
+        #{time} , #{onlineNum}, #{otherNum}, #{offlineNum} , #{interactiveNum},
+        #{broadbandNum}, #{mtaNum}, #{integratedNum}, #{cpeNum} , #{realTime},
+        #{cpeInteractiveNum} , #{cpeBroadbandNum} , #{cpeMtaNum}
+        )
+	</insert>
+    <insert id="insertCmtsCmNumLast" parameterType="com.topvision.ems.cmc.performance.domain.CmNum">
+	   INSERT
+	   INTO userNumLastCcmts
+	   VALUES (
+	   #{entityId},#{ccIfIndex},
+        #{time} , #{onlineNum}, #{otherNum}, #{offlineNum} , #{interactiveNum},
+        #{broadbandNum}, #{mtaNum}, #{integratedNum}, #{cpeNum} , #{realTime},
+        #{cpeInteractiveNum} , #{cpeBroadbandNum} , #{cpeMtaNum}
+        )
+	</insert>
+    <insert id="insertPortCmNumLast" parameterType="com.topvision.ems.cmc.performance.domain.CmNum">
+	   INSERT
+	   INTO userNumLastPort
+	   VALUES ( #{entityId}, #{ccIfIndex}, #{portIfIndex}, #{portType},
+        #{time} , #{onlineNum}, #{otherNum}, #{offlineNum} , #{interactiveNum},
+        #{broadbandNum}, #{mtaNum}, #{integratedNum}, #{cpeNum} , #{realTime},
+        #{cpeInteractiveNum} , #{cpeBroadbandNum} , #{cpeMtaNum}
+        )
+	</insert>
+    <insert id="insertDeviceCmNumLastByPonNum" parameterType="long">
+	   insert into usernumlastdevice(entityId,time,onlineNum,otherNum,offlineNum,interactiveNum
+        ,broadbandNum,mtaNum,integratedNum,cpeNum,realtime,cpeInteractiveNum,cpeBroadbandNum
+        ,cpeMtaNum) select entityId,time,sum(onlineNum) as onlineNum,sum(otherNum) as otherNum
+		,sum(offlineNum) as offlineNum ,sum(interactiveNum) as interactiveNum,sum(broadbandNum) as broadbandNum
+		,sum(mtaNum) as mtaNum,sum(integratedNum) as integratedNum,sum(cpeNum) as cpeNum
+        ,realtime,sum(cpeInteractiveNum) as cpeInteractiveNum,sum(cpeBroadbandNum) as cpeBroadbandNum
+		,sum(cpeMtaNum) as cpeMtaNum from usernumlastpon
+        where entityId = #{entityId} GROUP BY entityId,ponIndex
+	</insert>
+    <insert id="staticCpeNum" >
+	   INSERT
+	   INTO staticCpeNum(cmId,cpeNum) select cmId,count(*) cpeNum from cmcpe group by cmId
+	</insert>
+	<!-- ################################## insert end ######################################### -->
+    <!-- ################################## update start ######################################### -->
+    <update id="updateDeviceCmNumLast" parameterType="com.topvision.ems.cmc.performance.domain.CmNum">
+		update userNumLastDevice set onlineNum=#{onlineNum},otherNum=#{otherNum},offlineNum=#{offlineNum},
+		interactiveNum=#{interactiveNum},broadbandNum=#{broadbandNum},mtaNum=#{mtaNum},
+		integratedNum=#{integratedNum},cpeNum=#{cpeNum},realTime=#{realTime},
+		cpeInteractiveNum=#{cpeInteractiveNum},cpeBroadbandNum=#{cpeBroadbandNum},cpeMtaNum=#{cpeMtaNum},
+		time=#{time} where entityId = #{entityId}
+	</update>
+    <update id="updatePonCmNumLast" parameterType="com.topvision.ems.cmc.performance.domain.CmNum">
+		update userNumLastPon set onlineNum=#{onlineNum},otherNum=#{otherNum},offlineNum=#{offlineNum},
+		interactiveNum=#{interactiveNum},broadbandNum=#{broadbandNum},mtaNum=#{mtaNum},
+		integratedNum=#{integratedNum},cpeNum=#{cpeNum},realTime=#{realTime},
+		cpeInteractiveNum=#{cpeInteractiveNum},cpeBroadbandNum=#{cpeBroadbandNum},cpeMtaNum=#{cpeMtaNum},
+		time=#{time} where entityId = #{entityId}
+        <if test="ponIndex != null">
+            AND ponIndex = #{ponIndex}
+        </if>
+	</update>
+    <update id="updateCmtsCmNumLast" parameterType="com.topvision.ems.cmc.performance.domain.CmNum">
+		update userNumLastCcmts set onlineNum=#{onlineNum},otherNum=#{otherNum},offlineNum=#{offlineNum},
+		interactiveNum=#{interactiveNum},broadbandNum=#{broadbandNum},mtaNum=#{mtaNum},
+		integratedNum=#{integratedNum},cpeNum=#{cpeNum},realTime=#{realTime},
+		cpeInteractiveNum=#{cpeInteractiveNum},cpeBroadbandNum=#{cpeBroadbandNum},cpeMtaNum=#{cpeMtaNum},
+		time=#{time} where entityId = #{entityId}
+        <if test="ccIfIndex != null">
+            AND ccIfIndex = #{ccIfIndex}
+        </if>
+	</update>
+    <update id="updatePortCmNumLast" parameterType="com.topvision.ems.cmc.performance.domain.CmNum">
+		update userNumLastPort set onlineNum=#{onlineNum},otherNum=#{otherNum},offlineNum=#{offlineNum},
+		interactiveNum=#{interactiveNum},broadbandNum=#{broadbandNum},mtaNum=#{mtaNum},
+		integratedNum=#{integratedNum},cpeNum=#{cpeNum},realTime=#{realTime},
+		cpeInteractiveNum=#{cpeInteractiveNum},cpeBroadbandNum=#{cpeBroadbandNum},cpeMtaNum=#{cpeMtaNum},
+		time=#{time} where entityId = #{entityId}
+        <if test="ccIfIndex != null">
+            AND ccIfIndex = #{ccIfIndex}
+            <if test="portIfIndex != null">
+                AND portIfIndex = #{portIfIndex}
+                <if test="portType != null">
+                    AND portType = #{portType}
+                </if>
+            </if>
+        </if>
+	</update>
+    <update id="refreshPonLastCmNum" parameterType="map">
+		update userNumLastPort set onlineNum=#{onlineNum},otherNum=#{otherNum},offlineNum=#{offlineNum},
+		interactiveNum=#{interactiveNum},broadbandNum=#{broadbandNum},mtaNum=#{mtaNum},
+		integratedNum=#{integratedNum},cpeNum=#{cpeNum},realTime=#{realTime},
+		cpeInteractiveNum=#{cpeInteractiveNum},cpeBroadbandNum=#{cpeBroadbandNum},cpeMtaNum=#{cpeMtaNum},
+		time=#{time} where entityId = #{entityId}
+        <if test="ccIfIndex != null">
+            AND ccIfIndex = #{ccIfIndex}
+            <if test="portIfIndex != null">
+                AND portIfIndex = #{portIfIndex}
+                <if test="portType != null">
+                    AND portType = #{portType}
+                </if>
+            </if>
+        </if>
+	</update>
+    <!-- ################################## update end ######################################### -->
+	<!-- ################################## delete start ######################################### -->
+	<delete id="deleteDate" parameterType="map">
+		delete from ${table} where RealTime <![CDATA[<]]> #{realtime}
+	</delete>
+	<delete id="deleteCmHistoryData" parameterType="map">
+	    delete from cmhistory where collecttime <![CDATA[<]]> #{collecttime}
+	</delete>
+	<delete id="deleteDeviceCmNumLast" parameterType="long">
+	   delete from  userNumLastDevice where entityId = #{entityId}
+	</delete>
+	<delete id="deletePonCmNumLast" parameterType="long">
+	   delete from  userNumLastPon where entityId = #{entityId}
+	</delete>
+	<delete id="deleteCmtsCmNumLast" parameterType="long">
+	   delete from  userNumLastCcmts where entityId = #{entityId}
+	</delete>
+	<delete id="deletePortCmNumLast" parameterType="long">
+	   delete from  userNumLastPort where entityId = #{entityId}
+	</delete>
+
+    <delete id="deleteDeviceCmNumLastByCmNum" parameterType="com.topvision.ems.cmc.performance.domain.CmNum">
+	   delete from  userNumLastDevice where entityId = #{entityId}
+	</delete>
+    <delete id="deletePonCmNumLastByCmNum" parameterType="com.topvision.ems.cmc.performance.domain.CmNum">
+        delete from  userNumLastPon where entityId = #{entityId}
+        <if test="ponIndex != null">
+            AND ponIndex = #{ponIndex}
+        </if>
+    </delete>
+    <delete id="deleteCmtsCmNumLastByCmNum" parameterType="com.topvision.ems.cmc.performance.domain.CmNum">
+        delete from  userNumLastCcmts where entityId = #{entityId}
+        <if test="ccIfIndex != null">
+            AND ccIfIndex = #{ccIfIndex}
+        </if>
+    </delete>
+    <delete id="deletePortCmNumLastByCmNum" parameterType="com.topvision.ems.cmc.performance.domain.CmNum">
+        delete from  userNumLastPort where entityId = #{entityId}
+        <if test="ccIfIndex != null">
+            AND ccIfIndex = #{ccIfIndex}
+            <if test="portIfIndex != null">
+                AND portIfIndex = #{portIfIndex}
+                <if test="portType != null">
+                    AND portType = #{portType}
+                </if>
+            </if>
+        </if>
+    </delete>
+
+	<delete id="deleteStaticCpeNum" parameterType="long">
+	   delete from  staticCpeNum
+	</delete>
+    <!-- ################################## delete end ######################################### -->
+</mapper>

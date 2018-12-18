@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.onu.domain.RogueOnu">
+
+	<insert id="insertOrUpdateOnuLaser" parameterType="topOnuLaserEntry">
+		insert into onulaser (onuId,laserSwitch)
+        values (#{onuId},#{laserSwitch})
+		ON DUPLICATE KEY UPDATE
+		laserSwitch = #{laserSwitch}
+	</insert>
+	<insert id="insertOrUpdatePonRogueInfo" parameterType="topPonPortRogueEntry">
+		insert into oltPonRogueInfo (entityId,ponId,rogueSwitch,rogueOnuList,rogueOnuCheck)
+        values (#{entityId},#{ponId},#{rogueSwitch},#{rogueOnuList},#{rogueOnuCheck})
+		ON DUPLICATE KEY UPDATE
+		rogueSwitch = #{rogueSwitch},
+		rogueOnuList = #{rogueOnuList},
+		rogueOnuCheck = #{rogueOnuCheck}
+	</insert>
+
+	<update id="updateOltRogueSwitch" parameterType="map">
+		UPDATE oltattribute SET systemRogueCheck = #{systemRogueCheck}
+		WHERE entityId = #{entityId}
+	</update>
+	
+	<update id="updatePortRogueSwitch" parameterType="map">
+		UPDATE oltPonRogueInfo SET rogueSwitch = #{rogueSwitch}
+		WHERE ponId = #{ponId}
+	</update>
+	
+	<update id="updateOnuRogueStatus" parameterType="map">
+		UPDATE oltonuattribute SET rogueOnu = #{rogueOnu}
+		WHERE onuId = #{onuId}
+	</update>
+	
+	<update id="updateOnuLaserSwitch" parameterType="map">
+		UPDATE onulaser SET laserSwitch = #{laserSwitch}
+		WHERE onuId = #{onuId}
+	</update>
+	
+	<update id="changeOnuRogueStatus" parameterType="map">
+		UPDATE oltonuattribute SET rogueOnu = 0
+		WHERE onuId = (SELECT onuId FROM OltOnuRelation WHERE onuIndex = #{onuIndex}
+		AND entityId = #{entityId})
+	</update>
+	
+	<select id="queryRogueOnuList" parameterType="map" resultType="oltOnuAttribute">
+		SELECT 
+		J.displayName onuTypeString,D.name,B.onuindex,B.ponId,F.ip entityIp,F.entityId,F.name manageName,B.onuId,
+		A.onuUniqueIdentification uniqueId,A.onuEorG,
+		A.onuPreType,D.typeId, D.sysName AS onuDesc
+		FROM 
+		oltonuattribute A  LEFT JOIN  oltonurelation B on A.onuId= B.onuId
+		LEFT JOIN  entity D  on A.onuId = D.entityId
+		LEFT JOIN entity F ON D.parentId=F.entityId
+		LEFT JOIN entitytype J on D.typeId  = J.typeId
+		LEFT JOIN entitytyperelation K on J.typeId=K.typeId
+		WHERE 
+		A.rogueOnu = 1 and K.type=13000
+		AND A.onuId in (select entityId from ${Authority}) 
+		<if test="queryContent != null">
+            AND (A.onuMac LIKE "%${queryContentMac}%" 
+            	<if test="queryMacWithoutSplit != null">
+                	OR REPLACE(A.onuMac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+                	OR REPLACE(A.onuUniqueIdentification, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            	</if>
+            	OR D.name LIKE "%${queryContent}%" OR F.name LIKE "%${queryContent}%" OR  F.ip LIKE "%${queryContent}%"
+            	OR A.onuUniqueIdentification LIKE "%${queryContent}%"
+            	)
+        </if>
+   
+        <if test="entityId != null">
+			and A.entityId = #{entityId}
+		</if>
+		<if test="slotId != null and ponId == null">
+			AND EXISTS (SELECT * FROM oltonurelation M,oltponrelation N WHERE M.onuid=A.onuId AND M.ponid=N.ponid and slotId = #{slotId})
+		</if>
+		<if test="ponId != null">
+			and B.ponId = #{ponId}
+		</if>
+	    <if test="onuName != null">
+	          and D.name LIKE '%${onuName}%'
+	    </if>
+        <if test="sort != null and dir != ''">
+			<choose>
+				<when test="sort == 'entityIp'.toString()">
+					ORDER BY inet_aton(entityIp) ${dir}
+				</when>
+				<otherwise>
+					order by ${sort} ${dir}
+			</otherwise>
+		</choose>
+		</if>
+        limit ${start},${limit}
+	</select>
+	
+	<select id="queryRogueOnuCount" parameterType="map" resultType="int">
+	    SELECT count(A.onuId)
+		FROM oltonuattribute A  LEFT JOIN  oltonurelation B on A.onuId= B.onuId
+		LEFT JOIN  entity D  on A.onuId = D.entityId
+		LEFT JOIN entity F ON D.parentId=F.entityId
+		LEFT JOIN entitytype J on D.typeId  = J.typeId
+		LEFT JOIN entitytyperelation K on J.typeId=K.typeId
+		WHERE 
+		A.rogueOnu = 1 and K.type=13000
+		AND A.onuId in (select entityId from ${Authority}) 
+		<if test="queryContent != null">
+            AND (A.onuMac LIKE "%${queryContentMac}%" 
+            	<if test="queryMacWithoutSplit != null">
+                	OR REPLACE(A.onuMac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+                	OR REPLACE(A.onuUniqueIdentification, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            	</if>
+            	OR D.name LIKE "%${queryContent}%" OR F.name LIKE "%${queryContent}%" OR  F.ip LIKE "%${queryContent}%"
+            	OR A.onuUniqueIdentification LIKE "%${queryContent}%"
+            	)
+        </if>
+   
+        <if test="entityId != null">
+			and A.entityId = #{entityId}
+		</if>
+		<if test="slotId != null and ponId == null">
+			AND EXISTS (SELECT * FROM oltonurelation M,oltponrelation N WHERE M.onuid=A.onuId AND M.ponid=N.ponid and slotId = #{slotId})
+		</if>
+		<if test="ponId != null">
+			and B.ponId = #{ponId}
+		</if>
+	    <if test="onuName != null">
+	          and D.name LIKE '%${onuName}%'
+	    </if>
+	    </select>
+
+</mapper>

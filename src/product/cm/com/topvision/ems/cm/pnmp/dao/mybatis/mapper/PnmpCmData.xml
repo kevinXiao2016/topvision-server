@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cm.pnmp.facade.domain.PnmpCmData">
+	<select id="selectAllHighMonitorCmMac" resultType="string">
+		select cmmac from pnmphighintervalcm
+	</select>
+	
+	<select id="selectAllMiddleMonitorCmMac" resultType="string">
+		select cmmac from pnmpmiddleintervalcm
+	</select>
+
+	<select id="selectAllHighMonitorCmList" resultType="pnmpCmData">
+		SELECT 
+			A.cmMac,
+			B.statusValue,
+			B.checkStatus,
+			B.entityId,
+			B.cmcId,
+			B.tapCoefficient,
+			B.spectrumResponse,
+			B.mte,
+			B.preMte,
+			B.postMte,
+			B.tte,
+			B.mtc,
+			B.mtr,
+			B.nmtter,
+			B.mtrLevel,
+			B.premtter,
+			B.postmtter,
+			B.ppesr,
+			B.mrLevel,
+			B.Tdr,
+			B.upSnr,
+			B.upTxPower,
+			B.downSnr,
+			B.DownRxPower,
+			B.preEqualizationState,
+			B.orginalValue,
+			B.upChannelWidth,
+			B.collectTime,
+			C.correlationGroup,
+			D.name cmcName,
+			E.userAddr cmAddress,
+			F.displayIp cmIp
+		FROM pnmphighintervalcm A 
+		LEFT JOIN pnmpcmdatalast B ON A.cmmac = B.cmMac AND A.cmcId = B.cmcId
+		LEFT JOIN pnmpcmgroup C ON A.cmmac = C.cmMac
+		LEFT JOIN entity D ON B.cmcId = D.entityId
+		LEFT JOIN cmbossinfo E ON A.cmMac = E.cmMac
+		LEFT JOIN cmattribute F on A.cmMac = F.StatusMacAddress AND A.cmcId = F.cmcId
+	</select>
+	
+	<select id="selectAllMiddleMonitorCmList" resultType="pnmpCmData">
+		SELECT 
+			A.cmMac,
+			B.statusValue,
+			B.checkStatus,
+			B.entityId,
+			B.cmcId,
+			B.tapCoefficient,
+			B.spectrumResponse,
+			B.mte,
+			B.preMte,
+			B.postMte,
+			B.tte,
+			B.mtc,
+			B.mtr,
+			B.nmtter,
+			B.mtrLevel,
+			B.premtter,
+			B.postmtter,
+			B.ppesr,
+			B.mrLevel,
+			B.Tdr,
+			B.upSnr,
+			B.upTxPower,
+			B.downSnr,
+			B.DownRxPower,
+			B.preEqualizationState,
+			B.orginalValue,
+			B.upChannelWidth,
+			B.collectTime,
+			C.correlationGroup,
+			D.name cmcName,
+			E.userAddr cmAddress,
+			F.displayIp cmIp		
+		FROM pnmpmiddleintervalcm A
+		LEFT JOIN pnmpcmdatalast B ON A.cmmac = B.cmMac AND A.cmcId = B.cmcId
+		LEFT JOIN pnmpcmgroup C ON A.cmmac = C.cmMac
+		LEFT JOIN entity D ON B.cmcId = D.entityId
+		LEFT JOIN cmbossinfo E ON A.cmMac = E.cmMac
+		left join cmattribute F on A.cmMac = F.StatusMacAddress AND A.cmcId = F.cmcId
+	</select>
+	
+	<select id="selectAllHighMonitorCmListNum" resultType="int">
+		SELECT COUNT(cmMac)
+		FROM 
+		pnmphighintervalcm
+	</select>
+	
+	<select id="selectOnlineCmNum" resultType="int">
+		SELECT COUNT(cmId)
+		FROM 
+		cmattribute where statusValue in (6,21,26,27,30,31,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49)
+	</select>
+	
+	<select id="selectAllMiddleMonitorCmListNum" resultType="int">
+		SELECT COUNT(cmMac)
+		FROM 
+		pnmpmiddleintervalcm
+	</select>
+	
+	<select id="selectDataByGroup" resultType="pnmpCmData" parameterType="map">
+		SELECT 
+			A.correlationGroup,
+			B.cmMac,
+			B.statusValue,
+			B.checkStatus,
+			B.entityId,
+			B.cmcId,
+			B.tapCoefficient,
+			B.spectrumResponse,
+			B.mte,
+			B.preMte,
+			B.postMte,
+			B.tte,
+			B.mtc,
+			B.mtr,
+			B.nmtter,
+			B.mtrLevel,
+			B.premtter,
+			B.postmtter,
+			B.ppesr,
+			B.mrLevel,
+			B.Tdr,
+			B.upSnr,
+			B.upTxPower,
+			B.downSnr,
+			B.DownRxPower,
+			B.preEqualizationState,
+			B.orginalValue,
+			B.upChannelId,
+			B.upChannelFreq,
+			B.upChannelWidth,
+			B.collectTime,
+			C.name cmcName,
+			D.userAddr cmAddress,
+			D.userPhoneNo cmUserPhoneNo,
+			E.mtrVariance,
+			E.upSnrVariance,
+			E.mtrToUpSnrSimilarity 
+		FROM pnmpcmdatalast B
+		LEFT JOIN pnmpcmgroup A ON A.cmMac = B.cmMac
+		LEFT JOIN entity C ON B.cmcId = C.entityId
+		LEFT JOIN cmbossinfo D ON B.cmMac = D.cmMac
+		LEFT JOIN pnmpvariancelast E on B.cmcId=E.cmcId AND B.cmMac=E.cmMac
+		WHERE 1 = 1
+		<if test="correlationGroup != null">
+			AND A.correlationGroup = #{correlationGroup}
+		</if>
+		<if test="cmcId != null">
+			AND B.cmcId = #{cmcId}
+		</if>
+		<if test="cmMac != null">
+       		AND (A.cmMac like '%${cmMac}%'
+       		<if test="queryMacWithoutSplit != null">
+       			OR REPLACE(A.cmMac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+       		</if>
+       		)
+   		</if>
+ 		<if test="sort != null and dir != ''">
+			ORDER BY ${sort} ${dir}
+		</if>
+	</select>
+	
+	<select id="selectDataByGroupForMobile" resultType="pnmpCmData" parameterType="map">
+        SELECT 
+            B.cmMac,
+            B.statusValue,
+            B.checkStatus,
+            B.entityId,
+            B.cmcId,
+            B.tapCoefficient,
+            B.spectrumResponse,
+            B.mte,
+            B.preMte,
+            B.postMte,
+            B.tte,
+            B.mtc,
+            B.mtr,
+            B.nmtter,
+            B.mtrLevel,
+            B.premtter,
+            B.postmtter,
+            B.ppesr,
+            B.mrLevel,
+            B.Tdr,
+            B.upSnr,
+            B.upTxPower,
+            B.downSnr,
+            B.DownRxPower,
+            B.preEqualizationState,
+            B.orginalValue,
+            B.upChannelId,
+            B.upChannelFreq,
+            B.upChannelWidth,
+            B.collectTime,
+            C.name cmcName,
+            D.userAddr cmAddress,
+            D.userPhoneNo cmUserPhoneNo,
+            E.mtrVariance,
+            E.upSnrVariance,
+            E.mtrToUpSnrSimilarity 
+        FROM pnmpcmdatalast B
+        LEFT JOIN entity C ON B.cmcId = C.entityId
+        LEFT JOIN cmbossinfo D ON B.cmMac = D.cmMac
+        LEFT JOIN pnmpvariancelast E on B.cmcId=E.cmcId AND B.cmMac=E.cmMac
+        WHERE 1 = 1
+        <if test="entityId!=null">
+            and B.entityId=#{entityId}
+        </if>
+        <if test="cmcId != null">
+            AND B.cmcId = #{cmcId}
+        </if>
+        <if test="cmMac != null">
+            AND B.cmMac = #{cmMac}
+        </if>
+    </select>
+	
+	<select id="selectHighMonitorCmList" resultType="pnmpCmData" parameterType="map">
+		SELECT 
+			A.cmMac,
+			B.statusValue,
+			B.checkStatus,
+			B.entityId,
+			B.cmcId,
+			B.tapCoefficient,
+			B.spectrumResponse,
+			B.mte,
+			B.preMte,
+			B.postMte,
+			B.tte,
+			B.mtc,
+			B.mtr,
+			B.nmtter,
+			B.mtrLevel,
+			B.premtter,
+			B.postmtter,
+			B.ppesr,
+			B.mrLevel,
+			B.Tdr,
+			B.upSnr,
+			B.upTxPower,
+			B.downSnr,
+			B.DownRxPower,
+			B.preEqualizationState,
+			B.orginalValue,
+			B.upChannelWidth,
+			B.collectTime,
+			C.correlationGroup,
+			D.name cmcName,
+			E.userAddr cmAddress		
+		FROM pnmphighintervalcm A
+		LEFT JOIN pnmpcmdatalast B ON A.cmmac = B.cmMac AND A.cmcId = B.cmcId
+		LEFT JOIN pnmpcmgroup C ON A.cmmac = C.cmMac AND A.cmcId = C.cmcId
+		LEFT JOIN entity D ON B.cmcId = D.entityId
+		LEFT JOIN cmbossinfo E ON A.cmmac = E.cmMac
+		WHERE A.cmcId IN (SELECT entityId FROM entity)
+   		<if test="cmcName != null">
+   			AND D.name like '%${cmcName}%'
+   		</if> 
+   		<if test="cmMac != null">
+       		AND (A.cmmac like '%${cmMac}%'
+       		<if test="queryMacWithoutSplit != null">
+       			OR REPLACE(A.cmMac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+       		</if>
+       		)
+   		</if>
+   		<if test="cmAddress != null">
+       		AND E.userAddr like '%${cmAddress}%'
+   		</if>
+ 		<if test="sort != null and dir != ''">
+			ORDER BY ${sort} ${dir}
+		</if>
+        LIMIT ${start},${limit}
+	</select>
+	
+	<select id="selectHighMonitorCmListNum" resultType="int" parameterType="map">
+		SELECT COUNT(A.cmmac)
+		FROM pnmphighintervalcm A
+		LEFT JOIN pnmpcmdatalast B ON A.cmmac = B.cmMac AND A.cmcId = B.cmcId
+		LEFT JOIN entity C ON B.cmcId = C.entityId
+		LEFT JOIN cmbossinfo D ON A.cmmac = D.cmMac
+		WHERE A.cmcId IN (SELECT entityId FROM entity)
+   		<if test="cmcName != null">
+   			AND C.name like '%${cmcName}%'
+   		</if> 
+   		<if test="cmMac != null">
+       		AND (A.cmmac like '%${cmMac}%'
+       		<if test="queryMacWithoutSplit != null">
+       			OR REPLACE(A.cmMac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+       		</if>
+       		)
+   		</if>
+   		<if test="cmAddress != null">
+       		AND D.userAddr like '%${cmAddress}%'
+   		</if>
+	</select>
+	
+	<select id="selectHistoryData" resultType="pnmpCmData" parameterType="map">
+		SELECT 
+		B.cmMac,
+		B.mte,
+		B.preMte,
+		B.postMte,
+		B.tte,
+        B.mtr,
+        B.mtc,
+		B.nmtter,
+		B.premtter,
+		B.postmtter,
+		B.ppesr,
+		B.mrLevel,
+		B.Tdr,
+		B.upSnr,
+		B.upTxPower,
+		B.downSnr,
+		B.DownRxPower,
+		B.collectTime	
+		FROM pnmpcmdatahis B
+		WHERE B.cmMac = #{cmMac}
+		<if test="startTime != null">
+			and <![CDATA[B.collectTime >= #{startTime}]]>
+		</if>
+		<if test="endTime != null">
+			and <![CDATA[B.collectTime <= #{endTime}]]>
+		</if>
+	</select>
+	
+	<resultMap id="PartCmcAttribute" type="java.util.HashMap">
+	    <result column="name" property="alias" jdbcType="VARCHAR" />
+	    <result column="ip" property="ipAddress" jdbcType="VARCHAR" />
+	    <result column="cmcIndex" property="cmcIndex" jdbcType="BIGINT"/>
+	</resultMap>
+	
+	<select id="selectCmcAttributeByCmMac" parameterType="string" resultMap="PartCmcAttribute">
+		SELECT
+		B.name,
+		C.ip,
+		D.cmcIndex
+		FROM cmccmrelation A
+		LEFT JOIN entity B ON A.cmcId = B.entityId
+		LEFT JOIN entity C ON A.entityId = C.entityId
+		LEFT JOIN cmcentityrelation D ON A.cmcId = D.cmcId
+		WHERE A.mac = #{cmMac} 
+		<if test="queryMacWithoutSplit != null">
+       		OR REPLACE(A.mac, ':', '') = #{queryMacWithoutSplit}
+       	</if>
+	</select>
+	
+	<select id="selectHighMonitorCmByPK" parameterType="string" resultType="string">
+		SELECT cmmac 
+		FROM pnmphighintervalcm
+		WHERE cmmac = #{cmMac}
+		<if test="queryMacWithoutSplit != null">
+       		OR REPLACE(cmmac, ':', '') = #{queryMacWithoutSplit}
+       	</if>
+	</select>
+	
+	<resultMap id="CmcIdAndEntityId" type="java.util.HashMap">
+	    <result column="cmcId" property="cmcId" jdbcType="BIGINT" />
+	    <result column="entityId" property="entityId" jdbcType="BIGINT" />
+	</resultMap>
+	
+	<select id="selectCmcIdEntityIdByMac" parameterType="string" resultMap="CmcIdAndEntityId">
+		SELECT cmcId, entityId
+		FROM cmccmrelation
+		WHERE mac = #{cmMac}
+	</select>
+	
+	<select id="selectMaxUpChannelWidthByCmcId" parameterType="long" resultType="long">
+		SELECT MAX(upChannelWidth) 
+		FROM pnmpcmdatalast
+		WHERE cmcId = #{cmcId}
+	</select>
+	
+	<insert id="insertHighMonitorCm" parameterType="map">
+		INSERT INTO pnmphighintervalcm
+		(
+			cmmac, 
+			cmcId, 
+			entityId
+		)
+		VALUES
+		(
+			#{cmMac}, 
+			#{cmcId},
+			#{entityId}
+		)
+		ON DUPLICATE KEY UPDATE
+			cmcId = #{cmcId},
+			entityId = #{entityId}
+	</insert>
+	
+	<insert id="insertMiddleMonitorCm" parameterType="map">
+		INSERT INTO pnmpmiddleintervalcm
+		(
+			cmmac, 
+			cmcId, 
+			entityId
+		)
+		VALUES
+		(
+			#{cmMac}, 
+			#{cmcId},
+			#{entityId}
+		)
+		ON DUPLICATE KEY UPDATE
+			cmcId = #{cmcId},
+			entityId = #{entityId}
+	</insert>
+	
+	<delete id="deleteHighMonitorCm" parameterType="string">
+		DELETE 
+		FROM 
+		pnmphighintervalcm 
+		WHERE cmMac = #{cmMac}
+	</delete>
+	
+	<delete id="deleteMiddleMonitorCm" parameterType="string">
+		DELETE 
+		FROM 
+		pnmpmiddleintervalcm 
+		WHERE cmMac = #{cmMac}
+	</delete>
+	
+	<select id="selectHighIntervalCmcIds" resultType="long">
+		select distinct(cmcId) from pnmphighintervalcm
+	</select>
+	
+	<select id="selectMiddleIntervalCmcIds" resultType="long">
+		select distinct(cmcId) from pnmpmiddleintervalcm
+	</select>
+	
+	<select id="selectHighCorrelationGroups" resultType="correlationGroup" parameterType="long">
+		select 
+			B.cmcId,
+			B.cmMac,
+			B.upChannelId,
+			B.orginalValue 
+		from pnmphighintervalcm A 
+		LEFT JOIN pnmpcmdatalast B on A.cmmac = B.cmMac AND A.cmcId = B.cmcId
+		where 
+			A.cmcId = #{cmcId} 
+			AND B.checkStatus = 0 
+			AND B.preEqualizationState = 1
+	</select>
+	
+	<select id="selectMiddleCorrelationGroups" resultType="correlationGroup" parameterType="long">
+		select 
+			B.cmcId,
+			B.cmMac,
+			B.upChannelId,
+			B.orginalValue 
+		from pnmpmiddleintervalcm A 
+		LEFT JOIN pnmpcmdatalast B on A.cmmac = B.cmMac AND A.cmcId = B.cmcId
+		where 
+			A.cmcId = #{cmcId} 
+			AND B.checkStatus = 0 
+			AND B.preEqualizationState = 1
+	</select>
+	
+	<select id="selectCorrelationGroup" resultType="correlationGroup" parameterType="long">
+		SELECT 
+			cmMac,
+			cmcId,
+			correlationGroup groupId
+		FROM pnmpcmgroup
+		WHERE cmcId = #{cmcId} 
+		GROUP BY CorrelationGroup
+	</select>
+	
+	<update id="updateCorrelationGroup" parameterType="map">
+		insert into PnmpCmGroup
+       (
+			cmmac, 
+			cmcId, 
+			correlationGroup
+		)
+		VALUES
+		(
+			#{cmMac}, 
+			#{cmcId},
+			#{correlationGroup}
+		)
+        ON DUPLICATE KEY UPDATE
+        	CorrelationGroup = #{correlationGroup},
+			cmcId = #{cmcId}
+	</update>
+	
+	<update id="updateCorrelationGroupByCmcId" parameterType="long">
+		delete from PnmpCmGroup
+        where cmcId = #{cmcId}
+	</update>
+</mapper>

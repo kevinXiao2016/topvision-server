@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.onuauth.domain.OnuAuth">
+	<update id="updateOnuAuthPolicy" parameterType="oltAttribute"> UPDATE
+		OltAttribute SET onuAuthenticationPolicy = #{onuAuthenticationPolicy}
+		WHERE entityId = #{entityId}
+	</update>
+	
+	<select id="getOnuAuthMode" parameterType="long" resultType="oltPonOnuAuthModeTable">
+		select A.ponId,A.topPonOnuAuthModeMode topPonOnuAuthMode,B.* from
+		OltPonOnuAuthMode A,OltPonRelation B where A.ponid=B.ponid and A.entityId = #{entityId}
+	</select>
+	
+	<select id="getPonOnuAuthMode" parameterType="map" resultType="int">
+		select A.topPonOnuAuthModeMode from
+		OltPonOnuAuthMode A,OltPonRelation B where A.ponid=B.ponId and B.ponIndex=#{ponIndex} and A.entityId = #{entityId}
+	</select>
+
+	<insert id="insertOltPonOnuAuthModeTable" parameterType="oltPonOnuAuthModeTable">
+		INSERT
+		INTO
+		OltPonOnuAuthMode (
+		ponId,
+		topPonOnuAuthModeMode,
+		entityId
+		) VALUES (
+		#{ponId},
+		#{topPonOnuAuthMode},
+		#{entityId}
+		)
+	</insert>
+
+	<delete id="deleteOltPonOnuAuthModeTable" parameterType="long">
+		DELETE
+		FROM
+		OltPonOnuAuthMode where
+		entityId=#{entityId}
+	</delete>
+
+	<update id="updateOnuAuthMode" parameterType="oltPonOnuAuthModeTable">
+		update
+		OltPonOnuAuthMode set topPonOnuAuthModeMode=#{topPonOnuAuthMode}
+		where entityId=#{entityId} and
+		ponId = #{ponId}
+	</update>
+
+	<update id="updateOltAuthentication" parameterType="oltAuthentication">
+		update
+		OltAuthentication
+		<set>
+			<if test="onuAuthenMacAddress != null and onuComInfoComDesc != ''">
+				onuAuthenMacAddress=#{onuAuthenMacAddress},
+			</if>
+			<if test="topOnuAuthLogicSn != null and topOnuAuthLogicSn != ''">
+				topOnuAuthLogicSn=#{topOnuAuthLogicSn},topOnuAuthPassword=#{topOnuAuthPassword}
+			</if>
+		</set>
+		where entityId=#{entityId} and
+		onuIndex = #{onuIndex}
+	</update>
+
+	<update id="updateOnuAuthPreType" parameterType="oltTopOnuProductTable">
+		update
+		oltauthentication set onuPreType = #{topOnuProductTypeNum}
+		where
+		entityId = #{entityId} AND onuIndex = #{onuIndex}
+	</update>
+
+	<select id="getOnuAuthenPreConfigList" parameterType="oltAuthentication"
+		resultType="oltAuthentication">
+		SELECT
+		entityId,
+		ponId,
+		authType,
+		authAction,
+		onuAuthenMacAddress,
+		onuIndex,
+		onuSnMode,
+		topOnuAuthLogicSn,
+		topOnuAuthPassword,
+		onuPreType
+		FROM
+		OltAuthentication
+		WHERE
+		ponId =
+		#{ponId}
+		<if test="onuAuthenMacAddress != null and onuAuthenMacAddress != ''">
+			and onuAuthenMacAddress =
+			#{onuAuthenMacAddress}
+		</if>
+		<if test="topOnuAuthLogicSn != null and topOnuAuthLogicSn != ''">
+			and topOnuAuthLogicSn =
+			#{topOnuAuthLogicSn}
+		</if>
+	</select>
+
+	<select id="getOnuAuthenListBySlot" parameterType="oltAuthentication"
+		resultType="oltAuthentication">
+		SELECT
+		entityId,
+		ponId,
+		authType,
+		authAction,
+		onuAuthenMacAddress,
+		onuIndex,
+		onuSnMode,
+		topOnuAuthLogicSn,
+		topOnuAuthPassword,
+		onuPreType
+		FROM
+		OltAuthentication A
+		WHERE EXISTS (
+		SELECT 1 FROM OltPonRelation B
+		WHERE
+		A.ponId = B.ponId
+		AND B.slotId = #{slotId}
+		<if test="onuAuthenMacAddress != null and onuAuthenMacAddress != ''">
+			and onuAuthenMacAddress =
+			#{onuAuthenMacAddress}
+		</if>
+		<if test="topOnuAuthLogicSn != null and topOnuAuthLogicSn != ''">
+			and topOnuAuthLogicSn =
+			#{topOnuAuthLogicSn}
+		</if>
+		)
+	</select>
+
+	<select id="getOnuAuthenListByEntity" parameterType="long"
+		resultType="oltAuthentication">
+		SELECT
+		entityId,
+		ponId,
+		authType,
+		authAction,
+		onuAuthenMacAddress,
+		onuIndex,
+		onuSnMode,
+		topOnuAuthLogicSn,
+		topOnuAuthPassword,
+		onuPreType
+		FROM
+		OltAuthentication
+		WHERE
+		entityId =
+		#{entityId}
+	</select>
+
+	<select id="getOnuAuthIdList" parameterType="long" resultType="long">
+		SELECT onuIndex
+		FROM OltAuthentication
+		WHERE ponId = #{ponId}
+	</select>
+
+	<select id="getOnuAuthMacList" parameterType="long" resultType="oltAuthentication">
+		SELECT onuAuthenMacAddress,
+		onuIndex
+		FROM OltAuthentication
+		A
+		WHERE
+		EXISTS
+		(SELECT 1 FROM OltPonRelation B WHERE A.ponId = B.ponId
+		AND
+		B.entityId =
+		#{entityId} AND A.authType = 1 and A.authAction = 1)
+	</select>
+
+	<select id="getOnuAuthSnList" parameterType="long" resultType="oltAuthentication">
+		SELECT topOnuAuthLogicSn,
+		onuIndex
+		FROM OltAuthentication A
+		WHERE
+		EXISTS
+		(SELECT 1 FROM OltPonRelation B WHERE A.ponId = B.ponId AND
+		B.entityId
+		= #{entityId} AND A.authType = 2) 
+	</select>
+	<select id="selectRejectedMacList" parameterType="map" resultType="oltAuthentication">
+		SELECT onuAuthenMacAddress
+		FROM OltAuthentication A
+		WHERE
+		EXISTS
+		(SELECT 1 FROM OltPonRelation B WHERE A.ponId = B.ponId AND
+		B.entityId
+		= #{entityId} AND  A.authAction = 2) 
+	</select>
+
+	<insert id="insertOltAuthentication" databaseId="MySQL"
+		parameterType="oltAuthentication" useGeneratedKeys="true" keyProperty="authId">
+		INSERT INTO
+		OltAuthentication
+		(ponId, onuIndex, authType, authAction,
+		onuPreType,
+		onuAuthenMacAddress,
+		onuSnMode,
+		topOnuAuthLogicSn,
+		topOnuAuthPassword,
+		entityId
+		)
+		values
+		(#{ponId}, #{onuIndex}, #{authType},
+		#{authAction},
+		#{onuPreType},
+		#{onuAuthenMacAddress},
+		#{onuSnMode},
+		#{topOnuAuthLogicSn},
+		#{topOnuAuthPassword},
+		#{entityId}
+		)
+	</insert>
+
+	<insert id="insertOltAuthentication" databaseId="Oracle"
+		parameterType="oltAuthentication">
+		<selectKey keyProperty="authId" resultType="long" order="BEFORE">
+			SELECT OltAuthentication_Seq.nextval AS authId from dual
+		</selectKey>
+		INSERT INTO
+		OltAuthentication
+		(authId,ponId, onuIndex, authType,
+		authAction, onuPreType,
+		onuAuthenMacAddress,
+		onuSnMode,
+		topOnuAuthLogicSn,
+		topOnuAuthPassword,
+		entityId
+		)
+		values
+		(#{authId},#{ponId}, #{onuIndex}, #{authType}, #{authAction},
+		#{onuPreType},
+		#{onuAuthenMacAddress},
+		#{onuSnMode},
+		#{topOnuAuthLogicSn},
+		#{topOnuAuthPassword},
+		#{entityId}
+		)
+	</insert>
+
+	<update id="updateOnuAuthenPreConfig" parameterType="oltAuthentication">
+		UPDATE
+		OltAuthentication SET authType = #{authType}, authAction =
+		#{authAction}, onuAuthenMacAddress = #{onuAuthenMacAddress}, onuSnMode
+		=
+		#{onuSnMode}, topOnuAuthLogicSn = #{topOnuAuthLogicSn},
+		topOnuAuthPassword = #{topOnuAuthPassword} WHERE ponId = #{ponId} and
+		onuIndex =
+		#{onuIndex}
+	</update>
+
+	<delete id="deleteAllAuthentication" parameterType="long">
+		DELETE FROM
+		OltAuthentication where entityId = #{entityId}
+	</delete>
+
+	<delete id="deleteAuthentication" parameterType="oltAuthentication">
+		DELETE FROM
+		OltAuthentication
+		WHERE
+		onuIndex = #{onuIndex} and ponId = #{ponId}
+	</delete>
+	
+	<delete id="deleteAuthenticationByPonId" parameterType="long">
+		DELETE FROM
+		OltAuthentication
+		WHERE
+		ponId = #{ponId}
+	</delete>
+
+	<delete id="deleteAllOnuAuth" parameterType="Long">
+		delete from
+		oltauthentication where entityId = #{entityId}
+	</delete>
+
+	<select id="getBlockOnuAuthIdList" parameterType="long" resultType="long">
+		SELECT onuIndex
+		FROM OnuBlockAuthen
+		WHERE ponId = #{ponId}
+	</select>
+	
+	<delete id="deleteOnuAllInfo" parameterType="long">
+		DELETE FROM
+		OltOnuRelation WHERE onuId = #{onuId}
+	</delete>
+	
+	<select id="getOnuAuthenBlockList" parameterType="long"
+		resultType="OltOnuBlockAuthen">
+		SELECT onuAuthenBlockMacAddress AS macAddress,
+		authenTime AS authTime,
+		topOnuAuthBlockedExtLogicSn,
+		topOnuAuthBlockedExtPwd,
+		onuIndex,
+		ponId
+		FROM OnuBlockAuthen
+		WHERE ponId = #{ponId}
+	</select>
+	
+	<select id="getOnuAuthenBlockListBySlot" parameterType="long"
+		resultType="OltOnuBlockAuthen">
+		SELECT onuAuthenBlockMacAddress AS macAddress,
+		authenTime AS authTime,
+		topOnuAuthBlockedExtLogicSn,
+		topOnuAuthBlockedExtPwd,
+		onuIndex,
+		ponId
+		FROM OnuBlockAuthen
+		WHERE ponId
+		in (SELECT ponId FROM OltPonRelation WHERE slotId = #{slotId})
+	</select>
+	
+	<select id="getOnuAuthenBlockListByOlt" parameterType="long"
+		resultType="OltOnuBlockAuthen">
+		SELECT onuAuthenBlockMacAddress AS macAddress,
+		authenTime AS authTime,
+		topOnuAuthBlockedExtLogicSn,
+		topOnuAuthBlockedExtPwd,
+		onuIndex,
+		ponId
+		FROM OnuBlockAuthen
+		WHERE
+		entityId
+		= #{entityId}
+	</select>
+	
+	<delete id="deleteAllOnuBlockAuth" parameterType="long">
+		DELETE FROM
+		onublockauthen where entityId = #{entityId}
+	</delete>
+	
+	<insert id="insertOnuBlockAuth" parameterType="oltOnuBlockAuthen">
+		insert into
+		onublockauthen
+		(ponId, onuAuthenBlockMacAddress, authenTime,
+		onuIndex,entityId)
+		values
+		(#{ponId}, #{macAddress}, #{authTime},
+		#{onuIndex},#{entityId})
+	</insert>
+	
+	<delete id="deleteOnuBlockAuth" parameterType="oltOnuBlockAuthen">
+		delete from
+		onublockauthen where ponId=#{ponId} and onuIndex = #{onuIndex}
+	</delete>
+	
+	<delete id="deleteOnuBlockAuthByMac" parameterType="oltOnuBlockAuthen">
+		delete from
+		onublockauthen where ponId=#{ponId} and onuAuthenBlockMacAddress = #{macAddress}
+	</delete>
+	
+	<update id="updateOnuAuthenExtBlock" parameterType="oltOnuBlockExtAuthen">
+		update
+		OnuBlockAuthen set
+		topOnuAuthBlockedExtLogicSn=#{topOnuAuthBlockedExtLogicSn} ,
+		topOnuAuthBlockedExtPwd=#{topOnuAuthBlockedExtPwd} where
+		entityId=#{entityId} and
+		onuIndex = #{onuIndex}
+	</update>
+
+	<select id="getPonId" parameterType="oltPonAttribute"
+		resultType="long">
+		SELECT
+		ponId
+		FROM
+		OltPonRelation
+		WHERE
+		entityId = #{entityId}
+		and ponIndex = #{ponIndex}    
+	</select>
+	
+	<delete id="deletePonAuthRule" parameterType="map">
+		DELETE FROM
+		OltAuthentication where entityId = #{entityId} and ponId = #{ponId} and authAction != 2
+	</delete>
+	
+	<select id="selectOltAuthenticationByIndex" resultType="oltAuthentication" parameterType="map">
+		SELECT
+			entityId,
+			ponId,
+			authType,
+			authAction,
+			onuAuthenMacAddress,
+			onuIndex,
+			onuSnMode,
+			topOnuAuthLogicSn,
+			topOnuAuthPassword,
+			onuPreType
+		FROM
+			OltAuthentication
+		WHERE
+			entityId = #{entityId} AND onuIndex=#{onuIndex}
+	</select>
+</mapper>

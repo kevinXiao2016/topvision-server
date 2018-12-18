@@ -1,0 +1,23 @@
+* {margin: 0; padding: 0;}
+.required {font: 0.8em Verdana !important; color: #f68622;}
+input {font-family: Arial, Helvetica, sans-serif; font-size: 12px;}
+
+fieldset {padding: 4px; margin: 5px 10px; border: 1px solid #7F9EB9;}
+
+#content-tit{height: 50px !important;}
+#content-tit span:FIRST-CHILD {position: fixed; top: 20px; left: 20px;}
+#content-tit span img {position: absolute; top: 10px;right: 5px;}
+
+.normalInput{width: 250px; height:20px; padding-left: 4px; border: 1px solid #7F9EB9; background: #FFF;}
+.paramForm input.normalInput:HOVER{border: 1px solid #1E90FF;}
+.paramForm input.normalInput:FOCUS{background: #FFFFBE; border: 1px solid #1E90FF;}
+#ip{width: 230px;}
+#rootPath{width: 230px;}
+
+.basicDl{ width:400px;}
+.basicDl dt{ width:110px; height:23px; padding-top:2px; float:left; text-indent: 24px;}
+.basicDl dd{ width:288px; height:25px; float:left;}
+
+div.submit {text-align: right; margin: 8px 10px;}
+
+#pwd{ height:18px;position: relative; top: 1px;}

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Sat Nov 02 12:41:17 CST 2013 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.resources.domain.Resource">
+    <select id="getEntityCount" resultType="long">
+        SELECT count(entityId)
+        FROM Entity WHERE entityId IN(SELECT
+        DISTINCT
+        entityId FROM
+        EntityFolderRela)
+    </select>
+
+    <select id="statEntityByBigCategory" parameterType="long" resultType="entityType">
+        SELECT
+        A.typeId, A.icon16, A.icon48, A.name, A.displayName,
+        COUNT(B.entityId) AS entityCount from EntityType A left join Entity B
+        on
+        A.typeId = B.typeId WHERE 
+        A.typeId in (select typeId from entitytyperelation where type = #{type})
+        GROUP BY
+        A.typeId,A.icon16,A.icon48,A.name,A.displayName ORDER BY A.typeId ASC
+    </select>
+
+    <!-- Modify by Rod -->
+    <select id="getEntityStasticByState" parameterType="map" resultType="entityStastic">
+        SELECT
+	        displayName,
+	        ifnull(sum(case C.state when 1 then 1 end),0) online,
+	        ifnull(sum(case C.state when 0 then 1 end),0) offline
+        FROM 
+        	entitytype A 
+       		LEFT JOIN entity V ON A.typeId = V.typeId 
+       		left join entitysnap C on V.entityId = C.entityId
+        WHERE
+        	A.typeId in (select typeId from entitytyperelation where type = 50000)
+        	and V.entityId in (select entityId from ${Authority})
+        GROUP BY A.typeId
+    </select>
+	
+	<!-- 目前网管未使用，暂时先去掉type -->
+    <select id="statSnmpEntityByBigCategory" resultType="entityType">
+        SELECT
+        A.typeId, A.icon16, A.icon48, A.name,
+        A.displayName,
+        COUNT(B.entityId) AS entityCount from EntityType A left join Entity B
+        on
+        A.typeId = B.typeId
+        WHERE B.snmpSupport = '1' GROUP BY
+        A.typeId,A.icon16, A.icon48, A.name,
+        A.displayName ORDER BY A.typeId ASC
+    </select>
+
+    <select id="statEntityBySmallCategory" resultType="entity">
+        SELECT
+        A.typeId, A.superiorId, A.icon16, A.displayName,
+        COUNT(B.entityId) AS entityCount from EntityType A left join
+        (SELECT
+        C.entityId, C.id FROM Entity C WHERE
+        C.entityId
+        IN(SELECT DISTINCT
+        D.entityId FROM EntityFolderRela D)) B on
+        A.typeId = B.typeId WHERE
+        A.superiorId !=
+        't.0' GROUP BY
+        A.typeId ORDER BY A.superiorId ASC
+    </select>
+
+    <select id="statSnmpSupportEntity" resultType="long">
+        SELECT
+        COUNT(entityId) from Entity Where snmpSupport = '1' AND
+        entityId
+        IN(SELECT DISTINCT entityId FROM EntityFolderRela)
+    </select>
+</mapper>

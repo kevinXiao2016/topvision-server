@@ -1,0 +1,17 @@
+/*
+ * @author: niejun
+ *
+ * icon css for event
+ */
+.eventIcon {
+	background-image: url(images/fault/bt.gif) !important;
+	valign: middle;
+}
+
+.thresholdTabIcon {
+	background-image: url(../images/fault/threshold.gif) !important;
+}
+
+.actionTabIcon {
+	background-image: url(../images/fault/action.gif) !important;
+}

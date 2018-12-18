@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="fault" namespace="/fault" extends="default">
+
+		<action name="loadAllAlertLevel" class="faultAction" method="loadAllAlertLevel" />
+
+		<action name="loadAlertType" class="alertConfigAction" method="loadAlertType" />
+		
+		<action name="loadConcernAlertTypes" class="alertConfigAction" method="loadConcernAlertTypes" />
+
+		<action name="clearAlert" class="alertAction" method="clearAlert" />
+		<action name="clearEvent" class="eventAction" method="clearEvent" />
+		<action name="confirmAlert" class="alertAction" method="confirmAlert" />
+
+		<action name="showAlarmViewer" class="alertAction" method="showAlarmViewer">
+			<result>/fault/alarmViewer.jsp</result>
+		</action>
+
+		<action name="statHistoryAlertByCategory" class="alertAction"
+			method="statHistoryAlertByCategory" />
+
+		<action name="showEventViewer" class="eventAction" method="showEventViewer">
+			<result>/fault/eventViewer.jsp</result>
+		</action>
+		<action name="getAllEventType" class="eventAction" method="getAllEventType">
+		</action>
+		<action name="getEventList" class="eventAction" method="getEventList">
+		</action>
+		<action name="getRecentEventForPortal" class="eventAction"
+			method="getRecentEventForPortal">
+		</action>
+		<action name="getRecentAlarmForPortal" class="alertAction"
+			method="getRecentAlarmForPortal">
+		</action>
+
+		<!-- Fault Action -->
+		<action name="loadActionType" class="faultAction" method="loadActionType">
+		</action>
+		<action name="loadActionList" class="faultAction" method="loadActionList">
+		</action>
+		<action name="deleteAction" class="faultAction" method="deleteAction">
+		</action>
+		<action name="enableAction" class="faultAction" method="enableAction">
+		</action>
+		<action name="disableAction" class="faultAction" method="disableAction">
+		</action>
+		<!-- Email -->
+		<action name="newEmailAction" class="emailAction" method="newEmailAction">
+			<result>/fault/newEmailAction.jsp</result>
+		</action>
+		<action name="sendTestEmail" class="emailAction" method="sendTestEmail">
+		</action>
+		<action name="sendAlertInfo" class="sendUserInfoAction" method="sendAlertInfo">
+		</action>
+		<action name="showEmailAction" class="emailAction" method="showEmailAction">
+			<result>/fault/modifyEmailAction.jsp</result>
+		</action>
+		<action name="updateEmailAction" class="emailAction" method="updateEmailAction">
+		</action>
+		<!-- Sms -->
+		<action name="newSmsAction" class="smsAction" method="newSmsAction">
+			<result>/fault/newSmsAction.jsp</result>
+		</action>
+		<action name="sendTestSmsBak" class="smsAction" method="sendTestSmsBak">
+		</action>
+		<action name="showSmsAction" class="smsAction" method="showSmsAction">
+			<result>/fault/modifySmsAction.jsp</result>
+		</action>
+		<action name="updateSmsAction" class="smsAction" method="updateSmsAction">
+		</action>
+		<!-- Trap -->
+		<action name="newTrapAction" class="trapAction" method="newTrapAction">
+			<result>/fault/newTrapAction.jsp</result>
+		</action>
+		<action name="sendTestTrap" class="trapAction" method="sendTestTrap">
+		</action>
+		<action name="showTrapAction" class="trapAction" method="showTrapAction">
+			<result>/fault/modifyTrapAction.jsp</result>
+		</action>
+		<action name="updateTrapAction" class="trapAction" method="updateTrapAction">
+		</action>
+		<!-- Sound -->
+		<action name="newSoundAction" class="soundAction" method="newSoundAction">
+			<result>/fault/newSoundAction.jsp</result>
+		</action>
+		<action name="showSoundAction" class="soundAction" method="showSoundAction">
+			<result>/fault/modifySoundAction.jsp</result>
+		</action>
+		<action name="saveAlertTypeParam" class="alertSettingAction"
+			method="saveAlertTypeParam">
+		</action>
+		<action name="loadParamOfAlertType" class="alertSettingAction"
+			method="loadParamOfAlertType">
+		</action>
+		<action name="loadEventType" class="alertSettingAction" method="loadEventType">
+		</action>
+		<action name="loadAction" class="alertSettingAction" method="loadAction">
+		</action>
+		<action name="getAllEventTypeByTypeId" class="alertSettingAction" method="getAllEventTypeByTypeId">
+		</action>
+		<action name="getRelationAlertByAlertTypeId" class="alertSettingAction" method="getRelationAlertByAlertTypeId">
+		</action>
+		<action name="getAlertAboutUser" class="alertSettingAction" method="getAlertAboutUser">
+		</action>
+		<action name="getSendingInfoOfUsers" class="alertSettingAction" method="getSendingInfoOfUsers">
+		</action>				
+		<action name="getOneUserActionCs" class="alertSettingAction" method="getOneUserActionCs">
+		</action>
+		<action name="modifyUserActionCs" class="alertSettingAction" method="modifyUserActionCs">
+		</action>
+		<action name="showEventByEntityId" class="eventAction" method="showEventByEntityId">
+			<result>/fault/viewEntityEvent.jsp</result>
+		</action>
+		
+		<!-- event view -->
+		<action name="showEventJsp" class="eventAction" method="showEventJsp">
+			<result>/fault/event.jsp</result>
+		</action>
+		<action name="deleteEvent" class="eventAction" method="deleteEvent" />
+		<action name="batchDeleteEvent" class="eventAction" method="batchDeleteEvent" />
+		
+		<action name="queryEventList" class="eventAction" method="queryEventList" />
+		<action name="getEventType" class="eventAction" method="getEventType" />
+		<action name="getEventTypeTree" class="eventAction" method="getEventTypeTree" />
+		
+		<!-- alert filter -->
+		<action name="showAlertFilter" class="alertFilterAction"
+			method="showAlertFilter">
+			<result>/fault/alertFilterList.jsp</result>
+		</action>
+		<action name="showAddAlertFilter" class="alertFilterAction" method="showAddAlertFilter">
+            <result>/fault/alertFilter.jsp</result>
+        </action>
+        <action name="showEditAlertFilter" class="alertFilterAction" method="showEditAlertFilter">
+            <result>/fault/alertFilter.jsp</result>
+        </action>
+		<action name="addAlertFilter" class="alertFilterAction" method="addAlertFilter"></action>
+		<action name="modifyAlertFilter" class="alertFilterAction" method="modifyAlertFilter"></action>
+		<action name="deleteAlertFilter" class="alertFilterAction" method="deleteAlertFilter">
+		</action>
+		<action name="saveMinLevel" class="alertFilterAction" method="saveMinLevel">
+		</action>
+		<action name="saveFilterActived" class="alertFilterAction"
+			method="saveFilterActived">
+		</action>
+		<action name="loadALertFilter" class="alertFilterAction" method="loadALertFilter"></action>
+		<action name="saveAlertTypeFilter" class="alertFilterAction"
+			method="saveAlertTypeFilter">
+		</action>
+		<action name="loadAlertTypeFilter" class="alertFilterAction"
+			method="loadAlertTypeFilter">
+		</action>
+		<action name="loadAlertFilter" class="alertFilterAction"
+			method="loadAlertFilter">
+		</action>
+
+		<!-- Alert Setting -->
+		<action name="alertSetting" class="alertConfigAction" method="showAlertConfig">
+			<result>/fault/alertSetting.jsp</result>
+		</action>
+		<action name="getAlertTypeById" class="alertConfigAction"
+			method="getAlertTypeById" />
+		<action name="saveAlertType" class="alertConfigAction" method="saveAlertType" />
+		<action name="getAlertTypeOfUsersById" class="alertConfigAction" method="getAlertTypeOfUsersById">
+		</action>
+		<action name="saveAlertTypeOfUsers" class="alertConfigAction" method="saveAlertTypeOfUsers">
+		</action>
+		
+		<!-- Alert Confirm Setting -->
+		<action name="showAlertConfirmConfig" class="alertConfigAction" method="showAlertConfirmConfig">
+            <result>/system/alertConfirmConfig.jsp</result>
+        </action>
+        <action name="saveAlertConfirmConfig" class="alertConfigAction" method="saveAlertConfirmConfig">
+        </action>
+        
+        <!-- Nbi Setting -->
+       	<action name="showNorthBoundConfig" class="trapAction" method="showNorthBoundConfig">
+            <result>/system/nbiTrapConfig.jsp</result>
+        </action>
+        <action name="saveNorthBoundConfig" class="trapAction" method="saveNorthBoundConfig">
+        </action>
+        <action name="sendNorthBoundTestTrap" class="trapAction" method="sendNorthBoundTestTrap">
+        </action>
+        
+        <action name="showAlertSound" class="alertSoundAction" method="showAlertSound">
+        	<result>/fault/alertSound.jsp</result>
+        </action>
+        <action name="editSoundDescription" class="alertSoundAction" method="editSoundDescription"></action>
+        <action name="upLoadAlertSound" class="alertSoundAction" method="upLoadAlertSound"></action>
+        <action name="deleteAlertSound" class="alertSoundAction" method="deleteAlertSound"></action>
+        <action name="fetchAllAlertLevels" class="alertSoundAction" method="fetchAllAlertLevels"></action>
+        <action name="fetchAllSounds" class="alertSoundAction" method="fetchAllSounds"></action>
+        <action name="fetchSoundForAlertSelect" class="alertSoundAction" method="fetchSoundForAlertSelect"></action>
+        <action name="editLevelSound" class="alertSoundAction" method="editLevelSound"></action>
+        <action name="checkDuplicateSoundName" class="alertSoundAction" method="checkDuplicateSoundName"></action>
+        <action name="fetchAllSoundsName" class="alertSoundAction" method="fetchAllSoundsName"></action>
+        <action name="fetchAllAlertSoundsName" class="alertSoundAction" method="fetchAllAlertSoundsName"></action>
+	</package>
+</struts>

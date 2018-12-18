@@ -1,0 +1,318 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+    <node name="01 工作台" belong="01 工作台" man="李翔" time="第2周" complete="true" remark="需要结合树菜单">
+		<node name="新建设备" man="李翔" time="第2周" complete="true" remark="未国际化" />
+		<node name="新建链接" man="李翔" time="第2周" complete="true" remark="未国际化" />
+		<node name="新建收藏夹" man="李翔" time="第2周" complete="true" remark="未国际化" />
+		<node name="定制我的工作台" man="李翔" time="第2周" complete="true" remark="未保存功能" />
+	</node>
+	<node name="02 设备管理" belong="02 设备管理" man="张东明" time="第2周" complete="true" remark="-">
+		<node name="设备视图" man="张东明" time="第1周" complete="true" remark="-" />
+		<node name="资源列表" man="张东明" time="第2周" complete="true" remark="-" >
+			<node name="Epon-采集记录设置" man="李翔" time="第3周" complete="true" remark="-" />
+			<node name="阀值设置" man="李翔" time="第3周" complete="true" remark="-" />
+			<node name="修改阀值设置" man="李翔" time="第3周" complete="true" remark="-" />	
+			<node name="EPON端口监视器" man="李翔" time="第5周" complete="true" remark="未国际化" />	
+		</node>
+		<node name="Epon设备列表" man="张东明" time="-" complete="true" remark="无页面">			
+			<node name="OLT设备列表" man="张东明" time="第2周" complete="true" remark="-" >
+				<node name="告警查看" man="李翔" time="第5周" complete="true" remark="-" />
+				<node name="其它-告警管理-trap配置" man="李翔" time="第3周" complete="true" remark="未国际化" />
+				<node name="其它-告警管理-添加trap配置" man="李翔" time="第3周" complete="true" remark="未国际化" />	
+				<node name="告警屏蔽管理" man="李翔" time="第3周" complete="true" remark="未国际化" />
+				<node name="添加类型屏蔽" man="李翔" time="第3周" complete="true" remark="未国际化" />
+				<node name="事件实体屏蔽" man="李翔" time="第3周" complete="true" remark="未国际化" />
+				<node name="其它 - 添加到地域" man="李翔" time="第3周" complete="true" remark="未国际化" />				
+				<node name="PN8603性能展示" man="李翔" time="第4周" complete="true" remark="未国际化" />
+				<node name="PN8603-ACL配置管理" man="李翔" time="第4周" complete="true" remark="未国际化" />
+				<node name="PN8603-ACL配置管理-新建ACL" man="李翔" time="第4周" complete="true" remark="未国际化" />
+				<node name="PN8603-ACL配置管理-新建ACL规则列表" man="李翔" time="第4周" complete="true" remark="未国际化" />
+				<node name="PN8602设备视图" man="李翔" time="第4周" complete="true" remark="未国际化" />
+				<node name="PN8602设备视图-ONU认证管理" man="李翔" time="第4周" complete="true" remark="未国际化" />				
+				<node name="PN8602-VLAN视图" man="李翔" time="第4周" complete="true" remark="未国际化" />
+				<node name="PN8602-MIRROR视图" man="李翔" time="第4周" complete="true" remark="未国际化" />
+				
+			</node>
+			<node name="ONU设备列表" man="张东明" time="第2周" complete="true" remark="-" >
+				<node name="其它 - 基本配置" man="李翔" time="第3周" complete="true" remark="未国际化" />
+				<node name="其它 - 添加到地域" man="李翔" time="第3周" complete="true" remark="未国际化" />
+			</node>
+		</node>		
+		<node name="CCMTS设备列表" man="张东明" time="第2周" complete="true" remark="-">
+			<node name="CCMTS列表" man="张东明" time="第2周" complete="true" remark="-" >
+				<node name="其它 - 性能管理" man="李翔" time="第3周" complete="true" remark="未国际化" />
+				<node name="其它 - cpu端口限速" man="李翔" time="第3周" complete="true" remark="未国际化" />
+				<node name="其它 - 上联口配置 - 端口限速" man="李翔" time="第3周" complete="true" remark="未国际化" />
+				<node name="其它 - 上联口配置  - PHY信息配置" man="李翔" time="第5周" complete="true" remark="-" />
+				<node name="其它 - 风暴抑制" man="李翔" time="第3周" complete="true" remark="未国际化" />
+				<node name="其它 - VLAN全局配置" man="李翔" time="第3周" complete="true" remark="-" />
+				<node name="其它 - VLAN全局配置 - 新增vlan" man="李翔" time="第3周" complete="true" remark="-" />
+				<node name="其它 - VLAN全局配置 - 添加虚接口ip" man="李翔" time="第3周" complete="true" remark="-" />
+				<node name="其它 - VLAN全局配置 - 编辑" man="李翔" time="第5周" complete="true" remark="-" />
+				<node name="其它 - 子网VLAN" man="李翔" time="第5周" complete="true" remark="-" />
+				<node name="其它 - syslog配置" man="李翔" time="第3周" complete="true" remark="未国际化" />
+				<node name="其它 - syslog配置 - 修改记录方式" man="李翔" time="第3周" complete="true" remark="未国际化" />
+				<node name="其它 - syslog配置 - 8800b" man="李翔" time="第3周" complete="true" remark="未国际化" />
+				<node name="其它 - Docsis 3.0配置" man="李翔" time="第5周" complete="true" remark="未国际化" />
+				<node name="其它 - 添加到地域" man="李翔" time="第3周" complete="true" remark="未国际化" />
+				<node name="其它 - 修改设备名称" man="李翔" time="第3周" complete="true" remark="未国际化" />
+				<node name="设备快照8800B" man="李翔" time="第4周" complete="true" remark="未国际化" />
+				<node name="DHCP配置" man="李翔" time="第4周" complete="true" remark="未国际化" />
+				<node name="上行信道" man="李翔" time="第4周" complete="true" remark="功能还需修改" />
+				<node name="下行信道" man="李翔" time="第4周" complete="true" remark="内部无法修改" />
+				<node name="CM列表" man="李翔" time="第4周" complete="true" remark="未国际化" />
+				<node name="IPQAM" man="李翔" time="第4周" complete="true" remark="内部无法修改" />
+				<node name="CM列表" man="李翔" time="第4周" complete="true" remark="内部无法修改" />
+				<node name="节目流" man="李翔" time="第4周" complete="true" remark="内部无法修改" />
+				<node name="负载均衡" man="李翔" time="-" complete="false" remark="http500" />
+				<node name="ACL" man="李翔" time="-" complete="false" remark="http500" />
+				<node name="设备告警" man="李翔" time="第4周" complete="true" remark="未国际化" />
+				<node name="设备告警-告警属性" man="李翔" time="第4周" complete="true" remark="未国际化" />
+				<node name="设备告警-历史告警" man="李翔" time="第4周" complete="true" remark="未国际化" />
+				<node name="设备告警-历史告警属性" man="李翔" time="第4周" complete="true" remark="未国际化" />
+				<node name="性能展示" man="李翔" time="第4周" complete="true" remark="未国际化" />
+				<node name="8800A下行信道" man="李翔" time="第4周" complete="true" remark="未国际化" />
+				<node name="8800A下行信道编辑" man="李翔" time="第4周" complete="true" remark="未国际化" />
+				<node name="8800B基本信息管理" man="李翔" time="第4周" complete="true" remark="未国际化" />
+				<node name="8800B网管参数配置" man="李翔" time="第4周" complete="true" remark="未国际化" />
+				<node name="8800B设备Trap服务器配置" man="李翔" time="第5周" complete="true" remark="-" />
+				<node name="8800B设备Docsis 3.0 配置" man="李翔" time="第5周" complete="true" remark="-" />
+				<node name="8800B设备网络基本信息" man="李翔" time="第4周" complete="true" remark="未国际化" />
+				<node name="8800B设备网络基本信息-修改网络信息" man="李翔" time="第4周" complete="true" remark="未国际化" />
+				<node name="8800B设备网络基本信息-新建设备从ip" man="李翔" time="第4周" complete="true" remark="未国际化" />
+				<node name="8800B设备导出配置" man="李翔" time="第4周" complete="true" remark="未国际化" />				
+				<node name="8800B设备-DHCP Relay-第1步" man="李翔" time="第5周" complete="true" remark="未国际化" />
+				<node name="8800B设备-DHCP Relay-第3步" man="李翔" time="第5周" complete="true" remark="未国际化" />
+				<node name="8800B设备-DHCP Relay-第4步" man="李翔" time="第5周" complete="true" remark="未国际化" />
+				<node name="8800B设备-DHCP Relay-第5步" man="李翔" time="第5周" complete="true" remark="未国际化" />
+				<node name="8800B设备-添加Option60" man="李翔" time="第5周" complete="true" remark="未国际化" />
+				<node name="8800B设备-添加DHCP服务器" man="李翔" time="第5周" complete="true" remark="未国际化" />
+			</node>
+			<node name="CM列表" man="李翔" time="第3周" complete="true" remark="未国际化" >
+				<node name="其它 - cm 上下线行为" man="李翔" time="第3周" complete="true" remark="未国际化" />
+				<node name="其它 - 查看cpe信息" man="李翔" time="第3周" complete="true" remark="未国际化" />
+				<node name="其它 - cpe 上下线行为" man="李翔" time="第3周" complete="true" remark="未国际化" />
+				<node name="其它 - 查看大客户ip信息" man="李翔" time="第3周" complete="true" remark="未国际化" />
+			</node>
+			<node name="CM导入信息" man="张东明" time="第2周" complete="true" remark="-" >
+				<node name="导入Excel" man="张东明" time="第2周" complete="true" remark="-" />
+			</node>
+		</node>
+		<node name="新建设备" man="张东明" time="第1周" complete="true" remark="-" />
+		<node name="批量拓扑" man="张东明" time="第2周" complete="true" remark="-" >
+			 <node name="添加SNMP标签  " man="张东明" time="第2周" complete="true" remark="-" />
+			 <node name="拓扑结果  " man="张东明" time="第2周" complete="true" remark="-" />
+		</node>
+	</node>
+	<node name="04 拓扑管理" belong="04 拓扑管理" man="李翔" time="第3周" complete="true" remark="未国际化">
+		<node name="默认地域" man="李翔" time="-" complete="false" remark="-" />
+		<node name="google地图" man="李翔" time="-" complete="false" remark="-" />
+		<node name="新建地域" man="李翔" time="第3周" complete="true" remark="未国际化" />
+		<node name="新建地域-查看-列表" man="李翔" time="第3周" complete="true" remark="未国际化" />
+	</node>
+	<node name="04 配置管理" belong="04 配置管理" man="李翔" time="第2周" complete="true" remark="未国际化">
+		<node name="EPON配置文件管理" man="李翔" time="第2周" complete="true" remark="未国际化" />
+		<node name="终端设备采集配置" man="李翔" time="第2周" complete="true" remark="未国际化" />
+		<node name="负载均衡策略模板" man="李翔" time="第2周" complete="true" remark="未国际化" >
+			<node name="添加策略模板" man="李翔" time="第2周" complete="true" remark="未国际化" />
+			<node name="修改策略模板" man="李翔" time="第2周" complete="true" remark="未国际化" />
+		</node>
+	</node>
+	<node name="05 性能管理" belong="05 性能管理" man="李翔" time="-" complete="false" remark="-">
+		<node name="其它页面" man="李翔" time="-" complete="false" remark="功能为制作好，不能美化" />
+		<node name="性能阀值模板管理" man="李翔" time="第2周" complete="true" remark="未国际化" >
+			<node name="性能阀值模板管理-新建" man="李翔" time="第2周" complete="true" remark="未国际化" />
+			<node name="性能阀值模板管理-查看" man="李翔" time="第2周" complete="true" remark="未国际化" />
+		</node>
+	</node>
+	<node name="06 故障管理" belong="06 故障管理" man="张东明" time="第2周" complete="true" remark="-">
+		<node name="告警等级（告警查看器）" man="张东明" time="第2周" complete="true" remark="-" />
+		<node name="历史告警" man="张东明" time="第2周" complete="true" remark="-" />
+		<node name="事件类型" man="张东明" time="第2周" complete="true" remark="-" >
+		
+		</node>		
+		<node name="告警视图" man="张东明" time="第2周" complete="true" remark="-" />
+	</node>
+	<node name="07 报表管理" belong="07 报表管理" man="李翔" time="第3周" complete="true" remark="-">
+		<node name="所有任务生成的报表" man="张东明" time="第2周" complete="true" remark="-" />
+		<node name="所有报表任务" man="张东明" time="第2周" complete="true" remark="-" />
+		<node name="报表类型" man="张东明" time="-" complete="true" remark="无页面" />			
+		<node name="新建报表任务" man="张东明" time="第3周" complete="true" remark="-" >
+			<node name="选择模板" man="张东明" time="第2周" complete="true" remark="-" />
+			<node name="时间策略" man="张东明" time="第2周" complete="true" remark="-" />
+			<node name="OLT设备清单" man="张东明" time="第3周" complete="true" remark="定时报表任务模板配置" />
+			<node name="OLT板卡使用情况清单" man="张东明" time="第3周" complete="true" remark="定时报表任务模板配置" />
+			<node name="SNI端口使用情况清单" man="张东明" time="第3周" complete="true" remark="定时报表任务模板配置" />
+			<node name="PON端口使用情况清单" man="张东明" time="第3周" complete="true" remark="定时报表任务模板配置" />
+			<node name="ONU设备清单" man="张东明" time="第3周" complete="true" remark="定时报表任务模板配置" />
+			<node name="CCMTS设备清单" man="张东明" time="第3周" complete="true" remark="定时报表任务模板配置" />
+			<node name="CM设备清单" man="张东明" time="第3周" complete="true" remark="定时报表任务模板配置" />
+			<node name="CPU使用率排行" man="张东明" time="第3周" complete="true" remark="定时报表任务模板配置" />
+			<node name="内存使用率排行" man="张东明" time="第3周" complete="true" remark="定时报表任务模板配置" />
+			<node name="SNI端口流量报表" man="张东明" time="第3周" complete="true" remark="定时报表任务模板配置" />
+			<node name="PON端口流量报表" man="张东明" time="第3周" complete="true" remark="定时报表任务模板配置" />
+			<node name="设备响应延迟排行" man="张东明" time="第3周" complete="true" remark="定时报表任务模板配置" />
+			<node name="CCMTS上行SNR统计" man="张东明" time="第3周" complete="true" remark="定时报表任务模板配置" />
+			<node name="CCMTS用户流量统计汇总表" man="张东明" time="第3周" complete="true" remark="定时报表任务模板配置" />
+			<node name="当前告警统计" man="张东明" time="第3周" complete="true" remark="定时报表任务模板配置" />
+			<node name="历史告警统计" man="张东明" time="第3周" complete="true" remark="定时报表任务模板配置" />
+		</node>
+		<node name="即时报表统计" man="张东明" time="第3周" complete="true" remark="-" >
+			<node name="选择模板" man="张东明" time="第3周" complete="true" remark="-" />
+			<node name="时间策略" man="张东明" time="第3周" complete="true" remark="-" />
+			<node name="OLT设备清单" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="OLT板卡使用情况清单" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="SNI端口使用情况清单" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="PON端口使用情况清单" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="ONU设备清单" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="CCMTS设备清单" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="CM设备清单" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="CPU使用率排行" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="内存使用率排行" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="SNI端口流量报表" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="SNI端口流量详细" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="PON端口流量报表" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="PON端口流量详细" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="设备响应延迟排行" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="CCMTS上行SNR统计" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="CCMTS上行SNR详细" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="CCMTS用户流量统计汇总表" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="CCMTS用户流量统计详细表" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="当前告警统计" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="历史告警统计" man="张东明" time="第3周" complete="true" remark="" />
+		</node>
+	</node>
+	<node name="08 cm轮询" belong="08 cm轮询" man="李翔" time="第3周" complete="true" remark="未国际化">
+		<node name="cm轮询" man="李翔" time="第3周" complete="true" remark="未国际化" />	
+		<node name="轮询任务列表" man="张东明" time="第3周" complete="true" remark="" />
+		<node name="新建轮询任务" man="张东明" time="第3周" complete="true" remark="" />
+		<node name="修改轮询任务" man="张东明" time="第3周" complete="true" remark="" />
+		<node name="轮询对象列表" man="张东明" time="第3周" complete="true" remark="" />
+		<node name="新建轮询对象" man="张东明" time="第3周" complete="true" remark="" />
+		<node name="修改轮询对象" man="张东明" time="第3周" complete="true" remark="" />
+		<node name="查看轮询对象下的CM" man="张东明" time="第3周" complete="true" remark="" />
+		<node name="阈值列表" man="张东明" time="第3周" complete="true" remark="" />
+		<node name="修改阈值" man="张东明" time="第3周" complete="true" remark="" />
+		<node name="全局配置" man="张东明" time="第3周" complete="true" remark="" />
+	</node>
+	<node name="09 系统管理" belong="09 系统管理" man="李翔" time="第2周" complete="true" remark="未国际化">
+		<node name="全局管理视图" man="李翔" time="第2周" complete="true" remark="未国际化" >
+			<node name="系统访问策略" man="李翔" time="第1周" complete="true" remark="-" />
+			<node name="邮件服务器" man="李翔" time="第1周" complete="true" remark="未国际化" />
+			<node name="短信服务器" man="李翔" time="第1周" complete="true" remark="未国际化" />
+			<node name="数据库维护" man="李翔" time="第1周" complete="true" remark="未国际化" />
+			<node name="系统运行信息" man="李翔" time="第1周" complete="true" remark="未国际化" />
+			<node name="软件许可证" man="李翔" time="第1周" complete="true" remark="未国际化" />
+			<node name="关于" man="李翔" time="第1周" complete="true" remark="未国际化" />
+			<node name="告警策略管理" man="李翔" time="第2周" complete="true" remark="未国际化" />
+			<node name="告警动作" man="李翔" time="第1周" complete="true" remark="未国际化" >
+				<node name="新建动作 " man="李翔" time="第2周" complete="true" remark="未国际化" />
+				<node name="新建动作 - 邮箱" man="李翔" time="第2周" complete="true" remark="未国际化" />
+				<node name="新建动作 - 短信" man="李翔" time="第2周" complete="true" remark="未国际化" />
+				<node name="新建动作 - 陷阱" man="李翔" time="第2周" complete="true" remark="未国际化" />		
+				<node name="修改动作 - 邮箱" man="李翔" time="第3周" complete="true" remark="未国际化" />
+				<node name="修改动作 - 短信" man="李翔" time="第3周" complete="true" remark="未国际化" />
+				<node name="修改动作 - 陷阱" man="李翔" time="第3周" complete="true" remark="未国际化" />
+			</node>
+			<node name="个人资料" man="李翔" time="第1周" complete="true" remark="未国际化" />
+			<node name="修改密码" man="李翔" time="第1周" complete="true" remark="未国际化" />
+			<node name="区域和语言" man="李翔" time="第1周" complete="true" remark="未国际化" />
+			<node name="个性化" man="李翔" time="第1周" complete="true" remark="未国际化" />
+			<node name="导航窗格选项" man="李翔" time="第1周" complete="true" remark="未国际化" />
+			<node name="定制我的桌面" man="李翔" time="第1周" complete="true" remark="未国际化" />
+			<node name="Mibble Browser" man="李翔" time="-" complete="false" remark="-" />
+			<node name="内置FTP服务器" man="李翔" time="第1周" complete="true" remark="未国际化" />
+			<node name="FTP客户端" man="李翔" time="第1周" complete="true" remark="未国际化" >
+				<node name="文件管理" man="李翔" time="第2周" complete="true" remark="未国际化" />
+				<node name="上传文件" man="李翔" time="第2周" complete="true" remark="未国际化" />
+			</node>
+			<node name="内置TFTP服务器" man="李翔" time="第1周" complete="true" remark="未国际化" />
+			<node name="EngineServer配置" man="李翔" time="第1周" complete="true" remark="未国际化" >
+				<node name="EngineServer配置 - 添加" man="李翔" time="第2周" complete="true" remark="未国际化" />
+				<node name="EngineServer配置 - 修改" man="李翔" time="第2周" complete="true" remark="未国际化" />
+			</node>
+			<node name="Ping选项配置" man="李翔" time="第1周" complete="true" remark="未国际化" />
+			<node name="SNMP选项配置" man="李翔" time="第1周" complete="true" remark="未国际化" />
+			<node name="Trap监听端口配置" man="李翔" time="第1周" complete="true" remark="未国际化" />
+			<node name="Syslog监听端口配置" man="李翔" time="第1周" complete="true" remark="未国际化" />
+		</node>
+		<node name="管理" man="李翔" time="-" complete="true" remark="无页面" >
+			<node name="角色管理" man="李翔" time="第1周" complete="true" remark="未国际化" />
+			<node name="用户管理" man="李翔" time="第2周" complete="true" remark="未国际化" >
+				<node name="设置角色" man="李翔" time="第2周" complete="true" remark="未国际化" />
+				<node name="修改密码" man="李翔" time="第2周" complete="true" remark="-" />	
+				<node name="用户属性" man="李翔" time="第2周" complete="true" remark="未国际化-查看按钮" />
+			</node>
+			<node name="日志管理" man="李翔" time="第2周" complete="true" remark="未国际化" />
+			<node name="配置日志" man="李翔" time="第2周" complete="true" remark="未国际化" />
+		</node>
+		<node name="数据字典" man="李翔" time="-" complete="true" remark="无页面" >
+			<node name="部门" man="李翔" time="第2周" complete="true" remark="未国际化" >
+				<node name="部门 - 新建部门" man="李翔" time="第2周" complete="true" remark="未国际化" />
+			</node>
+			<node name="职位" man="李翔" time="第2周" complete="true" remark="未国际化" >
+			<node name="职位 - 新建职位" man="李翔" time="第2周" complete="true" remark="未国际化" />
+			</node>
+		</node>		
+		<node name="新建角色" man="李翔" time="第2周" complete="true" remark="未国际化" />
+		<node name="新建用户" man="李翔" time="第2周" complete="true" remark="未国际化" >
+			<node name="新建用户 - 选择地域" man="李翔" time="第2周" complete="true" remark="未国际化" />
+			<node name="新建用户 - 选择部门" man="李翔" time="第2周" complete="true" remark="未国际化" />
+			<node name="新建用户 - 选择职位" man="李翔" time="第2周" complete="true" remark="未国际化" />	
+		</node>
+	</node>
+	<node name="10 demo示例" belong="10 demo示例" man="张东明" time="-" complete="false" remark="-">
+		<node name="验证" man="李翔" time="第1周" complete="true" remark="-" />
+		<node name="后台拼接table" man="李翔" time="第1周" complete="true" remark="-" />
+		<node name="toolBar+gridPanel" man="李翔" time="第1周" complete="true" remark="-" />
+		<node name="上部分内容+gridPanel(border布局" man="李翔" time="第1周" complete="true" remark="-" />
+		<node name="配置信息页面" man="李翔" time="第1周" complete="true" remark="-" />
+		<node name="弹出窗口" man="张东明" time="第1周" complete="true" remark="-" />
+		<node name="ip输入框" man="张东明" time="第1周" complete="true" remark="-" />		
+		<node name="上一步，下一步页面" man="张东明" time="第1周" complete="true" remark="-" />
+		<node name="到左侧，到右侧" man="张东明" time="-" complete="false" remark="-" />
+		<node name="选项卡" man="张东明" time="第1周" complete="true" remark="-" />
+		<node name="文件上传" man="张东明" time="第1周" complete="true" remark="-" />
+	</node>
+	<node name="EPON产品" belong="EPON产品" man="张东明" time="-" complete="false" remark="PRODUCT">
+		<node name="8602快照" man="张东明" time="第3周" complete="true" remark="-" />
+		<node name="8603快照" man="张东明" time="第3周" complete="true" remark="-" />
+		<node name="信道利用率轮询设置" man="张东明" time="第3周" complete="true" remark="-" />
+		<node name="文件管理" man="张东明" time="第3周" complete="true" remark="-" />
+		<node name="上传文件" man="张东明" time="第3周" complete="false" remark="半完工" />
+		<node name="SNMP配置" man="张东明" time="第3周" complete="true" remark="-" >
+			<node name="SNMP用户列表" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="新建SNMP用户" man="张东明" time="第3周" complete="false" remark="半完工" />
+			<node name="SNMP组列表" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="新建SNMP组" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="视图列表" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="新建视图组" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="SNMP配置(V2C)" man="张东明" time="第3周" complete="true" remark="" />
+		</node>
+		<node name="RSTP设置" man="张东明" time="第3周" complete="true" remark="" />
+		<node name="IGMP管理" man="张东明" time="第3周" complete="true" remark="">
+			<node name="IGMP协议配置" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="可控组播组模板配置" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="组播组" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="呼叫记录" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="组播组转换规则列表" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="查询组播组下用户信息" man="张东明" time="第3周" complete="false" remark="未做" />
+			<node name="组播组端口列表" man="张东明" time="第3周" complete="true" remark="" />
+		</node>
+		<node name="ACL配置管理" man="张东明" time="第3周" complete="false" remark="未作" />
+		<node name="OLT QOS管理" man="张东明" time="第3周" complete="true" remark="">
+			<node name="QOS队列映射" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="QOS队列策略" man="张东明" time="第3周" complete="true" remark="" />
+		</node>
+		<node name="串口服务器VLAN配置" man="张东明" time="第3周" complete="true" remark="" />
+		<node name="PON口业务割接" man="张东明" time="第3周" complete="true" remark="" />
+		<node name="学习MAC地址表" man="张东明" time="第3周" complete="true" remark="" />
+		<node name="SNI基本配置" man="张东明" time="第3周" complete="true" remark="" />
+		<node name="流量限制" man="张东明" time="第3周" complete="true" remark="" />
+		<node name="SNI基本配置" man="张东明" time="第3周" complete="true" remark="" />
+		<node name="OLT设备告警" man="张东明" time="第3周" complete="true" remark="" >
+			<node name="OLT当前告警" man="张东明" time="第3周" complete="true" remark="" />
+			<node name="OLT历史告警" man="张东明" time="第3周" complete="true" remark="" />
+		</node>
+	</node>
+</root>

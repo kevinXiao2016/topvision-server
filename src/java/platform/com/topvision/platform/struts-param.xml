@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="param" namespace="/param" extends="default">
+        <action name="showEmailServer" class="emailServerAction" method="showEmailServer">
+            <result>/system/param/popEmailServer.jsp</result>
+        </action>
+        <action name="sendTestEmail" class="emailServerAction" method="sendTestEmail" />
+        <action name="saveEmailServer" class="emailServerAction" method="saveEmailServer" />
+
+        <action name="showSmsServer" class="smsServerAction" method="showSmsServer">
+            <result>/system/param/popSmsServer.jsp</result>
+        </action>
+        <action name="sendTestSms" class="smsServerAction" method="sendTestSms">
+        </action>
+        <action name="saveSmsServer" class="smsServerAction" method="saveSmsServer">
+        </action>
+        <action name="testSmsServer" class="smsServerAction" method="testSmsServer">
+        </action>
+        <action name="showAppletConfig" class="systemAction" method="showAppletConfig">
+            <result>/system/param/popAppletParam.jsp</result>
+        </action>
+        <action name="updateAppletConfig" class="systemAction" method="updateAppletConfig" />
+
+        <action name="showSystemPreferemces" class="systemAction" method="showSystemPreferemces">
+            <result>/system/param/popNetworkParams.jsp</result>
+        </action>
+        
+        <action name="modifySecurityParams" class="systemAction" method="modifySecurityParams">
+        </action>
+
+        <action name="showSecurityCenter" class="securityCenterAction" method="showSecurityCenter">
+            <result>/system/param/popSecurityCenter.jsp</result>
+        </action>
+
+        <action name="updateSecurityCenter" class="securityCenterAction" method="updateSecurityCenter" />
+
+        <action name="showQuickConfigWizard">
+            <result>/system/param/quickConfigWizard.jsp</result>
+        </action>
+
+        <action name="showQuickConfigTask" class="quickConfigAction" method="showQuickConfigTask">
+            <result name="modifyInterval">
+                /system/param/quickModifyInterval.jsp
+            </result>
+            <result name="modifySnmp">
+                /system/param/quickModifySnmp.jsp
+            </result>
+            <result name="modifyServer">
+                /system/param/quickModifyServer.jsp
+            </result>
+        </action>
+        
+         <action name="showUnitConfig" class="systemAction" method="showUnitConfig">
+            <result>/system/unitConfig.jsp</result>
+        </action>
+        <action name="saveUnitConfig" class="systemAction" method="saveUnitConfig" />
+    </package>
+</struts>

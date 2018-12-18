@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.spectrum.domain.SpectrumPlay">
+	<select id="getVideoById" parameterType="long" resultType="com.topvision.ems.cmc.spectrum.domain.SpectrumVideo">
+		SELECT 
+			* 
+		FROM 
+			spectrumiivideo 
+		WHERE 
+			videoId = #{videoId}
+	</select>
+	
+	<select id="getSpectrumVideos" parameterType="map" resultType="com.topvision.ems.cmc.spectrum.domain.SpectrumVideo">
+		SELECT * FROM spectrumiivideo where 1=1
+		<if test="videoName != null">
+			AND videoName like '%${videoName}%'
+		</if>
+		<if test="startTime != null">
+			AND startTime <![CDATA[ >= ]]> '${startTime}'
+		</if>
+		<if test="endTime != null">
+			AND endTime <![CDATA[ <= ]]> '${endTime}'
+		</if>
+		<if test="cmtsAlias != null">
+			AND cmtsAlias like '%${cmtsAlias}%'
+		</if>
+		<if test="userName != null">
+			AND userName like '%${userName}%'
+		</if>
+		<if test="terminalIp != null">
+			AND terminalIp like '%${terminalIp}%'
+		</if>
+		<if test="videoType != null">
+			AND videoType = ${videoType}
+		</if>
+		ORDER BY startTime DESC
+		LIMIT
+			${start} , ${limit}
+	</select>
+	
+	<select id="getSpectrumVideosCount" parameterType="map" resultType="long">
+		SELECT count(*) FROM spectrumiivideo where 1=1
+		<if test="videoName != null">
+			AND videoName like '%${videoName}%'
+		</if>
+		<if test="startTime != null">
+			AND startTime <![CDATA[ >= ]]> '${startTime}'
+		</if>
+		<if test="endTime != null">
+			AND endTime <![CDATA[ <= ]]> '${endTime}'
+		</if>
+		<if test="cmtsAlias != null">
+			AND cmtsAlias like '%${cmtsAlias}%'
+		</if>
+		<if test="userName != null">
+			AND userName like '%${userName}%'
+		</if>
+		<if test="terminalIp != null">
+			AND terminalIp like '%${terminalIp}%'
+		</if>
+		<if test="videoType != null">
+			AND videoType = ${videoType}
+		</if>
+	</select>
+	
+	<select id="getVideoList" resultType="com.topvision.ems.cmc.spectrum.domain.SpectrumVideo">
+		SELECT * FROM spectrumiivideo
+	</select>
+	
+	<delete id="deleteVideo" parameterType="long">
+		DELETE from
+		spectrumiivideo
+		where videoId = #{videoId}
+	</delete>
+	
+	<delete id="clearVideo">
+		DELETE from
+		spectrumiivideo
+	</delete>
+</mapper>

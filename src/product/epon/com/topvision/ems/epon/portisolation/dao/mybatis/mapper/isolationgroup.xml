@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.portisolation.domain.PortIsolationGroup">
+	<insert id="insertGroup" parameterType="portIsolationGroup">
+		INSERT INTO portisolationgroup(entityId, groupIndex, groupDesc)
+		VALUES(#{entityId},	#{groupIndex}, #{groupDesc})
+	</insert>
+	
+	<update id="updateGroup" parameterType="portIsolationGroup">
+		UPDATE portisolationgroup
+		SET groupDesc = #{groupDesc}
+		WHERE entityId = #{entityId} and groupIndex = #{groupIndex}
+	</update>
+	
+	<delete id="deleteGroup" parameterType="portIsolationGroup">
+		DELETE FROM portisolationgroup
+		WHERE entityId = #{entityId} and groupIndex = #{groupIndex}
+	</delete>
+	
+	<delete id="deleteGroupByEntityId" parameterType="long">
+		DELETE FROM portisolationgroup
+		WHERE entityId = #{entityId}
+	</delete>
+	
+	<select id="queryGroup" parameterType="map" resultType="portIsolationGroup">
+		SELECT * FROM portisolationgroup
+		WHERE entityId = #{entityId} and groupIndex = #{groupIndex}
+	</select>
+	
+	<select id="queryGroupList" parameterType="long" resultType="portIsolationGroup">
+		SELECT * FROM portisolationgroup
+		WHERE entityId = #{entityId}
+	</select>
+	
+	<insert id="insertGroupMemeber" parameterType="portIsolationGrpMember">
+		INSERT INTO portisolationmember(entityId, portIndex, groupIndex)
+		VALUES(#{entityId},	#{portIndex}, #{groupIndex})
+	</insert>
+
+	<delete id="deleteGroupMember" parameterType="portIsolationGrpMember">
+		DELETE FROM portisolationmember
+		WHERE entityId = #{entityId} and groupIndex = #{groupIndex} and portIndex = #{portIndex} 
+	</delete>
+	
+	<delete id="deleteMemberByGroup" parameterType="portIsolationGrpMember">
+		DELETE FROM portisolationmember
+		WHERE entityId = #{entityId} and groupIndex = #{groupIndex}
+	</delete>
+	
+	<delete id="deleteMemberByPorts" parameterType="map">
+		DELETE FROM portisolationmember
+		WHERE entityId = #{entityId} and groupIndex = #{groupIndex} and portIndex in (${portsList})
+	</delete>
+	
+	<delete id="deleteMemberByEntityId" parameterType="long">
+		DELETE FROM portisolationmember
+		WHERE entityId = #{entityId}
+	</delete>
+	
+	<select id="queryGroupMember" parameterType="map" resultType="portIsolationGrpMember">
+		SELECT * from portisolationmember 
+		WHERE entityId = #{entityId} and groupIndex = #{groupIndex}
+	</select>
+	
+	<select id="queryMemberByPorts" parameterType="map" resultType="portIsolationGrpMember">
+		SELECT * from portisolationmember 
+		WHERE entityId = #{entityId} and groupIndex = #{groupIndex} and portIndex in (${portsList})
+	</select>
+
+</mapper>

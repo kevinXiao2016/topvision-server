@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="commandSend" namespace="/entity/commandSend" extends="default">
+        <action name="showCommandSendEntityList" class="commandSendAction" method="showCommandSendEntityList">
+        	<result>/config/commandSendEntityList.jsp</result>
+        </action>
+        <action name="showEntityList" class="commandSendAction" method="showEntityList">
+        	<result>/config/entityList.jsp</result>
+        </action>
+        <action name="loadEntityList" class="commandSendAction" method="loadEntityList">
+        </action>
+        <action name="addSendConfigEntity" class="commandSendAction" method="addSendConfigEntity">
+        </action>
+        <action name="loadCommandSendEntityList" class="commandSendAction" method="loadCommandSendEntityList">
+        </action>
+        <action name="showCommandResult" class="commandSendAction" method="showCommandResult">
+        	<result>/config/commandSendResult.jsp</result>
+        </action>
+        <action name="getCommandResult" class="commandSendAction" method="getCommandResult">
+        </action>
+        <action name="sendConfig" class="commandSendAction" method="sendConfig">
+        </action>
+        <action name="makeSendConfigById" class="commandSendAction" method="makeSendConfigById">
+        </action>
+        <action name="deleteSendConfigEntity" class="commandSendAction" method="deleteSendConfigEntity">
+        </action>
+        <action name="entityTypeTree" class="commandSendAction" method="entityTypeTree">
+        </action>
+	</package>
+</struts>

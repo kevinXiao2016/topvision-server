@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="rstp" namespace="/epon/rstp" extends="default">
+		<action name="getStpGlobalConfigAttribute" class="oltRstpAction" method="getStpGlobalConfigAttribute">
+			<result>/epon/oltRstpConfig.jsp</result>
+		</action>
+		<action name="updateStpGlobalConfig" class="oltRstpAction" method="updateStpGlobalConfig"/>
+		<action name="setStpGlobalEnable" class="oltRstpAction" method="setStpGlobalEnable"/>
+		<action name="refreshStpGlobalConfig" class="oltRstpAction" method="refreshStpGlobalConfig"/>
+		
+		<action name="getStpPortConfigAttribute" class="oltRstpAction" method="getStpPortConfigAttribute">
+			<result>/epon/sniRstpConfig.jsp</result>
+		</action>
+		<action name="updateStpPortConfig" class="oltRstpAction" method="updateStpPortConfig"/>
+		<action name="setStpPortEnable" class="oltRstpAction" method="setStpPortEnable"/>
+		<action name="setRstpProtocolMigration" class="oltRstpAction" method="setRstpProtocolMigration"/>
+		<action name="refreshStpPortConfig" class="oltRstpAction" method="refreshStpPortConfig"/>
+		<action name="showOnuRstpMode" class="oltRstpAction" method="showOnuRstpMode">
+			<result>/epon/onuRstpConfig.jsp</result>
+		</action>
+	</package>
+</struts>

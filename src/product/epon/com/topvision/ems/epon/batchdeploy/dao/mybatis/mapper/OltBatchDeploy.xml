@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.batchdeploy.domain.OltBatchDeploy">
+	<select id="selectSlotTarget" parameterType="map" resultType="target">
+		SELECT A.slotId id,B.slotIndex  targetIndex,1 level
+		FROM oltslotattribute A, oltslotrelation B
+		WHERE A.entityId=#{entityId} AND A.slotId=B.slotId 
+		<if test="slotList != null">
+			AND A.slotNo IN (${slotList})
+		</if>
+	</select>
+	<select id="selectPortTarget" parameterType="map" resultType="target">
+		SELECT  ponIndex targetIndex,ponId id,3 level FROM oltponrelation
+		WHERE slotid in (${slotList})
+		<if test="includeUplink == true">
+			UNION ALL
+			SELECT  sniIndex targetIndex,sniId id,2 level FROM oltsnirelation
+			WHERE slotid in (${slotList})
+		</if>
+	</select>
+	<select id="selectLlidTarget" parameterType="map" resultType="target">
+		SELECT onuId id,onuIndex targetIndex,4 level FROM oltonurelation
+		WHERE ponId IN (${ponList})
+	</select>
+	<select id="selectUniTarget" parameterType="map" resultType="target">
+		SELECT uniIndex targetIndex,5 level from oltunirelation
+		WHERE onuId in (${llidList})
+	</select>
+</mapper>

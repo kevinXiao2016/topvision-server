@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GponTrafficProfile">
+	
+	<select id="selectGponTrafficProfileInfoList" parameterType="long" resultType="gponTrafficProfileInfo">
+		SELECT 
+			entityId,
+			ProfileId  gponTrafficProfileId,
+			ProfileName  gponTrafficProfileName,
+			ProfileCfgCir  gponTrafficProfileCfgCir,
+			ProfileCfgPir  gponTrafficProfileCfgPir,
+			ProfileCfgCbs  gponTrafficProfileCfgCbs,
+			ProfileCfgPbs  gponTrafficProfileCfgPbs,
+			ProfileCfgPriority  gponTrafficProfileCfgPriority,
+			ProfileBindNum  gponTrafficProfileBindNum
+ 		FROM 
+ 			GponTrafficProfileInfo 
+ 		WHERE entityId=#{entityId}
+	</select>
+	
+	<select id="selectGponTrafficProfileInfo" parameterType="map" resultType="gponTrafficProfileInfo">
+		SELECT 
+			entityId,
+			ProfileId  gponTrafficProfileId,
+			ProfileName  gponTrafficProfileName,
+			ProfileCfgCir  gponTrafficProfileCfgCir,
+			ProfileCfgPir  gponTrafficProfileCfgPir,
+			ProfileCfgCbs  gponTrafficProfileCfgCbs,
+			ProfileCfgPbs  gponTrafficProfileCfgPbs,
+			ProfileCfgPriority  gponTrafficProfileCfgPriority,
+			ProfileBindNum  gponTrafficProfileBindNum
+ 		FROM 
+ 			GponTrafficProfileInfo 
+ 		WHERE entityId=#{entityId} and ProfileId = #{profileId}
+	</select>
+	
+	<insert id="insertGponTrafficProfileInfo"  parameterType="gponTrafficProfileInfo">
+		INSERT INTO 
+			GponTrafficProfileInfo(entityId,ProfileId,ProfileName,ProfileCfgCir,ProfileCfgPir,ProfileCfgCbs,
+					ProfileCfgPbs,ProfileCfgPriority,ProfileBindNum) 
+		VALUES (#{entityId},#{gponTrafficProfileId},#{gponTrafficProfileName},#{gponTrafficProfileCfgCir},
+			#{gponTrafficProfileCfgPir},#{gponTrafficProfileCfgCbs},#{gponTrafficProfileCfgPbs},
+			#{gponTrafficProfileCfgPriority},#{gponTrafficProfileBindNum})
+	</insert>
+	
+	<update id="updateGponTrafficProfileInfo" parameterType="gponTrafficProfileInfo">
+		UPDATE GponTrafficProfileInfo 
+		SET ProfileName=#{gponTrafficProfileName},ProfileCfgCir=#{gponTrafficProfileCfgCir},
+			ProfileCfgPir=#{gponTrafficProfileCfgPir},ProfileCfgCbs=#{gponTrafficProfileCfgCbs},
+			ProfileCfgPbs=#{gponTrafficProfileCfgPbs},ProfileCfgPriority=#{gponTrafficProfileCfgPriority}
+		WHERE  entityId=#{entityId} AND ProfileId=#{gponTrafficProfileId}
+	</update>
+	
+	<delete id="deleteGponTrafficProfileInfo"  parameterType="map">
+		DELETE FROM GponTrafficProfileInfo WHERE entityId=#{entityId} AND ProfileId=#{gponTrafficProfileId} 
+	</delete>
+</mapper>

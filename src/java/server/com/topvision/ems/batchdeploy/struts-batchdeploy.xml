@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN" "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="batchdeploy" namespace="/batchdeploy" extends="default">
+		<action name="showBatchHistory" class="batchDeployHistoryAction" method="showBatchHistory" >
+			<result>/config/batchDeployHistory.jsp</result>
+		</action>
+		<action name="queryForBatchHistory" class="batchDeployHistoryAction" method="queryForBatchHistory" />
+		<action name="loadSuccess" class="batchDeployHistoryAction" method="loadSuccess" />
+		<action name="loadFailures" class="batchDeployHistoryAction" method="loadFailures" />
+		<action name="showBatchDeploySuccess"  class="batchDeployHistoryAction" method="showBatchDeploySuccess">
+			<result>/config/lookBatchDeploySuccess.jsp</result>
+		</action> 
+		<action name="showBatchDeployFault" class="batchDeployHistoryAction" method="showBatchDeployFault">
+			<result>/config/lookBatchDeployFault.jsp</result>
+		</action>
+		
+	</package>
+</struts>

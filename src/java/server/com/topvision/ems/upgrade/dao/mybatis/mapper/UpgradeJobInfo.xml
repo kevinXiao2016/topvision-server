@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.upgrade.domain.UpgradeJobInfo">
+    <select id="selectAllJob" resultType="com.topvision.ems.upgrade.domain.UpgradeJobInfo">
+        SELECT
+        jobId, name, createTime, updateTime, workerClass, jobClass, startTime, imageFile, versionName,transferType, subType,type
+        FROM upgradejob
+    </select>
+    
+    <select id="getJobById" resultType="com.topvision.ems.upgrade.domain.UpgradeJobInfo" parameterType="long">
+        SELECT
+      	  jobId, name, createTime, updateTime, workerClass, jobClass, startTime, imageFile, versionName,transferType, subType,type
+        FROM upgradejob
+        WHERE jobId = #{jobId}
+    </select>
+
+    <select id="selectJobByName" resultType="com.topvision.ems.upgrade.domain.UpgradeJobInfo" parameterType="string">
+        SELECT
+      	  jobId, name, createTime, updateTime, workerClass, jobClass, startTime, imageFile, versionName,transferType,subtype,type
+        FROM upgradejob
+        WHERE name = #{jobName}
+    </select>
+
+    <select id="selectJobByVersionName" resultType="com.topvision.ems.upgrade.domain.UpgradeJobInfo" parameterType="string">
+        SELECT
+      	  jobId, name, createTime, updateTime, workerClass, jobClass, startTime, imageFile, versionName,transferType,subtype,type
+        FROM upgradejob
+        WHERE versionName = #{versionName}
+    </select>
+    
+    <select id="selectUpgradeEntityList" resultType="com.topvision.ems.upgrade.domain.UpgradeEntity" parameterType="long">
+        SELECT
+      	  jobId, entityId, upgradeStatus, upgradeNote, retryTimes, retry, endTime, startTime
+        FROM upgradeentity
+        WHERE jobId = #{jobId}
+    </select>
+
+    <select id="selectUpgradeEntityIdList" resultType="long" parameterType="long">
+        SELECT
+      	  entityId
+        FROM upgradeentity
+        WHERE jobId = #{jobId}
+    </select>
+    
+    <select id="selectOltEntity" parameterType="map" resultType="com.topvision.ems.facade.domain.Entity">
+        select a.entityId, a.name, a.ip, a.mac, a.typeId, f.state as status, a.createTime, c.displayName as typeName
+        ,e.bSoftwareVersion  softwareVersion 
+        from entity a 
+		left join entityType c on a.typeId = c.typeId
+		left JOIN OltSlotAttribute e ON e.entityId = a.entityId
+		left join entitySnap f on a.entityId = f.entityId
+		<![CDATA[ 
+			WHERE a.entityId IN (select entityId from ${Authority})
+			AND a.entityId NOT IN (SELECT entityId from upgradeentity)
+		]]>
+		<if test="name != null">
+            AND (a.name LIKE '%${name}%')
+        </if>
+        <if test="mac != null">
+            AND (a.mac LIKE '%${mac}%'
+	            <if test="queryMacWithoutSplit != null">
+	                OR REPLACE(a.mac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+	            </if>
+	            )
+        </if>
+        <if test="ip != null">
+            AND a.ip LIKE '%${ip}%'
+        </if>
+        <if test="softVersion != null">
+            AND a.sysDescr LIKE '%${softVersion}%'
+        </if>
+        <if test="typeId != null">
+            AND a.typeId = #{typeId}
+        </if>
+        <if test="typeIds != null">
+            AND c.typeId in ( ${typeIds} )
+        </if>
+        AND e.bAttribute = 1
+        <if test="sort != null">order by ${sort} ${dir}</if>
+        limit ${start} , ${limit}
+    </select>
+    
+    <select id="selectCcmtsEntity" parameterType="map" resultType="com.topvision.ems.facade.domain.Entity">
+        select a.entityId, a.name, a.ip, a.mac, a.typeId, f.state as status, a.createTime, c.displayName as typeName
+        ,d.topCcmtsSysSwVersion softwareVersion
+        from entity a 
+		left join entityType c on a.typeId = c.typeId
+			left JOIN cmcattribute d ON d.cmcId = a.entityId
+			left join entitySnap f on a.entityId = f.entityId
+		<![CDATA[ 
+			WHERE a.entityId IN (select entityId from ${Authority})
+			AND a.entityId NOT IN (SELECT entityId from upgradeentity)
+		]]>
+		<if test="name != null">
+            AND (a.name LIKE '%${name}%')
+        </if>
+        <if test="mac != null">
+            AND (a.mac LIKE '%${mac}%'
+	            <if test="queryMacWithoutSplit != null">
+	                OR REPLACE(a.mac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+	            </if>
+	            )
+        </if>
+        <if test="ip != null">
+            AND a.ip LIKE '%${ip}%'
+        </if>
+        <if test="softVersion != null">
+            AND a.sysDescr LIKE '%${softVersion}%'
+        </if>
+        <if test="typeId != null">
+            AND a.typeId = #{typeId}
+        </if>
+        <if test="typeIds != null">
+            AND c.typeId in ( ${typeIds} )
+        </if>
+        <if test="supportEpon == true" >
+        	AND e.bAttribute = 1
+        </if>
+        and (A.typeId in (select typeId from entitytyperelation where type = 70000))
+        <if test="sort != null">order by ${sort} ${dir}</if>
+        limit ${start} , ${limit}
+    </select>
+    
+    <select id="selectEntityNum" parameterType="map" resultType="long">
+        select count(a.entityId) from entity a 
+		left join (select entityId, parentId, ip from entity) b on a.parentId = b.entityId
+		left join entityType c on a.typeId = c.typeId
+		left join entitySnap f on a.entityId = f.entityId
+		<![CDATA[ 
+			WHERE a.entityId IN (select entityId from ${Authority}) 
+			AND a.entityId not IN (SELECT entityId from upgradeentity)
+		]]>
+		<if test="name != null">
+            AND (a.name LIKE '%${name}%')
+        </if>
+        <if test="mac != null">
+            AND (a.mac LIKE '%${mac}%'
+	            <if test="queryMacWithoutSplit != null">
+	                OR REPLACE(a.mac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+	            </if>
+	            )
+        </if>
+        <if test="ip != null">
+            AND a.ip LIKE '%${ip}%'
+        </if>
+        <if test="softVersion != null">
+            AND a.sysDescr LIKE '%${softVersion}%'
+        </if>
+        <if test="typeId != null">
+            AND a.typeId = #{typeId}
+        </if>
+        <if test="typeIds != null">
+            AND c.typeId in ( ${typeIds} )
+        </if>
+        and (A.typeId in (select typeId from entitytyperelation where type = 10000 or type = 70000))
+        limit ${start} , ${limit}
+    </select>
+    
+    <select id="selectUpgradeEntity" parameterType="map" resultType="com.topvision.ems.upgrade.domain.UpgradeEntity">
+    	select a.entityId, a.name, a.ip, a.mac, a.typeId, b.versionName as upgradeVersion, c.displayName as typeName, d.retryTimes, d.upgradeStatus, d.upgradeNote, d.startTime as upgradeTime from entity a 
+    	left join upgradejob b on b.jobId = #{jobId}
+		left join entityType c on a.typeId = c.typeId
+		left join upgradeentity d on d.jobId = #{jobId} and d.entityId = a.entityId
+		where a.entityId in (select entityId from upgradeentity where jobId = #{jobId})
+		<if test="name != null">
+            AND (a.name LIKE '%${name}%')
+        </if>
+        <if test="mac != null">
+            AND (a.mac LIKE '%${mac}%'
+	            <if test="queryMacWithoutSplit != null">
+	                OR REPLACE(a.mac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+	            </if>
+	            )
+        </if>
+        <if test="ip != null">
+            AND a.ip LIKE '%${ip}%'
+        </if>
+        <if test="statusIds != null">
+        	and d.upgradeStatus IN (${statusIds})
+		</if>
+        <if test="sort != null">order by ${sort} ${dir}</if>
+        limit ${start} , ${limit}
+	</select>
+	
+	<select id="selectUpgradeEntityByEntityId" parameterType="map" resultType="com.topvision.ems.upgrade.domain.UpgradeEntity">
+    	select a.entityId, a.name, a.ip, a.mac, a.typeId, b.versionName as upgradeVersion, c.displayName as typeName, d.upgradeStatus, 
+    	d.jobId, d.retryTimes, d.retry,
+    	d.upgradeNote, d.startTime as upgradeTime 
+    	from upgradeentity d 
+    	left join entity a	on d.entityId = a.entityId
+    	left join entityType c on a.typeId = c.typeId
+    	left join upgradejob b on b.jobId = d.jobId
+		where a.entityId = #{entityId} AND d.jobId = #{jobId}
+	</select>
+	
+    <select id="selectUpgradeEntityNum" parameterType="map" resultType="long">
+    	select count(a.entityId) from entity a 
+		left join upgradejob b on b.jobId = #{jobId}
+		left join entityType c on a.typeId = c.typeId
+		left join upgradeentity d on d.jobId = #{jobId} and d.entityId = a.entityId
+		where a.entityId in (select entityId from upgradeentity where jobId = #{jobId})
+		<if test="name != null">
+            AND (a.name LIKE '%${name}%')
+        </if>
+        <if test="statusIds != null">
+        	and d.upgradeStatus IN (${statusIds})
+		</if>
+        <if test="mac != null">
+            AND (a.mac LIKE '%${mac}%'
+	            <if test="queryMacWithoutSplit != null">
+	                OR REPLACE(a.mac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+	            </if>
+	            )
+        </if>
+        <if test="ip != null">
+            AND a.ip LIKE '%${ip}%'
+        </if>
+	</select>
+    
+    <update id="updateUpgradeEntity" parameterType="com.topvision.ems.upgrade.domain.UpgradeEntity">
+		update upgradeentity
+		set upgradeStatus = #{upgradeStatus},
+		upgradeNote = #{upgradeNote},
+		retryTimes = #{retryTimes},
+		retry = #{retry},
+		startTime = #{startTime}
+		where entityId = #{entityId} 
+	</update>
+	
+	<insert id="insertJob" parameterType="com.topvision.ems.upgrade.domain.UpgradeJobInfo" useGeneratedKeys="true" keyProperty="jobId">
+		INSERT INTO
+			upgradejob(name, createTime, updateTime, workerClass, jobClass, startTime, imageFile, versionName,transferType, subType,type)
+		VALUES
+			(#{name}, #{createTime}, #{updateTime}, #{workerClass}, #{jobClass}, #{startTime},#{imageFile}, #{versionName}, #{transferType}, #{subType}, #{type})
+	</insert>
+	
+	<insert id="insertJobEntity" parameterType="com.topvision.ems.upgrade.domain.UpgradeEntity">
+		INSERT INTO
+			upgradeentity(jobId, entityId, retryTimes, retry, startTime, upgradeStatus)
+		VALUES
+			(#{jobId}, #{entityId}, #{retryTimes}, #{retry}, #{startTime}, #{upgradeStatus})
+	</insert>
+	
+	<delete id="deleteJob" parameterType="long">
+        delete from upgradejob where jobId=#{jobId}
+    </delete>
+    
+	<delete id="deleteJobEntity" parameterType="com.topvision.ems.upgrade.domain.UpgradeEntity">
+        delete from upgradeentity where entityId=#{entityId} and jobId = #{jobId}
+    </delete>
+    
+    <select id="selectBdPreConfigType" parameterType="map" resultType="int">
+    	SELECT topSysBdPreConfigType 
+    	FROM oltslotattribute 
+		WHERE entityId = #{entityId} AND slotNo = #{slotNo}
+    </select>
+    
+    <select id="selectCmcTypeIdList" parameterType="long" resultType="long">
+    	SELECT e.typeId
+		FROM cmcentityrelation cer 
+		LEFT JOIN entity e ON cer.cmcId = e.entityId 
+		LEFT JOIN entitytype et ON e.typeId = et.typeId
+		WHERE cer.cmcEntityId = #{cmcEntityId} 
+    </select>
+</mapper>

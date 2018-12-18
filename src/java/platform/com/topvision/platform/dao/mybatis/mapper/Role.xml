@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.platform.domain.Role">
+	<insert id="insertEntity" parameterType="role" useGeneratedKeys="true"
+		keyProperty="roleId">
+		INSERT INTO Role (superiorId, name, note) VALUES
+		(#{superiorId},
+		#{name}, #{note})
+    </insert>
+
+	<update id="updateEntity" parameterType="role">
+		UPDATE Role SET name =
+		#{name} WHERE roleId = #{roleId}
+    </update>
+
+	<delete id="deleteByPrimaryKey" parameterType="long">
+		DELETE FROM Role
+		WHERE roleId = #{roleId}
+    </delete>
+
+	<select id="selectByMap" parameterType="map" resultType="role">
+		SELECT roleId, superiorId,note, name FROM Role WHERE roleId > 1
+		<if test="name != null">AND
+			name = #{name}
+        </if>
+		<if test="superiorId != null">AND
+			superiorId = #{superiorId}
+        </if>
+		ORDER BY roleId ASC
+	</select>
+
+	<select id="getFunctionItemByRole" parameterType="long"
+		resultType="functionItem">
+		SELECT A.functionId FROM FunctionItem A,
+		RoleFunctionRela B
+		WHERE B.roleId = #{roleId} AND A.functionId = B.functionId
+    </select>
+
+	<select id="getMenuItemByRole" parameterType="long" resultType="menuItem">
+		SELECT A.itemId, A.parentId, A.name,
+		A.mnemonic, A.icon,
+		A.action,
+		A.target FROM MenuItem A, RoleMenuRela B WHERE
+		B.roleId = #{roleId} AND
+		A.itemId =
+		B.itemId
+    </select>
+
+	<select id="getMenuItemByUser" parameterType="long" resultType="menuItem">
+		SELECT distinct A.itemId, A.parentId, A.name,
+		A.mnemonic,
+		A.type,
+		A.icon, A.action, A.target FROM MenuItem A, RoleMenuRela
+		B,
+		UserRoleRela C WHERE C.userId =
+		#{userId} and C.roleId =
+		B.roleId and
+		B.itemId = A.itemId ORDER BY A.parentId ASC,
+		A.itemId ASC
+    </select>
+
+	<select id="getFunctionItemByUser" parameterType="long"
+		resultType="functionItem">
+		SELECT distinct A.functionId, A.name,
+		A.displayName FROM
+		FunctionItem A, RoleFunctionRela B, UserRoleRela C WHERE
+		C.userId =
+		#{userId} and C.roleId =
+		B.roleId and B.functionId =
+		A.functionId ORDER
+		BY A.functionId ASC
+    </select>
+
+	<select id="getUserPowerByUser" parameterType="long" resultType="string">
+		SELECT A.name FROM FunctionItem A,
+		RoleFunctionRela B,
+		UserRoleRela C
+		WHERE C.userId = #{userId} and C.roleId = B.roleId
+		and B.functionId =
+		A.functionId
+    </select>
+
+	<select id="getToolbarButtonByUser" parameterType="long"
+		resultType="toolbarButton">
+		SELECT distinct A.buttonId, A.text,
+		A.tooltip, A.icon,
+		A.action,
+		A.type FROM ToolbarButton A, RoleButtonRela B, UserRoleRela C
+		WHERE C.userId =
+		#{userId} and C.roleId = B.roleId and B.buttonId
+		=
+		A.buttonId ORDER BY A.buttonId ASC
+    </select>
+
+	<select id="getNavigationButtonByUser" parameterType="long"
+		resultType="navigationButton">
+		SELECT DISTINCT
+		B.name,
+		B.displayName,
+		B.icon16,
+		B.icon24,
+		B.action,
+		B.naviId
+		FROM
+		functionitem AS A
+		INNER JOIN navigationbutton AS B
+		ON A.functionId =
+		B.naviId ,
+		rolefunctionrela AS C ,
+		userrolerela AS D
+		WHERE
+		C.roleId = D.roleId AND
+		A.functionId = C.functionId AND
+		D.userId =
+		#{userId}
+    </select>
+
+	<select id="getNavigationButtonByRole" parameterType="long"
+		resultType="navigationButton">
+		SELECT distinct A.naviId, A.name,
+		A.displayName, A.icon16,
+		A.icon24, A.action FROM NavigationButton A, RoleNaviRela B WHERE
+		B.roleId = #{roleId} AND
+		B.naviId = A.naviId ORDER BY A.seq ASC,
+		A.naviId ASC
+    </select>
+
+	<insert id="insertFunctionItemEx" parameterType="functionItemEx">
+		INSERT INTO
+		RoleFunctionRela (roleId, functionId) VALUES
+		(#{roleId}, #{functionId})
+	</insert>
+
+	<delete id="deleteFunctionItem" parameterType="long">
+		DELETE FROM
+		RoleFunctionRela WHERE roleId = #{roleId}
+    </delete>
+
+	<insert id="insertNavigationButtonEx" parameterType="navigationButtonEx">
+		INSERT INTO
+		RoleNaviRela (roleId, naviId) VALUES
+		(#{roleId},
+		#{naviId})
+    </insert>
+
+	<delete id="deleteNavigationButton" parameterType="long">
+		DELETE FROM
+		RoleNaviRela WHERE roleId = #{roleId}
+    </delete>
+
+	<delete id="deleteRoleByUser" parameterType="long">
+		DELETE FROM
+		UserRoleRela WHERE userId = #{userId} AND userId != 1
+    </delete>
+
+	<insert id="inserUserRole" parameterType="userRoleRela">
+		INSERT INTO
+		UserRoleRela (userId, roleId) VALUES (#{userId},
+		#{roleId})
+    </insert>
+
+	<select id="getRoleByUser" parameterType="long" resultType="role">
+		SELECT A.roleId, A.name FROM Role A, UserRoleRela
+		B WHERE
+		B.userId =
+		#{userId} AND A.roleId = B.roleId
+    </select>
+
+	<select id="getUserRoles" resultType="userRoleRela">
+		SELECT
+			A.*,
+			B.userName,
+			C.name,
+			C.roleId,
+			C.name roleName
+		FROM userrolerela A
+		LEFT JOIN users B ON A.userId=B.userId
+		LEFT JOIN role C ON A.roleId=C.roleId
+    </select>
+    
+    <select id="getAllRoles" resultType="role">
+    	SELECT * FROM role;
+    </select>
+    
+    <select id="getAllRoleFunctionRela" resultType="roleFunctionRela">
+    	SELECT * FROM rolefunctionrela
+    </select>
+    
+</mapper>

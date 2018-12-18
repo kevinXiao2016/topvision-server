@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cm.upgrade.dao.CmUpgradeDao">
+	<select id="selectCmUpgradeConfig" resultType="cmUpgradeConfig">
+		select * from
+		cmupgradeconfig
+	</select>
+
+	<insert id="insertCmUpgradeConfig" parameterType="cmUpgradeConfig">
+		insert into
+		cmupgradeconfig(modulNum, softversion, versionFileName, fileSize)
+		values(#{modulNum}, #{softVersion}, #{versionFileName}, #{fileSize})
+	</insert>
+
+	<update id="modifyCmUpgradeConfig" parameterType="cmUpgradeConfig">
+		update
+		cmupgradeconfig set
+		modulNum =#{modulNum},
+		softversion=#{softVersion}
+		<if test="versionFileName != null and versionFileName != ''">
+			,versionFileName=#{versionFileName}
+			,fileSize=#{fileSize}
+		</if>
+		where configId=#{configId}
+	</update>
+
+	<delete id="deleteCmUpgradeConfig" parameterType="int">
+		delete from
+		cmupgradeconfig where configId=#{configId}
+	</delete>
+
+	<select id="selectModulList" resultType="string">
+		select distinct modulNum
+		from cmsoftversioninfo
+	</select>
+
+	<delete id="deleteCmModulSoftversion" parameterType="long">
+		delete from
+		cmsoftversioninfo where entityId=#{entityId}
+	</delete>
+
+	<insert id="insertCmModulSoftversion" parameterType="topCcmtsCmSwVersionTable">
+		insert into
+		cmsoftversioninfo(entityId,statusIndex,modulNum, softversion)
+		values(#{entityId}, #{statusIndex}, #{topCcmtsCmModelNum},
+		#{topCcmtsCmSwVersion})
+	</insert>
+
+	<select id="selectCmModulSoftversion" parameterType="map"
+		resultType="topCcmtsCmSwVersionTable">
+		select entityId, statusIndex, modulNum topCcmtsCmModelNum,
+		softversion topCcmtsCmSwVersion from cmsoftversioninfo where
+		entityId=#{entityId} and
+		statusIndex=#{statusIndex}
+	</select>
+
+	<select id="selectCmcUpgradeEntityInfo" parameterType="map"
+		resultType="cmcUpgradeInfo">
+		select entity.entityId, entity.name, entity.ip, entity.mac,
+		entity.sysname,
+		entitysnap.state status,
+		cmcattribute.topCcmtsSysSwVersion softversion
+		from entity,
+		cmcattribute, entitysnap, entityfolderrela
+		where entity.entityId =
+		cmcattribute.cmcId and entity.entityid
+		= entitysnap.entityId and
+		entity.entityId=entityfolderrela.entityId
+		and entity.typeId in
+		(30010,30011,30012,30022)
+		<if test="status != null and status != ''">
+			and entitysnap.state=#{status}
+		</if>
+		<if test="search != null and search != ''">
+			and (entity.name like '%${search}%'
+			or entity.ip like
+			'%${search}%'
+			or entity.sysName like '%${search}%'
+			or entity.mac like
+			'%${search}%')
+		</if>
+		<if test="typeId != null and typeId != ''">
+			and entity.typeId=#{typeId}
+		</if>
+		<if test="folderId != null and folderId != ''">
+			and find_in_set(entityfolderrela.folderId, #{folderId})
+		</if>
+		and entity.entityId in (select entityId from ${Authority})
+	</select>
+
+	<select id="getCmSwVersionInfo" parameterType="long"
+		resultType="topCcmtsCmSwVersionTable">
+		select entityId, statusIndex, modulNum topCcmtsCmModelNum,
+		softversion
+		topCcmtsCmSwVersion from cmsoftversioninfo where
+		entityId=#{entityId}
+	</select>
+
+</mapper>

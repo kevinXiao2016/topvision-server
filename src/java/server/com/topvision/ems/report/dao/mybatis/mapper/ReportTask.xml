@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.report.domain.ReportTask">
+
+	<insert id="insertReportTask" parameterType="com.topvision.ems.report.domain.ReportTask" useGeneratedKeys="true" keyProperty="taskId">
+		INSERT INTO
+			reportTask(note, templateId, taskName, email, state, cycleType, cronExpression,
+			conditions ,pdfEnabled ,excelEnabled , htmlEnabled, userId, reportId, reportName)
+		VALUES
+			(#{note}, #{templateId}, #{taskName}, #{email}, #{state},#{cycleType},
+			#{cronExpression}, #{conditionBlob:BLOB}, #{pdfEnabled}, #{excelEnabled},
+			#{htmlEnabled},#{userId}, #{reportId}, #{reportName})
+	</insert>
+
+	<delete id="deleteReportTask" parameterType="long">
+		DELETE FROM
+			reporttask
+		WHERE
+			taskId = #{taskId}
+	</delete>
+
+	<update id="updateReportInstanceTask" parameterType="long">
+		UPDATE
+			reportinstances
+		SET 
+			taskId = -1
+		WHERE 
+			taskId = #{taskId}
+	</update>
+
+	<update id="modifyReportTask" parameterType="map">
+		UPDATE 
+			reporttask
+		SET 
+			state = #{state}
+		WHERE 
+			taskId = #{taskId}
+	</update>
+
+	<select id="selectReportTaskList" resultType="com.topvision.ems.report.domain.ReportTask" parameterType="map">
+		SELECT
+			reportId,
+			reportName,
+			taskId,
+			note,
+			templateId, 
+			taskName,
+			email,
+			state,
+			cycleType,
+			cronExpression,
+			conditions conditionBlob,
+			pdfEnabled,
+			excelEnabled,
+			htmlEnabled
+		FROM
+			reporttask
+		WHERE 1=1
+		<if test="state != null">
+			AND state = #{state}
+		</if>
+		<if test="userId != null">
+			AND userId = #{userId}
+		</if>
+		limit ${start},${limit}
+	</select>
+	
+	<select id="selectReportTaskListForTask" resultType="com.topvision.ems.report.domain.ReportTask">
+		SELECT
+			taskId, note, templateId, taskName,email,state,cycleType,
+			cronExpression ,conditions conditionBlob ,pdfEnabled ,excelEnabled,htmlEnabled, userId, reportId, reportName
+		FROM
+			reporttask
+	</select>
+	
+	<select id="getReportTaskListNum" resultType="int" parameterType="map">
+		SELECT
+			count(*)
+		FROM
+			reporttask A 
+			LEFT JOIN reporttemplate B ON A.templateId=B.templateId
+		WHERE 1=1
+		<if test="state != null">
+			AND state = #{state}
+		</if>
+		<if test="userId != null">
+			AND A.userId = #{userId}
+		</if>
+	</select>
+
+	<select id="selectReportTaskListByTemplateId" resultType="com.topvision.ems.report.domain.ReportTask" parameterType="map">
+		SELECT
+			A.taskId,A.note,A.templateId,B.name reportCreatorBeanName,taskName,email,state,cycleType,
+			cronExpression ,conditions conditionBlob,pdfEnabled ,excelEnabled,htmlEnabled,userId
+		FROM
+			reporttask A 
+			LEFT JOIN reporttemplate B ON A.templateId=B.templateId
+		WHERE
+			A.templateId = #{templateId} and A.userId = #{userId}
+	</select>
+
+	<select id="getReportTaskByTaskId" resultType="com.topvision.ems.report.domain.ReportTask" parameterType="map">
+		SELECT
+			A.taskId,A.note,A.templateId,B.name reportCreatorBeanName,taskName,email,state,cycleType,
+			cronExpression ,conditions conditionBlob,pdfEnabled ,excelEnabled,htmlEnabled,userId
+		FROM
+			reporttask A 
+			LEFT JOIN reporttemplate B ON A.templateId=B.templateId
+		WHERE 
+			taskId = #{taskId}
+	</select>
+
+	<update id="modifyReprotTaskByTask" parameterType="com.topvision.ems.report.domain.ReportTask">
+		UPDATE
+			reporttask
+		SET
+			taskName = #{taskName},
+			note = #{note},
+			email = #{email}
+		WHERE 
+			taskId = #{taskId}
+	</update>
+
+	<select id="loadAllTaskNames" parameterType="long" resultType="String">
+		SELECT taskName FROM reporttask WHERE userId=#{userId} group by taskName
+	</select>
+	
+</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.nbi.domain.Nbi">
+	<select id="selectPerfGroupRow" resultType="com.topvision.performance.nbi.api.PerfGroupRow">
+		SELECT 
+			A.groupId,B.groupName,perfIndex,perfIndex as perfIndexNoInTable,
+			oid,
+			perfIndexName,
+			perfIndexDisplayName,
+			period
+		FROM nbiperfgroupindex A,nbiperfgroup B
+		WHERE A.groupId=B.groupId AND A.selected=1
+	</select>
+	<select id="getNbiBaseConfig" resultType="nbiBaseConfig">
+		SELECT * from nbiBaseConfig
+	</select>
+	<select id="getNbiMultiPeriodConfig" resultType="nbiMultiPeriod">
+		SELECT * from nbiexportconfig
+	</select> 
+	<delete id="deleteNbiBaseConfig">
+		delete from  nbibaseconfig 
+	</delete>
+	<insert id="insertNbiBaseConfig" parameterType="nbiBaseConfig">
+		insert into nbibaseconfig 
+		(mode, ftpAddr, ftpPort, ftpUser, ftpPwd,filePath,recordMax,fileSaveTime,nbiAddr,nbiPort,encoding,nbiSwitch)
+		values
+		(#{mode}, #{ftpAddr}, #{ftpPort}, #{ftpUser}, #{ftpPwd}, #{filePath}, #{recordMax}, #{fileSaveTime}, #{nbiAddr}, #{nbiPort},#{encoding},#{nbiSwitch})
+	</insert>
+	
+	<select id="selectNbiTargetGroupList" resultType="nbiTargetGroup" parameterType="String">
+		select groupId,groupName,displayName,groupModule from nbiperfgroup
+		where groupModule = #{module}
+	</select>
+	
+	<select id="selectNbiTargetListByGroup" resultType="nbiTarget" parameterType="int">
+		select groupId,perfIndex,oid,perfIndexName,perfIndexDisplayName displayName,period,selected
+		from nbiperfgroupindex where groupId = #{groupId}
+	</select>
+		
+	<update id="updateNbiTargetSelected" parameterType="nbiTarget">
+		update nbiperfgroupindex set selected = #{selected},period = #{period} where perfIndex = #{perfIndex}
+	</update>
+	
+	
+	<update id="updateNbiExportConfig" parameterType="nbiMultiPeriod">
+		update nbiexportconfig set five_enable = #{five_enable},ten_enable = #{ten_enable},fifteen_enable = #{fifteen_enable},
+		thirty_enable = #{thirty_enable},sixty_enable = #{sixty_enable}
+	</update>
+	
+	<select id="selectNbiFtpConfigParam" resultType="com.topvision.performance.nbi.api.NbiFtpConfig">
+		SELECT
+			mode,
+			ftpAddr AS ftpAddress,
+			ftpPort,
+			ftpUser AS username,
+			ftpPwd AS password,
+			filePath,
+			recordMax  AS maxCollectionsPerfFile,
+			fileSaveTime AS maxConserveDays,
+			encoding
+		FROM nbibaseconfig
+	</select>
+</mapper>

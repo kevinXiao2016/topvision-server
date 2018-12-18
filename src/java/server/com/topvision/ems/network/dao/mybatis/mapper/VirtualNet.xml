@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.network.domain.VirtualNet">
+	<!-- ################################## insert start ####################################### -->
+	<insert id="createVirtualNet" parameterType="virtualNetAttribute"
+		useGeneratedKeys="true" keyProperty="virtualNetId">
+		INSERT INTO
+		virtualnetwork
+		(folderId, virtualName, virtualType,
+		createTime,
+		modifyTime,
+		x, y,
+		width,
+		height, zoom, icon, fixed,
+		visiable)
+		VALUES
+		(#{folderId}, #{virtualName},
+		#{virtualType},
+		#{createTime},
+		#{modifyTime},
+		#{x}, #{y},
+		#{width}, #{height},
+		#{zoom}, #{icon},
+		#{fixed}, #{visiable})
+	</insert>
+
+	<insert id="insertVirtualProductRelation" parameterType="virtualProduct">
+		insert
+		into virtualproductrelation
+		(virtualNetId,
+		productId, productType,
+		productName,
+		productIp, createTime)
+		values
+		(#{virtualNetId},
+		#{productId},
+		#{productType},#{productName},
+		#{productIp},
+		#{productCreateTime})
+    </insert>
+	<insert id="insertProSnmpParam" parameterType="productSnmpParam">
+		insert into
+		ems.productsnmpparam
+		(productId, productType,
+		productIp, version,
+		timeout, retry, port,
+		mibs,
+		readCommunity,
+		writeCommunity,
+		username,
+		securityLevel,
+		authProtocol,
+		privProtocol,
+		authoritativeEngineId,
+		contextName,
+		contextId
+		)
+		values
+		(#{productId}, #{productType},
+		#{productIp},
+		#{version}, #{timeout}, #{retry}, #{port},
+		#{mibs},
+		#{readCommunity},
+		#{writeCommunity},
+		#{username},
+		#{securityLevel},
+		#{authProtocol},
+		#{privProtocol},
+		#{authoritativeEngineID},
+		#{contextName},
+		#{contextId}
+		)
+    </insert>
+	<insert id="relateProductToVirtualNet" parameterType="map">
+		insert
+		into
+		ems.virtualproductrelation
+		(virtualNetId,
+		productId)
+		values
+		(#{virtualNetId}, #{productId})
+    </insert>
+	<insert id="insertEntityProductRelation" parameterType="map">
+		insert
+		into entityproductrelation
+		(entityId, productId,
+		productType)
+		values
+		(#{entityId}, #{productId}, #{productType})
+    </insert>
+	<!-- ################################## insert end ######################################### -->
+	<!-- ################################## delete start ####################################### -->
+	<delete id="removeProductVirtualNetRelation" parameterType="map">
+		delete from virtualproductrelation where
+		productId=#{productId} and
+		productType=#{productType} and virtualNetId=#{virtualNetId}
+    </delete>
+	<delete id="deleteProductFromVirtualNet" parameterType="map">
+		delete
+		from virtualproductrelation where
+		productId=#{productId} and
+		productType=#{productType}
+    </delete>
+	<delete id="deleteProduct" parameterType="map">
+		delete from
+		${tableName} where ${productName} = #{productId}
+    </delete>
+	<delete id="deleteVirtualNet" parameterType="long">
+		delete from
+		virtualnetwork where virtualNetId=#{virtualNetId}
+    </delete>
+	<delete id="removeProductFromFolder" parameterType="map">
+		delete
+		from
+		entityfolderrela where entityId=#{entityId} and
+		folderId=#{folderId}
+	</delete>
+	<!-- ################################## delete end ######################################### -->
+	<!-- ################################## update start ####################################### -->
+	<update id="renameVirtualNet" parameterType="map">
+		update
+		virtualnetwork set virtualName=#{virtualName} where
+		virtualNetId=#{virtualNetId}
+    </update>
+	<update id="modifyVirtualNetAttribute" parameterType="virtualNetAttribute">
+
+	</update>
+	<update id="saveVirtualNetCoordinate" parameterType="virtualNetAttribute">
+		UPDATE
+		VirtualNetwork SET x = #{x}, y = #{y} WHERE
+		virtualNetId =
+		#{virtualNetId} AND folderId = #{folderId}
+    </update>
+	<update id="renameProductInVirtualNet" parameterType="map">
+		UPDATE
+		VirtualProductRelation
+		SET productName =
+		#{productName}
+		WHERE
+		virtualNetId = #{virtualNetId}
+		AND productId = #{productId}
+		AND
+		productType = #{productType}
+    </update>
+	<!-- ################################## update end ######################################## -->
+	<!-- ################################## query start ####################################### -->
+	<select id="getAllProductsInVirtualNet" parameterType="map"
+		resultType="virtualProduct">
+		select productName,productId,
+		productType, productIp,
+		createTime from
+		virtualproductrelation where virtualNetId =
+		#{virtualNetId}
+    </select>
+	<select id="getVirtualNetByFolderId" parameterType="long"
+		resultType="virtualNetAttribute">
+		select virtualNetId, folderId,
+		virtualName, virtualType,
+		createTime,
+		modifyTime,
+		x, y, width, height, zoom, icon, fixed, visiable
+		from
+		virtualnetwork
+		where folderId = #{folderId}
+    </select>
+	<select id="getAllProductsInVirtualNetCount" parameterType="long"
+		resultType="long">
+		SELECT
+		count(productId)
+		FROM
+		virtualproductrelation where
+		virtualNetId=#{virtualNetId}
+    </select>
+	<select id="getProductSnmpParam" parameterType="long"
+		resultType="long">
+		select productIp from prosnmpparam where
+		productId =
+		#{productId}
+    </select>
+	<select id="getProductSnmpParamByProductId" parameterType="map"
+		resultType="productSnmpParam">
+		select * from productSnmpParam
+		where productId =
+		#{productId} and productType = #{productType}
+    </select>
+	<select id="isProductExistsInTopo" parameterType="map"
+		resultType="long">
+		select count(*) from entityfolderrela b,
+		entityproductrelation a where a.productId
+		= #{productId} and
+		a.productType = #{productType} and a.entityId =
+		b.entityId and
+		b.folderId=#{folderId}
+    </select>
+	<select id="getEntityIdByProductIdAndType" parameterType="map"
+		resultType="long">
+		select
+		entityId from
+		entityproductrelation where
+		productId=#{productId} and
+		productType=#{productType}
+    </select>
+	<select id="selectByAddress" parameterType="String" resultType="String">
+		select b.virtualName from
+		virtualproductrelation a ,
+		virtualnetwork b
+		where
+		a.productIp = #{ipAddress} and a.virtualNetId =
+		b.virtualNetId
+	</select>
+	<select id="isProductExistsInFolder" parameterType="long"
+		resultType="int">
+		select count(*) from entityfolderrela
+		where
+		entityId=#{entityId}
+    </select>
+	<select id="getVirtualNetIdByCmcId" parameterType="long"
+		resultType="long">
+		select virtualNetId from
+		cmcentityrelation where
+		cmcId=#{cmcId}
+    </select>
+	<select id="getVirtualNetByVirtualNetId" parameterType="long"
+		resultType="virtualNetAttribute">
+		select
+		virtualNetId,folderId,virtualName,virtualType,createTime,modifyTime,x,y,width,height,zoom,
+		icon,fixed,visiable
+		from virtualnetwork where
+		virtualNetId=#{virtualNetId}
+    </select>
+	<!-- ################################## query end ######################################### -->
+</mapper>

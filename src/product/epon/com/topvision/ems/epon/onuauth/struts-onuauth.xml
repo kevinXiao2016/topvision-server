@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="onuAuth" namespace="/epon/onuauth" extends="default">
+    	<action name="getOnuAuthRule" class="onuAuthRuleAction" method="getOnuAuthRule"></action>
+		<action name="deleteOnuAuthRule" class="onuAuthRuleAction" method="deleteOnuAuthRule"></action>
+		<action name="addOnuAuthRule" class="onuAuthRuleAction" method="addOnuAuthRule"></action>
+		<action name="onuAuthInstead" class="onuAuthAction" method="onuAuthInstead"></action>
+		<action name="modifyOnuAuthMode" class="onuAuthAction" method="modifyOnuAuthMode"></action>
+		<action name="modifyOnuAuthEnable" class="onuAuthAction" method="modifyOnuAuthEnable"></action>
+		<action name="loadOnuAuthBlock" class="onuAuthAction" method="loadOnuAuthBlock"></action>
+		<action name="loadRejectedMacList" class="onuAuthAction" method="loadRejectedMacList" />
+		<action name="showOnuAuthMgmt" class="onuAuthAction" method="showOnuAuthConfig">
+			<result>/epon/onuAuthMgmt.jsp</result>
+		</action>
+		<action name="showOnuAuthen" class="onuAuthAction" method="showOnuAuthConfig">
+			<result>/epon/onuAuthen.jsp</result>
+		</action>
+		<action name="setOnuAuthPolicy" class="onuAuthAction" method="setOnuAuthPolicy"></action>
+		<action name="showOnuAuthConfig" class="onuAuthAction" method="showOnuAuthConfig">
+			<result>/epon/onuAuthConfig.jsp</result>
+		</action>
+		<action name="refreshOnuAuthBlock" class="onuAuthAction" method="refreshOnuAuthBlock"></action>
+		<action name="refreshOnuAuthInfo" class="onuAuthAction" method="refreshOnuAuthInfo"></action>
+		<action name="loadOnuNoList" class="onuAction" method="loadOnuNoList"></action>
+		
+		<action name="getOltOnuAuthStatistics" class="onuAuthManageAction" method="getOltOnuAuthStatistics"></action>
+		<action name="getPonOnuAuthStatistics" class="onuAuthManageAction" method="getPonOnuAuthStatistics"></action>
+		<action name="getOltList" class="onuAuthManageAction" method="getOltList"></action>
+		<action name="getOnuAuth" class="onuAuthManageAction" method="getOnuAuth"></action>
+		<action name="getOltPonIndex" class="onuAuthManageAction" method="getOltPonIndex"></action>
+		<action name="getOnuAuthFail" class="onuAuthManageAction" method="getOnuAuthFail"></action>
+		<action name="showAddOnuAuth" class="onuAuthManageAction" method="showAddOnuAuth">
+		    <result>/epon/addOnuAuth.jsp</result>
+		</action>
+		<action name="showModifyPonAuthMode" class="onuAuthManageAction" method="showModifyPonAuthMode">
+		    <result>/epon/modifyPonAuthMode.jsp</result>
+		</action>
+		<action name="addOnuAuth" class="onuAuthManageAction" method="addOnuAuth"></action>
+		<action name="deleteOnuAuth" class="onuAuthManageAction" method="deleteOnuAuth"></action>
+		<action name="refreshOnuAuthInfo" class="onuAuthManageAction" method="refreshOnuAuthInfo"></action>
+		<action name="modifyPonAuthMode" class="onuAuthManageAction" method="modifyPonAuthMode"></action>
+		<action name="fetchPonFolders" class="onuAuthManageAction" method="fetchPonFolders"></action>
+		
+		<action name="showModifyAuthMode" class="onuAuthManageAction" method="showModifyAuthMode">
+		    <result>/epon/modifyAuthMode.jsp</result>
+		</action>
+		<action name="showAddOnuAuthList" class="onuAuthManageAction" method="showAddOnuAuthList">
+		    <result>/epon/addOnuAuthList.jsp</result>
+		</action>
+		<action name="modifyAuthMode" class="onuAuthManageAction" method="modifyAuthMode"></action>
+		<action name="getOnuAuthFailByIds" class="onuAuthManageAction" method="getOnuAuthFailByIds"></action>
+		<action name="addOnuAuthList" class="onuAuthManageAction" method="addOnuAuthList"></action>
+		<action name="getAuthOnuId" class="onuAuthManageAction" method="getAuthOnuId"></action>
+		
+		<action name="getOnuAuthFailList" class="onuAuthFailListAction" method="getOnuAuthFailList"></action>
+    </package>
+</struts>

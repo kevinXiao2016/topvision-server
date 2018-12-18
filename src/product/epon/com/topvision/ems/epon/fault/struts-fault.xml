@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="oltalert" namespace="/epon/alert" extends="default">
+		<action name="showOltAlert" class="oltAlertAction" method="showOltAlert">
+			<result>/epon/oltAlert.jsp</result>
+		</action>
+		<action name="showOltAlertHistory" class="oltAlertAction" method="showOltAlertHistory">
+			<result>/epon/oltAlertHistory.jsp</result>
+		</action>
+		<action name="setOltTrapConfig" class="oltAlertAction" method="setOltTrapConfig" />
+		<action name="showOltAlertMask" class="oltAlertAction" method="showOltAlertMask">
+			<result>/epon/oltAlertMask.jsp</result>
+		</action>
+		<action name="loadOltAlertCodeMask" class="oltAlertAction"
+			method="loadOltAlertCodeMask" />
+		<action name="loadOltAlertInstanceMask" class="oltAlertAction"
+			method="loadOltAlertInstanceMask" />
+		<action name="loadOltAlertAvailableType" class="oltAlertAction"
+			method="loadOltAlertAvailableType" />
+		<action name="loadOltAlertAvailableInstance" class="oltAlertAction"
+			method="loadOltAlertAvailableInstance" />
+		<action name="addOltAlertCodeMask" class="oltAlertAction"
+			method="addOltAlertCodeMask" />
+		<action name="deleteOltAlertCodeMask" class="oltAlertAction"
+			method="deleteOltAlertCodeMask" />
+		<action name="addOltAlertInstanceMask" class="oltAlertAction"
+			method="addOltAlertInstanceMask" />
+		<action name="deleteOltAlertInstanceMask" class="oltAlertAction"
+			method="deleteOltAlertInstanceMask" />
+		<action name="refreshMaskDataFromFacility" class="oltAlertAction"
+			method="refreshMaskDataFromFacility" />
+		<action name="showOltTrapServerManagement" class="oltAlertAction"
+			method="showOltTrapServerManagement">
+			<result>/epon/oltTrapConfig.jsp</result>
+		</action>
+		<action name="loadOltTrapConfig" class="oltAlertAction" method="loadOltTrapConfig" />
+		<action name="addOltTrapConfig" class="oltAlertAction" method="addOltTrapConfig" />
+		<action name="deleteOltTrapConfig" class="oltAlertAction"
+			method="deleteOltTrapConfig" />
+		<action name="refreshTrapConfigFromFacility" class="oltAlertAction"
+			method="refreshTrapConfigFromFacility" />
+		<action name="loadAlertQueryInitData" class="oltAlertAction"
+			method="loadAlertQueryInitData" />
+		<action name="getOltDeviceAlertTop" class="oltAlertAction"
+			method="getOltDeviceAlertTop" />
+		<action name="getAllOltAlertType" class="oltAlertAction" method="getAllOltAlertType" />
+	</package>
+</struts>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="dhcp" namespace="/epon/dhcp" extends="default">
+		<action name="showOltDhcpConfig" class="oltDhcpAction" method="showOltDhcpConfig">
+			<result>/epon/oltDhcpConfig.jsp</result>
+		</action>
+		<action name="showOltDhcpServerConfig" class="oltDhcpAction" method="showOltDhcpServerConfig">
+			<result>/epon/oltDhcpServerConfig.jsp</result>
+		</action>
+		<action name="showOltDhcpGiaddrConfig" class="oltDhcpAction" method="showOltDhcpGiaddrConfig">
+			<result>/epon/oltDhcpGiaddrConfig.jsp</result>
+		</action>
+		<action name="showOltDhcpGiaddrModify" class="oltDhcpAction" method="showOltDhcpGiaddrModify">
+			<result>/epon/oltDhcpGiaddrModify.jsp</result>
+		</action>
+		<action name="showOltDhcpGiaddrAdd" class="oltDhcpAction" method="showOltDhcpGiaddrAdd">
+			<result>/epon/oltDhcpGiaddrAdd.jsp</result>
+		</action>
+		<action name="showOltDhcpIpMacStaticModify" class="oltDhcpAction" method="showOltDhcpIpMacStaticModify">
+			<result>/epon/oltDhcpIpMacStaticModify.jsp</result>
+		</action>
+		<action name="showOltDhcpIpMacStaticAdd" class="oltDhcpAction" method="showOltDhcpIpMacStaticAdd">
+			<result>/epon/oltDhcpIpMacStaticAdd.jsp</result>
+		</action>
+		<action name="showOltDhcpIpMacStaticConfig" class="oltDhcpAction" method="showOltDhcpIpMacStaticConfig">
+			<result>/epon/oltDhcpIpMacStatic.jsp</result>
+		</action>
+		<action name="showOltDhcpIpMacDynamicConfig" class="oltDhcpAction" method="showOltDhcpIpMacDynamicConfig">
+			<result>/epon/oltDhcpIpMacDynamic.jsp</result>
+		</action>
+		<action name="showOltDhcpServerModify" class="oltDhcpAction" method="showOltDhcpServerModify">
+			<result>/epon/oltDhcpServerModify.jsp</result>
+		</action>
+		<action name="showOltDhcpServerAdd" class="oltDhcpAction" method="showOltDhcpServerAdd">
+			<result>/epon/oltDhcpServerAdd.jsp</result>
+		</action>
+		<action name="loadDhcpServerBaseConfig" class="oltDhcpAction" method="loadDhcpServerBaseConfig" />
+		<action name="loadDhcpGiaddrConfig" class="oltDhcpAction" method="loadDhcpGiaddrConfig" />
+		<action name="loadDhcpIpMacStaticConfig" class="oltDhcpAction" method="loadDhcpIpMacStaticConfig" />
+		<action name="addDhcpServerConfig" class="oltDhcpAction"
+			method="addDhcpServerConfig" />
+		<action name="addDhcpGiaddrConfig" class="oltDhcpAction"
+			method="addDhcpGiaddrConfig" />
+		<action name="addDhcpIpMacStaticConfig" class="oltDhcpAction"
+			method="addDhcpIpMacStaticConfig" />
+		<action name="modifyDhcpBaseConfig" class="oltDhcpAction" method="modifyDhcpBaseConfig" />
+		<action name="modifyDhcpGiaddrConfig" class="oltDhcpAction"	method="modifyDhcpGiaddrConfig" />
+		<action name="modifyDhcpServerConfig" class="oltDhcpAction" method="modifyDhcpServerConfig" />
+		<action name="deleteDhcpServerIndex" class="oltDhcpAction" method="deleteDhcpServerIndex" />
+		<action name="deleteDhcpServerIndex" class="oltDhcpAction" method="deleteDhcpServerIndex" />
+		<action name="deleteDhcpGiaddrConfig" class="oltDhcpAction" method="deleteDhcpGiaddrConfig" />
+		<action name="deleteDhcpIpMacStaticConfig" class="oltDhcpAction" method="deleteDhcpIpMacStaticConfig" />
+		<action name="refreshDhcpBaseConfig" class="oltDhcpAction" method="refreshDhcpBaseConfig" />
+		<action name="refreshDhcpServerConfig" class="oltDhcpAction" method="refreshDhcpServerConfig" />
+		<action name="refreshDhcpGiaddrConfig" class="oltDhcpAction" method="refreshDhcpGiaddrConfig" />
+		<action name="refreshDhcpIpMacStaticConfig" class="oltDhcpAction" method="refreshDhcpIpMacStaticConfig" />
+	</package>
+</struts>

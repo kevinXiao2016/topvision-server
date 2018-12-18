@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.network.domain.Topology">
+    <update id="saveEntityCoordinate" parameterType="entity"> UPDATE EntityFolderRela SET x = #{x}, y
+        = #{y} WHERE entityId = #{entityId} AND folderId = #{folderId} </update>
+    <update id="saveFolderCoordinate" parameterType="topoFolder"> UPDATE TopoFolder SET x = #{x}, y = #{y}
+        WHERE folderId = #{folderId} </update>
+    <!-- for topology layout -->
+    <select id="getNodeCoordByFolderId" parameterType="long" resultType="entity"> SELECT A.entityId,
+        B.folderId, B.x, B.y, B.fixed FROM Entity A, EntityFolderRela B WHERE B.folderId =
+        #{folderId} AND A.entityId = B.entityId UNION SELECT D.nodeId as entityId, D.folderId, D.x,
+        D.y, '0' as fixed FROM MapNode D WHERE D.type > 100 AND D.folderId = #{folderId} </select>
+    <select id="getEdgeByFolderId" parameterType="long" resultType="link"> SELECT linkId, name,
+        srcEntityId, srcIfIndex, destEntityId, destIfIndex, startArrow, endArrow, dashed, connectType
+        FROM Link WHERE srcEntityId IN(SELECT entityId FROM EntityFolderRela WHERE folderId =
+        #{folderId} UNION SELECT nodeId as entityId FROM MapNode WHERE folderId = #{folderId}) AND
+        destEntityId IN(SELECT entityId From EntityFolderRela WHERE folderId = #{folderId} UNION
+        SELECT nodeId as entityId FROM MapNode WHERE folderId = #{folderId}) </select>
+    <select id="getEdgeIdByFolderId" parameterType="long" resultType="long"> SELECT linkId FROM
+        Link WHERE srcEntityId IN(SELECT entityId FROM EntityFolderRela WHERE folderId = #{folderId}
+        UNION SELECT nodeId as entityId FROM MapNode WHERE folderId = #{folderId}) AND destEntityId
+        IN(SELECT entityId From EntityFolderRela WHERE folderId = #{folderId} UNION SELECT nodeId as
+        entityId FROM MapNode WHERE folderId = #{folderId}) </select>
+    <select id="getVertexByFolderId" parameterType="long" resultType="entity"> SELECT A.entityId,A.parentId,
+        A.name,A.sysName,A.status, A.ip, A.mac, A.icon, A.snmpSupport, A.agentInstalled, A.url, A.virtualNetworkStatus, B.x, B.y, B.fixed,
+        B.nameInFolder, B.iconInFolder, A.typeId, C.module, C.modulePath, C.displayName AS typeName, C.icon48, groupId FROM
+        Entity A, EntityFolderRela B, EntityType C WHERE B.folderId = #{folderId} AND A.entityId =
+        B.entityId AND A.typeId = C.typeId </select>
+    <select id="getTopoLabels" parameterType="long" resultType="topoLabel"> SELECT labelId, module,
+        displayName, value, color FROM TopoLabel ORDER BY module ASC, value DESC </select>
+    <select id="getFloderList" resultType="long">
+    	SELECT
+    	folderId
+    	FROM 
+    	topofolder
+    </select>
+    <update id="updateTopoLabel" parameterType="topoLabel"> UPDATE TopoLabel SET value = #{value}, color
+        = #{color} WHERE labelId = #{labelId} 
+    </update>
+</mapper>

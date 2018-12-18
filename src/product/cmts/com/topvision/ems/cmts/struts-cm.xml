@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="cmtsCm" namespace="/cmts/cm" extends="default">
+        <action name="showContactedCmList" class="cmtsCmAction" method="showContactedCmList">
+            <result>/cmts/cmtsContactedCmList.jsp</result>
+        </action>
+        <action name="refreshCmOnCmtsInfo" class="cmtsCmAction" method="refreshCmOnCmtsInfo"></action>
+        <action name="getCmtsCmListByCmcId" class="cmtsCmAction" method="getCmtsCmListByCmcId"></action>
+        <action name="getCmListByCmtsIdForQuery" class="cmtsCmAction" method="getCmListByCmtsIdForQuery"></action>
+        <action name="getCmtsChannel" class="cmtsCmAction" method="getCmtsChannel"></action>
+        <action name="getSignal" class="ccmtsCmListAction" method="getSignal"></action>
+    </package>
+</struts>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcSni" namespace="/cmc/sni" extends="default">
+		<action name="showCpuRateLimit" class="cmcSniAction" method="showCpuRateLimit">
+			<result>/cmc/cpuRateLimitConfig.jsp</result>
+		</action>
+		<action name="showSniRateLimit" class="cmcSniAction" method="showSniRateLimit">
+			<result>/cmc/sniRateLimitConfig.jsp</result>
+		</action>
+		<action name="showPhyConfigFor3c" class="cmcSniAction" method="showPhyConfigFor3c">
+			<result>/cmc/phyConfigFor3c.jsp</result>
+		</action>
+		<action name="showPhyConfigFor4c" class="cmcSniAction" method="showPhyConfigFor4c">
+			<result>/cmc/phyConfigFor4c.jsp</result>
+		</action>
+        <action name="showStormLimitConfig" class="cmcSniAction" method="showStormLimitConfig">
+            <result>/cmc/stormLimitConfig.jsp</result>
+        </action>
+		<action name="modifyCmcCpuPortRateLimit" class="cmcSniAction"
+			method="modifyCmcCpuPortRateLimit">
+		</action>
+		<action name="modifyCmcSniRateLimit" class="cmcSniAction"
+			method="modifyCmcSniRateLimit">
+		</action>
+		<action name="modifyCmcSniPhyConfig" class="cmcSniAction"
+			method="modifyCmcSniPhyConfig">
+		</action>
+		<action name="loadSniUplinkLoopbackStatus" class="cmcSniAction"
+			method="loadSniUplinkLoopbackStatus">
+		</action>
+		<action name="modifySniLoopbackStatus" class="cmcSniAction"
+			method="modifySniLoopbackStatus">
+		</action>
+		<action name="modifyStormLimitConfig" class="cmcSniAction"
+            method="modifyStormLimitConfig">
+        </action>
+        <action name="refreshPhyConfigFor4c" class="cmcSniAction"
+            method="refreshPhyConfigFor4c">
+        </action>
+	</package>
+</struts>

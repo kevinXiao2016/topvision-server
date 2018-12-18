@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.platform.domain.FunctionItem">
+	<select id="selectByMap" resultType="functionItem">
+		SELECT functionId, superiorId, name, displayName FROM
+		FunctionItem where
+		functionId not in(4000003,4000004,4000005) ORDER BY functionId ASC
+    </select>
+
+	<select id="selectByPrimaryKey" parameterType="string"
+		resultType="functionItem">
+		SELECT functionId, superiorId, name,
+		displayName FROM
+		FunctionItem where name = #{name}
+    </select>
+	<insert id="insertEntity" parameterType="functionItem">
+		insert into functionitem(functionId,superiorId,name,displayName)
+		values(#{functionId},#{superiorId},#{name},#{displayName})
+    </insert>
+</mapper>

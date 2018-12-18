@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="oltRealtime" namespace="/epon/oltRealtime" extends="default">
+		<action name="showOltRealTime" class="oltRealtimeAction" method="showOltRealTime" >
+			<result>/epon/oltrealtime/oltRealTimeInfo.jsp</result>			
+		</action>
+		<action name="loadBaseInfo" class="oltRealtimeAction" method="loadBaseInfo" />
+		<action name="loadSlotInfo" class="oltRealtimeAction" method="loadSlotInfo" />
+		<action name="loadSniInfo" class="oltRealtimeAction" method="loadSniInfo" />
+		<action name="loadOpticalStatstics" class="oltRealtimeAction" method="loadOpticalStatstics" />
+		<action name="showOltPonInfo" class="oltRealtimeAction" method="showOltPonInfo">
+			<result>/epon/oltrealtime/oltRealTimePortInfo.jsp</result>			
+		</action>
+		<action name="loadOltPonInfo" class="oltRealtimeAction" method="loadOltPonInfo" />
+		<action name="showOltSubInfo" class="oltRealtimeAction" method="showOltSubInfo">
+			<result>/epon/oltrealtime/oltRealTimeOnuInfo.jsp</result>			
+		</action>
+		<action name="loadOltSubInfo" class="oltRealtimeAction" method="loadOltSubInfo" />
+	</package>
+</struts>

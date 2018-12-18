@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="nbi" namespace="/nbi" extends="default">
+    <action name="showNbiBaseConfigView" class="nbiAction" method="showNbiBaseConfigView">
+    	<result>/performance/nbiBaseConfig.jsp</result>
+    </action>
+    <action name="saveNbiBaseConfig" class="nbiAction" method="saveNbiBaseConfig"></action>
+    <action name="showNbiExportConfig" class="nbiAction" method="showNbiExportConfig">
+    	<result>/performance/nbiExportConfig.jsp</result>
+    </action>
+    <action name="saveNbiExportConfig" class="nbiAction" method="saveNbiExportConfig"></action>
+    
+    <action name="showNbiTargetConfig" class="nbiAction" method="showNbiTargetConfig">
+    	<result>/performance/nbiTargetConfig.jsp</result>
+    </action>
+    <action name="loadNbiTargetList" class="nbiAction" method="loadNbiTargetList"></action>
+    <action name="updateNbiTargetConfig" class="nbiAction" method="updateNbiTargetConfig"></action>
+    </package>
+</struts>

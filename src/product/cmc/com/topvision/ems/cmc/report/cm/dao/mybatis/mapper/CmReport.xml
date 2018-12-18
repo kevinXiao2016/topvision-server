@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.report.domain.CmReport">
+
+	<select id="getCmBasicInfoList" parameterType="map"	resultType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+		select
+			IFNULL(a.StatusIpAddress,a.statusInetAddress) as statusInetAddress,
+			a.StatusMacAddress,
+			a.StatusValue,
+			b.name as cmcAlias,
+			c.userAddr cmalias,
+			c.classification cmclassified
+		from
+			cmattribute a
+			left join cmbossinfo c on	a.StatusMacAddress = c.cmMac
+			left join entity b on a.cmcId =	b.entityId
+			left join entity d on b.parentId = d.entityId
+		where 
+			a.cmcId in (select entityId from ${Authority})
+		<if test="oltId != null">
+			AND d.entityId = #{oltId}
+		</if>
+		<if test="cmcId != null">
+			AND b.entityId = #{cmcId}
+		</if>
+		<if test="cmtsId != null">
+			AND b.entityId = #{cmtsId}
+		</if>
+		<if test="sortName == 'statusValue'">
+			order by case statusValue when 6 then 1 else 2 end,
+			statusInetAddress DESC
+		</if>
+		<if test="sortName != 'statusValue'">
+			ORDER BY ${sortName}
+		</if>
+		<if test="start != null">
+			limit ${start} , ${limit}
+		</if>
+	</select>
+	
+	<select id="loadIdAndNamePairsFromEntity" parameterType="map" resultType="map">
+    	SELECT 
+    		entityId as id, 
+    		name as name 
+    	FROM 
+    		entity 
+    	WHERE 
+    		typeId in (select typeId from entitytyperelation where type = #{deviceType})
+            AND entityId in (select entityId from ${Authority})
+	</select>
+
+</mapper>

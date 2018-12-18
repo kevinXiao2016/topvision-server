@@ -1,0 +1,520 @@
+BODY,TD,INPUT,BUTTON,SELECT,TEXTAREA,A,A:hover {
+	color: #000;
+}
+
+.search_input_focused {
+	color: #000;
+}
+
+.POPUP_WND {
+	background: #F5F5F5;
+}
+
+#headerbar {
+	background: url(bg_header.png) repeat-x;
+}
+
+#statusbar {
+	background: url(bg_statusbar.gif) 0 0;
+	height: 26px;
+}
+
+.STATUS-SEPARATOR {
+	height: 26px;
+}
+
+.checkedItem {
+	background: url(menu/checked.gif) no-repeat;
+}
+
+.uncheckedItem {
+	background: url(menu/unchecked.gif) no-repeat;
+}
+
+.NAVI_NAR_CONTAINER {
+	padding-left: 3px;
+	padding-right: 3px;
+	padding-top: 5px;
+	background: #FCFCFC;
+}
+
+.NAVI_BAR_SELECTED .NAVI_BAR_L {
+	width: 4px;
+	height: 21px;
+	background: url(navibar_sprites.gif) 0 -63px no-repeat;
+}
+
+.NAVI_BAR_SELECTED .NAVI_BAR_C {
+	height: 21px;
+	background: url(navibar_sprites.gif) 0 -105px repeat-x;
+}
+
+.NAVI_BAR_SELECTED .NAVI_BAR_R {
+	width: 4px;
+	height: 21px;
+	background: url(navibar_sprites.gif) 0 -84px no-repeat;
+}
+
+.NAVI_BT_CONTAINER {
+	height: 38px;
+	padding-right: 3px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	background: #FCFCFC;
+}
+
+.NAVI_BT {
+	width: 28px;
+	height: 28px;
+}
+
+.NAVI_DIVIDER,.NAVI_DIVIDER_OVER {
+	background: #FCFCFC;
+	border-top: 0;
+	border-bottom: 0;
+	padding-bottom: 3px;
+	height: 15px;
+}
+
+.NAVI_DIVIDER .NAVI_DIVIDER_UP,.NAVI_DIVIDER .NAVI_DIVIDER_DOWN {
+	width: 9px;
+	height: 6px;
+	margin-top: 5px;
+	background: url(s.gif) 0 0 no-repeat;
+}
+
+.NAVI_DIVIDER .divider-l {
+	width: 80px;
+	background: url(divider_l.gif) 0 0 no-repeat;
+}
+
+.NAVI_DIVIDER .divider-c {
+	background: url(divider_c.gif) repeat-x;
+}
+
+.NAVI_DIVIDER .divider-r {
+	width: 80px;
+	background: url(divider_r.gif) right 0 no-repeat;
+}
+
+.NAVI_DIVIDER_OVER .divider-l {
+	width: 80px;
+	background: url(divider1_l.gif) 0 0 no-repeat;
+}
+
+.NAVI_DIVIDER_OVER .divider-c {
+	background: url(divider1_c.gif) repeat-x;
+}
+
+.NAVI_DIVIDER_OVER .divider-r {
+	width: 80px;
+	background: url(divider1_r.gif) right 0 no-repeat;
+}
+
+.NAVI_DIVIDER_OVER .NAVI_DIVIDER_UP {
+	width: 9px;
+	height: 6px;
+	margin-top: 5px;
+	background: url(bg_divider.gif) 0 0 no-repeat;
+}
+
+.NAVI_DIVIDER_OVER .NAVI_DIVIDER_DOWN {
+	width: 9px;
+	height: 6px;
+	margin-top: 5px;
+	background: url(bg_divider.gif) 0 -6px no-repeat;
+}
+
+.NAVI_SEPARATOR {
+	height: 1px;
+	background: #dce4e9;
+}
+
+.NAVI_SPACING {
+	display: none;
+	height: 0;
+	border: 0;
+}
+
+.NAVI_TASK,.NAVI_TASK_OVER,.NAVI_TASK_PRESSED {
+	cursor: pointer;
+}
+
+.NAVI_TASK .NAVI_TASK_C a,.NAVI_TASK .NAVI_TASK_C a:hover,.NAVI_TASK_OVER .NAVI_TASK_C a,.NAVI_TASK_OVER .NAVI_TASK_C a:hover,.NAVI_TASK_PRESSED .NAVI_TASK_C a:hover
+	{
+	cursor: pointer;
+}
+
+.NAVI_TASK .NAVI_TASK_C {
+	padding: 0;
+}
+
+.NAVI_TASK_OVER .NAVI_TASK_L {
+	width: 4px;
+	background: url(task_sprites.gif) 0 0 no-repeat;
+}
+
+.NAVI_TASK_OVER .NAVI_TASK_C {
+	background: url(task_sprites.gif) 0 -42px repeat-x;
+	padding: 0;
+}
+
+.NAVI_TASK_OVER .NAVI_TASK_R {
+	width: 4px;
+	background: url(task_sprites.gif) 0 -21px no-repeat;
+}
+
+.NAVI_TASK_PRESSED .NAVI_TASK_L {
+	width: 4px;
+	background: url(task_sprites.gif) 0 -63px no-repeat;
+}
+
+.NAVI_TASK_PRESSED .NAVI_TASK_C {
+	background: url(task_sprites.gif) 0 -105px repeat-x;
+	padding: 0;
+}
+
+.NAVI_TASK_PRESSED .NAVI_TASK_R {
+	width: 4px;
+	background: url(task_sprites.gif) 0 -84px no-repeat;
+}
+
+.NAVI_ACTION {
+	padding-left: 20px;
+}
+
+.search_input_gray {
+	color: gray;
+	font-style: italic;
+}
+
+.search-bt-focused {
+	background: url(bg_searchdown.gif) 0 0 repeat-x;
+	border-color: silver;
+}
+
+.search-bt-over {
+	background: url(bg_searchover.gif) 0 0 repeat-x;
+	border-color: silver;
+}
+
+.search-bt-down {
+	background: url(bg_searchdown.gif) 0 0 repeat-x;
+	border-color: silver;
+}
+
+.search-arrow-over {
+	background: url(bg_searchover.gif) 0 0 repeat-x;
+	border-color: silver;
+}
+
+.search-arrow-focused {
+	background: url(bg_searchdown.gif) 0 0 repeat-x;
+	border-color: silver;
+}
+
+.search-arrow-down {
+	background: url(bg_searchdown.gif) 0 0 repeat-x;
+	border-color: silver;
+}
+
+.BUTTON_OVER75 {
+	background: url(button75.gif) 0 -22px;
+	height: 22px;
+}
+
+.BUTTON_PRESSED75 {
+	background: url(button75.gif) 0 -44px;
+	height: 22px;
+}
+
+.BUTTON95 {
+	background: url(button95.gif) 0 0;
+	height: 22px;
+}
+
+.BUTTON_OVER95 {
+	background: url(button95.gif) 0 -22px;
+	height: 22px;
+}
+
+.BUTTON_PRESSED95 {
+	background: url(button95.gif) 0 -44px;
+	height: 22px;
+}
+
+.BUTTON120 {
+	background: url(button120.gif) 0 0;
+	height: 22px;
+}
+
+.BUTTON_OVER120 {
+	background: url(button120.gif) 0 -22px;
+	height: 22px;
+}
+
+.BUTTON_PRESSED120 {
+	background: url(button120.gif) 0 -44px;
+	height: 22px;
+}
+
+.hseparator {
+	border-color: #AAAAAA;
+}
+
+.vseparator {
+	border-color: #AAAAAA;
+}
+
+.ipTextField {
+	border: solid 1px silver;
+}
+
+.iptxt {
+	border: 1px solid silver;
+	background: #FFF;
+}
+
+.iptxt_gray {
+	color: gray;
+	border: 1px solid silver;
+	background: #FFF;
+}
+
+.iptxt_focused {
+	border: 1px solid #76C9D8;
+	background: #FFFFBE;
+}
+
+.iptxa {
+	border: 1px solid silver;
+	background: #FFF;
+	overflow: auto;
+}
+
+.iptxa_gray {
+	color: gray;
+	border: 1px solid silver;
+	background: #FFF;
+	overflow: auto;
+}
+
+.iptxa_focused {
+	border: 1px solid #76C9D8;
+	background: #FFFFBE;
+	overflow: auto;
+}
+
+.progress-bar {
+	background: #2ed331;
+}
+
+.progress-container {
+	background-image: url(bg_progress.gif);
+	height: 13px !important;
+	border-color: silver;
+}
+
+.dprogress-bar {
+	width: 120px;
+	height: 13px;
+	background-image: url(bg_progressbar.gif);
+	margin: 0px;
+}
+
+.TREE-CONTAINER {
+	border: 1px solid silver;
+}
+
+.PANEL-CONTAINER {
+	border: 1px solid silver;
+	overflow: auto;
+}
+
+.PREF_HEADER {
+	background: url(bg_pref.gif) 0 0 repeat-x;
+}
+
+.WIZARD-HEADER {
+	height: 60px;
+	background: url(bg_wizard.gif);
+	padding-left: 12px;
+	border-bottom: 1px solid #b0cff7;
+}
+
+.WIZARD-RHEADER {
+	padding-right: 10px;
+}
+
+.gm-icon-over {
+	background: url(gm_bg.gif);
+	width: 250px;
+	height: 60px;
+	padding: 5px;
+}
+
+.gm-icon {
+	width: 250px;
+	height: 60px;
+	padding: 5px;
+}
+
+.DRAWING-CONTAINER {
+	background-color: #BFDBFF;
+}
+
+.DRAWING-SEPARATOR {
+	border-bottom: 1px solid #a2bec5;
+}
+
+.DRAWING-TOOL {
+	background: url(tools_sprites.gif) 0 0 no-repeat;
+	width: 24px;
+	height: 22px;
+}
+
+.DRAWING-TOOL-OVER {
+	background: url(tools_sprites.gif) 0 -22px no-repeat;
+	width: 24px;
+	height: 22px;
+}
+
+.DRAWING-TOOL-PRESSED {
+	background: url(tools_sprites.gif) 0 -44px no-repeat;
+	width: 24px;
+	height: 22px;
+}
+
+.DRAWING-TOOL-SELECTED {
+	background: url(tools_sprites.gif) 0 -66px no-repeat;
+	width: 24px;
+	height: 22px;
+}
+
+.DRAWING-TOOL-SELECTED-OVER {
+	background: url(tools_sprites.gif) 0 -88px no-repeat;
+	width: 24px;
+	height: 22px;
+}
+
+#monitorMap div a {
+	color: #000;
+	text-decoration: none;
+}
+
+#monitorMap div a:hover {
+	color: #000;
+	text-decoration: underline;
+}
+
+.cs_CustomColorAdd_Mini {
+	height: 22px;
+	background: url(button155.gif) 0 0;
+}
+
+.BLANK_WND,.MAIN_WND {
+	background: #FCFCFC;
+}
+
+.NAVI_BAR,.NAVI_BAR .NAVI_BAR_C,.NAVI_BAR_OVER,.NAVI_BAR_PRESSED,.NAVI_BAR_SELECTED
+	{
+	height: 21px;
+}
+
+.NAVI_BAR .NAVI_BAR_L,.NAVI_BAR .NAVI_BAR_R {
+	width: 4px;
+	height: 21px;
+}
+
+.NAVI_BAR_OVER .NAVI_BAR_L,.NAVI_BAR_PRESSED .NAVI_BAR_L {
+	width: 4px;
+	height: 21px;
+	background: url(navibar_sprites.gif) 0 0 no-repeat;
+}
+
+.NAVI_BAR_OVER .NAVI_BAR_C,.NAVI_BAR_PRESSED .NAVI_BAR_C {
+	height: 21px;
+	background: url(navibar_sprites.gif) 0 -42px repeat-x;
+}
+
+.NAVI_BAR_OVER .NAVI_BAR_R,.NAVI_BAR_PRESSED .NAVI_BAR_R {
+	width: 4px;
+	height: 21px;
+	background: url(navibar_sprites.gif) 0 -21px no-repeat;
+}
+
+.NAVI_BT_OVER,.NAVI_BT_PRESSED,.NAVI_BT_SELECTED {
+	width: 28px;
+	height: 28px;
+	background: #DFE8F6 url(navibt_sprites.gif) no-repeat;
+}
+
+.NAVI_TASK .NAVI_TASK_L,.NAVI_TASK .NAVI_TASK_R {
+	width: 4px;
+}
+
+.NAVI_ACTION a,.NAVI_ACTION a:hover {
+	color: #06c;
+	height: 20px;
+	padding-top: 5px;
+}
+
+.searchBox,.search-bt,.search-arrow {
+	border-color: silver;
+}
+
+.BUTTON75,.cs_ButtonOk,.cs_ButtonCancel {
+	background: url(button75.gif) 0 0;
+	height: 22px;
+}
+
+.discovery-container {
+	border: solid 1px silver;
+}
+
+.microContainer {
+	border-color: #2d8cb0;
+}
+
+#zetaGraph .ui-selected
+	{
+	border-color: #99DFFD;
+}
+
+#zetaGraph .ui-selected span {
+	color: #000;
+	background-color: #DFF2FD;
+}
+
+#zetaGraph .ui-selecting
+	{
+	border-color: #99DFFD;
+}
+
+#zetaGraph .ui-selecting span {
+	color: #000;
+	background-color: #DFF2FD;
+}
+
+#entityMap .ui-selected span {
+	background-color: #DFF2FD;
+}
+
+#entityMap .ui-selected,#monitorMap .ui-selecting,#monitorMap .ui-selected
+	{
+	border: 3px solid #99DFFD;
+	padding: 2px;
+}
+
+#entityMap .ui-selected span {
+	background-color: #DFF2FD;
+}
+
+.selectedTreeRow,.dhx_selected_option {
+	background-color: #DFF2FD;
+	color: #000;
+}
+
+.dhx_combo_list,.dhx_combo_list_rtl {
+	height: 210px;
+}

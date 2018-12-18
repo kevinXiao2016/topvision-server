@@ -1,0 +1,134 @@
+body {
+  color: #2f332a;
+  font: 15px/21px Arial, Helvetica, simsun, sans-serif;
+}
+
+.folderTree{
+  border: 1px solid #e1e1e8;
+  z-index: 100;
+}
+
+.folderTree .folderTree-header,
+.folderTree .folderTree-body{
+  border-bottom: 1px solid #e1e1e8;
+}
+
+.folderTree .folderTree-body{
+  height: 200px;
+  background: none repeat scroll 0 0 #f7f7f9;
+  overflow-x: auto;
+  overflow-y: scroll;
+}
+
+.folderTree .folderTree-footer{
+	background: none repeat scroll 0 0 #f7f7f9;
+}
+
+/* tree header */
+.nav {
+  padding-left: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+  list-style: none;
+}
+
+.nav:before,
+.nav:after {
+  display: table;
+  content: " ";
+}
+
+.nav:after {
+  clear: both;
+}
+
+.nav > li {
+  position: relative;
+  display: block;
+}
+
+.nav > li > a {
+  position: relative;
+  display: block;
+  padding: 0px 10px;
+  text-decoration: none;
+  color: #428bca;
+  font-family: Verdana,Arial,Helvetica,AppleGothic,sans-serif;
+  font-size: 12px;
+}
+
+.nav > li > a:hover,
+.nav > li > a:focus {
+  text-decoration: none;
+  background-color: #eeeeee;
+}
+
+.nav .open > a,
+.nav .open > a:hover,
+.nav .open > a:focus {
+  background-color: #eeeeee;
+  border-color: #428bca;
+}
+
+.nav-pills > li {
+  float: left;
+}
+
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+  color: #ffffff;
+  background-color: #428bca;
+}
+
+/* tree body */
+.folderTree-body .tab-pane{
+  width: 100%;
+  height: 100%;
+}
+
+/* tree footer */
+.folderTree-footer .footer-pane{
+  width: 100%;
+  height: 100%;
+}
+
+.folderTree-footer{
+  font-family: Verdana,Arial,Helvetica,AppleGothic,sans-serif;
+  color: #428bca;
+  font-size: 12px;
+}
+.folderTree-footer > span{
+	margin-right: 5px;
+}
+.folderTree-footer input[type="checkbox"]{
+  vertical-align: middle;
+  margin-top: 0;
+}
+.folderTree-footer input[type="checkbox"]:not(:first-child){
+  margin-left: 5px;
+}
+
+/* ztree fix */
+.ztree li span.button.chk.checkbox_false_part{
+  background-position: 0 0;
+}
+
+.ztree li span.button.chk.checkbox_true_part{
+  background-position: -14px 0;
+}
+.ztree li span.button.ico_close,
+.ztree li span.button.ico_open,
+.ztree li span.button.ico_docu{
+	background: url(/images/network/map16.png) no-repeat !important;
+}
+.noWrap{
+	display:inline-block;
+	white-space: nowrap;
+}
+.ztree li span.button.chk.radio_false_part{
+	background-position: -28px 0;
+}
+.ztree li span.button.chk.radio_false_part_focus{
+	background-position: -28px -14px;
+}

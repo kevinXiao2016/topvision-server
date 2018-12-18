@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="optReceiver" namespace="/cmc/optReceiver" extends="default">
+        <action name="showOptReciver" class="opticalReceiverAction" method="showOptReciver">
+            <result>/cmc/optical/optReciver.jsp</result>
+        </action>
+        <action name="loadOpticalReceiverInfo" class="opticalReceiverAction" method="loadOpticalReceiverInfo"></action>
+        <action name="refreshDataFromDevice" class="opticalReceiverAction" method="refreshDataFromDevice"></action>
+        <action name="saveConfig" class="opticalReceiverAction" method="saveConfig"></action>
+        <action name="reset" class="opticalReceiverAction" method="reset"></action>
+        <action name="showUpgrade" class="opticalReceiverAction" method="showUpgrade">
+            <result>/cmc/optical/upgrade.jsp</result>
+        </action>
+        <action name="upgrade" class="opticalReceiverAction" method="upgrade"></action>
+        <action name="getUpgradeProgress" class="opticalReceiverAction" method="getUpgradeProgress"></action>
+	</package>
+</struts>

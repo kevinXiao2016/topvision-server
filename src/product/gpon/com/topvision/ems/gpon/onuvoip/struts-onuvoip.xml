@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="gponOnuVoip" namespace="/gpon/onuvoip" extends="default">
+	    <action name="showSIPPstnUser" class="onuVoipAction" method="showSIPPstnUser">
+            <result>/gpon/onuvoip/sipPstnUser.jsp</result>
+        </action>
+        <action name="loadSipPstnUser" class="onuVoipAction" method="loadSipPstnUser" />
+        <action name="modifySipPstnUser" class="onuVoipAction" method="modifySipPstnUser" />
+        <action name="refreshSipPstnUser" class="onuVoipAction" method="refreshSipPstnUser" />
+        
+        <action name="showVoIPLineStatus" class="onuVoipAction" method="showVoIPLineStatus">
+            <result>/gpon/onuvoip/voIPLineStatus.jsp</result>
+        </action>
+        <action name="loadVoIPLineStatus" class="onuVoipAction" method="loadVoIPLineStatus" />
+        <action name="refreshVoIPLineStatus" class="onuVoipAction" method="refreshVoIPLineStatus" />
+        
+        
+        <action name="showGponOnuPotsList" class="onuVoipAction" method="showGponOnuPotsList">
+            <result>/gpon/onuPotsList.jsp</result>
+        </action>
+        <action name="loadGponOnuPotsList" class="onuVoipAction" method="loadGponOnuPotsList"/>
+        <action name="refreshGponOnuPotsInfo" class="onuVoipAction" method="refreshGponOnuPotsInfo"/>
+	    <action name="showPotsConfigView" class="onuVoipAction" method="showPotsConfigView">
+	       <result>/gpon/onuPotsConfig.jsp</result>
+	    </action>
+	    <action name="modifyGponOnuPotsConfig" class="onuVoipAction" method="modifyGponOnuPotsConfig"/>
+	    <action name="setOnuPotsAdminStatus" class="onuVoipAction" method="setOnuPotsAdminStatus"/>
+	</package>
+</struts>

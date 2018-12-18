@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcSpectrum" namespace="/cmcSpectrum" extends="default">
+		<action name="showCmcCurSpectrum" class="spectrumCurAction"
+			method="showCmcCurSpectrum">
+			<result>/cmc/spectrum/cmcCurSpectrum.jsp</result>
+		</action>
+		<action name="stopCurSpectrum" class="spectrumCurAction" method="stopCurSpectrum">
+		</action>
+		<action name="heartbeat" class="spectrumCurAction" method="heartbeat">
+		</action>
+		<action name="saveChannelData" class="spectrumCurAction" method="saveChannelData"></action>
+		<action name="loadTimeInterval" class="spectrumCurAction" method="loadTimeInterval"></action>
+		<action name="loadOltSwitchStatus" class="spectrumCurAction" method="loadOltSwitchStatus"></action>
+
+		<action name="realTimeVideoStart" class="spectrumRecordingAction"
+			method="realTimeVideoStart">
+		</action>
+		<action name="realTimeVideoStop" class="spectrumRecordingAction"
+			method="realTimeVideoStop">
+		</action>
+		<action name="hisVideoStart" class="spectrumRecordingAction"
+			method="hisVideoStart">
+		</action>
+		<action name="showRenameVideo" class="spectrumRecordingAction"
+			method="showRenameVideo">
+			<result>/cmc/spectrum/renameVideo.jsp</result>
+		</action>
+		<action name="renameVideo" class="spectrumRecordingAction"
+			method="renameVideo">
+		</action>
+		<action name="loadVideoStartTime" class="spectrumRecordingAction"
+			method="loadVideoStartTime">
+		</action>
+
+		<action name="showCmtsSpectrumConfig" class="spectrumConfigAction"
+			method="showCmtsSpectrumConfig">
+			<result>/cmc/spectrum/spectrumConfigCmts.jsp</result>
+		</action>
+		<action name="loadHisConfig" class="spectrumConfigAction"
+			method="loadHisConfig">
+		</action>
+		<action name="loadGlobalConfig" class="spectrumConfigAction"
+			method="loadGlobalConfig">
+		</action>
+		<action name="showOltSpectrumConfig" class="spectrumConfigAction"
+			method="showOltSpectrumConfig">
+			<result>/cmc/spectrum/spectrumConfigOlt.jsp</result>
+		</action>
+		<action name="modifyHisSpectrum" class="spectrumConfigAction"
+			method="modifyHisSpectrum">
+		</action>
+		<action name="modifyTimeStrategy" class="spectrumConfigAction"
+			method="modifyTimeStrategy">
+		</action>
+		<action name="loadSpectrumCmts" class="spectrumConfigAction"
+			method="loadSpectrumCmts">
+		</action>
+		<action name="startSpectrumSwitchCmts" class="spectrumConfigAction"
+			method="startSpectrumSwitchCmts">
+		</action>
+		<action name="stopSpectrumSwitchCmts" class="spectrumConfigAction"
+			method="stopSpectrumSwitchCmts">
+		</action>
+		<action name="startHisVideoSwitch" class="spectrumConfigAction"
+			method="startHisVideoSwitch">
+		</action>
+		<action name="stopHisVideoSwitch" class="spectrumConfigAction"
+			method="stopHisVideoSwitch">
+		</action>
+		<action name="loadSpectrumOlt" class="spectrumConfigAction"
+			method="loadSpectrumOlt">
+		</action>
+		<action name="startSpectrumSwitchOlt" class="spectrumConfigAction"
+			method="startSpectrumSwitchOlt">
+		</action>
+		<action name="stopSpectrumSwitchOlt" class="spectrumConfigAction"
+			method="stopSpectrumSwitchOlt">
+		</action>
+		<action name="refreshSpectrumSwitchOlt" class="spectrumConfigAction"
+			method="refreshSpectrumSwitchOlt">
+		</action>
+
+		<!-- VideoPlay -->
+		<action name="playVideo" class="spectrumPlayAction"
+			method="playVideo">
+			<result>/cmc/spectrum/videoPlayer.jsp</result>
+		</action>
+		<action name ="getSpectrumVideoFrame" class="spectrumPlayAction"
+		    method = "getSpectrumVideoFrame" >
+		</action>
+		<action name="loadSpectrumVideo" class="spectrumPlayAction"
+			method="loadSpectrumVideo">
+		</action>
+		<action name="showSpectrumVideoMgmt" class="spectrumPlayAction"
+			method="showSpectrumVideoMgmt">
+			<result>/cmc/spectrum/spectrumVideoMgmt.jsp</result>
+		</action>
+		<action name="deleteVideo" class="spectrumPlayAction"
+			method="deleteVideo">
+		</action>
+		<action name="clearVideo" class="spectrumPlayAction"
+			method="clearVideo">
+		</action>
+		
+		<!-- Spectrum alert config -->
+		<action name="showSpectrumAlertConfig" class="spectrumAlertConfigAction"
+		    method="showSpectrumAlertConfig">
+		    <result>/cmc/spectrum/spectrumAlertConfig.jsp</result>
+		</action>
+		<action name="loadSpectrumAlertConfig" class="spectrumAlertConfigAction"
+		    method="loadSpectrumAlertConfig">
+		</action>
+		<action name="modifySpectrumAlertConfig" class="spectrumAlertConfigAction"
+		    method="modifySpectrumAlertConfig">
+		</action>		
+		<action name="showTestSpectrumAlert" class="spectrumAlertConfigAction"
+		    method="showTestSpectrumAlert">
+		    <result>/cmc/spectrum/spectrumTestAlert.jsp</result>
+		</action>
+		<action name="addTestFreq" class="spectrumAlertConfigAction"
+		    method="addTestFreq">
+		</action>
+		<action name="loadSpecialPoints" class="spectrumAlertConfigAction"
+		    method="loadSpecialPoints">
+		</action>
+		<action name="deleteTestFreq" class="spectrumAlertConfigAction"
+		    method="deleteTestFreq">
+		</action>
+	</package>
+</struts>

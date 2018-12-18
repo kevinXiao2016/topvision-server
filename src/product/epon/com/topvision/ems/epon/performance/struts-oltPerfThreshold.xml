@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="oltPerfThreshold" namespace="/epon/perfThreshold" extends="default">
+		<!-- 添加操作日志拦截器配置  -->
+
+		
+		<!-- 跳转到OLT性能阈值告警页面 -->
+		 <action name="showOltPerfTemp" class="oltPerfThresholdAction" method="showOltPerfTemp">
+        	<result>/performance/perfThreshold/oltPerfTemplate.jsp</result>
+        </action>
+        
+        <!--加载OLT与绑定的阈值模板的列表 -->
+        <action name="loadOltThresholdTemplate" class="oltPerfThresholdAction" method="loadOltThresholdTemplate" />
+	</package>
+</struts>

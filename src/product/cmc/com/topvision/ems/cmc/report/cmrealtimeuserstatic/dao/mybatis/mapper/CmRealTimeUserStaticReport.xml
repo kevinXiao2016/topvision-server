@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.report.domain.CmRealTimeUserStaticReport">
+
+	<select id="loadCmRealTimeUserStaticData" parameterType="map" resultType="com.topvision.ems.cmc.report.domain.CmRealTimeUserStaticReport">
+		SELECT
+			c.cmcId, e1.name as oltName, e1.ip as oltIp,
+			opr.ponIndex as ponIndex, e.name as cmcName,
+			IFNULL(cmNumTable.onlineSum,0) as onLineCmNum,
+			IFNULL(cmNumTable.offlineSum,0) as offLineCmNum,
+			IFNULL(cmNumTable.otherSum,0) as otherStatusCmNum,
+			IFNULL(cmNumTable.totalSum,0) as allStatusCmNum
+		FROM 
+			cmcattribute c
+			LEFT JOIN entity e ON c.cmcId=e.entityId
+			LEFT JOIN oltonurelation oor ON c.cmcId=oor.onuId
+			LEFT JOIN oltponrelation opr ON	oor.ponId=opr.ponId
+			LEFT JOIN oltattribute oa ON opr.entityId=oa.entityId
+			LEFT JOIN entity e1 ON oa.entityId=e1.entityId
+			LEFT JOIN
+		    	( SELECT 
+		    		cmcId, sum(unlp.onlineNum + unlp.offlineNum + unlp.otherNum) as totalSum, sum(unlp.onlineNum) as onlineSum,
+				    sum(unlp.offlineNum) as offlineSum,sum(unlp.otherNum) as otherSum
+				  FROM
+                    usernumlastport unlp
+                    LEFT JOIN cmcentityrelation cer on (cer.cmcIndex is null and unlp.entityId = cer.cmcEntityId )  or (unlp.entityId = cer.cmcEntityId and unlp.ccIfIndex = cer.cmcIndex)
+                    where unlp.portType=1
+				  GROUP BY cer.cmcId ) cmNumTable ON c.cmcId=cmNumTable.cmcId
+		WHERE c.cmcDeviceStyle in(30001,30005,30013,30014,30015) and c.cmcId in (select entityId from ${Authority})
+		ORDER BY opr.ponIndex, e.name ASC
+	</select>
+
+</mapper>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.network.domain.MapNode">
+	<insert id="insertEntity" parameterType="mapNode"
+		useGeneratedKeys="true" keyProperty="nodeId">
+		INSERT INTO MapNode (name,
+		folderId, userObjType, userObjId, x, y, width,
+		height, type,
+		gradient,
+		gradientColor, fillColor, strokeColor, strokeWeight, dashed, shadow,
+		icon, text,
+		fontSize, fontStyle) VALUES (#{name}, #{folderId},
+		#{userObjType},
+		#{userObjId}, #{x}, #{y}, #{width}, #{height}, #{type},
+		#{gradient}, #{gradientColor},
+		#{fillColor},
+		#{strokeColor},
+		#{strokeWeight}, #{dashed}, #{shadow}, #{icon},
+		#{text}, #{fontSize},
+		#{fontStyle})
+    </insert>
+	<delete id="deleteByPrimaryKey" parameterType="long"> DELETE FROM
+		MapNode WHERE nodeId =
+		#{nodeId} </delete>
+	<delete id="deleteMapNodeByFolder" parameterType="long">
+		DELETE FROM
+		MapNode WHERE userObjId = #{folderId}
+ 	</delete>
+	<select id="getMapNodes" parameterType="long" resultType="mapNode"> SELECT
+		nodeId, userObjType,
+		userObjId, name, type, x, y, width, height, fixed,
+		text, fontSize, textColor,
+		gradientColor,
+		fillColor, gradient, shadow,
+		dashed, strokeColor, strokeWeight, icon, url,
+		groupId, expanded
+		FROM
+		MapNode WHERE folderId = #{folderId} ORDER BY type ASC </select>
+	<select id="getMapNodeByObjId" parameterType="mapNode"
+		resultType="mapNode"> SELECT nodeId, name,
+		type FROM MapNode WHERE userObjType =
+		#{userObjType} AND userObjId =
+		#{userObjId} </select>
+	<select id="selectByPrimaryKey" parameterType="long" resultType="mapNode">
+		SELECT nodeId, name,
+		type, x, y, width, height, icon, text, fontSize,
+		textColor, strokeWeight,
+		strokeColor,
+		fillColor, shadow, dashed, url,
+		userObjType, userObjId, fixed FROM MapNode WHERE
+		nodeId =
+		#{nodeId}
+	</select>
+	<update id="saveMapNodeCoordinate" parameterType="mapNode"> UPDATE MapNode
+		SET x = #{x}, y = #{y}
+		WHERE nodeId = #{nodeId} </update>
+	<update id="updateMapNodeFixed" parameterType="mapNode"> UPDATE MapNode
+		SET fixed = #{fixed} WHERE
+		nodeId = #{nodeId} </update>
+	<update id="updateMapNodeText" parameterType="mapNode"> UPDATE MapNode SET
+		text = #{text} WHERE
+		nodeId = #{nodeId} </update>
+	<update id="updateMapNodeUrl" parameterType="mapNode"> UPDATE MapNode SET
+		url = #{url},dashed = #{dashed} WHERE
+		nodeId = #{nodeId} </update>
+	<update id="updateTextByUserObj" parameterType="mapNode">
+		UPDATE MapNode SET text = #{text}
+		<if test="url != null">,url = #{url}</if>
+		WHERE userObjType = #{userObjType} AND userObjId = #{userObjId}
+	</update>
+	<update id="updateMapNodeSize" parameterType="mapNode"> UPDATE MapNode SET
+		width = #{width}, height
+		= #{height} WHERE nodeId = #{nodeId} </update>
+	<update id="updateMapNodeFillColor" parameterType="mapNode"> UPDATE
+		MapNode SET fillColor =
+		#{fillColor} WHERE nodeId = #{nodeId} </update>
+	<update id="updateMapNodeStrokeWeight" parameterType="mapNode"> UPDATE
+		MapNode SET strokeWeight =
+		#{strokeWeight} WHERE nodeId = #{nodeId}
+	</update>
+	<update id="updateMapNodeStrokeColor" parameterType="mapNode"> UPDATE
+		MapNode SET strokeColor =
+		#{strokeColor} WHERE nodeId = #{nodeId}
+	</update>
+	<update id="updateMapNodeShadow" parameterType="mapNode"> UPDATE MapNode
+		SET shadow = #{shadow}
+		WHERE nodeId = #{nodeId} </update>
+	<update id="updateMapNodeDashedBorder" parameterType="mapNode"> UPDATE
+		MapNode SET dashed =
+		#{dashed} WHERE nodeId = #{nodeId} </update>
+	<update id="updateMapNodeFontSize" parameterType="mapNode"> UPDATE MapNode
+		SET fontSize =
+		#{fontSize} WHERE nodeId = #{nodeId} </update>
+	<update id="updateMapNodeFontColor" parameterType="mapNode"> UPDATE
+		MapNode SET textColor =
+		#{textColor} WHERE nodeId = #{nodeId} </update>
+	<update id="updateMapNodeGroup" parameterType="mapNode"> UPDATE MapNode
+		SET groupId = #{groupId}
+		WHERE nodeId = #{nodeId} </update>
+	<update id="updateMapNodeIcon" parameterType="mapNode"> UPDATE MapNode SET
+		icon = #{icon} WHERE
+		nodeId = #{nodeId} </update>
+	<update id="updateMapNodeExpanded" parameterType="mapNode"> UPDATE MapNode
+		SET expanded =
+		#{expanded} WHERE nodeId = #{nodeId} </update>
+		
+	<select id="getAllMapNodes" resultType="mapNode">
+		select * from mapnode;
+	</select>
+</mapper>

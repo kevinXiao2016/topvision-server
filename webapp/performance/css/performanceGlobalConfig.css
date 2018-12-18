@@ -1,0 +1,9 @@
+table.modifyTable{width:100%;}
+table.modifyTable thead th{border-bottom:2px solid #6593CF; padding:12px 0px 6px; font-weight:bold; color:#36629F;}
+table.modifyTable tbody td{ border-bottom:1px solid #D6D6D6; padding:6px 2px;}
+.scrollBtn{ cursor: pointer;}
+.thTit{ float:left; margin-right:5px; cursor:pointer;}
+table.modifyTable thead th span.thTip{ float:left; padding-left:16px; font-weight:normal; color:#f60;}
+.openThTit{ padding-left:20px; background: url(/images/group-collapse.gif) no-repeat 4px 0px;}
+.closeThTit{ padding-left:20px; background: url(/images/group-expand.gif) no-repeat 4px 0px;}
+.tipImg{ cursor:pointer; margin-right:4px; position:relative; top:2px;}

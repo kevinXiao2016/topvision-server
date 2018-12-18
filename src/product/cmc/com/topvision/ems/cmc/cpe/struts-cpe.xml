@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmCpe" namespace="/cmCpe" extends="default">
+		<action name="showTerminalCollectConfig" class="cpeAction" method="showTerminalCollectConfig">
+			<result>/cmc/terminalConfig.jsp</result>
+		</action>
+		<action name="modifyCmCpeCollectConfig" class="cpeAction" method="modifyCmCpeCollectConfig"></action>
+		<action name="modifyCmCpeCollectDataPolicy" class="cpeAction" method="modifyCmCpeCollectDataPolicy"></action>
+		<action name="modifyCmPollConfig" class="cpeAction" method="modifyCmPollConfig"></action>
+		<action name="modifyCmSnmpParamConfig" class="cpeAction" method="modifyCmSnmpParamConfig"></action>
+		<action name="getCmCpeNumStatistic" class="cpeAction" method="getCmCpeNumStatistic">
+		<result>/cmc/cmCpeNumStatistic.jsp</result>
+		</action>
+		<action name="showAllCcmtsRealTimeUserNum" class="cpeAction" method="showAllCcmtsRealTimeUserNum">
+			<result>/cmc/cmcRealTimeUserNum.jsp</result>
+		</action>
+		<action name="loadAllDeviceCmNum" class="cpeAction" method="loadAllDeviceCmNum"></action>
+		<action name="loadCcmtsCmNumInfo" class="cpeAction" method="loadCcmtsCmNumInfo"></action>
+		<action name="showCmCpeQuery" class="cpeAction" method="showCmCpeQuery">
+			<result>/cmc/cmCpeQuery.jsp</result>
+		</action>
+		
+		<action name="showCmLocate" class="cpeAction" method="showCmLocate">
+			<result>/cmc/cmLocate.jsp</result>
+		</action>
+        <action name="loadCmSF" class="cpeAction" method="loadCmSF" />
+        <action name="loadCmAttribute" class="cpeAction" method="loadCmAttribute" />
+		<action name="getPreviousState" class="cpeAction" method="getPreviousState" />
+		<action name="queryCmLocate" class="cpeAction" method="queryCmLocate" />
+		<action name="loadCpeActHistory" class="cpeAction" method="loadCpeActHistory" />
+		<action name="loadCmActHistory" class="cpeAction" method="loadCmActHistory" />
+		<action name="loadCpeList" class="cpeAction" method="loadCpeList" />
+		<action name="loadCmServiceType" class="cpeAction" method="loadCmServiceType" />
+		<action name="loadOltAlertList" class="cpeAction" method="loadOltAlertList" />
+		<action name="loadCmcAlertList" class="cpeAction" method="loadCmcAlertList" />
+		<action name="loadCmcRunningInfo" class="cpeAction" method="loadCmcRunningInfo" />
+		<action name="loadOltRunningInfo" class="cpeAction" method="loadOltRunningInfo" />
+		<action name="loadCmFlap" class="cpeAction" method="loadCmFlap" />
+		
+		<action name="saveCmCpeView" class="cpeAction" method="saveCmCpeView" />
+		
+		<!-- CmCpeQuery -->
+		<action name="showUnBitErrorRateHisPerf" class="cpeAction" method="showUnBitErrorRateHisPerf"></action>
+		<action name="loadCmStatus" class="cpeAction" method="loadCmStatus"></action>
+		<action name="cmCpeListByCondition" class="cpeAction" method="cmCpeListByCondition"></action>
+		<action name="showBitErrorRateHisPerf" class="cpeAction" method="showBitErrorRateHisPerf"></action>
+		<action name="showCmOfflineNumHisPerf" class="cpeAction" method="showCmOfflineNumHisPerf"></action>
+		<action name="showCmOnlineNumHisPerf" class="cpeAction" method="showCmOnlineNumHisPerf"></action>
+		<!-- CmCpeHisUser -->
+		<action name="showFlowHisPerf" class="cpeAction" method="showFlowHisPerf"></action>
+		<action name="showSnrHisPerf" class="cpeAction" method="showSnrHisPerf"></action>
+		<action name="showCpuHisPerf" class="cpeAction" method="showCpuHisPerf"></action>
+		<action name="showCmHisUserPerf" class="cpeAction" method="showCmHisUserPerf"></action>
+		<action name="showCmcHisUserNum" class="cpeAction" method="showCmcHisUserNum">
+			<result>/cmc/cmcHisUserNum.jsp</result>
+		</action>
+		<action name="refreshCpeListByCmMac" class="cpeAction" method="refreshCpeListByCmMac"> </action>
+		<action name="refreshCpeList" class="cpeAction" method="refreshCpeList"> </action>
+		<action name="refreshCpeByCmcAndCpeMac" class="cpeAction" method="refreshCpeByCmcAndCpeMac"> </action>
+		<action name="refreshCpe" class="cpeAction" method="refreshCpe"> </action>
+		<action name="cpeDetail" class="cpeAction" method="cpeDetail"> </action>
+        <action name="showFdbAddress" class="cpeAction" method="showFdbAddress">
+            <result>/cmc/fdbAddress.jsp</result>
+        </action>
+        <action name="loadFdbAddress" class="cpeAction" method="loadFdbAddress"> </action>
+	</package>
+</struts> 

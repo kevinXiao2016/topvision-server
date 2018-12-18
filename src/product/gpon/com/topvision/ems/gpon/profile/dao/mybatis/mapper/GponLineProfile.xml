@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GponLineProfile">
+
+	<select id="selectGponLineProfileInfoList" parameterType="long" resultType="gponLineProfileInfo">
+		SELECT 
+			entityId,
+			ProfileId  gponLineProfileId,
+			ProfileName  gponLineProfileName,
+			ProfileUpstreamFECMode  gponLineProfileUpstreamFECMode,
+			ProfileMappingMode  gponLineProfileMappingMode,
+			ProfileTcontNum  gponLineProfileTcontNum,
+			ProfileGemNum  gponLineProfileGemNum,
+			ProfileBindNum  gponLineProfileBindNum 
+		FROM GponLineProfileInfo WHERE entityId=#{entityId}
+	</select>
+	
+	<select id="getMappingModeByProfileId" parameterType="map" resultType = "int">
+		SELECT ProfileMappingMode
+		FROM GponLineProfileInfo 
+		WHERE entityId=#{entityId} and ProfileId = #{profileId}
+	</select>
+	
+	<select id="selectGponLineProfileTcontList" parameterType="map" resultType="gponLineProfileTcont">
+		SELECT 
+			entityId,
+			ProfileTcontProfileIndex  gponLineProfileTcontProfileIndex,
+			ProfileTcontIndex  gponLineProfileTcontIndex,
+			ProfileTcontDbaProfileId  gponLineProfileTcontDbaProfileId,
+			entityId  entityId 
+		FROM GponLineProfileTcont 
+		WHERE entityId=#{entityId} and ProfileTcontProfileIndex = #{profileIndex}
+	</select>
+	
+	<select id="selectGponLineProfileGemList" parameterType="map" resultType="gponLineProfileGem">
+		SELECT 
+			gem.entityId,
+			gem.ProfileGemProfileIndex  gponLineProfileGemProfileIndex,
+			gem.ProfileGemIndex  gponLineProfileGemIndex,
+			gem.ProfileGemEncrypt  gponLineProfileGemEncrypt,
+			gem.ProfileGemTcontId  gponLineProfileGemTcontId,
+			gem.ProfileGemQueuePri  gponLineProfileGemQueuePri,
+			gem.ProfileGemUpCar  gponLineProfileGemUpCar,
+			gem.ProfileGemDownCar  gponLineProfileGemDownCar,
+			gem.ProfileGemMapNum  gponLineProfileGemMapNum,
+			profile.ProfileName
+		FROM 
+			GponLineProfileGem gem
+			left join gponlineprofileinfo profile 
+				on gem.ProfileGemProfileIndex = profile.ProfileId and gem.entityId=profile.entityId
+		WHERE 
+			gem.entityId=#{entityId} and gem.ProfileGemProfileIndex = #{profileIndex}
+	</select>
+	
+	<select id="selectGponLineProfileGemMapList" parameterType="map" resultType="gponLineProfileGemMap">
+		SELECT 
+			entityId,
+			ProfileGemMapProfileIndex  gponLineProfileGemMapProfileIndex,
+			ProfileGemMapGemIndex  gponLineProfileGemMapGemIndex,
+			ProfileGemMapIndex  gponLineProfileGemMapIndex,
+			ProfileGemMapVlan  gponLineProfileGemMapVlan,
+			ProfileGemMapPriority  gponLineProfileGemMapPriority,
+			ProfileGemMapPortType gponLineProfileGemMapPortType,
+			ProfileGemMapPortId  gponLineProfileGemMapPortId 
+		FROM GponLineProfileGemMap 
+		WHERE entityId=#{entityId} and ProfileGemMapProfileIndex = #{profileIndex} and ProfileGemMapGemIndex = #{gemIndex}
+	</select>
+	
+	<select id="selectGponLineProfileInfo" parameterType="map" resultType="gponLineProfileInfo">
+		SELECT 
+			a.entityId,
+			a.ProfileId  gponLineProfileId,
+			a.ProfileName  gponLineProfileName,
+			a.ProfileUpstreamFECMode  gponLineProfileUpstreamFECMode,
+			a.ProfileMappingMode  gponLineProfileMappingMode,
+			a.ProfileTcontNum  gponLineProfileTcontNum,
+			a.ProfileGemNum  gponLineProfileGemNum,
+			a.ProfileBindNum  gponLineProfileBindNum,
+			count(b.ProfileGemMapIndex) gemMapNum
+		FROM GponLineProfileInfo a
+		     left join gponlineprofilegemmap b on a.entityId = b.entityId and a.ProfileId = b.ProfileGemMapProfileIndex
+		WHERE a.entityId=#{entityId} and a.ProfileId = #{profileIndex} group by a.entityId,a.ProfileId
+	</select>
+	
+	<select id="selectGponLineProfileTcont" parameterType="map" resultType="gponLineProfileTcont">
+		SELECT 
+			entityId,
+			ProfileTcontProfileIndex  gponLineProfileTcontProfileIndex,
+			ProfileTcontIndex  gponLineProfileTcontIndex,
+			ProfileTcontDbaProfileId  gponLineProfileTcontDbaProfileId,
+			entityId  entityId 
+		FROM GponLineProfileTcont 
+		WHERE entityId=#{entityId} and ProfileTcontIndex = #{profileIndex} and ProfileTcontIndex = #{tcontIndex}
+	</select>
+	
+	<select id="selectGponLineProfileGem" parameterType="map" resultType="gponLineProfileGem">
+		SELECT 
+			gem.entityId,
+			gem.ProfileGemProfileIndex  gponLineProfileGemProfileIndex,
+			gem.ProfileGemIndex  gponLineProfileGemIndex,
+			gem.ProfileGemEncrypt  gponLineProfileGemEncrypt,
+			gem.ProfileGemTcontId  gponLineProfileGemTcontId,
+			gem.ProfileGemQueuePri  gponLineProfileGemQueuePri,
+			gem.ProfileGemUpCar  gponLineProfileGemUpCar,
+			gem.ProfileGemDownCar  gponLineProfileGemDownCar,
+			gem.ProfileGemMapNum  gponLineProfileGemMapNum,
+			profile.ProfileMappingMode mappingMode
+		FROM 
+			GponLineProfileGem gem
+			left join gponlineprofileinfo profile 
+				on gem.ProfileGemProfileIndex = profile.ProfileId and gem.entityId = profile.entityId
+		WHERE 
+			gem.entityId=#{entityId} and gem.ProfileGemProfileIndex = #{profileIndex} and gem.ProfileGemIndex = #{gemIndex}
+	</select>
+	
+	<select id="selectGponLineProfileGemMap" parameterType="map" resultType="gponLineProfileGemMap">
+		SELECT 
+			entityId,
+			ProfileGemMapProfileIndex  gponLineProfileGemMapProfileIndex,
+			ProfileGemMapGemIndex  gponLineProfileGemMapGemIndex,
+			ProfileGemMapIndex  gponLineProfileGemMapIndex,
+			ProfileGemMapVlan  gponLineProfileGemMapVlan,
+			ProfileGemMapPriority  gponLineProfileGemMapPriority,
+			ProfileGemMapPortType  gponLineProfileGemMapPortType,
+			ProfileGemMapPortId  gponLineProfileGemMapPortId 
+		FROM GponLineProfileGemMap 
+		WHERE entityId=#{entityId} and ProfileGemMapProfileIndex = #{profileIndex} 
+			and ProfileGemMapGemIndex = #{gemIndex} and ProfileGemMapIndex = #{gemMapIndex}
+	</select>
+
+	<insert id="insertGponLineProfileGemMap"  parameterType="gponLineProfileGemMap">
+		INSERT INTO 
+			GponLineProfileGemMap(entityId,ProfileGemMapProfileIndex,ProfileGemMapGemIndex,ProfileGemMapIndex,
+				ProfileGemMapVlan,ProfileGemMapPriority,ProfileGemMapPortType,ProfileGemMapPortId) 
+		VALUES (#{entityId},#{gponLineProfileGemMapProfileIndex},#{gponLineProfileGemMapGemIndex},
+			#{gponLineProfileGemMapIndex},#{gponLineProfileGemMapVlan},#{gponLineProfileGemMapPriority},
+			#{gponLineProfileGemMapPortType},#{gponLineProfileGemMapPortId})
+	</insert>
+	
+	<insert id="insertGponLineProfileTcont"  parameterType="gponLineProfileTcont">
+		INSERT INTO 
+			GponLineProfileTcont(ProfileTcontProfileIndex,ProfileTcontIndex,ProfileTcontDbaProfileId,entityId) 
+		VALUES (#{gponLineProfileTcontProfileIndex},#{gponLineProfileTcontIndex},#{gponLineProfileTcontDbaProfileId},#{entityId})
+	</insert>
+
+	<insert id="insertGponLineProfileGem" parameterType="gponLineProfileGem">
+		INSERT INTO 
+			GponLineProfileGem(entityId,ProfileGemProfileIndex,ProfileGemIndex,ProfileGemEncrypt,ProfileGemTcontId,
+			ProfileGemQueuePri,ProfileGemUpCar,ProfileGemDownCar,ProfileGemMapNum) 
+		VALUES (#{entityId},#{gponLineProfileGemProfileIndex},#{gponLineProfileGemIndex},#{gponLineProfileGemEncrypt},
+			#{gponLineProfileGemTcontId},#{gponLineProfileGemQueuePri},#{gponLineProfileGemUpCar},#{gponLineProfileGemDownCar},
+			#{gponLineProfileGemMapNum})
+	</insert>
+	
+	<insert id="insertGponLineProfileInfo"  parameterType="gponLineProfileInfo">
+		INSERT INTO 
+			GponLineProfileInfo(entityId,ProfileId,ProfileName,ProfileUpstreamFECMode,ProfileMappingMode,ProfileTcontNum,
+				ProfileGemNum,ProfileBindNum) 
+		VALUES (#{entityId},#{gponLineProfileId},#{gponLineProfileName},#{gponLineProfileUpstreamFECMode},
+			#{gponLineProfileMappingMode},#{gponLineProfileTcontNum},#{gponLineProfileGemNum},#{gponLineProfileBindNum})
+	</insert>
+	
+	<update id="updateGponLineProfileInfo" parameterType="gponLineProfileInfo">
+		UPDATE GponLineProfileInfo 
+		SET ProfileName=#{gponLineProfileName},ProfileUpstreamFECMode=#{gponLineProfileUpstreamFECMode},
+			ProfileMappingMode=#{gponLineProfileMappingMode}
+		WHERE  entityId=#{entityId} AND ProfileId=#{gponLineProfileId}
+	</update>
+	
+	<update id="updateGponLineProfileTcont" parameterType="gponLineProfileTcont">
+		UPDATE GponLineProfileTcont 
+		SET ProfileTcontDbaProfileId=#{gponLineProfileTcontDbaProfileId}
+		WHERE  ProfileTcontProfileIndex=#{gponLineProfileTcontProfileIndex} 
+			AND ProfileTcontIndex=#{gponLineProfileTcontIndex} AND entityId=#{entityId}
+	</update>
+	
+	<update id="updateGponLineProfileGem" parameterType="gponLineProfileGem">
+		UPDATE GponLineProfileGem 
+		SET ProfileGemEncrypt=#{gponLineProfileGemEncrypt},ProfileGemTcontId=#{gponLineProfileGemTcontId},
+			ProfileGemQueuePri=#{gponLineProfileGemQueuePri},
+			ProfileGemUpCar=#{gponLineProfileGemUpCar},ProfileGemDownCar=#{gponLineProfileGemDownCar}
+		WHERE  entityId=#{entityId} AND ProfileGemProfileIndex=#{gponLineProfileGemProfileIndex} 
+			AND ProfileGemIndex=#{gponLineProfileGemIndex}
+	</update>
+	
+	<update id="updateGponLineProfileGemMap" parameterType="gponLineProfileGemMap">
+		UPDATE GponLineProfileGemMap 
+			SET ProfileGemMapVlan=#{gponLineProfileGemMapVlan},ProfileGemMapPriority=#{gponLineProfileGemMapPriority},
+				ProfileGemMapPortType=#{gponLineProfileGemMapPortType},ProfileGemMapPortId=#{gponLineProfileGemMapPortId}
+		WHERE  entityId=#{entityId} AND ProfileGemMapProfileIndex=#{gponLineProfileGemMapProfileIndex} 
+			AND ProfileGemMapGemIndex=#{gponLineProfileGemMapGemIndex} AND ProfileGemMapIndex=#{gponLineProfileGemMapIndex} 
+	</update>
+	
+	<delete id="deleteGponLineProfileInfo"  parameterType="map">
+		DELETE FROM GponLineProfileInfo WHERE entityId=#{entityId} and ProfileId = #{gponLineProfileId}
+	</delete>
+	
+	<delete id="deleteGponLineProfileTcont"  parameterType="map">
+		DELETE FROM GponLineProfileTcont WHERE entityId=#{entityId} 
+		and ProfileTcontProfileIndex = #{profileIndex} and ProfileTcontIndex = #{tcontIndex}  
+	</delete>
+	
+	<delete id="deleteGponLineProfileGem" parameterType="gponLineProfileGem">
+		DELETE FROM GponLineProfileGem WHERE entityId=#{entityId} 
+		AND ProfileGemProfileIndex=#{profileIndex} AND ProfileGemIndex=#{gemIndex} 
+	</delete>
+	
+	<delete id="deleteGponLineProfileGemMap" parameterType="gponLineProfileGemMap">
+		DELETE FROM GponLineProfileGemMap 
+		WHERE  entityId=#{entityId} 
+			AND ProfileGemMapProfileIndex=#{profileIndex} 
+			AND ProfileGemMapGemIndex=#{gemIndex} 
+			AND ProfileGemMapIndex=#{gemMapIndex} 
+	</delete>
+</mapper>

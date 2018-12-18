@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.topvision.ems.gpon.onu.domain.GponOnuBusinessInfo">
+
+	<sql id="selectTable">
+		FROM oltonuattribute A 
+		LEFT JOIN oltonuponrelation B ON A.onuId = B.onuId
+		LEFT JOIN oltonuponattribute C ON C.onuPonId=B.onuPonId
+		LEFT JOIN oltonurelation D ON A.onuId = D.onuId
+		LEFT JOIN entity E ON A.onuId = E.entityId
+		LEFT JOIN entity F ON E.parentId = F.entityId
+		LEFT JOIN entitytype G ON G.typeId = E.typeId
+		LEFT JOIN entitytyperelation H ON H.typeId = G.typeId
+		LEFT JOIN userAttention I ON I.entityId = A.onuId
+		LEFT JOIN onutagrelation OT ON OT.onuId = A.onuId
+		LEFT JOIN onutag T ON T.id = OT.tagId
+		LEFT JOIN perftemplateentityrelation PTER on PTER.entityId = A.onuId
+	</sql>
+	
+	<sql id="selectCondition">
+		WHERE 
+			H.type=130000
+			AND A.onuEorG='G'
+			AND A.onuId in (select entityId from  ${Authority})
+		<if test="queryContent != null">
+            AND (A.onuMac LIKE "%${queryContentMac}%" 
+            	<if test="queryMacWithoutSplit != null">
+                	OR REPLACE(A.onuMac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+                	OR REPLACE(A.onuUniqueIdentification, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            	</if>
+            	OR E.name LIKE "%${queryContent}%" OR F.name LIKE "%${queryContent}%" OR  F.ip LIKE "%${queryContent}%"
+            	OR A.onuUniqueIdentification LIKE "%${queryContent}%"
+            	)
+        </if>
+        <if test="queryContent == null">
+        	<if test="onuName != null">
+	            and E.name LIKE '%${onuName}%'
+	        </if>
+	        <if test="macAddress != null">
+	        	AND (A.onuMac LIKE '%${macAddress}%' or A.onuUniqueIdentification LIKE '%${macAddress}%'
+				<if test="queryMacWithoutSplit != null">
+					OR REPLACE(A.onuMac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+					OR REPLACE(A.onuUniqueIdentification, ':', '') LIKE '%${queryMacWithoutSplit}%'
+				</if>
+				)
+	        </if>
+	        <if test="tagId != null">
+	            and T.id = #{tagId}
+	        </if>
+	        <if test="onuPreType != null">
+	            AND E.typeId = #{onuPreType}
+        	</if>
+        	<if test="entityId != null">
+				and A.entityId = #{entityId}
+			</if>
+			<if test="slotId != null and ponId == null">
+				AND EXISTS (SELECT * FROM oltonurelation K,oltponrelation J WHERE K.onuid=A.onuId AND K.ponid=J.ponid and  slotid = #{slotId})
+			</if>
+			<if test="ponId != null">
+				and D.ponId = #{ponId}
+			</if>
+			<if test="status != null">
+				and A.onuOperationStatus=#{status}
+			</if>
+        </if>
+	</sql>
+
+	<select id="selectGponOnuBusinessList" parameterType="map" resultMap="onuBusinessInfoResult">
+		SELECT 
+			A.onuMac, A.onuPreType, B.onuId, D.onuIndex, F.entityId, F.ip AS entityIp, F.name AS manageName,
+			E.name, A.onuUniqueIdentification, A.onuOperationStatus, A.onuLlidId, G.displayName AS typeName, 
+			E.typeId, I.userId AS attention,T.tagName, T.id AS tagId,PTER.templateId,
+			(SELECT offReason from onuonoffrecord WHERE onuId = A.onuId ORDER BY offTime DESC limit 1) AS lastOfflineReason,
+			(SELECT COUNT(OUL.onuId) FROM onucpelistlast OCL,oltunirelation OUL where OCL.entityId = OUL.entityId AND OCL.uniIndex=OUL.uniIndex AND OUL.onuId= A.onuId) AS cpeNum
+		<include refid="selectTable"/>
+		<include refid="selectCondition"/>
+        <if test="sort != null and dir != ''">
+			<choose>
+				<when test="sort == 'entityIp'.toString()">
+					ORDER BY inet_aton(entityIp) ${dir}
+				</when>
+				<when test="sort == 'onuOperationStatus'">
+					ORDER BY IF((onuOperationStatus = 1), 1, 0) ${dir}, ${sort} ${dir}, lastOfflineReason ${dir}
+				</when>
+				<otherwise>
+					order by ${sort} ${dir}
+				</otherwise>
+			</choose>
+		</if>
+        limit ${start},${limit}
+	</select>
+	
+	<select id="selectGponOnuBusinessCount" parameterType="map" resultType="int">
+	    SELECT 
+			COUNT(A.onuId)
+		<include refid="selectTable"/>
+		<include refid="selectCondition"/>
+	</select>
+	
+	<resultMap id="onuBusinessInfoResult" type="gponOnuBusinessInfo">
+		<id property="onuId" column="onuId" />
+		<result property="name" column="name" />
+		<result property="onuIndex" column="onuIndex" />
+		<result property="entityId" column="entityId" />
+		<result property="entityIp" column="entityIp" />
+		<result property="manageName" column="manageName" />
+		<result property="onuUniqueIdentification" column="onuUniqueIdentification" />
+		<result property="onuOperationStatus" column="onuOperationStatus" />
+		<result property="attention" column="attention" />
+		<result property="tagName" column="tagName" />
+		<result property="lastOfflineReason" column="lastOfflineReason" />
+		<result property="cpeNum" column="cpeNum" />
+		<collection property="uniPorts" javaType="ArrayList" column="onuId" ofType="gponUniAttribute" select="selectUniPortForOnu"/>
+		<collection property="wanConnects" javaType="ArrayList" column="onuId" ofType="onuWanConnect" select="selectWanConnectForOnu"/>
+		<collection property="wanSsids" javaType="ArrayList" column="onuId" ofType="onuWanSsid" select="selectWanSsidForOnu"/>
+	</resultMap>
+	
+	<select id="selectUniPortForOnu" parameterType="long" resultType="gponUniAttribute">
+		SELECT 
+			B.uniIndex,A.uniId,A.uniOperationStatus ethOperationStatus,C.vlanPVid gponOnuUniPvid,C.vlanTagPriority  gponOnuUniPri
+		FROM oltuniattribute A
+		LEFT JOIN oltunirelation B ON A.uniId=B.uniId 
+		left join onuportvlan C on B.uniId = C.uniId and B.entityId = C.entityId
+		WHERE B.onuId = #{onuId}
+	</select>
+	
+	<select id="selectWanConnectForOnu" parameterType="long" resultType="onuWanConnect">
+		SELECT 
+			owc.connectId, owc.connectName, ipMode, owc.ipv4Address, connectStatus, owcs.ipv4Address pppoeStatusIpv4Addr
+		FROM onuwanconnect owc
+		LEFT JOIN onuwanconnectstatus owcs ON owc.onuId = owcs.onuId AND owc.connectId = owcs.connectId
+		WHERE owc.onuId = #{onuId}
+	</select>
+	
+	<select id="selectWanSsidForOnu" parameterType="long" resultType="onuWanSsid">
+		SELECT 
+			ssid, ssidName
+		FROM onuwanssid 
+		WHERE onuId = #{onuId}
+	</select>
+	
+</mapper>

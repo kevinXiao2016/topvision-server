@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="OnuVoip">
+    
+    <select id="getTopSIPPstnUser" parameterType="map" resultType="topSIPPstnUser">
+        select * from topsippstnuser where onuId = #{onuId} and topSIPPstnUserPotsIdx = #{topSIPPstnUserPotsIdx}
+    </select>
+    
+    <select id="getTopVoIPLineStatus" parameterType="long" resultType="topVoIPLineStatus">
+        select * from topvoiplinestatus where onuId = #{onuId} and topVoIPLinePotsIdx = 1
+    </select>
+    
+    <select id="getGponOnuPotsList" parameterType="long" resultType="topGponOnuPots">
+	    SELECT
+		    A.onuId,
+		    A.entityId,
+		    A.topSIPPstnUserPotsIdx,
+		    A.topSIPPstnUserTelno,
+		    A.topSIPPstnUserForwardType,
+		    A.topSIPPstnUserTransferNum,
+		    A.topSIPPstnUserForwardTime,
+		    A.topSIPPstnUserSipsrvId,
+		    A.topSIPPstnUserDigitmapId,
+		    B.topVoIPLineCodec,
+		    B.topVoIPLineServStatus,
+		    B.topVoIPLineSessType,
+		    B.topVoIPLineState,
+		    D.topOnuIfPotsAdminState,
+		
+		    potsinfo.topGponSrvPotsInfoIpIdx topGponSrvPotsInfoPotsIdx,
+		    iphost.onuIpHostAddress topGponSrvPotsInfoIpIdx,
+		    iphost.onuIpHostVlanTagPriority,
+		    iphost.onuIpHostVlanPVid
+		FROM
+		    topsippstnuser AS A
+		LEFT JOIN topvoiplinestatus AS B ON A.onuId = B.onuId
+		LEFT JOIN toponuifpotsinfo AS D ON (A.onuId = D.onuId AND A.topSIPPstnUserPotsIdx = D.topOnuIfPotsPotsIdx)
+		
+		left join oltonuattribute onu on A.onuId = onu.onuId
+		left join GponOnuAuthConfig auth on (onu.onuserialNum = auth.sn and A.entityId = auth.entityId)
+		left join TopGponSrvPotsInfo potsinfo on (potsInfo.entityId  = A.entityId and auth.srvProfileId = potsinfo.topgponsrvpotsinfoprofIdx and A.topSIPPstnUserPotsIdx = potsinfo.topGponSrvPotsInfoPotsIdx)
+		left join gpon_onuiphost iphost on (iphost.onuId = A.onuId and iphost.onuIpHostIndex =  potsinfo.topgponsrvPotsInfoIPidx)
+		WHERE A.onuId = #{onuId}
+		ORDER BY A.topSIPPstnUserPotsIdx
+    </select>
+
+    <insert id="insertOrUpdateTopVoIPLineStatus" parameterType="topVoIPLineStatus">
+        insert into topvoiplinestatus
+            (entityId,onuId,onuIndex,
+            topVoIPLineSlotIdx,topVoIPLinePortIndx,topVoIPLineOnuIdx,topVoIPLinePotsIdx,
+            topVoIPLineCodec,topVoIPLineServStatus,topVoIPLineSessType,topVoIPLineState)
+        values
+            (#{entityId},#{onuId},#{onuIndex},            
+            #{topVoIPLineSlotIdx},#{topVoIPLinePortIndx},#{topVoIPLineOnuIdx},#{topVoIPLinePotsIdx},
+            #{topVoIPLineCodec},#{topVoIPLineServStatus},#{topVoIPLineSessType},#{topVoIPLineState})
+        ON DUPLICATE KEY UPDATE
+            entityId = #{entityId},
+            onuIndex = #{onuIndex},
+            topVoIPLineSlotIdx = #{topVoIPLineSlotIdx},
+            topVoIPLinePortIndx = #{topVoIPLinePortIndx},
+            topVoIPLineOnuIdx = #{topVoIPLineOnuIdx},
+            topVoIPLineCodec = #{topVoIPLineCodec},
+            topVoIPLineServStatus = #{topVoIPLineServStatus},
+            topVoIPLineSessType = #{topVoIPLineSessType},
+            topVoIPLineState = #{topVoIPLineState}
+    </insert>
+    
+    <insert id="insertOrUpdateTopSIPPstnUser" parameterType="topSIPPstnUser">
+        insert into topsippstnuser
+            (entityId,onuId,onuIndex,
+            topSIPPstnUserSlotIdx,topSIPPstnUserPortIndx,topSIPPstnUserOnuIdx,topSIPPstnUserPotsIdx,
+            topSIPPstnUserTelno,topSIPPstnUserName,topSIPPstnUserPwd,
+            topSIPPstnUserForwardType,topSIPPstnUserTransferNum,topSIPPstnUserDigitmapId,topSIPPstnUserSipsrvId,
+            topSIPPstnUserForwardTime)
+        values
+            (#{entityId},#{onuId},#{onuIndex},            
+            #{topSIPPstnUserSlotIdx},#{topSIPPstnUserPortIndx},#{topSIPPstnUserOnuIdx},#{topSIPPstnUserPotsIdx},
+            #{topSIPPstnUserTelno},#{topSIPPstnUserName},#{topSIPPstnUserPwd},
+            #{topSIPPstnUserForwardType},#{topSIPPstnUserTransferNum},#{topSIPPstnUserDigitmapId},#{topSIPPstnUserSipsrvId},
+            #{topSIPPstnUserForwardTime})
+        ON DUPLICATE KEY UPDATE
+            entityId = #{entityId},
+            onuIndex = #{onuIndex},
+            topSIPPstnUserSlotIdx = #{topSIPPstnUserSlotIdx},
+            topSIPPstnUserPortIndx = #{topSIPPstnUserPortIndx},
+            topSIPPstnUserOnuIdx = #{topSIPPstnUserOnuIdx},
+            topSIPPstnUserTelno = #{topSIPPstnUserTelno},
+            topSIPPstnUserName = #{topSIPPstnUserName},
+            topSIPPstnUserPwd = #{topSIPPstnUserPwd},
+            topSIPPstnUserForwardType = #{topSIPPstnUserForwardType},
+            topSIPPstnUserTransferNum = #{topSIPPstnUserTransferNum},
+            topSIPPstnUserDigitmapId = #{topSIPPstnUserDigitmapId},
+            topSIPPstnUserSipsrvId = #{topSIPPstnUserSipsrvId},
+            topSIPPstnUserForwardTime = #{topSIPPstnUserForwardTime}
+    </insert>
+    
+    <insert id="insertOrUpdateTopOnuIfPotsInfo" parameterType="topOnuIfPotsInfo">
+        insert into toponuifpotsinfo
+            (entityId,onuId,onuIndex,
+            topOnuIfPotsSlotIdx,topOnuIfPotsPortIndx,topOnuIfPotsOnuIdx,topOnuIfPotsPotsIdx,topOnuIfPotsAdminState)
+        values
+            (#{entityId},#{onuId},#{onuIndex},            
+            #{topOnuIfPotsSlotIdx},#{topOnuIfPotsPortIndx},#{topOnuIfPotsOnuIdx},#{topOnuIfPotsPotsIdx},#{topOnuIfPotsAdminState})
+        ON DUPLICATE KEY UPDATE
+            entityId = #{entityId},
+            onuIndex = #{onuIndex},
+            topOnuIfPotsSlotIdx = #{topOnuIfPotsSlotIdx},
+            topOnuIfPotsPortIndx = #{topOnuIfPotsPortIndx},
+            topOnuIfPotsOnuIdx = #{topOnuIfPotsOnuIdx},
+            topOnuIfPotsAdminState = #{topOnuIfPotsAdminState}
+    </insert>
+    
+    <update id="updateTopSIPPstnUser" parameterType="topSIPPstnUser">
+        update topsippstnuser set
+            topSIPPstnUserTelno = #{topSIPPstnUserTelno},
+            topSIPPstnUserName = #{topSIPPstnUserName},
+            topSIPPstnUserPwd = #{topSIPPstnUserPwd},
+            topSIPPstnUserForwardType = #{topSIPPstnUserForwardType},
+            topSIPPstnUserTransferNum = #{topSIPPstnUserTransferNum},
+            topSIPPstnUserForwardTime = #{topSIPPstnUserForwardTime},
+            topSIPPstnUserDigitmapId = #{topSIPPstnUserDigitmapId},
+            topSIPPstnUserSipsrvId = #{topSIPPstnUserSipsrvId}
+        where onuId = #{onuId} and topSIPPstnUserPotsIdx = #{topSIPPstnUserPotsIdx}
+    </update>
+    
+    <update id="updatePotsAdminStatusByOnuIdAndPotsIdx" parameterType="map">
+        update toponuifpotsinfo set 
+            topOnuIfPotsAdminState = #{topOnuIfPotsAdminState}
+        where onuId = #{onuId} and topOnuIfPotsPotsIdx = #{topOnuIfPotsPotsIdx}
+    </update>
+</mapper>

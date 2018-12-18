@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.platform.domain.EngineServer">
+	<insert id="insertEntity" parameterType="engineServer"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+		EngineServer(name, ip,
+		port, xmx, xms, note, type, manageStatus, linkStatus,
+		adminStatus)
+		VALUES (#{name}, #{ip},
+		#{port}, #{xmx}, #{xms}, #{note},
+		#{type},
+		#{manageStatus}, #{linkStatus},
+		#{adminStatus})
+	</insert>
+
+	<update id="updateEntity" parameterType="engineServer">
+		UPDATE EngineServer SET
+		name = #{name}, ip = #{ip}, port = #{port},
+		xmx=#{xmx}, xms=#{xms},
+		note = #{note}, type = #{type} WHERE id = #{id}
+	</update>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		DELETE FROM
+		EngineServer WHERE id = #{id}
+	</delete>
+
+	<delete id="deleteEngineServers" parameterType="java.util.List">
+		DELETE FROM EngineServer WHERE
+		<foreach item="item" index="index" collection="list" open="("
+			separator="OR" close=")">
+			id=#{item}
+		</foreach>
+	</delete>
+
+	<update id="startEngineServers" parameterType="java.util.List">
+		update EngineServer set adminStatus = 1 WHERE
+		<foreach item="item" index="index" collection="list" open="("
+			separator="OR" close=")">
+			id=#{item}
+		</foreach>
+	</update>
+
+	<update id="stopEngineServers" parameterType="java.util.List">
+		update EngineServer set adminStatus = 2, linkStatus = 2 WHERE
+		<foreach item="item" index="index" collection="list" open="("
+			separator="OR" close=")">
+			id=#{item}
+		</foreach>
+	</update>
+
+	<update id="updateLinkStatus" parameterType="engineServer">
+		update EngineServer
+		set linkStatus = #{linkStatus} WHERE id =
+		#{id}
+	</update>
+
+	<update id="updateManageStatus" parameterType="engineServer">
+		update
+		EngineServer
+		set manageStatus = #{manageStatus} WHERE ip = #{ip}
+	</update>
+
+
+	<select id="selectByMap" parameterType="map" resultType="engineServer">
+		SELECT
+		id, name, ip, port, version, xmx, xms, note, type, manageStatus,
+		linkStatus,adminStatus
+		FROM
+		EngineServer
+	</select>
+
+	<update id="updateEngineVersion" parameterType="engineServer">
+		update engineserver set version = #{version} where id=#{id}
+	</update>
+
+</mapper>

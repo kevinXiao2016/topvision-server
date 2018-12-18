@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcPerfThreshold" namespace="/cmc/perfThreshold" extends="default">
+		<!-- 添加操作日志拦截器配置  -->
+
+		
+		<!-- 跳转到CCMTS性能阈值告警页面 -->
+		<action name="showCCPerfTemp" class="cmcPerfThresholdAction" method="showCCPerfTemp">
+        	<result>/performance/perfThreshold/ccPerfTemplate.jsp</result>
+        </action>
+        
+        <!--加载CCMTS与绑定的阈值模板的列表 -->
+        <action name="loadCmcThresholdTemplate" class="cmcPerfThresholdAction" method="loadCmcThresholdTemplate" />
+	</package>
+</struts>

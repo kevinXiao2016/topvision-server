@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.spectrum.domain.SpectrumConfig">
+	<select id="getCmtsSwitchStatus" parameterType="long" resultType="int">
+		SELECT collectSwitch FROM spectrumiiswitchcmts where cmcId = #{cmcId}
+	</select>
+	
+	<select id="getCmtsSpectrumConfig" parameterType="map" resultType="com.topvision.ems.cmc.spectrum.domain.CmtsSpectrumConfig">
+		SELECT 
+			cmcattribute.cmcId cmcId,
+			entity1.name cmtsName,
+			entity2.ip cmtsIp,
+			entity2.entityId,
+			entity1.typeId typeId,
+			cmcentityrelation.cmcEntityId,
+			spectrumiiswitcholt.collectSwitch oltCollectSwitch,
+			spectrumiiswitchcmts.collectSwitch cmtsCollectSwitch,
+			spectrumiiswitchcmts.hisVideoSwitch hisVideoSwitch,
+			IFNULL(entity1.ip,CONCAT(entity2.name,'(',entity2.ip,')')) AS uplinkDevice
+		FROM 
+			cmcattribute
+		LEFT JOIN cmcentityrelation ON cmcattribute.cmcId = cmcentityrelation.cmcId
+		LEFT JOIN spectrumiiswitcholt ON cmcentityrelation.cmcEntityId = spectrumiiswitcholt.entityId
+		LEFT JOIN spectrumiiswitchcmts ON cmcattribute.cmcId = spectrumiiswitchcmts.cmcId
+		LEFT JOIN entity entity1 ON cmcattribute.cmcId = entity1.entityId
+		LEFT JOIN entity entity2 ON cmcentityrelation.cmcEntityId = entity2.entityId
+		WHERE 1=1 
+			and cmcattribute.cmcId in (select entityId from ${Authority})
+			and entity1.typeId in (select typeId from entitytyperelation where type = #{type})
+		<if test="cmtsName != null">
+        	AND entity1.name like '%${cmtsName}%'
+        </if>
+        <if test="cmtsIp != null">
+        	AND IFNULL(entity1.ip,CONCAT(entity2.name,'(',entity2.ip,')')) like '%${cmtsIp}%'
+        </if>
+        <if test="typeId != null">
+         	AND entity1.typeId = #{typeId}
+        </if>
+        <if test="oltCollectSwitch != null">
+        	<if test="oltCollectSwitch == 1">
+        		AND spectrumiiswitcholt.collectSwitch = '1'
+        	</if>
+        	<if test="oltCollectSwitch == 0">
+        		AND (spectrumiiswitcholt.collectSwitch = '0' OR spectrumiiswitcholt.collectSwitch is null)
+        	</if>
+        </if>
+        <if test="cmtsCollectSwitch != null">
+      		<if test="cmtsCollectSwitch == 1">
+        		AND spectrumiiswitchcmts.collectSwitch = '1'
+        	</if>
+        	<if test="cmtsCollectSwitch == 0">
+        		AND (spectrumiiswitchcmts.collectSwitch = '0' OR spectrumiiswitchcmts.collectSwitch is null)
+        	</if>
+        </if>
+        <if test="hisVideoSwitch != null">
+        	<if test="hisVideoSwitch == 1">
+        		AND spectrumiiswitchcmts.hisVideoSwitch = '1'
+        	</if>
+        	<if test="hisVideoSwitch == 0">
+        		AND (spectrumiiswitchcmts.hisVideoSwitch = '0' OR spectrumiiswitchcmts.hisVideoSwitch is null)
+        	</if>
+        </if>
+        ORDER BY 
+        	cmcId DESC
+        <if test="start != null and limit != null">
+		LIMIT
+			${start} , ${limit}
+        </if>
+	</select>
+	
+	<select id="getCmtsSpectrumConfigCount" parameterType="map" resultType="java.lang.Long">
+		SELECT 
+			count(*)
+		FROM 
+			cmcattribute
+		LEFT JOIN cmcentityrelation ON cmcattribute.cmcId = cmcentityrelation.cmcId
+		LEFT JOIN spectrumiiswitcholt ON cmcentityrelation.cmcEntityId = spectrumiiswitcholt.entityId
+		LEFT JOIN spectrumiiswitchcmts ON cmcentityrelation.cmcEntityId = spectrumiiswitchcmts.cmcId
+		LEFT JOIN entity entity1 ON cmcattribute.cmcId = entity1.entityId
+		LEFT JOIN entity entity2 ON cmcentityrelation.cmcEntityId = entity2.entityId
+		WHERE 1=1 and cmcattribute.cmcId in (select entityId from ${Authority})
+		<if test="cmtsName != null">
+        	AND entity1.name like '%${cmtsName}%'
+        </if>
+        <if test="cmtsIp != null">
+        	AND IFNULL(entity1.ip,CONCAT(entity2.name,'(',entity2.ip,')')) like '%${cmtsIp}%'
+        </if>
+        <if test="typeId != null">
+         	AND entity1.typeId = #{typeId}
+        </if>
+        <if test="oltCollectSwitch != null">
+        	<if test="oltCollectSwitch == 1">
+        		AND spectrumiiswitcholt.collectSwitch = '1'
+        	</if>
+        	<if test="oltCollectSwitch == 0">
+        		AND (spectrumiiswitcholt.collectSwitch = '0' OR spectrumiiswitcholt.collectSwitch is null)
+        	</if>
+        </if>
+        <if test="cmtsCollectSwitch != null">
+      		<if test="cmtsCollectSwitch == 1">
+        		AND spectrumiiswitchcmts.collectSwitch = '1'
+        	</if>
+        	<if test="cmtsCollectSwitch == 0">
+        		AND (spectrumiiswitchcmts.collectSwitch = '0' OR spectrumiiswitchcmts.collectSwitch is null)
+        	</if>
+        </if>
+        <if test="hisVideoSwitch != null">
+        	<if test="hisVideoSwitch == 1">
+        		AND spectrumiiswitchcmts.hisVideoSwitch = '1'
+        	</if>
+        	<if test="hisVideoSwitch == 0">
+        		AND (spectrumiiswitchcmts.hisVideoSwitch = '0' OR spectrumiiswitchcmts.hisVideoSwitch is null)
+        	</if>
+        </if>
+	</select>
+	
+	<select id="getCmtsSwitchById" parameterType="long" resultType="com.topvision.ems.cmc.spectrum.domain.CmtsSpectrumConfig">
+	    SELECT
+	    	spectrumiiswitchcmts.cmcId cmcId,
+	    	spectrumiiswitchcmts.hisVideoSwitch hisVideoSwitch,
+	    	spectrumiiswitchcmts.collectSwitch cmtsCollectSwitch
+	   	FROM
+	    	spectrumiiswitchcmts
+	    WHERE
+	    	cmcId = #{cmcId}
+	</select>
+	
+	<select id="getSpectrumSwitchOlt" parameterType="long" resultType="int">
+	    SELECT 
+	    	collectSwitch
+	    FROM
+	    	spectrumiiswitcholt
+	   	WHERE 
+	   		entityId = #{entityId}
+	</select>
+	
+	<select id="getOltSpectrumConfig" parameterType="map" resultType="com.topvision.ems.cmc.spectrum.facade.domain.SpectrumOltSwitch">
+		SELECT 
+		    a.entityId,
+		    a.name oltName,
+		    a.ip entityIp,
+		    IF(B.collectSwitch IS NULL, 0, B.collectSwitch) collectSwitch,
+		    C.state
+		FROM
+		    entity A
+		LEFT JOIN spectrumiiswitcholt B ON A.entityId=B.entityId
+		LEFT JOIN entitysnap C ON A.entityId=C.entityId
+		WHERE 1=1 AND A.typeId in (SELECT typeId FROM entitytyperelation WHERE type=10000)
+		<if test="oltName != null">
+            AND A.name like '%${oltName}%'
+        </if>
+        <if test="entityIp != null">
+            AND A.ip like '%${entityIp}%'
+        </if>
+        <if test="oltCollectSwitch != null and oltCollectSwitch == 1">
+            AND B.collectSwitch = 1
+        </if>
+        <if test="oltCollectSwitch != null and oltCollectSwitch == 0">
+            AND (B.collectSwitch = 0 OR B.collectSwitch IS NULL) 
+        </if>
+        LIMIT
+            ${start} , ${limit}
+	</select>
+	
+	<select id="getOltSpectrumConfigCount" parameterType="map" resultType="long">
+		SELECT 
+			count(*) 
+		FROM
+			spectrumiiswitcholt b left join entity a on a.entityId = b.entityId
+		WHERE 1=1 and b.entityId in (select entityId from ${Authority})
+		<if test="oltName != null">
+			AND a.name like '%${oltName}%'
+		</if>
+		<if test="entityIp != null">
+			AND a.ip like '%${entityIp}%'
+		</if>
+		<if test="oltCollectSwitch != null">
+			AND b.collectSwitch = #{oltCollectSwitch}
+		</if>
+	</select>
+	
+	<select id="getOltSwitchStatus" parameterType="long" resultType="int">
+	    SELECT 
+			spectrumiiswitcholt.collectSwitch oltCollectSwitch
+		FROM 
+			cmcattribute
+		LEFT JOIN cmcentityrelation ON cmcattribute.cmcId = cmcentityrelation.cmcId
+		LEFT JOIN spectrumiiswitcholt ON cmcentityrelation.cmcEntityId = spectrumiiswitcholt.entityId
+		WHERE
+			cmcattribute.cmcId = #{cmcId}
+	</select>
+	
+	<insert id="insertSpectrumSwitchCmts" parameterType="long">
+	    INSERT INTO 
+	    	spectrumiiswitchcmts(
+	    		cmcId,
+	    		collectSwitch
+	    	) 
+	    VALUES (
+	    		#{cmcId},
+	    		1
+	    	)
+	</insert>
+	
+	<update id="startSpectrumSwitchCmts" parameterType="long">
+		UPDATE spectrumiiswitchcmts
+		SET collectSwitch = 1
+		WHERE cmcId = #{cmcId}
+	</update>
+	
+	<update id="stopSpectrumSwitchCmts" parameterType="long">
+		UPDATE spectrumiiswitchcmts
+		SET collectSwitch = 0
+		WHERE cmcId = #{cmcId}
+	</update>
+	
+	<update id="updateSpectrumSwitchOlt" parameterType="map">
+	    INSERT INTO spectrumiiswitcholt(entityId, collectSwitch)
+	    VALUES(#{entityId}, #{status})
+	    ON DUPLICATE KEY UPDATE 
+		collectswitch = #{status}
+	</update>
+</mapper>

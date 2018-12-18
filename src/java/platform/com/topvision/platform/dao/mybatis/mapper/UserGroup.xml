@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.platform.domain.UserGroup">
+    <insert id="insertEntity" parameterType="userGroup" useGeneratedKeys="true" keyProperty="userGroupId">
+        INSERT INTO UserGroup (name, description, createTime) VALUES
+        (#{name}, #{description}, #{createTime})
+    </insert>
+
+    <delete id="deleteByPrimaryKey" parameterType="long">
+        DELETE FROM UserGroup WHERE userGroupId = #{userGroupId}
+    </delete>
+
+    <select id="selectByPrimaryKey" parameterType="long" resultType="userGroup">
+        SELECT * FROM UserGroup WHERE userGroupId =
+        #{userGroupId}
+    </select>
+
+    <select id="selectByMap" parameterType="map" resultType="userGroup">
+        SELECT * FROM UserGroup
+    </select>
+</mapper>

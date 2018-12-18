@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.performance.domain.OnuLinkCollectInfo">
+
+	<insert id="insertOnuOnlineStatus" parameterType="onuOnlineResult">
+		insert into
+		onuonlinestatus(entityId, onuId, onuIndex, onlineStatus, collectTime)
+		values(#{entityId},#{onuId},#{onuIndex},#{onuOnlneStatus},#{collectTime})
+	</insert>
+
+	<insert id="insertOnuLinkQuality" parameterType="onuLinkQualityResult">
+		insert into
+		perfonulinkquality(entityId, onuId, onuIndex, onuPonRevPower,
+		onuPonTransPower, oltPonRevPower, collectTime)
+		values(#{entityId},#{onuId},#{onuIndex},#{onuPonRevPower},#{onuPonTransPower},#{oltPonRevPower},#{collectTime})
+	</insert>
+
+	<insert id="insertOnuCatvQuality" parameterType="onuCatvOrInfoResult">
+		insert into
+		perfonucatvquality
+		(entityId, onuId, onuIndex, onuCatvOrInfoRxPower,
+		onuCatvOrInfoRfOutVoltage,
+		onuCatvOrInfoVoltage,
+		onuCatvOrInfoTemperature,
+		collectTime
+		)
+		values
+		(#{entityId}, #{onuId},
+		#{onuIndex}, #{onuCatvOrInfoRxPower},
+		#{onuCatvOrInfoRfOutVoltage},
+		#{onuCatvOrInfoVoltage},
+		#{onuCatvOrInfoTemperature},
+		#{collectTime}
+		)
+	</insert>
+
+	<select id="queryUniIndexByOnuId" parameterType="long"
+		resultType="long">
+		select uniIndex from oltunirelation where onuId = #{ounId}
+	</select>
+	
+	<select id="queryOnuTypeByOnuId" parameterType="long"
+		resultType="String">
+		select onuEorG from oltonuattribute where onuId = #{ounId}
+	</select>
+
+	<select id="queryPonIndexByOnuId" parameterType="long"
+		resultType="long">
+		select onuPonIndex from oltonuponrelation where onuId =
+		#{ounId}
+	</select>
+
+	<insert id="insertOnuFlowQuality" parameterType="onuFlowCollectInfo">
+		insert into
+		perfonuflowquality(onuId, portIndex, entityId, portInOctets,
+		portOutOctets,portInSpeed, portOutSpeed, collectTime)
+		values(#{onuId},#{portIndex},#{entityId},#{portInOctets},#{portOutOctets},#{portInSpeed},#{portOutSpeed},#{collectTime})
+	</insert>
+	
+	 <delete id="removeOnuCpeListByEntityId" parameterType="long">
+        delete from onucpelistlast where entityId = #{entityId}
+    </delete>
+    <delete id="removeOnuCpeCountByEntityId" parameterType="long">
+        delete from onucpecountlast where entityId = #{entityId}
+    </delete>
+
+    <insert id="insertOnuCpeList" parameterType="onuCpe">
+        insert into onucpelistlast(entityId,uniIndex,mac,type,vlan,realtime,ipAddress,cpeType)
+        values(#{entityId},#{uniIndex},#{mac},#{type},#{vlan},#{realtime},#{ipAddress},#{cpeType});
+    </insert>
+    <insert id="insertOnuCpeCount" parameterType="onuUniCpeCount">
+        insert into onucpecountlast(entityId,uniIndex,uniNo,cpecount,realtime)
+        values(#{entityId},#{uniIndex},#{uniNo},#{cpecount},#{realtime});
+    </insert>
+</mapper> 

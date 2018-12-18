@@ -1,0 +1,688 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.performance.domain.PerfThreshold">
+
+	<!-- 加载设备子类型 -->
+	<select id="loadEntitySubType" parameterType="int" resultType="entityType">
+		SELECT typeId, displayName
+		FROM entitytype
+		WHERE typeId in (select typeId from entitytyperelation where type = #{entityType})
+		GROUP BY displayName 
+		order by typeId ASC
+	</select>
+
+	<!-- 加载设备类型与模板之间的关系 -->
+	<select id="loadEntityTypeTemplateRelation" resultType="entityTypeTemplateRelation">
+		SELECT
+		typeId,
+		displayName
+		FROM entitytype et
+		WHERE (et.typeId in (select typeId from entitytyperelation where type in (10000, 13000, 60000)) OR et.typeId in (10000,13000, 60000))
+		ORDER BY typeId ASC
+	</select>
+
+	<!-- 获取哪些设备子类型拥有默认模板 -->
+	<select id="loadSubTypeWhichHasDefaultTemp" resultType="int">
+		SELECT
+		templateType
+		FROM perfthresholdtemplate
+		WHERE isDefaultTemplate=1 AND
+		templateType IN
+		(SELECT typeId FROM entitytype WHERE type = 1)
+	</select>
+
+	<!-- 获取符合查询条件的设备阈值模板列表 -->
+	<select id="selectEntityThresholdTemplate" parameterType="map" resultType="perfThresholdEntity">
+		SELECT * FROM
+		(SELECT
+			e.entityId,
+			e.name AS entityName, 
+			e.parentId,
+			B.name as parentName,
+			IFNULL(e.ip,B.ip) AS entityIp,
+			e.mac,
+			et.displayName AS entityTypeDisplayName,
+			et.typeId,	
+			ter.isPerfThreshold,
+			ter.templateId,
+			ptt.templateName,
+			IFNULL(e.ip,CONCAT(B.name,'(',B.ip,')')) AS uplinkDevice
+			FROM
+				entity e
+			LEFT JOIN entity B on e.parentId = B.entityId
+			LEFT JOIN entitytype et ON e.typeId=et.typeId
+			LEFT JOIN perftemplateentityrelation ter ON	e.entityId=ter.entityId
+			LEFT JOIN perfthresholdtemplate ptt ON ter.templateId=ptt.templateId
+			where e.typeId in (select typeId from entitytyperelation where type = #{entityType})
+			<if test="typeId != null and typeId != ''">
+				and e.typeId = #{typeId}
+			</if>
+			<if test="entityName != null and entityName != ''">
+				and e.name like '%${entityName}%'
+			</if>
+			<if test="tempRela != null">
+				<if test = "tempRela == 1">
+					and ter.templateId != -1
+				</if>
+				<if test = "tempRela == 2">
+					and ter.templateId = -1
+				</if>
+			</if>
+			<if test="templateName != null and templateName != ''">
+				and ptt.templateName like '%${templateName}%'
+			</if>
+			<if test="mac != null and mac != ''">
+            	and (e.mac LIKE '%${mac}%'
+	            <if test="queryMacWithoutSplit != null">
+	                OR REPLACE(e.mac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+	            </if>
+	            )
+	        </if>
+			and e.entityId in (select entityId from ${Authority})
+		) resultTable
+		WHERE 1=1
+		<!-- <if test="entityName != null and entityName != ''">
+			and resultTable.entityName like '%${entityName}%'
+		</if> -->
+		<if test="entityIp != null and entityIp != ''">
+			and resultTable.uplinkDevice like '%${entityIp}%'
+		</if>
+		<!-- <if test="tempRela != null">
+			<if test = "tempRela == 1">
+				and resultTable.templateId != -1
+			</if>
+			<if test = "tempRela == 2">
+				and resultTable.templateId = -1
+			</if>
+		</if> -->
+		<!-- <if test="templateName != null and templateName != ''">
+			and resultTable.templateName like '%${templateName}%'
+		</if>
+		<if test="mac != null and mac != ''">
+            AND (resultTable.mac LIKE '%${mac}%'
+            <if test="queryMacWithoutSplit != null">
+                OR REPLACE(resultTable.mac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            </if>
+            )
+        </if> -->
+		limit ${start},${limit}
+	</select>
+	
+	<select id="selectEntityNoRelaTemplate" parameterType="map" resultType="perfThresholdEntity">
+		SELECT * FROM
+		(SELECT
+			e.entityId,e.name AS entityName,
+			IFNULL(e.ip,(SELECT e2.ip FROM entity e1, entity e2 
+					WHERE e1.parentId=e2.entityId AND
+					e1.entityId=e.entityId )) AS entityIp,
+			e.mac,et.displayName  entityTypeDisplayName,
+			et.typeId
+			FROM
+			entity e
+			LEFT JOIN entitytype et ON e.typeId=et.typeId
+			
+		) resultTable
+		WHERE
+		resultTable.typeId in (select typeId from entitytyperelation where type = #{entityType})
+		and resultTable.entityId in (select entityId from ${Authority}) 
+		and resultTable.entityId not in (select entityId from perftemplateentityrelation)
+		<if test="entityName != null and entityName != ''">
+			and resultTable.entityName like '%${entityName}%'
+		</if>
+		<if test="entityIp != null and entityIp != ''">
+			and resultTable.entityIp like '%${entityIp}%'
+		</if>
+		<if test="mac != null and mac != ''">
+			and resultTable.mac like '%${mac}%'
+		</if>
+		<if test="typeId != null and typeId != ''">
+			and resultTable.typeId like '%${typeId}%'
+		</if>
+		limit ${start},${limit}
+	</select>
+	
+	
+	<!-- 获取符合查询条件的设备阈值模板总数 -->
+	<select id="selectPerfTmeplateCount" parameterType="map" resultType="long">
+		SELECT count(*) FROM
+		(SELECT 
+			IFNULL(e.ip,B.ip) AS entityIp,
+			IFNULL(e.ip,CONCAT(B.name,'(',B.ip,')')) AS uplinkDevice
+			FROM 
+			entity e
+			left join entity B on e.parentId = B.entityId
+			LEFT JOIN entitytype et ON e.typeId=et.typeId
+			LEFT JOIN perftemplateentityrelation ter ON	e.entityId=ter.entityId
+			LEFT JOIN perfthresholdtemplate ptt ON ter.templateId=ptt.templateId
+			where e.typeId in (select typeId from entitytyperelation where type = #{entityType})
+			<if test="typeId != null and typeId != ''">
+				and e.typeId = #{typeId}
+			</if>
+			<if test="entityName != null and entityName != ''">
+				and e.name like '%${entityName}%'
+			</if>
+			<if test="tempRela != null">
+				<if test = "tempRela == 1">
+					and ter.templateId != -1
+				</if>
+				<if test = "tempRela == 2">
+					and ter.templateId = -1
+				</if>
+			</if>
+			<if test="templateName != null and templateName != ''">
+				and ptt.templateName like '%${templateName}%'
+			</if>
+			<if test="mac != null and mac != ''">
+            	and (e.mac LIKE '%${mac}%'
+	            <if test="queryMacWithoutSplit != null">
+	                OR REPLACE(e.mac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+	            </if>
+	            )
+	        </if>
+			and e.entityId in (select entityId from ${Authority})
+		) resultTable
+		WHERE 1=1
+		<!-- <if test="entityName != null and entityName != ''">
+			and resultTable.entityName like '%${entityName}%'
+		</if> -->
+		<if test="entityIp != null and entityIp != ''">
+			and resultTable.uplinkDevice like '%${entityIp}%'
+		</if>
+		<!-- <if test="tempRela != null">
+			<if test = "tempRela == 1">
+				and resultTable.templateId != -1
+			</if>
+			<if test = "tempRela == 2">
+				and resultTable.templateId = -1
+			</if>
+		</if> -->
+		<!-- <if test="templateName != null and templateName != ''">
+			and resultTable.templateName like '%${templateName}%'
+		</if>
+		<if test="mac != null and mac != ''">
+            AND (resultTable.mac LIKE '%${mac}%'
+            <if test="queryMacWithoutSplit != null">
+                OR REPLACE(resultTable.mac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            </if>
+            )
+        </if> -->
+	</select>
+
+	<!-- 获取符合查询条件的模板 -->
+	<select id="selectThresholdTemplateList" parameterType="map" resultType="perfThresholdTemplate">
+		select 
+			templateId, templateType, e.displayName as typeDisplayName,parentType, 
+			createuser,isDefaultTemplate, createTime, templateName, modifyTime,
+			(select
+			count(entityId) 
+			from perftemplateentityrelation 
+			where templateId = p.templateId
+			AND perftemplateentityrelation.entityId in (select entityId from ${Authority})
+			) AS relaDeviceNum
+		from 
+			perfthresholdtemplate p,
+			entitytype e
+		WHERE p.templateType = e.typeId
+		<if test="parentTypeId != null and parentTypeId != ''">
+			and p.parentType = #{parentTypeId} 
+		</if>
+	</select>
+
+	<!-- 为设备绑定阈值模板 -->
+	<insert id="bindTemplateToEntity" parameterType="perfTempEntityRelation">
+		INSERT INTO
+		perftemplateentityrelation(entityId, templateId,isPerfThreshold)
+		VALUES(#{entityId},#{templateId},#{isPerfThreshold})
+		ON DUPLICATE KEY
+		UPDATE templateId=#{templateId}, isPerfThreshold=#{isPerfThreshold}
+	</insert>
+
+	<!-- 根据模板ID查询阈值模板 -->
+	<select id="selectThresholdTemplateById" parameterType="int"
+		resultType="perfThresholdTemplate">
+		select * from perfthresholdtemplate
+		WHERE templateId = #{templateId}
+	</select>
+
+	<!-- 根据模板名称查询阈值模板 -->
+	<select id="selectThresholdTemplateByName" parameterType="String"
+		resultType="perfThresholdTemplate">
+		select
+		templateId,
+		templateType,
+		createuser,
+		isDefaultTemplate,
+		createTime,
+		templateName,
+		modifyTime
+		from
+		perfthresholdtemplate where templateName = #{templateName}
+	</select>
+
+	<!-- 根据设备类型ID获取其显示名称 -->
+	<select id="getDisplayNameByEntityTypeId" parameterType="int"
+		resultType="String">
+		SELECT displayName FROM entitytype WHERE
+		typeId=#{entityTypeId}
+	</select>
+
+	<!-- 查询指定阈值模板的指标阈值规则列表 -->
+	<select id="selectThresholdTemplateRulesByTemplateId"
+		parameterType="int" resultType="perfThresholdRule">
+		select A.*,C.targetDisplayName as displayName, c.unit as targetUnit
+		from perfthresholdrule A , perftarget C
+		where A.targetId=C.targetId and A.templateId = #{templateId}
+	</select>
+
+	<!-- 获取所有的阈值指标列表 -->
+	<select id="getAllPerfTargets" resultType="perfTarget">
+		select * from perftarget 
+		order by targetType, targetGroup
+    </select>
+
+	<!-- 获取指定设备类型的阈值指标列表 -->
+	<select id="getPerfTargetListByType" parameterType="int"
+		resultType="perfTarget">
+		select * from perftarget 
+		where targetType = #{targetType} and enableStatus = 1
+	</select>
+
+	<select id="selectPerfGlobal" parameterType="long" resultType="perfGlobal">
+		select * from perfglobal where flag=#{type}
+	</select>
+
+	<select id="loadPerfGolbalByType" parameterType="long"
+		resultType="perfGlobal">
+		select * from perfglobal where flag=#{type}
+	</select>
+
+	<!-- 添加阈值模板 -->
+	<insert id="insertThresholdTemplate" parameterType="perfThresholdTemplate"
+		useGeneratedKeys="true" keyProperty="templateId">
+		insert into
+		perfthresholdtemplate(templateName, templateType,
+		isDefaultTemplate, createUser, createTime, modifyTime, parentType)
+		values (#{templateName},
+		#{templateType},
+		#{isDefaultTemplate},#{createUser}, #{createTime},#{modifyTime}, #{parentType})
+	</insert>
+
+	<!-- 添加模板阈值指标规则 -->
+	<insert id="insertThresholdRule" parameterType="perfThresholdRule"
+		useGeneratedKeys="true" keyProperty="ruleId">
+		insert into perfthresholdrule
+		(targetId, templateId, thresholds,
+		minuteLength, number, isTimeLimit,
+		timeRange,clearRules)
+		values
+		(#{targetId},
+		#{templateId}, #{thresholds},
+		#{minuteLength}, #{number},
+		#{isTimeLimit},#{timeRange},#{clearRules})
+	</insert>
+
+	<insert id="applyEntityThresholdTemplate" parameterType="map">
+		insert into perfTemplateEntityRelation(entityId, templateId,isPerfThreshold)
+		values(#{entityId}, #{templateId}, #{isPerfThreshold});
+	</insert>
+
+	<!-- 更新阈值模板的基本信息(除指标规则外) -->
+	<update id="updateThresholdTemplate" parameterType="perfThresholdTemplate">
+		update
+		perfthresholdtemplate
+		set
+		templateName = #{templateName},
+		templateType =
+		#{templateType},
+		isDefaultTemplate =
+		#{isDefaultTemplate},
+		modifyTime =
+		#{modifyTime}
+		where
+		templateId = #{templateId}
+	</update>
+
+	<!-- 删除指定阈值模板的所有指标规则 -->
+	<delete id="deleteThresholdRulesByTemplateId" parameterType="int">
+		delete from perfthresholdrule where templateId = #{templateId}
+	</delete>
+
+	<!-- 开启指定设备的阈值告警开关 -->
+	<update id="startEntityThreshold" parameterType="long">
+		update
+		perfTemplateEntityRelation set isPerfThreshold = 1 where entityId =
+		#{entityId}
+	</update>
+
+	<!-- 关闭指定设备的阈值告警开关 -->
+	<update id="stopEntityThreshold" parameterType="long">
+		update
+		perfTemplateEntityRelation set isPerfThreshold = 0 where entityId =
+		#{entityId}
+	</update>
+
+	<!-- 更新 指定设备类型的全局阈值告警开关 -->
+	<update id="updatePerfGlobal" parameterType="perfGlobal">
+		update perfglobal
+		set
+		isPerfOn = #{isPerfOn},
+		isRelationWithDefaultTemplate =
+		#{isRelationWithDefaultTemplate},
+		isPerfThreshold = #{isPerfThreshold}
+		where flag = #{flag}
+	</update>
+
+	<!-- 为指定设备解绑阈值模板 -->
+	<delete id="deleteEntityThresholdTemplate" parameterType="long">
+		delete
+		from perfTemplateEntityRelation where entityId = #{entityId}
+	</delete>
+
+	<!-- 删除指定的阈值模板 -->
+	<delete id="deleteThresholdTemplate" parameterType="int">
+		delete from
+		perfThresholdTemplate where templateId = #{templateId}
+	</delete>
+
+	<select id="getEntityRelatedToTemplate" parameterType="map"	resultType="perfThresholdEntity">
+		SELECT * FROM
+			(SELECT
+				e.entityId,e.`name` as entityName,e.typeId,
+				et.displayName as entityTypeDisplayName,
+				IFNULL(e.ip,(SELECT e2.ip FROM entity e1, entity e2 WHERE e1.parentId=e2.entityId AND
+						e1.entityId=e.entityId )) AS entityIp,
+				e.mac,ptt.templateId,ptt.templateName
+			FROM 
+				entity e
+				LEFT JOIN entitytype et ON e.typeId=et.typeId
+				LEFT JOIN perftemplateentityrelation ptr ON	e.entityId=ptr.entityId
+				LEFT JOIN perfthresholdtemplate ptt ON ptr.templateId=ptt.templateId
+			WHERE 
+				ptr.templateId=#{templateId} AND e.entityId in(select entityId from ${Authority})
+				<if test="entityName != null and entityName != ''">
+					and e.name like '%${entityName}%'
+				</if>
+				<if test="mac != null and mac != ''">
+					and e.mac like '%${mac}%'
+				</if>
+				<if test="typeId != null and typeId != ''">
+					and e.typeId = #{typeId}
+				</if>												
+			
+			) resultTable
+		WHERE 1=1
+			<!-- resultTable.templateId=#{templateId} AND resultTable.entityId in(select entityId from ${Authority}) -->
+		<!-- <if test="entityName != null and entityName != ''">
+			and resultTable.entityName like '%${entityName}%'
+		</if> -->
+		<if test="entityIp != null and entityIp != ''">
+			and resultTable.entityIp like '%${entityIp}%'
+		</if>
+		<!-- <if test="mac != null and mac != ''">
+			and resultTable.mac like '%${mac}%'
+		</if>
+		<if test="typeId != null and typeId != ''">
+			and resultTable.typeId like '%${typeId}%'
+		</if> -->
+		limit ${start},${limit}
+	</select>
+	
+	<select id="getRelaTemplateCount" parameterType="map"	resultType="long">
+		SELECT count(*) FROM
+			(SELECT
+				IFNULL(e.ip,(SELECT e2.ip FROM entity e1, entity e2 WHERE e1.parentId=e2.entityId AND
+						e1.entityId=e.entityId )) AS entityIp
+			FROM 
+				entity e
+				LEFT JOIN entitytype et ON e.typeId=et.typeId
+				LEFT JOIN perftemplateentityrelation ptr ON	e.entityId=ptr.entityId
+				LEFT JOIN perfthresholdtemplate ptt ON ptr.templateId=ptt.templateId
+			WHERE 
+				ptr.templateId=#{templateId} AND e.entityId in(select entityId from ${Authority})
+				<if test="entityName != null and entityName != ''">
+					and e.name like '%${entityName}%'
+				</if>
+				<if test="mac != null and mac != ''">
+					and e.mac like '%${mac}%'
+				</if>
+				<if test="typeId != null and typeId != ''">
+					and e.typeId = #{typeId}
+				</if>												
+			
+			) resultTable
+		WHERE 1=1
+			<!-- resultTable.templateId=#{templateId} AND resultTable.entityId in(select entityId from ${Authority}) -->
+		<!-- <if test="entityName != null and entityName != ''">
+			and resultTable.entityName like '%${entityName}%'
+		</if> -->
+		<if test="entityIp != null and entityIp != ''">
+			and resultTable.entityIp like '%${entityIp}%'
+		</if>
+		<!-- <if test="mac != null and mac != ''">
+			and resultTable.mac like '%${mac}%'
+		</if>
+		<if test="typeId != null and typeId != ''">
+			and resultTable.typeId like '%${typeId}%'
+		</if> -->
+	</select>
+
+	<select id="getEntityNotRelatedToTemplate" parameterType="map" resultType="perfThresholdEntity">
+		SELECT * FROM
+			(SELECT
+				e.entityId,	e.`name` as entityName,e.typeId,
+				et.displayName as entityTypeDisplayName,
+				IFNULL(e.ip,(SELECT e2.ip FROM entity e1, entity e2 WHERE
+				e1.parentId=e2.entityId AND e1.entityId=e.entityId )) AS entityIp,
+				e.mac,ptt.templateId,ptt.templateName
+			FROM 
+				entity e
+				LEFT JOIN entitytype et ON e.typeId=et.typeId
+				LEFT JOIN perftemplateentityrelation ptr ON e.entityId=ptr.entityId
+				LEFT JOIN perfthresholdtemplate ptt ON ptr.templateId=ptt.templateId
+				
+			WHERE 
+				ptr.templateId != #{templateId}
+				AND	e.typeId in (select typeId from entitytyperelation where type = #{parentTypeId})
+				AND e.entityId in (select entityId from ${Authority})
+				<if test="entityName != null and entityName != ''">
+					and e.name like '%${entityName}%'
+				</if>
+				<if test="mac != null and mac != ''">
+					and e.mac like '%${mac}%'
+				</if>
+				<if test="typeId != null and typeId != ''">
+					and e.typeId = #{typeId}
+				</if>
+			) resultTable
+		WHERE 1=1
+		<!-- 	(resultTable.templateId!=#{templateId} OR resultTable.templateId is null) 
+			AND	resultTable.typeId in (select typeId from entitytyperelation where type = #{parentTypeId})
+			AND resultTable.entityId in (select entityId from ${Authority}) -->
+		<!-- <if test="entityName != null and entityName != ''">
+			and resultTable.entityName like '%${entityName}%'
+		</if> -->
+		<if test="entityIp != null and entityIp != ''">
+			and resultTable.entityIp like '%${entityIp}%'
+		</if>
+		<!-- <if test="mac != null and mac != ''">
+			and resultTable.mac like '%${mac}%'
+		</if>
+		<if test="typeId != null and typeId != ''">
+			and resultTable.typeId like	'%${typeId}%'
+		</if> -->
+		limit ${start},${limit}
+	</select>
+	
+	<select id="getNoRelaTemplateCount" parameterType="map" resultType="long">
+		SELECT count(*) FROM
+			(SELECT
+				IFNULL(e.ip,(SELECT e2.ip FROM entity e1, entity e2 WHERE
+				e1.parentId=e2.entityId AND e1.entityId=e.entityId )) AS entityIp
+			FROM 
+				entity e
+				LEFT JOIN entitytype et ON e.typeId=et.typeId
+				LEFT JOIN perftemplateentityrelation ptr ON e.entityId=ptr.entityId
+				LEFT JOIN perfthresholdtemplate ptt ON ptr.templateId=ptt.templateId
+				
+			WHERE 
+				ptr.templateId != #{templateId}
+				AND	e.typeId in (select typeId from entitytyperelation where type = #{parentTypeId})
+				AND e.entityId in (select entityId from ${Authority})
+				<if test="entityName != null and entityName != ''">
+					and e.name like '%${entityName}%'
+				</if>
+				<if test="mac != null and mac != ''">
+					and e.mac like '%${mac}%'
+				</if>
+				<if test="typeId != null and typeId != ''">
+					and e.typeId = #{typeId}
+				</if>
+			) resultTable
+		WHERE 1=1
+		<!-- 	(resultTable.templateId!=#{templateId} OR resultTable.templateId is null) 
+			AND	resultTable.typeId in (select typeId from entitytyperelation where type = #{parentTypeId})
+			AND resultTable.entityId in (select entityId from ${Authority}) -->
+		<!-- <if test="entityName != null and entityName != ''">
+			and resultTable.entityName like '%${entityName}%'
+		</if> -->
+		<if test="entityIp != null and entityIp != ''">
+			and resultTable.entityIp like '%${entityIp}%'
+		</if>
+		<!-- <if test="mac != null and mac != ''">
+			and resultTable.mac like '%${mac}%'
+		</if>
+		<if test="typeId != null and typeId != ''">
+			and resultTable.typeId like	'%${typeId}%'
+		</if> -->
+	</select>
+
+	<!-- <select id="getOltRelaTemplateList" parameterClass="map" resultClass="perfThresholdEntity"> 
+		select A.entityId,A.name entityName,A.typeId entityType, A.ip entityIp,C.templateId,C.templateName 
+		from ${Authority} A , perftemplateentityrelation B,perfthresholdtemplate 
+		C where A.entityId = B.entityId and B.templateId = C.templateId AND C.templateId 
+		= #{templateId} </select> <select id="getOltNoRelaTemplateList" parameterType="map" 
+		resultType="perfThresholdEntity"> select A.name entityName,A.typeId entityType,A.ip 
+		entityIp,A.entityId,B.templateId,C.templateName from ${Authority} A left 
+		join perftemplateentityrelation B on A.entityId = B.entityId left join perfthresholdtemplate 
+		C on B.templateId = C.templateId where A.type = 10000 and (B.templateId != 
+		#{templateId} or B.templateId is null) <dynamic> <isNotEmpty prepend="AND" 
+		property="entityName"> A.name like '%${entityName}%' </isNotEmpty> <isNotEmpty 
+		prepend="AND" property="entityIp"> A.ip like '%${entityIp}%' </isNotEmpty> 
+		</dynamic> </select> <select id="getCCRelaTemplateList" parameterType="map" 
+		resultType="perfThresholdEntity"> select A.entityId,A.name entityName,A.typeId 
+		entityType, A.mac mac,C.templateId,C.templateName from ${Authority} A , perftemplateentityrelation 
+		B,perfthresholdtemplate C where A.entityId = B.entityId and B.templateId 
+		= C.templateId AND C.templateId = #{templateId} </select> <select id="getCCNoRelaTemplateList" 
+		parameterType="map" resultType="perfThresholdEntity"> select A.name entityName,A.typeId 
+		entityType,A.mac mac,A.entityId,B.templateId,C.templateName from ${Authority} 
+		A left join perftemplateentityrelation B on A.entityId = B.entityId left 
+		join perfthresholdtemplate C on B.templateId = C.templateId where A.type 
+		= 30000 and (B.templateId != #{templateId} or B.templateId is null) <dynamic> 
+		<isNotEmpty prepend="AND" property="entityName"> A.name like '%${entityName}%' 
+		</isNotEmpty> <isNotEmpty prepend="AND" property="mac"> A.mac like '%${mac}%' 
+		</isNotEmpty> <isNotEmpty prepend="AND" property="entityType"> A.typeId = 
+		#{entityType} </isNotEmpty> </dynamic> </select> -->
+
+	<select id="getEntityById" resultType="entity" parameterType="long">
+		select * from
+		entity where entityId = #{entityId}
+	</select>
+
+	<select id="selectEntityThresholdTemplateByEntityId"
+		parameterType="long" resultType="perfThresholdEntity">
+		select A.entityId, A.name
+		entityName,
+		A.ip entityIp, B.templateId, B.isPerfThreshold,
+		C.templateName from
+		entity A
+		, perftemplateentityrelation B,
+		perfthresholdtemplate C
+		where
+		A.entityId = B.entityId and B.templateId
+		= C.templateId and
+		A.entityId =
+		#{entityId}
+	</select>
+	<select id="selectThresholdRulesByTargetId" parameterType="map"
+		resultType="perfThresholdRule">
+		select * from perfthresholdrule where templateId =
+		#{templateId} and targetId = #{targetId}
+	</select>
+
+	<select id="selectDefaultTemplateByTypeId" parameterType="long"
+		resultType="perfThresholdTemplate">
+		select
+		templateId,
+		templateType,
+		createuser,
+		isDefaultTemplate,
+		createTime,
+		templateName,
+		modifyTime
+		from perfthresholdtemplate 
+		where templateType = #{typeId} and isDefaultTemplate = 1
+	</select>
+	
+	<update id="updateTargetStatus" parameterType="perfTarget">
+		update perftarget
+		set enableStatus = #{enableStatus}
+		where targetId = #{targetId}
+	</update>
+	
+	<select id="queryPerfTarget" parameterType="String" resultType="perfTarget">
+		select * from perftarget
+		where targetId = #{targetId}
+	</select>
+	
+	<update id="updateTargetValue" parameterType="perfTarget">
+		update perftarget
+		set maxNum = #{maxNum}, minNum = #{minNum}
+		where targetId = #{targetId}
+	</update>
+	
+	<select id="getAllTargetCount" resultType="java.util.HashMap">
+		SELECT targetType, count(*) AS targetNum FROM perftarget 
+		where enableStatus = 1
+		GROUP BY targetType
+	</select>
+	
+	<select id="queryTargetCountByType" resultType="int">
+		SELECT count(*) FROM perftarget
+		where targetType = #{targetType} and enableStatus = 1
+	</select>
+	
+	<select id="queryTargetReRuleCount" parameterType="String" resultType="int">
+		select count(*) from perfthresholdrule 
+		where targetId = #{targetId}
+	</select>
+	
+	<update id="updateTemplateEntityRelation" parameterType="perfTempEntityRelation">
+		update perfTemplateEntityRelation 
+		set templateId = #{templateId},	isPerfThreshold = #{isPerfThreshold}
+		where entityId = #{entityId}
+	</update>
+	
+	<select id="queryEntityRelationTemp" parameterType="long" resultType="perfTempEntityRelation">
+		select * from perfTemplateEntityRelation
+		where entityId = #{entityId}
+	</select>
+	
+	<update id="updateRelationByTemplateId" parameterType="map">
+		update perfTemplateEntityRelation 
+		set templateId = #{newTemplateId},isPerfThreshold = #{isPerfThreshold}
+		where templateId = #{templateId}
+	</update>
+	
+	<select id="selectLastedAlertValue" resultType="thresholdAlertValue">
+		SELECT entityId,source,alertEventId,levelId,perfValue FROM ThresholdAlertLastValue
+	</select>
+	<insert id="insertOrUpdateAlertValue" parameterType="thresholdAlertValue">
+		INSERT INTO ThresholdAlertLastValue(entityId,source,alertEventId,perfValue,levelId)
+		VALUES (#{entityId},#{source},#{alertEventId},#{perfValue},#{levelId})
+		ON DUPLICATE KEY UPDATE perfValue=#{perfValue},levelId=#{levelId}
+	</insert>
+	<update id="deleteLastedAlertData" parameterType="thresholdAlertValue">
+		DELETE FROM ThresholdAlertLastValue WHERE entityId=#{entityId} AND source=#{source} AND alertEventId=#{alertEventId}
+	</update>
+</mapper>

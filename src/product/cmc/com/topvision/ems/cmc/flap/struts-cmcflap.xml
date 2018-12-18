@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcflap" namespace="/cmflap" extends="default">
+		<action name="showDolflapConf" class="cmcFlapAction" method="showDolflapConf">
+			<result>/cmc/cmFlapInterval.jsp</result>
+		</action>
+		<action name="cmFlapConfig" class="cmcFlapAction" method="cmFlapConfig">
+		</action>
+		<action name="resetFlapCounters" class="cmcFlapAction" method="resetFlapCounters">
+		</action>
+		<action name="modifyFlapMonitor" class="cmcFlapAction" method="modifyFlapMonitor">
+		</action>
+		<action name="showOneCMFlapHisChart" class="cmcFlapAction" method="showOneCMFlapHisChart">
+			<result>/cmc/cmFlapHisPerf.jsp</result>
+		</action>
+		<action name="queryOneCMFlapHisData" class="cmcFlapAction" method="queryOneCMFlapHisData">
+		</action>
+	</package>
+</struts>

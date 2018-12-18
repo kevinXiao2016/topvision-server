@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.rstp.domain.OltStp">
+	<insert id="insertOltStpGlobalConfig" parameterType="oltStpGlobalConfig">
+		insert into
+		oltstpglobalsettable
+		(entityId, version,
+		priority,
+		timeSinceTopologyChange,
+		topChanges,
+		designatedRoot,
+		rootCost,
+		rootPort,
+		maxAge,
+		helloTime,
+		holdTime,
+		forwardDelay,
+		bridgeMaxAge,
+		bridgeHelloTime,
+		bridgeForwardDelay,
+		rstpTxHoldCount,
+		enable
+		)
+		values
+		(#{entityId}, #{version},
+		#{priority},
+		#{timeSinceTopologyChange},
+		#{topChanges},
+		#{designatedRoot},
+		#{rootCost},
+		#{rootPort},
+		#{maxAge},
+		#{helloTime},
+		#{holdTime},
+		#{forwardDelay},
+		#{bridgeMaxAge},
+		#{bridgeHelloTime},
+		#{bridgeForwardDelay},
+		#{rstpTxHoldCount},
+		#{enable}
+		)
+	</insert>
+	<insert id="insertOltStpPortConfig" parameterType="oltStpPortConfig">
+		insert into
+		oltstpporttable
+		(entityId, sniId, stpPortStatus, stpPortPriority,
+		stpPortPathCost,
+		stpPortDesignatedRoot,
+		stpPortDesignatedCost,
+		stpPortDesignatedBridge,
+		stpPortDesignatedPort,
+		stpPortForwardTransitions,
+		stpPortRstpProtocolMigration,
+		stpPortRstpAdminEdgePort,
+		stpPortRstpOperEdgePort,
+		stpPortPointToPointAdminStatus,
+		stpPortPointToPointOperStatus,
+		stpPortEnabled
+		)
+		values
+		(#{entityId}, #{sniId}, #{stpPortStatus},
+		#{stpPortPriority}, #{stpPortPathCost},
+		#{stpPortDesignatedRoot},
+		#{stpPortDesignatedCost},
+		#{stpPortDesignatedBridge},
+		#{stpPortDesignatedPort},
+		#{stpPortForwardTransitions},
+		#{stpPortRstpProtocolMigration},
+		#{stpPortRstpAdminEdgePort},
+		#{stpPortRstpOperEdgePort},
+		#{stpPortPointToPointAdminStatus},
+		#{stpPortPointToPointOperStatus},
+		#{stpPortEnabled}
+		)
+	</insert>
+
+
+	<delete id="deleteAllOltStpPortConfig" parameterType="long">
+		DELETE
+		FROM
+		oltstpporttable where entityId = #{entityId} 
+	</delete>
+
+	<select id="getCountForStpGlobalConfig" parameterType="long"
+		resultType="int">
+		select count(*) from oltstpglobalsettable where
+		entityId=#{entityId}  
+    </select>
+    
+    <select id="getStpEnablePortList" parameterType="long"
+		resultType="long">
+		select B.sniIndex from
+		oltstpporttable A , oltsnirelation B where A.sniId =
+		B.sniId and stpPortEnabled = 1 and A.entityId=#{entityId}
+    </select>
+    
+	<select id="getAllOltStpPortConfig" parameterType="long"
+		resultType="oltStpPortConfig">
+		select A.entityId, B.sniIndex, stpPortStatus,
+		stpPortPriority,
+		stpPortPathCost,
+		stpPortDesignatedRoot,
+		stpPortDesignatedCost,
+		stpPortDesignatedBridge,
+		stpPortDesignatedPort,
+		stpPortForwardTransitions,
+		stpPortRstpProtocolMigration,
+		stpPortRstpAdminEdgePort,
+		stpPortRstpOperEdgePort,
+		stpPortPointToPointAdminStatus,
+		stpPortPointToPointOperStatus,
+		stpPortEnabled
+		from
+		oltstpporttable A , oltsnirelation B where A.sniId =
+		B.sniId and A.entityId=#{entityId}
+    </select>
+	<select id="getOltStpPortConfigBySniId" parameterType="map"
+		resultType="oltStpPortConfig">
+		select A.entityId, B.sniIndex, stpPortStatus,
+		stpPortPriority,
+		stpPortPathCost,
+		stpPortDesignatedRoot,
+		stpPortDesignatedCost,
+		stpPortDesignatedBridge,
+		stpPortDesignatedPort,
+		stpPortForwardTransitions,
+		stpPortRstpProtocolMigration,
+		stpPortRstpAdminEdgePort,
+		stpPortRstpOperEdgePort,
+		stpPortPointToPointAdminStatus,
+		stpPortPointToPointOperStatus,
+		stpPortEnabled
+		from
+		oltstpporttable A , oltsnirelation B where A.sniId =
+		B.sniId and A.entityId=#{entityId} and A.sniId=#{sniId}
+    </select>
+	<select id="getOltStpGlobalConfig" parameterType="long"
+		resultType="oltStpGlobalConfig">
+		select entityId, version,
+		priority,
+		timeSinceTopologyChange,
+		topChanges,
+		designatedRoot,
+		rootCost,
+		rootPort,
+		maxAge,
+		helloTime,
+		holdTime,
+		forwardDelay,
+		bridgeMaxAge,
+		bridgeHelloTime,
+		bridgeForwardDelay,
+		rstpTxHoldCount,
+		enable
+		from
+		oltstpglobalsettable where entityId=#{entityId}
+	</select>
+	<update id="updateOltStpGlobalConfig" parameterType="oltStpGlobalConfig">
+		update
+		oltstpglobalsettable
+		set
+		version = #{version},
+		priority = #{priority},
+		<if test="timeSinceTopologyChange != null and timeSinceTopologyChange != ''">
+			timeSinceTopologyChange = #{timeSinceTopologyChange},
+		</if>
+		bridgeMaxAge=#{bridgeMaxAge},
+		bridgeHelloTime=#{bridgeHelloTime},
+		bridgeForwardDelay=#{bridgeForwardDelay},
+		rstpTxHoldCount=#{rstpTxHoldCount},
+		<if test="designatedRoot != null and designatedRoot != ''">
+			designatedRoot = #{designatedRoot},
+		</if>
+		<if test="topChanges != null and topChanges != ''">
+			topChanges = #{topChanges},
+		</if>
+		<if test="rootPort != null and rootPort != ''">
+			RootCost=#{rootCost},RootPort=#{rootPort},
+		</if>
+		<if test="maxAge != null and maxAge != ''">
+			MaxAge=#{maxAge},
+		</if>
+		<if test="helloTime != null and helloTime != ''">
+			HelloTime=#{helloTime},
+		</if>
+		<if test="holdTime != null and holdTime != ''">
+			HoldTime=#{holdTime},
+		</if>
+		<if test="forwardDelay != null and forwardDelay != ''">
+			ForwardDelay=#{forwardDelay},
+		</if>
+		enable=#{enable}
+		where entityId=#{entityId}
+	</update>
+	<update id="updateOltStpGlobalEnable" parameterType="map">
+		update
+		oltstpglobalsettable
+		set
+		enable=#{globalEnable}
+		where
+		entityId=#{entityId}
+	</update>
+    <update id="updateOltStpPortEnable" parameterType="map">
+		update
+		oltstpporttable
+		set
+		stpPortEnabled=#{stpPortEnabled}
+		where
+		entityId=#{entityId} and sniId=#{sniId}
+	</update>
+  <update id="updateOltStpPortMigration" parameterType="map">
+		update
+		oltstpporttable
+		set
+		stpPortRstpProtocolMigration=#{stpPortRstpProtocolMigration}
+		where
+		entityId=#{entityId} and sniId = #{sniId}
+	</update>    
+	<update id="updateOltStpPortConfig" parameterType="oltStpPortConfig">
+		update
+		oltstpporttable
+		set
+		stpPortPriority=#{stpPortPriority},
+		stpPortPathCost=#{stpPortPathCost},
+		stpPortRstpAdminEdgePort=#{stpPortRstpAdminEdgePort},
+		stpPortPointToPointAdminStatus=#{stpPortPointToPointAdminStatus},
+		stpPortEnabled=#{stpPortEnabled}
+		where
+		entityId=#{entityId} and sniId=#{sniId}
+	</update> 
+</mapper>

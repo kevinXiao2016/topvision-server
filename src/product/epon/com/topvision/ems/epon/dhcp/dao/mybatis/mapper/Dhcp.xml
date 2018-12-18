@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.dhcp.domain.Dhcp">
+
+	<select id="getDhcpBaseConfig" parameterType="long"
+		resultType="oltDhcpBaseConfig">
+		select entityId, topOltPPPOEPlusEnable,
+		topOltDHCPRelayMode,
+		topOltDHCPDyncIPMACBind
+		from
+		oltdhcpbaseconfig
+		where
+		entityId=#{entityId}
+	</select>
+	<select id="getDhcpServerConfig" parameterType="long"
+		resultType="oltDhcpServerConfig">
+		select entityId, topOltDHCPServerIndex,
+		topOltDHCPServerVid,
+		topOltDHCPServerIpAddr topOltDHCPServerIpAddrLong,
+		topOltDHCPServerIpMask topOltDHCPServerIpMaskLong
+		from
+		oltdhcpserverconfig
+		where entityId=#{entityId}    
+	</select>
+	<select id="getDhcpGiaddrConfig" parameterType="long"
+		resultType="oltDhcpGiaddrConfig">
+		select entityId, topOltDHCPGiaddrIndex,
+		topOltDHCPGiaddrVid,
+		topOltDHCPGiaddrIpAddr topOltDHCPGiaddrIpAddrLong
+		from
+		oltdhcpgiaddrconfig 
+	</select>
+	<select id="getDhcpIpMacStatic" parameterType="long"
+		resultType="oltDhcpIpMacStatic">
+		select entityId,
+		topOltDHCPIpAddr
+		topOltDHCPIpAddrLong,
+		topOltDHCPMacAddr
+		topOltDHCPMacAddrLong,
+		topOltDHCPOnuMacAddr
+		topOltDHCPOnuMacAddrLong,
+		topOltDHCPIpMacIdx
+		from
+		oltdhcpipmacstatic
+		where entityId = #{entityId} 
+	</select>
+	<select id="getMaxIndexForIpMacStatic" parameterType="long"
+		resultType="int">
+		select max(topOltDHCPIpMacIdx) topOltDHCPIpMacIdx from oltdhcpipmacstatic
+		where entityId=#{entityId}
+    </select>
+	<select id="getCountForIpMacStatic" parameterType="map"
+		resultType="int">
+		select count(*) from oltdhcpipmacstatic where entityId=#{entityId} and
+		(topOltDHCPIpAddr=#{topOltDHCPIpAddr} or topOltDHCPMacAddr=#{topOltDHCPMacAddr})
+    </select>
+
+	<insert id="insertDhcpBaseConfig" parameterType="oltDhcpBaseConfig">
+		insert into
+		oltdhcpbaseconfig
+		(entityId, topOltPPPOEPlusEnable,
+		topOltDHCPRelayMode, topOltDHCPDyncIPMACBind
+		)
+		values
+		(#{entityId},
+		#{topOltPPPOEPlusEnable}, #{topOltDHCPRelayMode},
+		#{topOltDHCPDyncIPMACBind}
+		)
+ 	</insert>
+	<insert id="insertDhcpServerRule" parameterType="oltDhcpServerConfig">
+		insert into
+		oltdhcpserverconfig
+		values(#{entityId},#{topOltDHCPServerIndex},#{topOltDHCPServerVid},#{topOltDHCPServerIpAddrLong},#{topOltDHCPServerIpMaskLong})
+	</insert>
+	<insert id="insertDhcpGiaddrRule" parameterType="oltDhcpGiaddrConfig">
+		insert into
+		oltdhcpgiaddrconfig
+		(entityId, topOltDHCPGiaddrIndex,
+		topOltDHCPGiaddrVid, topOltDHCPGiaddrIpAddr
+		)
+		values
+		(#{entityId},
+		#{topOltDHCPGiaddrIndex}, #{topOltDHCPGiaddrVid},
+		#{topOltDHCPGiaddrIpAddrLong}
+		)
+	</insert>
+	<insert id="insertDhcpIpMacStatic" parameterType="oltDhcpIpMacStatic">
+		insert into
+		oltdhcpipmacstatic
+		(entityId, topOltDHCPIpMacIdx,topOltDHCPIpAddr,
+		topOltDHCPMacAddr,
+		topOltDHCPOnuMacAddr
+		)
+		values
+		(#{entityId},
+		#{topOltDHCPIpMacIdx},#{topOltDHCPIpAddrLong},
+		#{topOltDHCPMacAddrLong},
+		#{topOltDHCPOnuMacAddrLong}
+		)
+	</insert>
+
+
+	<delete id="deleteDhcpServerRule" parameterType="map">
+		DELETE FROM
+		oltdhcpserverconfig where entityId = #{entityId} and
+		topOltDHCPServerIndex=#{dhcpServerIndex}
+	</delete>
+	<delete id="deleteAllDhcpServerRule" parameterType="long">
+		DELETE FROM
+		oltdhcpserverconfig where entityId = #{entityId} 
+	</delete>
+	<delete id="deleteDhcpGiaddrRule" parameterType="map">
+		DELETE FROM
+		oltdhcpgiaddrconfig where entityId = #{entityId} and
+		topOltDHCPGiaddrIndex=#{topOltDHCPGiaddrIndex}
+	</delete>
+	<delete id="deleteAllDhcpGiaddrRule" parameterType="long">
+		DELETE FROM
+		oltdhcpgiaddrconfig where entityId = #{entityId}  
+	</delete>
+	<delete id="deleteDhcpIpMacStatic" parameterType="map">
+		DELETE FROM
+		oltdhcpipmacstatic where entityId = #{entityId} and
+		topOltDHCPIpMacIdx=#{topOltDHCPIpMacIdx}
+	</delete>
+	<delete id="deleteAllDhcpIpMacStatic" parameterType="long">
+		DELETE FROM
+		oltdhcpipmacstatic where entityId = #{entityId} 
+	</delete>
+
+	<update id="updateDhcpBaseConfig" parameterType="oltDhcpBaseConfig">
+		update
+		oltdhcpbaseconfig set topOltPPPOEPlusEnable=#{topOltPPPOEPlusEnable},
+		topOltDHCPRelayMode=#{topOltDHCPRelayMode},
+		topOltDHCPDyncIPMACBind=#{topOltDHCPDyncIPMACBind}
+		where
+		entityId=#{entityId}
+	</update>
+
+</mapper>

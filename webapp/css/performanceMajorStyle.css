@@ -1,0 +1,279 @@
+body,html {
+	height: 100%;
+}
+
+.winTip {
+	padding-top: 20px;
+	margin-left: 15px;
+}
+
+.winIcon {
+	position: absolute;
+	right: 30px;
+	top: 15px;
+}
+
+.rightTxt {
+	text-align: right;
+}
+
+.contentDiv {
+	margin: 10px 20px;
+	padding-top: 10px;
+}
+
+#saveAsGolbalPerfOuter {
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
+
+#loading {
+	padding: 5px 8px 5px 26px;
+	border: 1px solid #069;
+	background: #fff url('../images/refreshing2.gif') no-repeat 2px center;
+	position: absolute;
+	z-index: 999;
+	top: 0px;
+	left: 0px;
+	display: none;
+	cursor: pointer;
+}
+
+#serachDiv,#center {
+	margin-top: 10px;
+	margin-left: 20px;
+}
+
+.contentTable {
+	border-collapse: collapse;
+	width: 100%;
+	white-space: nowrap;
+	word-spacing: normal;
+	word-break: keep-all;
+}
+
+.contentTable th {
+	background: none repeat scroll 0 0 #F5F5F5;
+	white-space: nowrap;
+	word-spacing: normal;
+	word-break: keep-all;
+}
+
+.contentTable td,.contentTable th {
+	border-top-width: 0;
+	border-left-width: 0;
+	border-right-width: 0;
+	border-bottom: 1px solid #D6D6D6;
+	height: 29px;
+	padding: 4px 3px;
+	vertical-align: middle;
+	white-space: nowrap;
+	word-spacing: normal;
+	word-break: keep-all;
+}
+
+.contentTable td input,.contentTable td span {
+	vertical-align: middle;
+}
+
+.contentTable tr.subCat {
+	background-color: #F5F5DC;
+}
+
+.contentTable tr.subCat td {
+	border: 0;
+	font: bold 14px tahoma, arial, helvetica, sans-serif;
+}
+
+.contentTable tr.subCat td.lastSubCatTd {
+	border-right: 1px solid #D6D6D6;
+	font: 11px tahoma, arial, helvetica, sans-serif;
+	text-indent: -26px;
+}
+
+
+
+.buttonDiv {
+	text-align: right;
+	margin-top: 30px;
+}
+
+.groupTitle {
+	cursor: pointer;
+	padding-top: 6px;
+	font: bold 11px tahoma, arial, helvetica, sans-serif;
+}
+
+.groupTitle td {
+	border-bottom: 2px solid #6593CF;
+	color: #3764A0;
+	cursor: pointer;
+	padding-left: 15px;
+}
+
+.groupTitle_open {
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-image: url('/images/group-collapse.gif');
+}
+
+.groupTitle_close {
+	background-repeat: no-repeat;
+	background-position: left center;
+	background-image: url('/images/group-expand.gif');
+}
+
+.chnSpan1 {
+	width: 115px;
+}
+
+.chnSpan2 {
+	width: 115px;
+}
+
+.chnSpan3 {
+	width: 115px;
+}
+
+.vertical-middle {
+	vertical-align: middle;
+}
+
+.vertical-middle span,.vertical-middle input,.vertical-middle img {
+	vertical-align: middle;
+}
+
+.disabledInput {
+	background-color: #E5E5E5;
+}
+
+.evenTr {
+	background-color: #E5E5E5;
+}
+
+.cover {
+	height: 100%;
+	left: 0;
+	position: absolute;
+	overflow: auto;
+	top: 0;
+	width: 100%;
+	background: #F3F3F3;
+}
+
+.queryBar {
+	text-indent: 10px;
+}
+
+.queryInput {
+	width: 130px;
+}
+
+.querySelect {
+	width: 102px;
+}
+
+.spanWidth100 {
+	width: 100px;
+	display: -moz-inline-box;
+	display: inline-block;
+}
+
+.spanWidth150 {
+	width: 150px;
+	display: -moz-inline-box;
+	display: inline-block;
+	font-weight: bold;
+	white-space: nowrap;
+}
+.spanWidth200 {
+	width: 260px;
+	display: -moz-inline-box;
+	display: inline-block;
+	font-weight: bold;
+	white-space: nowrap;
+}
+
+.spanMarginRight50 {
+	display: -moz-inline-box;
+	display: inline-block;
+	margin-right: 50px;
+	font-weight: bold;
+	white-space: nowrap;
+}
+
+.alert {
+	background-color: #FCF8E3;
+	border: 1px solid #FBEED5;
+	border-radius: 4px 4px 4px 4px;
+	margin: 20px;
+	padding: 8px 35px 8px 14px;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+
+.alert-info {
+	background-color: #D9EDF7;
+	border-color: #BCE8F1;
+	color: #3A87AD;
+}
+
+.alert h3 {
+	margin: 10px 0;
+	font-size: 14px;
+	white-space: nowrap;
+}
+
+#mainDiv {
+}
+
+#searchDiv {
+	clear: both;
+	padding: 15px 0;
+}
+
+#searchDiv table td {
+	height: 23px;
+	padding: 3px;
+	vertical-align: middle;
+}
+
+#container {
+	margin: 10px;
+	border: 2px solid #6593CF;
+}
+
+.X-TOOLBAR-TITLE {
+	background-color: red;
+}
+
+.item-selected {
+	background: url(/epon/image/checked.gif) no-repeat;
+}
+
+.item-unselected {
+	background: url(/epon/image/unchecked.gif) no-repeat;
+}
+
+#loading {
+	padding: 5px 8px 5px 26px;
+	border: 1px solid #069;
+	background: #fff url('/images/refreshing2.gif') no-repeat 2px center;
+	position: absolute;
+	z-index: 999;
+	top: 0px;
+	left: 0px;
+	display: none;
+	cursor: pointer;
+}
+
+.tooltipSpan {
+	display: -moz-inline-box;
+	display: inline-block;
+	font-weight: bold;
+	white-space: nowrap;
+}
+
+div.highcharts-button shape{
+	
+}

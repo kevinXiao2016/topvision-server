@@ -1,0 +1,814 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.vlan.domain.PonVlan">
+
+	<select id="getPonId" parameterType="oltPonAttribute"
+		resultType="long">
+		SELECT
+		ponId
+		FROM
+		OltPonRelation
+		WHERE
+		entityId = #{entityId}
+		and ponIndex = #{ponIndex}    
+	</select>
+	<insert id="insertOltPortVlan" parameterType="portVlanAttribute">
+		insert into
+		OltPortVlan
+		(sniId, vlanTagTpid, vlanTagCfi, vlanTagPriority, vlanPVid,
+		vlanMode,
+		sniIndex,
+		entityId
+		)
+		values
+		(#{portId}, #{vlanTagTpid},
+		#{vlanTagCfi}, #{vlanTagPriority}, #{vlanPVid},
+		#{vlanMode},
+		#{portIndex},
+		#{entityId}
+		)
+	</insert>
+	<insert id="insertOltVlanTranslation" parameterType="vlanTranslationRule">
+		insert into
+		OltVlanTranslation
+		(ponId, vlanIndex, translationNewVid, ponIndex,
+		entityId)
+		values
+		(#{portId}, #{vlanIndex}, #{translationNewVid},
+		#{portIndex}, #{entityId})
+    </insert>
+	<insert id="insertOltVlanTrunk" parameterType="vlanTrunkRule">
+		insert into
+		OltVlanTrunk
+		(ponId, trunkVidList, ponIndex, entityId)
+		values
+		(#{portId},
+		#{trunkVidList}, #{portIndex}, #{entityId})
+	</insert>
+	<insert id="insertOltVlanTransparent" parameterType="vlanTransparentRule">
+		insert into
+		OltVlanTransparent
+		(ponId, transparentId, transparentMode, ponIndex, entityId)
+		values
+		(#{portId},
+		#{transparentId}, #{transparentMode}, #{portIndex}, #{entityId})
+	</insert>
+	<insert id="insertOltVlanAgg" parameterType="vlanAggregationRule">
+		insert into
+		OltVlanAgg
+		(ponId, portAggregationVidIndex, aggregationVidList,
+		ponIndex,
+		entityId
+		)
+		values
+		(#{portId}, #{portAggregationVidIndex},
+		#{aggregationVidList}, #{portIndex},
+		#{entityId}
+		)
+	</insert>
+	<insert id="insertOltPonQinQ" parameterType="vlanQinQRule">
+		insert into
+		OltPonQinq
+		(ponIndex, pqStartVlanId, pqEndVlanId, pqSVlanId,
+		pqSTagCosDetermine,
+		pqSTagCosNewValue,
+		ponId,
+		entityId
+		)
+		values
+		(#{portIndex}, #{pqStartVlanId}, #{pqEndVlanId}, #{pqSVlanId},
+		#{pqSTagCosDetermine},
+		#{pqSTagCosNewValue},
+		#{portId},
+		#{entityId}
+		)
+	</insert>
+	<insert id="insertOltTopVlanTrans" parameterType="vlanLlidTranslationRule">
+		insert into
+		OltTopVlanTrans
+		(ponId, topLlidTransDevMac, topLlidTransVidIdx,
+		topLlidTransNewVid,
+		topLlidTransCosMode,
+		topLlidTransNewCos,
+		topLlidTransNewTpid,
+		ponIndex,
+		entityId
+		)
+		values
+		(#{portId}, #{onuMacString},
+		#{topLlidTransVidIdx},
+		#{topLlidTransNewVid},
+		#{topLlidTransCosMode},
+		#{topLlidTransNewCos},
+		#{topLlidTransNewTpid},
+		#{portIndex},
+		#{entityId}
+		)
+	</insert>
+	<insert id="insertOltTopVlanTrunk" parameterType="vlanLlidTrunkRule">
+		insert into
+		OltTopVlanTrunk
+		(ponId, llidVlanTrunkVidBmp, llidVlanTrunkMacIdx,
+		ponIndex,
+		entityId
+		)
+		values
+		(#{portId}, #{llidVlanTrunkVidBmp},
+		#{onuMacString}, #{portIndex}, #{entityId}
+		)
+	</insert>
+	<insert id="insertOltTopVlanAgg" parameterType="vlanLlidAggregationRule">
+		insert into
+		OltTopVlanAgg
+		(ponId, llidVlanAggMacAddr, llidVlanAfterAggVid,
+		llidVlanBeforeAggVidList,
+		llidVlanAggCosMode,
+		llidVlanAggNewCos,
+		llidVlanAggNewTpid,
+		ponIndex,
+		entityId
+		)
+		values
+		(#{portId}, #{onuMacString},
+		#{llidVlanAfterAggVid}, #{llidVlanBeforeAggVidList},
+		#{llidVlanAggCosMode},
+		#{llidVlanAggNewCos},
+		#{llidVlanAggNewTpid},
+		#{portIndex},
+		#{entityId}
+		)
+	</insert>
+	<insert id="insertOltTopVlanQinQ" parameterType="vlanLlidQinQRule">
+		insert into
+		OltTopVlanQinq
+		(ponId, topLqVlanMacIndex, topLqVlanStartCVid,
+		topLqVlanEndCVid,
+		topLqVlanSVlan,
+		topLqVlanCosMode,
+		topLqVlanSCos,
+		topLqVlanOuterTpid,
+		ponIndex,
+		entityId
+		)
+		values
+		(#{portId}, #{onuMacString},
+		#{topLqVlanStartCVid}, #{topLqVlanEndCVid},
+		#{topLqVlanSVlan},
+		#{topLqVlanCosMode},
+		#{topLqVlanSCos},
+		#{topLqVlanOuterTpid},
+		#{portIndex},
+		#{entityId}
+		)
+	</insert>
+	<insert id="insertOltPonTransparent" parameterType="vlanTransparentRule">
+		insert into
+		OltVlanTransparent
+		(entityId, ponId, ponIndex, transparentId, transparentMode)
+		values
+		(#{entityId}, #{portId}, #{portIndex}, #{transparentId}, #{transparentMode})
+	</insert>
+
+	<delete id="deleteOltPortVlan" parameterType="portVlanAttribute">
+		delete from
+		OltPortVlan where sniId=#{portId} 
+	</delete>
+	<delete id="deleteOltVlanTranslation" parameterType="vlanTranslationRule">
+		delete from
+		OltVlanTranslation where ponId=#{portId} and
+		vlanIndex=#{vlanIndex}
+	</delete>
+	<delete id="deleteOltVlanTrunk" parameterType="long">
+		delete from
+		OltVlanTrunk where ponId=#{portId}  
+	</delete>
+	<delete id="deleteOltVlanAgg" parameterType="vlanAggregationRule">
+		delete from
+		OltVlanAgg where ponId=#{portId} and
+		portAggregationVidIndex=#{portAggregationVidIndex}
+	</delete>
+	<delete id="deleteOltPonQinQ" parameterType="vlanQinQRule">
+		delete from
+		OltPonQinq where ponId=#{portId} and
+		pqStartVlanId=#{pqStartVlanId} and
+		pqEndVlanId=#{pqEndVlanId}
+	</delete>
+	<delete id="deleteOltTopVlanTrans" parameterType="vlanLlidTranslationRule">
+		delete from
+		OltTopVlanTrans where ponId=#{portId} and
+		topLlidTransDevMac=#{onuMacString} and
+		topLlidTransVidIdx=#{topLlidTransVidIdx} 
+    </delete>
+	<delete id="deleteOltTopVlanTrunk" parameterType="vlanLlidTrunkRule">
+		delete from
+		OltTopVlanTrunk where ponId=#{portId} and
+		llidVlanTrunkMacIdx=#{onuMacString}
+	</delete>
+	<delete id="deleteOltTopVlanAgg" parameterType="vlanLlidAggregationRule">
+		delete from
+		OltTopVlanAgg where ponId=#{portId} and
+		llidVlanAggMacAddr=#{onuMacString}
+		and
+		llidVlanAfterAggVid=#{llidVlanAfterAggVid} 
+	</delete>
+	<delete id="deleteOltTopVlanQinQ" parameterType="vlanLlidQinQRule">
+		delete from
+		OltTopVlanQinQ where ponId=#{portId} and
+		topLqVlanMacIndex=#{onuMacString}
+		and
+		topLqVlanStartCVid=#{topLqVlanStartCVid}
+		and
+		topLqVlanEndCVid=#{topLqVlanEndCVid}
+	</delete>
+
+	<delete id="deleteAllOltVlanTranslation" parameterType="long">
+		delete
+		from
+		OltVlanTranslation where entityId = #{entityId}  
+	</delete>
+	<delete id="deleteAllOltVlanTrunk" parameterType="long">
+		delete from
+		OltVlanTrunk where entityId = #{entityId}  
+	</delete>
+	<delete id="deleteAllOltVlanTransparent" parameterType="long">
+		delete from
+		OltVlanTransparent where entityId = #{entityId}
+	</delete>
+	<delete id="deleteAllOltVlanAgg" parameterType="long">
+		delete from
+		OltVlanAgg where entityId = #{entityId}   
+	</delete>
+	<delete id="deleteAllOltPonQinQ" parameterType="long">
+		delete from
+		OltPonQinq where entityId = #{entityId}  
+	</delete>
+	<delete id="deleteAllOltTopVlanTrans" parameterType="long">
+		delete from
+		OltTopVlanTrans where entityId = #{entityId}  
+    </delete>
+	<delete id="deleteAllOltTopVlanTrunk" parameterType="long">
+		delete from
+		OltTopVlanTrunk where entityId = #{entityId}  
+	</delete>
+	<delete id="deleteAllOltTopVlanAgg" parameterType="long">
+		delete from
+		OltTopVlanAgg where entityId = #{entityId}  
+	</delete>
+	<delete id="deleteAllOltTopVlanQinQ" parameterType="long">
+		delete from
+		OltTopVlanQinQ where entityId = #{entityId}  
+	</delete>
+	<delete id="deleteOltPonTransparent" parameterType="vlanTransparentRule">
+		delete from
+		OltVlanTransparent
+		where entityId = #{entityId} and ponId = #{portId}
+	</delete>
+
+	<select id="getTransList" parameterType="long" resultType="vlanTranslationRule">
+		SELECT entityId,
+		ponId AS portId,
+		ponIndex AS portIndex,
+		vlanIndex,
+		translationNewVid
+		FROM OltVlanTranslation
+		WHERE ponId = #{portId}
+		ORDER BY vlanIndex ASC
+	</select>
+
+	<select id="getTrunkList" parameterType="long" resultType="vlanTrunkRule">
+		SELECT entityId,
+		ponId AS portId,
+		ponIndex AS portIndex,
+		trunkVidList
+		FROM OltVlanTrunk
+		WHERE ponId = #{portId}
+	</select>
+	<select id="getTransparent" parameterType="map" resultType="vlanTransparentRule">
+		SELECT entityId,
+		ponId as portId,
+		ponIndex as portIndex,
+		transparentId,
+		transparentMode
+		FROM OltVlanTransparent
+		WHERE ponId = #{ponId} and entityId = #{entityId}
+	</select>
+
+	<update id="modifyTrunkRule" parameterType="vlanTrunkRule">
+		UPDATE
+		OltVlanTrunk
+		SET
+		trunkVidList = #{trunkVidList}
+		WHERE
+		ponId = #{portId}
+	</update>
+
+	<select id="getAggrList" parameterType="long" resultType="vlanAggregationRule">
+		SELECT entityId,
+		ponId AS portId,
+		portAggregationVidIndex,
+		aggregationVidList,
+		ponIndex AS portIndex
+		FROM OltVlanAgg
+		WHERE ponId = #{ponId}
+		ORDER BY portAggregationVidIndex ASC
+	</select>
+	<update id="modifyCvlanAggrRule" parameterType="vlanAggregationRule">
+		UPDATE OltVlanAgg
+		SET aggregationVidList = #{aggregationVidList}
+		WHERE ponId = #{portId}
+		AND portAggregationVidIndex = #{portAggregationVidIndex}
+	</update>
+	<select id="getQinQList" parameterType="long" resultType="vlanQinQRule">
+		SELECT entityId,
+		ponId AS portId,
+		pqStartVlanId,
+		pqEndVlanId,
+		pqSVlanId,
+		pqSTagCosDetermine,
+		pqSTagCosNewValue,
+		ponIndex AS portIndex
+		FROM OltPonQinq
+		WHERE ponId = #{ponId}
+		ORDER BY pqSVlanId ASC
+	</select>
+	<select id="getOnuMacAddress" parameterType="long" resultType="long">
+		SELECT DISTINCT B.onuMacAddress
+		FROM oltonuattribute B
+		WHERE B.onuId IN 
+			(SELECT A.onuId
+				FROM oltonurelation A,entity C
+			WHERE 
+				A.onuId = C.entityId and A.ponId = #{ponId} and 
+				C.typeId in (select typeId from entitytyperelation where type = 13000))
+		ORDER BY B.onuMacAddress ASC
+	</select>
+	<select id="getOnuMacAndName" parameterType="long" resultType="oltOnuAttribute">
+		SELECT B.onuMacAddress, B.onuName
+		FROM oltonuattribute B
+		WHERE B.onuId IN 
+			(SELECT A.onuId
+				FROM oltonurelation A,entity C
+			WHERE 
+				A.onuId = C.entityId and A.ponId = #{ponId} and 
+				C.typeId in (select typeId from entitytyperelation where type = 13000))
+		ORDER BY B.onuMacAddress ASC
+	</select>
+	
+	<select id="getLlidTransList" parameterType="map"
+		resultType="vlanLlidTranslationRule">
+		SELECT entityId,
+		ponId AS portId,
+		ponIndex AS portIndex,
+		topLlidTransDevMac AS onuMacString,
+		topLlidTransVidIdx,
+		topLlidTransNewVid,
+		topLlidTransCosMode,
+		topLlidTransNewCos,
+		topLlidTransNewTpid
+		FROM OltTopVlanTrans
+		WHERE ponId = #{ponId}
+		AND topLlidTransDevMac = #{topLlidTransDevMac}
+		ORDER BY topLlidTransVidIdx ASC
+	</select>
+	<select id="getLlidAggrList" parameterType="vlanLlidAggregationRule"
+		resultType="vlanLlidAggregationRule">
+		SELECT entityId,
+		ponId AS portId,
+		llidVlanAggMacAddr AS onuMacString,
+		llidVlanAfterAggVid,
+		llidVlanBeforeAggVidList,
+		llidVlanAggCosMode,
+		llidVlanAggNewCos,
+		llidVlanAggNewTpid,
+		ponIndex AS portIndex
+		FROM OltTopVlanAgg
+		WHERE ponId = #{portId}
+		AND llidVlanAggMacAddr = #{onuMacString}
+		ORDER BY llidVlanAfterAggVid ASC
+	</select>
+	<update id="modifyLlidCvlanAggrRule" parameterType="vlanLlidAggregationRule">
+		UPDATE
+		OltTopVlanAgg
+		SET
+		llidVlanBeforeAggVidList = #{llidVlanBeforeAggVidList},
+		llidVlanAggCosMode = #{llidVlanAggCosMode},
+		llidVlanAggNewCos = #{llidVlanAggNewCos},
+		llidVlanAggNewTpid = #{llidVlanAggNewTpid}
+		WHERE ponId = #{portId}
+		  AND llidVlanAggMacAddr = #{onuMacString}
+		  AND llidVlanAfterAggVid = #{llidVlanAfterAggVid}
+	</update>
+	<update id="modifyLlidTrunkRule" parameterType="vlanLlidTrunkRule">
+		UPDATE
+		OltTopVlanTrunk
+		SET
+		llidVlanTrunkVidBmp = #{llidVlanTrunkVidBmp}
+		WHERE
+		ponId = #{portId} AND llidVlanTrunkMacIdx = #{onuMacString}
+	</update>
+	<update id="updateTransparentRule" parameterType="vlanTransparentRule">
+		update
+		oltVlanTransparent
+		set
+		transparentId = #{transparentId},
+		transparentMode = #{transparentMode}
+		where
+		ponId = #{portId} and entityId = #{entityId}
+	</update>
+	<select id="getLlidTrunkList" parameterType="map" resultType="vlanLlidTrunkRule">
+		SELECT entityId,
+		ponId AS portId,
+		ponIndex AS portIndex,
+		llidVlanTrunkMacIdx AS onuMacString,
+		llidVlanTrunkVidBmp
+		FROM OltTopVlanTrunk
+		WHERE ponId = #{ponId}
+		AND llidVlanTrunkMacIdx = #{llidVlanTrunkMacIdx}
+	</select>
+	<select id="getLlidQinQList" parameterType="vlanLlidQinQRule"
+		resultType="vlanLlidQinQRule">
+		SELECT entityId,
+		ponId AS portId,
+		topLqVlanMacIndex AS onuMacString,
+		topLqVlanStartCVid,
+		topLqVlanEndCVid,
+		topLqVlanSVlan,
+		topLqVlanCosMode,
+		topLqVlanSCos,
+		topLqVlanOuterTpid,
+		ponIndex AS portIndex
+		FROM OltTopVlanQinQ
+		WHERE ponId = #{portId}
+		AND topLqVlanMacIndex = #{onuMacString}
+		ORDER BY topLqVlanSVlan ASC
+	</select>
+
+	<select id="getPonCvidModeRela" databaseId="MySQL" parameterType="long"
+		resultType="ponCvidModeRela">
+		SELECT A.entityId,
+		A.ponId,
+		A.ponIndex,
+		'' AS onuMac,
+		1 AS vlanMode,
+		CONVERT(A.vlanIndex, CHAR(1535)) AS cvidString
+		FROM OltVlanTranslation A
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT B.entityId,
+		B.ponId,
+		B.ponIndex,
+		'' AS onuMac,
+		2 AS vlanMode,
+		B.aggregationVidList AS cvidString
+		FROM OltVlanAgg B
+		WHERE ponId = #{ponId}
+		<!-- UNION
+		SELECT C.entityId,
+		C.ponId,
+		C.ponIndex,
+		'' AS onuMac,
+		3 AS vlanMode,
+		C.transparentId AS svidString
+		FROM OltVlanTransparent C
+		WHERE ponId = #{ponId} -->
+		UNION
+		SELECT D.entityId,
+		D.ponId,
+		D.ponIndex,
+		'' AS onuMac,
+		4 AS vlanMode,
+		CONCAT(CONVERT(D.pqStartVlanId, CHAR(1535)), '-', CONVERT(D.pqEndVlanId, CHAR(1535))) AS cvidString
+		FROM OltPonQinq D WHERE ponId = #{ponId}
+		UNION
+		SELECT E.entityId,
+		E.ponId,
+		E.ponIndex,
+		E.topLlidTransDevMac AS onuMac,
+		5 AS vlanMode,
+		CONVERT(E.topLlidTransVidIdx, CHAR(1535)) AS cvidString
+		FROM OltTopVlanTrans E
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT F.entityId,
+		F.ponId,
+		F.ponIndex,
+		F.llidVlanAggMacAddr AS onuMac,
+		6 AS vlanMode,
+		F.llidVlanBeforeAggVidList AS cvidString
+		FROM OltTopVlanAgg F
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT G.entityId,
+		G.ponId,
+		G.ponIndex,
+		G.llidVlanTrunkMacIdx AS onuMac,
+		7 AS vlanMode,
+		G.llidVlanTrunkVidBmp AS cvidString
+		FROM OltTopVlanTrunk G
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT H.entityId,
+		H.ponId,
+		H.ponIndex,
+		H.topLqVlanMacIndex AS onuMac,
+		8 AS vlanMode,
+		CONCAT(CONVERT(H.topLqVlanStartCVid, CHAR(1535)), '-', CONVERT(H.topLqVlanEndCVid, CHAR(1535))) AS
+		cvidString
+		FROM OltTopVlanQinq H
+		WHERE ponId = #{ponId}
+    </select>
+    
+    <select id="getPonCvidModeRela" databaseId="Oracle" parameterType="long"
+		resultType="ponCvidModeRela">
+		SELECT A.entityId,
+		A.ponId,
+		A.ponIndex,
+		0 AS onuMac,
+		1 AS
+		vlanMode,
+		to_char(A.vlanIndex) AS cvidString
+		FROM OltVlanTranslation A
+		WHERE ponId = #ponId#
+		UNION
+		SELECT B.entityId,
+		B.ponId,
+		B.ponIndex,
+		0 AS
+		onuMac,
+		2 AS vlanMode,
+		to_char(B.aggregationVidList) AS cvidString
+		FROM
+		OltVlanAgg B
+		WHERE ponId = #{ponId}
+		<!-- UNION
+		SELECT C.entityId,
+		C.ponId,
+		C.ponIndex,
+		0 AS onuMac,
+		3 AS vlanMode,
+		to_char(C.transparentId) AS svidString
+		FROM OltVlanTransparent C
+		WHERE ponId = #{ponId} -->
+		UNION
+		SELECT
+		D.entityId,
+		D.ponId,
+		D.ponIndex,
+		0 AS onuMac,
+		4 AS vlanMode,
+		D.pqStartVlanId||'-'||D.pqEndVlanId AS cvidString
+		FROM OltPonQinq D
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT E.entityId,
+		E.ponId,
+		E.ponIndex,
+		E.topLlidTransDevMac AS onuMac,
+		5 AS vlanMode,
+		to_char(E.topLlidTransVidIdx) AS cvidString
+		FROM OltTopVlanTrans E
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT F.entityId,
+		F.ponId,
+		F.ponIndex,
+		F.llidVlanAggMacAddr AS onuMac,
+		6 AS vlanMode,
+		to_char(F.llidVlanBeforeAggVidList) AS cvidString
+		FROM OltTopVlanAgg F
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT G.entityId,
+		G.ponId,
+		G.ponIndex,
+		G.llidVlanTrunkMacIdx AS onuMac,
+		7 AS vlanMode,
+		to_char(G.llidVlanTrunkVidBmp) AS cvidString
+		FROM OltTopVlanTrunk G
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT H.entityId,
+		H.ponId,
+		H.ponIndex,
+		H.topLqVlanMacIndex AS onuMac,
+		8 AS vlanMode,
+		H.topLqVlanStartCVid||'-'||H.topLqVlanEndCVid AS
+		cvidString
+		FROM
+		OltTopVlanQinq H
+		WHERE ponId = #{ponId}
+    </select>
+    
+	<select id="getPonSvidModeRela" databaseId="MySQL" parameterType="map"
+		resultType="ponSvidModeRela">
+		SELECT J.entityId,
+		J.ponId AS ponId,
+		J.ponIndex AS ponIndex,
+		J.onuMacAddress AS onuMacAddress,
+		J.vlanMode AS vlanMode,
+		J.svidString AS svidString
+		FROM (SELECT A.entityId,
+		A.ponId,
+		A.ponIndex,
+		'' AS onuMacAddress,
+		1 AS vlanMode,
+		CONVERT(A.translationNewVid, CHAR(1535)) AS svidString
+		FROM OltVlanTranslation A
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT B.entityId,
+		B.ponId,
+		B.ponIndex,
+		'' AS onuMacAddress,
+		2 AS vlanMode,
+		CONVERT(B.portAggregationVidIndex, CHAR(1535)) AS svidString
+		FROM OltVlanAgg B
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT C.entityId,
+		C.ponId,
+		C.ponIndex,
+		'' AS onuMacAddress,
+		3 AS vlanMode,
+		C.transparentId AS svidString
+		FROM OltVlanTransparent C
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT D.entityId,
+		D.ponId,
+		D.ponIndex,
+		'' AS onuMacAddress,
+		4 AS vlanMode,
+		CONVERT(D.pqSVlanId, CHAR(1535)) AS svidString
+		FROM OltPonQinq D
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT E.entityId,
+		E.ponId,
+		E.ponIndex,
+		E.topLlidTransDevMac AS onuMacAddress,
+		5 AS vlanMode,
+		CONVERT(E.topLlidTransNewVid, CHAR(1535)) AS svidString
+		FROM OltTopVlanTrans E
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT F.entityId,
+		F.ponId,
+		F.ponIndex,
+		F.llidVlanAggMacAddr AS onuMacAddress,
+		6 AS vlanMode,
+		CONVERT(F.llidVlanAfterAggVid, CHAR(1535)) AS svidString
+		FROM OltTopVlanAgg F
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT G.entityId,
+		G.ponId,
+		G.ponIndex,
+		G.llidVlanTrunkMacIdx AS onuMacAddress,
+		7 AS vlanMode,
+		G.llidVlanTrunkVidBmp
+		FROM OltTopVlanTrunk G
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT H.entityId,
+		H.ponId,
+		H.ponIndex,
+		H.topLqVlanMacIndex AS onuMacAddress,
+		8 AS vlanMode,
+		CONVERT(H.topLqVlanSVlan, CHAR(1535)) AS svidString
+		FROM OltTopVlanQinq H
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT I.entityId,
+		0 AS ponId,
+		0 AS ponIndex,
+		'' AS onuMacAddress,
+		0 AS vlanMode,
+		CONVERT(I.oltVlanIndex, CHAR(1535)) AS svidString
+		FROM OltVlanConfig I WHERE I.entityId = #{entityId}) J
+	</select>
+	<select id="getPonSvidModeRela" databaseId="Oracle" parameterType="map"
+		resultType="ponSvidModeRela">
+		SELECT J.entityId,
+		J.ponId AS ponId,
+		J.ponIndex AS ponIndex,
+		J.onuMac AS onuMac,
+		J.vlanMode AS vlanMode,
+		J.svidString AS svidString
+		FROM (SELECT A.entityId,
+		A.ponId,
+		A.ponIndex,
+		0 AS onuMac,
+		1 AS vlanMode,
+		to_char(A.translationNewVid) AS svidString
+		FROM OltVlanTranslation A
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT B.entityId,
+		B.ponId,
+		B.ponIndex,
+		0 AS onuMac,
+		2 AS vlanMode,
+		to_char(B.portAggregationVidIndex) AS svidString
+		FROM OltVlanAgg B
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT C.entityId,
+		C.ponId,
+		C.ponIndex,
+		0 AS onuMac,
+		3 AS vlanMode,
+		to_char(C.transparentId) AS svidString
+		FROM OltVlanTransparent C
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT D.entityId,
+		D.ponId,
+		D.ponIndex,
+		0 AS onuMac,
+		4 AS vlanMode,
+		to_char(D.pqSVlanId) AS svidString
+		FROM OltPonQinq D
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT E.entityId,
+		E.ponId,
+		E.ponIndex,
+		E.topLlidTransDevMac AS onuMac,
+		5 AS vlanMode,
+		to_char(E.topLlidTransNewVid) AS svidString
+		FROM OltTopVlanTrans E
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT F.entityId,
+		F.ponId,
+		F.ponIndex,
+		F.llidVlanAggMacAddr AS onuMac,
+		6 AS vlanMode,
+		to_char(F.llidVlanAfterAggVid) AS svidString
+		FROM OltTopVlanAgg F
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT G.entityId,
+		G.ponId,
+		G.ponIndex,
+		G.llidVlanTrunkMacIdx AS onuMac,
+		7 AS vlanMode,
+		to_char(G.llidVlanTrunkVidBmp) AS svidString
+		FROM OltTopVlanTrunk G
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT H.entityId,
+		H.ponId,
+		H.ponIndex,
+		H.topLqVlanMacIndex AS onuMac,
+		8 AS vlanMode,
+		to_char(H.topLqVlanSVlan) AS svidString
+		FROM OltTopVlanQinq H
+		WHERE ponId = #{ponId}
+		UNION
+		SELECT I.entityId,
+		0 AS ponId,
+		0 AS ponIndex,
+		0 AS onuMac,
+		0 AS vlanMode,
+		to_char(I.oltVlanIndex) AS svidString
+		FROM OltVlanConfig I WHERE I.entityId = #entityId#) J
+	</select>
+	
+	<delete id="deleteAllPonVlan" parameterType="long">
+	    delete from oltponvlan where entityId = #{entityId}
+	</delete>
+	
+	<insert id="insertPonVlan" parameterType="portVlanAttribute">
+	    insert into oltponvlan(entityId, ponId, ponIndex,vlanTagTpid,vlanTagCfi,vlanTagPriority,vlanPVid,vlanMode)
+		values (#{entityId}, #{portId}, #{portIndex},#{vlanTagTpid},#{vlanTagCfi},#{vlanTagPriority},#{vlanPVid},#{vlanMode})
+	</insert>
+	
+	<select id="queryPonVlan" parameterType="long" resultType="portVlanAttribute">
+	    select * from oltponvlan
+	    where ponId = #{ponId}
+	</select>
+	
+	<update id="updatePonPvid" parameterType="map">
+	    update oltponvlan set vlanPVid = #{pvid} where ponId = #{ponId}
+	</update>
+	<update id="syncUpdatePortPvid" parameterType="map">
+		update oltportvlan A SET  vlanPVid= #{pvid}
+		WHERE EXISTS (SELECT 1 FROM oltponrelation B WHERE A.sniIndex=B.ponIndex AND A.entityId=B.entityId AND B.ponId=#{ponId})
+	</update>
+	
+	<insert id="insertOrUpdatePonVlan" parameterType="portVlanAttribute">
+	    insert into oltponvlan(entityId, ponId, ponIndex,vlanTagTpid,vlanTagCfi,vlanTagPriority,vlanPVid,vlanMode)
+		values (#{entityId}, #{portId}, #{portIndex},#{vlanTagTpid},#{vlanTagCfi},#{vlanTagPriority},#{vlanPVid},#{vlanMode})
+        ON DUPLICATE KEY UPDATE 
+        vlanTagTpid = #{vlanTagTpid}, vlanTagCfi = #{vlanTagCfi}, vlanTagPriority = #{vlanTagPriority},
+        vlanPVid = #{vlanPVid}, vlanMode = #{vlanMode}
+	</insert>
+	
+	<insert id="insertOltTopVlanOnuQinQ" parameterType="vlanLlidOnuQinQRule">
+		INSERT INTO OltTopVlanQinq (ponId,topLqVlanMacIndex,topLqVlanStartCVid,topLqVlanEndCVid,topLqVlanSVlan,ponIndex,entityId)
+		VALUES (#{ponId}, #{mac},#{topOnuQinQStartVlanId},#{topOnuQinQEndVlanId},#{topOnuQinQSVlanId},#{ponIndex},#{entityId})
+	</insert>
+</mapper>

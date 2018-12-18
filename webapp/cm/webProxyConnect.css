@@ -1,0 +1,46 @@
+h5{ font-size: 18px; color:#a6abb4;}
+p{ color:#a6abb4;}
+.blueTxt, .blueTxt p{ color:#42eb42; font-size:12px;}
+.blueLine{ border:1px solid #42eb42; padding:10px;}
+.lightBlueLine{border:1px solid #01effc; padding:10px; background:rgba(1, 239, 252, 0.2);}
+.yellowTxt, b.yellowTxt, p.yellowTxt, .yellowTxt p{ color:#f2daaa; font-size:12px;}
+.yellowLine,.yellowLine1, .yellowLine2{ border:2px solid #f2daaa; padding:10px; border-radius:0px 0px 16px 0px; background:rgba(242,218,170,0.2);}
+.yellowLine{ border-width:1px; border-radius:0px;}
+.yellowLine1{ border-width:1px;}
+.lightBlueTxt, .lightBlueTxt p, p.lightBlueTxt, b.lightBlueTxt{ color:#07edfa;}
+.x-window .x-tool-close, .pd0 .x-tool-close, .x-panel-ghost .x-tool-close{ background:url(../images/geekClose.png) no-repeat center center;}
+.x-window .x-tool-maximize{ background:url(../images/geekMax.png) no-repeat center center;}
+.x-window .x-tool-restore{ background:url(../images/geekMin.png) no-repeat center center;} 
+.x-window-tl{ padding-left:3px;}
+.x-window-tr{ padding-right:3px;}
+.x-window .x-window-tl,	.x-window .x-window-tr,	.x-window .x-window-tc,
+.x-panel-ghost .x-window-tl, .x-panel-ghost .x-window-tr
+{ background: #a6abb4; border-bottom:none;}
+.x-panel-ghost .x-window-tl, .x-panel-ghostl .x-window-tr, .x-panel-ghost .x-window-tc{ background: #a6abb4; border-bottom:none;}
+.x-window .x-tool, .x-panel-ghost .x-tool{ width:20px; height:20px;}
+.x-window .x-window-header-text, .x-panel-ghost .x-window-header-text{ font-size:12px; font-weight:normal; text-shadow:none; color:#000; padding-top:2px; padding-left:0px; height:18px;}
+.x-window .x-window-ml{ background:#a6abb4; padding-left:3px;}
+.x-window .x-window-mr{ background:#a6abb4; padding-right:3px;}
+.x-window .x-window-mc{ border:none; background:#000;}
+.x-window .x-window-bl,	.x-window .x-window-br,	.x-window .x-window-bc{ background:#a6abb4;}
+.x-panel-nofooter .x-panel-bc, .x-panel-nofooter .x-window-bc{ height:3px;}
+.folders{ position:absolute; top:30px; right:30px;}
+.folder{ width:48px;}
+.folder-title{ width:50%; height:6px; background:#ccc; border-radius:0 3px 0 0;}
+.folder-body{ width:100%; height:30px; background:#a6abb4;}
+.audio{width:100%; height:190px; /* background:url(../images/audio2.gif) no-repeat 0px 130px; */}
+#putCir, #putDot, #putSubBox{ width:50%; position:absolute; top:0; left:0;}
+#putDot{left:50%; line-height:1.4em;}
+#putSubBox{top:142px; left:21px; width:351px; height:26px; overflow:hidden; border:2px solid #f5dba8; padding:2px; padding-right:0;}
+#putSubTxt{position:absolute; top:182px; left:21px; width:357px;}
+.progressBoxTop{ width:5px; height:18px; overflow:hidden; display:inline-block; margin-right:2px; margin-bottom:2px;}
+.progressBoxBottom{ width:5px; height:6px; overflow:hidden; display:inline-block; margin-right:2px;}
+.darkYellowBg{ background:#847e66;}
+div.yellowBg{ background:#f2daaa; }
+.darkBlueBg{ background:#1a8491;}
+div.blueBg{ background:#0aedfe;}
+.errCls .x-window-tl, .errCls .x-window-tr, .errCls .x-window-tc, .errCls .x-window-ml, .errCls .x-window-mr, .errCls .x-window-bl, .errCls .x-window-br, .errCls .x-window-bc{
+	transition: all 2s ease;  
+	background:#f00;
+}
+.geekImg{ position:relative; top:3px;}

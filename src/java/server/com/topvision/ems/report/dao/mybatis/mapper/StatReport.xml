@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.report.domain.StatReport">
+
+	<select id="getAuthFolderList" parameterType="string" resultType="long">
+		select folderId from ${value} order by folderId
+	</select>
+
+	<select id="getFolderNameById" parameterType="long" resultType="string">
+		select name folderName from topofolder where folderId = #{folderId}
+	</select>
+
+	<select id="getAuthEntityStastics" parameterType="map" resultType="com.topvision.ems.report.domain.TopoEntityStastic">
+		select 
+			E.* ,F.displayName typeName
+		from ( select entityId,ip entityIp,name entityName,typeId
+		from entity a
+		where a.entityId in (select entityId from ${Authority})
+		<if test="type != null">
+				AND a.typeId in (select typeId from entitytyperelation where type = #{type})
+		</if>
+		) E left join entityType F on E.typeId = F.typeId
+	</select>
+	
+	<select id="selectEntityIdsByFolderId" parameterType="map" resultType="long">
+		SELECT
+			entity.entityId
+		FROM
+			${Authority}
+			INNER JOIN entity ON ${Authority}.entityId=entity.entityId
+		WHERE 1=1
+		<if test="types != null">
+			AND entity.typeId in (select typeId from entitytyperelation where type in (${types}))
+		</if>
+	</select>
+	
+	<select id="getAuthFolderIds" parameterType="map" resultType="long">
+		<foreach item="folderId" index="index" collection="list" separator="union">
+			select folderId from topofolder where FIND_IN_SET(folderId, topofolderfun(#{folderId}))
+        </foreach>
+	</select>
+
+</mapper>

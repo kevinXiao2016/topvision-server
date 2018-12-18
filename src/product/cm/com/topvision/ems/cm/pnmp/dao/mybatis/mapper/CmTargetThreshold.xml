@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cm.pnmp.facade.domain.CmTargetThreshold">
+
+	<select id="selectAllCmTargetThresholds" resultType="cmTargetThreshold">
+		SELECT * from CmSignalTargetThreshold
+	</select>
+	
+	<select id="selectLevelTargetThresholds" resultType="cmTargetThreshold">
+		SELECT * from CmSignalTargetThreshold where thresholdName = #{level}
+	</select>
+	
+	<select id="selectThresholdsByTargetName"  parameterType="String" resultType="cmTargetThreshold">
+		SELECT * from CmSignalTargetThreshold where targetName = #{targetName}
+	</select>
+	
+	<select id="selectThresholdByTargetAndName" parameterType="map" resultType="cmTargetThreshold">
+		SELECT * from CmSignalTargetThreshold where targetName = #{targetName} and thresholdName = #{thresholdName}
+	</select>
+	
+	<update id="updateCmTargetThreshold" parameterType="cmTargetThreshold">
+		update CmSignalTargetThreshold
+        set lowValue=#{lowValue},highValue=#{highValue}
+        where targetName = #{targetName} and thresholdName = #{thresholdName}
+	</update>
+	
+	<update id="updateThreshold" parameterType="cmTargetThreshold">
+		update CmSignalTargetThreshold 
+        set lowValue=#{lowValue},highValue=#{highValue}
+        where targetName = #{targetName} and thresholdName = #{thresholdName}
+	</update>
+	
+</mapper>

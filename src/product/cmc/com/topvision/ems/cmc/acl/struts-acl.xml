@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcacl" namespace="/cmcacl" extends="default">
+		<action name="loadSingleAcl" class="cmcAclAction" method="loadSingleAcl">
+		</action>
+		<action name="addAcl" class="cmcAclAction" method="addAcl">
+		</action>
+		<action name="modifyAcl" class="cmcAclAction" method="modifyAcl">
+		</action>
+		<action name="modifyDefAct" class="cmcAclAction" method="modifyDefAct">
+		</action>
+		<action name="deleteAcl" class="cmcAclAction" method="deleteAcl">
+		</action>
+		<action name="loadAllAclList" class="cmcAclAction" method="loadAllAclList">
+		</action>
+		<action name="viewAllAclList" class="cmcAclAction" method="viewAllAclList">
+			<result>/cmc/allAclList.jsp</result>
+		</action>
+		<action name="countPositionAcl" class="cmcAclAction" method="countPositionAcl"></action>
+		
+		<action name="refreshAllCmcAcl" class="cmcAclAction" method="refreshAllCmcAcl" />
+	</package>
+</struts>

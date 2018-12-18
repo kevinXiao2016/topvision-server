@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmtsPerfGraph" namespace="/cmtsPerfGraph" extends="default">
+		<action name="modifyCmtsPerfTargetById" class="cmtsPerfGraphAction" method="modifyCmtsPerfTargetById" />
+		<action name="loadCmtsPerfTargetGroups" class="cmtsPerfGraphAction" method="loadCmtsPerfTargetGroups" />
+		<action name="loadPerfTargetsByGroup" class="cmtsPerfGraphAction" method="loadPerfTargetsByGroup" />
+		<action name="loadCmtsChannelList" class="cmtsPerfGraphAction" method="loadCmtsChannelList" />
+		<action name="loadChannelSingalQuality" class="cmtsPerfGraphAction" method="loadChannelSingalQuality" />
+		<action name="loadFlowData" class="cmtsPerfGraphAction" method="loadFlowData" />
+		<action name="loadCmtsSubPerfTargets" class="cmtsPerfGraphAction" method="loadCmtsSubPerfTargets" />
+		<action name="loadCmtsRelayPerfData" class="cmtsPerfGraphAction" method="loadCmtsRelayPerfData" />
+		<action name="loadCmtsServicePerfData" class="cmtsPerfGraphAction" method="loadCmtsServicePerfData" />
+	</package>
+</struts>

@@ -1,0 +1,28 @@
+.txtLeftTh{text-indent: 16px;}
+.partTwoUl{ float:left; width:100%;}
+.partTwoUl_li{ float:left; width:48%; position:relative; padding-top:10px;}
+label.flagOpen{ padding-left:20px; background:url(/images/flagOpen.gif) no-repeat 0px center; cursor:pointer;}
+label.flagClose{ padding-left:20px; background:url(/images/flagClose.gif) no-repeat 0px center; cursor:pointer;}
+
+.colorTableDl{ position:relative; top:0px; left:0px; height:55px; overflow:hidden;}
+.colorTableDl dd{ width:286px; overflow:hidden; position:absolute; top:0px; left:63px; height:60px;  text-align:center; margin:0 auto;}
+.colorTableOl{ float:left;}
+.colorTableOl li{width:27px; height:27px; overflow:hidden; text-align:center; float:left;}
+.colorTableOl li.colorTableFirst{width:16px;border-top:1px solid transparent; border-bottom:1px solid #2a2a2a;}
+.colorTableOl li.lastArr{ height:29px; background:url(/images/bottomBlackArrow.gif) no-repeat 0px bottom;}
+.colorTableOl li a{ width:27px; height:22px; display:block; padding-top:5px; text-decoration: underline; color:#000;}
+.redBox{ border:1px solid #2A2A2A; border-left:none; background:#ED2439;}
+.redBoxWidthLeftLine{ border-left:1px solid #2a2a2a;}
+.greenBox{ border:1px solid #2A2A2A; border-left:none; background:#00CE0A;}
+.yellowBox{ border:1px solid #2A2A2A; border-left:none; background:#E9D000;}
+.colorTxt{text-align:center; width:20px; position: absolute; top:30px; left:35px;}
+.firstTxt{ padding-left:10px; left:0px; background:url(/images/smallArrIco.gif) no-repeat 5px 4px;}
+.left35{ left:35px;}
+.left62{ left:62px;}
+.left92{ left:92px;}
+.left120{ left:120px;}
+.left149{ left:149px;}
+.left178{ left:178px;}
+.left204{ left:204px;}
+.left244{ left:244px;}
+.lastTxt{ padding-right:10px;  background:url(/images/bigArrIco.gif) no-repeat 22px 4px;}

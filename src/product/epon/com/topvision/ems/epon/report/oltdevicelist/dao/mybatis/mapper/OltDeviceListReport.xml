@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.report.domain.OltDeviceListReport">
+
+	<select id="getDeviceListItemSortIp" parameterType="map" resultType="com.topvision.ems.epon.domain.DeviceListItem">
+		SELECT
+			A.entityId,A.name,A.ip,A.sysLocation,B.displayName AS typeName,A.createTime
+		FROM
+			entity A, EntityType B
+		WHERE
+			A.typeId = B.typeId	AND A.typeId in (select typeId from entitytyperelation where type = #{type})
+			and A.entityId in (select entityId from ${Authority})
+		ORDER BY inet_aton(${sortName})
+	</select>
+
+	<select id="getDeviceListItem" parameterType="map" resultType="com.topvision.ems.epon.domain.DeviceListItem">
+		SELECT
+			A.entityId,A.name,A.ip,A.sysLocation,B.displayName AS typeName,A.createTime
+		FROM
+			entity A, EntityType B
+		WHERE
+			A.typeId = B.typeId
+			AND A.typeId in (select typeId from entitytyperelation where type = #{type})
+			and A.entityId in (select entityId from ${Authority})
+		ORDER BY ${sortName}
+	</select>
+
+</mapper>

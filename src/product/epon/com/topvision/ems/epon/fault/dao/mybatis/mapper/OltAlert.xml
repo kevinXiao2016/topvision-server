@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.fault.domain.OltAlert">
+	<select id="getOltAlertCodeMask" parameterType="map"
+		resultType="oltTopAlarmCodeMask">
+		SELECT A.entityId,
+		A.topAlarmCodeMaskIndex,
+		A.topAlarmCodeMaskEnable,
+		B.displayName AS alarmName
+		FROM
+		OltTopAlarmCodeMask A,
+		EventType B,
+		eponeventtyperelation
+		C
+		WHERE
+		A.entityId = #{entityId}
+		AND A.topAlarmCodeMaskIndex =
+		C.deviceEventTypeId
+		AND C.type = #{type}
+		AND
+		C.emsEventTypeId = B.typeId
+	</select>
+	<select id="getOltAlertAvailableType" parameterType="map"
+		resultType="alertType">
+		SELECT C.deviceEventTypeId typeId,
+		B.displayName,
+		B.note
+		FROM
+		eponeventtyperelation C,
+		eventtype B
+		WHERE C.type =
+		#{type}
+		AND
+		C.emsEventTypeId = B.typeId
+		AND C.deviceEventTypeId NOT IN (SELECT
+		A.topAlarmCodeMaskIndex
+		typeId
+		FROM olttopalarmcodemask A
+		WHERE entityId
+		= #{entityId})
+	</select>
+	<select id="getOltAlertInstanceMask" parameterType="long"
+		resultType="oltTopAlarmInstanceMask">
+		SELECT entityId,
+		topAlarmInstanceMaskIndex AS
+		topAlarmInstanceMaskIndex5Byte,
+		topAlarmInstanceMaskEnable
+		FROM
+		OltTopAlarmInstanceMask
+		WHERE entityId = #{entityId}
+	</select>
+	<select id="getOltAlertAvailableInstance" parameterType="long"
+		resultType="oltAlertInstance">
+		SELECT H.instanceType, H.instanceIndex FROM
+		(
+		SELECT 'slot'
+		instanceType,
+		A.slotIndex instanceIndex
+		FROM oltslotrelation A,
+		oltslotattribute A1
+		WHERE A.entityId = #{entityId}
+		AND A.slotId =
+		A1.slotId
+		UNION
+		SELECT 'pon' instanceType,
+		B.ponIndex instanceIndex
+		FROM
+		oltponrelation B
+		WHERE B.entityId =
+		#{entityId}
+		UNION
+		SELECT 'sni'
+		instanceType,
+		C.sniIndex instanceIndex
+		FROM
+		oltsnirelation C
+		WHERE
+		C.entityId = #{entityId}
+		UNION
+		SELECT 'onu'
+		instanceType,
+		F.onuIndex
+		instanceIndex
+		FROM oltonurelation F
+		WHERE
+		F.entityId = #{entityId}
+		UNION
+		SELECT 'uni' instanceType,
+		G.uniIndex
+		instanceIndex
+		FROM oltunirelation G
+		WHERE G.entityId = #{entityId}
+		) H
+		WHERE H.instanceIndex NOT IN (SELECT
+		I.topAlarmInstanceMaskIndex FROM
+		olttopalarminstancemask I)
+		ORDER BY
+		H.instanceType ASC, H.instanceIndex
+		ASC
+	</select>
+	<select id="getOltTrapConfig" parameterType="long" resultType="oltTrapConfig">
+		SELECT entityId,
+		eponManagementAddrName,
+		eponManagementAddrTAddress,
+		eponManagementAddrCommunity
+		FROM OltTrapConfig
+		WHERE entityId =
+		#{entityId}
+	</select>
+	<select id="getOltTrapByPrimaryKey" parameterType="map"
+		resultType="oltTrapConfig">
+		SELECT entityId,
+		eponManagementAddrName,
+		eponManagementAddrTAddress,
+		eponManagementAddrCommunity
+		FROM
+		OltTrapConfig
+		WHERE entityId = #{entityId}
+		AND eponManagementAddrName =
+		#{eponManagementAddrName}
+	</select>
+	<select id="getAvailableEntityIp" resultType="string">
+		SELECT ip FROM
+		entityaddress
+	</select>
+	<select id="getAlertSeverity" resultType="level">
+		SELECT levelId, name
+		FROM levels WHERE active = 1 order by levelId desc
+	</select>
+	<select id="getAlertType" resultType="alertType">
+		SELECT typeId, name,category,
+		displayName FROM alerttype 
+	</select>
+	<select id="getOltDeviceAlertTop" databaseId="MySQL" resultType="oltAlertTop">
+		select A.entityId,
+		SUM(A.happenTimes) as happenTimes,
+		B.name oltName,
+		B.ip
+		FROM alert A,
+		entity B
+		WHERE
+		A.entityId = B.entityId and A.entityId
+		in (select
+		entityId from oltattribute)
+		GROUP BY A.entityId
+		ORDER BY
+		happenTimes
+		DESC LIMIT 0, 10
+	</select>
+	<select id="getOltDeviceAlertTop" databaseId="Oracle"
+		resultType="oltAlertTop">
+		select tt.* from (select rownum rn , t.* from (select A.entityId,
+		SUM(A.happenTimes) as happenTimes,
+		B.name oltName,
+		B.ip
+		FROM alert A,
+		entity B
+		WHERE
+		A.entityId = B.entityId and A.entityId in (select entityId from oltattribute)
+		GROUP BY A.entityId
+		ORDER BY happenTimes DESC) t) tt where rn <![CDATA[>]]>
+		0 and rn <![CDATA[<=]]>
+		10
+	</select>
+	<insert id="insertOltAlertCodeMask" parameterType="oltTopAlarmCodeMask">
+		INSERT INTO
+		OltTopAlarmCodeMask (entityId, topAlarmCodeMaskIndex,
+		topAlarmCodeMaskEnable)
+		VALUES (#{entityId}, #{topAlarmCodeMaskIndex},
+		#{topAlarmCodeMaskEnable})
+	</insert>
+	<insert id="insertOltAlertInstanceMask" parameterType="oltTopAlarmInstanceMask">
+		INSERT
+		INTO OltTopAlarmInstanceMask (entityId, topAlarmInstanceMaskIndex,
+		topAlarmInstanceMaskEnable)
+		VALUES (#{entityId},
+		#{topAlarmInstanceMaskIndex5Byte},
+		#{topAlarmInstanceMaskEnable})
+	</insert>
+	<insert id="insertOltTrapConfig" parameterType="oltTrapConfig">
+		INSERT INTO
+		OltTrapConfig (entityId, eponManagementAddrName,
+		eponManagementAddrTAddress, eponManagementAddrCommunity)
+		VALUES
+		(#{entityId}, #{eponManagementAddrName},
+		#{eponManagementAddrTAddress},
+		#{eponManagementAddrCommunity})
+	</insert>
+	<update id="updateOltTrapConfig" parameterType="oltTrapConfig">
+		UPDATE
+		OltTrapConfig
+		SET entityId = #{entityId},
+		eponManagementAddrName =
+		#{eponManagementAddrName},
+		eponManagementAddrTAddress =
+		#{eponManagementAddrTAddress},
+		eponManagementAddrCommunity =
+		#{eponManagementAddrCommunity}
+		WHERE entityId = #{entityId}
+		AND
+		eponManagementAddrName = #{eponManagementAddrName}
+	</update>
+	<delete id="deleteOltAlertCodeMask" parameterType="map">
+		DELETE FROM
+		OltTopAlarmCodeMask WHERE entityId = #{entityId} AND
+		topAlarmCodeMaskIndex = #{codeMaskIndex}
+	</delete>
+	<delete id="deleteAllAlertCodeMask" parameterType="long">
+		DELETE FROM
+		OltTopAlarmCodeMask WHERE entityId = #{entityId}
+	</delete>
+	<delete id="deleteOltAlertInstanceMask" parameterType="map">
+		DELETE
+		FROM OltTopAlarmInstanceMask WHERE entityId = #{entityId} AND
+		topAlarmInstanceMaskIndex = #{instanceMaskIndex}
+	</delete>
+	<delete id="deleteAllAlertInstanceMask" parameterType="long">
+		DELETE
+		FROM OltTopAlarmInstanceMask WHERE entityId = #{entityId}
+	</delete>
+	<delete id="deleteOltTrapConfig" parameterType="oltTrapConfig">
+		DELETE FROM
+		OltTrapConfig WHERE entityId = #{entityId} AND eponManagementAddrName
+		=
+		#{eponManagementAddrName}
+	</delete>
+	<delete id="deleteAllTrapConfig" parameterType="long">
+		DELETE FROM
+		OltTrapConfig WHERE entityId = #{entityId}
+	</delete>
+</mapper>

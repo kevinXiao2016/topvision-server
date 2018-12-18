@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.report.domain.CurrentAlarmReport">
+
+	<select id="statEntityCurrentAlarmDetail" parameterType="map" resultType="com.topvision.ems.epon.report.domain.CurrentAlarmDetail">
+		SELECT
+			alert.message,
+			alerttype.displayName,
+			alert.entityId,
+			entity.name entityName,
+			alert.lastTime,
+			IF(alert.status IS NULL,0,1) AS status,
+			alert.confirmUser,
+			IF(alert.status IS NULL,null,alert.confirmTime) AS confirmTime
+		FROM
+			alert
+			INNER JOIN alerttype ON alert.typeId=alerttype.typeId
+			INNER JOIN entity ON entity.entityId=alert.entityId
+			INNER JOIN entityfolderrela ON alert.entityId=entityfolderrela.entityId
+		where 
+			alert.entityId=#{entityId} 
+			and entity.entityId in (select entityId from ${Authority})
+		<if test="alarmTypeId != null">
+			AND alert.levelId = #{alarmTypeId}
+		</if>
+		<if test="stTime != null">
+			AND <![CDATA[alert.lastTime >= #{stTime}]]>
+		</if>
+		<if test="etTime != null">
+			AND <![CDATA[alert.lastTime <= #{etTime}]]>
+		</if>
+		group by alert.alertId
+		<if test="start != null">
+		LIMIT #{start}, #{limit}
+		</if>
+	</select>
+
+	<select id="statCurrentAlarmReport" parameterType="map" resultType="com.topvision.ems.epon.report.domain.CurrentAlarmReport">
+		SELECT
+			e.entityId, e.name as entityName, et.displayName,
+			IFNULL(b.allAlarmNum,0) as allAlarmNum,
+			IFNULL(b.emergencyAlarmNum,0) as emergencyAlarmNum,
+			IFNULL(b.seriousAlarmNum,0) as seriousAlarmNum,
+			IFNULL(b.mainAlarmNum,0) as mainAlarmNum,
+			IFNULL(b.minorAlarmNum,0) as minorAlarmNum,
+			IFNULL(b.generalAlarmNum,0) as generalAlarmNum,
+			IFNULL(b.messageNum,0) as messageNum
+		FROM 
+			entity e
+			LEFT JOIN entitytype et ON e.typeId=et.typeId
+			LEFT JOIN (select entityId,
+						ifnull(sum(entityLevelAlertCount),0) allAlarmNum,
+						ifnull(sum(case c.levelId when 6 then entityLevelAlertCount end),0) emergencyAlarmNum,
+						ifnull(sum(case c.levelId when 5 then entityLevelAlertCount end),0) seriousAlarmNum,
+						ifnull(sum(case	c.levelId when 4 then entityLevelAlertCount end),0) mainAlarmNum,
+						ifnull(sum(case c.levelId when 3 then entityLevelAlertCount end),0) minorAlarmNum,
+						ifnull(sum(case c.levelId when 2 then entityLevelAlertCount end),0) generalAlarmNum,
+						ifnull(sum(case	c.levelId when 1 then entityLevelAlertCount end),0) messageNum
+						from
+						(select entityId, levelId, sum(1) entityLevelAlertCount from alert
+						where ${sql} group by entityId , levelId) c
+						group by c.entityId) b ON e.entityId=b.entityId
+		WHERE 1=1 AND e.entityId in (select entityId from ${Authority})
+		<if test="types != null">
+			AND e.typeId in (select typeId from entitytyperelation where type in (${types}))
+		</if>
+	</select>
+
+</mapper>

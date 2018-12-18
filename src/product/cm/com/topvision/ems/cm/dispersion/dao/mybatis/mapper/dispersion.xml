@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.dispersion.domain.Dispersion">
+	<select id="selectDispersionList" parameterType="map" resultType="dispersion">
+		SELECT 
+			DISTINCT(A.id) opticalNodeId,
+			A.name opticalNodeName,
+			C.name cmtsName,
+			E.displayName typeName,
+			IFNULL(C.ip,CONCAT(D.name,'(',D.ip,')')) manageIp,
+			(SELECT GROUP_CONCAT(B.channelId) FROM opticalnoderelation A, cmcupchannelbaseinfo B WHERE A.cmtsId=B.cmcId AND A.channelIndex=B.channelIndex AND opticalNodeId=A.id) channelIds,
+			(SELECT GROUP_CONCAT(B.name) FROM entityfolderrela A, topofolder B WHERE A.folderId=B.folderId AND A.entityId=C.entityId) folderNames,
+			B.*
+		FROM opticalnode A
+		LEFT JOIN dispersionlast B ON A.id=B.opticalNodeId
+		LEFT JOIN entity C ON A.id=C.entityId
+		LEFT JOIN entity D ON C.parentId=D.entityId
+		LEFT JOIN entitytype E ON C.typeId=E.typeId
+		LEFT JOIN entityFolderRela F ON C.entityId = F.entityId
+		WHERE 1=1 and C.entityId in (select entityId from ${Authority})
+		<if test="folderIds != null and folderIds != ''">
+		AND FIND_IN_SET(F.folderId,'${folderIds}')>0
+        </if>
+		<if test="deviceType != null">
+		AND E.typeId = #{deviceType}
+		</if>
+		<if test="deviceName != null">
+		AND C.name LIKE '%${deviceName}%'
+		</if>
+		<if test="manageIp != null">
+		AND IFNULL(C.ip,CONCAT(D.name,'(',D.ip,')')) LIKE '%${manageIp}%'
+		</if>
+		<if test="sort != null and dir != null">
+		ORDER BY ${sort} ${dir}
+		</if>
+		LIMIT ${start}, ${limit}
+	</select>
+	
+	<select id="getDispersionListNum" parameterType="map" resultType="int">
+		SELECT 
+			count(DISTINCT(A.id))
+		FROM opticalnode A
+		LEFT JOIN dispersionlast B ON A.id=B.opticalNodeId
+		LEFT JOIN entity C ON A.id=C.entityId
+		LEFT JOIN entity D ON C.parentId=D.entityId
+		LEFT JOIN entitytype E ON C.typeId=E.typeId
+		LEFT JOIN entityFolderRela F ON C.entityId = F.entityId
+		WHERE 1=1 and C.entityId in (select entityId from ${Authority})
+		<if test="folderIds != null and folderIds != ''">
+		AND FIND_IN_SET(F.folderId,'${folderIds}')>0
+        </if>
+		<if test="deviceType != null">
+		AND E.typeId = #{deviceType}
+		</if>
+		<if test="deviceName!=null">
+		AND C.name LIKE '%${deviceName}%'
+		</if>
+		<if test="manageIp != null">
+		AND IFNULL(C.ip,CONCAT(D.name,'(',D.ip,')'))  LIKE '%${manageIp}%'
+		</if>
+	</select>
+	
+	<select id="getDispersionById" parameterType="long" resultType="dispersion">
+		SELECT 
+			A.id opticalNodeId,
+			A.name opticalNodeName,
+			C.name cmtsName,
+			E.displayName typeName,
+			IFNULL(C.ip, CONCAT(D.ip, '(OLT)')) manageIp
+		FROM opticalnode A
+		LEFT JOIN entity C ON A.id=C.entityId
+		LEFT JOIN entity D ON C.parentId=D.entityId
+		LEFT JOIN entitytype E ON C.typeId=E.typeId
+		WHERE A.id = #{opticalNodeId}
+	</select>
+	
+	<select id="selectDispersionsByIdAndRange" parameterType="map" resultType="dispersion">
+		SELECT * FROM dispersionhistory 
+		WHERE 
+		opticalNodeId=#{opticalNodeId} 
+		AND (collectTime BETWEEN #{startTime} AND #{endTime})
+		ORDER BY collectTime
+	</select>
+	
+	<select id="selectDispersionByIdAndTime" parameterType="map" resultType="dispersion">
+		SELECT * FROM dispersionhistory 
+		WHERE 
+		opticalNodeId=#{opticalNodeId} 
+		AND collectTime = #{exactTime}
+	</select>
+	
+	<insert id="insertDispersion" parameterType="dispersion">
+		INSERT INTO dispersionhistory(
+			opticalNodeId,
+			collectTime,
+			cmNum,
+			upSnrAvg,
+			upSnrStd,
+			upSnrDist,
+			upPowerAvg,
+			upPowerStd,
+			upPowerDist
+		)
+		VALUES(
+			#{opticalNodeId}, 
+			#{collectTime}, 
+			#{cmNum},  
+			#{upSnrAvg},  
+			#{upSnrStd},  
+			#{upSnrDist},  
+			#{upPowerAvg},  
+			#{upPowerStd},  
+			#{upPowerDist}
+		);
+	</insert>
+</mapper>

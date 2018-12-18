@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+    <bean id="systemPreferencesDao"
+          class="com.topvision.platform.dao.ibatis.SystemPreferencesDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+    <bean id="systemLogDao"
+          class="com.topvision.platform.dao.ibatis.SystemLogDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="userDao"
+          class="com.topvision.platform.dao.ibatis.UserDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="userGroupDao"
+          class="com.topvision.platform.dao.ibatis.UserGroupDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="userPreferencesDao"
+          class="com.topvision.platform.dao.ibatis.UserPreferencesDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="repositoryDao"
+          class="com.topvision.platform.dao.ibatis.RepositoryDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="departmentDao"
+          class="com.topvision.platform.dao.ibatis.DepartmentDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="postDao"
+          class="com.topvision.platform.dao.ibatis.PostDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="favouriteFolderDao"
+          class="com.topvision.platform.dao.ibatis.FavouriteFolderDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="databaseDao"
+          class="com.topvision.platform.dao.ibatis.DatabaseDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="reportDao"
+          class="com.topvision.platform.dao.ibatis.ReportDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+    <bean id="reportTaskDao"
+          class="com.topvision.platform.dao.ibatis.ReportTaskDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+    <bean id="portletItemDao"
+          class="com.topvision.platform.dao.ibatis.PortletItemDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="navigationButtonDao"
+          class="com.topvision.platform.dao.ibatis.NavigationButtonDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="functionItemDao"
+          class="com.topvision.platform.dao.ibatis.FunctionItemDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="menuItemDao"
+          class="com.topvision.platform.dao.ibatis.MenuItemDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="toolbarButtonDao"
+          class="com.topvision.platform.dao.ibatis.ToolbarButtonDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="roleDao" class="com.topvision.platform.dao.ibatis.RoleDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="imageDao" class="com.topvision.platform.dao.ibatis.ImageDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+</beans>

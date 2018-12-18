@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TopDigitMapProf">
+    <select id="selectTopDigitMapProfInfoList" parameterType="long" resultType="topDigitMapProfInfo">
+        SELECT 
+            entityId,
+            topDigitMapProfIdx,
+            topDigitMapProfName,
+            topDigitMapCirtDialTime,
+            topDigitMapPartDialTime,
+            topDigitMapDialPlanToken,
+            topDigitMapBindCnt
+        FROM 
+            topdigitmapprofinfo 
+        WHERE entityId=#{entityId}
+    </select>
+    
+    <select id="selectTopDigitMapProfInfo" parameterType="map" resultType="topDigitMapProfInfo">
+        SELECT 
+            entityId,
+            topDigitMapProfIdx,
+            topDigitMapProfName,
+            topDigitMapCirtDialTime,
+            topDigitMapPartDialTime,
+            topDigitMapDialPlanToken,
+            topDigitMapBindCnt
+        FROM 
+            topdigitmapprofinfo 
+        WHERE entityId=#{entityId} and topDigitMapProfIdx = #{profileId}
+    </select>
+    
+    <insert id="insertTopDigitMapProfInfo"  parameterType="topDigitMapProfInfo">
+        INSERT INTO 
+            topdigitmapprofinfo(entityId,topDigitMapProfIdx,topDigitMapProfName,
+                    topDigitMapCirtDialTime,topDigitMapPartDialTime,topDigitMapDialPlanToken,topDigitMapBindCnt) 
+        VALUES (#{entityId},#{topDigitMapProfIdx},#{topDigitMapProfName},
+            #{topDigitMapCirtDialTime},#{topDigitMapPartDialTime},#{topDigitMapDialPlanToken},#{topDigitMapBindCnt}
+            )
+    </insert>
+    
+    <update id="updateTopDigitMapProfInfo" parameterType="topDigitMapProfInfo">
+        UPDATE topdigitmapprofinfo 
+        SET topDigitMapProfName=#{topDigitMapProfName},
+        	topDigitMapCirtDialTime=#{topDigitMapCirtDialTime},
+        	topDigitMapPartDialTime=#{topDigitMapPartDialTime},
+        	topDigitMapDialPlanToken=#{topDigitMapDialPlanToken}
+        WHERE  entityId=#{entityId} AND topDigitMapProfIdx=#{topDigitMapProfIdx}
+    </update>
+    
+    <delete id="deleteTopDigitMapProfInfo"  parameterType="map">
+        DELETE FROM topdigitmapprofinfo WHERE entityId=#{entityId} AND topDigitMapProfIdx=#{profileId} 
+    </delete>
+</mapper>

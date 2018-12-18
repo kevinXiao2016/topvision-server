@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.report.domain.OltSniPortReport">
+
+	<select id="getSniPortList" parameterType="map"	resultType="oltSniAttribute">
+		select
+			A.sniId,
+			A.sniMediaType,
+			A.sniPortName,
+			A.sniAdminStatus,
+			A.sniOperationStatus,
+			B.ip AS entityIp,
+			B.name AS entityName,
+			C.sniIndex
+		from
+			oltsniattribute A ,entity B,oltsnirelation C
+		where 
+			A.entityId = B.entityId 
+			AND A.sniId = C.sniId and B.entityId in (select entityId from ${Authority})
+		<if test="entityType!=null">and B.typeId = #{entityType}</if>
+		<if test="entityIp!=null">and B.ip = #{entityIp}</if>
+		<if test="adminState!=null">and A.sniAdminStatus = #{adminState}</if>
+		<if test="operationState!=null">and A.sniOperationStatus = #{operationState}</if>
+		order by B.ip,C.sniIndex
+	</select>
+
+</mapper>

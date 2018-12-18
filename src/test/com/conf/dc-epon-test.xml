@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+    <bean id="oltDao" class="com.topvision.ems.epon.dao.ibatis.OltDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+    <bean id="sniVlanDao" class="com.topvision.ems.epon.dao.ibatis.SniVlanDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+    <bean id="ponVlanDao" class="com.topvision.ems.epon.dao.ibatis.PonVlanDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+    <bean id="uniVlanDao" class="com.topvision.ems.epon.dao.ibatis.UniVlanDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+    <bean id="oltDhcpDao" class="com.topvision.ems.epon.dao.ibatis.OltDhcpDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+    <bean id="oltPerfDao" class="com.topvision.ems.epon.dao.ibatis.OltPerfDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+    <bean id="oltAlertDao" class="com.topvision.ems.epon.dao.ibatis.OltAlertDaoImpl">
+    	<property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+    <bean id="oltIgmpDao" class="com.topvision.ems.epon.dao.ibatis.OltIgmpDaoImpl">
+    	<property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+    <bean id="oltAclDao" class="com.topvision.ems.epon.dao.ibatis.OltAclDaoImpl">
+    	<property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+    <bean id="oltQosDao" class="com.topvision.ems.epon.dao.ibatis.OltQosDaoImpl">
+    	<property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+    <bean id="oltStpDao" class="com.topvision.ems.epon.dao.${dao.type}.OltStpDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+</beans>

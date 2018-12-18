@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.baidu.domain.BaiduEntity">
+    <insert id="insertBaiduEntity" parameterType="baiduEntity">
+		INSERT
+		INTO
+		baiduEntity (
+		entityId,
+		typeId,
+		zoom,
+		location,
+		latitude,
+		longitude
+		) VALUES (
+		#{entityId},
+		#{typeId},
+		#{zoom},
+		#{location},
+		#{latitude},
+		#{longitude}
+		)
+	</insert>
+	
+	<insert id="batchInsertOrUpdateBaiduEntity" parameterType="BaiduEntity">
+        INSERT INTO BaiduEntity 
+            (entityId, typeId, longitude, latitude, zoom, minZoom, maxZoom,location) 
+        VALUES 
+            (#{entityId},#{typeId}, #{longitude}, #{latitude},#{zoom}, #{minZoom},#{maxZoom},#{location})
+        ON DUPLICATE KEY UPDATE
+            longitude = #{longitude}, 
+            latitude = #{latitude}, 
+            zoom = #{zoom}, 
+            minZoom = #{minZoom}, 
+            maxZoom = #{maxZoom}, 
+            location = #{location}
+    </insert>
+	<select id="selectBaiduEntity" resultType="baiduEntity">
+		SELECT
+		a.entityId,
+		a.typeId,
+		a.zoom,
+		a.location,
+		a.latitude,
+		a.longitude,
+		b.icon16,
+		b.icon32,
+		b.icon48,
+		b.displayName,
+		c.name,
+		c.mac,
+		ifnull (c.ip, d.ip) ip,
+		e.state
+		FROM
+		baiduEntity a
+		left join entityType b on a.typeId = b.typeId
+		left join entity c on a.entityId = c.entityId
+		left join entity d on c.parentId = d.entityId
+		left join entitysnap e on a.entityId = e.entityId
+	</select>
+	<select id="searchEntity" parameterType="map" resultType="baiduEntity">
+		SELECT
+		a.entityId,
+		a.typeId,
+		a.zoom,
+		a.location,
+		a.latitude,
+		a.longitude,
+		b.icon16,
+		b.icon32,
+		b.icon48,
+		b.displayName,
+		c.name,
+		c.mac,
+		ifnull (c.ip, d.ip) ip,
+		e.state
+		FROM
+		baiduEntity a
+		left join entityType b on a.typeId = b.typeId
+		left join entity c on a.entityId = c.entityId
+		left join entity d on c.parentId = d.entityId
+		left join entitysnap e on a.entityId = e.entityId
+		<if test="queryContent != null">
+		where c.name like '%${queryContent}%'
+		or c.ip like '%${queryContent}%'
+		or d.ip like '%${queryContent}%'
+		or c.mac like '%${queryContent}%'
+		or c.mac like '%${queryContentMac}%'
+		<if test="queryMacWithoutSplit != null">
+                OR REPLACE(c.mac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+        </if>
+        </if>
+	</select>
+	<select id="selectBaiduEntityByEntityId" resultType="baiduEntity">
+		SELECT
+		a.entityId,
+		a.typeId,
+		a.zoom,
+		a.location,
+		a.latitude,
+		a.longitude,
+		b.icon16,
+		b.icon32,
+		b.icon48,
+		b.displayName,
+		c.name,
+		c.mac,
+		ifnull (c.ip, d.ip) ip,
+		e.state
+		FROM
+		baiduEntity a
+		left join entityType b on a.typeId = b.typeId
+		left join entity c on a.entityId = c.entityId
+		left join entity d on c.parentId = d.entityId
+		left join entitysnap e on a.entityId = e.entityId
+		where a.entityId = #{entityId}
+	</select>
+	<select id="deleteBaiduEntity" parameterType="long">
+		delete from baiduentity where entityId = #{entityId}
+	</select>
+	<select id="updateBaiduEntity" parameterType="baiduEntity">
+		update baiduentity set longitude = #{longitude},
+		latitude = #{latitude},
+		zoom = #{zoom},
+		location = #{location}
+		where entityId = #{entityId}
+		
+	</select>
+</mapper>

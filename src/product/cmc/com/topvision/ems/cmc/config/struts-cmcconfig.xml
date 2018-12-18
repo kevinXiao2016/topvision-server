@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcConfig" namespace="/cmc/config" extends="default">
+		<action name="showCmcConfig" class="cmcConfigAction" method="showCmcConfig">
+			<result>/cmc/cmcConfig.jsp</result>
+		</action>
+		<action name="showCmcPollingConfig" class="cmcConfigAction"
+			method="showCmcPollingConfig">
+			<result>/cmc/cmcPollingConfig.jsp</result>
+		</action>
+		<action name="updateCmcPollingConfig" class="cmcConfigAction"
+			method="updateCmcPollingConfig">
+		</action>
+		<action name="modifyCmcBasicInfo" class="cmcConfigAction"
+			method="modifyCmcBasicInfo">
+		</action>
+		<action name="modifyCmcIpInfo" class="cmcConfigAction" method="modifyCmcIpInfo">
+		</action>
+		<action name="addCmcEmsInfo" class="cmcConfigAction" method="addCmcEmsInfo">
+		</action>
+		<action name="modifyCmcEmsInfo" class="cmcConfigAction" method="modifyCmcEmsInfo">
+		</action>
+		<action name="deleteCmcEmsInfo" class="cmcConfigAction" method="deleteCmcEmsInfo">
+		</action>
+
+		<action name="refreshCmcConfig" class="cmcConfigAction" method="refreshCmcConfig">
+		</action>
+		<action name="deviceeventcontrol" class="cmcConfigAction"
+			method="deviceEventControl">
+		</action>
+		<action name="modifyCc8800BSniConfig" class="cmcConfigAction"
+			method="modifyCc8800BSniConfig">
+		</action>
+		<action name="showSnmpBasicInfo" class="cmcConfigAction"
+			method="showSnmpConfigJsp">
+			<result>/cmc/cmcSnmpConfigInfo.jsp</result>
+		</action>
+		<action name="showEmsBasicInfo" class="cmcConfigAction" method="showEmsBasicInfoJsp">
+			<result>/cmc/cmcEmsConfigInfo.jsp</result>
+		</action>
+		<action name="showSystemIpInfo" class="cmcConfigAction" method="showSystemIpInfoJsp">
+			<result>/cmc/cmcSystemIpInfo.jsp</result>
+		</action>
+		<action name="modifyEmsConfigInfo" class="cmcConfigAction"
+			method="modifyEmsConfigInfo">
+		</action>
+		<action name="loadSystemIpInfo" class="cmcConfigAction" method="loadSystemIpInfo">
+		</action>
+		<action name="deleteSubIpVlan0" class="cmcConfigAction" method="deleteSubIpVlan0">
+		</action>
+		<action name="modifyCmcSystemIpInfo" class="cmcConfigAction" method="modifyCmcSystemIpInfo">
+		</action>
+		<action name="modifyCmcGatewayInfo" class="cmcConfigAction" method="modifyCmcGatewayInfo">
+        </action>
+		<action name="addCmcSubIpInfo" class="cmcConfigAction" method="addCmcSubIpInfo">
+		</action>
+		<action name="showModifyCmcSystemIpInfo" class="cmcConfigAction" method="showModifyCmcSystemIpInfo">
+			<result>/cmc/modifyCmcSystemIpInfo.jsp</result>
+		</action>
+		<action name="showAddCmcSubIpInfo" class="cmcConfigAction" method="showAddCmcSubIpInfo">
+			<result>/cmc/addCmcSubIpInfo.jsp</result>
+		</action>
+		<action name="showCmcPiggyBackConfig" class="cmcConfigAction" method="showCmcPiggyBackConfig">
+            <result>/cmc/cmcPiggyBackConfig.jsp</result>
+        </action>
+        <action name="modifyCmcPiggyBackConfig" class="cmcConfigAction" method="modifyCmcPiggyBackConfig">
+        </action>
+	</package>
+</struts>

@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.frequencyhopping.domain.CcmtsSpectrumGp">
+
+	<!-- ################################## select start ####################################### -->
+	<select id="selectAllConfigLog" parameterType="map"	resultType="com.topvision.ems.cmc.frequencyhopping.domain.SpectrumTempConfigLog">
+		SELECT * FROM 
+		spectrumtempconfiglog
+		ORDER BY configTime	DESC
+		limit ${start} , ${limit}
+	</select>
+
+	<select id="selectDetailByLogId" parameterType="map" resultType="com.topvision.ems.cmc.frequencyhopping.domain.SpectrumTempConfigLogDetail">
+		SELECT * FROM 
+		spectrumtempconfiglogDetail
+		WHERE 
+		configLogId = #{configLogId} 
+		ORDER BY configDetailId DESC 
+		limit ${start} , ${limit}
+	</select>
+
+	<select id="selectAllGpTemplate" parameterType="map" resultType="com.topvision.ems.cmc.frequencyhopping.domain.CcmtsSpectrumGpTemplate">
+		SELECT * 
+		FROM ccmtsspectrumgptemplate 
+		ORDER BY tempLateId
+		DESC limit ${start} , ${limit}
+	</select>
+
+	<select id="getGlobalGpList" parameterType="map" resultType="com.topvision.ems.cmc.frequencyhopping.domain.EmsCcmtsSpectrumGp">
+		select * from 
+		emsccmtsspectrumgp 
+		ORDER BY emsGroupId DESC 
+		limit ${start} , ${limit}
+	</select>
+	
+	<select id="getGpGlobal" parameterType="long" resultType="com.topvision.ems.cmc.frequencyhopping.domain.CcmtsSpectrumGpGlobal">
+		select
+		entityId,
+		globalAdminStatus,
+		snrQueryPeriod,
+		hopHisMaxCount
+		from
+		ccmtsspectrumgpglobal
+		where
+		entityId=#{entityId}
+	</select>
+
+	<select id="getDeviceGroupList" parameterType="long" resultType="com.topvision.ems.cmc.frequencyhopping.domain.CcmtsSpectrumGp">
+		select * from ccmtsspectrumgp where entityId = #{entityId}
+	</select>
+
+	<select id="getGlobalSpectrumGpList" resultType="com.topvision.ems.cmc.frequencyhopping.domain.EmsCcmtsSpectrumGp">
+		select * from emsccmtsspectrumgp
+	</select>
+
+	<select id="getDeviceGroup" parameterType="map" resultType="com.topvision.ems.cmc.frequencyhopping.domain.CcmtsSpectrumGp">
+		select * from ccmtsspectrumgp 
+		where entityId = #{entityId} and groupId = #{groupId}
+	</select>
+
+	<select id="getSpectrumGroupFreqList" parameterType="map" resultType="com.topvision.ems.cmc.frequencyhopping.domain.CcmtsSpectrumGpFreq">
+		select * from ccmtsspectrumgpfreq 
+		where entityId = #{entityId} and groupId = #{groupId}
+	</select>
+	
+	<select id="selectChnlGroup" parameterType="map" resultType="com.topvision.ems.cmc.frequencyhopping.domain.CcmtsSpectrumGpChnl">
+		SELECT * FROM ccmtsspectrumgpchnl 
+		WHERE entityId = #{entityId} AND channelIndex = #{channelIndex}
+	</select>
+
+	<select id="getGlobalSpectrumGpById" parameterType="long" resultType="com.topvision.ems.cmc.frequencyhopping.domain.EmsCcmtsSpectrumGp">
+		SELECT * FROM emsccmtsspectrumgp 
+		WHERE emsGroupId = #{emsgroupId}
+	</select>
+
+	<select id="getGlobalSpectrumGpFreqById" parameterType="long" resultType="com.topvision.ems.cmc.frequencyhopping.domain.EmsCcmtsSpectrumGpFreq">
+		SELECT * FROM emsccmtsspectrumgpfreq 
+		WHERE emsGroupId = #{emsgroupId}
+	</select>
+
+	<select id="selectHopHis" parameterType="map" resultType="com.topvision.ems.cmc.frequencyhopping.domain.CcmtsSpectrumGpHopHis">
+		SELECT * 
+		FROM ccmtsspectrumgphophis 
+		WHERE entityId = #{entityId} AND channelIndex = #{channelIndex}
+	</select>
+
+	<select id="selectAllDeviceGp" parameterType="long" resultType="com.topvision.ems.cmc.frequencyhopping.domain.CcmtsSpectrumGp">
+		SELECT * FROM ccmtsspectrumgp WHERE entityId = #{entityId}
+	</select>
+
+	<select id="selectTempCount" resultType="int">
+		SELECT count(*) 
+		FROM ccmtsspectrumgptemplate
+	</select>
+
+	<select id="selectGpTemplateById" parameterType="long"	resultType="com.topvision.ems.cmc.frequencyhopping.domain.CcmtsSpectrumGpTemplate">
+		SELECT * FROM ccmtsspectrumgptemplate WHERE tempLateId = #{tempLateId}
+	</select>
+
+	<select id="selectTempRelationGp" parameterType="long"	resultType="com.topvision.ems.cmc.frequencyhopping.domain.EmsCcmtsSpectrumGp">
+		select
+		emsGp.emsGroupId,
+		emsGp.emsGroupName,
+		emsGp.adminStatus,
+		emsGp.hopPeriod,
+		emsGp.maxHopLimit,
+		emsGp.groupPolicy,
+		tempRelation.groupId AS deviceGroupId
+		from 
+		spectrumtempgprelation tempRelation,emsccmtsspectrumgp emsGp
+		where 
+		tempRelation.tempLateId = #{tempLateId}	and tempRelation.emsGroupId = emsGp.emsGroupId
+	</select>
+
+	<select id="selectTotalLog" resultType="int">
+		SELECT count(*) FROM
+		spectrumtempconfiglog
+	</select>
+
+	<select id="selectTotalDetail" resultType="int">
+		SELECT count(*) FROM
+		spectrumtempconfiglogDetail WHERE configLogId = #{configLogId}
+	</select>
+
+	<select id="getGroupChlNum" parameterType="map" resultType="int">
+		SELECT count(*) 
+		FROM ccmtsspectrumgpchnl 
+		WHERE entityId = #{entityId} and chnlGroupId = #{groupId}
+	</select>
+
+	<select id="getGlobalSpectrumGpNum" resultType="int">
+		select count(*)
+		from emsccmtsspectrumgp
+	</select>
+
+	<select id="getAllGlobalGp" resultType="com.topvision.ems.cmc.frequencyhopping.domain.EmsCcmtsSpectrumGp">
+		select * from emsccmtsspectrumgp
+	</select>
+	<!-- ################################## select end ####################################### -->
+
+	<!-- ################################## insert start ####################################### -->
+	<insert id="insertCcmtsSpectrumGpGlobal" parameterType="com.topvision.ems.cmc.frequencyhopping.domain.CcmtsSpectrumGpGlobal">
+		insert into ccmtsspectrumgpglobal
+		(entityId, 
+		globalAdminStatus,
+		snrQueryPeriod, 
+		hopHisMaxCount)
+		values
+		(#{entityId}, 
+		#{globalAdminStatus},
+		#{snrQueryPeriod}, 
+		#{hopHisMaxCount})
+	</insert>
+
+	<insert id="insertChnlGroup" parameterType="com.topvision.ems.cmc.frequencyhopping.domain.CcmtsSpectrumGpChnl">
+		INSERT INTO
+		ccmtsspectrumgpchnl
+		VALUES
+		(
+		#{entityId},
+		#{channelIndex},
+		#{chnlId},
+		#{chnlCmcMac},
+		#{chnlGroupId},
+		#{chnlSecondaryProf},
+		#{chnlTertiaryProf}
+		)
+	</insert>
+
+	<insert id="insertHopHis" parameterType="com.topvision.ems.cmc.frequencyhopping.domain.CcmtsSpectrumGpHopHis">
+		INSERT INTO
+		ccmtsspectrumgphophis
+		VALUES
+		(
+		#{entityId},
+		#{channelIndex},
+		#{cmcMac},
+		#{chnlId},
+		#{hisIndex},
+		#{hisSelect1st},
+		#{hisSelect2st},
+		#{hisSelect3st},
+		#{hisPolicy},
+		#{hisGroupId},
+		#{hisMaxHop},
+		#{hisFrequency},
+		#{hisWidth},
+		#{hisPower},
+		#{hisSnr},
+		#{hisCorrect},
+		#{hisUnCorrect},
+		#{lastHopTimeYMD}
+		)
+	</insert>
+
+	<insert id="insertDeviceGroup" parameterType="com.topvision.ems.cmc.frequencyhopping.domain.CcmtsSpectrumGp">
+		INSERT INTO
+		ccmtsspectrumgp
+		(
+		entityId,
+		groupId,
+		hopPeriod,
+		snrThres1,
+		snrThres2,
+		fecThresCorrect1,
+		fecThresCorrect2,
+		fecThresUnCorrect1,
+		fecThresUnCorrect2,
+		adminStatus,
+		maxHopLimit,
+		groupPolicy,
+		groupPriority1st,
+		groupPriority2st,
+		groupPriority3st
+		)
+		VALUES
+		(
+		#{entityId},
+		#{groupId},
+		#{hopPeriod},
+		#{snrThres1},
+		#{snrThres2},
+		#{fecThresCorrect1},
+		#{fecThresCorrect2},
+		#{fecThresUnCorrect1},
+		#{fecThresUnCorrect2},
+		#{adminStatus},
+		#{maxHopLimit},
+		#{groupPolicy},
+		#{groupPriority1st},
+		#{groupPriority2st},
+		#{groupPriority3st}
+		)
+	</insert>
+
+	<insert id="insertGlobalSpectrumGp" parameterType="com.topvision.ems.cmc.frequencyhopping.domain.EmsCcmtsSpectrumGp">
+		INSERT INTO emsccmtsspectrumgp
+		(
+		emsGroupName,
+		hopPeriod,
+		snrThres1,
+		snrThres2,
+		fecThresCorrect1,
+		fecThresCorrect2,
+		fecThresUnCorrect1,
+		fecThresUnCorrect2,
+		adminStatus,
+		maxHopLimit,
+		groupPolicy,
+		groupPriority1st,
+		groupPriority2st,
+		groupPriority3st
+		)
+		VALUES
+		(
+		#{emsGroupName},
+		#{hopPeriod},
+		#{snrThres1},
+		#{snrThres2},
+		#{fecThresCorrect1},
+		#{fecThresCorrect2},
+		#{fecThresUnCorrect1},
+		#{fecThresUnCorrect2},
+		#{adminStatus},
+		#{maxHopLimit},
+		#{groupPolicy},
+		#{groupPriority1st},
+		#{groupPriority2st},
+		#{groupPriority3st}
+		)
+		<selectKey resultType="long" keyProperty="emsGroupId">
+			SELECT @@IDENTITY
+			AS emsGroupId
+		</selectKey>
+	</insert>
+
+	<insert id="insertDeviceGpFreq" parameterType="com.topvision.ems.cmc.frequencyhopping.domain.CcmtsSpectrumGpFreq">
+		INSERT INTO
+		ccmtsspectrumgpfreq
+		(
+		entityId,
+		groupId,
+		freqIndex,
+		freqFrequency,
+		freqMaxWidth,
+		freqPower
+		)
+		VALUES
+		(
+		#{entityId},
+		#{groupId},
+		#{freqIndex},
+		#{freqFrequency},
+		#{freqMaxWidth},
+		#{freqPower}
+		)
+	</insert>
+
+	<insert id="insertGlobalSpectrumGpFreq" parameterType="com.topvision.ems.cmc.frequencyhopping.domain.EmsCcmtsSpectrumGpFreq">
+		INSERT
+		INTO emsccmtsspectrumgpfreq
+		(
+		emsGroupId,
+		freqIndex,
+		freqFrequency,
+		freqMaxWidth,
+		freqPower
+		)
+		VALUES
+		(
+		#{emsgroupId},
+		#{freqIndex},
+		#{freqFrequency},
+		#{freqMaxWidth},
+		#{freqPower}
+		)
+	</insert>
+
+	<insert id="insertGpTemplate" parameterType="com.topvision.ems.cmc.frequencyhopping.domain.CcmtsSpectrumGpTemplate">
+		INSERT INTO ccmtsspectrumgptemplate
+		(
+		templateName,
+		globalAdminStatus,
+		snrQueryPeriod,
+		hopHisMaxCount,
+		chnlSecondaryProf,
+		chnlTertiaryProf,
+		gpForUpChannel1,
+		gpForUpChannel2,
+		gpForUpChannel3,
+		gpForUpChannel4
+		)
+		VALUES
+		(
+		#{templateName},
+		#{globalAdminStatus},
+		#{snrQueryPeriod},
+		#{hopHisMaxCount},
+		#{chnlSecondaryProf},
+		#{chnlTertiaryProf},
+		#{gpForUpChannel1},
+		#{gpForUpChannel2},
+		#{gpForUpChannel3},
+		#{gpForUpChannel4}
+		)
+		<selectKey resultType="long" keyProperty="tempLateId">
+			SELECT @@IDENTITY
+			AS tempLateId
+		</selectKey>
+	</insert>
+
+	<insert id="insetTempGpRelation" parameterType="com.topvision.ems.cmc.frequencyhopping.domain.SpectrumTempGpRelation">
+		INSERT INTO
+		spectrumtempgprelation
+		(
+		tempLateId,
+		emsGroupId,
+		groupId
+		)
+		VALUES
+		(
+		#{tempLateId},
+		#{emsgroupId},
+		#{groupId}
+		)
+	</insert>
+
+	<insert id="insertConfigLog" parameterType="com.topvision.ems.cmc.frequencyhopping.domain.SpectrumTempConfigLog">
+		INSERT INTO spectrumtempconfiglog
+		(
+		configLogId,
+		tempLateId,
+		templateName,
+		deviceNum,
+		userId,
+		userName,
+		configTime,
+		configStatus
+		)
+		VALUES
+		(
+		#{configLogId},
+		#{tempLateId},
+		#{templateName},
+		#{deviceNum},
+		#{userId},
+		#{userName},
+		#{configTime},
+		#{configStatus}
+		)
+		<selectKey resultType="long" keyProperty="configLogId">
+			SELECT @@IDENTITY
+			AS configLogId
+		</selectKey>
+	</insert>
+
+	<insert id="insertLogDetail" parameterType="com.topvision.ems.cmc.frequencyhopping.domain.SpectrumTempConfigLogDetail">
+		INSERT INTO
+		spectrumtempconfiglogDetail
+		(
+		configDetailId,
+		configLogId,
+		templateName,
+		configUnit,
+		configOperation,
+		configTime,
+		configResult
+		)
+		VALUES
+		(
+		#{configDetailId},
+		#{configLogId},
+		#{templateName},
+		#{configUnit},
+		#{configOperation},
+		#{configTime},
+		#{configResult}
+		)
+	</insert>
+	<!-- ################################## insert end ####################################### -->
+
+	<!-- ################################## update start ####################################### -->
+	<update id="updateGpGlobal" parameterType="com.topvision.ems.cmc.frequencyhopping.domain.CcmtsSpectrumGpGlobal">
+		UPDATE
+		ccmtsspectrumgpglobal
+		SET
+		globalAdminStatus = #{globalAdminStatus},
+		snrQueryPeriod = #{snrQueryPeriod},
+		hopHisMaxCount = #{hopHisMaxCount}
+		WHERE
+		entityId = #{entityId}
+	</update>
+
+	<update id="updateDeviceGroup" parameterType="com.topvision.ems.cmc.frequencyhopping.domain.CcmtsSpectrumGp">
+		UPDATE
+		ccmtsspectrumgp
+		SET
+		hopPeriod = #{hopPeriod},
+		snrThres1 = #{snrThres1},
+		snrThres2 = #{snrThres2},
+		fecThresCorrect1 = #{fecThresCorrect1},
+		fecThresCorrect2 = #{fecThresCorrect2},
+		fecThresUnCorrect1 = #{fecThresUnCorrect1},
+		fecThresUnCorrect2 = #{fecThresUnCorrect2},
+		adminStatus = #{adminStatus},
+		maxHopLimit = #{maxHopLimit},
+		groupPolicy = #{groupPolicy},
+		groupPriority1st = #{groupPriority1st},
+		groupPriority2st = #{groupPriority2st},
+		groupPriority3st = #{groupPriority3st}
+		WHERE
+		entityId = #{entityId} and groupId = #{groupId}
+	</update>
+
+	<update id="updateChnlGroup" parameterType="com.topvision.ems.cmc.frequencyhopping.domain.CcmtsSpectrumGpChnl">
+		UPDATE
+		ccmtsspectrumgpchnl
+		SET
+		chnlGroupId = #{chnlGroupId},
+		chnlSecondaryProf =	#{chnlSecondaryProf},
+		chnlTertiaryProf = #{chnlTertiaryProf}
+		WHERE
+		chnlCmcMac = #{chnlCmcMac} AND chnlId = #{chnlId}
+	</update>
+
+	<update id="updateGlobalSpectrumGp" parameterType="com.topvision.ems.cmc.frequencyhopping.domain.EmsCcmtsSpectrumGp">
+		UPDATE
+		emsccmtsspectrumgp
+		SET
+		emsGroupName = #{emsGroupName},
+		hopPeriod =	#{hopPeriod},
+		snrThres1 = #{snrThres1},
+		snrThres2 = #{snrThres2},
+		fecThresCorrect1 = #{fecThresCorrect1},
+		fecThresCorrect2 = #{fecThresCorrect2},
+		fecThresUnCorrect1 = #{fecThresUnCorrect1},
+		fecThresUnCorrect2 = #{fecThresUnCorrect2},
+		adminStatus = #{adminStatus},
+		maxHopLimit = #{maxHopLimit},
+		groupPolicy = #{groupPolicy},
+		groupPriority1st = #{groupPriority1st},
+		groupPriority2st = #{groupPriority2st},
+		groupPriority3st = #{groupPriority3st}
+		WHERE
+		emsGroupId = #{emsgroupId}
+	</update>
+
+	<update id="updateGpTemplate" parameterType="com.topvision.ems.cmc.frequencyhopping.domain.CcmtsSpectrumGpTemplate">
+		UPDATE ccmtsspectrumgptemplate
+		SET 
+		templateName = #{templateName},
+		globalAdminStatus =	#{globalAdminStatus}, 
+		snrQueryPeriod = #{snrQueryPeriod}, 
+		hopHisMaxCount = #{hopHisMaxCount}, 
+		chnlSecondaryProf = #{chnlSecondaryProf},
+		chnlTertiaryProf = #{chnlTertiaryProf},
+		gpForUpChannel1 = #{gpForUpChannel1}, 
+		gpForUpChannel2 = #{gpForUpChannel2},
+		gpForUpChannel3 = #{gpForUpChannel3},
+		gpForUpChannel4 = #{gpForUpChannel4}
+		WHERE 
+		tempLateId = #{tempLateId}
+	</update>
+
+	<update id="updateSpectrumTempConfigLogStatus" parameterType="long">
+		UPDATE spectrumtempconfiglog
+		SET
+		configStatus = 1
+		WHERE configLogId =	#{configLogId}
+	</update>
+
+	<update id="updateChlGroupToZero" parameterType="map">
+		UPDATE
+		ccmtsspectrumgpchnl
+		SET
+		chnlGroupId = 0
+		WHERE entityId = #{entityId} and chnlGroupId = #{groupId}
+	</update>
+	<!-- ################################## update end ####################################### -->
+
+	<!-- ################################## delete start ####################################### -->
+	<delete id="deleteCcmtsSpectrumGpGlobal" parameterType="long">
+		delete from ccmtsspectrumgpglobal where entityId = #{entityId}
+	</delete>
+	<delete id="deleteChnlGroup" parameterType="com.topvision.ems.cmc.frequencyhopping.domain.CcmtsSpectrumGpChnl">
+		DELETE FROM	ccmtsspectrumgpchnl WHERE chnlCmcMac = #{chnlCmcMac}
+	</delete>
+
+	<delete id="delChnlGpByEntityId" parameterType="long">
+		DELETE FROM ccmtsspectrumgpchnl WHERE entityId=#{entityId}
+	</delete>
+
+	<delete id="deleteHopHis" parameterType="map">
+		DELETE FROM ccmtsspectrumgphophis 
+		WHERE entityId = #{entityId} AND channelIndex =	#{channelIndex}
+	</delete>
+
+	<delete id="delHopHisByEntityId" parameterType="long">
+		DELETE FROM	ccmtsspectrumgphophis WHERE entityId = #{entityId}
+	</delete>
+
+	<delete id="deleteDeviceGroup" parameterType="map">
+		DELETE FROM	ccmtsspectrumgp WHERE entityId = #{entityId} AND groupId = #{groupId}
+	</delete>
+
+	<delete id="deleteDeviceGroupList" parameterType="long">
+		DELETE FROM ccmtsspectrumgp WHERE entityId = #{entityId}
+	</delete>
+
+	<delete id="deleteGpTemplate" parameterType="long">
+		DELETE FROM	ccmtsspectrumgptemplate WHERE tempLateId = #{tempLateId}
+	</delete>
+
+	<delete id="deleteGlobalGroup" parameterType="long">
+		DELETE FROM	emsccmtsspectrumgp WHERE emsgroupId = #{groupId}
+	</delete>
+
+	<delete id="deleteGlobalSpectrumGpFreqById" parameterType="long">
+		DELETE FROM emsccmtsspectrumgpfreq WHERE emsgroupId = #{emsgroupId}
+	</delete>
+
+	<delete id="delRelByTemplateId" parameterType="long">
+		DELETE FROM	spectrumtempgprelation	WHERE tempLateId = #{tempLateId}
+	</delete>
+	<!-- ################################## delete end ####################################### -->
+</mapper>

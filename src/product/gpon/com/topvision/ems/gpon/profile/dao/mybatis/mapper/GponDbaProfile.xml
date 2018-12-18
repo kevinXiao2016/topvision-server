@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GponDbaProfile">
+
+<select id="selectGponDbaProfileInfoList" parameterType="long" resultType="gponDbaProfileInfo">
+	SELECT 
+		entityId,
+		ProfileId  gponDbaProfileId,
+		ProfileName  gponDbaProfileName,
+		ProfileType  gponDbaProfileType,
+		ProfileAssureRate  gponDbaProfileAssureRate,
+		ProfileFixRate  gponDbaProfileFixRate,
+		ProfileMaxRate  gponDbaProfileMaxRate,
+		ProfileBindNum  gponDbaProfileBindNum
+	FROM 
+		GponDbaProfileInfo 
+	WHERE entityId=#{entityId}
+</select>
+
+<select id="selectGponDbaProfileInfo"  parameterType="map" resultType="gponDbaProfileInfo">
+	SELECT 
+		entityId,
+		ProfileId  gponDbaProfileId,
+		ProfileName  gponDbaProfileName,
+		ProfileType  gponDbaProfileType,
+		ProfileAssureRate  gponDbaProfileAssureRate,
+		ProfileFixRate  gponDbaProfileFixRate,
+		ProfileMaxRate  gponDbaProfileMaxRate,
+		ProfileBindNum  gponDbaProfileBindNum
+	FROM 
+		GponDbaProfileInfo 
+	WHERE entityId=#{entityId} and ProfileId = #{profileId}
+</select>
+
+<insert id="insertGponDbaProfileInfo" parameterType="gponDbaProfileInfo">
+	INSERT INTO 
+		GponDbaProfileInfo(entityId,ProfileId,ProfileName,ProfileType,ProfileAssureRate,ProfileFixRate,ProfileMaxRate,ProfileBindNum) 
+	VALUES (
+		#{entityId},#{gponDbaProfileId},#{gponDbaProfileName},#{gponDbaProfileType},#{gponDbaProfileAssureRate},
+		#{gponDbaProfileFixRate},#{gponDbaProfileMaxRate},#{gponDbaProfileBindNum})
+</insert>
+
+<update id="updateGponDbaProfileInfo" parameterType="gponDbaProfileInfo">
+	UPDATE GponDbaProfileInfo 
+	SET ProfileName=#{gponDbaProfileName},ProfileType=#{gponDbaProfileType},ProfileAssureRate=#{gponDbaProfileAssureRate},
+		ProfileFixRate=#{gponDbaProfileFixRate},ProfileMaxRate=#{gponDbaProfileMaxRate}
+	WHERE entityId=#{entityId} AND ProfileId=#{gponDbaProfileId}
+</update>
+
+<delete id="deleteGponDbaProfileInfo" parameterType="map">
+	DELETE FROM GponDbaProfileInfo WHERE entityId=#{entityId} and ProfileId=#{gponDbaProfileId}
+</delete>
+
+</mapper>

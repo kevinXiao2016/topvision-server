@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="trunk" namespace="/epon/trunk" extends="default">
+		<action name="modifyTrunkGroup" class="oltTrunkAction" method="modifyTrunkGroup"></action>
+		<action name="dropTrunkGroup" class="oltTrunkAction" method="dropTrunkGroup"></action>
+		<action name="createTrunkGroup" class="oltTrunkAction" method="createTrunkGroup"></action>
+		<action name="loadAvailbleListWithSni" class="oltTrunkAction" method="loadAvailbleListWithSni"></action>
+		<action name="loadAvailbleListFirst" class="oltTrunkAction" method="loadAvailbleListFirst"></action>
+		<action name="getAvailblePortTrunkList" class="oltTrunkAction" method="getAvailblePortTrunkList"></action>
+		<action name="loadTrunkConfigList" class="oltTrunkAction" method="loadTrunkConfigList" />
+		<action name="jumpTrunkGroupPage" class="oltTrunkAction" method="jumpTrunkGroupPage">
+			<result>/epon/addTrunkGroup.jsp</result>
+		</action>
+		<action name="showOltTrunkView" class="oltTrunkAction" method="showOltTrunkView">
+			<result>/epon/oltTrunkView.jsp</result>
+		</action>
+    </package>
+</struts>

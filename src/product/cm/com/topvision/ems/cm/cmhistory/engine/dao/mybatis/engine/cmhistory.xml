@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cm.cmhistory.engine.domain.CmHistory">
+	<insert id="insertCmHistory" parameterType="cmHistory">
+		INSERT INTO cmHistory(
+				cmId,
+				collectTime,
+ 				statusValue,
+ 				checkStatus,
+ 				upChannelId,
+  				downChannelId,
+				upChannelFreq,
+				downChannelFreq,
+				upRecvPower,
+				upSnr,
+				downSnr,
+				upSendPower,
+				downRecvPower
+		)
+		VALUES(
+			#{cmId}, 
+			#{collectTime}, 
+			#{statusValue},  
+			#{checkStatus},  
+			#{upChannelId},  
+			#{downChannelId},  
+			#{upChannelFreq},  
+			#{downChannelFreq},  
+			#{upRecvPower},  
+			#{upSnr},
+			#{downSnr},  
+			#{upSendPower},
+			#{downRecvPower}
+		);
+	</insert>
+
+    <insert id="insertSpecifiedCmListLast" parameterType="cmHistory">
+		INSERT INTO SpecifiedCmListLast(
+				cmId,
+				collectTime,
+ 				statusValue,
+ 				checkStatus,
+ 				upChannelId,
+  				downChannelId,
+				upChannelFreq,
+				downChannelFreq,
+				upRecvPower,
+				upSnr,
+				downSnr,
+				upSendPower,
+				downRecvPower
+		)
+		VALUES(
+			#{cmId},
+			#{collectTime},
+			#{statusValue},
+			#{checkStatus},
+			#{upChannelId},
+			#{downChannelId},
+			#{upChannelFreq},
+			#{downChannelFreq},
+			#{upRecvPower},
+			#{upSnr},
+			#{downSnr},
+			#{upSendPower},
+			#{downRecvPower}
+		);
+	</insert>
+
+    <delete id="deleteSpecifiedCmListLast" parameterType="cmHistory">
+		DELETE FROM SpecifiedCmListLast WHERE cmId = #{cmId};
+	</delete>
+</mapper>

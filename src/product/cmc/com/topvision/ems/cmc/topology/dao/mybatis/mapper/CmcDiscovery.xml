@@ -1,0 +1,1593 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.discovery.domain.CmcDiscovery">
+
+	<select id="isExistCmc8800A" parameterType="long" resultType="int">
+		select count(*) from cmcentityrelation where
+		cmcId = #{cmcId}
+	</select>
+
+	<select id="getCmcEntityRelationByOlt" parameterType="long"
+		resultType="cmcEntityRelation">
+		select cmcId,onuId,cmcIndex,cmcType,cmcEntityId from
+		cmcentityrelation where
+		cmcEntityId=#{cmcEntityId}
+	</select>
+
+	<select id="getChannelMap" parameterType="long" resultType="java.util.HashMap">
+		select concat(cmcId,"_",channellIndex) cmcId_channelIndex, cmcPortId
+		from cmcportrelation
+		where cmcId in(select cmcId from cmcentityrelation
+		where
+		cmcentityId=#{entityId})
+	</select>
+
+	<select id="getCmcDownChannelBaseInfo" parameterType="cmcDownChannelBaseInfo"
+		resultType="int">
+		select
+		count(*)
+		from
+		cmcdownchannelbaseinfo where
+		cmcId=#{cmcId} and
+		channelIndex=#{channelIndex}
+	</select>
+	
+	<select id="getCmcPhyConfig" parameterType="cmcPhyConfig"
+		resultType="long">
+		select cmcId
+		from cmcsniphyconfig where
+		cmcId=#{cmcId} AND
+		phyIndex=#{phyIndex}
+	</select>
+	
+	<update id="updateCmcPhyConfig" parameterType="cmcPhyConfig">
+		Update
+		cmcsniphyconfig
+		set
+		topCcmtsSniInt = #{topCcmtsSniInt},
+		topCcmtsSniCurrentMedia = #{topCcmtsSniCurrentMedia},
+		topCcmtsSniDuplexMod = #{topCcmtsSniDuplexMod}
+		where
+		cmcId =
+		#{cmcId} AND
+		phyIndex = #{phyIndex}
+	</update>
+	
+	<insert id="insertCmcPhyConfig" parameterType="cmcPhyConfig">
+		INSERT INTO
+		cmcsniphyconfig
+		(cmcId,
+		phyIndex,
+		topCcmtsSniInt,
+		topCcmtsSniCurrentMedia,
+		topCcmtsSniDuplexMod)
+		VALUES
+		(#{cmcId},
+		#{phyIndex},
+		#{topCcmtsSniInt},
+		#{topCcmtsSniCurrentMedia},
+		#{topCcmtsSniDuplexMod})
+	</insert>
+
+	<update id="syncCmcPortInfo" parameterType="cmcPortAttribute">
+		insert into
+		cmcportattribute
+		(cmcPortId, cmcId, ifIndex, ifDescr,
+		ifType,
+		ifMtu,
+		ifSpeed, ifPhysAddress, ifAdminStatus, ifOperStatus,
+		ifLastChange
+		)
+		values
+		(#{cmcPortId}, #{cmcId},
+		#{ifIndex},
+		#{ifDescr},
+		#{ifType},
+		#{ifMtu},
+		#{ifSpeed},
+		#{ifPhysAddress},
+		#{ifAdminStatus},
+		#{ifOperStatus},
+		#{ifLastChange}
+		) on duplicate key
+		update
+		<if test="ifDescr != null">
+			ifDescr=#{ifDescr},
+		</if>
+		<if test="ifType != null">
+			ifType=#{ifType},
+		</if>
+		<if test="ifMtu != null">
+			ifMtu=#{ifMtu},
+		</if>
+		<if test="ifSpeed != null">
+			ifSpeed=#{ifSpeed},
+		</if>
+		<if test="ifPhysAddress != null">
+			ifPhysAddress=#{ifPhysAddress},
+		</if>
+		<if test="ifAdminStatus != null">
+			ifAdminStatus=#{ifAdminStatus},
+		</if>
+		<if test="ifOperStatus != null">
+			ifOperStatus=#{ifOperStatus},
+		</if>
+		<if test="ifLastChange != null">
+			ifLastChange=#{ifLastChange},
+		</if>
+		cmcId=#{cmcId},
+		ifIndex=#{ifIndex}
+	</update>
+
+	<update id="syncCmcUpChannelSignalQualityInfo" parameterType="cmcUpChannelSignalQualityInfo">
+		insert into cmcupchannelsignalqualityinfo
+		(cmcPortId, cmcId,
+		channelIndex,
+		docsIfSigQIncludesContention,
+		docsIfSigQUnerroreds,
+		docsIfSigQCorrecteds,
+		docsIfSigQUncorrectables,
+		docsIfSigQSignalNoise,
+		docsIfSigQMicroreflections,
+		docsIfSigQEqualizationData,
+		docsIfSigQExtUnerroreds,
+		docsIfSigQExtCorrecteds,
+		docsIf3SignalPower,
+		docsIfSigQExtUncorrectables)
+		values
+		(#{cmcPortId}, #{cmcId},
+		#{channelIndex},
+		#{docsIfSigQIncludesContention},
+		#{docsIfSigQUnerroreds},
+		#{docsIfSigQCorrecteds},
+		#{docsIfSigQUncorrectables},
+		#{docsIfSigQSignalNoise},
+		#{docsIfSigQMicroreflections},
+		#{docsIfSigQEqualizationData},
+		#{docsIfSigQExtUnerroreds},
+		#{docsIfSigQExtCorrecteds},
+		#{docsIf3SignalPower},
+		#{docsIfSigQExtUncorrectables}
+		) on duplicate key
+		update
+		<if test="docsIfSigQIncludesContention != null">
+			docsIfSigQIncludesContention=#{docsIfSigQIncludesContention},
+		</if>
+		<if test="docsIfSigQUnerroreds != null">
+			docsIfSigQUnerroreds=#{docsIfSigQUnerroreds},
+		</if>
+		<if test="docsIfSigQCorrecteds != null">
+			docsIfSigQCorrecteds=#{docsIfSigQCorrecteds},
+		</if>
+		<if test="docsIfSigQUncorrectables != null">
+			docsIfSigQUncorrectables=#{docsIfSigQUncorrectables},
+		</if>
+		<if test="docsIfSigQSignalNoise != null">
+			docsIfSigQSignalNoise=#{docsIfSigQSignalNoise},
+		</if>
+		<if test="docsIfSigQMicroreflections != null">
+			docsIfSigQMicroreflections=#{docsIfSigQMicroreflections},
+		</if>
+		<if test="docsIfSigQEqualizationData != null">
+			docsIfSigQEqualizationData=#{docsIfSigQEqualizationData},
+		</if>
+		<if test="docsIfSigQExtUnerroreds != null">
+			docsIfSigQExtUnerroreds=#{docsIfSigQExtUnerroreds},
+		</if>
+		<if test="docsIfSigQExtCorrecteds != null">
+			docsIfSigQExtCorrecteds=#{docsIfSigQExtCorrecteds},
+		</if>
+		<if test="docsIfSigQExtUncorrectables != null">
+			docsIfSigQExtUncorrectables=#{docsIfSigQExtUncorrectables},
+		</if>
+		<if test="docsIf3SignalPower != null">
+			docsIf3SignalPower = #{docsIf3SignalPower},
+		</if>
+		cmcId=#{cmcId},
+		channelIndex=#{channelIndex}
+	</update>
+	<select id="queryForCmIdListByCmcId" parameterType="Long"
+		resultType="Long">
+		SELECT
+		cmId
+		FROM
+		cmccmrelation
+		WHERE cmcId
+		=
+		#{cmcId}
+	</select>
+
+	<select id="getCmIdByCmIndex" parameterType="map" resultType="long">
+		select cmId from cmccmrelation where
+		docsIfCmtsCmStatusIndex
+		=#{cmIndex} and entityId = #{entityId} group by entityId,
+		docsIfCmtsCmStatusIndex
+	</select>
+	<select id="getCmIdByCpeMac" parameterType="string" resultType="long">
+		select cmId from cmcpe where
+		topCmCpeMacAddress =#{cpeMac}
+	</select>
+	<select id="getCmIdByStaticIp" parameterType="string"
+		resultType="long">
+		select cmId from cmstaticip where
+		topCcmtsCmStaticIP
+		=#{staticIp}
+	</select>
+
+	<select id="selectPolicyIdByEntityIdAndIndex" parameterType="cmcLoadBalTopPolicy"
+		resultType="long">
+		select
+		policyId
+		from docsLoadBalPolicy where entityId =
+		#{cmcId}
+		and docsLoadBalPolicyId = #{topLoadBalPolicyId}
+	</select>
+
+	<select id="getCmIdByMap" parameterType="docsIf3CmtsCmUsStatus"
+		resultType="long">
+		select cmId
+		from
+		docsif3cmtscmusstatus where cmRegStatusId
+		=
+		#{cmRegStatusId} and cmUsStatusChIfIndex = #{cmUsStatusChIfIndex}
+	</select>
+	<select id="getCmIdByMapFor8800A" parameterType="map"
+		resultType="long">
+		select cmId from cmccmrelation where
+		docsIfCmtsCmStatusIndex
+		=#{cmIndex} and cmcId = #{cmcId}
+	</select>
+	<select id="selectCmtsPortByEntityIdAndIfIndex" parameterType="map"
+		resultType="port">
+		select * from port
+		where
+		entityId = #{entityId} and ifIndex = #{ifIndex};
+	</select>
+
+	<insert id="insertInitialDataCmAction" parameterType="map">
+		insert into
+		initialDataCmAction
+		(entityId,
+		cmIndex,upChannelIfIndex,
+		downChannelIfIndex, cmmac, cmip, state, realtime )
+		values
+		(#{entityId},
+		#{cmIndex},
+		#{upChannelIfIndex}, #{downChannelIfIndex}, #{cmmac},
+		#{cmip}, #{state}, #{realtime})
+	</insert>
+
+	<insert id="insertInitialDataCpeAction" parameterType="map">
+		insert
+		into
+		initialDataCpeAction
+		(entityId,
+		cmmac,cpemac,
+		cpeip,cpetype, realtime
+		)
+		values
+		(#{entityId}, #{cmmac}, #{cpemac}, #{cpeip}, #{cpetype},
+		#{realtime})
+	</insert>
+
+	<insert id="insertCmCpe" parameterType="cmCpe"> INSERT INTO cmcpe
+		(cmId,
+		entityId,topCmCpeMacAddress, topCmCpeType,
+		topCmCpeIpAddress,
+		topCmCpeCcmtsIfIndex, topCmCpeCmStatusIndex,
+		topCmCpeToCmMacAddr,updateTime)
+		VALUES (#{cmId},
+		#{entityId},#{topCmCpeMacAddressString}, #{topCmCpeType},
+		#{topCmCpeIpAddress}, #{topCmCpeCcmtsIfIndex},
+		#{topCmCpeCmStatusIndex},
+		#{topCmCpeToCmMacAddr},#{updateTime})
+	</insert>
+	<insert id="insertCmStaticIp" parameterType="cmStaticIp"> INSERT INTO
+		cmstaticip (cmId,entityId, topCcmtsCmStaticIP,
+		docsIfCmtsCmStatusIndex) VALUES
+		(#{cmId},#{entityId},
+		#{topCcmtsCmStaticIP}, #{docsIfCmtsCmStatusIndex})
+	</insert>
+
+	<insert id="insertCmcLoadBalTopPolicy" parameterType="cmcLoadBalTopPolicy">
+		INSERT
+		INTO
+		topccmtsloadbalpolicy
+		(cmcId,
+		policyId)
+		VALUES
+		(#{cmcId},
+		#{policyId})
+	</insert>
+
+	<insert id="insertCmcLoadBalRulePolicyRela" parameterType="map">
+		INSERT INTO
+		policyruleref
+		(ruleId,
+		policyId)
+		VALUES
+		(#{ruleId},
+		#{policyId})
+	</insert>
+	<insert id="insertDocsIf3CmtsCmUsStatus" parameterType="docsIf3CmtsCmUsStatus">
+		INSERT
+		INTO
+		docsif3cmtscmusstatus
+		(cmId,
+		cmRegStatusId,
+		cmUsStatusChIfIndex,
+		cmUsStatusModulationType,
+		cmUsStatusRxPower,
+		cmUsStatusSignalNoise,
+		cmUsStatusMicroreflections,
+		cmUsStatusEqData,
+		cmUsStatusUnerroreds,
+		cmUsStatusCorrecteds,
+		cmUsStatusUncorrectables,
+		cmUsStatusHighResolutionTimingOffset,
+		cmUsStatusIsMuted,
+		cmUsStatusRangingStatus)
+		VALUES
+		(#{cmId},
+		#{cmRegStatusId},
+		#{cmUsStatusChIfIndex},
+		#{cmUsStatusModulationType},
+		#{cmUsStatusRxPower},
+		#{cmUsStatusSignalNoise},
+		#{cmUsStatusMicroreflections},
+		#{cmUsStatusEqData},
+		#{cmUsStatusUnerroreds},
+		#{cmUsStatusCorrecteds},
+		#{cmUsStatusUncorrectables},
+		#{cmUsStatusHighResolutionTimingOffset},
+		#{cmUsStatusIsMuted},
+		#{cmUsStatusRangingStatus})
+	</insert>
+
+	<insert id="insertCmtsPort" parameterType="cmcPortAttribute">
+		insert into
+		port
+		(entityId, ifIndex, ifDescr, ifType, ifMtu,ifName,
+		ifSpeed,
+		ifPhysAddress, ifAdminStatus, ifOperStatus, ifLastChange
+		)
+		values
+		(#{cmcId}, #{ifIndex},
+		#{ifDescr},
+		#{ifType},
+		#{ifMtu},
+		#{ifName},
+		#{ifSpeed},
+		#{ifPhysAddress},
+		#{ifAdminStatus},
+		#{ifOperStatus},
+		#{ifLastChange}
+		)
+	</insert>
+
+	<update id="updateCmcAttributeToOnuAttribute" parameterType="cmcAttribute">
+		update
+		oltonuattribute set
+		onuSoftwareVersion=#{topCcmtsSysSwVersion},
+		onuOperationStatus = #{topCcmtsSysStatus} where
+		onuId = #{cmcId}
+	</update>
+
+	<update id="updateCmCpe" parameterType="cmCpe"> Update cmcpe set
+		topCmCpeType = #{topCmCpeType}, entityId =#{entityId}
+		,topCmCpeIpAddress =
+		#{topCmCpeIpAddress},
+		topCmCpeCcmtsIfIndex =
+		#{topCmCpeCcmtsIfIndex},
+		topCmCpeCmStatusIndex =
+		#{topCmCpeCmStatusIndex}, topCmCpeToCmMacAddr =
+		#{topCmCpeToCmMacAddr},
+		cmId = #{cmId} where topCmCpeMacAddress =
+		#{topCmCpeMacAddressString}
+	</update>
+	<update id="updateCmStaticIp" parameterType="cmStaticIp"> Update cmstaticip
+		set cmId = #{cmId}, entityId=#{entityId},
+		docsIfCmtsCmStatusIndex =
+		#{docsIfCmtsCmStatusIndex}, topCcmtsCmStaticIP = #{topCcmtsCmStaticIP}
+		where
+		topCcmtsCmStaticIP = #{topCcmtsCmStaticIP}
+	</update>
+
+	<update id="updateDocsIf3CmtsCmUsStatus" parameterType="docsIf3CmtsCmUsStatus">
+		Update
+		docsif3cmtscmusstatus set
+		cmId =
+		#{cmId},
+		cmUsStatusModulationType =
+		#{cmUsStatusModulationType},
+		cmUsStatusRxPower =
+		#{cmUsStatusRxPower},
+		cmUsStatusSignalNoise =
+		#{cmUsStatusSignalNoise},
+		cmUsStatusMicroreflections =
+		#{cmUsStatusMicroreflections},
+		cmUsStatusEqData =
+		#{cmUsStatusEqData},
+		cmUsStatusUnerroreds =
+		#{cmUsStatusUnerroreds},
+		cmUsStatusCorrecteds =
+		#{cmUsStatusCorrecteds},
+		cmUsStatusUncorrectables =
+		#{cmUsStatusUncorrectables},
+		cmUsStatusHighResolutionTimingOffset =
+		#{cmUsStatusHighResolutionTimingOffset},
+		cmUsStatusIsMuted =
+		#{cmUsStatusIsMuted},
+		cmUsStatusRangingStatus =
+		#{cmUsStatusRangingStatus}
+		where cmRegStatusId = #{cmRegStatusId}
+		AND
+		cmUsStatusChIfIndex = #{cmUsStatusChIfIndex}
+	</update>
+	<update id="updateCmtsPort" parameterType="cmcPortAttribute">
+		Update
+		port set
+		ifDescr	=#{ifDescr},
+		ifType =#{ifType},
+		ifMtu =	#{ifMtu},
+		ifSpeed =#{ifSpeed},
+		ifPhysAddress =	#{ifPhysAddress},
+		ifAdminStatus =	#{ifAdminStatus},
+		ifOperStatus =#{ifOperStatus},
+		ifLastChange =#{ifLastChange},
+		ifName = #{ifName}
+		where
+		entityId = #{cmcId} AND
+		ifIndex = #{ifIndex}
+	</update>
+	<delete id="deleteCmByCmId" parameterType="Long">
+		delete from
+		cmccmrelation where cmId=#{cmId}
+	</delete>
+	<delete id="deleteAllCmcLoadBalBasicRule" parameterType="long">
+		delete
+		from
+		docsloadbalbasicrule where
+		entityId=#{entityId}
+	</delete>
+	<delete id="deteleCpeByEntityId" parameterType="long">
+		delete from
+		cmcpe
+		where
+		entityId=#{entityId}
+	</delete>
+	<delete id="deteleCmStaticIpByEntityId" parameterType="long">
+		delete
+		from
+		cmstaticip where
+		entityId=#{entityId}
+	</delete>
+	<delete id="deleteCmByEntityId" parameterType="long">
+		delete from
+		cmccmrelation where entityId=#{entityId}
+	</delete>
+
+	<delete id="deleteUsStatusByMap" parameterType="docsIf3CmtsCmUsStatus">
+		delete from
+		docsif3cmtscmusstatus where cmRegStatusId =
+		#{cmRegStatusId} and
+		cmUsStatusChIfIndex = #{cmUsStatusChIfIndex}
+	</delete>
+	<delete id="deleteCmCpeByCpeMac" parameterType="string">
+		delete from cmcpe
+		where topCmCpeMacAddress =#{cpeMac}
+	</delete>
+	<delete id="deleteCmStaticIpByStaticIp" parameterType="string">
+		delete
+		from cmstaticip where topCcmtsCmStaticIP
+		=#{staticIp}
+	</delete>
+
+	<delete id="deleteCmtsPort" parameterType="long">
+		delete from port where
+		entityId=#{cmcId}
+	</delete>
+	<delete id="deleteUsStatusByCmId" parameterType="long">
+		delete from
+		docsif3cmtscmusstatus
+		where cmId = #{cmId}
+	</delete>
+
+	<select id="getCmcEntityByCmcId" parameterType="cmcEntityRelation"
+		resultType="int">
+		SELECT
+		count(*)
+		FROM
+		cmcentityrelation
+		WHERE cmcId = #{cmcId}
+	</select>
+	<select id="getCmcEntityByOnuId" parameterType="cmcEntityRelation"
+		resultType="int">
+		SELECT
+		count(*)
+		FROM
+		cmcentityrelation
+		WHERE onuId = #{onuId}
+	</select>
+	<select id="getCpeIdByCmIdAndCpeIpIndex" parameterType="map"
+		resultType="Long">
+		SELECT cpeId
+		FROM cpecmrelation
+		WHERE 1 = 1
+		<if test="cmId != null">
+			AND cmId =
+			#{cmId}
+		</if>
+		<if test="cpeIpIndex != null">
+			AND docsSubMgtCpeIpIndex =
+			#{cpeIpIndex}
+		</if>
+	</select>
+	<update id="updateCpeCmRelation" parameterType="cpeCmRelation">
+		update
+		cpeCmRelation set
+		cpeId = #{cpeId},
+		cmId = #{cmId},
+		docsSubMgtCpeIpIndex
+		=
+		#{docsSubMgtCpeIpIndex}
+		where cpeId = #{cpeId}
+	</update>
+	<insert id="insertCpeCmRelation" parameterType="cpeCmRelation">
+		insert into
+		cpecmrelation
+		(cmId, docsSubMgtCpeIpIndex)
+		values
+		(#{cmId},
+		#{docsSubMgtCpeIpIndex})
+		<selectKey resultType="long" keyProperty="cpeId">
+			SELECT @@IDENTITY
+			AS cpeId
+		</selectKey>
+	</insert>
+	<insert id="insertCpeAttribute" parameterType="cpeAttribute">
+		insert into
+		cpeattribute
+		(cpeId,docsIfCmtsCmStatusIndex,docsSubMgtCpeIpIndex,
+		docsSubMgtCpeIpAddr,
+		docsSubMgtCpeIpLearned,
+		docsSubMgtCpeType
+		)
+		values
+		(#{cpeId}, #{docsIfCmtsCmStatusIndex}, #{docsSubMgtCpeIpIndex},
+		#{docsSubMgtCpeIpAddr},
+		#{docsSubMgtCpeIpLearned},
+		#{docsSubMgtCpeType}
+		)
+	</insert>
+	<select id="getCpeControlNum" parameterType="Long" resultType="Integer">
+		SELECT
+		count(*)
+		FROM
+		cmattributeextcpecontrol
+		WHERE cmId = #{cmId}
+	</select>
+	<update id="updateCmattributeExtCpeControl" parameterType="cmattributeExtCpeControl">
+		update
+		cmattributeExtCpeControl set
+		docsIfCmtsCmStatusIndex=#{docsIfCmtsCmStatusIndex},
+		docsSubMgtCpeControlMaxCpeIp=#{docsSubMgtCpeControlMaxCpeIp},
+		docsSubMgtCpeControlActive=#{docsSubMgtCpeControlActive},
+		docsSubMgtCpeControlLearnable=#{docsSubMgtCpeControlLearnable},
+		docsSubMgtCpeControlReset=#{docsSubMgtCpeControlReset}
+		where cmId =
+		#{cmId}
+	</update>
+	<insert id="insertCmattributeExtCpeControl" parameterType="cmattributeExtCpeControl">
+		insert
+		cmattributeExtCpeControl
+		(cmId,
+		docsIfCmtsCmStatusIndex,
+		docsSubMgtCpeControlMaxCpeIp,
+		docsSubMgtCpeControlActive,
+		docsSubMgtCpeControlLearnable,
+		docsSubMgtCpeControlReset
+		)
+		values
+		(#{cmId}, #{docsIfCmtsCmStatusIndex}, #{docsSubMgtCpeControlMaxCpeIp},
+		#{docsSubMgtCpeControlActive},
+		#{docsSubMgtCpeControlLearnable},
+		#{docsSubMgtCpeControlReset}
+		)
+	</insert>
+	<select id="getCmcAttribute" parameterType="long" resultType="long">
+		select cmcId
+		from cmcattribute where
+		cmcId=#{cmcId}
+	</select>
+	<select id="getCmcIdByCmcMac" parameterType="cmcAttribute"
+		resultType="long">
+		select a.cmcId
+		from cmcattribute
+		a,cmcentityrelation b where
+		a.topCcmtsSysMacAddrLong=#{topCcmtsSysMacAddrLong}
+		and a.cmcId =
+		b.cmcId and
+		b.cmcEntityId=#{entityId}
+	</select>
+	<update id="updateCmcAttribute" parameterType="cmcAttribute">
+		update
+		cmcattribute
+		set
+		<if test="cmcDeviceStyle != null">
+			cmcDeviceStyle=#{cmcDeviceStyle},
+		</if>
+		<if test="topCcmtsSysDescr != null and topCcmtsSysDescr != ''">
+			topCcmtsSysDescr=#{topCcmtsSysDescr},
+		</if>
+		<if test="topCcmtsSysObjectId != null">
+			topCcmtsSysObjectId=#{topCcmtsSysObjectId},
+		</if>
+		<if test="topCcmtsSysUpTime != null">
+			topCcmtsSysUpTime=#{topCcmtsSysUpTime},
+		</if>
+		<if test="topCcmtsSysContact != null and topCcmtsSysContact != ''">
+			topCcmtsSysContact=#{topCcmtsSysContact},
+		</if>
+		<if test="topCcmtsSysName != null">
+			topCcmtsSysName=#{topCcmtsSysName},
+		</if>
+		<if test="topCcmtsSysLocation != null">
+			topCcmtsSysLocation=#{topCcmtsSysLocation},
+		</if>
+		<if test="topCcmtsSysService != null">
+			topCcmtsSysService=#{topCcmtsSysService},
+		</if>
+		<if test="topCcmtsSysORLastChange != null">
+			topCcmtsSysORLastChange=#{topCcmtsSysORLastChange},
+		</if>
+		<if test="topCcmtsDocsisBaseCapability != null">
+			topCcmtsDocsisBaseCapability=#{topCcmtsDocsisBaseCapability},
+		</if>
+		<if test="topCcmtsSysRAMRatio != null">
+			topCcmtsSysRAMRatio=#{topCcmtsSysRAMRatio},
+		</if>
+		<if test="topCcmtsSysCPURatio != null">
+			topCcmtsSysCPURatio=#{topCcmtsSysCPURatio},
+		</if>
+		<if test="topCcmtsSysMacAddrLong != null">
+			topCcmtsSysMacAddrLong=#{topCcmtsSysMacAddrLong},
+		</if>
+		<if test="topCcmtsSysFlashRatio != null">
+			topCcmtsSysFlashRatio=#{topCcmtsSysFlashRatio},
+		</if>
+		<if test="topCcmtsSysMacAddr != null">
+			topCcmtsSysMacAddr=#{topCcmtsSysMacAddr},
+		</if>
+		<if test="topCcmtsSysStatus != null">
+			topCcmtsSysStatus=#{topCcmtsSysStatus},
+		</if>
+		<if test="topCcmtsSysSwVersion != null">
+			topCcmtsSysSwVersion=#{topCcmtsSysSwVersion},
+		</if>
+		<if test="topCcmtsSysSerialNumber != null">
+			topCcmtsSysSerialNumber=#{topCcmtsSysSerialNumber},
+		</if>
+		<if test="topCcmtsSysDorType != null">
+			topCcmtsSysDorType=#{topCcmtsSysDorType},
+		</if>
+		<if test="topCcmtsEqamSupport != null">
+			topCcmtsEqamSupport=#{topCcmtsEqamSupport},
+		</if>
+		cmcId = cmcId
+		where
+		cmcId=#{cmcId}
+	</update>
+	
+	<update id="updateEntityTypeByCmcAttribute" parameterType="cmcAttribute">
+	    update entity set typeId = #{cmcDeviceStyle} where entityId=#{cmcId}
+	</update>
+	
+	<update id="updateCmcName" parameterType="map">
+	    update entity set name = #{name} where entityId=#{cmcId}
+	</update>
+	
+	<insert id="insertCmcAttribute" parameterType="cmcAttribute">
+		insert into
+		cmcattribute
+		(cmcId,cmcDeviceStyle,topCcmtsSysDescr,topCcmtsSysObjectId,topCcmtsSysUpTime,topCcmtsSysContact,
+		topCcmtsSysName,topCcmtsSysLocation,topCcmtsSysService,topCcmtsSysORLastChange,topCcmtsDocsisBaseCapability,
+		topCcmtsSysRAMRatio,topCcmtsSysCPURatio,topCcmtsSysMacAddrLong,topCcmtsSysFlashRatio,topCcmtsSysMacAddr,
+		topCcmtsSysStatus, topCcmtsSysSwVersion,topCcmtsSysSerialNumber,topCcmtsSysDorType,
+        <if test="topCcmtsEqamSupport != null">
+            topCcmtsEqamSupport,
+        </if>
+		statusChangeTime)
+		values
+		(#{cmcId},#{cmcDeviceStyle},#{topCcmtsSysDescr},#{topCcmtsSysObjectId},#{topCcmtsSysUpTime},#{topCcmtsSysContact},
+		#{topCcmtsSysName},#{topCcmtsSysLocation},#{topCcmtsSysService},#{topCcmtsSysORLastChange},#{topCcmtsDocsisBaseCapability},
+		#{topCcmtsSysRAMRatio},#{topCcmtsSysCPURatio},#{topCcmtsSysMacAddrLong},#{topCcmtsSysFlashRatio},#{topCcmtsSysMacAddr},
+		#{topCcmtsSysStatus},
+		#{topCcmtsSysSwVersion},#{topCcmtsSysSerialNumber},#{topCcmtsSysDorType},
+        <if test="topCcmtsEqamSupport != null">
+            #{topCcmtsEqamSupport},
+        </if>
+		#{statusChangeTime})
+	</insert>
+	<select id="getUpChannelBaseInfo" parameterType="cmcUpChannelBaseInfo"
+		resultType="int">
+		select
+		count(*)
+		from
+		cmcupchannelbaseinfo
+		where
+		cmcId=#{cmcId}
+		and
+		channelIndex=#{channelIndex}
+	</select>
+	<insert id="insertCmcUpChannelBaseInfo" parameterType="cmcUpChannelBaseInfo">
+		insert
+		into
+		cmcupchannelbaseinfo
+		(cmcPortId,cmcId,
+		channelIndex,
+		channelId,
+		channelFrequency, channelWidth,
+		channelModulationProfile,
+		channelSlotSize,
+		channelTxTimingOffset, channelRangingBackoffStart,
+		channelRangingBackoffEnd, channelTxBackoffStart,
+		channelTxBackoffEnd,
+		channelScdmaActiveCodes,
+		channelScdmaCodesPerSlot,
+		channelScdmaFrameSize,
+		channelScdmaHoppingSeed, channelType,
+		channelCloneFrom,
+		channelUpdate,
+		channelStatus,
+		channelPreEqEnable,
+		channelMode,
+		cmtsChannelModulationProfile)
+		values
+		(#{cmcPortId},
+		#{cmcId},
+		#{channelIndex},
+		#{channelId}, #{channelFrequency},
+		#{channelWidth},
+		#{channelModulationProfile},
+		#{channelSlotSize},
+		#{channelTxTimingOffset},
+		#{channelRangingBackoffStart},
+		#{channelRangingBackoffEnd}, #{channelTxBackoffStart},
+		#{channelTxBackoffEnd}, #{channelScdmaActiveCodes},
+		#{channelScdmaCodesPerSlot},
+		#{channelScdmaFrameSize},
+		#{channelScdmaHoppingSeed}, #{channelType},
+		#{channelCloneFrom},
+		#{channelUpdate},
+		#{channelStatus},
+		#{channelPreEqEnable},#{channelExtMode},#{cmtsChannelModulationProfile})
+	</insert>
+	<update id="updateCmcUpChannelBaseInfo" parameterType="cmcUpChannelBaseInfo">
+		update
+		cmcupchannelbaseinfo
+		set
+		<if test="channelId != null">
+			channelId=#{channelId},
+		</if>
+		<if test="channelFrequency != null">
+			channelFrequency=#{channelFrequency},
+		</if>
+		<if test="channelWidth != null">
+			channelWidth=#{channelWidth},
+		</if>
+		<if test="channelModulationProfile != null">
+			channelModulationProfile=#{channelModulationProfile},
+		</if>
+		<if test="channelSlotSize != null">
+			channelSlotSize=#{channelSlotSize},
+		</if>
+		<if test="channelTxTimingOffset != null">
+			channelTxTimingOffset=#{channelTxTimingOffset},
+		</if>
+		<if test="channelRangingBackoffStart != null">
+			channelRangingBackoffStart=#{channelRangingBackoffStart},
+		</if>
+		<if test="channelRangingBackoffEnd != null">
+			channelRangingBackoffEnd=#{channelRangingBackoffEnd},
+		</if>
+		<if test="channelTxBackoffStart != null">
+			channelTxBackoffStart=#{channelTxBackoffStart},
+		</if>
+		<if test="channelTxBackoffEnd != null">
+			channelTxBackoffEnd=#{channelTxBackoffEnd},
+		</if>
+		<if test="channelScdmaActiveCodes != null">
+			channelScdmaActiveCodes=#{channelScdmaActiveCodes},
+		</if>
+		<if test="channelScdmaCodesPerSlot != null">
+			channelScdmaCodesPerSlot=#{channelScdmaCodesPerSlot},
+		</if>
+		<if test="channelScdmaFrameSize != null">
+			channelScdmaFrameSize=#{channelScdmaFrameSize},
+		</if>
+		<if test="channelScdmaHoppingSeed != null">
+			channelScdmaHoppingSeed=#{channelScdmaHoppingSeed},
+		</if>
+		<if test="channelType != null">
+			channelType=#{channelType},
+		</if>
+		<if test="channelExtMode != null">
+			channelMode = #{channelExtMode},
+		</if>
+		<if test="channelCloneFrom != null">
+			channelCloneFrom=#{channelCloneFrom},
+		</if>
+		<if test="channelUpdate != null">
+			channelUpdate=#{channelUpdate},
+		</if>
+		<if test="channelStatus != null">
+			channelStatus=#{channelStatus},
+		</if>
+		<if test="channelPreEqEnable != null">
+			channelPreEqEnable=#{channelPreEqEnable},
+		</if>
+		<if test="cmtsChannelModulationProfile != null">
+			cmtsChannelModulationProfile=#{cmtsChannelModulationProfile},
+		</if>
+		cmcId=#{cmcId}
+		where
+		cmcId=#{cmcId} AND channelIndex=#{channelIndex}
+	</update>
+	<update id="syncCmcUpChannelBaseInfo" parameterType="cmcUpChannelBaseInfo">
+		insert
+		into
+		cmcupchannelbaseinfo
+		(cmcPortId,cmcId,
+		channelIndex,
+		channelId,
+		channelFrequency, channelWidth,
+		channelModulationProfile,
+		channelSlotSize,
+		channelTxTimingOffset, channelRangingBackoffStart,
+		channelRangingBackoffEnd, channelTxBackoffStart,
+		channelTxBackoffEnd,
+		channelScdmaActiveCodes,
+		channelScdmaCodesPerSlot,
+		channelScdmaFrameSize,
+		channelScdmaHoppingSeed, channelType,
+		channelCloneFrom,
+		channelUpdate,
+		channelStatus,
+		channelPreEqEnable,
+		channelMode,
+		cmtsChannelModulationProfile)
+		values
+		(#{cmcPortId},
+		#{cmcId},
+		#{channelIndex},
+		#{channelId}, #{channelFrequency},
+		#{channelWidth},
+		#{channelModulationProfile},
+		#{channelSlotSize},
+		#{channelTxTimingOffset},
+		#{channelRangingBackoffStart},
+		#{channelRangingBackoffEnd}, #{channelTxBackoffStart},
+		#{channelTxBackoffEnd}, #{channelScdmaActiveCodes},
+		#{channelScdmaCodesPerSlot},
+		#{channelScdmaFrameSize},
+		#{channelScdmaHoppingSeed}, #{channelType},
+		#{channelCloneFrom},
+		#{channelUpdate},
+		#{channelStatus},
+		#{channelPreEqEnable},#{channelExtMode},#{cmtsChannelModulationProfile})
+		on duplicate key 
+		update
+		<if test="channelId != null">
+			channelId=#{channelId},
+		</if>
+		<if test="channelFrequency != null">
+			channelFrequency=#{channelFrequency},
+		</if>
+		<if test="channelWidth != null">
+			channelWidth=#{channelWidth},
+		</if>
+		<if test="channelModulationProfile != null">
+			channelModulationProfile=#{channelModulationProfile},
+		</if>
+		<if test="channelSlotSize != null">
+			channelSlotSize=#{channelSlotSize},
+		</if>
+		<if test="channelTxTimingOffset != null">
+			channelTxTimingOffset=#{channelTxTimingOffset},
+		</if>
+		<if test="channelRangingBackoffStart != null">
+			channelRangingBackoffStart=#{channelRangingBackoffStart},
+		</if>
+		<if test="channelRangingBackoffEnd != null">
+			channelRangingBackoffEnd=#{channelRangingBackoffEnd},
+		</if>
+		<if test="channelTxBackoffStart != null">
+			channelTxBackoffStart=#{channelTxBackoffStart},
+		</if>
+		<if test="channelTxBackoffEnd != null">
+			channelTxBackoffEnd=#{channelTxBackoffEnd},
+		</if>
+		<if test="channelScdmaActiveCodes != null">
+			channelScdmaActiveCodes=#{channelScdmaActiveCodes},
+		</if>
+		<if test="channelScdmaCodesPerSlot != null">
+			channelScdmaCodesPerSlot=#{channelScdmaCodesPerSlot},
+		</if>
+		<if test="channelScdmaFrameSize != null">
+			channelScdmaFrameSize=#{channelScdmaFrameSize},
+		</if>
+		<if test="channelScdmaHoppingSeed != null">
+			channelScdmaHoppingSeed=#{channelScdmaHoppingSeed},
+		</if>
+		<if test="channelType != null">
+			channelType=#{channelType},
+		</if>
+		<if test="channelExtMode != null">
+			channelMode = #{channelExtMode},
+		</if>
+		<if test="channelCloneFrom != null">
+			channelCloneFrom=#{channelCloneFrom},
+		</if>
+		<if test="channelUpdate != null">
+			channelUpdate=#{channelUpdate},
+		</if>
+		<if test="channelStatus != null">
+			channelStatus=#{channelStatus},
+		</if>
+		<if test="channelPreEqEnable != null">
+			channelPreEqEnable=#{channelPreEqEnable},
+		</if>
+		<if test="cmtsChannelModulationProfile != null">
+			cmtsChannelModulationProfile=#{cmtsChannelModulationProfile},
+		</if>
+		cmcId=#{cmcId}
+	</update>
+	 
+	<select id="getCmcUpChannelSignalQualityInfo" parameterType="cmcUpChannelSignalQualityInfo"
+		resultType="int">
+		select
+		count(*)
+		from
+		cmcupchannelsignalqualityinfo
+		WHERE
+		cmcPortId = #{cmcPortId}
+	</select>
+	<update id="updateCmcUpChannelSignalQualityInfo" parameterType="cmcUpChannelSignalQualityInfo">
+		update cmcupchannelsignalqualityinfo set
+		<if test="docsIfSigQIncludesContention != null">
+			docsIfSigQIncludesContention=#{docsIfSigQIncludesContention},
+		</if>
+		<if test="docsIfSigQUnerroreds != null">
+			docsIfSigQUnerroreds=#{docsIfSigQUnerroreds},
+		</if>
+		<if test="docsIfSigQCorrecteds != null">
+			docsIfSigQCorrecteds=#{docsIfSigQCorrecteds},
+		</if>
+		<if test="docsIfSigQUncorrectables != null">
+			docsIfSigQUncorrectables=#{docsIfSigQUncorrectables},
+		</if>
+		<if test="docsIfSigQSignalNoise != null">
+			docsIfSigQSignalNoise=#{docsIfSigQSignalNoise},
+		</if>
+		<if test="docsIfSigQMicroreflections != null">
+			docsIfSigQMicroreflections=#{docsIfSigQMicroreflections},
+		</if>
+		<if test="docsIfSigQEqualizationData != null">
+			docsIfSigQEqualizationData=#{docsIfSigQEqualizationData},
+		</if>
+		<if test="docsIfSigQExtUnerroreds != null">
+			docsIfSigQExtUnerroreds=#{docsIfSigQExtUnerroreds},
+		</if>
+		<if test="docsIfSigQExtCorrecteds != null">
+			docsIfSigQExtCorrecteds=#{docsIfSigQExtCorrecteds},
+		</if>
+		<if test="docsIfSigQExtUncorrectables != null">
+			docsIfSigQExtUncorrectables=#{docsIfSigQExtUncorrectables},
+		</if>
+		<if test="docsIf3SignalPower != null">
+			docsIf3SignalPower = #{docsIf3SignalPower},
+		</if>
+		cmcId=#{cmcId},
+		channelIndex=#{channelIndex}
+		WHERE
+		cmcPortId =
+		#{cmcPortId}
+	</update>
+	<insert id="insertCmcUpChannelSignalQualityInfo" parameterType="cmcUpChannelSignalQualityInfo">
+		insert into cmcupchannelsignalqualityinfo
+		(cmcPortId, cmcId,
+		channelIndex,
+		docsIfSigQIncludesContention,
+		docsIfSigQUnerroreds,
+		docsIfSigQCorrecteds,
+		docsIfSigQUncorrectables,
+		docsIfSigQSignalNoise,
+		docsIfSigQMicroreflections,
+		docsIfSigQEqualizationData,
+		docsIfSigQExtUnerroreds,
+		docsIfSigQExtCorrecteds,
+		docsIf3SignalPower,
+		docsIfSigQExtUncorrectables)
+		values
+		(#{cmcPortId}, #{cmcId},
+		#{channelIndex},
+		#{docsIfSigQIncludesContention},
+		#{docsIfSigQUnerroreds},
+		#{docsIfSigQCorrecteds},
+		#{docsIfSigQUncorrectables},
+		#{docsIfSigQSignalNoise},
+		#{docsIfSigQMicroreflections},
+		#{docsIfSigQEqualizationData},
+		#{docsIfSigQExtUnerroreds},
+		#{docsIfSigQExtCorrecteds},
+		#{docsIf3SignalPower},
+		#{docsIfSigQExtUncorrectables})
+	</insert>
+
+	<select id="getPerfCmcUpChannelSignalQualityInfo" parameterType="cmcUpChannelSignalQualityInfo"
+		resultType="int">
+		select
+		count(*)
+		from
+		cmcupchannelsignalqualityinfo
+		WHERE
+		cmcPortId = #{cmcPortId}
+	</select>
+	<update id="updatePerfCmcUpChannelSignalQualityInfo"
+		parameterType="cmcUpChannelSignalQualityInfo">
+		update cmcupchannelsignalqualityinfo set
+		cmcId=#{cmcId},
+		channelIndex=#{channelIndex},
+		docsIfSigQIncludesContention=#{docsIfSigQIncludesContention},
+		docsIfSigQUnerroreds=#{docsIfSigQUnerroreds},
+		docsIfSigQCorrecteds=#{docsIfSigQCorrecteds},
+		docsIfSigQUncorrectables=#{docsIfSigQUncorrectables},
+		docsIfSigQSignalNoise=#{docsIfSigQSignalNoise},
+		docsIfSigQMicroreflections=#{docsIfSigQMicroreflections},
+		docsIfSigQEqualizationData=#{docsIfSigQEqualizationData},
+		docsIfSigQExtUnerroreds=#{docsIfSigQExtUnerroreds},
+		docsIfSigQExtCorrecteds=#{docsIfSigQExtCorrecteds},
+		docsIfSigQExtUncorrectables=#{docsIfSigQExtUncorrectables},
+		docsIf3SignalPower = #{docsIf3SignalPower}
+		WHERE
+		cmcPortId =
+		#{cmcPortId}
+	</update>
+	<insert id="insertPerfCmcUpChannelSignalQualityInfo"
+		parameterType="cmcUpChannelSignalQualityInfo">
+		insert into cmcupchannelsignalqualityinfo
+		(cmcPortId,
+		cmcId,
+		channelIndex,
+		docsIfSigQIncludesContention,
+		docsIfSigQUnerroreds,
+		docsIfSigQCorrecteds,
+		docsIfSigQUncorrectables,
+		docsIfSigQSignalNoise,
+		docsIfSigQMicroreflections,
+		docsIfSigQEqualizationData,
+		docsIfSigQExtUnerroreds,
+		docsIfSigQExtCorrecteds,
+		docsIf3SignalPower,
+		docsIfSigQExtUncorrectables)
+		values
+		(#{cmcPortId}, #{cmcId},
+		#{channelIndex},
+		#{docsIfSigQIncludesContention},
+		#{docsIfSigQUnerroreds},
+		#{docsIfSigQCorrecteds},
+		#{docsIfSigQUncorrectables},
+		#{docsIfSigQSignalNoise},
+		#{docsIfSigQMicroreflections},
+		#{docsIfSigQEqualizationData},
+		#{docsIfSigQExtUnerroreds},
+		#{docsIfSigQExtCorrecteds},
+		#{docsIf3SignalPower},
+		#{docsIfSigQExtUncorrectables})
+	</insert>
+	<update id="updateCmcDownChannelBaseInfo" parameterType="cmcDownChannelBaseInfo">
+		update
+		cmcdownchannelbaseinfo set
+		<if test="docsIfDownChannelId != null">
+			docsIfDownChannelId=#{docsIfDownChannelId},
+		</if>
+		<if test="docsIfDownChannelFrequency != null">
+			docsIfDownChannelFrequency=#{docsIfDownChannelFrequency},
+		</if>
+		<if test="docsIfDownChannelWidth != null">
+			docsIfDownChannelWidth=#{docsIfDownChannelWidth},
+		</if>
+		<if test="docsIfDownChannelModulation != null">
+			docsIfDownChannelModulation=#{docsIfDownChannelModulation},
+		</if>
+		<if test="docsIfDownChannelInterleave != null">
+			docsIfDownChannelInterleave=#{docsIfDownChannelInterleave},
+		</if>
+		<if test="docsIfDownChannelPower != null">
+			docsIfDownChannelPower=#{docsIfDownChannelPower},
+		</if>
+		<if test="docsIfDownChannelAnnex != null">
+			docsIfDownChannelAnnex=#{docsIfDownChannelAnnex},
+		</if>
+		<if test="docsIfDownChannelStorageType != null">
+			docsIfDownChannelStorageType=#{docsIfDownChannelStorageType},
+		</if>
+		cmcId=#{cmcId}
+		where
+		cmcId=#{cmcId} AND channelIndex=#{channelIndex}
+	</update>
+	<insert id="insertCmcDownChannelBaseInfo" parameterType="cmcDownChannelBaseInfo">
+		insert
+		into cmcdownchannelbaseinfo
+		(cmcPortId, cmcId,
+		channelIndex,
+		docsIfDownChannelId,
+		docsIfDownChannelFrequency,
+		docsIfDownChannelWidth,
+		docsIfDownChannelModulation,
+		docsIfDownChannelInterleave,
+		docsIfDownChannelPower,
+		docsIfDownChannelAnnex,
+		docsIfDownChannelStorageType)
+		values
+		(#{cmcPortId}, #{cmcId}, #{channelIndex},
+		#{docsIfDownChannelId},
+		#{docsIfDownChannelFrequency},
+		#{docsIfDownChannelWidth},
+		#{docsIfDownChannelModulation},
+		#{docsIfDownChannelInterleave},
+		#{docsIfDownChannelPower},
+		#{docsIfDownChannelAnnex},
+		#{docsIfDownChannelStorageType})
+	</insert>
+	
+	<update id="syncCmcDownChannelBaseInfo" parameterType="cmcDownChannelBaseInfo">
+		insert
+		into cmcdownchannelbaseinfo
+		(cmcPortId, cmcId,
+		channelIndex,
+		docsIfDownChannelId,
+		docsIfDownChannelFrequency,
+		docsIfDownChannelWidth,
+		docsIfDownChannelModulation,
+		docsIfDownChannelInterleave,
+		docsIfDownChannelPower,
+		docsIfDownChannelAnnex,
+		docsIfDownChannelStorageType)
+		values
+		(#{cmcPortId}, #{cmcId}, #{channelIndex},
+		#{docsIfDownChannelId},
+		#{docsIfDownChannelFrequency},
+		#{docsIfDownChannelWidth},
+		#{docsIfDownChannelModulation},
+		#{docsIfDownChannelInterleave},
+		#{docsIfDownChannelPower},
+		#{docsIfDownChannelAnnex},
+		#{docsIfDownChannelStorageType})
+		on duplicate key
+		update
+		<if test="docsIfDownChannelId != null">
+			docsIfDownChannelId=#{docsIfDownChannelId},
+		</if>
+		<if test="docsIfDownChannelFrequency != null">
+			docsIfDownChannelFrequency=#{docsIfDownChannelFrequency},
+		</if>
+		<if test="docsIfDownChannelWidth != null">
+			docsIfDownChannelWidth=#{docsIfDownChannelWidth},
+		</if>
+		<if test="docsIfDownChannelModulation != null">
+			docsIfDownChannelModulation=#{docsIfDownChannelModulation},
+		</if>
+		<if test="docsIfDownChannelInterleave != null">
+			docsIfDownChannelInterleave=#{docsIfDownChannelInterleave},
+		</if>
+		<if test="docsIfDownChannelPower != null">
+			docsIfDownChannelPower=#{docsIfDownChannelPower},
+		</if>
+		<if test="docsIfDownChannelAnnex != null">
+			docsIfDownChannelAnnex=#{docsIfDownChannelAnnex},
+		</if>
+		<if test="docsIfDownChannelStorageType != null">
+			docsIfDownChannelStorageType=#{docsIfDownChannelStorageType},
+		</if>
+		cmcId=#{cmcId}
+	</update>
+	
+	 
+	<select id="getCmcPort" parameterType="cmcPortAttribute"
+		resultType="cmcPortAttribute">
+		select *
+		from
+		cmcportattribute where
+		cmcPortId=#{cmcPortId}
+	</select>
+	<update id="updateCmcPort" parameterType="cmcPortAttribute">
+		update
+		cmcportattribute
+		set
+		cmcId=#{cmcId}, 
+		ifIndex=#{ifIndex},
+		ifDescr=#{ifDescr},
+		ifType=#{ifType}, 
+		ifMtu=#{ifMtu},
+		ifSpeed=#{ifSpeed},
+		ifPhysAddress=#{ifPhysAddress},
+		ifAdminStatus=#{ifAdminStatus},
+		ifOperStatus=#{ifOperStatus},
+		ifLastChange=#{ifLastChange},
+		ifName = #{ifName}
+		where
+		cmcPortId=#{cmcPortId}
+	</update>
+	<insert id="insertCmcPort" parameterType="cmcPortAttribute">
+		insert into
+		cmcportattribute
+		(cmcPortId, cmcId, ifIndex, ifDescr,
+		ifType, ifMtu,
+		ifSpeed, ifPhysAddress, ifAdminStatus, ifOperStatus, ifLastChange,ifName
+		)
+		values
+		(#{cmcPortId}, #{cmcId},
+		#{ifIndex},
+		#{ifDescr},
+		#{ifType},
+		#{ifMtu},
+		#{ifSpeed},
+		#{ifPhysAddress},
+		#{ifAdminStatus},
+		#{ifOperStatus},
+		#{ifLastChange},
+		#{ifName}
+		)
+	</insert>
+
+	<insert id="insertCmCmcRelation" databaseId="MySQL"
+		parameterType="cmCmcRelation" useGeneratedKeys="true" keyProperty="cmId">
+		insert into
+		cmccmRelation(cmcId,upPortId,downPortId,mac,maclong,entityId,docsIfCmtsCmStatusIndex)
+		values
+		(#{cmcId},#{upPortId},#{downPortId},#{mac},#{maclong},#{entityId},#{cmIndex})
+	</insert>
+	<insert id="insertCmCmcRelation" databaseId="Oracle"
+		parameterType="cmCmcRelation">
+		<selectKey keyProperty="cmId" resultType="long" order="BEFORE">
+			SELECT
+			cmccmRelation_Seq.nextval AS cmId from
+			dual
+		</selectKey>
+		insert into
+		cmccmRelation(cmcId,upPortId,downPortId,mac,maclong,entityId,docsIfCmtsCmStatusIndex)
+		values
+		(#{cmcId},#{upPortId},#{downPortId},#{mac},#{maclong},#{entityId},#{cmIndex})
+	</insert>
+	<select id="getCmAttribute" parameterType="cmAttribute"
+		resultType="int">
+		select count(*)
+		from cmccmRelation
+		where
+		cmId=#{cmId}
+	</select>
+	<!-- 由于cmIndex可能发生变化，删除cmIndex的判�? -->
+	<select id="getCmIdByCmMac" parameterType="cmCmcRelation"
+		resultType="long">
+		select cmId from cmccmrelation where
+		entityId=#{entityId}
+		and maclong=#{maclong}
+	</select>
+	<update id="updateCmAttribute" parameterType="cmAttribute">
+		update
+		cmattribute
+		set
+		cmcId=#{cmcId},
+		statusIndex=#{statusIndex},
+		statusMacAddress=#{statusMacAddress},
+		statusIpAddress=#{statusIpAddress},
+		statusDownChannelIfIndex=#{statusDownChannelIfIndex},
+		statusUpChannelIfIndex=#{statusUpChannelIfIndex},
+		statusRxPower=#{statusRxPower},
+		statusTimingOffset=#{statusTimingOffset},
+		statusEqualizationData=#{statusEqualizationData},
+		statusValue=#{statusValue},
+		statusUnerroreds=#{statusUnerroreds},
+		statusCorrecteds=#{statusCorrecteds},
+		statusUncorrectables=#{statusUncorrectables},
+		statusExtUnerroreds=#{statusExtUnerroreds},
+		statusExtCorrecteds=#{statusExtCorrecteds},
+		statusExtUncorrectables=#{statusExtUncorrectables},
+		statusSignalNoise=#{statusSignalNoise},
+		statusMicroreflections=#{statusMicroreflections},
+		statusDocsisRegMode=#{statusDocsisRegMode},
+		statusModulationType=#{statusModulationType},
+		statusInetAddressType=#{statusInetAddressType},
+		statusInetAddress=#{statusInetAddress},
+		statusValueLastUpdate=#{statusValueLastUpdate},
+		statusHighResolutionTO=#{statusHighResolutionTO}
+		where
+		cmId=#{cmId}
+	</update>
+	<insert id="insertCmAttribute" parameterType="cmAttribute">
+		insert into
+		cmattribute
+		(cmId, cmcId, statusIndex,
+		statusMacAddress,
+		statusIpAddress,
+		statusDownChannelIfIndex,
+		statusUpChannelIfIndex,
+		statusRxPower,
+		statusTimingOffset,
+		statusEqualizationData,
+		statusValue,
+		statusUnerroreds,
+		statusCorrecteds,
+		statusUncorrectables,
+		statusExtUnerroreds,
+		statusExtCorrecteds,
+		statusExtUncorrectables,
+		statusSignalNoise,
+		statusMicroreflections,
+		statusDocsisRegMode,
+		statusModulationType,
+		statusInetAddressType,
+		statusInetAddress,
+		statusValueLastUpdate,
+		statusHighResolutionTO
+		)
+		values
+		(#{cmId}, #{cmcId},
+		#{statusIndex}, #{statusMacAddress},
+		#{statusIpAddress},
+		#{statusDownChannelIfIndex},
+		#{statusUpChannelIfIndex},
+		#{statusRxPower},
+		#{statusTimingOffset},
+		#{statusEqualizationData},
+		#{statusValue},
+		#{statusUnerroreds},
+		#{statusCorrecteds},
+		#{statusUncorrectables},
+		#{statusExtUnerroreds},
+		#{statusExtCorrecteds},
+		#{statusExtUncorrectables},
+		#{statusSignalNoise},
+		#{statusMicroreflections},
+		#{statusDocsisRegMode},
+		#{statusModulationType},
+		#{statusInetAddressType},
+		#{statusInetAddress},
+		#{statusValueLastUpdate},
+		#{statusHighResolutionTO}
+		)
+	</insert>
+	<select id="getCmcUpQosDynamicServiceStats" parameterType="long"
+		resultType="int">
+		select count(*)
+		from
+		dynamicserviceflowstats
+		where
+		cmcId=#{cmcId} AND docsQosIfDirection = 2
+	</select>
+	<update id="updateCmcUpQosDynamicServiceStats" parameterType="cmcQosDynamicServiceStats">
+		update
+		dynamicserviceflowstats set
+		cmcId=#{cmcId}, cmcIndex=#{cmcIndex},
+		docsQosIfDirection=#{docsQosIfDirection},
+		docsQosDSAReqs=#{docsQosDsaReqs},
+		docsQosDSARsps=#{docsQosDsaRsps},
+		docsQosDSAAcks=#{docsQosDsaAcks},
+		docsQosDSCReqs=#{docsQosDscReqs},
+		docsQosDSCRsps=#{docsQosDscRsps},
+		docsQosDSCAcks=#{docsQosDscAcks},
+		docsQosDSDReqs=#{docsQosDsdReqs},
+		docsQosDSDRsps=#{docsQosDsdRsps},
+		docsQosDynamicAdds=#{docsQosDynamicAdds},
+		docsQosDynamicAddFails=#{docsQosDynamicAddFails},
+		docsQosDynamicChanges=#{docsQosDynamicChanges},
+		docsQosDynamicChangeFails=#{docsQosDynamicChangeFails},
+		docsQosDynamicDeletes=#{docsQosDynamicDeletes},
+		docsQosDynamicDeleteFails=#{docsQosDccReqs},
+		docsQosDCCReqs=#{docsQosDccReqs},
+		docsQosDCCRsps=#{docsQosDccRsps},
+		docsQosDCCAcks=#{docsQosDccAcks},
+		docsQosDCCs=#{docsQosDccs},
+		docsQosDCCFails=#{docsQosDccFails},
+		docsQosDCCRspDeparts=#{docsQosDccRspDeparts},
+		docsQosDCCRspArrives=#{docsQosDccRspArrives},
+		collectTime=#{collectTime}
+		where
+		cmcId=#{cmcId} AND docsQosIfDirection=2
+	</update>
+	<select id="getCmcQosServiceFlowAttribute" parameterType="cmcQosServiceFlowAttribute"
+		resultType="int">
+		select
+		count(*)
+		from
+		serviceflowattribute
+		where
+		cmcId=#{cmcId}
+		and docsQosServiceFlowId=#{docsQosServiceFlowId}
+	</select>
+
+
+	<select id="getCmcIdByCmcIndexAndEntityId" parameterType="map"
+		resultType="long">
+		select cmcId from cmcentityrelation
+		where cmcIndex =
+		#{cmcIndex} and cmcEntityId=#{entityId}
+	</select>
+	<select id="getCmcIdByOlt" parameterType="long" resultType="long">
+		select
+		A.cmcId
+		from
+		cmcentityrelation A,
+		oltonurelation B,
+		oltonuattribute
+		C
+		where
+		B.entityId = #{entityId} AND B.onuId = C.onuId AND B.onuId =
+		A.onuId
+	</select>
+	<insert id="insertCmcPortRelation" databaseId="MySQL"
+		parameterType="cmcPortRelation" useGeneratedKeys="true" keyProperty="cmcPortId">
+		insert into cmcportrelation(cmcId,channellIndex,channelType) values
+		(#{cmcId},#{channelIndex},#{channelType})
+	</insert>
+	<insert id="insertCmcPortRelation" databaseId="Oracle"
+		parameterType="cmcPortRelation">
+		<selectKey keyProperty="cmcPortId" resultType="long" order="BEFORE">
+			SELECT
+			cmcportrelation_Seq.nextval AS
+			cmcPortId from dual
+		</selectKey>
+		insert into cmcportrelation(cmcPortId,
+		cmcId,channellIndex,channelType) values
+		(#{cmcPortId},
+		#{cmcId},#{channelIndex},#{channelType})
+	</insert>
+	<select id="getCmcPortIdByIfIndexAndCmcId" parameterType="map"
+		resultType="long">
+		select cmcPortId from
+		cmcportrelation where channellIndex =
+		#{channelIndex} and cmcId=#{cmcId}
+	</select>
+	<update id="updateCmcCmRelation" parameterType="cmCmcRelation">
+		update
+		cmccmrelation set
+		cmcId=#{cmcId},
+		upPortId=#{upPortId},
+		downPortId=#{downPortId},
+		entityId=#{entityId},
+		docsIfCmtsCmStatusIndex=#{cmIndex}
+		where cmId=#{cmId}
+	</update>
+	<select id="getCmcIdByMac" parameterType="String" resultType="long">
+		select b.cmcId from cmattribute a right join
+		cmcdownchannelbaseinfo b
+		on
+		a.statusDownChannelIfIndex = b.channelIndex
+		where
+		a.statusMacAddress=#{mac}
+	</select>
+	<delete id="deleteCmInfoByEntityId" parameterType="long">
+		DELETE FROM
+		cmAttribute
+		WHERE cmcId in(SELECT cmcId FROM
+		cmcentityrelation a left
+		join
+		oltonurelation b on a.onuId=b.onuId
+		WHERE
+		b.entityId=#{entityId})
+	</delete>
+	<delete id="deleteCmCmcRelationByEntityId" parameterType="long">
+		DELETE
+		FROM cmccmrelation
+		WHERE cmcId in(SELECT cmcId
+		FROM cmcentityrelation a
+		left join
+		oltonurelation b on a.onuId=b.onuId
+		WHERE
+		b.entityId=#{entityId})
+	</delete>
+
+	<delete id="deleteCmAndRelationByCmcId" parameterType="long">
+		DELETE
+		FROM cmccmrelation
+		WHERE
+		cmccmrelation.cmcId=#{cmcId}
+	</delete>
+
+	<insert id="insertCmcEntityRelation" parameterType="cmcEntityRelation">
+		insert into
+		cmcentityrelation
+		(cmcId, onuId, cmcIndex,
+		cmcType,
+		cmcEntityId
+		)
+		values
+		(#{cmcId}, #{onuId},
+		#{cmcIndex},
+		#{cmcType},
+		#{cmcEntityId}
+		)
+	</insert>
+	<update id="updateCmcEntityRelation" parameterType="cmcEntityRelation">
+		update
+		cmcentityrelation set
+		cmcId = cmcId
+		<if test="cmcType != null">
+			,cmcType = #{cmcType}
+		</if>
+		<if test="onuId != null">
+			,onuId = #{onuId}
+		</if>
+		<if test="cmcEntityId != null">
+			,cmcEntityId = #{cmcEntityId}
+		</if>
+		where
+		cmcId = #{cmcId}
+	</update>
+	<select id="getSplitCmcIdByIndex" parameterType="map"
+		resultType="long">
+		select cmcId from cmcentityrelation where
+		cmcentityId=#{cmcentityId} and
+		cmcIndex=#{cmcIndex} and cmcType=30002
+	</select>
+	<select id="getProductIdByIp" parameterType="String" resultType="long">
+		select productId from productsnmpparam where
+		productIp=#{productIp}
+	</select>
+
+	<delete id="delCmCmcRelationByEntityId" parameterType="long">
+		delete
+		from
+		cmccmrelation where entityId=#{entityId}
+	</delete>
+
+	<select id="getVirtualEntityIdByCmcEntityId" parameterType="long"
+		resultType="long">
+		select vnEntityId from
+		virtualentityrelation where
+		linkedEntityId=#{cmcEntityId}
+	</select>
+
+	<update id="updateEntityMac" parameterType="map">
+		UPDATE entity
+		SET
+		mac=#{mac}
+		WHERE entityId=#{entityId}
+	</update>
+
+	<delete id="deleteOfflineCmcCmRelationByCmc" parameterType="long">
+		delete from cmccmrelation
+		where cmId in (select
+		cmId from cmattribute b
+		where cmcId=#{cmcId} and statusValue=1)
+	</delete>
+
+	<delete id="deleteOfflineCmAttributeByCmc" parameterType="long">
+		delete
+		from cmattribute
+		where cmcId=#{cmcId} and
+		statusValue=1
+	</delete>
+
+	<insert id="insertCmcLoadBalPolicy" databaseId="Oracle"
+		parameterType="cmcLoadBalPolicy">
+		<selectKey keyProperty="policyId" resultType="long" order="BEFORE">
+			SELECT
+			docsloadbalpolicy_Seq.nextval AS
+			policyId from dual
+		</selectKey>
+
+		INSERT INTO
+		docsloadbalpolicy
+		(entityId,
+		docsLoadBalPolicyId)
+		VALUES
+		(#{entityId},
+		#{docsLoadBalPolicyId})
+	</insert>
+
+</mapper>

@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.vlan.domain.SniVlan">
+
+	<select id="selectEntityVlanCount" parameterType="Long"
+		resultType="int">
+		select count(*) from oltvlanglobalinfo where
+		entityId=#{entityId}
+    </select>
+	<select id="getSniId" parameterType="oltSniAttribute"
+		resultType="long">
+		SELECT
+		sniId portId
+		FROM
+		OltSniRelation
+		WHERE
+		entityId =
+		#{entityId}
+		and sniIndex = #{sniIndex}    
+	</select>
+	<select id="getSniPortAttribute" parameterType="Long"
+		resultType="PortVlanAttribute">
+		select entityId,sniId portId,sniIndex
+		portIndex,vlanTagTpid,vlanTagCfi,vlanTagPriority,vlanPVid,vlanMode
+		from oltportvlan where
+		sniId=#{sniId}
+	</select>
+	<select id="getSniPortAttributeByMap" parameterType="map"
+		resultType="PortVlanAttribute">
+		select entityId,sniId portId,sniIndex
+		portIndex,vlanTagTpid,vlanTagCfi,vlanTagPriority,vlanPVid,vlanMode
+		from oltportvlan where
+		sniIndex=#{sniIndex} and entityId=#{entityId}
+	</select>
+	<select id="getOltVlanGlobalInfo" parameterType="Long"
+		resultType="OltVlanAttribute">
+		select * from OltVlanGlobalInfo where entityId=#{entityId}
+	</select>
+	<select id="getOltVlanConfigList" parameterType="Long"
+		resultType="VlanAttribute">
+		SELECT
+		entityId,oltVlanIndex
+		vlanIndex,oltVlanName,topMcFloodMode,taggedPort,untaggedPort
+		FROM
+		OltVlanConfig
+		WHERE
+		entityId = #{entityId}
+	</select>
+	<select id="getOltVlanConfig" parameterType="map" resultType="VlanAttribute">
+		SELECT *
+		FROM
+		OltVlanConfig
+		WHERE
+		entityId = #{entityId} and oltVlanIndex
+		=
+		#{vlanIndex}
+	</select>
+	<select id="getVlanVifPriIp" parameterType="map"
+		resultType="topOltVlanVifPriIpTable">
+		SELECT *
+		FROM
+		oltvifpriipconfig
+		WHERE
+		entityId = #{entityId}
+		and topOltVifPriIpVlanIdx =
+		#{vlanIndex}
+	</select>
+	<select id="getVlanVifPriIpList" parameterType="long"
+		resultType="topOltVlanVifPriIpTable">
+		SELECT
+		entityId,
+		topOltVifPriIpVlanIdx
+		FROM
+		oltvifpriipconfig
+		WHERE
+		entityId = #{entityId}
+	</select>
+	<select id="getVlanVifSubIp" parameterType="map"
+		resultType="topOltVlanVifSubIpTable">
+		SELECT *
+		FROM
+		oltvifsubipconfig
+		WHERE
+		entityId = #{entityId}
+		and topOltVifSubIpVlanIdx =
+		#{vlanIndex}
+	</select>
+
+	<insert id="insertOltVlanGlobalInfo" parameterType="oltVlanAttribute">
+		insert into
+		oltvlanglobalinfo
+		(entityId, maxVlanId, maxSupportVlans,
+		createdVlanNumber)
+		values
+		(#{entityId}, #{maxVlanId},
+		#{maxSupportVlans},
+		#{createdVlanNumber})   
+    </insert>
+	<insert id="insertOltVlanConfig" parameterType="vlanAttribute">
+		insert into
+		oltvlanconfig
+		(entityId, oltVlanIndex, oltVlanName, taggedPort,
+		untaggedPort,topMcFloodMode
+		)
+		values
+		(#{entityId}, #{vlanIndex},
+		#{oltVlanName},
+		#{taggedPort}, #{untaggedPort},#{topMcFloodMode})
+	</insert>
+	<insert id="insertOltPortVlanRelation" parameterType="oltPortVlanRelation">
+		INSERT INTO  OltPortVlanRelation (entityId,portIndex,vlanIndex,type)
+		VALUES (#{entityId},#{portIndex},#{vlanIndex},#{type})
+	</insert>
+	<insert id="insertVlanVifPriIp" parameterType="topOltVlanVifPriIpTable">
+		insert into
+		oltvifpriipconfig
+		(entityId, topOltVifPriIpVlanIdx, topOltVifPriIpAddr,
+		topOltVifPriIpMask
+		)
+		values
+		(#{entityId}, #{topOltVifPriIpVlanIdx},
+		#{topOltVifPriIpAddr},
+		#{topOltVifPriIpMask})
+	</insert>
+	<insert id="insertVlanVifSubIp" parameterType="topOltVlanVifSubIpTable">
+		insert into
+		oltvifsubipconfig
+		(entityId, topOltVifSubIpVlanIdx,
+		topOltVifSubIpSeqIdx, topOltVifSubIpAddr,topOltVifSubIpMask
+		)
+		values
+		(#{entityId}, #{topOltVifSubIpVlanIdx}, #{topOltVifSubIpSeqIdx},
+		#{topOltVifSubIpAddr},#{topOltVifSubIpMask})
+	</insert>
+	<insert id="insertOltPortVlan" parameterType="portVlanAttribute">
+		insert into
+		oltportvlan
+		(entityId, sniId,
+		sniIndex,vlanTagTpid,vlanTagCfi,vlanTagPriority,vlanPVid,vlanMode)
+		values
+		(#{entityId}, #{portId},
+		#{portIndex},#{vlanTagTpid},#{vlanTagCfi},#{vlanTagPriority},#{vlanPVid},#{vlanMode})
+	</insert>
+	<insert id="addOltVlan" parameterType="vlanAttribute">
+		INSERT INTO oltvlanconfig
+			(entityId, oltVlanIndex, oltVlanName,topMcFloodMode)
+		values
+			(#{entityId}, #{vlanIndex},#{oltVlanName},#{topMcFloodMode})
+	</insert>
+	<insert id="setVlanPriIp" parameterType="topOltVlanVifPriIpTable">
+		INSERT INTO
+		oltvifpriipconfig
+		(entityId, topOltVifPriIpVlanIdx,
+		topOltVifPriIpAddr,topOltVifPriIpMask
+		)
+		values
+		(#{entityId},
+		#{topOltVifPriIpVlanIdx},
+		#{topOltVifPriIpAddr},#{topOltVifPriIpMask}
+		)
+	</insert>
+	<insert id="addVlanVifSubIp" parameterType="topOltVlanVifSubIpTable">
+		INSERT INTO
+		oltvifsubipconfig
+		(entityId,
+		topOltVifSubIpVlanIdx,topOltVifSubIpSeqIdx,
+		topOltVifSubIpAddr,topOltVifSubIpMask
+		)
+		values
+		(#{entityId},
+		#{topOltVifSubIpVlanIdx},#{topOltVifSubIpSeqIdx},
+		#{topOltVifSubIpAddr},#{topOltVifSubIpMask}
+		)
+	</insert>
+
+	<update id="insertTopMcFloodMode" parameterType="topOltVlanConfigTable">
+		UPDATE oltvlanconfig
+		SET topMcFloodMode = #{topMcFloodMode}
+		WHERE entityId =#{entityId} and	oltVlanIndex = #{vlanIndex} 
+	</update>
+	<update id="updateOltVlanGlobalInfo" parameterType="oltVlanAttribute">
+		UPDATE
+		oltvlanglobalinfo
+		SET
+		maxVlanId = #{maxVlanId},
+		maxSupportVlans =
+		#{maxSupportVlans},
+		createdVlanNumber = #{createdVlanNumber}
+		WHERE
+		entityId = #{entityId}	
+	</update>
+	<update id="updateTagStatus" parameterType="vlanAttribute">
+		UPDATE
+		oltvlanconfig
+		SET
+		taggedPort = #{taggedPort},untaggedPort =#{untaggedPort}
+		WHERE
+		entityId = #{entityId} and oltVlanIndex=#{vlanIndex}
+	</update>
+	<delete id="deletePortVlanRelation" parameterType="vlanAttribute">
+		DELETE FROM oltPortVlanRelation 
+		WHERE entityId = #{entityId} and vlanIndex=#{vlanIndex}
+	</delete>
+	<update id="updateSniPortAttribute" parameterType="portVlanAttribute">
+		UPDATE 
+		oltPortVlan
+		SET
+		<if test="vlanPVid != null and vlanPVid != ''">
+			vlanPVid =#{vlanPVid}
+		</if>
+		<if test="vlanTagTpid != null and vlanTagTpid != ''">
+			,vlanTagTpid = #{vlanTagTpid}
+		</if>
+		<if test="vlanTagPriority != null">
+			,vlanTagPriority=#{vlanTagPriority}
+		</if>
+		<if test="vlanMode != null and vlanMode != ''">
+			,vlanMode =#{vlanMode}
+		</if>
+		WHERE sniId = #{portId}
+	</update>
+	<update id="modifyVlanName" parameterType="map">
+		UPDATE
+		OltVlanConfig
+		SET oltVlanName = #{oltVlanName},topMcFloodMode=#{topMcFloodMode}
+		WHERE entityId = #{entityId} and
+		oltVlanIndex = #{vlanIndex}  
+	</update>
+	<update id="modifyVlanVifPriIp" parameterType="topOltVlanVifPriIpTable">
+		UPDATE
+		oltvifpriipconfig
+		SET topOltVifPriIpAddr =
+		#{topOltVifPriIpAddr},topOltVifPriIpMask=#{topOltVifPriIpMask}
+		WHERE
+		entityId = #{entityId} and
+		topOltVifPriIpVlanIdx =
+		#{topOltVifPriIpVlanIdx}  
+	</update>
+	<update id="modifyVlanVifSubIp" parameterType="topOltVlanVifSubIpTable">
+		UPDATE
+		oltvifsubipconfig
+		SET topOltVifSubIpAddr =
+		#{topOltVifSubIpAddr},topOltVifSubIpMask=#{topOltVifSubIpMask}
+		WHERE
+		entityId = #{entityId} and
+		topOltVifSubIpVlanIdx =
+		#{topOltVifSubIpVlanIdx} and
+		topOltVifSubIpSeqIdx =
+		#{topOltVifSubIpSeqIdx}
+	</update>
+
+	<delete id="deleteAllOltVlanConfig" parameterType="long">
+		DELETE FROM oltvlanconfig where entityId = #{entityId}				
+	</delete>
+	<delete id="deleteAllOltPortVlanRelation" parameterType="long">
+		DELETE FROM oltPortVlanRelation where entityId = #{entityId}		
+	</delete>
+	<delete id="deleteOltPortVlan" parameterType="portVlanAttribute">
+		delete from
+		oltportvlan where sniId=#{portId} 
+	</delete>
+	<delete id="deleteAllOltPortVlan" parameterType="long">
+		delete from
+		oltportvlan where entityId = #{entityId}
+	</delete>
+	<delete id="deleteAllVlanVifPriIp" parameterType="long">
+		delete from
+		oltvifpriipconfig where entityId = #{entityId}
+	</delete>
+	<delete id="deleteAllVlanVifSubIp" parameterType="long">
+		delete from
+		oltvifsubipconfig where entityId = #{entityId}
+	</delete>
+	<delete id="deleteOltVlan" parameterType="map">
+		delete from
+		oltvlanconfig where entityId=#{entityId} and
+		oltVlanIndex=#{vlanIndex}
+	</delete>
+	<delete id="deleteOltPortVlanRelation" parameterType="map">
+		DELETE FROM oltPortVlanRelation
+		WHERE entityId=#{entityId} AND vlanIndex=#{vlanIndex}
+	</delete>
+	<delete id="deleteVlanVif" parameterType="topOltVlanVifPriIpTable">
+		delete from
+		oltvifpriipconfig where entityId=#{entityId} and
+		topOltVifPriIpVlanIdx=#{topOltVifPriIpVlanIdx}
+	</delete>
+	<delete id="deleteVlanVifSubIps" parameterType="map">
+		delete from
+		oltvifsubipconfig where entityId=#{entityId} and
+		topOltVifSubIpVlanIdx=#{vlanIndex}
+	</delete>
+	<delete id="deleteVlanVifSubIp" parameterType="topOltVlanVifSubIpTable">
+		delete from
+		oltvifsubipconfig where entityId=#{entityId} and
+		topOltVifSubIpVlanIdx=#{topOltVifSubIpVlanIdx} and
+		topOltVifSubIpSeqIdx=#{topOltVifSubIpSeqIdx}
+	</delete>
+	
+	<select id="getUsedSubIpIndex" parameterType = "map" resultType="int">
+		SELECT DISTINCT topOltVifSubIpSeqIdx from oltvifsubipconfig 
+		WHERE entityId = #{entityId} and topOltVifSubIpVlanIdx = #{vlanIndex}
+	</select>
+</mapper>

@@ -1,0 +1,184 @@
+
+*{ margin:0; padding:0;}
+.edge10{ padding:10px;}
+.flagP{ height:26px; overflow:hidden;}
+.flagInfo{padding: 3px 36px 3px 16px;font: bold 12px/2em Arial, Helvetica, sans-serif ,"����" ; display: inline-block; background: url(/images/flag.png) no-repeat right 0; color: white;}
+.dataTableRows,.dataTableAll{ border-collapse:collapse;border: 1px solid #99BBE9;}
+.dataTableRows td, .dataTableAll td{height: 30px;border: 1px solid #DFDFDF;border-left: none;border-right: none; border-top:none;padding: 0px 2px;}
+.dataTableAll td{ border:1px solid #dfdfdf; padding:0px 4px;}
+.dataTableRows th, .dataTableAll th{ height:30px; border: 1px solid #cccccc;border-left: none;border-right: none; font-size:12px;}
+.dataTableAll th{ border:1px solid #ccc;}
+.dataTableRows th.txtLeftTh, .dataTableAll th.txtLeftTh{ text-align:left;}
+
+
+body, html{ height:100%; overflow:hidden; margin:0; padding:0; font:12px Arial ,"宋体" ;}
+ul,ol{ list-style:none;}
+.gPanel{ width:100%;}
+#wh100{ width:100%; height:100%; overflow:hidden;}
+.topLineBar{ width:100%; height:30px; padding:10px 10px 0px; overflow:hidden;}
+#openLayerLeft{ width:200px; height:100%; overflow:auto; position:absolute; top:40px; left:0px; background:url(/images/leftGrayBg.gif) repeat;}
+#openLayerLine{ width:8px; height:100%; overflow:auto; position:absolute; top:40px; left:200px; cursor:w-resize}
+#openLayerMain{ margin:0px 0px 0px 208px; height:100%; overflow:hidden; background:#f0f0f0; position:relative; top:0;left:0;}
+.edge10{ padding:10px;}
+.topLineBarUl li{ float:left; margin-right:3px; line-height:1.8em;}
+.topLineBarUl li.mR15{ margin-right:15px;}
+.leftPartAlink{ text-decoration:none; color:#333; margin:10px 10px 0px; padding:10px 5px; line-height:1.5em; display:block; border-bottom:1px dashed #A3C0E8; cursor:pointer;}
+.leftPartAlink p{ white-space:normal; word-break:break-all; word-wrap:break-word;}
+.leftPartAlink p.blueTxt{color:#0065B5; font-weight:bold;}
+.leftPartAlink:hover, .leftPartAlinkSel{ background:#DAE6F6;}
+.mT10{ margin-top:10px;}
+label.flagOpen{ padding-left:20px; background:url(/images/flagOpen.gif) no-repeat 0px center; cursor:pointer;}
+label.flagClose{ padding-left:20px; background:url(/images/flagClose.gif) no-repeat 0px center; cursor:pointer;}
+.relativeDiv{ position:relative; top:0px; left:0px;}
+.rightTopLink{position:absolute; right:0px; top:0px;}
+
+
+.nm3kProgressBar{ width:700px; position:relative;}
+.nm3kProgressBarLineBg{ width:100%; height:10px; overflow:hidden; background:#bcbcbc; -webkit-border-radius:5px; -moz-border-radius:5px; border-radius:5px; position:absolute; z-index:1; top:8px; left:0px;}
+.nm3kProgressBarLine{ width:0%; height:10px; overflow:hidden; background:#03a9f5; z-index:2; position:absolute; top:8px; left:0px; -webkit-border-radius:5px; -moz-border-radius:5px; border-radius:5px;	            
+}
+@-webkit-keyframes hightLightMove{
+	0%{ background-position:left}
+	100%{ background-position:right;}
+}
+
+.nm3kProgressBarCir{ width:26px; height:26px; overflow:hidden; background:#03a9f5 url(../images/nm3khalfCir.png) no-repeat; position:absolute; top:0; left:10px; z-index:3; -webkit-border-radius:50%; -moz-border-radius:50%; border-radius:50%;
+	 background:#03a9f5 url(../images/nm3kProgressOuter.png)\0;
+}
+.nm3kProgressInner{ width:16px; height:16px; overflow:hidden; background:#fff; position:absolute; top:5px; left:5px; -webkit-border-radius:50%; -moz-border-radius:50%; border-radius:50%;
+	background:url(../images/nm3kProgressInnerCir.gif) no-repeat\0;
+}
+.putProgressBar{ background:url(../images/cmcpeTopBg.gif) repeat-x; height:54px; border-bottom:1px solid #d4d4d4; padding:16px;}
+.nm3kProgressGray{ background:#bcbcbc;}
+.nm3kProgressBarCir.nm3kProgressGray{ background:#bcbcbc url(../images/nm3kProgressOuter.png) no-repeat\0;}
+.nm3kProgressSuccess{ background:#fff url(../images/nm3kProgressOk.gif) no-repeat center center;
+background:#fff url(../images/nm3kProgressOk_ie.png) no-repeat center center\0;
+	-webkit-animation: toBig 0.5s ease-out 1 forwards;
+	   -moz-animation: toBig 0.5s ease-out 1 forwards;
+		 -o-animation: toBig 0.5s ease-out 1 forwards;
+			animation: toBig 0.5s ease-out 1 forwards;	
+}
+/* ������ɣ������С */
+@-webkit-keyframes toBig{
+	0%{ -webkit-transform: scale(1);}
+	80%{-webkit-transform: scale(1.5);}
+	100%{ -webkit-transform: scale(1);}
+}
+@-moz-keyframes toBig{
+	0%{ -moz-transform: scale(1);}
+	80%{-moz-transform: scale(1.5);}
+	100%{ -moz-transform: scale(1);}
+}
+@-o-keyframes toBig{
+	0%{ -o-transform: scale(1);}
+	80%{-o-transform: scale(1.5);}
+	100%{ -o-transform: scale(1);}
+}
+@keyframes toBig{
+	0%{ transform: scale(1);}
+	80%{transform: scale(1.5);}
+	100%{ transform: scale(1);}
+}
+.nm3kProgressFail{ background:#fff url(../images/nm3kProgressFail.png) no-repeat center center;
+	background:#fff url(../images/nm3kProgressFail_ie.png) no-repeat center center\0;
+	-webkit-animation: error 2s ease-out 1 forwards;
+	   -moz-animation: toBig 0.5s ease-out 1 forwards;
+		 -o-animation: toBig 0.5s ease-out 1 forwards;
+			animation: toBig 0.5s ease-out 1 forwards;	
+}
+/*����ʧ��*/
+@-webkit-keyframes error{
+	0%{ -webkit-transform: scale(1);}
+	15%{-webkit-transform: scale(1.5);}
+	30%{-webkit-transform: scale(1);}
+	31%{-webkit-transform: translate(-5px,-5px) rotate(0deg);}
+	35%{-webkit-transform: translate(10px,-5px) rotate(120deg);}
+	40%{-webkit-transform: translate(-5px,5px) rotate(240deg);}
+	45%{-webkit-transform: translate(5px,5px) rotate(360deg)}
+	50%,100%{-webkit-transform: translate(0px,0px);}
+}
+@-moz-keyframes error{
+	0%{ -moz-transform: scale(1);}
+	15%{-moz-transform: scale(1.5);}
+	30%{-moz-transform: scale(1);}
+	31%{-moz-transform: translate(-5px,-5px) rotate(0deg);}
+	35%{-moz-transform: translate(10px,-5px) rotate(120deg);}
+	40%{-moz-transform: translate(-5px,5px) rotate(240deg);}
+	45%{-moz-transform: translate(5px,5px) rotate(360deg)}
+	50%,100%{-moz-transform: translate(0px,0px);}
+}
+@-o-keyframes error{
+	0%{ -o-transform: scale(1);}
+	15%{-o-transform: scale(1.5);}
+	30%{-o-transform: scale(1);}
+	31%{-o-transform: translate(-5px,-5px) rotate(0deg);}
+	35%{-o-transform: translate(10px,-5px) rotate(120deg);}
+	40%{-o-transform: translate(-5px,5px) rotate(240deg);}
+	45%{-o-transform: translate(5px,5px) rotate(360deg)}
+	50%,100%{-o-transform: translate(0px,0px);}
+}
+@keyframes error{
+	0%{ transform: scale(1);}
+	15%{transform: scale(1.5);}
+	30%{transform: scale(1);}
+	31%{transform: translate(-5px,-5px) rotate(0deg);}
+	35%{transform: translate(10px,-5px) rotate(120deg);}
+	40%{transform: translate(-5px,5px) rotate(240deg);}
+	45%{transform: translate(5px,5px) rotate(360deg)}
+	50%,100%{transform: translate(0px,0px);}
+}
+
+.nm3kProgressCancel{ background:#fff url(../images/nm3kProgressCancel.png) no-repeat; background:#fff url(../images/nm3kProgressCancel_ie.png) no-repeat\0;}
+
+.nm3kProgressLoading{ 
+	background:#fff url(../images/threeDot.png) no-repeat center center;
+	background:#fff url(../images/threeDot.gif) no-repeat center center\9;
+	-webkit-animation: loading 1s linear infinite forwards;
+	   -moz-animation: loading 1s linear infinite forwards;
+		 -o-animation: loading 1s linear infinite forwards;
+			animation: loading 1s linear infinite forwards;	
+}
+/*���...���ڼ���*/
+@-webkit-keyframes loading{
+	0%{ -webkit-transform: rotate(0deg);}
+	100%{ -webkit-transform: rotate(360deg);}
+}
+@-moz-keyframes loading{
+	0%{ -moz-transform: rotate(0deg);}
+	100%{ -moz-transform: rotate(360deg);}
+}
+@-o-keyframes loading{
+	0%{ -o-transform: rotate(0deg);}
+	100%{ -o-transform: rotate(360deg);}
+}
+@keyframes loading{
+	0%{ transform: rotate(0deg);}
+	100%{ transform: rotate(360deg);}
+}
+.nm3kProgressTxt{ position:absolute; top:30px; text-align:center; line-height:1.1em; cursor:pointer;}
+#cancelProgress{ position:absolute; top:20px; left:730px;}
+#mainTableContainer{ overflow:auto; position:relative;}
+#bootStrapTip{ font:12px/1.4em "Helvetica Neue",Helvetica,Arial,sans-serif; display:inline-block; position:absolute; top:20px; left:20px; padding:5px 0px;
+	-webkit-animation: upDown 0.6s linear infinite alternate;
+	   -moz-animation: upDown 0.6s linear infinite alternate;
+		 -o-animation: upDown 0.6s linear infinite alternate;
+			animation: upDown 0.6s linear infinite alternate;
+}
+#bootStrapTip .tooltip-arrow{ position: absolute; width: 0; height: 0; border-color: transparent; border-style: solid; top: 0; left: 50%; margin-left: -5px; border-width: 0 5px 5px; border-bottom-color: #000;}
+#bootStrapTip .tooltip-inner { max-width: 200px; padding: 3px 8px; color: #fff; text-align: center; text-decoration: none; background-color: #000; border-radius: 4px; }
+@-webkit-keyframes upDown{
+	  0%{ -webkit-transform:translateY(0px);}
+	100%{ -webkit-transform:translateY(10px);}
+}
+@-moz-keyframes upDown{
+	  0%{ -moz-transform:translateY(0px);}
+	100%{ -moz-transform:translateY(10px);}
+}
+@-o-keyframes upDown{
+	  0%{ -o-transform:translateY(0px);}
+	100%{ -o-transform:translateY(10px);}
+}
+@keyframes upDown{
+	  0%{ transform:translateY(0px);}
+	100%{ transform:translateY(10px);}
+}

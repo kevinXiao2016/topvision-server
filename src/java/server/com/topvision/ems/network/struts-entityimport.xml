@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="entityimport" namespace="/entity/import" extends="default">
+		<action name="showEntityNameImport" class="entityImportAction"
+			method="showEntityNameImport">
+			<result>/network/entityNameImport.jsp</result>
+		</action>
+		<action name="showPreviewEntityName" class="entityImportAction"
+			method="showPreviewEntityName">
+			<result>/network/previewEntityName.jsp</result>
+		</action>
+		<action name="getPreviewEntityName" class="entityImportAction"
+			method="getPreviewEntityName">
+		</action>
+		<action name="importEntityName" class="entityImportAction"
+			method="importEntityName">
+		</action>
+		<action name="downLoadTemplate" class="entityImportAction"
+			method="downLoadTemplate">
+		</action>
+	</package>
+</struts>

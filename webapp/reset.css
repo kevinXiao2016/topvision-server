@@ -1,0 +1,11 @@
+@CHARSET "UTF-8";
+*{ margin:0; padding:0;}
+ul,li,ol,dl,dt,dd{ list-style:none;}
+a{ text-decoration:none; color:#069;}
+a:hover{ color:#f00;}
+
+
+body,html{ font:12px Arial, Helvetica, sans-serif, "宋体"; color:#333;}
+
+
+body{ background:#E2E5E9 url(white/sideBg.png) repeat;}

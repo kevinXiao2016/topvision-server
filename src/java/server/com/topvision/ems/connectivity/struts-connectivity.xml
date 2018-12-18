@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="connectivity" namespace="/connectivity" extends="default">
+    
+        <action name="showConnectivityConfig" class="connectivityAction" method="showConnectivityConfig">
+            <result>/system/connectivityConfig.jsp</result>
+        </action>
+        
+        <action name="loadConnectivityStrategy" class="connectivityAction" method="loadConnectivityStrategy"></action>
+        <action name="saveConnectivityStrategy" class="connectivityAction" method="saveConnectivityStrategy"></action>
+        
+        <action name="showTcpConnectivityConfig" class="connectivityAction" method="showTcpConnectivityConfig">
+        	<result>/system/tcpConnectivityConfig.jsp</result>
+        </action>
+        <action name="savTcpConnectivityConfig" class="connectivityAction" method="savTcpConnectivityConfig"></action>
+    </package>
+</struts>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cm.cmpoll.facade.domain.CmPollTask">
+	<select id="selectCmListCountN" resultType="com.topvision.ems.cmc.facade.domain.CmAttribute"
+		parameterType="map">
+		select a.cmId, a.cmcId, a.statusIndex, a.statusMacAddress,
+		IF(a.StatusIpAddress='noSuchObject' || a.StatusIpAddress is NULL,a.StatusInetAddress,a.StatusIpAddress) as statusIpAddress,
+		a.statusValue, b.cmcIndex, b.cmcEntityId as
+		entityId
+		from cmattribute a
+		left join cmcentityrelation b on a.cmcId =
+		b.cmcId
+		where <![CDATA[a.cmId > #{cmId}]]>
+		limit #{count};
+	</select>
+
+	<select id="selectEntityIdWithIp" parameterType="long"
+		resultType="long">
+		select entityId
+		from entity
+		where typeId in (select typeId
+		from entitytyperelation where type = #{type})
+	</select>
+
+	<select id="selectCmListByEntityId" parameterType="long"
+		resultType="com.topvision.ems.cm.cmpoll.taskbuild.domain.CmPollAttribute">
+		select a.cmId, a.cmcId, a.statusIndex, a.statusMacAddress,
+		IF(a.StatusIpAddress='noSuchObject' || a.StatusIpAddress is NULL,a.StatusInetAddress,a.StatusIpAddress) as statusIpAddress,
+		a.statusValue, b.cmcIndex, b.cmcEntityId as
+		entityId
+		from cmattribute a
+		left join cmcentityrelation b on a.cmcId =
+		b.cmcId
+		where b.cmcEntityId = #{entityId}
+	</select>
+	
+	<select id="getCmNum" resultType="long">
+		select count(cmId) from cmattribute where StatusValue in(6,21,26,27,30,31)
+	</select>
+
+</mapper>

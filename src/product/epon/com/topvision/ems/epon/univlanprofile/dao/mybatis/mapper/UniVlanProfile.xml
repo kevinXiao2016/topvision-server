@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.univlanprofile.domain.UniVlanProfile">
+
+	<insert id="insertUniVlanProfile" parameterType="uniVlanProfileTable">
+		insert into
+		uniVlanProfile
+		(entityId, profileId, profileRefCnt, profileName,profileMode)
+		values
+		(#{entityId}, #{profileId}, #{profileRefCnt},
+		#{profileName}, #{profileMode}
+		)
+	</insert>
+	
+	<delete id="deleteAllUniVlanProfiles" parameterType="long">
+		DELETE FROM uniVlanProfile 
+		where entityId = #{entityId} 
+	</delete>
+	
+	<select id="getUniVlanProfileList" parameterType="long"
+		resultType="uniVlanProfileTable">
+		select * from uniVlanProfile where
+		entityId=#{entityId}
+    </select>
+	
+	<select id="getUniVlanProfile" parameterType="map"
+		resultType="uniVlanProfileTable">
+		select * from uniVlanProfile where
+		entityId=#{entityId} and profileId = #{profileId}
+    </select>
+    
+    <update id="updateUniVlanProfile" parameterType="uniVlanProfileTable">
+		update
+		uniVlanProfile
+		set
+		profileName = #{profileName},profileMode = #{profileMode}
+		where entityId=#{entityId} and profileId = #{profileId}
+	</update>
+	
+	<update id="updateProfileRefCnt" parameterType="uniVlanProfileTable">
+		update
+		uniVlanProfile
+		set
+		profileRefCnt = #{profileRefCnt}
+		where entityId=#{entityId} and profileId = #{profileId}
+	</update>
+	
+	<delete id="deleteUniVlanProfile" parameterType="uniVlanProfileTable">
+		DELETE FROM uniVlanProfile 
+		where entityId = #{entityId} and profileId = #{profileId}
+	</delete>
+	
+	<insert id="insertUniVlanRule" parameterType="uniVlanRuleTable">
+		insert into
+		uniVlanRuleTable
+		(entityId, ruleProfileIndex, ruleIndex, ruleMode,ruleCvlan,ruleSvlan)
+		values
+		(#{entityId}, #{ruleProfileIndex}, #{ruleIndex},
+		#{ruleMode}, #{ruleCvlan},#{ruleSvlan}
+		)
+	</insert>
+	
+	<delete id="deleteAllUniVlanRules" parameterType="long">
+		DELETE FROM uniVlanRuleTable 
+		where entityId = #{entityId} 
+	</delete>
+	
+	<select id="getProfileVlanRuleList" parameterType="map"
+		resultType="uniVlanRuleTable">
+		select * from uniVlanRuleTable where
+		entityId=#{entityId} and ruleProfileIndex = #{ruleProfileIndex}
+    </select>
+    
+    <select id="getUniVlanRule" parameterType="uniVlanRuleTable"
+		resultType="uniVlanRuleTable">
+		select * from uniVlanRuleTable where
+		entityId=#{entityId} and ruleProfileIndex = #{ruleProfileIndex} 
+		and ruleIndex = #{ruleIndex}
+    </select>
+    
+    <update id="updateUniVlanRule" parameterType="uniVlanRuleTable">
+		update
+		uniVlanRuleTable
+		set
+		ruleMode = #{ruleMode},ruleCvlan = #{ruleCvlan},ruleSvlan = #{ruleSvlan}
+		where entityId=#{entityId} and ruleProfileIndex = #{ruleProfileIndex}
+		and ruleIndex = #{ruleIndex}
+	</update>
+	
+	<delete id="deleteUniVlanRule" parameterType="uniVlanRuleTable">
+		DELETE FROM uniVlanRuleTable 
+		where entityId = #{entityId} and ruleProfileIndex = #{ruleProfileIndex}
+		and ruleIndex = #{ruleIndex}
+	</delete>
+	
+	<delete id="deleteProfileRelRule" parameterType="map">
+		DELETE FROM uniVlanRuleTable 
+		where entityId = #{entityId} and ruleProfileIndex = #{ruleProfileIndex}
+	</delete>
+	
+	<delete id="deleteAllUniVlanBinds" parameterType="uniVlanBindTable">
+		DELETE FROM uniVlanBindTable 
+		where entityId = #{entityId} and uniIndex = #{uniIndex} 
+	</delete>
+	
+	<insert id="insertUniVlanBind" parameterType="uniVlanBindTable">
+		insert into
+		uniVlanBindTable
+		(entityId, uniIndex, bindPvid, bindProfileId, bindProfAttr)
+		values
+		(#{entityId}, #{uniIndex}, #{bindPvid}, #{bindProfileId}, #{bindProfAttr})
+	</insert>
+	
+	<select id="getUniVlanBind" parameterType="uniVlanBindTable"
+		resultType="uniVlanRuleTable">
+		select a.*,b.uniIndex from uniVlanBindTable a left join oltUniRelation b 
+		on  a.uniId = b.uniId and a.entityId = b.entityId
+		where entityId=#{entityId} and uniIndex = #{uniIndex}
+    </select>
+	
+	<update id="updateUniVlanBind" parameterType="uniVlanBindTable">
+		update
+		uniVlanBindTable
+		set
+		bindProfileId = #{bindProfileId}
+		<if test="bindPvid != null">
+		,bindPvid = #{bindPvid}
+		</if>
+		where entityId=#{entityId} and uniIndex = #{uniIndex}
+	</update>
+	
+	<select id="getProfileBindList" parameterType="map" resultType="long">
+		select uniIndex from uniVlanBindTable
+		where entityId = #{entityId} and bindProfileId = #{profileIndex}
+	</select>
+	
+	<select id="getUniBindInfo" parameterType="uniVlanBindTable" resultType="uniVlanBindTable">
+		select * from uniVlanBindTable where entityId=#{entityId} and uniIndex = #{uniIndex}
+	</select>
+	
+	<update id="updateUniPvid" parameterType="uniVlanBindTable">
+		update uniVlanBindTable 
+		set bindPvid = #{bindPvid} 
+		where entityId=#{entityId} and uniIndex = #{uniIndex}
+	</update>
+	
+	<update id="updateUniBindInfo" parameterType="uniVlanBindTable">
+		update
+		uniVlanBindTable
+		set
+		bindProfileId = #{bindProfileId}, bindPvid = #{bindPvid}
+		<if test="bindProfAttr != null">
+			,bindProfAttr = #{bindProfAttr}		    
+		</if>
+		where entityId=#{entityId} and uniIndex = #{uniIndex}
+	</update>
+	
+	<select id="queryEntityBindList" parameterType="long" resultType="uniVlanBindTable">
+		select * from uniVlanBindTable where entityId = #{entityId} and bindProfileId != 0
+	</select>
+</mapper>

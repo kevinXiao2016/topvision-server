@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.platform.domain.SystemPreferences">
+    <insert id="insertEntity" parameterType="systemPreferences">
+        INSERT INTO SystemPreferences ( name, value, module) VALUES (
+        #{name}, #{value}, #{module})
+    </insert>
+
+    <select id="selectByPrimaryKey" parameterType="string" resultType="systemPreferences">
+        SELECT name, value, module FROM
+        SystemPreferences WHERE name =
+        #{name}
+    </select>
+
+    <update id="updateEntity" parameterType="systemPreferences">
+        UPDATE SystemPreferences SET value = #{value} WHERE name = #{name}
+        <if test="module != null">and
+            module = #{module}
+        </if>
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="systemPreferences">
+        DELETE FROM SystemPreferences WHERE name = #{name}
+        <if test="module != null">and
+            module = #{module}
+        </if>
+    </delete>
+
+    <delete id="deleteByModule" parameterType="string">
+        DELETE FROM SystemPreferences WHERE module = #{module}
+    </delete>
+
+    <select id="selectByModule" parameterType="string" resultType="systemPreferences">
+        SELECT name, value FROM SystemPreferences WHERE
+        module =
+        #{module}
+    </select>
+
+    <select id="selectByModuleAndName" parameterType="map" resultType="systemPreferences">
+        SELECT name, value FROM SystemPreferences
+        WHERE module =
+        #{module} and name = #{name}
+    </select>
+</mapper>

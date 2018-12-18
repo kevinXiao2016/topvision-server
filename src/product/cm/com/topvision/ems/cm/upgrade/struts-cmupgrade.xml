@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmupgrade" namespace="/cmupgrade" extends="default">
+		<action name="loadCcmtsFile" class="cmUpgradeAction" method="loadCcmtsFile" />
+
+		<action name="deleteCcmtsFile" class="cmUpgradeAction" method="deleteCcmtsFile" />
+
+		<action name="upgradeSingleCm" class="cmUpgradeAction" method="upgradeSingleCm" />
+
+		<action name="showAutoUpgrade" class="cmUpgradeAction" method="showAutoUpgrade" />
+
+	    <action name="loadAutoUpgradeConfig" class="cmUpgradeAction" method="loadAutoUpgradeConfig" />
+
+		<action name="addAutoUpgradeConfig" class="cmUpgradeAction" method="addAutoUpgradeConfig" />
+		
+		<action name="modifyAutoUpgradeConfig" class="cmUpgradeAction" method="modifyAutoUpgradeConfig" />
+		
+		<action name="deleteAutoUpgradeConfig" class="cmUpgradeAction" method="deleteAutoUpgradeConfig" />
+		
+		<action name="showAddAutoUpgradeConfig" class="cmUpgradeAction" method="showAddAutoUpgradeConfig" />
+		
+		<action name="upLoadCmUpgradeFile" class="cmUpgradeAction" method="upLoadCmUpgradeFile"></action>
+		
+		<action name="showCmVersionStatics" class="cmUpgradeAction" method="showCmVersionStatics"></action>
+		
+		<action name="loadCmVersionStatics" class="cmUpgradeAction" method="loadCmVersionStatics"></action>
+		
+		<action name="applyAutoUpgradeConfig" class="cmUpgradeAction" method="applyAutoUpgradeConfig"></action>
+		
+		<action name="loadEntityType" class="cmUpgradeAction" method="loadEntityType"></action>
+		
+		<action name="loadCcmtsE" class="cmUpgradeAction" method="loadCcmtsE"></action>
+		
+		<action name="loadAutoUpgradeProcess" class="cmUpgradeAction" method="loadAutoUpgradeProcess"></action>
+		
+		<action name="uploadCcmtsFile" class="cmUpgradeAction" method="uploadCcmtsFile"></action>
+		
+		<action name="loadUploadProcess" class="cmUpgradeAction" method="loadUploadProcess"></action>
+		
+		<action name="showCmUpgradeConfig" class="cmUpgradeAction"  method="showCmUpgradeConfig">
+		   <result>/cm/cmUpgradeConfig.jsp</result>
+		</action>
+		
+		<action name="showCmUpgradeStatisitcs" class="cmUpgradeAction"  method="showCmUpgradeStatisitcs">
+		   <result>/cm/cmUpgradeStatisitcs.jsp</result>
+		</action>
+		
+		<action name="showCcmtsFile" class="cmUpgradeAction" method="showCcmtsFile" >
+        	<result>/cm/cmUpgradeFileMan.jsp</result>
+        </action>
+        
+		<action name="showCmUpgradeUpload" class="cmUpgradeAction" method="showCmUpgradeUpload" >
+			<result>/cm/cmUpgradeUpload.jsp</result>
+        </action>
+        
+        <action name="showUpgradeSingleCm" class="cmUpgradeAction" method="showUpgradeSingleCm" >
+			<result>/cm/cmUpgrade.jsp</result>
+        </action>
+        
+        <action name="loadUpgradeCmData" class="cmUpgradeAction" method="loadUpgradeCmData"></action>
+        
+        <action name="showAutoUpgradeResult" class="cmUpgradeAction" method="showAutoUpgradeResult">
+            <result>/cm/cmUpgradeConfigResult.jsp</result>
+        </action>
+	</package>
+</struts>

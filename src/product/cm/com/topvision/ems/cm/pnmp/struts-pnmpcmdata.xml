@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+    
+<struts>
+	<package name="pnmpcmdata" namespace="/pnmp/cmdata" extends="default">
+        <action name="showHistoryData" class="pnmpCmDataAction" method="showHistoryData">
+            <result>/terminal/pnmp/pnmp-cm-history.jsp</result>
+        </action>
+        <action name="showRealData" class="pnmpCmDataAction" method="showRealData">
+            <result>/terminal/pnmp/pnmp-cm-real.jsp</result>
+        </action>
+        <action name="loadHistoryData" class="pnmpCmDataAction" method="loadHistoryData"></action>
+        <action name="loadRealData" class="pnmpCmDataAction" method="loadRealData"></action>
+        <action name="loadCmtsDataByGroup" class="pnmpCmDataAction" method="loadCmtsDataByGroup"></action>
+    </package>
+</struts>

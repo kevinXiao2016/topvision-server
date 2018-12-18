@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<!-- <package name="cmcMacDomain" namespace="/cmc/macdomain" extends="default">
+		<action name="showCmcMacDomainInfo" class="cmcMacDomainAction" method="showCmcMacDomainInfo">
+			<result>/cmc/macDomain.jsp</result>
+		</action>
+		<action name="modifyMacDomainBaseInfo" class="cmcMacDomainAction" method="modifyMacDomainBaseInfo">
+		</action>
+		<action name="refreshMacDomainInfo" class="cmcMacDomainAction" method="refreshMacDomainInfo">
+		</action>
+	</package> -->
+</struts>

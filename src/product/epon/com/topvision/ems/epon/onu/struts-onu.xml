@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="onu" namespace="/onu" extends="default">
+		<action name="loadOnuTypes" class="onuAction" method="loadOnuTypes" />
+		<action name="showOnuAutoUpg" class="onuUpdateAction" method="showOnuAutoUpg">
+			<result>/epon/onuAutoUpg.jsp</result>
+		</action>
+		<action name="showOnuAutoUpgProfile" class="onuUpdateAction"
+			method="showOnuAutoUpgProfile">
+			<result>/epon/onuAutoUpgProfile.jsp</result>
+		</action>
+		<action name="showOnuAutoUpgRecord" class="onuUpdateAction"
+			method="showOnuAutoUpgRecord">
+			<result>/epon/onuAutoUpgRecord.jsp</result>
+		</action>
+		<action name="showOnuAutoUpgAddPro" class="onuUpdateAction"
+			method="showOnuAutoUpgAddPro">
+			<result>/epon/onuAutoUpgAddPro.jsp</result>
+		</action>
+		<action name="loadOnuAutoUpgInfo" class="onuUpdateAction"
+			method="loadOnuAutoUpgInfo" />
+		<action name="addOnuAutoUpgProfile" class="onuUpdateAction"
+			method="addOnuAutoUpgProfile" />
+		<action name="modifyOnuAutoUpgProfile" class="onuUpdateAction"
+			method="modifyOnuAutoUpgProfile" />
+		<action name="delOnuAutoUpgProfile" class="onuUpdateAction"
+			method="delOnuAutoUpgProfile" />
+		<action name="bandOnuAutoUpgProfile" class="onuUpdateAction"
+			method="bandOnuAutoUpgProfile" />
+		<action name="unbandOnuAutoUpgProfile" class="onuUpdateAction"
+			method="unbandOnuAutoUpgProfile" />
+		<action name="restartOnuAutoUpg" class="onuUpdateAction"
+			method="restartOnuAutoUpg" />
+		<action name="cancelOnuAutoUpg" class="onuUpdateAction" method="cancelOnuAutoUpg" />
+		<action name="loadOnuUpgFileList" class="onuUpdateAction"
+			method="loadOnuUpgFileList" />
+		<action name="refreshOnuAutoUpg" class="onuUpdateAction"
+			method="refreshOnuAutoUpg" />
+		<action name="refreshOnuAutoUpging" class="onuUpdateAction"
+			method="refreshOnuAutoUpging" />
+		<action name="uploadFileInOnuAutoUpg" class="onuUpdateAction"
+			method="uploadFileInOnuAutoUpg">
+			<result>/epon/onuAutoUpgMessage.jsp</result>
+		</action>
+		<action name="showOnuAutoUpgMessage" class="onuUpdateAction"
+			method="showOnuAutoUpgMessage">
+			<result>/epon/onuAutoUpgMessage.jsp</result>
+		</action>
+		<action name="onuObjectCreate" class="onuAction" method="onuObjectCreate" />
+		
+		<action name="showOnuViewJsp" class="onuAction" method="showOnuViewJsp">
+			<result>/epon/onuView.jsp</result>
+		</action>
+		<action name="showOnuConfig" class="onuAction" method="showOnuConfig">
+			<result>/epon/onuConfig.jsp</result>
+		</action>
+		<action name="showOnuMacAddrCap" class="onuAction" method="showOnuMacAddrCap">
+			<result>/epon/onuMacAddrCabConfig.jsp</result>
+		</action>
+		<action name="refreshOnuBaseInfo" class="onuAction" method="refreshOnuBaseInfo" />
+		<action name="refreshCC8800ABaseInfo" class="onuAction"
+			method="refreshCC8800ABaseInfo" />
+
+		<action name="showUniAutoNegoConfig" class="uniAction"
+			method="showUniAutoNegoConfig">
+			<result>/epon/uniAutoNegoConfig.jsp</result>
+		</action>
+		<action name="loadOnuNoList" class="onuAction" method="loadOnuNoList"></action>
+		<action name="showUniMacAddrMgmt" class="uniAction" method="showUniMacAddrMgmt">
+			<result>/epon/uniMacAddrMgmt.jsp</result>
+		</action>
+		<action name="showUniMacAddrCap" class="uniAction" method="showUniMacAddrCap">
+			<result>/epon/uniMacAddrCabConfig.jsp</result>
+		</action>
+		<action name="modifyUniMacAddrLearnMaxNum" class="uniAction"
+			method="modifyUniMacAddrLearnMaxNum" />
+		<action name="refreshUniUSUtgPri" class="uniAction" method="refreshUniUSUtgPri" />
+		<action name="showUniBroadCastStromMgmt" class="uniAction"
+			method="showUniBroadCastStromMgmt">
+			<result>/epon/uniBroadCastStromMgmt.jsp</result>
+		</action>
+		<action name="showUniRateLimit" class="uniAction" method="showUniRateLimit">
+			<result>/epon/uniRateLimit.jsp</result>
+		</action>
+		<action name="showUniRateLimitBak" class="uniAction" method="showUniRateLimitBak">
+			<result>/epon/uniRateLimitBak.jsp</result>
+		</action>
+		<action name="deregisterOnu" class="onuAction" method="deregisterOnu" />
+		<action name="onuDeactive" class="onuAction" method="onuDeactive" />
+		<action name="setOnuAdminStat" class="onuAction" method="setOnuAdminStat" />
+		<action name="resetOnu" class="onuAction" method="resetOnu" />
+		<action name="resetOnuList" class="onuAction" method="resetOnuList" />
+		<action name="modifyOnuName" class="onuAction" method="modifyOnuName" />
+		<action name="setOnuVOIPStatus" class="onuAction" method="setOnuVOIPStatus" />
+		<action name="setOnuTemperatureStatus" class="onuAction"
+			method="setOnuTemperatureStatus" />
+		<action name="setOnuFECStatus" class="onuAction" method="setOnuFECStatus" />
+		<action name="configOnuIsolationEnable" class="onuAction"
+			method="configOnuIsolationEnable" />
+		<action name="setOnu15MinPerfStatus" class="onuAction"
+			method="setOnu15MinPerfStatus" />
+		<action name="setOnu24HourPerfStatus" class="onuAction"
+			method="setOnu24HourPerfStatus" />
+		<action name="setOnuCATVStatus" class="onuAction" method="setOnuCATVStatus" />
+		<action name="setOnuUniAdminStatus" class="uniAction"
+			method="setOnuUniAdminStatus" />
+		<action name="setUniIsolationEnableStatus" class="uniAction"
+			method="setUniIsolationEnableStatus" />
+		<action name="setUniAttrFlowCtrlStatus" class="uniAction"
+			method="setUniAttrFlowCtrlStatus" />
+		<action name="setUni15MinPerfStatus" class="uniAction"
+			method="setUni15MinPerfStatus" />
+		<action name="setOnuUni24HourPerfStatus" class="uniAction"
+			method="setOnuUni24HourPerfStatus" />
+		<action name="updateUniPortRateLimit" class="uniAction"
+			method="updateUniPortRateLimit" />
+		<action name="setRestartUniAutoNego" class="uniAction"
+			method="setRestartUniAutoNego" />
+		<action name="setUniAutoNegoActive" class="uniAction"
+			method="setUniAutoNegoActive" />
+		<action name="setUniAutoNegoModeType" class="uniAction"
+			method="setUniAutoNegoModeType" />
+		<action name="getOltOnuList" class="onuAction" method="getOltOnuList" />
+		<action name="setUniAutoNegotiationStat" class="uniAction"
+			method="setUniAutoNegotiationStat" />
+		<action name="modifyOnuRstpMode" class="oltRstpAction" method="modifyOnuRstpMode" />
+		<action name="fetchOnuRstpMode" class="oltRstpAction" method="fetchOnuRstpMode" />
+		<action name="modifyOnuMacMax" class="onuAction" method="modifyOnuMacMax" />
+		<action name="updateUniBroadCastStromMgmt" class="uniAction"
+			method="updateUniBroadCastStromMgmt" />
+		<action name="showOnuAbility" class="onuAction" method="showOnuAbility">
+			<result>/epon/onuAbility.jsp</result>
+		</action>
+		<action name="showUniMacAgeTime" class="uniAction" method="showUniMacAgeTime">
+			<result>/epon/setUniMacAgeTime.jsp</result>
+		</action>
+		<action name="saveUniMacAgeTime" class="uniAction" method="saveUniMacAgeTime" />
+		<!-- <action name="refreshOnuInfo" class="onuAction" method="refreshOnuInfo" 
+			/> -->
+		<action name="moveToTopoJsp" class="onuAction" method="moveToTopoJsp">
+			<result>/epon/showTopoFolder.jsp</result>
+		</action>
+		<action name="moveToTopoFromOnuView" class="onuAction"
+			method="moveToTopoFromOnuView" />
+		<action name="onuMacClear" class="onuAction" method="onuMacClear" />
+		<action name="refreshOnuTemperature" class="onuAction"
+			method="refreshOnuTemperature" />
+		<action name="loadOnuList" class="onuAction" method="loadOnuList" />
+		<action name="refreshUniRateLimit" class="uniAction" method="refreshUniRateLimit" />
+		<action name="setUniDSLoopBackEnable" class="uniAction"
+			method="setUniDSLoopBackEnable"></action>
+		<action name="setUniUtagPri" class="uniAction" method="setUniUSUtgPri"></action>
+		<action name="modifyOnuStormOutPacketRate" class="onuAction"
+			method="modifyOnuStormOutPacketRate"></action>
+		<action name="showOnuStormOutPacketRate" class="onuAction"
+			method="showOnuStormOutPacketRate">
+			<result>/epon/onuStormOutPacketRate.jsp</result>
+		</action>
+		<action name="showUniUSUtgPri" class="uniAction" method="showUniUSUtgPri">
+			<result>/epon/uniUSUtgPri.jsp</result>
+		</action>
+		<action name="refreshOnuStormOutPacketRate" class="onuAction"
+			method="refreshOnuStormOutPacketRate"></action>
+		<action name="configUniLoopDetectEnable" class="uniAction"
+			method="configUniLoopDetectEnable" />
+		<action name="loadSlotPonRelation" class="onuUpdateAction"
+			method="loadSlotPonRelation" />
+		<action name="loadAvailableUpgradeOnuList" class="onuUpdateAction"
+			method="loadAvailableUpgradeOnuList" />
+		<action name="loadOnuUpgradeHistory" class="onuUpdateAction"
+			method="loadOnuUpgradeHistory" />
+		<action name="onuUpgradeFileUpload" class="onuUpdateAction"
+			method="onuUpgradeFileUpload">
+			<result>/epon/onuUpgradeFileUpload.jsp</result>
+		</action>
+		<action name="onuUpdate" class="onuUpdateAction" method="onuUpdate"></action>
+
+		<action name="getOltSlotList" class="onuAction" method="getOltSlotList" />
+		<action name="getOltGponSlotList" class="onuAction" method="getOltGponSlotList" />
+		<action name="getOltEponSlotList" class="onuAction" method="getOltEponSlotList" />
+		<action name="getOltPonList" class="onuAction" method="getOltPonList" />
+		<action name="showOnuMacAgeTime" class="onuAction" method="showOnuMacAgeTime">
+			<result>/epon/setOnuMacAgeTime.jsp</result>
+		</action>
+		<action name="saveOnuMacAgeTime" class="onuAction" method="saveOnuMacAgeTime" />
+		<action name="fetchOnuMacAgeTime" class="onuAction" method="fetchOnuMacAgeTime" />
+
+		<action name="showUniRateBatchConfig" class="uniRateBatchConfigAction"
+			method="showUniRateBatchConfig">
+			<result>/epon/onuUniConfig/uniRateBatchConfig.jsp</result>
+		</action>
+		<action name="loadUniRateTemplate" class="uniRateBatchConfigAction"
+			method="loadUniRateTemplate" />
+		<action name="addUniRateTemplate" class="uniRateBatchConfigAction"
+			method="addUniRateTemplate" />
+		<action name="modifyUniRateTemplate" class="uniRateBatchConfigAction"
+			method="modifyUniRateTemplate" />
+		<action name="deleteUniRateTemplate" class="uniRateBatchConfigAction"
+			method="deleteUniRateTemplate" />
+		<action name="showUniRateApplyPage" class="uniRateBatchConfigAction"
+			method="showUniRateApplyPage">
+			<result>/epon/onuUniConfig/uniRateApplyPage.jsp</result>
+		</action>
+		<action name="batchConfigUniRateLimit" class="uniRateBatchConfigAction"
+			method="batchConfigUniRateLimit" />
+		<action name="showOnuPortal" class="onuPortalAction" method="showOnuPortal">
+			<result>/epon/onu/onuPortal.jsp</result>
+			<result name="GponOnu">/gpon/onuPortal.jsp</result>
+		</action>
+		<action name="isOnuExist" class="onuPortalAction" method="isOnuExist"></action>
+		<action name="showOnuUniList" class="onuPortalAction" method="showOnuUniList">
+			<result>/epon/onu/onuUniList.jsp</result>
+		</action>
+		<action name="showOnuAlert" class="onuPortalAction" method="showOnuAlert">
+			<result>/epon/onu/onuAlert.jsp</result>
+			<result name="GponOnu">/gpon/onuAlert.jsp</result>
+		</action>
+		<action name="showOnuAlertHistory" class="onuPortalAction"
+			method="showOnuAlertHistory">
+			<result>/epon/onu/onuHistoryAlert.jsp</result>
+		</action>
+        <action name="loadOnuPonAttribute" class="onuPortalAction" method="loadOnuPonAttribute"></action>
+
+		<action name="showOnuPerf" class="onuPortalAction" method="showOnuPerf">
+			<result>/epon/onu/onuPerfView.jsp</result>
+			<result name="GponOnu">/gpon/onuPerfView.jsp</result>
+		</action>
+		<action name="loadUniList" class="uniListAction" method="loadUniList" />
+		<action name="getOnuUpTime" class="onuPortalAction" method="getOnuUpTime" />
+		<action name="queryForOnuList" class="onuListAction" method="queryForOnuList" />
+		<action name="showPartitionSelect" class="onuListAction"
+			method="showPartitionSelect">
+			<result>/epon/onu/showPartitionSelect.jsp</result>
+		</action>
+		<action name="refreshOnuQuality" class="onuListAction" method="refreshOnuQuality" />
+		<action name="refreshOnuUniInfo" class="uniListAction" method="refreshOnuUniInfo" />
+		<action name="getOnuAlertType" class="onuAlertAction" method="getOnuAlertType" />
+		<action name="loadOnuAlert" class="onuAlertAction" method="loadOnuAlert" />
+		<action name="loadOnuHistoryAlert" class="onuAlertAction"
+			method="loadOnuHistoryAlert" />
+		<action name="refreshOnu" class="onuPortalAction" method="refreshOnu" />
+		<action name="deleteOnuAuth" class="onuAction" method="deleteOnuAuth" />
+
+		<action name="showUniServiceConfig" class="onuManageAction"
+			method="showUniServiceConfig">
+			<result>/epon/onu/uniServiceConfig.jsp</result>
+		</action>
+		<action name="showApplyOtherPortView" class="onuManageAction"
+			method="showApplyOtherPortView">
+			<result>/epon/applyOtherPorts.jsp</result>
+		</action>
+		
+		<action name="showOnuServerLevel" class="onuListAction"
+			method="showOnuServerLevel">
+			<result>/epon/onu/onuServerLevel.jsp</result>
+		</action>
+		<action name="saveOnuServerLevel" class="onuListAction" method="saveOnuServerLevel" />
+		
+		<action name="applyPortConfig" class="onuManageAction" method="applyPortConfig" />
+		<action name="loadUniServiceConfig" class="onuManageAction"
+			method="loadUniServiceConfig" />
+		<action name="applyServiceConfig" class="onuManageAction"
+			method="applyServiceConfig">
+			<result>/epon/onu/applyOtherPorts.jsp</result>
+		</action>
+		<action name="setPortEnabled" class="onuManageAction" method="setPortEnabled" />
+		<action name="setUniVlan" class="onuManageAction" method="setUniVlan" />
+		<action name="setPortRateLimit" class="onuManageAction" method="setPortRateLimit" />
+		<action name="setPortWorkMode" class="onuManageAction" method="setPortWorkMode" />
+		<action name="setUniUSUtgPri" class="onuManageAction" method="setUniUSUtgPri" />
+		<action name="setUniMacLearnNum" class="onuManageAction"
+			method="setUniMacLearnNum" />
+		<action name="setUniPerfStatus" class="onuManageAction" method="setUniPerfStatus" />
+
+		<action name="refreshOnuOptical" class="onuListAction" method="refreshOnuOptical" />
+		
+		<action name="queryOnuOpticalHistory" class="onuListAction" method="queryOnuOpticalHistory" />
+
+		<action name="showOnuWanInfo" class="onuWanAction" method="showOnuWanInfo">
+			<result>/epon/onu/onuWanInfo.jsp</result>
+		</action>
+		<action name="showAddWanSsid" class="onuWanAction" method="showAddWanSsid">
+			<result>/epon/onu/addWanSsid.jsp</result>
+		</action>
+		<action name="showModifyWanSsid" class="onuWanAction" method="showModifyWanSsid">
+		    <result>/epon/onu/modifyWanSsid.jsp</result>
+		</action>
+		<action name="modifyWanSsid" class="onuWanAction" method="modifyWanSsid" />
+		<action name="getWanSsid" class="onuWanAction" method="getWanSsid" />
+		<action name="getWanSsidList" class="onuWanAction" method="getWanSsidList" />
+		<action name="addWanSsid" class="onuWanAction" method="addWanSsid" />
+		<action name="deleteWanSsid" class="onuWanAction" method="deleteWanSsid" />
+		
+		<action name="showOnuWanStatus" class="onuWanAction" method="showOnuWanStatus">
+			<result>/epon/onu/onuWanStatus.jsp</result>
+		</action>
+		<action name="getWanConnectList" class="onuWanAction" method="getWanConnectList" />
+		<action name="showAddWanConnect" class="onuWanAction" method="showAddWanConnect">
+			<result>/epon/onu/addWanConnect.jsp</result>
+		</action>
+		<action name="showModifyWanConnect" class="onuWanAction"
+			method="showModifyWanConnect">
+			<result>/epon/onu/modifyWanConnect.jsp</result>
+		</action>
+		<action name="loadWanConnection" class="onuWanAction" method="loadWanConnection" />
+		<action name="showBindInterface" class="onuWanAction" method="showBindInterface">
+			<result>/epon/onu/addBindInterface.jsp</result>
+		</action>
+		<action name="loadBindInterface" class="onuWanAction" method="loadBindInterface" />
+		<action name="saveBindInterface" class="onuWanAction" method="saveBindInterface" />
+		<action name="addWanConnect" class="onuWanAction" method="addWanConnect" />
+		<action name="deleteWanConnect" class="onuWanAction" method="deleteWanConnect" />
+		<action name="modifyWanConnect" class="onuWanAction" method="modifyWanConnect" ></action>
+		<action name="clearWanConnection" class="onuWanAction" method="clearWanConnection" />
+		<action name="refreshWanConnection" class="onuWanAction" method="refreshWanConnection" />
+		
+
+		<action name="saveWLANConfig" class="onuWanAction" method="saveWLANConfig" />
+		<action name="loadWLANConfig" class="onuWanAction" method="loadWLANConfig" />
+		<action name="refreshWLANConfig" class="onuWanAction" method="refreshWLANConfig" />
+		<action name="refreshSSIDList" class="onuWanAction" method="refreshSSIDList" />
+		<action name="restoreOnu" class="onuWanAction" method="restoreOnu" />
+		
+		<action name="getOnuAttrById" class="onuAction" method="getOnuAttrById" />
+		
+		<action name="showTagManagementView" class="onuTagAction" method="showTagManagementView">
+            <result>/epon/onu/onuTagManagement.jsp</result>
+        </action>
+        <action name="loadOnuTags" class="onuTagAction" method="loadOnuTags"></action>
+        <action name="createOnuTag" class="onuTagAction" method="createOnuTag"></action>
+        <action name="deleteOnuTag" class="onuTagAction" method="deleteOnuTag"></action>
+        <action name="modifyOnuTag" class="onuTagAction" method="modifyOnuTag"></action>
+        <action name="showOnuTagCreate" class="onuTagAction" method="showOnuTagCreate">
+        	<result>/epon/onu/onuTagCreate.jsp</result>
+        </action>
+        <action name="showOnuTagModify" class="onuTagAction" method="showOnuTagModify">
+        	<result>/epon/onu/onuTagModify.jsp</result>
+        </action>
+	</package>
+</struts>

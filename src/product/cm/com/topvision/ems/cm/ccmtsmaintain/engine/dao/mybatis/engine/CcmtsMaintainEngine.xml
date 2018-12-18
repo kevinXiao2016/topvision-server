@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="com.topvision.ems.cm.ccmtsmaintain.engine.domain.CcmtsChannel">
+	
+	<select id="selectCcmtsChannels" resultType="ccmtsChannel">
+		SELECT
+			A.entityId cmcId,
+			B.ChannelId,
+			B.channelIndex,
+			B.ChannelWidth
+		FROM entity A, cmcupchannelbaseinfo B 
+		WHERE 
+			<![CDATA[typeId >30000 AND typeId<40000]]>
+		AND A.entityId=B.cmcId
+	</select>
+</mapper>

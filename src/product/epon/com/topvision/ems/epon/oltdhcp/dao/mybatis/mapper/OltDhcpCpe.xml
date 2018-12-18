@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="OltDhcpCpe">
+	
+	<select id="getOltDhcpCpeInfo" parameterType="map" resultType="topOltDhcpCpeInfo">
+		select A.*, B.typeId from topOltDhcpCpeInfo A
+		left join entity B on B.entityId=A.entityId
+		where A.entityId  = #{entityId}
+		<if test="cpeIpIndex!=null">
+			and A.topOltDhcpCpeIpIndex like concat(concat('%',#{cpeIpIndex}),'%')
+		</if>
+		<if test="cpeMac!=null">
+			and A.topOltDhcpCpeMac like concat(concat('%',#{cpeMac}),'%')
+		</if>
+		<if test="cpeVlan!=null">
+			and A.topOltDhcpCpeVlan = #{cpeVlan}
+		</if>
+		<if test="cpePortType!=null">
+			and A.topOltDhcpCpePortType = #{cpePortType}
+		</if>
+		<if test="cpeSlot!=null">
+			and A.topOltDhcpCpeSlot = #{cpeSlot}
+		</if>
+		<if test="cpePort!=null">
+			and A.topOltDhcpCpePort = #{cpePort}
+		</if>
+		<if test="cpeOnu!=null">
+			and A.topOltDhcpCpeOnu = #{cpeOnu}
+		</if>
+		LIMIT ${start} , ${limit}
+	</select>
+	
+	<select id="getOltDhcpCpeInfoCount" parameterType="map" resultType="long">
+		select count(*) from topOltDhcpCpeInfo
+		where entityId  = #{entityId}
+		<if test="cpeIpIndex!=null">
+			and topOltDhcpCpeIpIndex like concat(concat('%',#{cpeIpIndex}),'%')
+		</if>
+		<if test="cpeMac!=null">
+			and topOltDhcpCpeMac like concat(concat('%',#{cpeMac}),'%')
+		</if>
+		<if test="cpeVlan!=null">
+			and topOltDhcpCpeVlan = #{cpeVlan}
+		</if>
+		<if test="cpePortType!=null">
+			and topOltDhcpCpePortType = #{cpePortType}
+		</if>
+		<if test="cpeSlot!=null">
+			and topOltDhcpCpeSlot = #{cpeSlot}
+		</if>
+		<if test="cpePort!=null">
+			and topOltDhcpCpePort = #{cpePort}
+		</if>
+		<if test="cpeOnu!=null">
+			and topOltDhcpCpeOnu = #{cpeOnu}
+		</if>
+	</select>
+
+</mapper>

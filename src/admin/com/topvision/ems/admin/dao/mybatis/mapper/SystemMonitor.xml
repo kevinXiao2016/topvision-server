@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.admin.domain.SystemMonitor">
+    <insert id="insertEntity" parameterType="com.topvision.ems.admin.domain.SystemMonitor">
+        INSERT INTO SystemMonitor
+        (collectTime,cpu,heapMemory,nonHeapMemory,disk,threadCount,diskReads,diskWrites) VALUES
+        (#{collectTime},#{cpu},#{heapMemory},#{nonHeapMemory},#{disk},#{threadCount},#{diskReads},#{diskWrites})
+    </insert>
+
+    <select id="selectCpuAndMemory" parameterType="map" resultType="systemMonitor">
+        SELECT
+        collectTime,cpu,heapMemory,nonHeapMemory,disk,threadCount,diskReads,diskWrites
+        FROM systemmonitor
+        WHERE
+        collectTime BETWEEN #{st} and #{et}
+    </select>
+</mapper>

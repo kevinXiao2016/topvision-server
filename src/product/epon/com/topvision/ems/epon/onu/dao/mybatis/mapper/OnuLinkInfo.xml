@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.onu.domain.OnuLinkInfo">
+	
+	<sql id="selectCondition">
+		WHERE 
+			H.type=130000
+			AND A.onuId in (select entityId from  ${Authority})
+		<if test="queryContent != null">
+            AND (A.onuMac LIKE "%${queryContentMac}%" 
+            	<if test="queryMacWithoutSplit != null">
+                	OR REPLACE(A.onuMac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+                	OR REPLACE(A.onuUniqueIdentification, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            	</if>
+            	OR E.name LIKE "%${queryContent}%" OR F.name LIKE "%${queryContent}%" OR  F.ip LIKE "%${queryContent}%"
+            	OR A.onuUniqueIdentification LIKE "%${queryContent}%"
+            	)
+        </if>
+        <if test="queryContent == null">
+        	<if test="onuName != null">
+	            and E.name LIKE '%${onuName}%'
+	        </if>
+	        <if test="macAddress != null">
+	        	AND (A.onuMac LIKE '%${macAddress}%' or A.onuUniqueIdentification LIKE '%${macAddress}%'
+				<if test="queryMacWithoutSplit != null">
+					OR REPLACE(A.onuMac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+					OR REPLACE(A.onuUniqueIdentification, ':', '') LIKE '%${queryMacWithoutSplit}%'
+				</if>
+				)
+	        </if>
+	        <if test="onuPreType != null">
+	            and E.typeId = #{onuPreType}
+        	</if>
+        	<if test="onuEorG != null">
+				and A.onuEorG=#{onuEorG}
+			</if>
+        	<if test="entityId != null">
+				and A.entityId = #{entityId}
+			</if>
+			<if test="slotId != null and ponId == null">
+				AND EXISTS (SELECT * FROM oltonurelation K,oltponrelation J WHERE K.onuid=A.onuId AND K.ponid=J.ponid and  slotid = #{slotId})
+			</if>
+			<if test="ponId != null">
+				and D.ponId = #{ponId}
+			</if>
+			<if test="status != null">
+				and A.onuOperationStatus=#{status}
+			</if>
+			<if test="receiveMin != null">
+	        	<![CDATA[AND I.onuPonRevPower >= #{receiveMin}]]>
+	        </if>
+	        <if test="receiveMax != null">
+	        	<![CDATA[AND ( I.onuPonRevPower < #{receiveMax} OR I.onuPonRevPower is NULL )]]>
+	        </if>
+	        <if test="transmitMin != null">
+	        	<![CDATA[AND I.onuPonTransPower >= #{transmitMin}]]>
+	        </if>
+	        <if test="transmitMax != null">
+	        	<![CDATA[AND ( I.onuPonTransPower < #{transmitMax} OR I.onuPonTransPower is NULL )]]>
+	        </if>
+	         <if test="ponRecvMin != null">
+	        	<![CDATA[AND I.oltponrevpower >= #{ponRecvMin}]]>
+	        </if>
+	        <if test="ponRecvMax != null">
+	        	<![CDATA[AND ( I.oltponrevpower < #{ponRecvMax} OR I.oltponrevpower is NULL )]]>
+	        </if>
+	        <if test="receiveMin != null || receiveMax != null || transmitMin != null || transmitMax != null || ponRecvMin != null || ponRecvMax != null">
+        		and A.onuOperationStatus=1
+	        </if>
+        </if>
+	</sql>
+	
+	<sql id = "selectTable">
+		FROM oltonuattribute A 
+		LEFT JOIN oltonuponrelation B ON A.onuId = B.onuId
+		LEFT JOIN oltonuponattribute C ON C.onuPonId=B.onuPonId
+		LEFT JOIN oltonurelation D ON A.onuId = D.onuId
+		LEFT JOIN entity E ON A.onuId = E.entityId
+		LEFT JOIN entity F ON E.parentId = F.entityId
+		LEFT JOIN entitytype G ON G.typeId = E.typeId
+		LEFT JOIN entitytyperelation H ON H.typeId = G.typeId
+		LEFT JOIN perfonulinkqualitylast I ON A.onuId=I.onuId
+		LEFT JOIN perfonucatvqualitylast PL ON A.onuId=PL.onuId 
+		LEFT JOIN perfonuqualityhistory PH ON A.onuId = PH.onuId
+		LEFT JOIN onuLaser Y on A.onuId = Y.onuId
+		LEFT JOIN userAttention U ON U.entityId = A.onuId
+		LEFT JOIN oltponoptical P on D.ponId = P.ponId
+		LEFT JOIN perftemplateentityrelation PTER on PTER.entityId = A.onuId
+		LEFT JOIN onutagrelation OT ON OT.onuId = A.onuId
+		LEFT JOIN onutag T ON T.id = OT.tagId
+	</sql>
+	
+	<select id="selectOnuLinkList" parameterType="map" resultType="onuLinkInfo">
+		SELECT 
+			A.onuMac, A.onuEorG, A.onuPreType, B.onuId, D.onuIndex, F.entityId, F.ip AS entityIp, F.name AS manageName,
+			E.name, A.onuUniqueIdentification, A.onuOperationStatus,A.changeTime, A.onuTimeSinceLastRegister, A.onuDeactive,
+			A.lastDeregisterTime, A.onuLlidId, G.displayName AS typeName,A.onuTestDistance,
+			E.location, E.typeId, PTER.templateId,
+			I.onuPonRevPower ,I.onuPonTransPower ,I.oltponrevpower,P.txpower as oltPonTransPower,
+			PL.onuCatvOrInfoRxPower, PH.minOnuPonRevPower, PH.minPowerTimeStr, PH.minCatvRevPower, PH.minCatvTimeStr,
+			Y.laserSwitch,U.userId AS attention, T.tagName,T.id AS tagId,
+			(SELECT offReason from onuonoffrecord WHERE onuId = A.onuId ORDER BY offTime DESC limit 1) AS lastOfflineReason
+		<include refid="selectTable"/>
+		<include refid="selectCondition"/>
+        <if test="sort != null and dir != ''">
+			<choose>
+				<when test="sort == 'onuUniqueIdentification'">
+					ORDER BY onuEorG ${dir}, onuUniqueIdentification ${dir}
+				</when>
+				<when test="sort == 'entityIp'.toString()">
+					ORDER BY inet_aton(entityIp) ${dir}
+				</when>
+				<when test="sort == 'onuOperationStatus'">
+					ORDER BY IF((onuOperationStatus = 1), 1, 0) ${dir}, ${sort} ${dir}, lastOfflineReason ${dir}
+				</when>
+				<when test="sort == 'onuPonRevPower' || sort == 'onuPonTransPower' || sort == 'oltPonRevPower' || sort == 'oltPonTransPower' || sort == 'onuCatvOrInfoRxPower' || sort == 'minOnuPonRevPower' || sort == 'minCatvRevPower'">
+					ORDER BY IF((onuOperationStatus = 1), 1, 0) desc,IF((${sort}=0),0,1) desc, ${sort} is null , ${sort} ${dir}
+				</when>
+				<when test="sort == 'changeTime'">
+					ORDER BY IF((onuOperationStatus = 1), 1, 0) ${dir},
+					IF((onuOperationStatus = 1), onuTimeSinceLastRegister-UNIX_TIMESTAMP(changeTime), lastDeregisterTime) ${dir}
+				</when>
+				<otherwise>
+					order by ${sort} ${dir}
+				</otherwise>
+			</choose>
+		</if>
+        limit ${start},${limit}
+	</select>
+	
+	<select id="selectOnuLinkListCount" parameterType="map" resultType="int">
+	    SELECT 
+			count(A.onuId)
+		<include refid="selectTable"/>
+		<include refid="selectCondition"/>
+	</select>
+	
+    <select id="selectOnuLinkThreshold" resultType="onuLinkThreshold">
+    	SELECT
+			B.templateId,B.targetId,B.thresholds
+		FROM perfthresholdtemplate A
+		LEFT JOIN perfthresholdrule B on A.templateId = B.templateId
+		WHERE
+			A.templateType = 13000
+			and B.targetId in ('ONU_PON_RE_POWER','ONU_PON_TX_POWER','OLT_PONLLID_RE_POWER','ONU_CATV_RX_POWER')	
+    </select>
+	
+	
+	<select id="selectOnuLinkInfo" parameterType="long" resultType="onuLinkInfo">
+		SELECT 
+			A.onuMac, A.onuEorG, A.onuPreType, B.onuId, D.onuIndex, F.entityId, F.ip AS entityIp, F.name AS manageName,
+			E.name, A.onuUniqueIdentification, A.onuOperationStatus,A.changeTime, A.onuTimeSinceLastRegister, 
+			A.lastDeregisterTime, A.onuLlidId, G.displayName AS typeName,A.onuTestDistance,
+			E.location, E.typeId, PTER.templateId,
+			I.onuPonRevPower ,I.onuPonTransPower ,I.oltponrevpower,P.txpower as oltPonTransPower,
+			PL.onuCatvOrInfoRxPower, PH.minOnuPonRevPower, PH.minPowerTimeStr, PH.minCatvRevPower, PH.minCatvTimeStr,
+			Y.laserSwitch,U.userId AS attention, 
+			P.ponId,P.portIndex,opa.perfStats15minuteEnable AS perfStats,
+			(SELECT offReason from onuonoffrecord WHERE onuId = A.onuId ORDER BY offTime DESC limit 1) AS lastOfflineReason
+		<include refid="selectTable"/>
+		LEFT JOIN oltponattribute opa on opa.ponId = P.ponId
+		WHERE 
+			H.type=130000
+			AND A.onuId = #{onuId}
+	</select>
+</mapper>

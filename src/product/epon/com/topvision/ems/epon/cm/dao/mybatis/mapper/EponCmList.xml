@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.cm.domain.EponCmList">
+	<select id="loadPonOfOlt" parameterType="long" resultType="com.topvision.ems.epon.olt.domain.OltPonAttribute">
+		SELECT 
+			opr.ponId, opr.ponIndex
+		FROM
+			oltslotattribute osa
+        LEFT JOIN  oltponrelation opr on osa.slotId = opr.slotId
+		WHERE
+			opr.entityId=#{entityId}
+	</select>
+	
+	<select id="loadPonAttrByCmcId" parameterType="long" resultType="com.topvision.ems.epon.olt.domain.OltPonAttribute">
+		SELECT
+			opr.ponId,
+			opr.ponIndex
+		FROM
+			cmcentityrelation cer
+		INNER JOIN
+			oltonurelation oor ON cer.onuId=oor.onuId AND cer.cmcId=#{cmcId}
+		INNER JOIN
+			oltponrelation opr ON oor.ponId=opr.ponId
+	</select>
+
+    <select id="getEponCmNumStatic"  resultType="eponCmNumStatic" parameterType="long">
+        select
+        IFNULL(unld.onlineNum + unld.offlineNum + unld.otherNum,0) as cmNumTotal,
+        IFNULL(unld.onlineNum,0) as cmNumOnline,
+        IFNULL(unld.otherNum,0) as cmNumActive,
+        IFNULL(unld.otherNum,0) as cmNumUnregistered,
+        IFNULL(unld.offlineNum,0) as cmNumOffline,
+        IFNULL(unld.onlineNum,0) as CmNumRregistered
+        from
+        usernumlastdevice unld
+        where unld.entityId=#{entityId}
+    </select>
+
+    <select id="getPonCmNumList"  resultType="ponCmNum" parameterType="long">
+        select
+        IFNULL(unlp.onlineNum + unlp.offlineNum + unlp.otherNum,0) cmNumTotal,
+        IFNULL(unlp.onlineNum,0) cmNumOnline,
+        IFNULL(unlp.otherNum,0) cmNumActive,
+        IFNULL(unlp.otherNum,0) cmNumUnregistered,
+        IFNULL(unlp.offlineNum,0) cmNumOffline,
+        IFNULL(unlp.onlineNum,0) CmNumRregistered,
+        opr.entityId,
+        opr.ponIndex ifIndex,
+        opr.ponId,
+        IFNULL(unlp.realtime,SYSDATE()) dt
+        from oltslotattribute osa
+        LEFT JOIN  oltponrelation opr on (osa.topSysBdPreConfigType = osa.topSysBdActualType OR osa.topSysBdPreConfigType=14) and osa.slotId = opr.slotId
+        LEFT JOIN usernumlastpon unlp on opr.entityId = unlp.entityId and opr.ponIndex = unlp.ponIndex
+        WHERE opr.entityId = #{entityId} ;
+    </select>
+    
+    <select id="getCmtsCmNumList"  resultType="cmtsCmNum" parameterType="long">
+        select
+        IFNULL(unlc.onlineNum + unlc.offlineNum + unlc.otherNum,0) cmNumTotal,
+        IFNULL(unlc.onlineNum,0) cmNumOnline,
+        IFNULL(unlc.otherNum,0) cmNumActive,
+        IFNULL(unlc.otherNum,0) cmNumUnregistered,
+        IFNULL(unlc.offlineNum,0) cmNumOffline,
+        IFNULL(unlc.onlineNum,0) CmNumRregistered,
+        e.entityId,
+        cer.cmcIndex ifIndex,
+        cer.cmcId,
+        ce.name cmtsName,
+        IFNULL(unlc.realtime,SYSDATE()) dt
+        from entity e
+		LEFT JOIN cmcentityrelation cer on e.entityId = cer.cmcEntityId
+		LEFT JOIN entity ce on cer.cmcId = ce.entityId
+        LEFT JOIN usernumlastccmts unlc on cer.cmcEntityId = unlc.entityId and cer.cmcIndex = unlc.ccIfIndex
+        WHERE e.entityId = #{entityId} ;
+    </select>
+</mapper>

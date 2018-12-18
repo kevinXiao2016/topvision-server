@@ -1,0 +1,59 @@
+<h4 class=txtCenter>The NM3000 software End User License Agreement</h4>
+<p class=txtCenter>========================</p>
+
+<p style=text-indent:20px;>Be sure to carefully read and understand all rights and limits of the NM3000 End User License Agreement. When Installing, you need to carefully read and decide to accept or not to accept this agreement terms and conditions.Unless or until you accept the terms of this Agreement, the software may not be installed in your computer.</p>
+<p style=text-indent:20px;>As a reference, you can now print out the text of this agreement from this page, or refer to the copy of this agreement in the "help" document of this soft.</p> 
+<p style=text-indent:20px;>This Agreement is attached to this Agreement between you and NM3000 legal agreement. The software includes the accompanying computer software, and related documentation may include printed materials. Once you install thissoftware means that you agree to be bound by the terms of this Agreement. If you do not agree to the terms of this agreement, you can not install or use this software.</p>
+<p style=text-indent:20px;>This software is protected by copyright laws and international copyright treaties and other intellectual property laws and treaties. The rights of the software is licensed, not sold.</p>
+A.You are granted the right to use the software for non-exclusive use in mainland China (excluding Hong Kong, Macao, Taiwan outside China).
+ You can:</br>
+1. To install, use, display, run a copy of the software in one computer, workstation, terminal, handheld computer or other digital electronic equipment(Computer)  .</br>
+2. In order to prevent the replica damaged, to make a backup copy. These backup copy is not available to others, and when you lose ownership of the legitimate copies, you are responsible to destroy the backup copy.</br>
+3. You can modify the software for a real computer environment or improving its performance. However, you are not allowed to offer the modified software to others unless they are permitted.</br>
+</br>B. You warrant that:</br>
+1. Do not use, copy, modify, lease or transfer the software or any part of it outside the terms of the agreement.</br>
+2. Only use the software on a computer; A software license may not be used jointly or concurrently on different computers.</br>
+3. Do not reverse engineer, reverse engineer or disassemble the software.</br>
+4. Do not rent, lease or lend the software products.</br>
+5. Contains all the copyright on all copies of the software logo.</br>
+</br>C. Software transfer</br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;You may make a permanent transfer of all your rights under this agreement, and your license will terminate on its own after the transfer. 
+The transfer conditions are:</br>
+1. You may not retain copies.</br>
+2. Transfer software products (including all components, the media and printed materials, any upgrades and this Agreement).</br>
+3. Assignee to accept the terms of this Agreement.</br>
+4. If software products are updated, any transfer must include all previous versions of this software product.</br>
+</br>D. Support services</br>
+1. NM3000 provide you with the support services ("Support Services").</br>
+2. Support the use of the service by the policies described in the user manual or other NM3000 provide material and planning constraints.</br>
+3. Any additional software code provided to you as part of support services shall be deemed as part of this software and shall conform to the terms of this agreement.</br>
+4. You provide technical information to NM3000 as part of support services, and NM3000 can be used for commercial purposes, including product support and development. In addition to the circumstances that are required to support you, the software will not refer to you personally in the use of these technical information.</br>
+</br>E. Replace, modify and upgrade software</br>
+1. NM3000 reserve at any time by to provide you with the replacement version or modified version of the software or this class upgrade version to replace, modify, or the right to make to the "software upgrade" and for such replacement, the right to modify or upgrade fee. </br>
+2. NM3000 offers you the software of any version replace or modify the software code or upgrade version, will be deemed to be the part of the software and is restricted by the terms of this agreement (unless this agreement be replaced or modified version of the software is attached, or upgrade version of another "agreement").</br>
+3. If NM3000 provide the replacement or a modified version of the software or any updated version, (a) you continue to use this software on condition that you accept this software of such replacement or modified versions or upgrade version and any accompanying instead of the agreement, and (b) as replaced or modified version of the software,  all the software  of the previous version will be terminated.</br>
+</br>F. Reservation of rights:</br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;All other rights not expressly granted are NM3000.</br>
+</br>G. The copyright of this software</br>
+1. The name of this software product and all of its copies, with the company on the CD or in the software.</br>
+2. This software product (including but not limited to the software contained in any images, photographs, moving Painting, video, audio, music, text and additional procedures), the accompanying printed materials, and The copyright of any copy of this software shall be owned by NM3000.</br>
+3. The software and documents are copyrighted and protected by state copyright law and international treaty provisions.</br>
+4. You may not remove the copyright notices from the Software; It is also guaranteed to copy the copyright statement for copies of the software (all or part). You agree to stop the illegal copying of the software and documentation in any form.</br>
+5. You can not copy the software accompanying printed materials.</br>
+</br>H. Export restrictions</br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;You agree not to export or export any program or service to any country or region outside the Chinese mainland without this software, any part or any direct result of software.</br>
+</br>I. After-sales guarantee:</br>
+1. NM3000 guarantee, in the case of normal use, the software carrier has no material or workmanship defects within 90 days from the date of sale. The whole responsibility of NM3000 is to replace the software carrier as compensation for your defects.</br>
+2. The warranty is invalid because of the carrier defect caused by accident, misuse or misapplication.</br>
+3. The carrier of the exchange shall enjoy the remaining time of the original guarantee period, or the guarantee of thirty days; Take senior priority for the elderly.</br>
+4. In addition to the above, the software does not enjoy any other form of after-sales guarantee.</br>
+</br>J. Limited liability:</br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;You and NM3000 recognize the generation, transmission of virus and malicious programs is not controlled and is unpredictability, therefore NM3000 only guarantee on its technical level and has control of the virus to the extent permitted within the scope of this virus killing software services, NM3000 do not guarantee to control those virus and malicious programs out of scope, but NM3000 is committed to continuously improve the technical level and scope of control of the virus. You have been aware of the situation, and have committed not to claim rights to the NM3000 for any result that may result from it.The above guarantee, whether expressly or metaphorical, shall include all the contents of the guarantee, including commercial and adaptive security for the purpose of special application. To the maximum extent permitted by applicable law, NM3000 or its suppliers never bear the liability for compensation from using or not using the software caused by or related to any indirect, accidents, direct, indirect, special, punitive or any other damages(Including but not limited to the damage caused by personal injury or property damage compensation, for loss of profits, business interruption, commercial information lost for any damages caused by failure to meet any responsibility, including integrity or quite attention, cause the damages caused by privacy, the damages caused by negligence, or for any pecuniary loss or damages caused by any other loss),even if NM3000 or any of its suppliers are notified in advance of the possibility of the damage occurring.Even if the remedial measures fail to reach the intended purpose, the exclusion clause will remain valid.</br>
+</br>K. Termination of the license:</br>
+1. If you fail to comply with the terms and conditions of this agreement,then without prejudice to any other rights, the application may terminate this agreement. When terminating the agreement, you must immediately destroy all copies of the software or return them to NM3000.</br>
+2. By providing you with the software or any replacement of the software or modified versions or upgrade version of a place of agreement, and you continue to use the software or this kind of replacement, modification or upgrade version replaced by the condition that you accept this kind of agreement, NM3000 may terminate this agreement.</br>
+</br>L. Applicable, under the jurisdiction of the law:</br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This Agreement applies to the Copyright Law of the People's Republic of China , People's Republic of computer software protection Article cases, the Trademark Law of the People's Republic of China, the People's Republic of China Patent Law and other laws and regulations.This Agreement is governed by the laws.</br>
+</br>M. Special note:</br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;In order to continuously improve the quality of this software and services, we may collect information about your usage of the software information, and feedback is not regularly given.We do not collect your name, address, Contacts and other personal information as well as the contents of the file related to information of security.The above information collected only for the market analysis of need in the future, so that we can provide you with better features and services,and the data is strictly confidential by NM3000.This agreement refers to the scope of information collected by NM3000 in the appropriate technical level. The NM3000 will do its best to determine accuracy, but the NM3000 is based on its own ability to identify the accuracy of its own judgment. You have clearly aware of the above and recognized NM3000 operation, and recognize NM3000's operation, willing to bear the loss caused thereby.
+<p style=text-indent:20px;>At this point, you certainly have read and understood this Agreement and agree to strictly comply with all terms and conditions.</p>

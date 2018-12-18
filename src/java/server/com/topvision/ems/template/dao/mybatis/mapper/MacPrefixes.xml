@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Sat Nov 02 12:51:03 CST 2013 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.template.domain.MacPrefixes">
+    <insert id="insertEntity" parameterType="macPrefixes">
+        INSERT INTO MacPrefixes
+        (prefix, corp, corp_zh, type, note)
+        VALUES(#{prefix}, #{corp},
+        #{corp_zh}, #{type},
+        #{note})
+    </insert>
+</mapper>

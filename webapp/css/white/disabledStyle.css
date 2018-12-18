@@ -1,0 +1,15 @@
+/*
+ ************************************************************************
+ **                                                                    **
+ **   ����ť�������ȼ���disabled���Ե�Ч��css支持ie7+                                **
+ **																	   **
+ ************************************************************************
+*/ 
+input[disabled][type='text']{  background:url(normalInputDisabled.png) repeat;}
+input[disabled][type='password']{  background:url(normalInputDisabled.png) repeat;}
+a.nearInputBtn[disabled]{ opacity:0.5; filter:alpha(opacity=50); cursor:default; pointer-events:none;}
+a.nearInputBtn[disabled] > span, a.nearInputBtn[disabled] > span > i{ cursor:default; pointer-events:none;}
+a.normalBtnBig[disabled],a.normalBtn[disabled]{ opacity:0.5; filter:alpha(opacity=50); cursor:default; pointer-events:none;}
+a.normalBtnBig[disabled] > span, a.normalBtnBig[disabled] > span > i{ cursor:default; pointer-events:none;}
+a.normalBtn[disabled] > span, a.normalBtn[disabled] > span > i{ cursor:default; pointer-events:none;}
+select[disabled]{ background:url(normalInputDisabled.png) repeat; height:22px; border:1px solid #B7B8CA;}

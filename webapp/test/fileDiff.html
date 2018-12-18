@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<HTML>
+<HEAD>
+  <TITLE>Diff, Match and Patch: Demo of Diff</TITLE>
+  <script TYPE="text/javascript" LANGUAGE="JavaScript" SRC="/js/textDiff/diff_match_patch_uncompressed.js"></script>
+</HEAD>
+
+<BODY>
+
+
+<SCRIPT TYPE="text/javascript" LANGUAGE="JavaScript">
+var dmp = new diff_match_patch();
+
+function launch() {
+  var text1 = document.getElementById('text1').value;
+  var text2 = document.getElementById('text2').value;
+  /* dmp.Diff_Timeout = parseFloat(document.getElementById('timeout').value);
+  dmp.Diff_EditCost = parseFloat(document.getElementById('editcost').value); */
+
+  var d = dmp.diff_main(text1, text2);
+
+ /*  if (document.getElementById('semantic').checked) {
+    dmp.diff_cleanupSemantic(d);
+  }
+  if (document.getElementById('efficiency').checked) {
+    dmp.diff_cleanupEfficiency(d);
+  } */
+  var ds = dmp.diff_prettyHtml(d,true);
+  document.getElementById('outputdiv').innerHTML = ds 
+}
+</SCRIPT>
+
+<FORM action="#" onsubmit="return false">
+<TABLE WIDTH="100%"><TR>
+  <TD WIDTH="50%">
+<H3>Text Version 1:</H3>
+<TEXTAREA ID="text1" STYLE="width: 100%" ROWS=10></TEXTAREA></TD>
+  <TD WIDTH="50%">
+<H3>Text Version 2:</H3>
+<TEXTAREA ID="text2" STYLE="width: 100%" ROWS=10></TEXTAREA></TD>
+</TR></TABLE>
+
+<H3>Diff timeout:</H3>
+
+
+<INPUT TYPE="button" onClick="launch()" VALUE="Compute Diff">
+</FORM>
+
+<DIV ID="outputdiv"></DIV>
+
+<HR>
+
+</BODY>
+</HTML>

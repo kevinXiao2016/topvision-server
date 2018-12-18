@@ -1,0 +1,66 @@
+<StackPanel>
+<vc:Chart xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts"
+              Width='700' Height='350' Theme="Theme1" BorderBrush="Gray" ZoomingEnabled="True" ScrollingEnabled="True">
+
+    <vc:Chart.Titles>
+        <vc:Title Text="CCMTS 带宽总流量"/>
+    </vc:Chart.Titles>
+    
+    <vc:Chart.AxesX>
+        <vc:Axis Title='时间(s)'   IntervalType="Hours"  ValueFormatString="hh:mm tt" TitleFontStyle='italic'>
+			<vc:Axis.AxisLabels> 
+				<vc:AxisLabels Enabled="True"  TextAlignment='right' /> 
+			</vc:Axis.AxisLabels>			 
+        </vc:Axis>
+	</vc:Chart.AxesX>
+    
+    <vc:Chart.AxesY>
+		<vc:Axis Title="下行总带宽"  ScalingSet="2,M"  />
+		<vc:Axis Title="上行总带宽"  ScalingSet="2,K"  AxisType='secondary '/>
+    </vc:Chart.AxesY>
+
+	<vc:Chart.Legends>
+		<vc:Legend   DockInsidePlotArea='true' HorizontalAlignment='left' VerticalAlignment='top'/>
+	</vc:Chart.Legends>
+
+    <vc:Chart.PlotArea>
+        <vc:PlotArea ShadowEnabled="false"/>
+    </vc:Chart.PlotArea>
+
+    <vc:Chart.TrendLines> 	
+		<vc:TrendLine Enabled="True" Value="4000"  Orientation="Horizontal" LineColor="Orange" 
+    			LineThickness="2" ToolTipText="China has the highest growth rate"/>
+	</vc:Chart.TrendLines>
+
+    <vc:Chart.Series>
+        <vc:DataSeries RenderAs="Line" ShadowEnabled="True" XValueType="Time" XValueFormatString="hh:mm tt"  
+        SelectionEnabled="False" MarkerEnabled="True" MovingMarkerEnabled="True"> 
+            <vc:DataSeries.DataPoints> 
+                <vc:DataPoint XValue="1:2:18" YValue="20"/> 
+                <vc:DataPoint XValue="3:1:4" YValue="21"/> 
+                <vc:DataPoint XValue="5:2:14" YValue="20"/> 
+                <vc:DataPoint XValue="8:3:22" YValue="21"/> 
+                <vc:DataPoint XValue="12:8:44" YValue="24"/> 
+                <vc:DataPoint XValue="15:10:52" YValue="26"/> 
+                <vc:DataPoint XValue="18:11:23" YValue="25"/> 
+                <vc:DataPoint XValue="22:18:22" YValue="23"/> 
+            </vc:DataSeries.DataPoints> 
+        </vc:DataSeries> 
+
+        <vc:DataSeries RenderAs="Line" LegendText="上行总流量趋势" ShadowEnabled="True" XValueType="Time" XValueFormatString="hh:mm tt"  AxisYType="Secondary" 
+        SelectionEnabled="False" MarkerEnabled="True" MovingMarkerEnabled="True"> 
+            <vc:DataSeries.DataPoints> 
+                <vc:DataPoint XValue="1:2:18" YValue="20"/> 
+                <vc:DataPoint XValue="3:1:4" YValue="21"/> 
+                <vc:DataPoint XValue="5:2:14" YValue="20"/> 
+                <vc:DataPoint XValue="8:3:22" YValue="21"/> 
+                <vc:DataPoint XValue="12:8:44" YValue="24"/> 
+                <vc:DataPoint XValue="15:10:52" YValue="26"/> 
+                <vc:DataPoint XValue="18:11:23" YValue="25"/> 
+                <vc:DataPoint XValue="22:18:22" YValue="23"/> 
+            </vc:DataSeries.DataPoints> 
+        </vc:DataSeries>
+    </vc:Chart.Series>
+</vc:Chart>
+
+</StackPanel>

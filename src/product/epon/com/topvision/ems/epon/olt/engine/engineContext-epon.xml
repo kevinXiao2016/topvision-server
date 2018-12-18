@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<bean id="oltFacade"
+		class="com.topvision.ems.epon.olt.engine.OltFacadeImpl">
+		<property name="snmpExecutorService" ref="snmpExecutorService" />
+	</bean>
+	<bean id="oltSlotFacade"
+		class="com.topvision.ems.epon.olt.engine.OltSlotFacadeImpl">
+		<property name="snmpExecutorService" ref="snmpExecutorService" />
+	</bean>
+	<bean id="oltPonFacade"
+		class="com.topvision.ems.epon.olt.engine.OltPonFacadeImpl">
+		<property name="snmpExecutorService" ref="snmpExecutorService" />
+	</bean>
+	<bean id="oltSniFacade"
+		class="com.topvision.ems.epon.olt.engine.OltSniFacadeImpl">
+		<property name="snmpExecutorService" ref="snmpExecutorService" />
+	</bean>
+</beans>

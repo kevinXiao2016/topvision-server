@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.loopback.domain.LoopBack">
+	<insert id="insertLoopBackConfig" parameterType="loopbackConfigTable">
+		insert into
+		oltloopbackconfig
+		(entityId, loopbackIndex, loopbackPriIpAddr,
+		loopbackPriMask,
+		loopbackPriMac
+		)
+		values
+		(#{entityId}, #{loopbackIndex},
+		#{loopbackPriIpAddr}, #{loopbackPriMask}, #{loopbackPriMac}
+		)
+	</insert>
+
+	<insert id="insertLoopBackSub" parameterType="loopbackSubIpTable">
+		insert into
+		oltloopbacksub
+		(entityId, loopbackSubIpIndex, loopbackSubIpSeqIndex,
+		loopbackSubIpAddr,
+		loopbackSubMask,
+		loopbackSubMac
+		)
+		values
+		(#{entityId},
+		#{loopbackSubIpIndex}, #{loopbackSubIpSeqIndex}, #{loopbackSubIpAddr},
+		#{loopbackSubMask},
+		#{loopbackSubMac}
+		)
+	</insert>
+
+	<delete id="deleteLoopBackSub" parameterType="long">
+		delete from
+		oltloopbacksub where entityId = #{entityId}
+	</delete>
+
+	<delete id="deleteLoopBackConfig" parameterType="long">
+		delete from
+		oltloopbackconfig where entityId = #{entityId}
+	</delete>
+	
+	<delete id="deleteLoopBackInterface" parameterType="loopbackConfigTable">
+		delete from
+		oltloopbackconfig where entityId = #{entityId} and loopbackIndex = #{loopbackIndex}
+	</delete>
+
+	<select id="selectLoopBackList" parameterType="long" resultType="loopbackConfigTable">
+		select * from oltloopbackconfig where entityId = #{entityId}
+	</select>
+	
+	<delete id="deleteLBSubIp" parameterType="loopbackSubIpTable">
+		delete from oltloopbacksub 
+		where entityId = #{entityId} and loopbackSubIpIndex = #{loopbackSubIpIndex} 
+		<if test="loopbackSubIpSeqIndex != null">
+			and loopbackSubIpSeqIndex = #{loopbackSubIpSeqIndex}
+		</if>
+	</delete>
+	
+	<select id="querySubIpList" parameterType="map" resultType="loopbackSubIpTable"> 
+		select * from oltloopbacksub
+		where entityId = #{entityId} and loopbackSubIpIndex = #{loopbackSubIpIndex}
+	</select>
+	
+	<update id="updateLoopBackInterface" parameterType="loopbackConfigTable">
+		update oltloopbackconfig
+		set loopbackPriIpAddr = #{loopbackPriIpAddr}, loopbackPriMask = #{loopbackPriMask}
+		where entityId = #{entityId} and loopbackIndex = #{loopbackIndex}
+	</update>
+	
+	<update id="updateLBSubIp" parameterType="loopbackSubIpTable">
+		update oltloopbacksub
+		set loopbackSubIpAddr = #{loopbackSubIpAddr}, loopbackSubMask = #{loopbackSubMask}
+		where entityId = #{entityId} and loopbackSubIpIndex = #{loopbackSubIpIndex} and loopbackSubIpSeqIndex = #{loopbackSubIpSeqIndex}
+	</update>
+</mapper>

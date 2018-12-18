@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="OltDhcpRefresh">
+	<delete id="deleteTopOltDhcpCpeInfos" parameterType="long">
+		delete from topOltDhcpCpeInfo where entityId = #{entityId}
+	</delete>
+
+	<insert id="insertTopOltDhcpCpeInfo" parameterType="topOltDhcpCpeInfo">
+        insert into topOltDhcpCpeInfo
+            (entityId,topOltDhcpCpeIpIndex,topOltDhcpCpeMac,topOltDhcpCpeVlan,topOltDhcpCpePortType,
+            topOltDhcpCpeSlot,topOltDhcpCpePort,topOltDhcpCpeOnu,topOltDhcpCpeRemainingTime,remainingTimeStr)
+        values
+            (#{entityId},#{topOltDhcpCpeIpIndex},#{topOltDhcpCpeMac},#{topOltDhcpCpeVlan},#{topOltDhcpCpePortType},         
+            #{topOltDhcpCpeSlot},#{topOltDhcpCpePort},#{topOltDhcpCpeOnu},#{topOltDhcpCpeRemainingTime},#{remainingTimeStr})
+    </insert>
+    
+    <insert id="insertTopOltDhcpGlobalObjects" parameterType="topOltDhcpGlobalObjects">
+        insert into topOltDhcpGlobalObjects
+            (entityId,topOltDhcpEnable,topOltDhcpOpt82Enable,topOltDhcpOpt82Policy,topOltDhcpOpt82Format,
+            topOltDhcpSourceVerifyEnable,topOltPPPoEPlusEnable,topOltPPPoEPlusPolicy,topOltPPPoEPlusFormat)
+        values
+            (#{entityId},#{topOltDhcpEnable},#{topOltDhcpOpt82Enable},#{topOltDhcpOpt82Policy},#{topOltDhcpOpt82Format},         
+            #{topOltDhcpSourceVerifyEnable},#{topOltPPPoEPlusEnable},#{topOltPPPoEPlusPolicy},#{topOltPPPoEPlusFormat})
+        ON DUPLICATE KEY UPDATE	
+            topOltDhcpEnable = #{topOltDhcpEnable},
+            topOltDhcpOpt82Enable = #{topOltDhcpOpt82Enable},
+            topOltDhcpOpt82Policy = #{topOltDhcpOpt82Policy},
+            topOltDhcpOpt82Format = #{topOltDhcpOpt82Format},
+            topOltDhcpSourceVerifyEnable = #{topOltDhcpSourceVerifyEnable},
+            topOltPPPoEPlusEnable = #{topOltPPPoEPlusEnable},
+            topOltPPPoEPlusPolicy = #{topOltPPPoEPlusPolicy},
+            topOltPPPoEPlusFormat = #{topOltPPPoEPlusFormat}
+    </insert>
+    
+   	<delete id="deleteTopOltDhcpPortAttributes" parameterType="long">
+		delete from topOltDhcpPortAttribute where entityId = #{entityId}
+	</delete>
+	
+	<insert id="insertTopOltDhcpPortAttribute" parameterType="topOltDhcpPortAttribute">
+        insert into topOltDhcpPortAttribute
+            (entityId,topOltDhcpPortProtIndex,topOltDhcpPortTypeIndex,topOltDhcpSlotIndex,topOltDhcpPortIndex,
+            topOltDhcpPortCascade,topOltDhcpPortTrans,topOltDhcpPortTrust)
+        values
+            (#{entityId},#{topOltDhcpPortProtIndex},#{topOltDhcpPortTypeIndex},#{topOltDhcpSlotIndex},#{topOltDhcpPortIndex},         
+            #{topOltDhcpPortCascade},#{topOltDhcpPortTrans},#{topOltDhcpPortTrust})
+    </insert>
+    
+    <delete id="deleteTopOltDhcpServerGroups" parameterType="long">
+		delete from topOltDhcpServerGroup where entityId = #{entityId}
+	</delete>
+	
+	<insert id="insertTopOltDhcpServerGroup" parameterType="topOltDhcpServerGroup">
+        insert into topOltDhcpServerGroup
+            (entityId,topOltDhcpServerGroupIndex,topOltDhcpServerIpList,topOltDhcpServerBindNum)
+        values
+            (#{entityId},#{topOltDhcpServerGroupIndex},#{topOltDhcpServerIpList},#{topOltDhcpServerBindNum})
+    </insert>
+
+	<delete id="deleteTopOltDhcpStaticIps" parameterType="long">
+		delete from topOltDhcpStaticIp where entityId = #{entityId}
+	</delete>
+	
+	<insert id="insertTopOltDhcpStaticIp" parameterType="topOltDhcpStaticIp">
+        insert into topOltDhcpStaticIp
+            (entityId,ipIndex,maskIndex,topOltDhcpStaticIpSlot,
+            topOltDhcpStaticIpPort,topOltDhcpStaticIpOnu)
+        values
+            (#{entityId},#{ipIndex},#{maskIndex},#{topOltDhcpStaticIpSlot},
+            #{topOltDhcpStaticIpPort},#{topOltDhcpStaticIpOnu})
+    </insert>
+    
+    <insert id="insertTopOltDhcpStatisticsObjects" parameterType="topOltDhcpStatisticsObjects">
+        insert into topOltDhcpStatisticsObjects
+            (entityId,topOltDhcpStatRDiscover,topOltDhcpStatRRequest,topOltDhcpStatROffer,topOltDhcpStatRAck,
+            topOltDhcpStatROther,topOltDhcpStatDDiscover,topOltDhcpStatDRequest,topOltDhcpStatDOffer,
+            topOltDhcpStatDAck,topOltDhcpStatDOther,topOltDhcpStatDFlood,topOltDhcpStatDUnknown,
+            topOltDhcpStatDCongestion,topOltDhcpStatTDiscover,topOltDhcpStatTRequest,topOltDhcpStatTOffer,
+            topOltDhcpStatTAck,topOltDhcpStatTOther)
+        values
+            (#{entityId},#{topOltDhcpStatRDiscover},#{topOltDhcpStatRRequest},#{topOltDhcpStatROffer},#{topOltDhcpStatRAck},         
+            #{topOltDhcpStatROther},#{topOltDhcpStatDDiscover},#{topOltDhcpStatDRequest},#{topOltDhcpStatDOffer},
+            #{topOltDhcpStatDAck},#{topOltDhcpStatDOther},#{topOltDhcpStatDFlood},#{topOltDhcpStatDUnknown},
+            #{topOltDhcpStatDCongestion},#{topOltDhcpStatTDiscover},#{topOltDhcpStatTRequest},#{topOltDhcpStatTOffer},
+            #{topOltDhcpStatTAck},#{topOltDhcpStatTOther})
+        ON DUPLICATE KEY UPDATE	
+            topOltDhcpStatRDiscover = #{topOltDhcpStatRDiscover},
+            topOltDhcpStatRRequest = #{topOltDhcpStatRRequest},
+            topOltDhcpStatROffer = #{topOltDhcpStatROffer},
+            topOltDhcpStatRAck = #{topOltDhcpStatRAck},
+            topOltDhcpStatROther = #{topOltDhcpStatROther},
+            topOltDhcpStatDDiscover = #{topOltDhcpStatDDiscover},
+            topOltDhcpStatDRequest = #{topOltDhcpStatDRequest},
+            topOltDhcpStatDOffer = #{topOltDhcpStatDOffer},
+            topOltDhcpStatDAck = #{topOltDhcpStatDAck},
+            topOltDhcpStatDOther = #{topOltDhcpStatDOther},
+            topOltDhcpStatDFlood = #{topOltDhcpStatDFlood},
+            topOltDhcpStatDUnknown = #{topOltDhcpStatDUnknown},
+            topOltDhcpStatDCongestion = #{topOltDhcpStatDCongestion},
+            topOltDhcpStatTDiscover = #{topOltDhcpStatTDiscover},
+            topOltDhcpStatTRequest = #{topOltDhcpStatTRequest},
+            topOltDhcpStatTOffer = #{topOltDhcpStatTOffer},
+            topOltDhcpStatTAck = #{topOltDhcpStatTAck},
+            topOltDhcpStatTOther = #{topOltDhcpStatTOther}
+    </insert>
+    
+    <delete id="deleteTopOltDhcpVifCfgs" parameterType="long">
+		delete from topOltDhcpVifCfg where entityId = #{entityId}
+	</delete>
+	
+	<insert id="insertTopOltDhcpVifCfg" parameterType="topOltDhcpVifCfg">
+        insert into topOltDhcpVifCfg
+            (entityId,topOltDhcpVifIndex,topOltDhcpVifOpt60StrIndex,topOltDhcpVifAgentAddr,
+            topOltDhcpVifServerGroup)
+        values
+            (#{entityId},#{topOltDhcpVifIndex},#{topOltDhcpVifOpt60StrIndex},#{topOltDhcpVifAgentAddr},
+            #{topOltDhcpVifServerGroup})
+    </insert>
+    
+    <delete id="deleteTopOltDhcpVLANCfgs" parameterType="long">
+		delete from topOltDhcpVLANCfg where entityId = #{entityId}
+	</delete>
+	
+	<insert id="insertTopOltDhcpVLANCfg" parameterType="topOltDhcpVLANCfg">
+        insert into topOltDhcpVLANCfg
+            (entityId,topOltDhcpVLANIndex,topOltDhcpVLANMode,topOltDhcpVLANRelayMode)
+        values
+            (#{entityId},#{topOltDhcpVLANIndex},#{topOltDhcpVLANMode},#{topOltDhcpVLANRelayMode})
+    </insert>
+	
+	<insert id="insertTopOltPppoeStatisticsObjects" parameterType="topOltPppoeStatisticsObjects">
+        insert into topOltPppoeStatisticsObjects
+            (entityId,topOltPppoeStatReceive,topOltPppoeStatDrop,topOltPppoeStatTransmit)
+        values
+            (#{entityId},#{topOltPppoeStatReceive},#{topOltPppoeStatDrop},#{topOltPppoeStatTransmit})
+        ON DUPLICATE KEY UPDATE	
+            topOltPppoeStatReceive = #{topOltPppoeStatReceive},
+            topOltPppoeStatDrop = #{topOltPppoeStatDrop},
+            topOltPppoeStatTransmit = #{topOltPppoeStatTransmit}
+    </insert>
+</mapper>

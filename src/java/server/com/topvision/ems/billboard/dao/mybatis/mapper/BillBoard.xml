@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.billboard.domain.BillBoard">
+
+    <insert id="insertNotice" useGeneratedKeys="true" keyProperty="noticeId"  parameterType="notice">
+    	INSERT INTO billboard(
+			userId,
+			createTime,
+			startTime,
+			deadline,
+			content
+		)VALUES(
+			#{userId},
+			#{createTime},
+			#{startTime},
+			#{deadline},
+			#{content}
+		)
+    </insert>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultType="notice">
+    	SELECT 
+    		A.userId,A.noticeId,A.createTime,A.startTime,A.deadline,A.status,B.familyName username,A.content
+		FROM 
+			billboard A,users B
+		WHERE
+			A.userId=B.userId AND A.noticeId=#{noticeId}
+    </select>
+    <select id="selectAllValidNotice" resultType="notice" parameterType="java.lang.Integer">
+    	SELECT 
+    		A.userId,A.noticeId,A.createTime,A.startTime,A.deadline,A.status,B.username,A.content
+		FROM 
+			billboard A,users B
+		WHERE
+			A.userId=B.userId AND A.status = 1
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    	DELETE FROM billboard WHERE noticeId = #{noticeId}
+    </delete>
+    <update id="expireNotice" parameterType="notice">
+    	UPDATE billboard
+    	SET status = #{status}
+    	WHERE noticeId = #{noticeId}
+    </update>
+</mapper>

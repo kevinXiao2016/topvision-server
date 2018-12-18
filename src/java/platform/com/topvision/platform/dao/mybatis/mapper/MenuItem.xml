@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.platform.domain.MenuItem">
+	<select id="selectByMap" resultType="menuItem">
+		SELECT itemId, parentId,
+		name, mnemonic, type, icon, action,
+		target FROM
+		MenuItem order by itemId
+		asc
+    </select>
+</mapper>

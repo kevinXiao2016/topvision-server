@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC 
+	"-//SPRING//DTD BEAN//EN" 
+	"http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="entityIdentify"
+		class="com.topvision.ems.template.service.impl.EntityIdentifyImpl"
+		init-method="initialize" destroy-method="destroy">
+		<property name="entityTypeDao" ref="entityTypeDao"></property>
+	</bean>
+
+	<bean id="entityTypeService"
+		class="com.topvision.ems.template.service.impl.EntityTypeServiceImpl"
+		init-method="initialize" destroy-method="destroy">
+		<property name="entityTypeDao" ref="entityTypeDao" />
+		<property name="resourceCategoryDao" ref="resourceCategoryDao" />
+	</bean>
+
+    <bean id="configWorkService"
+		class="com.topvision.ems.template.service.impl.ConfigWorkServiceImpl"
+		init-method="initialize" destroy-method="destroy">
+        <property name="messageService" ref="messageService" />
+    </bean>
+</beans>

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.network.domain.BatchAutoDiscoveryIps">
+
+	<select id="getAutoDiscoveryPeriodConfigs" resultType="autoDiscoveryPeriodConfig">
+		select
+		strategyType periodType, periodStart periodStartTime, period, active
+		activating from batchautodiscoveryperiod
+	</select>
+
+	<select id="getAutoDiscoveryIps" resultType="batchAutoDiscoveryIps">
+		select id, ipInfo, folderId, autoDiscovery from batchautodiscoveryips
+	</select>
+
+	<select id="getAutoDiscoverySnmpConfigs" resultType="batchAutoDiscoverySnmpConfig">
+		select * from batchautodiscoverysnmpconfig
+	</select>
+
+	<select id="getAutoDiscoverySysObjectId" resultType="string">
+		select sysObjectId from entityType inner join batchautodiscoveryentitytype
+		using(typeId)
+	</select>
+
+	<select id="queryAllDiscoveryIps"  parameterType="map" resultType="batchAutoDiscoveryIps">
+		SELECT a.* ,b.name folderName
+		FROM batchautodiscoveryips a
+		left join topofolder b on a.folderId = b.folderId
+		WHERE 1=1
+		<if test="queryName!=null">
+		AND (a.ipInfo LIKE '%${queryName}%' OR a.name LIKE '%${queryName}%')
+		</if>
+		<if test="sort != null and dir != null">
+		ORDER BY ${sort} ${dir}
+		</if>
+	</select>
+	
+	<select id="queryDeviceInfoByIps" parameterType="map" resultType="ipSegmentInfo"  flushCache = "true"> 
+		SELECT count(*) totalNum,
+			ifnull(sum(case C.state when 1 then 1 end),0) onlineNum,
+			ifnull(sum(case C.state when 0 then 1 end),0) offineNum
+		FROM entity B 
+			LEFT JOIN entity P on B.parentId=P.entityid 
+			LEFT JOIN entitysnap C on B.entityid = C.entityId
+		WHERE B.typeId in (select typeId from entitytyperelation where type = 30000)
+		 and B.entityId in (select entityId from ${Authority})
+		<if test="ipList != null">
+			and (P.ip in
+				<foreach item="item" index="index" collection="ipList" open="(" separator="," close=")">
+					#{item}
+  				</foreach>
+  			OR B.ip in 
+  				<foreach item="item" index="index" collection="ipList" open="(" separator="," close=")">
+					#{item}
+  				</foreach>
+			)
+		</if>
+	</select>
+	
+	<select id="queryDeviceByIpSegment" parameterType="map" resultType="entitySnap"> 
+		SELECT 
+			b.entityId, 
+			c.state,
+			B.typeId,
+			B.name,
+			cmc.topCcmtsSysMacAddr mac,
+			IFNULL(B.ip,P.ip) ip
+		FROM
+			entity B 
+			LEFT JOIN entity P on b.parentId=P.entityid
+			LEFT JOIN entitysnap C on b.entityid=c.entityId 
+			LEFT JOIN cmcAttribute cmc on B.entityId = cmc.cmcId
+		WHERE b.typeId in (select typeId from entitytyperelation where type = 30000)
+		 	  and B.entityId in (select entityId from ${Authority})
+		<if test="list != null">
+			and (P.ip in
+				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+					#{item}
+  				</foreach>
+  			OR B.ip in 
+  				<foreach item="item" index="index" collection="list" open="(" separator="," close=")">
+					#{item}
+  				</foreach>
+			)
+		</if>
+	</select>
+	
+	<select id="queryAllTypeIds" resultType = "batchAutoDiscoveryEntityType">
+		SELECT a.typeId,b.displayname typeName,b.sysObjectID sysObjectId
+		FROM batchautodiscoveryentitytype a,entityType b
+		where a.typeId = b.typeId
+	</select>
+	
+	<select id="querySnmpConfigs" resultType = "batchAutoDiscoverySnmpConfig">
+		select * from batchautodiscoverysnmpConfig
+	</select>
+
+	<select id="queryPeriod" resultType = "batchAutoDiscoveryPeriod">
+		select * from batchautodiscoveryperiod
+	</select>
+	
+	<select id="getIpsByIds" parameterType="map" resultType="batchAutoDiscoveryIps">
+		SELECT a.* ,b.name folderName
+		FROM batchautodiscoveryips a
+		left join topofolder b on a.folderId = b.folderId
+		where a.id in 
+		<foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<select id="queryNetSegmentById" parameterType="long" resultType="batchAutoDiscoveryIps">
+		SELECT a.* ,b.name folderName
+		FROM batchautodiscoveryips a
+		left join topofolder b on a.folderId = b.folderId
+		where a.id = #{id}
+	</select>
+	
+	<select id="querySnmpConfigById" parameterType="long" resultType="batchAutoDiscoverySnmpConfig">
+		select * from batchautodiscoverysnmpConfig where id=#{id}
+	</select>
+	
+	<insert id="insertNetSegmet" parameterType="batchAutoDiscoveryIps">
+		INSERT INTO
+		batchautodiscoveryips
+		(ipInfo,name,folderId,autoDiscovery,createtime,lastDiscoveryTime)
+		VALUES
+		(#{ipInfo},#{name},#{folderId},#{autoDiscovery},#{createtime},#{lastDiscoveryTime})
+	</insert>
+
+	<insert id="insertSnmpConfig" parameterType="batchAutoDiscoverySnmpConfig">
+		INSERT INTO
+		batchautodiscoverysnmpConfig
+		(name,readCommunity,writeCommunity,version,username,authProtocol,
+		authPassword,privProtocol,privPassword)
+		VALUES
+		(#{name},#{readCommunity},#{writeCommunity},#{version},#{username},#{authProtocol},
+		#{authPassword},#{privProtocol},#{privPassword})
+	</insert>
+
+	<insert id="insertTypeId" parameterType="long">
+		INSERT INTO batchautodiscoveryentitytype(typeId)
+		VALUES(#{typeId})
+	</insert>
+	
+	<update id="updateNetSegment" parameterType="batchAutoDiscoveryIps">
+		UPDATE
+		batchautodiscoveryips 
+		SET ipInfo = #{ipInfo},
+		name = #{name} ,
+		folderId = #{folderId},
+		autoDiscovery = #{autoDiscovery} 
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateSnmpConfig" parameterType="batchAutoDiscoverySnmpConfig">
+		UPDATE
+		batchautodiscoverysnmpConfig 
+		SET name = #{name},
+		readCommunity = #{readCommunity} ,
+		writeCommunity = #{writeCommunity},
+		version = #{version},
+		username = #{username},
+		authProtocol = #{authProtocol},
+		authPassword = #{authPassword},
+		privProtocol = #{privProtocol},
+		privPassword = #{privPassword}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="updateLastAutoDiscoveryTime" parameterType="batchAutoDiscoveryIps">
+		UPDATE
+		batchautodiscoveryips
+		SET lastDiscoveryTime = #{lastDiscoveryTime}
+		WHERE id = #{id}
+	</update>
+
+	<update id="updatePeriod" parameterType="batchAutoDiscoveryPeriod">
+		UPDATE batchautodiscoveryperiod
+		SET strategyType = #{strategyType},
+		periodStart = #{periodStart},
+		period = #{period}
+	</update>
+	
+	<update id="updateAutoDiscovery" parameterType="batchAutoDiscoveryIps">
+		UPDATE
+		batchautodiscoveryips
+		SET autoDiscovery = #{autoDiscovery}
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="batchDeleteNetSegment" parameterType="list">
+		DELETE FROM 
+			batchautodiscoveryips
+		WHERE 
+			id in
+		<foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+
+	<delete id="deleteSnmpConfig" parameterType="long">
+		Delete from batchautodiscoverysnmpConfig
+		where id = #{id}
+	</delete>
+	
+	<delete id="deleteTypeIds">
+		Delete from batchautodiscoveryentitytype
+	</delete>
+	
+</mapper>

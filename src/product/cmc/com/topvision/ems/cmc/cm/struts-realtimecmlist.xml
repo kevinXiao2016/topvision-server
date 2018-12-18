@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="realtimecmlist" namespace="/realtimecmlist" extends="default">
+        <action name="showRealtimeCmList" class="realtimeCmListAction" method="showRealtimeCmList">
+            <result>/cmc/realtimeCmList.jsp</result>
+        </action>
+        <action name="loadRealtimeCmList" class="realtimeCmListAction" method="loadRealtimeCmList"/>
+        <action name="loadUpChannelSnr" class="realtimeCmListAction" method="loadUpChannelSnr"/>
+        <action name="loadCmSignal" class="realtimeCmListAction" method="loadCmSignal"/>
+        
+        <action name="showRealtimeCpeList" class="realtimeCmListAction" method="showRealtimeCpeList">
+            <result>/cmc/realtimeCpeList.jsp</result>
+        </action>
+        <action name="loadRealtimeCpeList" class="realtimeCmListAction" method="loadRealtimeCpeList"/>
+    </package>
+</struts>

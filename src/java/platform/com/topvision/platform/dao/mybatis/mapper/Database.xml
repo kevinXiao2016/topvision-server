@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.platform.domain.DatabaseInfo">
+	<delete id="cleanHistoryAlertData" parameterType="org.apache.commons.net.ntp.TimeStamp">
+         <![CDATA[DELETE FROM HistoryAlert WHERE clearTime < #{time}]]>
+	</delete>
+
+	<select id="fetchTableCount" parameterType="String" resultType="int">
+		select count(*) from ${value}
+    </select>
+    
+    
+    <select id="cleanHistoryData" statementType="CALLABLE" parameterType="Integer" resultType="HashMap">  
+       <![CDATA[{call autoClearHistoryData(#{keepMonth, mode=IN, jdbcType=NUMERIC})}]]>  
+    </select>  
+    
+    
+    <select id="getHistoryKeepMonth" resultType="int"> 
+       select value from systempreferences where name = 'historyDataKeepMonth' and module='DataBase' 
+    </select>  
+    
+    <update id="updateHistoryKeepMonth" parameterType="Integer">
+       update systempreferences set value = #{keepMonth}  where name = 'historyDataKeepMonth' and module='DataBase' 
+    </update>
+    
+</mapper>

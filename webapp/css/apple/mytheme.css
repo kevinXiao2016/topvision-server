@@ -1,0 +1,338 @@
+A:hover {
+	text-decoration: underline;
+}
+
+.checkedItem {
+	background: url(menu/checked.gif) no-repeat;
+}
+
+.NAVI_WND {
+	background: #AEAEAE url(nc_bg.gif);
+}
+
+.NAVI_BAR {
+	background: url(navi_sprites.gif) 0 0;
+}
+
+.NAVI_BAR_OVER {
+	background: url(navi_sprites.gif) 0 -32px;
+}
+
+.NAVI_BAR_PRESSED {
+	background: url(navi_sprites.gif) 0 -64px;
+}
+
+.NAVI_BAR_SELECTED {
+	background: url(navi_sprites.gif) 0 -96px;
+}
+
+.NAVI_BT_OVER {
+	background: url(navi_sprites.gif) 0 -158px;
+}
+
+.NAVI_BT_PRESSED {
+	background: url(navi_sprites.gif) 0 -188px;
+}
+
+.NAVI_BT_SELECTED {
+	background: url(navi_sprites.gif) 0 -218px;
+}
+
+.NAVI_DIVIDER,.NAVI_DIVIDER_OVER {
+	background: url(navi_sprites.gif) 0 -248px;
+	border-top: 1px solid #8B8B8B;
+	border-bottom: 1px solid #8B8B8B;
+}
+
+.NAVI_TREE_CONTAINER {
+	border-top: 1px solid gray;
+	border-bottom: 1px solid gray;
+}
+
+.NAVI_SEPARATOR {
+	background: url(nc_bg.gif);
+}
+
+.NAVI_SPACING {
+	display: block;
+	height: 4px;
+}
+
+.NAVI_EXPANDER_UP {
+	background: url(up.gif) 0 0;
+	width: 21px;
+	height: 21px;
+}
+
+.NAVI_EXPANDER_DOWN {
+	background: url(up.gif) 0 -21px;
+	width: 21px;
+	height: 21px;
+}
+
+.NAVI_EXPANDER_LEFT {
+	background: url(l_expander.gif);
+	width: 7px;
+	height: 21px;
+}
+
+.NAVI_EXPANDER_CENTER {
+	background: url(c_expander.gif);
+	height: 21px;
+	padding-top: 2px;
+}
+
+.search_input_focused {
+	color: #000;
+}
+
+.search-arrow-down {
+	border: 0;
+	background: url(search_bg.gif) 0 -42px no-repeat;
+	padding: 1px 0 1px 1px;
+}
+
+.BUTTON75 {
+	background: url(button75.gif) 0 0;
+}
+
+.BUTTON_OVER75 {
+	background: url(button75.gif) 0 -21px;
+}
+
+.BUTTON_PRESSED75 {
+	background: url(button75.gif) 0 -42px;
+}
+
+.BUTTON95 {
+	background: url(button95.gif) 0 0;
+}
+
+.BUTTON_OVER95 {
+	background: url(button95.gif) 0 -21px;
+}
+
+.BUTTON_PRESSED95 {
+	background: url(button95.gif) 0 -42px;
+}
+
+.BUTTON120 {
+	background: url(button120.gif) 0 0;
+}
+
+.BUTTON_OVER120 {
+	background: url(button120.gif) 0 -21px;
+}
+
+.BUTTON_PRESSED120 {
+	background: url(button120.gif) 0 -42px;
+}
+
+.iptxt {
+	padding-top: 2px;
+	border: 1px solid #d8d8d8;
+	background: #FFF;
+}
+
+.iptxt_gray {
+	padding-top: 2px;
+	color: gray;
+	border: 1px solid #d8d8d8;
+	background: #FFF;
+}
+
+.iptxt_focused {
+	padding-top: 2px;
+	border: 1px solid #d8d8d8;
+	background: #FFFFBE;
+}
+
+.iptxa {
+	border: 1px solid #d8d8d8;
+	background: #FFF;
+}
+
+.iptxa_gray {
+	color: gray;
+	border: 1px solid #d8d8d8;
+	background: #FFF;
+}
+
+.iptxa_focused {
+	border: 1px solid #d8d8d8;
+	background: #FFFFBE;
+	overflow: auto;
+}
+
+.row-unselected {
+	color: #000;
+	background-color: #FFF;
+}
+
+.progress-bar {
+	background: #2ed331;
+}
+
+.TREE-CONTAINER {
+	border: 1px solid #d8d8d8;
+}
+
+.PANEL-CONTAINER {
+	border: 1px solid #646464;
+	background: #AEAEAE;
+}
+
+.PREF_HEADER {
+	background: url(pref_header.gif) 0 0 repeat-x;
+}
+
+.WIZARD-HEADER {
+	background: url(wizard_bg.gif);
+	border-bottom: 1px solid #d8d8d8;
+}
+
+.PAGING_TOOLBAR {
+	border-top: solid 1px #646464;
+}
+
+.gm-icon-over {
+	background: url(gm_bg.gif) no-repeat;
+}
+
+.DRAWING-SEPARATOR {
+	border-bottom: 1px solid gray;
+}
+
+.DRAWING-TOOL {
+	background: #AEAEAE;
+	width: 23px;
+	height: 22px;
+}
+
+#monitorMap div a {
+	color: #00156E;
+	text-decoration: none;
+}
+
+#monitorMap div a:hover {
+	color: #00156E;
+	text-decoration: underline;
+}
+
+.cs_CustomColorAdd_Mini {
+	height: 21px;
+	background: url(button155.gif) 0 0;
+}
+
+A,.HEADER_BAR a {
+	color: #000;
+	text-decoration: none;
+}
+
+.POPUP_WND,.BLANK_WND,.REPORT_WND,.CONDITIONVIEW,.DRAWING-CONTAINER {
+	background: #AEAEAE;
+}
+
+.HEADER_BAR a:hover,.STATUS_BAR a:hover,.NAVI_ACTION a:hover,.search_input_gray
+	{
+	color: gray;
+}
+
+.NAVI_BAR td,.NAVI_BAR_OVER td,.NAVI_BAR_PRESSED td,.NAVI_BAR_SELECTED td
+	{
+	color: #3f3d3d;
+	font-weight: 700;
+	border-bottom: 1px solid #8B8B8B;
+}
+
+.NAVI_BT,.NAVI_BT_CONTAINER {
+	background: url(navi_sprites.gif) 0 -128px;
+}
+
+.NAVI_EXPANDER,.NAVI_EXPANDER_OVER {
+	height: 21px;
+	padding-left: 1px;
+	padding-right: 1px;
+}
+
+.NAVI_TASK_OVER .NAVI_TASK_C a:hover,.NAVI_TASK_PRESSED .NAVI_TASK_C a:hover
+	{
+	color: gray;
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.searchBox,.search-bt {
+	border-color: #8C8C8C;
+}
+
+.search-bt-focused,.search-bt-over,.search-bt-down {
+	border-left: 0;
+	width: 16px;
+	background: url(search_bg.gif) 0 0 no-repeat;
+	border-color: #8C8C8C;
+}
+
+.search-arrow,.search-arrow-over,.search-arrow-focused {
+	border: 0;
+	background: url(search_bg.gif) 0 -20px no-repeat;
+	padding: 1px 0 1px 1px;
+}
+
+.row-selected,#topoMap .ui-selected span,#entityMap .ui-selected span {
+	color: #FFF;
+	background-color: #316AC5;
+}
+
+.discovery-container,.progress-container {
+	border: solid 1px #d8d8d8;
+}
+
+.DRAWING-TOOL-OVER,.DRAWING-TOOL-PRESSED {
+	background: #AEAEAE url(tools_sprites.gif) 0 0 no-repeat;
+	width: 23px;
+	height: 22px;
+}
+
+.DRAWING-TOOL-SELECTED,.DRAWING-TOOL-SELECTED-OVER {
+	background: url(tools_sprites.gif) 0 0 no-repeat;
+	width: 23px;
+	height: 22px;
+}
+
+.cs_ButtonOk,.cs_ButtonCancel {
+	background: url(button75.gif) 0 0;
+	height: 21px;
+}
+
+.selectedTreeRow,.dhx_selected_option {
+	background-color: #316AC5;
+	color: #FFF;
+}
+
+.dhx_combo_list,.dhx_combo_list_rtl {
+	height: 200px;
+}
+
+.ultab {
+	background: url(tab_bg.png) repeat-x 50% bottom;
+}
+
+.ultab li {
+	background: url(tab_l_off.png) no-repeat left top;
+}
+
+.ultab a {
+	background: url(tab_r_off.png) no-repeat right top;
+}
+.ultab .selected {
+	background-image: url(tab_l_on.png);
+}
+
+.ultab .selected a {
+	background-image: url(tab_r_on.png);
+}
+
+.microContainer {
+	border-color: #646464;
+}

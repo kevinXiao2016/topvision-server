@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.ponprotect.domain.OltPonProtect">
+	<!-- 刷新设备/发现设备时批量添加pon保护数据,此domain为facade的domain -->
+	<insert id="insertPonProtectConfig" parameterType="oltPonProtectConfig">
+		INSERT INTO
+			topPonPSGrpConfig(
+				entityId,
+				alias,
+				topPonPSGrpIndex,
+				topPonPsGrpAdmin,
+				topPonPSWorkPortItem,
+				topPonPSWorkPortIndex,
+				topPonPsWorkPortStatus,
+				topPonPSStandbyPortItem,
+				topPonPSStandbyPortIndex,
+				topPonPsStandbyPortStatus,
+				topPonPsTimes,
+				topPonPsLastSwitchTime,
+				topPonPsReason
+		)VALUES(
+			#{entityId},
+			#{alias},
+			#{topPonPSGrpIndex},
+			#{topPonPsGrpAdmin},
+			#{topPonPSWorkPortItem},
+			#{topPonPSWorkPortIndex},
+			#{topPonPsWorkPortStatus},
+			#{topPonPSStandbyPortItem},
+			#{topPonPSStandbyPortIndex},
+			#{topPonPsStandbyPortStatus},
+			#{topPonPsTimes},
+			#{topPonPsLastSwitchTime},
+			#{topPonPsReason}
+		)
+	</insert>
+
+	<select id="loadPPGList" resultType="oltPonProtectConfig" parameterType="long">
+		SELECT
+			alias,
+			entityId,
+			topPonPSGrpIndex,
+			topPonPsGrpAdmin,
+			topPonPSWorkPortItem,
+			topPonPSWorkPortIndex,
+			topPonPsWorkPortStatus,
+			topPonPSStandbyPortItem,
+			topPonPSStandbyPortIndex,
+			topPonPsStandbyPortStatus,
+			topPonPsTimes,
+			topPonPsLastSwitchTime,
+			topPonPsReason
+		FROM
+			topPonPSGrpConfig
+		WHERE
+			entityId = #{entityId}
+	</select>	
+	<select id="loadPPGArray" resultType="int" parameterType="long">
+		SELECT
+			topPonPSGrpIndex
+		FROM
+			topPonPSGrpConfig
+		WHERE
+			entityId = #{entityId}
+	</select>
+	<select id="loadAvialPorts" resultType="long" parameterType="map">
+		SELECT ponIndex
+		FROM   oltponrelation A, oltponattribute B
+		WHERE  A.entityId = #{entityId} AND A.ponId = B.ponId AND B.ponPortType != 2
+		AND ponIndex  NOT IN (select topPonPSWorkPortIndex
+			from topPonPSGrpConfig
+			where entityId = #{entityId} and topPonPSWorkPortIndex IS NOT NULL)
+		AND ponIndex  NOT IN (select topPonPSStandbyPortIndex
+			from topPonPSGrpConfig
+			where entityId = #{entityId} and topPonPSStandbyPortIndex IS NOT NULL)
+		<if test="selectedPonIndex != null and selectedPonIndex != '' ">
+				AND ponIndex != #{selectedPonIndex}
+		</if>
+	</select>
+	<!-- 由于添加PON保护组的时候保护组是可能没有任何激活端口的，但是使能后会有激活端口，所以需要把所有相关的信息都存入DB -->
+	<update id="updatePonProtectAdmin" parameterType="oltPonProtectConfig">
+		UPDATE
+			topPonPSGrpConfig
+		SET
+			topPonPsGrpAdmin = #{topPonPsGrpAdmin},
+			topPonPsWorkPortStatus = #{topPonPsWorkPortStatus},
+			topPonPsStandbyPortStatus = #{topPonPsStandbyPortStatus},
+			topPonPsTimes = #{topPonPsTimes},
+			topPonPsLastSwitchTime = #{topPonPsLastSwitchTime},
+			topPonPsReason = #{topPonPsReason}
+		WHERE
+			entityId = #{entityId} and topPonPSGrpIndex = #{topPonPSGrpIndex}
+	</update>
+	
+	<!-- 手动倒换后修改倒换信息 -->
+	<update id="updateSwitchInfo" parameterType="oltPonProtectConfig">
+		UPDATE
+			topPonPSGrpConfig
+		SET
+			topPonPsGrpAdmin = #{topPonPsGrpAdmin},
+			topPonPsWorkPortStatus = #{topPonPsWorkPortStatus},
+			topPonPsStandbyPortStatus = #{topPonPsStandbyPortStatus},
+			topPonPsTimes = #{topPonPsTimes},
+			topPonPsLastSwitchTime = #{topPonPsLastSwitchTime},
+			topPonPsReason = #{topPonPsReason}
+		WHERE
+			entityId = #{entityId} and topPonPSGrpIndex = #{topPonPSGrpIndex}
+	</update>
+
+	<delete id="deletePPG" parameterType="map">
+		DELETE FROM 
+			topPonPSGrpConfig
+		WHERE
+			topPonPSGrpIndex = #{ppgId}
+		AND entityId = #{entityId}
+	</delete>
+	<!-- 批量插入之前先把某一设备下的所有pon保护数据都删除 -->
+	<delete id="deleteAllPonProtectConfigs" parameterType="long">
+		DELETE FROM 
+			topPonPSGrpConfig
+		WHERE
+			entityId = #{entityId}
+	</delete>
+	
+	<delete id="deleteOltPonProtect" parameterType="map">
+		DELETE FROM
+		oltponprotect
+		WHERE
+		entityId = #{entityId} and protectId = #{protectId}
+	</delete>
+
+</mapper>

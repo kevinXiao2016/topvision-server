@@ -1,0 +1,58 @@
+.POPUP_WND {
+	background: #dfe8f6;
+}
+
+.NAVI_SEPARATOR {
+	height: 1px;
+	background: #ADD1FF;
+}
+
+.NAVI_BAR td {
+	border-top: 1px solid #98c0f4;
+	cursor: pointer;
+}
+
+.NAVI_BAR_OVER td {
+	border-top: 1px solid #98c0f4;
+	cursor: pointer;
+	background: #dfe8f6;
+}
+
+.NAVI_BAR_PRESSED td {
+	border-top: 1px solid #98c0f4;
+	cursor: pointer;
+	background: #dfe8f6;
+}
+
+.NAVI_BAR_SELECTED td {
+	border-top: 1px solid #98c0f4;
+	cursor: pointer;
+	background: #dfe8f6;
+}
+
+.NAVI_BT_CONTAINER {
+	cursor: pointer;
+	border-top: 1px solid #8db2e3;
+}
+
+.NAVI_BT_PRESSED {
+	background: #dfe8f6;
+}
+
+.NAVI_BT_SELECTED {
+	background: #dfe8f6;
+}
+
+.NAVI_BT_OVER {
+	background: #dfe8f6;
+}
+
+.NAVI_TASK_OVER .NAVI_TASK_C a:hover {
+	cursor: pointer;
+	TEXT-DECORATION: underline;
+}
+
+.row-selected,#topoMap .ui-selected span,#entityMap .ui-selected span {
+	color: #FFF;
+	background-color: #316AC5;
+}

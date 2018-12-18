@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="devicePerfTarget">
+	<select id="queryDevice" resultType="long" parameterType="map">
+		select 
+			DISTINCT(A.entityId) 
+		from 
+			entity A
+			left join entity B on A.parentId = B.entityId
+		where 
+			A.typeId in (select typeId from entitytyperelation where type = #{parentType})
+			and A.typeId != -1 
+		<if test="folderId != null and folderId != ''">
+            and A.entityId in (select entityId from EntityFolderRela where EntityFolderRela.folderId = #{folderId})
+        </if>
+        <if test="folderId == null or folderId == ''">
+			and A.entityId in (select entityId from ${authority})
+		</if>
+		<if test="deviceName != null and deviceName != ''">
+			and A.name like '%${deviceName}%'
+		</if>
+		<if test="manageIp != null and manageIp != ''">
+			and IFNULL(A.ip,CONCAT(B.name,'(',B.ip,')')) like '%${manageIp}%' 
+		</if>
+		<if test="typeId != null and typeId != ''">
+			and A.typeId = #{typeId}
+		</if>
+		ORDER BY A.typeId ASC
+		limit #{start} , #{limit}
+	</select>
+	
+	<!-- 查询指定类型的设备性能数据列表-->
+	<select id="queryDevicePerfList" resultType="DevicePerfTarget" parameterType="map">
+		select 
+			B.*, 
+			A.name as deviceName, 
+			e.displayName,
+			IFNULL(A.ip,et.ip) AS manageIp,
+			IFNULL(A.ip,CONCAT(et.name,'(',et.ip,')')) AS uplinkDevice,
+			et.entityId AS parentId, et.name AS parentName, et.typeId AS parentTypeId
+		from 
+			entity A
+			left join entity et on A.parentId = et.entityId
+			left join deviceperfcollecttime B on A.entityId = B.entityId
+			left join entityType e on a.typeId = e.typeId
+		where 
+			B.parentType = #{parentType} and B.entityId = #{entityId} 
+		<if test="perfTargetName != null and perfTargetName != ''">
+			<!-- 只查询具体的性能指标 -->
+			and B.perfTargetName = #{perfTargetName}
+		</if>
+	</select>
+	
+	<!-- 查询满足条件的设备数量 -->
+	<select id="queryDeviceNum" resultType="int" parameterType="map">
+		select 
+			COUNT(DISTINCT A.entityId) 
+		from 
+			entity A
+			left join entity B on A.parentId = B.entityId
+		where 
+			A.typeId in (select typeId from entitytyperelation where type = #{parentType})
+			and A.typeId != -1 
+			and A.entityId in (select entityId from ${authority})
+		<if test="deviceName != null and deviceName != ''">
+			and A.name like '%${deviceName}%'
+		</if>
+		<if test="manageIp != null and manageIp != ''">
+			and IFNULL(A.ip,CONCAT(B.name,'(',B.ip,')')) like '%${manageIp}%' 
+		</if>
+		<if test="typeId != null and typeId != ''">
+			and A.typeId = #{typeId}
+		</if>
+	</select>
+	
+	<!-- 查询具体设备的性能指标参数 -->
+	<select id="queryDevicePerfTarget" resultType="DevicePerfTarget" parameterType="long">
+		select A.*, B.targetGroup from deviceperfcollecttime A, globalperfcollecttime B
+		where A.entityId = #{entityId} and A.entityType = B.entityType and A.perfTargetName = B.perfTargetName
+		order by B.groupPriority
+	</select>
+	
+	<!-- 查询指定类型的全局性能指标 -->
+	<select id="queryGlobalPerfTarget" resultType="DevicePerfTarget" parameterType="long">
+		select * from globalperfcollecttime
+		where entityType = #{entityType} order by groupPriority
+	</select>
+	
+	<!-- 查询设备的性能指标以及对应的全局性能指标 -->
+	<select id="queryDeviceGlobalPerf" resultType="DevicePerfTarget" parameterType="long">
+		select A.*, B.globalInterval, B.globalEnable, B.targetGroup
+	    from deviceperfcollecttime A, globalperfcollecttime B
+	    where A.entityId = #{entityId} and A.entityType = B.entityType and A.perfTargetName = B.perfTargetName
+	    order by B.groupPriority
+	</select>
+	
+	<!-- 查询支持具体性能指标的所有设备 -->
+	<select id="querySupportTargetDevice" resultType="long" parameterType="map">
+		select 
+			A.entityId
+		from 
+			entity A
+			left join entity B on A.parentId = B.entityId
+			left join deviceperfcollecttime C on C.entityId = A.entityId
+		where  
+			C.parentType = #{parentType} and  C.perfTargetName = #{perfTargetName} 
+			and A.typeId in (select typeId from entitytyperelation where type = #{parentType})
+		    and A.entityId in (select entityId from ${authority})
+		<if test="deviceName != null and deviceName != ''">
+			and A.name like '%${deviceName}%'
+		</if>
+		<if test="manageIp != null and manageIp != ''">
+			and IFNULL(A.ip,CONCAT(B.name,'(',B.ip,')')) like '%${manageIp}%' 
+		</if>
+		<if test="typeId != null and typeId != ''">
+			and A.typeId = #{typeId}
+		</if>
+		limit #{start} , #{limit}
+	</select>
+	
+	<!-- 根据具体的设备类型和组名查找性能指标 -->
+	<select id="queryTargetByTypeIdAndGroup" resultType="DevicePerfTarget" parameterType="map">
+		select A.*, B.globalInterval, B.globalEnable 
+		from deviceperftarget A, globalperfcollecttime B 
+		where A.typeId = #{typeId} and A.targetGroup = #{targetGroup} 
+		and A.entityType = B.entityType and A.perfTargetName = B.perfTargetName
+		order by B.groupPriority
+	</select>
+	
+	<!-- 查询支持具体性能指标的所有设备数量 -->
+	<select id="querySupportTargetDeviceNum" resultType="int" parameterType="map">
+		select 
+			count(*)
+		from 
+			entity A
+			left join entity B on A.parentId = B.entityId
+			left join deviceperfcollecttime C on C.entityId = A.entityId 
+		where  
+			C.parentType = #{parentType} and C.perfTargetName = #{perfTargetName} 
+			and A.typeId in (select typeId from entitytyperelation where type = #{parentType})
+			and A.typeId != -1 
+			and A.entityId in (select entityId from ${authority})
+		<if test="deviceName != null and deviceName != ''">
+			and A.name like '%${deviceName}%'
+		</if>
+		<if test="manageIp != null and manageIp != ''">
+			and IFNULL(A.ip,CONCAT(B.name,'(',B.ip,')')) like '%${manageIp}%' 
+		</if>
+		<if test="typeId != null and typeId != ''">
+			and A.typeId = #{typeId}
+		</if>
+	</select>
+	
+	<!-- 查询具体设备类型所支持的性能指标 -->
+	<select id="queryDeviceSupportTarget" resultType="DevicePerfTarget" parameterType="long">
+		select A.*, B.globalInterval, B.globalEnable 
+		from deviceperftarget A, globalperfcollecttime B 
+		where A.typeId = #{typeId} and A.entityType = B.entityType and A.perfTargetName = B.perfTargetName
+		order by B.groupPriority
+	</select>
+	
+	<!-- 查询指定类型或指定子类的设备性能指标数据 -->
+	<select id="queryDevicePerfByType" resultType="DevicePerfTarget" parameterType="map">
+		select A.*, B.name as deviceName, 
+		IFNULL(ip,(SELECT e2.ip FROM entity e1, entity e2 WHERE e1.parentId=e2.entityId AND e1.entityId=B.entityId )) AS manageIp
+		from deviceperfcollecttime A, entity B
+		where A.entityType = #{entityType} and A.entityId = B.entityId
+		<if test="typeId != null and typeId != ''">
+			and A.typeId = #{typeId}
+		</if>
+	</select>
+	
+	<!-- 根据设备类型和组名查询全局性能指标 -->
+	<select id="queryGroupTargetByType" resultType="DevicePerfTarget" parameterType="map">
+		select * from globalperfcollecttime where entityType = #{entityType} and targetGroup = #{targetGroup}
+	</select>
+	
+	<!-- 根据设备类型和指标名称查询全局性能指标 -->
+	<select id="queryGlobalTargetByType" resultType="DevicePerfTarget" parameterType="map">
+		select * from globalperfcollecttime where entityType = #{entityType} and perfTargetName = #{perfTargetName}
+	</select>
+	
+	<!-- 查询指定设备的指定的性能指标数据 -->
+	<select id="queryDeviceSingleTarget" resultType="DevicePerfTarget" parameterType="map">
+		select A.*, B.name as deviceName, 
+		IFNULL(ip,(SELECT e2.ip FROM entity e1, entity e2 WHERE e1.parentId=e2.entityId AND e1.entityId=B.entityId )) AS manageIp
+		from deviceperfcollecttime A, entity B
+		where A.perfTargetName = #{perfTargetName} and A.entityId in(${entityIds}) and A.entityId = B.entityId
+	</select>
+	
+	<select id="queryTargetByTypeIdAndName" resultType="DevicePerfTarget" parameterType="map">
+		select A.*, B.globalInterval, B.globalEnable 
+		from deviceperftarget A, globalperfcollecttime B 
+		where A.typeId = #{typeId} and A.perfTargetName = #{targetName} 
+		and A.entityType = B.entityType and A.perfTargetName = B.perfTargetName
+	</select>
+	
+	<select id="queryColIntervalByIdAndName" resultType="int" parameterType="map">
+		select a.collectInterval from deviceperfcollecttime a 
+		where a.entityId =#{entityId} and a.perftargetName = #{targetName};
+	</select>
+	
+	<!-- 更新某一类型的设备性能指标数据 -->
+	<update id="udpateDevicePerfByType" parameterType="DevicePerfTarget">
+		update deviceperfcollecttime 
+		set collectInterval = #{collectInterval}, targetEnable = #{targetEnable}
+		where entityType = #{entityType} and perfTargetName = #{perfTargetName}
+	</update>
+	
+	<!-- 更新指定的子类型的设备性能指标数据 -->
+	<update id="updateDevicePerfByTypeId" parameterType="DevicePerfTarget">
+		update deviceperfcollecttime 
+		set collectInterval = #{collectInterval}, targetEnable = #{targetEnable}
+		where typeId = #{typeId} and perfTargetName = #{perfTargetName}
+	</update>
+	
+	<!-- 更新设备性能指标 -->
+	<update id="updateDevicePerfTarget" parameterType="DevicePerfTarget">
+		update deviceperfcollecttime 
+		set collectInterval = #{collectInterval}, targetEnable = #{targetEnable}
+		where entityId = #{entityId} and perfTargetName = #{perfTargetName}
+	</update>
+	
+	<!-- 更新全局性能指标 -->
+	<update id="updateGlobalPerfTarget" parameterType="DevicePerfTarget">
+		update globalperfcollecttime
+		set globalInterval = #{collectInterval}, globalEnable = #{targetEnable}
+		where perfTargetName = #{perfTargetName} and parentType = #{parentType}
+	</update>
+	
+	<!-- 插入设备性能指标数据,数据来自全局对应字段 -->
+	<insert id="insertDevicePerfData" parameterType="DevicePerfTarget">
+		insert into deviceperfcollecttime(entityId, perfTargetName, collectInterval, targetEnable, entityType, typeId)
+		values (#{entityId}, #{perfTargetName}, #{globalInterval}, #{globalEnable}, #{entityType}, #{typeId})
+	</insert>
+	
+	<!-- 插入设备性能指标数据 -->
+	<insert id="insertDevicePerfTarget" parameterType="DevicePerfTarget">
+		insert into deviceperfcollecttime(entityId, perfTargetName, collectInterval, targetEnable, parentType, entityType, typeId)
+		values (#{entityId}, #{perfTargetName}, #{collectInterval}, #{targetEnable}, #{parentType}, #{entityType}, #{typeId})
+	</insert>
+	
+	<!-- 插入全局性能指标数据 -->
+	<insert id="insertGLobalPerf" parameterType="DevicePerfTarget">
+		insert into globalperfcollecttime(perfTargetName, entityType, globalInterval, globalEnable, targetGroup)
+		values(#{perfTargetName}, #{entityType}, #{globalInterval}, #{globalEnable}, #{targetGroup})
+	</insert>
+	
+	<delete id="deleteTargetCollectTime" parameterType="map">
+		delete from deviceperfcollecttime
+		where entityId = #{entityId} and perfTargetName = #{perfTargetName}
+	</delete>
+	
+	<select id="querySpecialTargetCount" parameterType="map" resultType="int">
+		select count(0) from deviceperfcollecttime
+		where entityId = #{entityId} and perfTargetName = #{perfTargetName}
+	</select>
+	
+	<select id="getManageIpById" parameterType="long" resultType="String">
+		SELECT e2.ip FROM entity e1, entity e2 WHERE e1.parentId = e2.entityId AND e1.entityId=#{entityId}
+	</select>
+	
+	<select id="getTargetEnableStatus" parameterType="map" resultType="int">
+		SELECT targetEnable FROM `deviceperfcollecttime` WHERE entityId = #{entityId} and perfTargetName = #{perfTargetName}
+	</select>
+	
+</mapper>

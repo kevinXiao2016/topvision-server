@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="cmlist" namespace="/cmlist" extends="default">
+    	<!-- CmAction -->
+        <action name="showCmListPage" class="cmListAction" method="showCmListPage">
+        	<result>/cm/view/cmList.jsp</result>
+        </action>
+        
+        <action name="showCmCpeInfo" class="cmListAction" method="showCmCpeInfo">
+            <result>/cmc/cmCpeInfo.jsp</result>
+        </action>
+        <action name="loadCmCollectMode" class="cmListAction" method="loadCmCollectMode"></action>
+        <action name="loadCmCpeList" class="cmListAction" method="loadCmCpeList"></action>
+        <action name="loadDeviceListByTypeId" class="cmListAction" method="loadDeviceListByTypeId"></action>
+        <action name="loadDeviceListByType" class="cmListAction" method="loadDeviceListByType"></action>
+        
+        <action name="loadPonOfOlt" class="cmListAction" method="loadPonOfOlt" />
+        <action name="loadCcmtsOfPon" class="cmListAction" method="loadCcmtsOfPon" />
+        <action name="loadUpDownChlOfCmts" class="cmListAction" method="loadUpDownChlOfCmts" />
+        
+        <action name="loadCmList" class="cmListAction" method="loadCmList" />
+        <action name="loadCmLocationInfo" class="cmListAction" method="loadCmLocationInfo" />
+        <action name="loadCmNum" class="cmListAction" method="loadCmNum" />
+        <action name="refreshAllOnLineCm" class="cmListAction" method="refreshAllOnLineCm" />
+        <action name="refreshCm" class="cmListAction" method="refreshCm" />
+        
+        <action name="getCmByCmcId" class="cmListAction" method="getCmByCmcId" />
+        <action name="loadCmNumUnderCcmts" class="cmListAction" method="loadCmNumUnderCcmts"></action>
+        <action name="refreshCmSignal" class="cmListAction" method="refreshCmSignal"></action>
+        <action name="resetOnLineCm" class="cmListAction" method="resetOnLineCm"></action>
+        <action name="refreshCmList" class="cmListAction" method="refreshCmList"></action>
+        <action name="clearSingleCM" class="cmListAction" method="clearSingleCM"></action>
+        <action name="showPartitionSelect" class="cmListAction" method="showPartitionSelect">
+        	<result>/cmc/partitionSelect.jsp</result>
+        </action>
+        <action name="showPartitionSelect2" class="cmListAction" method="showPartitionSelect2">
+            <result>/cmc/partitionSelect2.jsp</result>
+        </action>
+        
+        <action name="loadCmcVersion" class="cmListAction" method="loadCmcVersion"></action>
+        <action name="saveCmQueryView" class="cmListAction" method="saveCmQueryView"></action>
+    </package>
+</struts>

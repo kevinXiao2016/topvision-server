@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcportal" namespace="/cmc" extends="default">
+		<!-- 添加操作日志拦截器配置 -->
+
+        <action name="entityPortal" class="cmcPortalAction" method="entityPortal">
+            <result type="redirect">/cmc/showCmcPortal.tv?cmcId=${cmcId}</result>
+            <result name="disconnect">/cmc/cmcConfigDisconnect.jsp</result>
+        </action>
+        <action name="showCmcPortal" class="cmcPortalAction" method="showCmcPortal">
+            <result>/cmc/newCmcPortal.jsp</result>
+            <result name="unManaged" type="redirect">${redirectURL}</result>
+            <result name="notComplete">/notComplete.jsp</result>
+            <result name="cmts">/cmts/newCmtsPortal.jsp</result>
+        </action>
+        <action name="showCmcEntityById" class="cmcPortalAction" method="showCmcEntityById">
+            <result>/cmc/cmcEntityConfig.jsp</result>
+        </action>
+        <action name="entityPortalCancel" class="cmcPortalAction" method="showCmcCancelJsp">
+            <result>/cmc/cmcCanceled.jsp</result>
+        </action>
+        <action name="savePortalView" class="cmcPortalAction" method="savePortalView"></action>
+	</package>
+</struts>

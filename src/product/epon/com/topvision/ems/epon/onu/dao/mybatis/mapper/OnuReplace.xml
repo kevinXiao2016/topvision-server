@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.onu.domain.OnuReplaceEntry">
+
+	<select id="getOnuMacListByEntityId" parameterType="long"
+		resultType="entity">
+		select
+		entity.name,entity.mac,entity.typeId,oltonurelation.onuIndex location
+		from entity,
+		oltonuattribute,
+		oltonurelation where
+		entity.entityId=oltonuattribute.onuId and oltonuattribute.onuId =
+		oltonurelation.onuId and
+		oltonurelation.entityId = #{entityId}
+	</select>
+
+
+	<select id="getOnuSnListByEntityId" parameterType="long"
+		resultType="oltAuthenSnInfo">
+		select entityId, onuIndex, topOnuAuthLogicSn from
+		oltauthentication
+		where entityId = #{entityId} and topOnuAuthLogicSn is
+		not null
+	</select>
+
+	<select id="getOnuAttributeByMacAddress" parameterType="map"
+		resultType="oltOnuAttribute">
+		select oltonuattribute.*, oltonurelation.onuIndex,
+		oltonurelation.ponId from
+		oltonuattribute, oltonurelation where
+		oltonuattribute.entityId=#{entityId}
+		and
+		oltonuattribute.onumac=#{mac}
+		and oltonuattribute.onuid = oltonurelation.onuid
+	</select>
+
+	<select id="getOnuAttributeBySn" parameterType="map" resultType="oltOnuAttribute">
+		select oltonuattribute.*,oltonurelation.onuIndex,oltonurelation.ponId
+		from oltonuattribute, oltonurelation, oltauthentication where
+		oltonuattribute.onuId = oltonurelation.onuId
+		and
+		oltonurelation.onuIndex = oltauthentication.onuIndex
+		and
+		oltonuattribute.entityId = oltauthentication.entityId
+		and
+		oltonuattribute.entityId = #{entityId}
+		and
+		oltauthentication.topOnuAuthLogicSn = #{sn}
+	</select>
+
+
+	<select id="getPonAuthType" parameterType="map" resultType="int">
+		select
+		topPonOnuAuthModeMode from oltpononuauthmode,
+		oltponrelation
+		where
+		oltpononuauthmode.ponId = oltponrelation.ponId
+		and
+		oltponrelation.ponIndex=#{ponIndex} and oltponrelation.entityId=
+		#{entityId}
+	</select>
+
+	<update id="updateOnuMacEntity" parameterType="map">
+		update entity set
+		mac = #{mac} where entityId = #{onuId}
+	</update>
+
+	<update id="updateOnuMacAttribute" parameterType="oltOnuAttribute">
+		update
+		oltOnuAttribute 
+		set onuMac=#{onuMac},
+		onuUniqueIdentification=#{onuMac},
+		onuMacAddress=#{onuMacAddress}
+		where onuId=#{onuId}
+	</update>
+
+	<update id="updateOnuMacAuth" parameterType="map">
+		update
+		oltauthentication set onuAuthenMacAddress=#{mac} where
+		onuIndex=#{onuIndex} and entityId=#{entityId}
+	</update>
+
+
+	<update id="updateOnuSnPwdAuth" parameterType="map">
+		update
+		oltauthentication set topOnuAuthLogicSn = #{sn},
+		topOnuAuthPassword=#{pwd} where onuIndex=#{onuIndex} and
+		entityId=#{entityId}
+	</update>
+</mapper>

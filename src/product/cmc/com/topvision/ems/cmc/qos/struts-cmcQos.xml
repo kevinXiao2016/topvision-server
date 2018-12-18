@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcQos" namespace="/cmc/qos" extends="default">
+		<action name="refreshServiceFlow" class="cmcQosAction" method="refreshServiceFlow">
+		</action>
+		<action name="showQosParamSetInfo" class="cmcQosAction" method="showQosParamSetInfo">
+			<result>/cmc/serviceFlowParameterSet.jsp</result>
+		</action>
+		<action name="showQosPktClassInfo" class="cmcQosAction" method="showQosPktClassInfo">
+			<result>/cmc/serviceFlowPktClass.jsp</result>
+		</action>
+		<action name="showCmcQosServiceFlowInfo" class="cmcQosAction"
+			method="showCmcQosServiceFlowInfo">
+			<result>/cmc/serviceFlow.jsp</result>
+		</action>
+		<action name="showUpServiceClassConfigInfo" class="cmcQosAction"
+			method="showUpServiceClassConfigInfo">
+			<result>/cmc/upServiceClassConfigInfo.jsp</result>
+		</action>
+		<action name="showDownServiceClassConfigInfo" class="cmcQosAction"
+			method="showDownServiceClassConfigInfo">
+			<result>/cmc/downServiceClassConfigInfo.jsp</result>
+		</action>
+		<action name="showCreateServiceClass" class="cmcQosAction"
+			method="showCreateServiceClass">
+			<result>/cmc/createServiceClass.jsp</result>
+		</action>
+		<action name="getServiceClassList" class="cmcQosAction" method="getServiceClassList">
+		</action>
+		<action name="getCmcQosServiceFlowListInfo" class="cmcQosAction"
+			method="getCmcQosServiceFlowListInfo">
+		</action>
+		<action name="getQosParamSetInfo" class="cmcQosAction" method="getQosParamSetInfo">
+		</action>
+		<action name="getQosPktClassInfo" class="cmcQosAction" method="getQosPktClassInfo">
+		</action>
+		<action name="showQosConfigFiles" class="cmcQosAction" method="showQosConfigFiles">
+			<result>/cmc/qosConfigFiles.jsp</result>
+		</action>
+		<action name="showQosServiceStreamInfo" class="cmcQosAction"
+			method="showQosServiceStreamInfo">
+			<result>/cmc/qosServiceStreamList.jsp</result>
+		</action>
+		<action name="showQosAssociatedCmInfo" class="cmcQosAction"
+			method="showQosAssociatedCmInfo">
+			<result>/cmc/showSignalCmInfo.jsp</result>
+		</action>
+		<action name="deleteServiceClass" class="cmcQosAction" method="deleteServiceClass">
+		</action>
+		<action name="createOrModifyServiceClassInfo" class="cmcQosAction" method="createOrModifyServiceClassInfo">
+		</action>		
+	</package>
+</struts>

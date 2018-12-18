@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC 
+	"-//SPRING//DTD BEAN//EN" 
+	"http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="topologyMgr" class="com.topvision.ems.network.service.TopologyManager"
+		init-method="initialize" destroy-method="destroy">
+		<constructor-arg index="0">
+			<set>
+				<value>0.0.0.0</value>
+				<value>1.1.1.1</value>
+				<value>127.0.0.0</value>
+				<value>127.0.0.1</value>
+				<value>224.0.0.0</value>
+				<value>127.255.255.254</value>
+				<value>255.255.255.255</value>
+			</set>
+		</constructor-arg>
+		<property name="entityDao" ref="entityDao" />
+		<property name="topologyDao" ref="topologyDao" />
+		<property name="entityAddressDao" ref="entityAddressDao" />
+		<property name="linkDao" ref="linkDao" />
+		<property name="portDao" ref="portDao" />
+		<property name="topoFolderDao" ref="topoFolderDao" />
+		<property name="entityIdentify" ref="entityIdentify" />
+		<property name="paramService" ref="topologyParamService" />
+		<property name="messageService" ref="messageService" />
+		<property name="entityTypeService" ref="entityTypeService" />
+		<property name="onlineService" ref="onlineService" />
+		<property name="facadeFactory" ref="facadeFactory" />
+	</bean>
+
+	<bean id="topologyService"
+		class="com.topvision.ems.network.service.impl.CacheTopologyServiceImpl"
+		init-method="initialize" destroy-method="destroy">
+		<property name="systemLogDao" ref="systemLogDao" />
+		<property name="topoFolderDao" ref="topoFolderDao" />
+		<property name="entityDao" ref="entityDao" />
+		<property name="linkDao" ref="linkDao" />
+		<property name="topologyDao" ref="topologyDao" />
+		<property name="mapNodeDao" ref="mapNodeDao" />
+		<property name="virtualNetDao" ref="virtualNetDao" />
+		<property name="messageService" ref="messageService" />
+		<property name="entityTypeService" ref="entityTypeService" />
+	</bean>
+
+	<!-- <bean id="discoveryService" class="com.topvision.ems.network.service.impl.DiscoveryServiceImpl" 
+		init-method="initialize" destroy-method="destroy"> <property name="entityDao" 
+		ref="entityDao" /> <property name="portDao" ref="portDao" /> <property name="entityAttributeDao" 
+		ref="entityAttributeDao" /> <property name="entityTypeService" ref="entityTypeService" 
+		/> <property name="messageService" ref="messageService" /> <property name="onlineService" 
+		ref="onlineService" /> <property name="facadeFactory" ref="facadeFactory" 
+		/> </bean> -->
+
+	<bean id="networkSnapManager" class="com.topvision.ems.network.service.NetworkSnapManager"
+		factory-method="getInstance">
+		<property name="alertService" ref="alertService" />
+		<property name="linkService" ref="linkService" />
+		<property name="entityService" ref="entityService" />
+		<property name="messageService" ref="messageService" />
+		<property name="entityDao" ref="entityDao" />
+	</bean>
+
+	<bean id="configurationService"
+		class="com.topvision.ems.network.service.impl.ConfigurationServiceImpl"
+		factory-method="getInstance">
+		<property name="configurationDao" ref="configurationDao" />
+	</bean>
+
+	<bean id="licenseManage" class="com.topvision.ems.network.service.LicenseManage"
+		init-method="initialize">
+		<property name="licenseService" ref="licenseService" />
+		<property name="entityDao" ref="entityDao" />
+	</bean>
+	
+	<bean id="unknownEntityPoll" class="com.topvision.ems.network.service.UnknownEntityPoll"
+		init-method="initialize">
+		<property name="entityDao" ref="entityDao" />
+		<property name="discoveryService" ref="discoveryService" />
+	</bean>
+
+	<bean id="entitySendConfigListener" class="com.topvision.ems.network.message.EntitySendConfigListener" init-method="init">
+        <property name="entityService" ref="entityService" />
+        <property name="commandSendService" ref="commandSendService" />
+        <property name="messageService" ref="messageService" />
+    </bean>
+</beans>

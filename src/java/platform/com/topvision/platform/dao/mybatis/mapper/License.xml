@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Sat Nov 02 12:51:02 CST 2013 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="license">
+    <select id="selectEntityTypes" resultType="entityType">
+        select * from
+        entitytype where typeId in
+        (select typeId from
+        entitytyperelation where type = 3)
+    </select>
+    <select id="selectEntityTypesByModule" resultType="entityType" parameterType="java.lang.String">
+        select * from
+        EntityType where
+        module = #{module}
+    </select>
+    <select id="selectUnauthorizedEntities" resultType="entity">
+        select * from Entity where typeId in(select typeId from
+        EntityType where disabled = 1) and typeId != -1 and typeId != 255
+    </select>
+</mapper>

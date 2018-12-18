@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!--Converted at: Sat Nov 02 12:51:02 CST 2013 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.facade.domain.EntityType">
+    <insert id="insertEntity" parameterType="entityType">
+        INSERT INTO EntityType (typeId, corpId, name,
+        displayName, module,
+        sysObjectID, icon16, icon32, icon48, icon64, properties, remark)
+        VALUES (#{typeId}, #{corpId}, #{name},
+        #{displayName}, #{module}, 
+        #{sysObjectID}, #{icon16},
+        #{icon32}, #{icon48}, #{icon64},
+        #{properties},#{disabled},
+        #{remark})
+    </insert>
+
+    <update id="updateEntity" parameterType="entityType">
+        UPDATE EntityType SET name=#{name},
+        displayName=#{displayName},
+        module=#{module},
+        corpId=#{corpId},
+        sysObjectID=#{sysObjectID},
+        icon16=#{icon16}, icon32=#{icon32},
+        icon48=#{icon48},
+        icon64=#{icon64}, properties=#{properties}, remark=#{remark}, disabled=#{disabled} WHERE
+        typeId = #{typeId}
+    </update>
+
+    <insert id="insertEntityCorp" parameterType="entityCorp">
+        INSERT INTO EntityCorp (corpId, name,
+        displayName, sysObjectID,
+        properties, remark) VALUES (#{corpId} , #{name}, #{displayName},
+        #{sysObjectID}, #{properties}, #{remark})
+    </insert>
+
+    <update id="updateEntityCorp" parameterType="entityCorp">
+        UPDATE EntityCorp SET name=#{name},
+        displayName=#{displayName},
+        sysObjectID=#{sysObjectID}, properties=#{properties},
+        remark=#{remark} WHERE corpId = #{corpId}
+    </update>
+
+    <select id="selectByMap" parameterType="map" resultType="entityType">
+        SELECT typeId, corpId,
+        displayName, module, name,
+        icon16, icon32,
+        icon48, icon64, sysObjectID, remark,
+        properties, disabled, standard, discoveryBean FROM EntityType
+        ORDER BY displayName ASC
+    </select>
+
+    <select id="selectByPrimaryKey" parameterType="long" resultType="entityType">
+        SELECT typeId, corpId,
+        displayName, module,
+        name, icon16, icon32,
+        icon48, icon64, sysObjectID, remark,
+        properties,disabled,standard, discoveryBean FROM EntityType
+        where typeId =
+        #{typeId}
+    </select>
+
+    <select id="getTypesBySysObjectID" parameterType="java.lang.String" resultType="entityType">
+        SELECT
+        typeId, corpId,
+        displayName, name, module, icon16, icon32,
+        icon48, icon64, sysObjectID,
+        remark, properties, disabled, standard, discoveryBean FROM EntityType
+        where sysObjectID like '${sysObjectID}%' ORDER BY typeId
+        ASC
+    </select>
+
+    <select id="getEntityCorps" resultType="entityCorp">
+        SELECT corpId, displayName, name, sysObjectID,
+        properties, disabled,
+        remark FROM
+        EntityCorp
+    </select>
+
+    <select id="getEntityCorpById" parameterType="long" resultType="entityCorp">
+        SELECT corpId,
+        displayName, name, sysObjectID,
+        properties, disabled,
+        remark FROM EntityCorp WHERE corpId = #{corpId}
+    </select>
+	
+	<!-- 网管中未使用，暂时先去掉type -->
+    <select id="getEntityCategories" resultType="entityType">
+        SELECT typeId, corpId, displayName, name,
+        module FROM EntityType
+        ORDER BY
+        typeId ASC
+    </select>
+	
+	<select id="selectEntityTypeRelation" resultType="com.topvision.ems.network.domain.EntityTypeRelation">
+		SELECT type, typeId FROM EntityTypeRelation ORDER BY type
+    </select>
+
+	<select id="selectEntityTypesByTypeGroup" resultType="entityType" parameterType="long" >
+		select * from entitytype where typeId in (select typeId from entitytyperelation where type = #{typeId});
+    </select>
+    
+    <insert id="insertLastModified" parameterType="java.lang.String">
+        INSERT INTO SystemPreferences(name, value,
+        module) values
+        ('lastModified', #{value}, 'EntityType')
+    </insert>
+
+    <update id="updateLastModified" parameterType="java.lang.String">
+        UPDATE SystemPreferences SET value =
+        #{value} WHERE
+        module =
+        'EntityType' AND name = 'lastModified'
+    </update>
+
+    <select id="getLastModified" resultType="java.lang.String">
+        SELECT value FROM SystemPreferences WHERE
+        module
+        = 'EntityType' AND
+        name = 'lastModified'
+    </select>
+
+    <select id="getTypeBySysObjectID" parameterType="java.lang.String" resultType="entityType">
+        SELECT
+        typeId, corpId,
+        displayName, name, module, icon16, icon32,
+        icon48, icon64, sysObjectID,
+        remark, properties, disabled, standard, discoveryBean FROM EntityType
+        where sysObjectID = #{sysObjectID}
+    </select>
+    
+    <select id="queryCategoryTypeByTypeId" parameterType="long" resultType="long">
+        SELECT type FROM EntityTypeRelation 
+		where typeId = #{typeId}
+    </select>
+</mapper>

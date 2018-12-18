@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="webproxy" namespace="/webproxy" extends="default">
+		<action name="showCmWebJumpConfig" class="cmWebProxyAction"
+			method="showCmWebJumpConfig">
+			<result>/cmc/cmcJumpMode.jsp</result>
+		</action>
+		<action name="configCmWebProxy" class="cmWebProxyAction" method="configCmWebProxy">
+		</action>
+		<action name="showCmWebProxy" class="cmWebProxyAction" method="showCmWebProxy">
+            <result>/cm/webProxy.jsp</result>
+        </action>
+		<action name="addHeartbeat" class="cmWebProxyAction" method="addHeartbeat"></action>
+		<action name="pickCCProxyByCmcId" class="cmWebProxyAction" method="pickCCProxyByCmcId"></action>
+		<action name="pickPortByCmId" class="cmWebProxyAction" method="pickPortByCmId"></action>
+		<action name="loadCmWebProxyUrl" class="cmWebProxyAction" method="loadCmWebProxyUrl"></action>
+		<action name="loadCmPortMapByCmId" class="cmWebProxyAction" method="loadCmPortMapByCmId"></action>
+
+		<action name="loadCCProxyByCmcId" class="cmWebProxyAction"
+			method="loadCCProxyByCmcId">
+		</action>
+		<action name="releaseHeartbeat" class="cmWebProxyAction"
+			method="releaseHeartbeat">
+		</action>
+		<action name="heartbeat" class="cmWebProxyAction"
+			method="heartbeat">
+		</action>
+	</package>
+</struts>

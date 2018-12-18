@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.performance.domain.PerfTarget">
+
+	<!-- 获取指定设备类型的性能采集指标的分组 -->
+	<select id="getPerfTargetGroupsByDeviceType" resultType="String" parameterType="long">
+        SELECT distinct(targetGroup)
+        FROM devicePerftarget A ,entity B
+        WHERE A.typeId = B.typeId  and B.entityId = #{entityId} 
+        order BY groupPriority
+    </select>
+    
+    <select id="getOnuPerfTargetGroupsByDeviceType" resultType="String" parameterType="long">
+        SELECT distinct(targetGroup)
+        FROM devicePerftarget A 
+        WHERE A.entityType = #{entityType}
+        order BY groupPriority
+    </select>
+
+	<!-- 查询指定分组下面的性能采集指标列表 -->
+	<select id="getPerfNamesByGroup" parameterType="map" resultType="String">
+		select A.perfTargetName 
+		from deviceperftarget A,entity B
+		where B.entityId = #{entityId} and A.typeId = B.typeId and
+		A.targetGroup = 
+		#{groupName} 
+		group by A.perfTargetName
+    </select>
+    
+    <select id="getOnuPerfNamesByGroup" parameterType="map" resultType="String">
+		select A.perfTargetName 
+		from deviceperftarget A
+		where  A.entityType = #{entityType} and
+		A.targetGroup = #{groupName} 
+		group by A.perfTargetName
+    </select>
+
+	<!-- 查询指定设备类型的所有性能采集指标列表 -->
+	<select id="getPerfTargetNameList" resultType="String"
+		parameterType="long">
+		select perfTargetName from globalperfcollecttime
+		where
+		entityType= #{entityType}
+		group by perfTargetName
+    </select>
+
+	<select id="getEntityIdList" resultType="long" parameterType="map">
+		select 
+			distinct(entityId) 
+		from 
+			deviceperfcollecttime
+		where 
+			type = #{type} and entityId in (select entityId from ${Authority})
+	</select>
+	
+	<select id="loadDevicesByMap" resultType="entity" parameterType="map">
+		select 
+			entityId, name, typeId, parentId,
+			IFNULL(ip,(SELECT e2.ip FROM entity e1, entity e2 WHERE e1.parentId=e2.entityId AND
+					e1.entityId=entity.entityId )) AS ip
+		from 
+			entity
+		where entityId in (select entityId from ${Authority})
+		and entityId in (
+			SELECT 
+				entityId
+			FROM 
+				deviceperfcollecttime 
+			WHERE 1=1 
+				<if test="perfType != null and perfType != ''">
+					and perfTargetName = #{perfType}
+				</if>
+				<if test="collectCycle != null and collectCycle != ''">
+					and interval_ = #{collectCycle}
+				</if>
+			GROUP BY entityId
+		)
+		<if test="deviceName != null and deviceName != ''">
+			and name like '%${deviceName}%'
+		</if>
+		<if test="manageIp != null and manageIp != ''">
+			and (ip like '%${manageIp}%' 
+				or entityId in( select C.entityId from entity C, entity D where D.ip like '%${manageIp}%' and D.entityId = C.parentId))
+		</if>
+		<if test="entityType != null and entityType != ''">
+			and typeId in (select typeId from entitytyperelation where type = ${entityType}) 
+		</if>
+		<if test="entityTypeId != null and entityTypeId != ''">
+			and typeId = ${entityTypeId}
+		</if>
+		order by entityId
+		limit ${start} , ${limit}
+	</select>
+	
+	<select id="loadDevicesNumByMap" resultType="int" parameterType="map">
+		select 
+			count(*)
+		from 
+			entity
+		where entityId in (select entityId from ${Authority})
+		and entityId in (
+			SELECT 
+				entityId
+			FROM 
+				deviceperfcollecttime 
+			WHERE 1=1 
+				<if test="perfType != null and perfType != ''">
+					and perfTargetName = #{perfType}
+				</if>
+				<if test="collectCycle != null and collectCycle != ''">
+					and interval_ = #{collectCycle}
+				</if>
+			GROUP BY entityId
+		)
+		<if test="deviceName != null and deviceName != ''">
+			and name like '%${deviceName}%'
+		</if>
+		<if test="manageIp != null and manageIp != ''">
+			and ip like '%${manageIp}%'
+		</if>
+		<if test="entityType != null and entityType != ''">
+			and typeId in (select typeId from entitytyperelation where type  = ${entityType})
+		</if>
+		<if test="entityTypeId != null and entityTypeId != ''">
+			and typeId = ${entityTypeId}
+		</if>
+	</select>
+	
+	<select id="selectPerfTargetCategory" parameterType="map" resultType="string">
+		SELECT category FROM  perftargetCategory
+		WHERE perfIndex = #{perfTarget}  AND typeId=#{typeId}
+	</select>
+
+</mapper>

@@ -1,0 +1,69 @@
+<vg:Gauge Type="Circular" Width="100" Height="100" DefaultTemplate="CircularGaugeQuarterNWStyle"  
+OuterBackground="Transparent" BorderBrush="Black" ShadowEnabled="True"> 
+ <vg:Gauge.Background> 
+    <LinearGradientBrush StartPoint="1.07,0.114" EndPoint="0.084,1.277"> 
+      <GradientStop Color="#FFE5E5E5" Offset="0"/> 
+      <GradientStop Color="White" Offset="0.461"/> 
+      <GradientStop Color="#FF707070" Offset="1"/> 
+    </LinearGradientBrush> 
+  </vg:Gauge.Background> 
+
+  <vg:Gauge.CircularScales> 
+    <vg:CircularScale ScaleThickness="0.2" BorderThickness="0" Radius="1.24" BorderBrush="#103f3f"  
+    ShadowEnabled="False"> 
+      <vg:CircularScale.MajorTicks> 
+        <vg:MajorTicks Background="Black" Placement="Outside"/> 
+      </vg:CircularScale.MajorTicks> 
+      <vg:CircularScale.MinorTicks> 
+        <vg:MinorTicks Background="Black" Placement="Outside" TickWidth="0.015"/> 
+      </vg:CircularScale.MinorTicks> 
+      <vg:CircularScale.ScaleLabels> 
+        <vg:ScaleLabels Placement="Outside"/> 
+      </vg:CircularScale.ScaleLabels> 
+    </vg:CircularScale> 
+  </vg:Gauge.CircularScales> 
+
+  <vg:Gauge.Indicators> 
+    <vg:NeedleIndicator Value="50" CapWidth="0.25" IndicatorWidth="0.09" DistanceFromScale="-0.1"  
+    BorderThickness="1" BorderBrush="Black"> 
+     <vg:NeedleIndicator.Background> 
+      <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0"> 
+       <GradientStop Color="#FF676767" Offset="0.222"/> 
+       <GradientStop Color="White" Offset="0.008"/> 
+       <GradientStop Color="#FF555555" Offset="0.339"/> 
+       <GradientStop Color="#FF181414" Offset="0.957"/> 
+       <GradientStop Color="Black"/> 
+      </LinearGradientBrush> 
+     </vg:NeedleIndicator.Background> 
+      <vg:NeedleIndicator.CapBackground> 
+      <RadialGradientBrush> 
+       <GradientStop Color="White" Offset="0.833"/> 
+       <GradientStop Color="#FF8D8D8D" Offset="0.903"/> 
+       <GradientStop Color="#FF1B1A1A" Offset="0.992"/> 
+       <GradientStop Color="#FFF3F3F3" Offset="0.794"/> 
+      </RadialGradientBrush> 
+     </vg:NeedleIndicator.CapBackground> 
+    </vg:NeedleIndicator> 
+    
+  </vg:Gauge.Indicators> 
+
+  <vg:Gauge.Ranges> 
+    <vg:Range Canvas.ZIndex="1" StartValue="0" EndValue="100" StartWidth="0.14" EndWidth="0.14"  
+    Placement="Center" BorderThickness="0" BorderBrush="Black" > 
+     <vg:Range.Background> 
+          <LinearGradientBrush EndPoint="0.208,0.858" MappingMode="RelativeToBoundingBox"  
+            StartPoint="0.851,0.217"> 
+       <GradientStop Color="#FF4D90E2" Offset="0.53"/> 
+       <GradientStop Color="#FF86CFFB" Offset="0.716"/> 
+       <GradientStop Color="#FFFF9A2C" Offset="0.068"/> 
+       <GradientStop Color="#FFFEC64B" Offset="0.335"/> 
+       <GradientStop Color="#FFFF4D49"/> 
+       <GradientStop Color="#FFCAF30E" Offset="1"/> 
+      </LinearGradientBrush> 
+     </vg:Range.Background> 
+    </vg:Range> 
+    <vg:Range Canvas.ZIndex="1" StartValue="0" EndValue="100.1" StartWidth="0.05" EndWidth="0.05"  
+    Placement="Center" BorderThickness="0" Opacity="1" BorderBrush="Black" Background="White"/> 
+  </vg:Gauge.Ranges> 
+
+</vg:Gauge>

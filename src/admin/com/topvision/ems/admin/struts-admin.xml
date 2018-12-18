@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="/admin" extends="default">
+        <action name="showAdmin">
+            <result>/admin/menuNew.jsp</result>
+        </action>
+        <action name="systemInfo" class="adminAction" method="systemInfo">
+            <result>/admin/systemInfo.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="engineInfo" class="adminAction" method="engineInfo">
+            <result>/admin/engineInfo.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="systemStatus" class="adminAction" method="systemStatus">
+            <result>/admin/systemStatus.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="change2Development" class="adminAction" method="change2Development">
+            <result>/admin/systemStatus.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="clearPerformanceQueue" class="adminAction" method="clearPerformanceQueue">
+            <result>/admin/systemStatus.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="version" class="versionAction" method="queryVersion">
+            <result>/admin/versionView.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="debug" class="adminAction" method="debug">
+            <result>/admin/debug.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="runScriptlet" class="adminAction" method="runScriptlet">
+        </action>
+        <action name="debugLogs" class="adminAction" method="debugLogs">
+        </action>
+        <action name="clearDebugLogs" class="adminAction" method="clearDebugLogs">
+        </action>
+        <action name="viewLogs" class="adminAction" method="viewLogs">
+            <result>/admin/logs.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="deleteLog" class="adminAction" method="deleteLog">
+            <result>/admin/logs.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="downloadLog" class="adminAction" method="downloadLog">
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="listFiles" class="adminAction" method="listFiles">
+            <result>/admin/files.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="postUpload" class="adminAction" method="postUpload">
+            <result>/admin/files.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="deleteFile" class="adminAction" method="deleteFile">
+            <result>/admin/files.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="downloadFile" class="adminAction" method="downloadFile">
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="cmd" class="adminAction" method="cmd">
+            <result>/admin/cmd.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="jstack" class="adminAction" method="jstack">
+            <result>/admin/logs.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="jmap" class="adminAction" method="jmap">
+            <result>/admin/logs.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="logConfig" class="adminAction" method="logConfig">
+            <result>/admin/logConfig.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="showLog" class="adminAction" method="showLog">
+            <result>/admin/showLog.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="loadAllLogs" class="adminAction" method="loadAllLogs">
+        </action>
+        
+        <action name="showFrontEndLogger" class="adminAction" method="showFrontEndLogger">
+            <result>/admin/frontEndLogger.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="openFrontEndLog" class="adminAction" method="openFrontEndLog" />
+        <action name="closeFrontEndLog" class="adminAction" method="closeFrontEndLog" />
+          
+        <action name="showLogger" class="adminAction" method="showLogger">
+            <result>/admin/newlogger.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="showRestartAnalyzer" class="adminAction" method="showRestartAnalyzer">
+            <result>/admin/showRestartAnalyzer.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="showRestartStatistic" class="adminAction" method="showRestartStatistic">
+            <result>/admin/showRestartStastic.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="showSql" class="adminAction" method="showSql">
+            <result>/admin/sql.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="executeSql" class="adminAction" method="executeSql">
+        </action>
+        <action name="querySql" class="adminAction" method="querySql">
+        </action>
+        <action name="executeHSql" class="adminAction" method="executeHSql">
+            <result>/admin/hsql.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="queryHSql" class="adminAction" method="queryHSql">
+            <result>/admin/hsql.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="viewJobs" class="adminAction" method="viewJobs">
+            <result>/admin/jobs.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="getInstallInfo" class="adminAction" method="getInstallInfo">
+            <result>/admin/installInfo.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="showReportManagement" class="adminAction" method="showReportManagement">
+            <result>/report/reportManagement.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="beanMgr" class="adminAction" method="beanMgr">
+            <result>/admin/beans.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="beanInfo" class="adminAction" method="beanInfo">
+            <result>/admin/beanInfo.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="logonInfo" class="adminAction" method="logonInfo">
+            <result>/admin/logonInfo.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="showDataSource" class="adminAction" method="showDataSource">
+            <result>/admin/dataSource.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="showCpuAndMemory" class="adminAction" method="showCpuAndMemory">
+            <result>/admin/showCpuAndMemory.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="loadCpuAndMemory" class="adminAction" method="loadCpuAndMemory" />
+        <action name="showOpenPerfCollect" class="adminAction" method="showOpenPerfCollect">
+            <result>/admin/showOpenPerfCollect.jsp</result>
+        </action>
+
+        <action name="showCmtsFlowSampling" class="adminAction" method="showCmtsFlowSampling">
+            <result>/admin/showCmtsFlowSampling.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="clearPortCaches" class="adminAction" method="clearPortCaches">
+            <result>/admin/systemStatus.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="clearEntityCaches" class="adminAction" method="clearEntityCaches">
+            <result>/admin/systemStatus.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="clearSnmpParamCaches" class="adminAction" method="clearSnmpParamCaches">
+            <result>/admin/systemStatus.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="clearPerfThresholdCaches" class="adminAction" method="clearPerfThresholdCaches">
+            <result>/admin/systemStatus.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="clearSystemPreferencesCaches" class="adminAction" method="clearSystemPreferencesCaches">
+            <result>/admin/systemStatus.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="loadCmtsFlowSampling" class="adminAction" method="loadCmtsFlowSampling" />
+        <action name="modifyCmtsFlowSampling" class="adminAction" method="modifyCmtsFlowSampling" />
+        <action name="update" class="adminAction" method="update" />
+        
+        <action name="showSendMessage" class="adminAction" method="showSendMessage">
+            <result>/admin/sendMessage.jsp</result>
+        </action>
+        <action name="sendMessage" class="adminAction" method="sendMessage" />
+        <action name="viewMonitors" class="adminAction" method="viewMonitors">
+            <result>/admin/monitors.jsp</result>
+            <result name="error">/admin/error.jsp</result>
+        </action>
+        <action name="clearMonitors" class="adminAction" method="clearMonitors" />
+        <action name="startMonitors" class="adminAction" method="startMonitors" />
+        <action name="showExecutorThreadSnap" class="adminAction" method="showExecutorThreadSnap">
+        	<result>/admin/executorThreadSnap.jsp</result>
+        </action>
+        <action name="loadEngineList" class="adminAction" method="loadEngineList"></action>
+        <action name="queryEngineExecutorThread" class="adminAction" method="queryEngineExecutorThread"></action>
+        <action name="showDelayedPerfMonitors" class="adminAction" method="showDelayedPerfMonitors">
+        	<result>/admin/delayedPerfMonitors.jsp</result>
+        </action>
+        <action name="loadDelayedPerfMonitors" class="adminAction" method="loadDelayedPerfMonitors"></action>
+        <action name="showEngineHealth" class="adminAction" method="showEngineHealth">
+        	<result>/admin/engineHealth.jsp</result>
+        </action>
+        <action name="loadEngineHealthInfo" class="adminAction" method="loadEngineHealthInfo"></action>
+    </package>
+</struts>

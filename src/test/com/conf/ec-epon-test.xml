@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+    <bean id="oltDiscoveryFacade" class="com.topvision.ems.epon.engine.executor.OltDiscoveryFacadeImpl">
+        <property name="snmpExecutorService" ref="snmpExecutorService" />
+    </bean>
+    <bean id="oltControlFacade" class="com.topvision.ems.epon.engine.executor.OltControlFacadeImpl">
+        <property name="snmpExecutorService" ref="snmpExecutorService" />
+    </bean>
+    <bean id="oltPerfFacade" class="com.topvision.ems.epon.engine.executor.OltPerfFacadeImpl">
+        <property name="snmpExecutorService" ref="snmpExecutorService" />
+    </bean>
+    <bean id="oltVlanFacade" class="com.topvision.ems.epon.engine.executor.OltVlanFacadeImpl">
+        <property name="snmpExecutorService" ref="snmpExecutorService" />
+    </bean>
+     <bean id="oltDhcpFacade" class="com.topvision.ems.epon.engine.executor.OltDhcpFacadeImpl">
+        <property name="snmpExecutorService" ref="snmpExecutorService" />
+    </bean>
+    <bean id="oltAlertFacade" class="com.topvision.ems.epon.engine.executor.OltAlertFacadeImpl">
+    	<property name="snmpExecutorService" ref="snmpExecutorService" />
+    </bean>
+    <bean id="oltIgmpFacade" class="com.topvision.ems.epon.engine.executor.OltIgmpFacadeImpl">
+    	<property name="snmpExecutorService" ref="snmpExecutorService" />
+    </bean>
+    <bean id="oltAclFacade" class="com.topvision.ems.epon.engine.executor.OltAclFacadeImpl">
+    	<property name="snmpExecutorService" ref="snmpExecutorService" />
+    </bean>
+    <bean id="oltQosFacade" class="com.topvision.ems.epon.engine.executor.OltQosFacadeImpl">
+    	<property name="snmpExecutorService" ref="snmpExecutorService" />
+    </bean>
+    <bean id="oltStpFacade"
+        class="com.topvision.ems.epon.engine.${engine.type}.OltStpFacadeImpl">
+        <property name="snmpExecutorService" ref="snmpExecutorService" />
+    </bean>
+</beans>

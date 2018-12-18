@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="ponprotect" namespace="/epon/ponprotect" extends="default">
+    	<!-- 进入添加保护组页面 -->
+		<action name="createPPG" class="oltPonProtectAction" method="createPPG">
+			<result>/epon/addPPG.jsp</result>
+		</action>
+		<!-- 添加保护组 -->
+		<action name="addPPG" class="oltPonProtectAction"  method="addPPG" />
+		<!-- 加载保护组列表 -->
+		<action name="loadPPGList" class="oltPonProtectAction"  method="loadPPGList" />
+		<!-- 如果保护组没有端口,则加载可用端口 -->
+		<action name="loadPPGAvialList" class="oltPonProtectAction"  method="loadPPGAvialList" />
+		<!-- 加载可用的主端口 -->
+		<action name="loadPPGAvialMasterPort" class="oltPonProtectAction"  method="loadPPGAvialMasterPort" />
+		<!-- 加载可用的备端口 -->
+		<action name="loadPPGAvialSlavePort" class="oltPonProtectAction"  method="loadPPGAvialSlavePort" />
+		<!-- 保护组去使能 -->
+		<action name="disablePPG" class="oltPonProtectAction"  method="disablePPG" />
+		<!-- 保护组使能 -->
+		<action name="enablePPG" class="oltPonProtectAction"  method="enablePPG" />
+		<!-- 删除保护组 -->
+		<action name="deletePPG" class="oltPonProtectAction"  method="deletePPG" />
+		<!-- 保护组手动倒换 -->
+		<action name="manuSwitch" class="oltPonProtectAction"  method="manuSwitch" />
+
+		<action name="showOltPonProtectView" class="oltPonProtectAction"
+			method="showOltPonProtectView">
+			<result>/epon/oltPonProtectView.jsp</result>
+		</action>
+	</package>
+</struts>

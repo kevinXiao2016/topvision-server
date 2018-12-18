@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcnew" namespace="/cmc" extends="default">
+		<!-- 添加操作日志拦截器配置 -->
+
+		<action name="refreshCC" class="cmcAction" method="refreshCC">
+		</action>
+		<action name="resetCmc" class="cmcAction" method="resetCmc">
+		</action>
+		<action name="addAndRelateCmcToOnu" class="cmcAction"
+			method="addAndRelateCmcToOnu">
+		</action>
+		<action name="relateCmcToOnu" class="cmcAction" method="relateCmcToOnu">
+		</action>
+		<action name="showRenameCmc_B" class="cmcAction" method="showCmcRename_B">
+			<result>/cmc/renameCmc_B.jsp</result>
+		</action>
+		<action name="discoveryCmcAgain" class="cmcAction" method="discoveryCmcAgain">
+		</action>
+		<action name="cmcNoMacBind" class="cmcAction" method="cmcNoMacBind">
+		</action>
+		<action name="showRenameCmc" class="cmcAction" method="showRenameCmc">
+			<result>/cmc/renameCmc.jsp</result>
+		</action>
+		<action name="renameCc" class="cmcAction" method="renameCc">
+		</action>
+		<action name="moveToTopoFromOnuView" class="cmcAction"
+			method="moveToTopoFromOnuView" />
+		<action name="moveToTopoJsp" class="cmcAction" method="moveToTopoJsp">
+			<result>/cmc/showTopoFolder.jsp</result>
+		</action>
+		<action name="refreshCmInfo" class="cmcAction" method="refreshCmInfo">
+		</action>
+		<action name="showCmcRealTimeData" class="cmcRealtimeAction"
+			method="showCmcRealTimeData">
+			<result>/cmc/cmcRealtimeInfo.jsp</result>
+		</action>
+		<action name="getCmcRealTimeData" class="cmcRealtimeAction"
+			method="getCmcRealTimeData">
+		</action>
+		<action name="openRemoteQuery" class="cmcRealtimeAction"
+			method="openRemoteQuery">
+		</action>
+		<action name="showDistributeConfig" class="cmcRealtimeAction"
+			method="showDistributeConfig">
+			<result>/cmc/distributeConfig.jsp</result>
+		</action>
+		<action name="saveCommonConfig" class="cmcRealtimeAction"
+			method="saveCommonConfig">
+		</action>
+		<action name="readCommonConfig" class="cmcRealtimeAction"
+			method="readCommonConfig">
+		</action>
+		<action name="sendCommonConfig" class="cmcRealtimeAction"
+			method="sendCommonConfig">
+		</action>
+		<action name="importCommonConfig" class="cmcRealtimeAction"
+			method="importCommonConfig">
+		</action>
+
+		<action name="importCommonConfig" class="cmcRealtimeAction"
+			method="importCommonConfig">
+		</action>
+		<action name="getCmcSnr" class="cmcRealtimeAction" method="getCmcSnr">
+		</action>
+		<action name="refreshCC8800A" class="cmcAction" method="refreshCC8800A" />
+
+		<action name="showCmtsFlapClearConfig" class="cmcFlapClearAction"
+			method="showCmtsFlapClearConfig">
+			<result>/cmc/cmcFlapClearConfig.jsp</result>
+		</action>
+		<action name="saveCmtsFlapClearConfig" class="cmcFlapClearAction"
+			method="saveCmtsFlapClearConfig" />
+			
+	</package>
+</struts>

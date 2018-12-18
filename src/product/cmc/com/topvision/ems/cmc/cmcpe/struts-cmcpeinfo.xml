@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmCpeInfo" namespace="/cmCpeInfo" extends="default">
+        <action name="showCmCpeListPage" class="cmCpeInfoAction" method="showCmCpeListPage">
+            <result>/cmc/cmCpeList.jsp</result>
+        </action>
+        <action name="loadCmCpeList" class="cmCpeInfoAction" method="loadCmCpeList"/>
+	</package>
+</struts> 

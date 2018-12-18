@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.onu.dao.OnuWanDao">
+    
+    <select id="loadBindInterface" parameterType="map" resultType="string">
+        SELECT 
+        	bindInterface
+        FROM
+        	onuwanconnect
+        WHERE
+        	onuId = #{onuId}
+        AND
+        	connectId = #{connectId}
+    </select>
+    
+    <select id="loadAlreadyBindInterface" parameterType="map" resultType="string">
+        SELECT 
+        	bindInterface
+        FROM
+        	onuwanconnect
+        WHERE
+        	onuId = #{onuId}
+        AND
+        	connectId != #{connectId}
+    </select>
+    
+    <select id="loadBindInterfaceByOnuId" parameterType="map" resultType="string">
+         SELECT 
+        	bindInterface
+        FROM
+        	onuwanconnect
+        WHERE
+        	onuId = #{onuId}
+    </select>
+    
+ 	<select id="getOnuWanConfig" parameterType="long" resultType="onuWanConfig">
+		SELECT 
+			config.onuId,
+		    onu.entityId, 
+		    onu.onuIndex,
+			wanEnnable,
+			softVersion, 
+			hardVersion, 
+		    channelId,
+		    workMode,
+			channelWidth,
+			sendPower
+		FROM onuwanconfig config
+		LEFT JOIN oltonurelation onu ON config.onuId = onu.onuId 
+		WHERE config.onuId = #{onuId}
+	</select>
+	
+ 	<select id="getOnuWanSsid" parameterType="map" resultType="onuWanSsid">
+		select onuId, ssid, ssidName, encryptMode,
+		password, ssidEnnable, ssidBroadcastEnnable, ssidMaxUser
+		from onuwanssid where
+		onuId = #{onuId}
+		<if test="ssid != null"> 
+		    AND ssid = #{ssid}
+        </if>
+	</select>
+	
+ 	<select id="getOnuWanConnect" parameterType="long" resultType="onuWanConnect">
+		SELECT 
+			owc.onuId, owc.connectId, owc.connectName, connectMtu,
+			vlanId, vlanPriority, owc.connectMode, ipMode, pppoeUserName, pppoePassword, 
+			owc.ipv4Address, owc.ipv4Mask, owc.ipv4Gateway, owc.ipv4Dns, owc.ipv4DnsAlternative, 
+			serviceMode, bindInterface,	connectStatus, connectErrorCode , owcs.ipv4Address pppoeStatusIpv4Addr,
+			owcs.ipv4Mask pppoeStatusIpv4Mask, owcs.ipv4Gateway pppoeStatusIpv4Gw,
+			owcs.ipv4Dns pppoeStatusIpv4DnsPrimary,owcs.ipv4DnsAlternative pppoeStatusIpv4DnsSecondary
+		FROM onuwanconnect owc
+		LEFT JOIN onuwanconnectstatus owcs ON owc.onuId = owcs.onuId AND owc.connectId = owcs.connectId
+		WHERE owc.onuId = #{onuId}
+		<if test="connectId != null"> 
+		    AND owc.connectId = #{connectId}
+        </if>
+	</select>
+	
+ 	<select id="getOnuWanConnectStatus" parameterType="long" resultType="onuWanConnectStatus">
+		select onuId, connectId, connectName, connectMode, connectStatus, connectErrorCode,
+		ipv4Address, ipv4Mask, ipv4Gateway, ipv4Dns, ipv4DnsAlternative
+		from onuwanconnectstatus where
+		onuId = #{onuId}
+	</select>
+	
+	<select id="getOnuIdByIndex" parameterType="map" resultType="long">
+		select onuId from oltonurelation where entityId = #{entityId} and onuIndex = #{onuIndex}
+	</select>
+ 	
+ 	<insert id="saveBindInterface" parameterType="map">
+ 	    UPDATE 
+			onuwanconnect
+		SET
+			bindInterface = #{bindInterface}
+		WHERE
+			onuId = #{onuId}
+		AND
+			connectId = #{connectId}
+ 	</insert>
+ 	
+ 	<insert id="insertOnuWanConfig" parameterType="onuWanConfig">
+		INSERT INTO onuwanconfig
+		(onuId, clearWan, resetWan, wanEnnable,
+		softVersion, hardVersion, channelId, workMode,
+		channelWidth, sendPower)
+		values (#{onuId}, #{clearWan}, #{resetWan}, #{wanEnnable},
+		#{softVersion}, #{hardVersion}, #{channelId}, #{workMode},
+		#{channelWidth}, #{sendPower})
+	</insert>
+	
+ 	<insert id="insertOnuWanSsid" parameterType="onuWanSsid">
+		INSERT INTO
+		onuwanssid
+		(onuId, ssid, ssidName, encryptMode,
+		password, ssidEnnable, ssidBroadcastEnnable, ssidMaxUser)
+		VALUES
+		(#{onuId},
+		#{ssid},
+		#{ssidName},
+		#{encryptMode},
+		#{password},
+		#{ssidEnnable},
+		#{ssidBroadcastEnnable},
+		#{ssidMaxUser})
+	</insert>
+	
+ 	<insert id="insertOnuWanConnect" parameterType="onuWanConnect">
+		INSERT INTO
+		onuwanconnect
+		(onuId, connectId, connectName, connectMtu,
+		vlanId, vlanPriority,  connectMode, ipMode, pppoeUserName,
+		pppoePassword, ipv4Address, ipv4Mask, ipv4Gateway, ipv4Dns, ipv4DnsAlternative, serviceMode, bindInterface)
+		VALUES
+		(#{onuId},
+		#{connectId},
+		#{connectName},
+		#{connectMtu},
+		#{vlanId},
+		#{vlanPriority},
+		#{connectMode},
+		#{ipMode},
+		#{pppoeUserName},
+		#{pppoePassword},
+		#{ipv4Address},
+		#{ipv4Mask},
+		#{ipv4Gateway},
+		#{ipv4Dns},
+		#{ipv4DnsAlternative},
+		#{serviceMode},
+		#{bindInterface})
+	</insert>
+	
+ 	<insert id="insertOnuWanConnectStatus" parameterType="onuWanConnectStatus">
+		INSERT INTO
+		onuwanconnectstatus
+		(onuId, connectId, connectName, connectMode, connectStatus, connectErrorCode,
+		ipv4Address, ipv4Mask, ipv4Gateway, ipv4Dns, ipv4DnsAlternative)
+		VALUES
+		(#{onuId},
+		#{connectId},
+		#{connectName},
+		#{connectMode},
+		#{connectStatus},
+		#{connectErrorCode},
+		#{ipv4Address},
+		#{ipv4Mask},
+		#{ipv4Gateway},
+		#{ipv4Dns},
+		#{ipv4DnsAlternative})
+	</insert>
+	
+	<insert id="insertOrUpdateOnuWanConfig" parameterType="onuWanConfig">
+		INSERT INTO 
+    	onuwanconfig (onuId, wanEnnable, softVersion, hardVersion,channelId,workMode,channelWidth,sendPower) 
+    	VALUES
+		(#{onuId}, #{wanEnnable}, #{softVersion}, #{hardVersion}, #{channelId}, #{workMode}, #{channelWidth}, #{sendPower})
+		ON DUPLICATE KEY UPDATE
+		wanEnnable = #{wanEnnable},
+		softVersion = #{softVersion},
+		hardVersion = #{hardVersion},
+		channelId = #{channelId},
+		workMode = #{workMode},
+		channelWidth = #{channelWidth},
+		sendPower = #{sendPower}
+	</insert>
+ 	
+ 	<delete id="deleteOnuWanSsid" parameterType="map">
+		delete from
+		onuwanssid where onuId = #{onuId} and ssid = #{ssid}
+	</delete>
+	
+ 	<delete id="deleteOnuWanConnect" parameterType="map">
+		delete from
+		onuwanconnect where onuId = #{onuId} and connectId = #{connectId}
+	</delete>
+	
+	<delete id="deleteOnuWanSsidByOnuId" parameterType="long">
+		delete from onuwanssid where onuId = #{onuId}
+	</delete>
+	
+	<delete id="deleteOnuWanSsidByOltId" parameterType="long">
+		delete from onuwanssid where onuId in(select onuId from oltonurelation where entityId = #{entityId})
+	</delete>
+	
+	<delete id="deleteOnuWanConnectsByOnuId" parameterType="long">
+		delete from onuwanconnect where onuId = #{onuId}
+	</delete>
+	
+	<delete id="deleteOnuWanConnectsByOltId" parameterType="long">
+		delete from onuwanconnect where onuId in(select onuId from oltonurelation where entityId = #{entityId})
+	</delete>
+	
+	<delete id="deleteOnuWanConnectStatusByOnuId" parameterType="long">
+		delete from onuwanconnectstatus where onuId = #{onuId}
+	</delete>
+	
+	<delete id="deleteOnuWanConnectStatusByOltId" parameterType="long">
+		delete from onuwanconnectstatus where onuId in(select onuId from oltonurelation where entityId = #{entityId})
+	</delete>
+	
+ 	<update id="updateOnuWanConfig" parameterType="onuWanConfig">
+		Update
+			onuwanconfig
+		set
+			wanEnnable = #{wanEnnable},
+			softVersion = #{softVersion},
+			hardVersion = #{hardVersion},
+			channelId = #{channelId},
+			workMode = #{workMode},
+			channelWidth = #{channelWidth},
+			sendPower = #{sendPower}
+		where
+			onuId = #{onuId}
+	</update>
+	
+ 	<update id="updateOnuWanSsid" parameterType="onuWanSsid">
+		Update
+		onuwanssid
+		set
+		ssidName = #{ssidName},
+		encryptMode = #{encryptMode},
+		password = #{password},
+		ssidEnnable = #{ssidEnnable},
+		ssidBroadcastEnnable = #{ssidBroadcastEnnable},
+		ssidMaxUser = #{ssidMaxUser}
+		where
+		onuId =
+		#{onuId} and ssid = #{ssid}
+	</update>
+	
+	<update id="updateWanSsidAndName" parameterType="onuWanSsid">
+		Update 
+			onuwanssid
+		set
+			ssidName = #{ssidName},
+			password = #{password}
+		where
+			onuId =
+			#{onuId} and ssid = #{ssid}
+	</update>
+		
+ 	<update id="updateOnuWanConnect" parameterType="onuWanConnect">
+		Update
+			onuwanconnect
+		set
+			connectName = #{connectName},
+			connectMtu = #{connectMtu},
+			vlanId = #{vlanId},
+			vlanPriority = #{vlanPriority},
+			connectMode = #{connectMode},
+			ipMode = #{ipMode},
+			pppoeUserName = #{pppoeUserName},
+			pppoePassword = #{pppoePassword},
+			ipv4Address = #{ipv4Address},
+			ipv4Mask = #{ipv4Mask},
+			ipv4Gateway = #{ipv4Gateway},
+			ipv4Dns = #{ipv4Dns},
+			ipv4DnsAlternative = #{ipv4DnsAlternative},
+			serviceMode = #{serviceMode},
+			bindInterface = #{bindInterface}
+		where
+			onuId =	#{onuId} 
+		and 
+		    connectId = #{connectId}
+	</update>
+	
+	<update id="updateOnuWanPassord" parameterType="onuWanConnect">
+		Update
+			onuwanconnect
+		set
+			pppoeUserName = #{pppoeUserName},
+			pppoePassword = #{pppoePassword}
+		where
+			onuId =	#{onuId} 
+		and 
+		    connectId = #{connectId}
+	</update>
+	
+ 	
+</mapper>

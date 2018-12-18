@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="GponProfile">
+<select id="selectGponSrvProfilePortNumProfileList" parameterType="long" resultType="gponSrvProfilePortNumProfile">
+SELECT entityId  entityId,ProfilePortNumProfileIndex  gponSrvProfilePortNumProfileIndex,ProfileEthNum  gponSrvProfileEthNum,ProfileCatvNum  gponSrvProfileCatvNum,ProfileWlanNum  gponSrvProfileWlanNum,ProfileVeipNum  gponSrvProfileVeipNum 
+FROM GponSrvProfilePortNumProfile WHERE entityId=#{entityId}
+</select>
+<select id="selectGponSrvProfileCfgList" parameterType="long" resultType="gponSrvProfileCfg">
+SELECT entityId  entityId,ProfileIndex  gponSrvProfileIndex,ProfileMacLearning  gponSrvProfileMacLearning,ProfileMacAgeSeconds  gponSrvProfileMacAgeSeconds,ProfileLoopbackDetectCheck  gponSrvProfileLoopbackDetectCheck,ProfileMcMode  gponSrvProfileMcMode,ProfileMcFastLeave  gponSrvProfileMcFastLeave,ProfileUpIgmpFwdMode  gponSrvProfileUpIgmpFwdMode,ProfileUpIgmpTCI  gponSrvProfileUpIgmpTCI 
+FROM GponSrvProfileCfg WHERE entityId=#{entityId}
+</select>
+<delete id="deleteGponSrvProfilePortVlanAggregation" parameterType="gponSrvProfilePortVlanAggregation">
+DELETE FROM GponSrvProfilePortVlanAggregation WHERE  entityId=#{entityId} AND ProfilePortVlanAggrProfileIndex=#{gponSrvProfilePortVlanAggrProfileIndex} AND ProfilePortVlanAggrPortTypeIndex=#{gponSrvProfilePortVlanAggrPortTypeIndex} AND ProfilePortVlanAggrPortIdIndex=#{gponSrvProfilePortVlanAggrPortIdIndex} AND ProfilePortVlanAggrVlanIndex=#{gponSrvProfilePortVlanAggrVlanIndex}
+</delete>
+<delete id="deleteGponLineProfileTcont" parameterType="gponLineProfileTcont">
+DELETE FROM GponLineProfileTcont WHERE  ProfileTcontProfileIndex=#{gponLineProfileTcontProfileIndex} AND ProfileTcontIndex=#{gponLineProfileTcontIndex} AND ProfileTcontDbaProfileId=#{gponLineProfileTcontDbaProfileId} AND entityId=#{entityId}
+</delete>
+<delete id="deleteGponSrvProfilePortNumProfile" parameterType="gponSrvProfilePortNumProfile">
+DELETE FROM GponSrvProfilePortNumProfile WHERE  entityId=#{entityId} AND ProfilePortNumProfileIndex=#{gponSrvProfilePortNumProfileIndex}
+</delete>
+<delete id="deleteGponSrvProfileEthPortConfig" parameterType="gponSrvProfileEthPortConfig">
+DELETE FROM GponSrvProfileEthPortConfig WHERE  entityId=#{entityId} AND ProfileEthPortProfileIndex=#{gponSrvProfileEthPortProfileIndex} AND ProfileEthPortIdIndex=#{gponSrvProfileEthPortIdIndex} AND ProfileEthPortInTrafficProfileId=#{gponSrvProfileEthPortInTrafficProfileId} AND ProfileEthPortOutTrafficProfileId=#{gponSrvProfileEthPortOutTrafficProfileId}
+</delete>
+<delete id="deleteGponSrvProfileInfo" parameterType="gponSrvProfileInfo">
+DELETE FROM GponSrvProfileInfo WHERE  entityId=#{entityId} AND ProfileId=#{gponSrvProfileId}
+</delete>
+<delete id="deleteGponSrvProfilePortVlanCfg" parameterType="gponSrvProfilePortVlanCfg">
+DELETE FROM GponSrvProfilePortVlanCfg WHERE  entityId=#{entityId} AND ProfilePortVlanProfileIndex=#{gponSrvProfilePortVlanProfileIndex} AND ProfilePortVlanPortTypeIndex=#{gponSrvProfilePortVlanPortTypeIndex} AND ProfilePortVlanPortIdIndex=#{gponSrvProfilePortVlanPortIdIndex}
+</delete>
+<delete id="deleteGponLineProfileGem" parameterType="gponLineProfileGem">
+DELETE FROM GponLineProfileGem WHERE  entityId=#{entityId} AND ProfileGemProfileIndex=#{gponLineProfileGemProfileIndex} AND ProfileGemIndex=#{gponLineProfileGemIndex} AND ProfileGemTcontId=#{gponLineProfileGemTcontId}
+</delete>
+<delete id="deleteGponDbaProfileInfo" parameterType="gponDbaProfileInfo">
+DELETE FROM GponDbaProfileInfo WHERE  entityId=#{entityId} AND ProfileId=#{gponDbaProfileId}
+</delete>
+<delete id="deleteGponLineProfileInfo" parameterType="gponLineProfileInfo">
+DELETE FROM GponLineProfileInfo WHERE  entityId=#{entityId} AND ProfileId=#{gponLineProfileId}
+</delete>
+<delete id="deleteGponSrvProfileCfg" parameterType="gponSrvProfileCfg">
+DELETE FROM GponSrvProfileCfg WHERE  entityId=#{entityId} AND ProfileIndex=#{gponSrvProfileIndex}
+</delete>
+<delete id="deleteGponSrvProfilePortVlanTrunk" parameterType="gponSrvProfilePortVlanTrunk">
+DELETE FROM GponSrvProfilePortVlanTrunk WHERE  entityId=#{entityId} AND ProfilePortVlanTrunkProfileIndex=#{gponSrvProfilePortVlanTrunkProfileIndex} AND ProfilePortVlanTrunkPortTypeIndex=#{gponSrvProfilePortVlanTrunkPortTypeIndex} AND ProfilePortVlanTrunkPortIdIndex=#{gponSrvProfilePortVlanTrunkPortIdIndex}
+</delete>
+<delete id="deleteGponLineProfileGemMap" parameterType="gponLineProfileGemMap">
+DELETE FROM GponLineProfileGemMap WHERE  entityId=#{entityId} AND ProfileGemMapProfileIndex=#{gponLineProfileGemMapProfileIndex} AND ProfileGemMapGemIndex=#{gponLineProfileGemMapGemIndex} AND ProfileGemMapIndex=#{gponLineProfileGemMapIndex} AND ProfileGemMapPortId=#{gponLineProfileGemMapPortId}
+</delete>
+<delete id="deleteGponTrafficProfileInfo" parameterType="gponTrafficProfileInfo">
+DELETE FROM GponTrafficProfileInfo WHERE  entityId=#{entityId} AND ProfileId=#{gponTrafficProfileId}
+</delete>
+<delete id="deleteGponSrvProfilePortVlanTranslation" parameterType="gponSrvProfilePortVlanTranslation">
+DELETE FROM GponSrvProfilePortVlanTranslation WHERE  entityId=#{entityId} AND ProfilePortVlanTransProfileIndex=#{gponSrvProfilePortVlanTransProfileIndex} AND ProfilePortVlanTransPortTypeIndex=#{gponSrvProfilePortVlanTransPortTypeIndex} AND ProfilePortVlanTransPortIdIndex=#{gponSrvProfilePortVlanTransPortIdIndex} AND ProfilePortVlanTransVlanIndex=#{gponSrvProfilePortVlanTransVlanIndex}
+</delete>
+</mapper>

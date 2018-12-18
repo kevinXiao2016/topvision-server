@@ -1,0 +1,69 @@
+<StackPanel>
+<vc:Chart xmlns:vc="clr-namespace:Visifire.Charts;assembly=SLVisifire.Charts"
+              Width='700' Height='100' Theme="Theme1" BorderBrush="Gray" ZoomingEnabled="True" ScrollingEnabled="True">
+
+    
+    <!-- <vc:Chart.AxesX>
+        <vc:Axis AxisMinimum="0" Title='时间(s)' TitleFontStyle='italic'>
+			<vc:Axis.AxisLabels> 
+				<vc:AxisLabels Enabled="True" FontStyle='italic' TextAlignment='right' /> 
+			</vc:Axis.AxisLabels>			 
+        </vc:Axis>
+	</vc:Chart.AxesX> -->
+    
+    <vc:Chart.AxesY>
+		<vc:Axis Title="指标1"  AxisMaximum='300' Interval='80' TitleFontStyle='italic'/>
+    </vc:Chart.AxesY>
+
+	<vc:Chart.Legends>
+		<vc:Legend   DockInsidePlotArea='true' HorizontalAlignment='left' VerticalAlignment='top'/>
+	</vc:Chart.Legends>
+
+    <vc:Chart.PlotArea>
+        <vc:PlotArea ShadowEnabled="false"/>
+    </vc:Chart.PlotArea>
+
+    <vc:Chart.Series>
+        <vc:DataSeries  LegendText="下行总流量趋势" RenderAs="Area">
+            <vc:DataSeries.DataPoints>
+                <vc:DataPoint YValue="250"/>
+                <vc:DataPoint YValue="218"/>
+                <vc:DataPoint YValue="162"/>
+                <vc:DataPoint YValue="225"/>
+                <vc:DataPoint YValue="125"/>
+                <vc:DataPoint YValue="218"/>
+                <vc:DataPoint YValue="162"/>
+                <vc:DataPoint YValue="225"/>
+                <vc:DataPoint YValue="125"/>
+                <vc:DataPoint YValue="218"/>
+                <vc:DataPoint YValue="162"/>
+                <vc:DataPoint YValue="225"/>
+                <vc:DataPoint YValue="125"/>
+                <vc:DataPoint YValue="218"/>
+                <vc:DataPoint YValue="162"/>
+                <vc:DataPoint YValue="225"/>
+                <vc:DataPoint YValue="125"/>
+                <vc:DataPoint YValue="218"/>
+                <vc:DataPoint YValue="162"/>
+                <vc:DataPoint YValue="225"/>
+                <vc:DataPoint YValue="125"/>
+                <vc:DataPoint YValue="218"/>
+                <vc:DataPoint YValue="162"/>
+                <vc:DataPoint YValue="225"/>
+                <vc:DataPoint YValue="125"/>
+                <vc:DataPoint YValue="218"/>
+                <vc:DataPoint YValue="162"/>
+                <vc:DataPoint YValue="225"/>
+                <vc:DataPoint YValue="125"/>
+                <vc:DataPoint YValue="218"/>
+                <vc:DataPoint YValue="162"/>
+                <vc:DataPoint YValue="225"/>
+                <vc:DataPoint YValue="125"/>
+                <vc:DataPoint YValue="218"/>
+            </vc:DataSeries.DataPoints>
+        </vc:DataSeries>
+  </vc:Chart.Series>
+
+   
+</vc:Chart>
+</StackPanel>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.network.domain.Port">
+    <select id="selectByPrimaryKey" parameterType="long" resultType="port">
+        SELECT portId,
+        entityId,
+        card,
+        ifIndex,
+        name,
+        note,
+        ifDescr,
+        ifType,
+        ifMtu,
+        ifSpeed,
+        ifPhysAddress,
+        ifAdminStatus,
+        ifOperStatus,
+        ifLastChange,
+        ifName,
+        ifAlias
+        FROM Port
+        WHERE portId = #{portId}
+    </select>
+
+    <update id="updateEntity" parameterType="port">
+        UPDATE Port
+        SET
+        ifDescr=#{ifDescr},
+        ifType=#{ifType},
+        ifMtu=#{ifMtu},
+        ifSpeed=#{ifSpeed},
+        ifPhysAddress=#{ifPhysAddress},
+        ifAdminStatus=#{ifAdminStatus},
+        ifOperStatus=#{ifOperStatus},
+        ifLastChange=#{ifLastChange},
+        ifName=#{ifName},
+        ifAlias=#{ifAlias}
+        WHERE
+        portId=#{portId}
+    </update>
+
+    <update id="updatePortOutline" parameterType="port">
+        UPDATE Port
+        SET
+        ifSpeed=#{ifSpeed},
+        name=#{name},
+        note=#{note}
+        WHERE portId=#{portId}
+    </update>
+
+    <update id="updatePortStatus" parameterType="port">
+        UPDATE Port
+        SET
+        ifAdminStatus=#{ifAdminStatus},
+        ifOperStatus=#{ifOperStatus}
+        WHERE
+        entityId = #{entityId}
+        AND ifIndex = #{ifIndex}
+    </update>
+
+    <select id="getPortByEntityId" parameterType="long" resultType="port">
+        SELECT portId,
+        entityId,
+        card,
+        name,
+        ifIndex,
+        ifDescr,
+        ifType,
+        ifMtu,
+        ifSpeed,
+        ifPhysAddress,
+        ifAdminStatus,
+        ifOperStatus,
+        ifLastChange,
+        ifName,
+        ifAlias
+        FROM Port
+        WHERE
+        entityId = #{entityId}
+    </select>
+
+    <select id="getPortByIfIndex" parameterType="map" resultType="port">
+        SELECT portId,
+        entityId,
+        card,
+        name,
+        note,
+        ifIndex,
+        ifDescr,
+        ifType,
+        ifMtu,
+        ifSpeed,
+        ifPhysAddress,
+        ifAdminStatus,
+        ifOperStatus,
+        ifLastChange,
+        ifName,
+        ifAlias
+        FROM
+        Port
+        WHERE entityId = #{entityId}
+        AND ifIndex = #{ifIndex}
+    </select>
+
+    <select id="getConnectedPortByIp" parameterType="string" resultType="port">
+        SELECT portId,
+        entityId,
+        card,
+        ifIndex,
+        ifDescr,
+        ifType,
+        ifMtu,
+        ifSpeed,
+        ifPhysAddress,
+        ifAdminStatus,
+        ifOperStatus,
+        ifLastChange,
+        ifName,
+        ifAlias
+        FROM Port
+        WHERE
+        entityId = #{entityId}
+        AND ifPhysAddress =
+        #{ifPhysAddress}
+    </select>
+
+    <select id="getPortCoord" parameterType="long" resultType="port">
+        SELECT portId,
+        card,
+        ifIndex,
+        ifDescr,
+        x,
+        y,
+        ifAdminStatus,
+        ifOperStatus
+        FROM
+        Port
+        WHERE entityId = #{entityId}
+        AND ifType != 135
+        AND ifType != 136
+        ORDER BY ifIndex
+        asc
+    </select>
+
+    <update id="savePortCoord" parameterType="port">
+        UPDATE Port SET x=#{x},
+        y=#{y} WHERE portId=#{portId}
+    </update>
+
+    <select id="isPortExists" parameterType="port" resultType="long">
+        SELECT portId from Port WHERE entityId =
+        #{entityId} AND ifIndex =
+        #{ifIndex}
+    </select>
+    
+    <insert id="insertEntity" parameterType="port" useGeneratedKeys="true" keyProperty="portId">
+        INSERT INTO Port 
+        (portId,entityId,card,ifIndex,ifDescr,ifType,ifMtu,ifSpeed,ifPhysAddress,
+        ifAdminStatus,ifOperStatus,ifLastChange,ifName,ifAlias)
+        VALUES
+        (#{portId},#{entityId},#{card},#{ifIndex},#{ifDescr},#{ifType},
+        #{ifMtu},#{ifSpeed},#{ifPhysAddress}, #{ifAdminStatus},#{ifOperStatus},
+        #{ifLastChange},#{ifName},#{ifAlias})
+    </insert>
+</mapper>

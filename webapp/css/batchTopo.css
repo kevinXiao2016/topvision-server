@@ -1,0 +1,71 @@
+html, body{
+	height: 100%;
+}
+#putTab{
+	display: table;
+	height: 30px;
+}
+#tabContent{
+	position: relative;
+	margin: 0 10px;
+}
+#gridContainer, #config{
+	position: absolute;
+	width: 100%;
+}
+#config{
+	display: none;
+}
+.spinnerInput{
+	height: 18px;
+	text-indent:2px;
+	width: 100px;
+}
+.headerFlag{
+	background: url("/css/white/flag.png") no-repeat scroll right 0 rgba(0, 0, 0, 0);
+    color: #FFFFFF;
+    display: inline-block;
+    font: bold 14px Arial,Helvetica,sans-serif,"宋体";
+    padding: 3px 36px 3px 16px;
+}
+.block100{
+	display: inline-block;
+	width: 100px;
+	vertical-align: middle;
+	line-height: 1.616;
+}
+.block140{
+	display: inline-block;
+	width: 140px;
+	vertical-align: middle;
+	line-height: 1.616;
+}
+.block100 input, .block100 label {
+	vertical-align: middle;
+}
+.pR10{
+	padding-left: 10px !important;
+}
+.clickable{
+	cursor: pointer;
+}
+.progressMsg{
+	color: #B3711A;
+}
+.successMsg{
+	color: green;
+}
+.failMsg{
+	color: red;
+}
+.configDiv{
+	width: 45%;
+	height: 100%;
+	float: left;
+	display: block;
+}
+.configDivLeft{ float:left; width:49.5%;}
+.configDivRight{ float:right; width:49.5%;}
+div.treeLoading{ padding-right:26px;}
+#scanTip a.deleteSpanClose,#scanTip a.deleteSpanClose:hover { top:6px;}
+#scanTip{ top:11px; left:305px;}

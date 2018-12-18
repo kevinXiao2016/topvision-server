@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="OltDhcpGroup">
+	
+	<select id="getOltDhcpServerGroups" parameterType="long" resultType="topOltDhcpServerGroup">
+		select * from topOltDhcpServerGroup where entityId = #{entityId}
+	</select>
+	
+	<select id="getOltDhcpServerGroup" parameterType="map" resultType="topOltDhcpServerGroup">
+		select * from topOltDhcpServerGroup 
+		where entityId = #{entityId} and topOltDhcpServerGroupIndex = #{groupIndex}
+	</select>
+	
+	<insert id="insertOltDhcpServerGroup" parameterType="topOltDhcpServerGroup">
+        insert into topOltDhcpServerGroup
+            (entityId,topOltDhcpServerGroupIndex,topOltDhcpServerIpList,topOltDhcpServerBindNum)
+        values
+            (#{entityId},#{topOltDhcpServerGroupIndex},#{topOltDhcpServerIpList},#{topOltDhcpServerBindNum})
+    </insert>
+    
+    <update id="updateOltDhcpServerGroup" parameterType="topOltDhcpServerGroup">
+    	update topOltDhcpServerGroup
+    	set topOltDhcpServerIpList = #{topOltDhcpServerIpList}
+    	where entityId = #{entityId} and topOltDhcpServerGroupIndex = #{topOltDhcpServerGroupIndex}
+    </update>
+    
+    <delete id="deleteOltDhcpServerGroup" parameterType="map">
+    	delete from topOltDhcpServerGroup 
+    	where entityId = #{entityId} and topOltDhcpServerGroupIndex = #{groupIndex}
+    </delete>
+	
+</mapper>

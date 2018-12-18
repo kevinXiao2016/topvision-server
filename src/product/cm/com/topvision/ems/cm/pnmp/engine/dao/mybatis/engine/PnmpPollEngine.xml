@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cm.pnmp.facade.domain.PnmpCalculationResult">
+    <insert id="insertPnmpCalculationResult" parameterType="pnmpCalculationResult">
+		INSERT INTO pnmpcmdatalast (cmMac,statusValue,checkStatus,entityId,cmcId,tapCoefficient,spectrumResponse,
+			mte,preMte,postMte,tte,mtc,mtr,mtrLevel,nmtter,premtter,postmtter,ppesr,mrLevel,
+			tdr,upSnr,upTxPower,downSnr,downRxPower,preEqualizationState,orginalValue,upChannelId,upChannelFreq,upChannelWidth,collectTime)
+		VALUES
+		(#{cmMac},#{statusValue},#{checkStatus},#{entityId},#{cmcId},#{tapCoefficient},#{spectrumResponse},
+		#{mte},#{preMte},#{postMte},#{tte},#{mtc},#{mtr},#{mtrLevel},#{nmtter},#{preMtter},#{postMtter},#{ppesr},#{mrLevel},
+		#{tdr},#{upSnr},#{upTxPower},#{downSnr},#{downRxPower},#{preEqualizationState},#{orginalValue},#{upChannelId},#{upChannelFreq},#{upChannelWidth},#{collectTime})
+		ON DUPLICATE KEY UPDATE
+            statusValue = #{statusValue}, 
+            checkStatus = #{checkStatus},
+            tapCoefficient = #{tapCoefficient}, 
+            spectrumResponse = #{spectrumResponse}, 
+            mte = #{mte},
+            preMte = #{preMte},
+            postMte = #{postMte},
+            tte = #{tte},
+            mtc = #{mtc},
+            mtr = #{mtr},
+			mtrLevel = #{mtrLevel},
+            nmtter = #{nmtter},
+            preMtter = #{preMtter},
+            postMtter = #{postMtter},
+            ppesr = #{ppesr},
+            mrLevel = #{mrLevel},
+            tdr = #{tdr},
+            upSnr = #{upSnr},
+            upTxPower = #{upTxPower},
+            downSnr = #{downSnr},
+            downRxPower = #{downRxPower},
+            preEqualizationState = #{preEqualizationState},
+            orginalValue = #{orginalValue},
+            upChannelId = #{upChannelId},
+            upChannelFreq = #{upChannelFreq},
+            upChannelWidth = #{upChannelWidth},
+            collectTime = #{collectTime}
+	</insert>
+    <insert id="insertPnmpCalculationResultHis" parameterType="pnmpCalculationResult">
+		INSERT INTO PnmpCmDataHis (entityId,cmcId,cmMac,statusValue,checkStatus,
+			mte,preMte,postMte,tte,mtc,mtr,nmtter,premtter,postmtter,ppesr,mrLevel,
+			tdr,upSnr,upTxPower,downSnr,downRxPower,collectTime)
+		VALUES
+		(#{entityId},#{cmcId},#{cmMac},#{statusValue},#{checkStatus},
+		#{mte},#{preMte},#{postMte},#{tte},#{mtc},#{mtr},#{nmtter},#{preMtter},#{postMtter},#{ppesr},#{mrLevel},
+		#{tdr},#{upSnr},#{upTxPower},#{downSnr},#{downRxPower},#{collectTime})
+	</insert>
+
+    <insert id="insertPnmpVariance" parameterType="pnmpCalculationResult">
+		INSERT INTO PnmpVarianceLast (entityId,cmcId,cmMac,mtrVariance,upSnrVariance,collectTime
+        <if test="mtrToUpSnrSimilarity != null">
+            ,mtrToUpSnrSimilarity
+        </if>
+		)
+		VALUES
+		(#{entityId},#{cmcId},#{cmMac},#{mtrVariance},#{upSnrVariance},#{collectTime}
+        <if test="mtrToUpSnrSimilarity != null">
+            ,#{mtrToUpSnrSimilarity}
+        </if>
+        )
+		ON DUPLICATE KEY UPDATE
+            mtrVariance = #{mtrVariance},
+            upSnrVariance = #{upSnrVariance},
+            <if test="mtrToUpSnrSimilarity != null">
+                mtrToUpSnrSimilarity = #{mtrToUpSnrSimilarity},
+            </if>
+            collectTime = #{collectTime}
+	</insert>
+
+    <insert id="insertPnmpVarianceHis" parameterType="pnmpCalculationResult">
+		INSERT INTO PnmpVarianceHis (entityId,cmcId,cmMac,mtrVariance,upSnrVariance,collectTime
+        <if test="mtrToUpSnrSimilarity != null">
+            ,mtrToUpSnrSimilarity
+        </if>
+        )
+		VALUES
+		(#{entityId},#{cmcId},#{cmMac},#{mtrVariance},#{upSnrVariance},#{collectTime}
+        <if test="mtrToUpSnrSimilarity != null">
+            ,#{mtrToUpSnrSimilarity}
+        </if>
+        )
+	</insert>
+
+    <insert id="insertLowPnmpCalculationResult" parameterType="pnmpCalculationResult">
+        INSERT INTO pnmpcmdatalast (cmMac,statusValue,checkStatus,entityId,cmcId,tapCoefficient,spectrumResponse,
+        mte,preMte,postMte,tte,mtc,mtr,mtrLevel,nmtter,premtter,postmtter,ppesr,mrLevel,
+        tdr,upSnr,upTxPower,downSnr,downRxPower,preEqualizationState,orginalValue,upChannelId,upChannelFreq,upChannelWidth,collectTime)
+        VALUES
+        (#{cmMac},#{statusValue},#{checkStatus},#{entityId},#{cmcId},#{tapCoefficient},#{spectrumResponse},
+        #{mte},#{preMte},#{postMte},#{tte},#{mtc},#{mtr},#{mtrLevel},#{nmtter},#{preMtter},#{postMtter},#{ppesr},#{mrLevel},
+        #{tdr},#{upSnr},#{upTxPower},#{downSnr},#{downRxPower},#{preEqualizationState},#{orginalValue},#{upChannelId},#{upChannelFreq},#{upChannelWidth},#{collectTime})
+        ON DUPLICATE KEY UPDATE
+        statusValue = #{statusValue},
+        checkStatus = #{checkStatus},
+        entityId = #{entityId},
+        cmcId = #{cmcId},
+        <if test="tapCoefficient != null">
+            tapCoefficient = #{tapCoefficient},
+        </if>
+        <if test="spectrumResponse != null">
+            spectrumResponse = #{spectrumResponse},
+        </if>
+        mte = #{mte},
+        preMte = #{preMte},
+        postMte = #{postMte},
+        tte = #{tte},
+        mtc = #{mtc},
+        mtr = #{mtr},
+        mtrLevel = #{mtrLevel},
+        nmtter = #{nmtter},
+        preMtter = #{preMtter},
+        postMtter = #{postMtter},
+        ppesr = #{ppesr},
+        mrLevel = #{mrLevel},
+        <if test="tdr != null">
+            tdr = #{tdr},
+        </if>
+        <if test="upSnr != null">
+            upSnr = #{upSnr},
+        </if>
+        <if test="upTxPower != null">
+            upTxPower = #{upTxPower},
+        </if>
+        <if test="downSnr != null">
+            downSnr = #{downSnr},
+        </if>
+        <if test="downRxPower != null">
+            downRxPower = #{downRxPower},
+        </if>
+        preEqualizationState = #{preEqualizationState},
+        orginalValue = #{orginalValue},
+        upChannelId = #{upChannelId},
+        upChannelFreq = #{upChannelFreq},
+        upChannelWidth = #{upChannelWidth},
+        collectTime = #{collectTime}
+    </insert>
+	
+	<select id="selectMtrThresholds" resultType="pnmpTargetThreshold">
+		SELECT * from PnmpTargetThreshold where targetName = 'mtr'
+	</select>
+
+    <select id="selectCmMtrLevel" parameterType="String" resultType="int">
+		SELECT mtrLevel from pnmpcmdatalast where cmMac = #{cmMac} and statusValue != 1
+	</select>
+
+    <select id="selectCmDataList" parameterType="map" resultType="pnmpCmData">
+		SELECT entityId,cmcId,cmMac,mtr,mtc,upSnr,collectTime from pnmpcmdataHis where cmcId = #{cmcId} and cmMac = #{cmMac} and collectTime > #{fromTime}
+	</select>
+	
+	<insert id="insertHighMonitorCm" parameterType="pnmpPollResult">
+		INSERT INTO pnmphighintervalcm
+		(
+			cmmac, 
+			cmcId, 
+			entityId
+		)
+		VALUES
+		(
+			#{cmMac}, 
+			#{cmcId},
+			#{entityId}
+		)
+		ON DUPLICATE KEY UPDATE
+			cmcId = #{cmcId},
+			entityId = #{entityId}
+	</insert>
+	<insert id="insertMiddleMonitorCm" parameterType="pnmpPollResult">
+		INSERT INTO pnmpmiddleintervalcm
+		(
+			cmmac, 
+			cmcId, 
+			entityId
+		)
+		VALUES
+		(
+			#{cmMac}, 
+			#{cmcId},
+			#{entityId}
+		)
+		ON DUPLICATE KEY UPDATE
+			cmcId = #{cmcId},
+			entityId = #{entityId}
+	</insert>
+	
+	<delete id="deleteHighMonitorCm" parameterType="String">
+		DELETE FROM 
+		pnmphighintervalcm 
+		WHERE cmMac = #{cmMac}
+	</delete>
+	
+	<delete id="deleteMiddleMonitorCm" parameterType="String">
+		DELETE FROM 
+		pnmpmiddleintervalcm 
+		WHERE cmMac = #{cmMac}
+	</delete>
+</mapper>

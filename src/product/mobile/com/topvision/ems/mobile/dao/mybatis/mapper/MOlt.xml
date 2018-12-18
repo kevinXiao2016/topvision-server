@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.mobile.domain.MobileOlt">
+	
+	<select id="queryOltList" resultType="MobileOlt" parameterType="map">
+		SELECT A.entityId, A.ip, A.name, A.mac, A.typeId, B.state, C.displayname as oltType
+		FROM entity A
+		LEFT JOIN  entitysnap B ON  A.entityId = B.entityId
+		LEFT JOIN  entityType C ON  A.typeId = C.typeId
+		WHERE
+		A.typeId in (SELECT typeId FROM entitytyperelation WHERE type = 10000)
+		AND A.entityId IN (SELECT entityId FROM ${Authority})
+		<if test="queryContext != null and queryContext != ''">
+			AND (A.name LIKE '%${queryContext}%' OR A.ip LIKE '%${queryContext}%' or A.mac LIKE '%${queryContentMac}%'
+			 <if test="queryMacWithoutSplit != null">
+                OR REPLACE(A.mac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            </if>
+			)
+		</if>
+		LIMIT ${start},${limit}
+	</select>
+	
+	<select id="queryOltListCount" resultType="int" parameterType="map">
+		SELECT COUNT(*)
+		FROM entity A
+		WHERE
+		A.typeId IN (SELECT typeId FROM entitytyperelation WHERE type = #{type})
+		AND A.entityId IN (select entityId from ${Authority})
+		<if test="queryContext != null and queryContext != ''">
+			AND (A.name LIKE '%${queryContext}%' OR A.ip LIKE '%${queryContext}%' or A.mac LIKE '%${queryContentMac}%'
+			 <if test="queryMacWithoutSplit != null">
+                OR REPLACE(A.mac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            </if>
+			)
+		</if>
+	</select>
+	
+	<select id="queryOltBaseInfo" resultType="MobileOlt" parameterType="long">
+		SELECT A.entityId, A.ip, A.name, A.mac, A.typeId,B.snapTime,
+		B.state, B.cpu cpuUsed, B.mem memUsed, B.sysUpTime,
+		C.displayname oltType, D.bSoftwareVersion softVersion,
+		E.location oltLocation 
+		FROM entity A
+		LEFT JOIN  entitysnap B ON  A.entityId = B.entityId
+		LEFT JOIN  entityType C ON  A.typeId = C.typeId
+		LEFT JOIN  OltSlotAttribute D ON A.entityId = D.entityId
+		LEFT JOIN baiduentity E ON E.entityId=A.entityId 
+		WHERE A.entityId = #{entityId} AND D.bAttribute = 1
+	</select>
+	
+	<select id="queryOltCmtsList" resultType="cmtsInfo" parameterType="long">
+		SELECT A.entityId cmtsId, A.name, A.typeId, A.mac, B.state, C.displayName type,ca.topCcmtsSysDorType
+		FROM entity A 
+		LEFT JOIN entitysnap B ON A.entityId = B.entityId
+		LEFT JOIN entitytype C ON A.typeId = C.typeId
+        LEFT JOIN cmcAttribute ca ON A.entityId = ca.cmcId
+		WHERE A.parentId = #{entityId} 
+		AND A.typeId IN (SELECT typeId FROM entitytyperelation WHERE type = 30000)
+		<if test="queryContext != null and queryContext != ''">
+			AND (A.name LIKE '%${queryContext}%' OR A.mac LIKE '%${queryContext}%')
+		</if>
+		LIMIT ${start},${limit}
+	</select>
+	
+	<select id="queryOltCmtsListWithRegion" resultType="cmtsInfo" parameterType="long">
+        SELECT A.entityId cmtsId, A.name, A.typeId, A.mac, B.state, C.displayName type,ca.topCcmtsSysDorType
+        FROM entity A 
+        LEFT JOIN entitysnap B ON A.entityId = B.entityId
+        LEFT JOIN entitytype C ON A.typeId = C.typeId
+        LEFT JOIN cmcAttribute ca ON A.entityId = ca.cmcId
+        WHERE A.parentId = #{entityId} 
+        AND A.typeId IN (SELECT typeId FROM entitytyperelation WHERE type = 30000) 
+        AND A.entityId IN (select entityId from ${Authority})
+        <if test="queryContext != null and queryContext != ''">
+            AND (A.name LIKE '%${queryContext}%' OR A.mac LIKE '%${queryContext}%')
+        </if>
+        LIMIT ${start},${limit}
+    </select>
+	
+	<select id="queryOltCmtsCount" resultType="int" parameterType="long">
+		SELECT count(*)
+		FROM entity A 
+		WHERE A.parentId = #{entityId} 
+		AND A.typeId IN (SELECT typeId FROM entitytyperelation WHERE type = 30000)
+		<if test="queryContext != null and queryContext != ''">
+			AND (A.name LIKE '%${queryContext}%' OR A.mac LIKE '%${queryContext}%')
+		</if>
+	</select>
+	
+	<select id="queryOltCmtsOnlineCountWithRegion" resultType="int" parameterType="long">
+        SELECT 
+            IFNULL(sum(case WHEN a.topCcmtsSysStatus = 4 THEN 1 END),0)
+        FROM 
+            cmcattribute a, cmcentityrelation b 
+        WHERE 
+            a.cmcId = b.cmcId
+            and b.cmcEntityId = #{entityId} 
+            and b.cmcId in(select entityId from ${Authority})
+    </select>
+    
+    <select id="queryOltCmtsCountWithRegion" resultType="int" parameterType="long">
+        SELECT count(*)
+        FROM entity A 
+        WHERE A.parentId = #{entityId} 
+        AND A.typeId IN (SELECT typeId FROM entitytyperelation WHERE type = 30000) 
+        AND A.entityId IN (select entityId from ${Authority})
+        <if test="queryContext != null and queryContext != ''">
+            AND (A.name LIKE '%${queryContext}%' OR A.mac LIKE '%${queryContext}%')
+        </if>
+    </select>
+	
+	<select id="queryOltOnuList" resultType="MobileOnu" parameterType="long">
+		SELECT A.entityId onuId, A.parentId  entityId,A.name, A.typeId, A.mac, B.state, C.displayName onuType,D.ip manageIp
+		FROM entity A 
+		LEFT JOIN entitysnap B ON A.entityId = B.entityId
+		LEFT JOIN entitytype C ON A.typeId = C.typeId
+		left join entity D on a.parentId=d.entityId
+		WHERE 1=1
+		<if test="entityId != null">
+			AND A.parentId = #{entityId} 
+		</if> 
+		AND A.typeId IN (SELECT typeId FROM entitytyperelation WHERE type = 13000)
+		<if test="queryContext != null and queryContext != ''">
+			AND (A.name LIKE '%${queryContext}%' OR A.mac LIKE '%${queryContentMac}%' OR D.ip LIKE '%${queryContext}%'
+			 <if test="queryMacWithoutSplit != null">
+                OR REPLACE(A.mac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            </if>
+			)
+		</if>
+		LIMIT ${start},${limit}
+	</select>
+	
+	<select id="queryOltOnuListWithRegion" resultType="MobileOnu" parameterType="long">
+        SELECT A.entityId onuId, A.parentId  entityId,A.name, A.typeId, A.mac, B.state, C.displayName onuType,D.ip manageIp
+        FROM entity A 
+        LEFT JOIN entitysnap B ON A.entityId = B.entityId
+        LEFT JOIN entitytype C ON A.typeId = C.typeId
+        left join entity D on a.parentId=d.entityId
+        WHERE A.entityId IN (select entityId from ${Authority}) 
+        <if test="entityId != null">
+            AND A.parentId = #{entityId} 
+        </if> 
+        AND A.typeId IN (SELECT typeId FROM entitytyperelation WHERE type = 13000)
+        <if test="queryContext != null and queryContext != ''">
+            AND (A.name LIKE '%${queryContext}%' OR A.mac LIKE '%${queryContentMac}%' OR D.ip LIKE '%${queryContext}%'
+             <if test="queryMacWithoutSplit != null">
+                OR REPLACE(A.mac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            </if>
+            )
+        </if>
+        LIMIT ${start},${limit}
+    </select>
+	
+	<select id="queryOltOnuCount" resultType="int" parameterType="long">
+		SELECT count(*)
+		FROM entity A 
+		LEFT JOIN entitysnap B ON A.entityId = B.entityId
+		LEFT JOIN entitytype C ON A.typeId = C.typeId
+		left join entity D on a.parentId=d.entityId
+		WHERE 1=1
+		<if test="entityId != null">
+			AND A.parentId = #{entityId} 
+		</if>
+		AND A.typeId IN (SELECT typeId FROM entitytyperelation WHERE type = 13000)
+		<if test="queryContext != null and queryContext != ''">
+			AND (A.name LIKE '%${queryContext}%' OR A.mac LIKE '%${queryContentMac}%' OR D.ip LIKE '%${queryContext}%'
+			 <if test="queryMacWithoutSplit != null">
+                OR REPLACE(A.mac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            </if>
+			)
+		</if>
+	</select>
+	
+	<select id="queryOltOnuCountWithRegion" resultType="int" parameterType="map">
+        SELECT count(*)
+        FROM entity A 
+        LEFT JOIN entitysnap B ON A.entityId = B.entityId
+        LEFT JOIN entitytype C ON A.typeId = C.typeId
+        left join entity D on a.parentId=d.entityId
+        WHERE A.entityId IN (select entityId from ${Authority}) 
+        <if test="entityId != null">
+            AND A.parentId = #{entityId} 
+        </if>
+        AND A.typeId IN (SELECT typeId FROM entitytyperelation WHERE type = 13000)
+        <if test="queryContext != null and queryContext != ''">
+            AND (A.name LIKE '%${queryContext}%' OR A.mac LIKE '%${queryContentMac}%' OR D.ip LIKE '%${queryContext}%'
+             <if test="queryMacWithoutSplit != null">
+                OR REPLACE(A.mac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            </if>
+            )
+        </if>
+    </select>
+    
+    <select id="queryOltOnuOnlineCountWithRegion" resultType="int" parameterType="map">
+        SELECT 
+            IFNULL(SUM(case WHEN entity.typeId not in(select typeId from entitytyperelation where type = 30000) and oltonuattribute.onuOperationStatus=1 THEN 1 END),0)
+        FROM oltonuattribute left join entity on oltonuattribute.onuId = entity.entityId
+        WHERE oltonuattribute.entityId = #{entityId} and oltonuattribute.onuId in(select entityId from ${Authority})
+    </select>
+	
+	<select id="getPonOnuIndex" resultType="long" parameterType="map">
+		select onuIndex
+		from
+		oltauthentication 
+		where ponId = (select ponId from oltponrelation where ponIndex = #{ponIndex} and entityId = #{entityId})
+	</select>
+	
+	<select id="getBaiduMapEntityInfo" parameterType="long" resultType="com.topvision.ems.mobile.domain.BaiduMapInfo">
+        SELECT
+        entityId,
+        longitude,
+        latitude
+        FROM
+        baiduentity
+        WHERE
+        entityId = #{entityId}
+    </select>
+    
+    <insert id="updateEntityLocation" parameterType="map">
+       insert into baiduentity (entityId,longitude,latitude,location) 
+       values (#{entityId},#{longitude},#{latitude},#{address}) 
+       ON DUPLICATE KEY UPDATE 
+       longitude=#{longitude},latitude=#{latitude},location=#{address}
+    </insert>
+    
+    <insert id="insertOrUpdataMapInfoEntity" parameterType="map">
+       insert into baiduentity (entityId,typeId,longitude,latitude,location) 
+       values (#{entityId},#{typeId},#{longitude},#{latitude},#{address}) 
+       ON DUPLICATE KEY UPDATE 
+       typeId=#{typeId},longitude=#{longitude},latitude=#{latitude},location=#{address}
+    </insert>
+	
+</mapper>

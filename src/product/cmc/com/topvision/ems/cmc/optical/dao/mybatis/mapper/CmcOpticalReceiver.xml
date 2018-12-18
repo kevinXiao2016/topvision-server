@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.optical.dao.mybatis.CmcOpticalReceiverDaoImpl">
+    <!-- ################################## select start ####################################### -->
+    <select id="selectOpReceiverRfCfg" parameterType="long" resultType="cmcOpReceiverRfCfg">
+        select a.id,a.cmcId,a.outputIndex,a.outputControl,a.outputGainType,a.outputLevel,
+            a.outputAGCOrigin,a.outputRFlevelatt,a.dt
+        from CmcOpReceiverRfCfg a
+        where a.cmcId=#{cmcId}
+    </select>
+    <select id="selectOpReceiverSwitchCfg" parameterType="long" resultType="cmcOpReceiverSwitchCfg">
+        select a.id,a.cmcId,a.switchIndex,a.switchState,a.switchControl,a.switchThres
+        from CmcOpReceiverSwitchCfg a
+        where a.cmcId=#{cmcId}
+    </select>
+    <select id="selectOpReceiverType" parameterType="long" resultType="cmcOpReceiverType">
+    	select * from cmcopreceivertype where cmcId=#{cmcId}
+    </select>
+    <select id="selectOpReceiverInputInfo" parameterType="long" resultType="cmcOpReceiverInputInfo">
+        select a.id,a.cmcId,a.inputIndex,a.inputPower,a.dt
+        from CmcOpReceiverInputInfo a
+        where a.cmcId=#{cmcId}
+    </select>
+    <select id="selectOpReceiverAcPower" parameterType="long" resultType="cmcOpReceiverAcPower">
+        select a.id,a.cmcId,a.powerIndex,a.powerVoltage1,a.dt
+        from CmcOpReceiverAcPower a
+        where a.cmcId=#{cmcId}
+    </select>
+    <select id="selectOpReceiverDcPower" parameterType="long" resultType="cmcOpReceiverDcPower">
+        select a.id,a.cmcId,a.powerIndex,a.powerVoltage,a.dt
+        from CmcOpReceiverDcPower a
+        where a.cmcId=#{cmcId}
+    </select>
+    <select id="selectOpReceiverAcPowerByMap" parameterType="map" resultType="cmcOpReceiverDcPower">
+        select a.id,a.cmcId,a.powerIndex,a.powerVoltage,a.dt
+        from CmcOpReceiverDcPower a
+        where a.cmcId=#{cmcId} AND a.powerIndex=#{powerIndex}
+    </select>
+    
+    <select id="selectOpReceiverInputInfoHis"  resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="map">
+        SELECT
+            a.inputPower/10 as y,
+            a.collectTime as xTime
+        FROM
+            PerfCmcOpReceiverInputPowerHis a
+        where
+            a.cmcId=#{cmcId} and inputIndex=#{inputIndex} AND 
+            a.collectTime BETWEEN #{startTime} and #{endTime}
+        ORDER BY a.collectTime ASC
+    </select>
+    <select id="selectOpReceiverRfPortList"  resultType="cmcOpReceiverRfPort" parameterType="long">
+        SELECT
+            a.id,
+            a.cmcId,
+            a.rfPortIndex,
+            a.rfOutputLevel,
+            a.collectTime
+        FROM
+            CmcOpReceiverRfPortInfo a
+        where
+            a.cmcId=#{cmcId}
+    </select>
+    <select id="selectOpReceiverChannelNum"  resultType="cmcOpReceiverChannelNum" parameterType="long">
+        SELECT
+            a.id,
+            a.cmcId,
+            a.channelNumIndex,
+            a.channelNum,
+            a.collectTime
+        FROM
+            CmcOpReceiverChannelNumInfo a
+        where
+            a.cmcId=#{cmcId}
+    </select>
+    <!-- ################################## select end ######################################### -->
+    
+    <!-- ################################## insert start ####################################### -->
+    <insert id="insertOpReceiverRfCfg" databaseId="MySQL" parameterType="cmcOpReceiverRfCfg" 
+        useGeneratedKeys="true" keyProperty="id">
+        insert into CmcOpReceiverRfCfg(cmcId,outputIndex,outputControl,outputGainType,outputLevel,
+        outputAGCOrigin,outputRFlevelatt,dt)
+        values
+        (#{cmcId},#{outputIndex},#{outputControl},#{outputGainType},#{outputLevel},
+        #{outputAGCOrigin},#{outputRFlevelatt}, #{dt})
+    </insert>
+    <insert id="insertOpReceiverRfCfg" databaseId="Oracle" parameterType="cmcOpReceiverRfCfg" >
+        <selectKey keyProperty="id" resultType="long"
+            order="BEFORE">
+            SELECT
+            CmcOpReceiverRfCfg_Seq.nextval AS id from dual
+        </selectKey>
+        insert into CmcOpReceiverRfCfg(cmcId,outputIndex,outputControl,outputGainType,outputLevel,
+        outputAGCOrigin,outputRFlevelatt,dt)
+        values
+        (#{cmcId},#{outputIndex},#{outputControl},#{outputGainType},#{outputLevel},
+        #{outputAGCOrigin},#{outputRFlevelatt}, #{dt})
+    </insert>
+    
+    <insert id="insertOpReceiverSwitchCfg" databaseId="MySQL" parameterType="cmcOpReceiverSwitchCfg" 
+        useGeneratedKeys="true" keyProperty="id">
+        insert into CmcOpReceiverSwitchCfg(cmcId,switchIndex,switchState,switchControl,switchThres)
+        values
+        (#{cmcId},#{switchIndex},#{switchState},#{switchControl},#{switchThres})
+    </insert>
+    <insert id="insertOpReceiverSwitchCfg" databaseId="Oracle" parameterType="cmcOpReceiverSwitchCfg" >
+        <selectKey keyProperty="id" resultType="long"
+            order="BEFORE">
+            SELECT
+            CmcOpReceiverSwitchCfg_Seq.nextval AS id from dual
+        </selectKey>
+        insert into CmcOpReceiverSwitchCfg(cmcId,switchIndex,switchState,switchControl,switchThres)
+        values
+        (#{cmcId},#{switchIndex},#{switchState},#{switchControl},#{switchThres})
+    </insert>
+    
+    <insert id="insertOpReceiverType" databaseId="MySQL" parameterType="cmcOpReceiverType" 
+        useGeneratedKeys="true" keyProperty="id">
+        insert into cmcopreceivertype(cmcId, dorDevTypeIndex, dorDevType)
+        values
+        (#{cmcId}, #{dorDevTypeIndex}, #{dorDevType})
+    </insert>
+    
+    <insert id="insertOpReceiverInputInfo" databaseId="MySQL" parameterType="cmcOpReceiverInputInfo" 
+        useGeneratedKeys="true" keyProperty="id">
+        insert into CmcOpReceiverInputInfo(cmcId,inputIndex,inputPower,dt)
+        values
+        (#{cmcId},#{inputIndex},#{inputPower},#{dt})
+    </insert>
+    <insert id="insertOpReceiverInputInfo" databaseId="Oracle" parameterType="cmcOpReceiverInputInfo" >
+        <selectKey keyProperty="id" resultType="long"
+            order="BEFORE">
+            SELECT
+            CmcOpReceiverInputInfo_Seq.nextval AS id from dual
+        </selectKey>
+        insert into CmcOpReceiverInputInfo(cmcId,inputIndex,inputPower,dt)
+        values
+        (#{cmcId},#{inputIndex},#{inputPower},#{dt})
+    </insert>
+    
+    <insert id="insertOpReceiverAcPower" databaseId="MySQL" parameterType="cmcOpReceiverAcPower" 
+        useGeneratedKeys="true" keyProperty="id">
+        insert into CmcOpReceiverAcPower(cmcId,powerIndex,powerVoltage1,dt)
+        values
+        (#{cmcId},#{powerIndex},#{powerVoltage1},#{dt})
+    </insert>
+    <insert id="insertOpReceiverAcPower" databaseId="Oracle" parameterType="cmcOpReceiverAcPower" >
+        <selectKey keyProperty="id" resultType="long"
+            order="BEFORE">
+            SELECT
+            CmcOpReceiverAcPower_Seq.nextval AS id from dual
+        </selectKey>
+        insert into CmcOpReceiverAcPower(cmcId,powerIndex,powerVoltage1,dt)
+        values
+        (#{cmcId},#{powerIndex},#{powerVoltage1},#{dt})
+    </insert>
+    
+    <insert id="insertOpReceiverDcPower" databaseId="MySQL" parameterType="cmcOpReceiverDcPower" 
+        useGeneratedKeys="true" keyProperty="id">
+        insert into CmcOpReceiverDcPower(cmcId,powerIndex,powerVoltage,dt)
+        values
+        (#{cmcId},#{powerIndex},#{powerVoltage},#{dt})
+    </insert>
+    <insert id="insertOpReceiverDcPower" databaseId="Oracle" parameterType="cmcOpReceiverDcPower" >
+        <selectKey keyProperty="id" resultType="long"
+            order="BEFORE">
+            SELECT
+            CmcOpReceiverDcPower_Seq.nextval AS id from dual
+        </selectKey>
+        insert into CmcOpReceiverDcPower(cmcId,powerIndex,powerVoltage,dt)
+        values
+        (#{cmcId},#{powerIndex},#{powerVoltage},#{dt})
+    </insert>
+    <insert id="insertOpReceiverInputInfoHis"  parameterType="cmcOpReceiverDcPower" >
+        insert into PerfCmcOpReceiverInputPowerHis(cmcId,inputIndex, inputPower,collectTime)
+        values
+        (#{cmcId},#{inputIndex}, #{inputPower},#{collectTime})
+    </insert>
+    <insert id="insertOpReceiverRfPort" databaseId="MySQL" parameterType="cmcOpReceiverRfPort" 
+        useGeneratedKeys="true" keyProperty="id">
+        insert into CmcOpReceiverRfPortInfo(cmcId,rfPortIndex,rfOutputLevel,collectTime)
+        values
+        (#{cmcId},#{rfPortIndex},#{rfOutputLevel},#{collectTime})
+    </insert>
+    <insert id="insertOpReceiverRfPort" databaseId="Oracle" parameterType="cmcOpReceiverRfPort" >
+        <selectKey keyProperty="id" resultType="long"
+            order="BEFORE">
+            SELECT
+            CmcOpReceiverRfPortInfo_Seq.nextval AS id from dual
+        </selectKey>
+        insert into CmcOpReceiverRfPortInfo(cmcId,rfPortIndex,rfOutputLevel,collectTime)
+        values
+        (#{cmcId},#{rfPortIndex},#{rfOutputLevel},#{collectTime})
+    </insert>
+    <insert id="insertOpReceiverChannelNum" databaseId="MySQL" parameterType="cmcOpReceiverChannelNum" 
+        useGeneratedKeys="true" keyProperty="id">
+        insert into CmcOpReceiverChannelNumInfo(cmcId,channelNumIndex,channelNum,collectTime)
+        values
+        (#{cmcId},#{channelNumIndex},#{channelNum},#{collectTime})
+    </insert>
+    <insert id="insertOpReceiverChannelNum" databaseId="Oracle" parameterType="cmcOpReceiverChannelNum" >
+        <selectKey keyProperty="id" resultType="long"
+            order="BEFORE">
+            SELECT
+            CmcOpReceiverChannelNumInfo_Seq.nextval AS id from dual
+        </selectKey>
+        insert into CmcOpReceiverChannelNumInfo(cmcId,channelNumIndex,channelNum,collectTime)
+        values
+        (#{cmcId},#{channelNumIndex},#{channelNum},#{collectTime})
+    </insert>
+    <!-- ################################## insert end ######################################### -->
+    
+    <!-- ################################## update start ####################################### -->
+    <update id="updateOpReceiverRfCfg" parameterType="cmcOpReceiverRfCfg" >
+        update CmcOpReceiverRfCfg
+        set 
+            outputIndex=#{outputIndex},
+            outputControl=#{outputControl},
+            outputGainType=#{outputGainType},
+            outputLevel=#{outputLevel},
+            outputAGCOrigin=#{outputAGCOrigin},
+            outputRFlevelatt=#{outputRFlevelatt},
+            dt=#{dt}
+        where
+            cmcId=#{cmcId} AND outputIndex=#{outputIndex}
+    </update>
+    <update id="updateOpReceiverSwitchCfg" parameterType="cmcOpReceiverSwitchCfg" >
+        update CmcOpReceiverSwitchCfg
+        set 
+            switchIndex=#{switchIndex},
+            switchState=#{switchState},
+            switchControl=#{switchControl},
+            switchThres=#{switchThres}
+        where
+            cmcId=#{cmcId}
+    </update>
+    <update id="updateOpReceiverType" parameterType="cmcOpReceiverType" >
+        update cmcopreceivertype
+        set 
+            dorDevTypeIndex=#{dorDevTypeIndex},
+            dorDevType=#{dorDevType}
+        where
+            cmcId=#{cmcId}
+    </update>
+    <update id="updateOpReceiverInputInfo" parameterType="cmcOpReceiverInputInfo" >
+        update CmcOpReceiverInputInfo
+        set 
+            inputPower=#{inputPower},
+            dt=#{dt}
+        where
+            cmcId=#{cmcId} AND inputIndex=#{inputIndex}
+    </update>
+    <update id="updateOpReceiverAcPower" parameterType="cmcOpReceiverAcPower" >
+        update CmcOpReceiverAcPower
+        set 
+            powerIndex=#{powerIndex},
+            powerVoltage1=#{powerVoltage1},
+            dt=#{dt}
+        where
+            cmcId=#{cmcId}
+    </update>
+    <update id="updateOpReceiverDcPower" parameterType="cmcOpReceiverDcPower" >
+        update CmcOpReceiverDcPower
+        set 
+            powerVoltage=#{powerVoltage},
+            dt=#{dt}
+        where
+            cmcId=#{cmcId} AND powerIndex=#{powerIndex}
+    </update>
+    <update id="updateOpReceiverRfPort" parameterType="cmcOpReceiverRfPort" >
+        update CmcOpReceiverRfPortInfo
+        set 
+            rfOutputLevel=#{rfOutputLevel},
+            collectTime=#{collectTime}
+        where
+            cmcId=#{cmcId} AND rfPortIndex=#{rfPortIndex}
+    </update>
+    <update id="updateOpReceiverChannelNum" parameterType="cmcOpReceiverChannelNum" >
+        update CmcOpReceiverChannelNumInfo
+        set 
+            channelNum=#{channelNum},
+            collectTime=#{collectTime}
+        where
+            cmcId=#{cmcId} AND channelNumIndex=#{channelNumIndex}
+    </update>
+    <!-- ################################## update end ######################################### -->
+    
+    <!-- ################################## delete start ####################################### -->
+    
+    <!-- ################################## delete end ######################################### -->
+</mapper>

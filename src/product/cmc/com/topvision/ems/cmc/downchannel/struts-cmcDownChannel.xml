@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcDownChannel" namespace="/cmc" extends="default">
+
+        <action name="showDownChannelPortal" class="cmcDownChannelPortalAction" method="showDownChannelPortal">
+            <result>/cmc/downChannelPortal.jsp</result>
+        </action>
+        <action name="saveDownChannelView" class="cmcDownChannelPortalAction" method="saveDownChannelView" />
+	</package>
+</struts>

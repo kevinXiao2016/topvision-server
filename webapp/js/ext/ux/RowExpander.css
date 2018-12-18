@@ -1,0 +1,4 @@
+div.x-grid3-row-collapsed tr.x-grid3-row-body-tr{display:none;}
+div.x-grid3-row-expanded tr.x-grid3-row-body-tr{} 
+.x-grid3-body .x-grid3-td-expander .x-grid3-cell-inner { height: auto; }
+.x-grid3-body .x-grid3-td-expander{ vertical-align: top;  }

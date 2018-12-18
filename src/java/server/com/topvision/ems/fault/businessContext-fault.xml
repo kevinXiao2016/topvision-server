@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+             http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+             http://www.springframework.org/schema/tx
+             http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+             http://www.springframework.org/schema/lang
+             http://www.springframework.org/schema/lang/spring-lang-2.0.xsd">
+
+	<bean id="actionCenter" class="com.topvision.ems.fault.service.ActionCenter"
+		init-method="initialize" destroy-method="destroy">
+		<property name="trapService" ref="trapService"></property>
+		<property name="alertTypeDao" ref="alertTypeDao"></property>
+		<property name="actionDao" ref="actionDao"></property>
+		<property name="entityDao" ref="entityDao"></property>
+		<property name="userService" ref="userService"></property>
+		<property name="actionServices">
+			<map>
+				<entry key="1">
+					<ref bean="mailActionService" />
+				</entry>
+				<entry key="2">
+					<ref bean="smsAlertService" />
+				</entry>
+				<entry key="3">
+					<ref bean="trapService" />
+				</entry>
+			</map>
+		</property>
+	</bean>
+
+	<bean id="eventSender" class="com.topvision.ems.fault.service.EventSender"
+		factory-method="getInstance" destroy-method="destroy">
+		<property name="eventService" ref="eventService"></property>
+		<property name="alertService" ref="alertService"></property>
+	</bean>
+
+	<!-- Event UDP Server -->
+	<bean id="eventServer" class="com.topvision.ems.fault.service.EventServer"
+		factory-method="getInstance" init-method="start" destroy-method="stop">
+		<property name="listenerPort" value="${event.listener.port}" />
+	</bean>
+
+	<bean id="syslogService" class="com.topvision.ems.fault.service.impl.SyslogServiceImpl"
+		init-method="initialize" destroy-method="destroy">
+		<property name="systemPreferencesDao" ref="systemPreferencesDao" />
+		<property name="parsers">
+			<list>
+				<ref bean="syslogParser" />
+			</list>
+		</property>
+		<property name="facadeFactory" ref="facadeFactory" />
+		<property name="entityAddressDao" ref="entityAddressDao"></property>
+		<property name="entityDao" ref="entityDao"></property>
+		<property name="syslogDao" ref="syslogDao"></property>
+	</bean>
+	<bean id="trapService" class="com.topvision.ems.fault.service.impl.TrapServiceImpl"
+		init-method="initialize" destroy-method="destroy">
+		<property name="systemPreferencesDao" ref="systemPreferencesDao" />
+		<!-- <property name="parsers">
+			<list>
+				<ref bean="trapParser" />
+			</list>
+		</property> -->
+		<property name="facadeFactory" ref="facadeFactory" />
+		<property name="entityAddressDao" ref="entityAddressDao"></property>
+		<property name="entityDao" ref="entityDao"></property>
+		<property name="messageService" ref="messageService" />
+	</bean>
+
+	<!-- <lang:jruby id="trapParser" refresh-check-delay="60000"
+		script-interfaces="com.topvision.ems.fault.parser.TrapParser"
+		script-source="classpath:com/topvision/ems/fault/parser/trapParser.rb">
+	</lang:jruby> -->
+	<lang:jruby id="syslogParser" refresh-check-delay="60000"
+		script-interfaces="com.topvision.ems.fault.parser.SyslogParser"
+		script-source="classpath:com/topvision/ems/fault/parser/syslogParser.rb">
+	</lang:jruby>
+</beans>

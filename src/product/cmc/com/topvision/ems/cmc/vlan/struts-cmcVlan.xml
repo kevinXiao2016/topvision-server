@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcVlan" namespace="/cmcVlan" extends="default">
+		<action name="showCcmtsIpSubVlan" class="cmcVlanAction" method="showCcmtsIpSubVlan">
+		    <result>/cmc/ccmtsIpSubVlan.jsp</result>
+		</action>
+		<action name="modifyCmcIpSubVlanScalar" class="cmcVlanAction" method="modifyCmcIpSubVlanScalar" />
+		<action name="loadCmcIpSubVlanCfg" class="cmcVlanAction" method="loadCmcIpSubVlanCfg" />
+		<action name="addCmcIpSubVlanCfg" class="cmcVlanAction" method="addCmcIpSubVlanCfg" />
+		<action name="modifyCmcIpSubVlanCfg" class="cmcVlanAction" method="modifyCmcIpSubVlanCfg" />
+		<action name="deleteCmcIpSubVlanCfg" class="cmcVlanAction" method="deleteCmcIpSubVlanCfg" />
+		<action name="refreshCmcIpSubVlanCfg" class="cmcVlanAction" method="refreshCmcIpSubVlanCfg" />
+		
+		<action name="showCcmtsVlanJsp" class="cmcVlanAction" method="showCcmtsVlanJsp">
+		    <result>/cmc/cmcVlan.jsp</result>
+		</action>
+		<action name="loadCmcVlanList" class="cmcVlanAction" method="loadCmcVlanList" />
+		<action name="addCmcVlan" class="cmcVlanAction" method="addCmcVlan" />
+		<action name="showAddCmcVlanJsp" class="cmcVlanAction" method="showAddCmcVlanJsp">
+		    <result>/cmc/addCmcVlan.jsp</result>
+		</action>
+		<action name="deleteCmcVlan" class="cmcVlanAction" method="deleteCmcVlan" />
+		
+		<action name="showAddCmcVlanIp" class="cmcVlanAction" method="showAddCmcVlanIp">
+		    <result>/cmc/addCmcVlanIp.jsp</result>
+		</action>
+		<action name="addCmcVlanIp" class="cmcVlanAction" method="addCmcVlanIp" />
+		<action name="addCmcVlanIp" class="cmcVlanAction" method="addCmcVlanIp" />
+		<action name="deleteCmcVlanIp" class="cmcVlanAction" method="deleteCmcVlanIp" />
+		
+		<action name="showModifyCmcVlanIp" class="cmcVlanAction" method="showModifyCmcVlanIp">
+		    <result>/cmc/modifyCmcVlanIp.jsp</result>
+		</action>
+		
+		<action name="modifyVlanPriIpDhcpCfg" class="cmcVlanAction" method="modifyVlanPriIpDhcpCfg" />
+		<action name="modifyVlanSubIp" class="cmcVlanAction" method="modifyVlanSubIp" />
+		<action name="refreshCmcVlan" class="cmcVlanAction" method="refreshCmcVlan" />
+	</package>
+</struts>

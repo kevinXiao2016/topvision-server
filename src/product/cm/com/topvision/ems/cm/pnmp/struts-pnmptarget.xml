@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+    
+<struts>
+	<package name="pnmptarget" namespace="/pnmp/target" extends="default">
+        <action name="showPnmpTargetConfig" class="pnmpTargetThresholdAction" method="showPnmpTargetConfig">
+            <result>/terminal/pnmp/pnmp-target-threshold-config.jsp</result>
+        </action>
+        <action name="savePnmpTargetConfig" class="pnmpTargetThresholdAction" method="savePnmpTargetConfig" />
+        <action name="loadPnmpTargetConfig" class="pnmpTargetThresholdAction" method="loadPnmpTargetConfig" />
+        <action name="getPnmpTargetLevelThresholds" class="pnmpTargetThresholdAction" method="getPnmpTargetLevelThresholds" />
+    </package>
+</struts>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcSyslog" namespace="/cmc" extends="default">
+		<action name="showSyslogManagement" class="cmcSyslogServerAction"
+			method="showSyslogManagement">
+			<result>/cmc/cmcSyslogManagement.jsp</result>
+		</action>
+		<action name="showSyslogServer" class="cmcSyslogServerAction"
+			method="showSyslogServer">
+			<result>/cmc/cmcSyslogServer.jsp</result>
+		</action>
+		<action name="getSyslogServerList" class="cmcSyslogServerAction"
+			method="loadSyslogServerList" />
+		<action name="deleteSyslogServer" class="cmcSyslogServerAction"
+			method="deleteSyslogServer" />
+		<action name="addSyslogServer" class="cmcSyslogServerAction"
+			method="addSyslogServer" />
+		<action name="modifySyslogServer" class="cmcSyslogServerAction"
+			method="modifySyslogServer" />
+		<action name="getEntitySyslogServerData" class="cmcSyslogServerAction"
+			method="refreshEntityData" />
+ 		<action name="showSyslogConfig" class="cmcSyslogConfigAction" method="showSyslogConfig">
+            <result>/cmc/cmcSyslogConfig.jsp</result>
+        </action>
+        <action name="show8800ASyslogConfig" class="cmcSyslogConfigAction" method="showSyslogConfig">
+            <result>/cmc/cmc8800ASyslogConfig.jsp</result>
+        </action>
+        
+        <action name="getSyslogRecordType" class="cmcSyslogConfigAction" method="loadSyslogRecordType" />
+        <action name="showUpdateRecordTypeLvl" class="cmcSyslogConfigAction" method="showUpdateRecordTypeLvl">
+            <result>/cmc/cmcUpdateRecordTypeLvl.jsp</result>
+        </action>
+        <action name="undoAllSyslogEvtLvls" class="cmcSyslogConfigAction" method="undoAllSyslogEvtLvls" />
+        <action name="getAllEventLevel" class="cmcSyslogConfigAction" method="loadAllEventLevel" />
+        <action name="getAllTrotMode" class="cmcSyslogConfigAction" method="loadAllTrotMode" />
+        <action name="updateSyslogEvtLvl" class="cmcSyslogConfigAction" method="updateSyslogEvtLvl" />
+        <action name="getSyslogParams" class="cmcSyslogConfigAction" method="loadSyslogParams" />
+        <action name="updateCmcSyslogConfig" class="cmcSyslogConfigAction" method="updateCmcSyslogConfig" />
+        <action name="update8800ACmcSyslogConfig" class="cmcSyslogConfigAction" method="update8800ACmcSyslogConfig" />
+		<action name="getEntitySyslogConfigData" class="cmcSyslogConfigAction" method="refreshEntityData" />
+		
+		<action name="loadSyslogRecordTypeII" class="cmcSyslogConfigAction" method="loadSyslogRecordTypeII" />
+        <action name="showUpdateRecordTypeLvlII" class="cmcSyslogConfigAction" method="showUpdateRecordTypeLvlII">
+            <result>/cmc/cmcUpdateRecordTypeLvlII.jsp</result>
+        </action>
+        <action name="updateSyslogEvtLvlII" class="cmcSyslogConfigAction" method="updateSyslogEvtLvlII" />
+	</package>
+</struts>

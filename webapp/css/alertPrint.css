@@ -1,0 +1,147 @@
+
+*{ margin:0; padding:0;}
+body,html{color:#000;}
+body{ padding:10px; font:13px/1.4em "Microsoft YaHei","微软雅黑";}
+h3{ font:18px/2em "Microsoft YaHei","微软雅黑";}
+a{ text-decoration: none; color:#000; cursor:default;}
+table{ border-collapse: collapse;}
+td,th{ padding:4px;}
+.txtCenter{ text-align: center;}
+
+.buttonDiv{
+	padding-top: 20px;
+}
+.queryDiv{
+	width: 960px;
+	margin: 20px auto;
+	background: #FFF;
+	border: solid 1px #BDBDBD;
+	padding: 30px 50px 20px !important;
+}
+.report-content-div{
+	width: 960px;
+	background: #FFF;
+	border: solid 1px #BDBDBD;
+	padding: 50px;
+	margin: 20px auto;
+	clear:both;
+}
+.report-content-div h1{
+	text-align: center;
+	font-size: 32px;
+    line-height: 40px
+}
+.report-content-div h2{
+	font-size: 20px;
+    line-height: 22px;
+    height: 30px;
+}
+#queryTime{
+    font-size: 14px;
+    text-align: right;
+}
+.reportTable {
+  	width: 100%;
+  	margin: 20px auto;
+  	border-collapse: collapse;
+  	border-spacing: 0;
+}
+.reportTable > thead > tr > th,
+.reportTable > tbody > tr > th,
+.reportTable > tfoot > tr > th,
+.reportTable > thead > tr > td,
+.reportTable > tbody > tr > td,
+.reportTable > tfoot > tr > td {
+  	height: 29px;
+	text-align: center;
+	border: 1px solid #D6D6D6;
+	padding: 1px 3px;
+	word-wrap: break-word;
+	word-break:break-all;
+}
+.reportTable > thead > tr > th,
+.reportTable > tbody > tr > th {
+  	background-color: #F5F5DC;
+	font-weight: bold;
+	font-size: 12px;
+}
+.reportTable a, .reportTable a:HOVER{
+	color: red;
+}
+.reportTable caption{
+	font-weight: bold;
+	font: 14px;
+	width: 100%;
+}
+th.nowrap, td.nowrap{
+	white-space:nowrap;
+}
+.summaryTd{
+	background-color: #E5E5E5;
+}
+.vertical-middle{
+	vertical-align: middle;
+}
+.vertical-middle input, .vertical-middle span, .vertical-middle label{
+	vertical-align: middle;
+}
+.floatLeftDiv{
+	float: left;
+	margin: 2px 5px;
+	vertical-align: middle;
+	white-space: nowrap;
+	word-spacing: normal;
+	word-break:keep-all;
+}
+.floatLeftDiv input,  
+.floatLeftDiv select, 
+.floatLeftDiv span,
+.floatLeftDiv label{
+	vertical-align: middle;
+}
+
+body {
+	border: 0;
+	font-size: 10.5pt;
+	font-family: Arial, Helvetica, Sans-Serif;
+	padding: 0;
+	max-width:1440px;
+}
+
+TD,DIV {
+	font-size: 10.5pt;
+	font-family: Arial, Helvetica, Sans-Serif;
+}
+
+#extGridContainer {
+	width: 600px;
+}
+
+.x-toolbar,#extPagingBar {
+	display: none;
+}
+
+.x-grid3-hd-row td,#extGridContainer thead td {
+	font-weight: bold;
+}
+
+.x-grid3-row td a {
+	text-decoration: none;
+	color: #000;
+}
+
+.x-grid3-hd-row td,.x-grid3-row td,.x-grid3-summary-row td,.x-grid-group-hd div,.x-grid3-cell div,.x-grid-empty
+{ font: 13px/1.42857143em "Microsoft YaHei", "微软雅黑",Arial, Helvetica, Sans-Serif;}
+
+.edge10{ margin:10px;}
+#stTime, #etTime{ width:150px;}
+.center{ max-width:1440px; margin:0 auto;}
+.x-grid3, .x-grid3-header-inner, .x-grid3-header-offset, .x-grid3-header-offset > table, .x-grid3-row, .x-panel-body,
+.x-grid3-scroller, .x-grid3-body,.x-grid3-row > table { max-width:1440px; width:100% !important;}
+.x-panel-header{ text-align:center;}
+.x-panel-header-text{ font:20px/2em "Microsoft YaHei", "微软雅黑", Arial, Helvetica, Sans-Serif; color:#15428b; text-align:center;}
+.x-grid3-header{ border-bottom:1px solid #ddd; padding:8px 0px;}
+.x-grid3-row{ padding:8px 0px; border-top:1px solid #ddd;line-height: 1.42857143;}
+#stTime .x-form-field-wrap, #etTime .x-form-field-wrap{width:auto !important;}
+.x-grid3-scroller{ height:auto !important;}
+.x-panel-body, .x-grid3{ height:auto !important;}

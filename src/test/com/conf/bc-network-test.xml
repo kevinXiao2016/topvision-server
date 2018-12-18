@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC 
+	"-//SPRING//DTD BEAN//EN" 
+	"http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+    <bean id="portService" class="com.topvision.ems.network.service.impl.PortServiceImpl"
+        init-method="initialize" destroy-method="destroy">
+        <property name="portDao" ref="portDao" />
+        <property name="entityDao" ref="entityDao" />
+        <property name="messageService" ref="messageService" />
+        <property name="facadeFactory" ref="facadeFactory" />
+    </bean>
+
+    <bean id="entityService" class="com.topvision.ems.network.service.impl.EntityServiceImpl"
+        init-method="initialize" destroy-method="destroy">
+        <property name="entityDao" ref="entityDao" />
+        <property name="entityAddressDao" ref="entityAddressDao" />
+        <property name="entityAttributeDao" ref="entityAttributeDao" />
+        <property name="linkDao" ref="linkDao" />
+        <property name="systemLogDao" ref="systemLogDao" />
+        <property name="entityTypeDao" ref="entityTypeDao" />
+        <property name="portDao" ref="portDao" />
+        <property name="messageService" ref="messageService" />
+    </bean>
+</beans>

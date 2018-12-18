@@ -1,0 +1,944 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.cm.domain.Cm">
+
+	<!-- ################################## select start ####################################### -->
+	<select id="getCmcIdByCmId" parameterType="long" resultType="long">
+		select cmcId from cmattribute where cmId=#{cmId}
+	</select>
+	
+	<select id="getEntityIdByCmcId" parameterType="long" resultType="long">
+		select entityId from oltonurelation 
+		where 
+		onuId in (selectonuId from cmcentityrelation where cmcId=#{cmcId})
+	</select>
+	
+	<select id="queryEntityIdByCmMac" parameterType="string" resultType="long">
+		SELECT entityId from cmccmrelation where mac=#{cmMac}
+	</select>
+	<select id="queryCmLocate" parameterType="map" resultType="cmLocateInfo">
+		<if test="ccIndex == null">
+			SELECT  A.cmcId, B.name govName,B.ip,sub.name  ccName,E.name folderName
+				FROM 	cmcentityrelation A, entity B LEFT JOIN entity sub on B.entityId=sub.parentId,
+					 	entityfolderrela D ,topofolder E
+				WHERE 	A.cmcentityid=B.entityId 
+				      	AND A.cmcentityid=D.entityId and D.folderId=E.folderId
+				      	AND A.cmcentityid=#{entityId}
+		</if>
+		<if test="ccIndex != null">
+		SELECT  A.cmcId, B.name govName,B.ip,sub.name  ccName,E.name folderName
+		FROM 	cmcentityrelation A, entity B LEFT JOIN entity sub on B.entityId=sub.parentId,
+			 	entityfolderrela D ,topofolder E
+		WHERE 	A.cmcentityid=B.entityId  AND A.cmcId=sub.entityId
+		      	AND A.cmcentityid=D.entityId and D.folderId=E.folderId
+		      	AND A.cmcentityid=#{entityId}
+			    	AND A.cmcindex=#{ccIndex}  
+		 </if>
+	</select>
+	
+	<select id="getDolSnmpParamByEntityId" parameterType="long"	resultType="com.topvision.ems.cmc.domain.DolSnmpParam">
+		SELECT 
+			entityId,
+			version, 
+			ip ipAddress, 
+			timeout, 
+			retry, 
+			port, 
+			mibs, 
+			community, 
+			writeCommunity,
+			username,
+			securityLevel, 
+			authProtocol, 
+			authPassword, 
+			privProtocol, 
+			privPassword,
+			authoritativeEngineID, 
+			contextName, 
+			contextId 
+		FROM dolsnmpparam
+		WHERE entityId = #{entityId}
+	</select>
+	
+	<select id="getCmListByOlt" parameterType="map" resultType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+		SELECT
+			a.cmId,
+			a.statusMacAddress,
+			a.statusInetAddress,
+			a.statusValue,
+			a.statusRxPower,
+			a.statusSignalNoise
+		FROM
+			cmattribute a
+		where exists
+			(select 1 from entity v , cmccmrelation b, cmccmrelation c
+			where 
+				a.cmcId = v.entityId 
+				and a.cmcId = b.cmcId 
+				and b.entityId = c.entityId
+				and c.cmId = #{cmId} 
+				and v.entityId in(select entityId from ${Authority}))
+		order by case StatusValue when 6 then 1 else 2 end, StatusInetAddress DESC
+    </select>
+    
+	<select id="getCmListByOltCount" parameterType="map" resultType="Long">
+		SELECT 
+			count(cmId)
+		FROM
+       	 cmattribute a
+        where exists 
+	        (select 1 from entity v , cmccmrelation b, cmccmrelation c 
+	        where 
+		        a.cmcId = v.entityId 
+		        and a.cmcId = b.cmcId 
+		        and b.entityId = c.entityId 
+		        and c.cmId = #{cmId} and v.entityId in (select entityId from ${Authority}))
+    </select>
+    
+	<select id="getCmListByPonCount" parameterType="map" resultType="Long">
+		SELECT count(cmId)
+		FROM
+        	cmattribute a
+        where exists 
+	        (select 1 from entity v, oltonurelation b, cmccmrelation c, oltonurelation d 
+	        where 
+		        a.cmcId = v.entityId 
+		        and a.cmcId = b.onuId 
+		        and b.ponId = d.ponId 
+		        and d.onuId = c.cmcId  
+		        and c.cmId = #{cmId} and v.entityId in (select entityId from ${Authority}))
+    </select>
+    
+	<select id="getCmListByCmcCount" parameterType="map" resultType="Long">
+		SELECT count(cmId)
+		FROM
+        cmattribute a
+        where exists 
+        	(select 1 from entity v, cmccmrelation b 
+        	where 
+        		a.cmcId = v.entityId 
+        		and a.cmcId = b.cmcId 
+        		and b.cmId = #{cmId} 
+        		and v.entityId in (select entityId from ${Authority}))
+    </select>
+    
+	<select id="getCmListByCmcId" parameterType="map" resultType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+		SELECT
+			a.cmId,
+			a.cmcId,
+			statusIndex,
+			statusMacAddress,
+			IF(StatusIpAddress='noSuchObject' || StatusIpAddress is NULL,StatusInetAddress,StatusIpAddress) 
+			as StatusIpAddress,
+			statusDownChannelIfIndex,
+			statusUpChannelIfIndex,
+			statusRxPower,
+			statusTimingOffset,
+			statusEqualizationData,
+			statusValue,
+			statusUnerroreds,
+			statusCorrecteds,
+			statusUncorrectables,
+			statusExtUnerroreds,
+			statusExtCorrecteds,
+			statusExtUncorrectables,
+			statusSignalNoise,
+			statusMicroreflections,
+			statusDocsisRegMode,
+			statusModulationType,
+			statusInetAddressType,
+			statusInetAddress,
+			statusValueLastUpdate,
+			statusHighResolutionTO,
+			b.userAddr cmAlias,
+	        b.classification cmClassified,
+			c.topCmFlapInsertionFailNum,
+			d.downChannelSnr,
+			d.downChannelTx,
+			d.upChannelTx,
+			d.collectTime
+		FROM 
+			cmattribute a 
+			left join cmbossinfo b on a.StatusMacAddress = b.cmMac
+			left join cmflap c on a.StatusMacAddress = c.topCmFlapMacAddr and a.cmId = c.cmId
+			left JOIN cmsignal d on a.cmId = d.cmId
+		WHERE
+			a.cmcId = #{cmcId}
+			order by case StatusValue when 6 then 1 else 2 end, StatusInetAddress DESC
+		limit ${start} , ${limit}
+	</select>
+
+	<select id="getCmNumByStatus" parameterType="map" resultType="Long">
+		select count(distinct(tmp.cmId))from ( 
+		select
+			a.cmId, 
+			a.cmcId
+		FROM
+            (
+            select * from  entity e left join
+            (select type,typeid tid from entitytyperelation where type in
+            (select typeId from entitytyperelation where type = 4))
+            etr on e.typeId = etr.tid
+            ) d
+			right join cmcentityrelation c on d.entityId = c.cmcEntityId 
+			right join cmccmrelation b on c.cmcId = b.cmcId 
+			right join cmattribute a on a.cmId=b.cmId
+		WHERE 1 = 1
+		<if test="deviceType != null">AND (d.type = #{deviceType} or d.typeId = #{deviceType} ) </if>
+		<if test="cmcId != null">AND c.cmcEntityId = #{cmcId}</if>
+		<if test="channelId != null">
+			AND upPortId
+			in (select cmcPortId from cmcupchannelbaseinfo where
+			channelId=#{channelId})
+		</if>
+		<if test="docsIfDownChannelId != null">
+			AND downPortId in (select cmcPortId from cmcdownchannelbaseinfo where
+			docsIfDownChannelId=#{docsIfDownChannelId})
+		</if>
+		<if test="cmMac != null">AND b.mac LIKE '${cmMac}%'</if>
+		<if test="status != null">AND a.statusValue = #{status}</if>
+		) tmp 
+		inner join entity v on tmp.cmcId = v.entityId where v.entityId in (select entityId from ${Authority})
+	</select>
+
+	
+	<select id="getEntity8800BInfoList" parameterType="map"	resultType="com.topvision.ems.cmc.domain.EntityRelation">
+		SELECT
+			a.entityId, 
+			a.ip
+		FROM entity a
+		where 
+			a.typeId=#{type} and a.entityId in (select entityId from ${Authority})
+		order by a.ip asc
+	</select>
+	
+	<select id="getDownChannelId" parameterType="long" resultType="long">
+	    SELECT docsIfDownChannelId from cmcdownchannelbaseinfo 
+		where cmcPortId	=(SELECT cmcPortId from cmcportrelation where cmcId= 
+		(select cmcId from cmccmrelation where cmId = #{cmId}) 
+		and channellIndex = (select StatusDownChannelIfIndex from cmattribute where cmId = #{cmId}))
+	</select>
+	
+	<select id="getUpChannelId" parameterType="long" resultType="long">
+	    SELECT channelId from cmcupchannelbaseinfo 
+		where cmcPortId	=(SELECT cmcPortId from cmcportrelation where cmcId= 
+		(select cmcId from cmccmrelation where cmId = #{cmId}) 
+		and channellIndex = (select StatusUpChannelIfIndex from cmattribute where cmId = #{cmId}));
+	</select>
+	
+	<select id="getDeviceTypeByCmId" parameterType="long" resultType="long">
+		SELECT typeId
+		FROM entity 
+		WHERE entityId = (SELECT entityId FROM cmccmrelation WHERE cmId=#{cmId})
+	</select>
+	
+	<select id="get8800BTopologyInfo" parameterType="Long" resultType="com.topvision.ems.cmc.domain.CmTopologyInfo">
+		SELECT
+			a.cmId,
+			a.cmcId,
+			a.upPortId,
+			a.downPortId,
+			a.mac,
+			c.entityId,
+			c.ip,
+			b.cmcIndex
+		from 
+			cmccmrelation a 
+			left join cmcentityrelation b on a.cmcId = b.cmcId 
+			left join entity c on b.cmcEntityId = c.entityId
+		WHERE 
+			cmId = #{cmId}
+	</select>
+	
+	<select id="getCmtsTopologyInfo" parameterType="Long" resultType="com.topvision.ems.cmc.domain.CmTopologyInfo">
+		SELECT
+			a.cmId,
+			a.cmcId,
+			a.upPortId,
+			a.downPortId,
+			a.mac,
+			c.entityId,
+			c.ip,
+			b.cmcIndex,
+			d.ifDescr as upDesrc, 
+			d.ifIndex as upChannelIndex, 
+			e.ifDescr as downDesrc,
+			e.ifIndex as downChannelIndex
+		from 
+			cmccmrelation a 
+			left join cmcentityrelation b on a.cmcId = b.cmcId 
+			left join entity c on b.cmcEntityId = c.entityId
+			left join cmcportattribute d on a.upPortId = d.cmcPortId
+			left join cmcportattribute e on a.downPortId = e.cmcPortId
+		WHERE 
+			cmId = #{cmId}
+	</select>
+	
+	<select id="getTopologyInfo" parameterType="Long" resultType="com.topvision.ems.cmc.domain.CmTopologyInfo">
+		SELECT
+			a.cmId,
+			a.cmcId,
+			a.upPortId,
+			a.downPortId,
+			a.mac,
+			b.onuId,
+			c.ponId,
+			c.entityId,
+			e.ip,
+			f.onuMacAddress	cmcMac,
+			b.cmcIndex
+		from 
+			cmccmrelation a 
+			left join cmcentityrelation b on a.cmcId = b.cmcId
+			left join oltonurelation c on b.onuId = c.onuId 
+			left join entity e on c.entityId = e.entityId
+			left join oltonuattribute f on f.onuId=b.onuId
+		WHERE 
+			cmId = #{cmId}
+	</select>
+	
+	<select id="getCmServiceFlowListInfo" parameterType="String" resultType="com.topvision.ems.cmc.qos.domain.CmcQosServiceFlowInfo">
+		SELECT
+			a.mac statusMacAddress ,
+			b.cmcId,
+			b.docsQosServiceFlowId,
+			b.cmcIndex,
+			b.docsQosServiceFlowDirection,
+			b.docsQosServiceFlowPrimary,
+			b.docsQosServiceFlowSID
+		FROM 
+			serviceflowcmrelation a 
+			right join serviceflowattribute b on a.sId = b.sId
+		WHERE 
+			mac=#{cmMac}
+    </select>
+    
+	<select id="getCmListByDownPortIdCount" parameterType="map"	resultType="Long">
+		SELECT count(cmId) 
+		FROM cmattribute a
+        where exists 
+	        (select 1 from entity v, cmccmrelation b, cmccmrelation c 
+	        where 
+	        	a.cmcId = v.entityId 
+	        	and a.cmId = b.cmId 
+	        	and b.downPortId=c.downPortId 
+	        	and c.cmId = #{cmId} 
+	        	and v.entityId in (select entityId from ${Authority}))
+    </select>
+    
+	<select id="getCmListByDownPortId" parameterType="map" resultType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+		SELECT
+			a.cmId,
+			a.statusMacAddress,
+			a.statusIpAddress,
+			a.statusInetAddress,
+			a.statusValue,
+			a.statusRxPower,
+			a.statusSignalNoise
+		FROM cmattribute a
+        where exists 
+	        (select 1 from entity v, cmccmrelation b, cmccmrelation c 
+	        where 
+	        	a.cmcId = v.entityId 
+	        	and a.cmId = b.cmId 
+	        	and b.downPortId=c.downPortId 
+	        	and c.cmId = #{cmId} 
+	        	and v.entityId in (select entityId from ${Authority}))
+	    order by case StatusValue when 6 then 1 else 2 end, StatusInetAddress DESC
+    </select>
+    
+	<select id="getCmListByUpPortIdCount" parameterType="map" resultType="Long">
+		SELECT count(cmId) 
+		FROM 
+			cmattribute a
+        where exists 
+	        (select 1 from entity v, cmccmrelation b, cmccmrelation c 
+	        where 
+	        	a.cmcId = v.entityId 
+	        	and a.cmId = b.cmId 
+	        	and b.upPortId=c.upPortId 
+	        	and c.cmId = #{cmId} 
+	        	and v.entityId in (select entityId from ${Authority}))
+    </select>
+    
+	<select id="getCmListByUpPortId" parameterType="map" resultType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+		SELECT
+			a.cmId,
+			a.statusMacAddress,
+			a.statusIpAddress,
+			a.statusInetAddress,
+			a.statusValue,
+			a.statusRxPower,
+			a.statusSignalNoise
+		FROM cmattribute a
+        where exists 
+	        (select 1 from entity v, cmccmrelation b, cmccmrelation c 
+	        where 
+	        	a.cmcId = v.entityId 
+	        	and a.cmId = b.cmId 
+	        	and b.upPortId=c.upPortId 
+	        	and c.cmId = #{cmId} 
+	        	and v.entityId in (select entityId from ${Authority}))
+	   order by case StatusValue when 6 then 1 else 2 end, StatusInetAddress DESC
+    </select>
+    
+	<select id="getCmListByCmc" parameterType="map" resultType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+		SELECT
+			a.cmId,
+			a.statusMacAddress,
+			a.statusIpAddress,
+			a.statusInetAddress,
+			a.statusValue,
+			a.statusRxPower,
+			a.statusSignalNoise
+		FROM
+        	cmattribute a
+        	where exists 
+        		(select 1 
+        		from entity v, cmccmrelation b 
+        		where 
+        			a.cmcId = v.entityId 
+        			and a.cmcId = b.cmcId 
+        			and b.cmId = #{cmId} 
+        			and v.entityId in (select entityId from ${Authority}))
+        order by case StatusValue when 6 then 1 else 2 end, StatusInetAddress DESC			
+	</select>
+	
+	<select id="getCmListByPon" parameterType="map" resultType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+		SELECT
+			a.cmId,
+			a.statusMacAddress,
+			a.statusInetAddress,
+			a.statusValue,
+			a.statusRxPower,
+			a.statusSignalNoise
+		FROM
+        	cmattribute a
+        where 
+        	exists (select 1 from entity v, oltonurelation b, cmccmrelation c, oltonurelation d 
+        			where 
+	        			a.cmcId = v.entityId 
+	        			and a.cmcId = b.onuId 
+	        			and b.ponId = d.ponId 
+	        			and d.onuId = c.cmcId  
+	        			and c.cmId = #{cmId} 
+	        			and v.entityId in (select entityId from ${Authority})
+        			)
+      order by case StatusValue when 6 then 1 else 2 end, StatusInetAddress DESC		  			
+    </select>
+    
+    <select id="getCpeListByCmId" parameterType="Long" resultType="com.topvision.ems.cmc.facade.domain.CpeAttribute">
+    	SELECT
+			a.cpeId, 
+			a.docsIfCmtsCmStatusIndex, 
+			a.docsSubMgtCpeIpIndex,
+			a.docsSubMgtCpeIpAddr, 
+			a.docsSubMgtCpeIpLearned, 
+			a.docsSubMgtCpeType
+		FROM
+			cpeattribute a 
+			left join cpecmrelation b on a.cpeId = b.cpeId
+		WHERE cmId = #{cmId}
+    </select>
+    
+    <select id="realCpeMaxCpe" parameterType="Long" resultType="Integer">
+    	SELECT
+			docsSubMgtCpeControlMaxCpeIp
+		FROM
+			cmattributeextcpecontrol
+		WHERE cmId = #{cmId}
+    </select>
+    
+    <select id="getRealIpNum" parameterType="Long" resultType="Integer">
+    	SELECT
+			count(*)
+		FROM
+			cpecmrelation
+		WHERE cmId = #{cmId}
+    </select>
+    
+	<select id="getCmIndexByMac" parameterType="String" resultType="long">
+    	select a.statusIndex 
+    	from cmattribute a 
+    	where a.statusMacAddress = #{cmMac}
+    </select>
+    
+	<select id="getEntityIdByCmMac" parameterType="String" resultType="long">
+    	select 
+    		c.entityId 
+    	from 
+    		cmattribute a 
+    		left join cmcentityrelation b on a.cmcId = b.cmcId
+			left join oltonurelation c on b.onuId = c.onuId
+    	where 
+    		a.statusMacAddress = #{cmMac}
+    </select>
+	
+	<select id="getCmAttributeByCmId" parameterType="long" resultType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+    	SELECT
+			b.entityId,
+			a.cmId,
+			a.statusMacAddress,
+			a.statusIpAddress,
+			a.statusInetAddress,
+			a.statusValue,
+			a.statusRxPower,
+			a.statusSignalNoise, 
+			a.statusIndex, 
+			a.cmcId,
+			a.StatusExtUnerroreds,
+			a.StatusExtCorrecteds,
+			a.StatusExtUncorrectables,
+			a.StatusDownChannelIfIndex,
+			a.StatusUpChannelIfIndex,
+			b.docsIfCmtsCmStatusIndex as statusIndex
+		FROM 
+			cmattribute a 
+			left join cmccmrelation b on a.cmId = b.cmId
+		where 
+			a.cmId=#{cmId}
+    </select>
+    
+    <select id="selectCmListByCmMacs" parameterType="map" resultType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+    select
+    		cmId,
+			cmcId,
+			statusIndex,
+			statusMacAddress,
+			IF(StatusIpAddress='noSuchObject' || StatusIpAddress is NULL,StatusInetAddress,StatusIpAddress) 
+			as StatusIpAddress,
+			statusDownChannelIfIndex,
+			statusUpChannelIfIndex,
+			statusRxPower,
+			statusTimingOffset,
+			statusEqualizationData,
+			statusValue,
+			statusUnerroreds,
+			statusCorrecteds,
+			statusUncorrectables,
+			statusExtUnerroreds,
+			statusExtCorrecteds,
+			statusExtUncorrectables,
+			statusSignalNoise,
+			statusMicroreflections,
+			statusDocsisRegMode,
+			statusModulationType,
+			statusInetAddressType,
+			statusInetAddress,
+			statusValueLastUpdate,
+			statusHighResolutionTO
+    	from cmattribute where 1 = 1
+        <if test="macs != null">AND StatusMacAddress in (${macs})</if>
+    </select>
+    
+    <select id="getCmCpeList" parameterType="long" resultType="com.topvision.ems.cmc.facade.domain.CmCpe">
+    	select 
+	    	cmId,
+	    	entityId,
+	    	topCmCpeType,
+	    	topCmCpeIpAddress,
+	    	topCmCpeCcmtsIfIndex,
+	    	topCmCpeCmStatusIndex,
+	    	topCmCpeToCmMacAddr,
+	    	topCmCpeMacAddress as topCmCpeMacAddressString
+    	from cmcpe
+    	where cmId = #{cmId}
+    </select>
+    
+    <select id="getCmStaticIpList" parameterType="long" resultType="com.topvision.ems.cmc.facade.domain.CmStaticIp">
+    	select * from cmstaticip where cmId = #{cmId}
+    </select>
+    
+    <select id="getUpChannelIdList" parameterType="long" resultType="long">
+    	select cmUsStatusChIfIndex from docsif3cmtscmusstatus where cmId = #{cmId}
+    </select>
+    
+    <select id="getDocsIf3CmtsCmUsStatusList" parameterType="long" resultType="com.topvision.ems.cmc.facade.domain.DocsIf3CmtsCmUsStatus">
+    	select * from docsif3cmtscmusstatus where cmId = #{cmId}  group by cmid,cmUsStatusChIfIndex
+    </select>
+    
+    <select id="selectCmActionInfo" parameterType="map" resultType="com.topvision.ems.cmc.performance.domain.CmAct">
+        select 
+	        a.entityId, 
+	        a.cmIndex, 
+	        a.cmmac, 
+	        a.cmip, 
+	        a.action, 
+	        a.time, 
+	        a.realtime, 
+	        CONCAT(b.name,'(',b.ip,')') entityIp
+        from 
+        	cmaction a
+        	left join entity b on a.entityId = b.entityId
+        where 1 = 1
+        <if test="entityId != null">AND a.entityId = #{entityId}</if>
+        <if test="cmMac != null">AND a.cmmac = #{cmMac}</if>
+        <if test="startTime != null">AND <![CDATA[ a.realtime >= #{startTime} ]]></if>
+        <if test="endTime != null">AND <![CDATA[ a.realtime <= #{endTime}]]></if>
+        group by a.entityId,a.cmmac,a.action,a.realtime
+        order by a.realtime
+    </select>
+    
+    <select id="selectCpeActionInfoByCmMac" parameterType="map" resultType="com.topvision.ems.cmc.performance.domain.CpeAct">
+        select 
+	        a.entityId, 
+	        a.cmIndex, 
+	        a.cmmac, 
+	        a.cpemac, 
+	        a.cpeip, 
+	        a.action, 
+	        a.time, 
+	        a.realtime, 
+	        b.ip as entityIp
+        from
+        	cpeaction a
+        	left join entity b on a.entityId = b.entityId
+        where 1 = 1
+        <if test="cmMac != null">AND a.cmmac = #{cmMac}</if>
+        <if test="cpeMac != null">AND a.cpeMac = #{cpeMac}</if>
+        <if test="startTime != null">AND <![CDATA[ a.realtime >= #{startTime} ]]></if>
+        <if test="endTime != null">AND <![CDATA[ a.realtime <= #{endTime}]]></if>
+        order by a.cpemac, a.realtime
+    </select>
+    
+    <select id="selectChannelCmNum" parameterType="map"
+	resultType="com.topvision.ems.cmc.performance.domain.CmNum">
+	select entityId, ccIfIndex, portIfIndex, onlineNum, otherNum,
+	offlineNum,
+	interactiveNum, broadbandNum, mtaNum, integratedNum, cpeNum,
+	max(realtime) as realtime from
+	usernumhisport where entityId =
+	#{entityId} and portIfIndex =
+	#{portIfIndex}
+	</select>
+	
+    <select id="selectChannelCmNumHis" parameterType="map"
+	resultType="com.topvision.ems.cmc.performance.domain.CmNum">
+	select entityId, ccIfIndex, portIfIndex, onlineNum, otherNum,
+	offlineNum,
+	interactiveNum, broadbandNum, mtaNum, integratedNum, cpeNum
+	from
+	usernumhisport where entityId = #{entityId} and portIfIndex =
+	#{portIfIndex} and <![CDATA[ realtime >= #{startTime} ]]>
+	and <![CDATA[realtime <= #{endTime}]]>
+	</select>
+    <select id="selectCmUsStatusByCmcId" parameterType="long"
+	resultType="com.topvision.ems.cmc.facade.domain.DocsIf3CmtsCmUsStatus">
+	select a.cmcId, a.cmId, b.cmId, b.cmRegStatusId, b.cmUsStatusChIfIndex,
+	b.cmUsStatusModulationType, b.cmUsStatusRxPower,
+	b.cmUsStatusSignalNoise, b.cmUsStatusMicroreflections,
+	b.cmUsStatusEqData, b.cmUsStatusUnerroreds, b.cmUsStatusCorrecteds,
+	b.cmUsStatusUncorrectables,
+	b.cmUsStatusHighResolutionTimingOffset, b.cmUsStatusIsMuted, b.cmUsStatusRangingStatus
+	from cmccmrelation a, docsif3cmtscmusstatus b where a.cmId = b.cmId and a.cmcId = #{cmcId}
+	</select>
+    <select id="selectCmAttributeByCmcId" parameterType="long"
+	resultType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+	select a.cmId, a.cmcId, a.statusIndex, a.statusMacAddress,
+	a.statusIpAddress,
+	a.statusDownChannelIfIndex,
+	a.statusUpChannelIfIndex,
+	a.statusRxPower,
+	a.statusTimingOffset,
+	a.statusValue,
+	a.statusSignalNoise,
+	a.statusMicroreflections,
+	a.statusDocsisRegMode,
+	a.statusInetAddressType,
+	a.statusInetAddress,
+	b.userAddr cmAlias,
+    b.classification cmClassified
+	from cmattribute a
+    left join cmbossinfo b on a.statusMacAddress = b.CmMac
+	where a.cmcId = #{cmcId}
+	</select>
+	
+	<select id="selectCmAttributeByCmId" parameterType="long" resultType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+		SELECT 
+			* 
+		FROM 
+			CmAttribute 
+		WHERE 
+			cmId = #{cmId}
+	</select>
+	
+	<select id="getCmSignalByCmId" parameterType="com.topvision.ems.cmc.facade.domain.CmStatus" resultType="com.topvision.ems.cmc.cm.domain.CmSignal">
+    	select 
+    		* 
+    	from 
+    		CmSignal 
+    	where
+    		CmId = #{cmId}
+    </select>
+    
+	<select id="getCm2SignalByCmId" parameterType="com.topvision.ems.cmc.cm.domain.CmSignal" resultType="com.topvision.ems.cmc.cm.domain.CmSignal">
+    	select 
+    		* 
+    	from 
+    		CmSignal 
+    	where
+    		CmId = #{cmId}
+    </select>
+    
+	<select id="getCm3SignalByCmId" parameterType="com.topvision.ems.cmc.cm.domain.Cm3Signal" resultType="com.topvision.ems.cmc.cm.domain.Cm3Signal">
+    	select 
+    		* 
+    	from 
+    		Cm3Signal 
+    	where
+    		CmId = #{cmId}
+    	and
+    		channelId = #{channelId}
+    	and 
+    		channelType = #{channelType}
+    </select>
+    
+	<select id="selectCm3SignalByChannel" parameterType="map" resultType="com.topvision.ems.cmc.cm.domain.Cm3Signal">
+    	select 
+    		* 
+    	from 
+    		Cm3Signal 
+    	where
+    		CmId = #{cmId}
+    	and 
+    		channelType = #{channelType}
+    </select>
+	
+	<select id="selectcmcIdByEntityIdAndCmmac" parameterType="map" resultType="long">
+		select cmcId from cmccmrelation where entityId = #{entityId} and maclong = #{maclong}
+    </select>
+    
+	<select id="getPreviousStateById"  parameterType="long" resultType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+	    SELECT
+	    	cmId,preStatus
+	    FROM 
+	    	CmAttribute
+	    WHERE
+	    	cmId = #{cmId}
+	</select>
+	
+	<select id="getUpChannelSignalByCmId" parameterType="long" resultType="cm3Signal">
+		select A.*,B.cmcId,C.ChannelFrequency upChannelFrequency from cm3signal A 
+		left join cmattribute B on A.cmId = B.cmId
+		left join cmcupchannelbaseinfo C on B.cmcId = C.cmcId and A.channelId = C.channelId
+		where A.cmId=#{cmId} and A.channelType=0 order by A.channelId
+	</select>
+	
+	<select id="getDownChannelSignalByCmId" parameterType="long" resultType="cm3Signal">
+		select A.*,B.cmcId,C.docsIfDownChannelFrequency downChannelFrequency from cm3signal A 
+		left join cmattribute B on A.cmId = B.cmId
+		left join cmcdownchannelbaseinfo C on B.cmcId = C.cmcId and A.channelId = C.docsIfDownChannelId
+		where A.cmId=#{cmId} and A.channelType=1 order by A.channelId
+	</select>
+    
+	<!-- ################################## select end ######################################### -->
+	
+	<!-- ################################## insert start ####################################### -->
+	<insert id="insertCmSignal" parameterType="com.topvision.ems.cmc.facade.domain.CmStatus">
+	   INSERT INTO CmSignal
+	   (
+	   	   cmId,
+		   downChannelSnr, 
+		   downChannelTx, 
+		   upChannelTx, 
+		   collectTime,
+		   upChannelFrequency,
+		   downChannelFrequency
+	   )
+	   VALUES 
+	   (
+	       #{cmId},
+		   #{downChannelSnr}, 
+		   #{downChannelTx}, 
+		   #{upChannelTx}, 
+		   #{collectTime},
+		   #{upChannelFrequency},
+		   #{downChannelFrequency}
+	   )
+	</insert>
+	
+	<insert id="insertCm2Signal" parameterType="com.topvision.ems.cmc.cm.domain.CmSignal">
+	   INSERT INTO CmSignal
+	   (
+	   	   cmId,
+		   downChannelSnr, 
+		   downChannelTx, 
+		   upChannelTx, 
+		   collectTime,
+		   upChannelFrequency,
+		   downChannelFrequency,
+		   upChannelSnr
+	   )
+	   VALUES 
+	   (
+	       #{cmId},
+		   #{downChannelSnr}, 
+		   #{downChannelTx}, 
+		   #{upChannelTx}, 
+		   #{collectTime},
+		   #{upChannelFrequency},
+		   #{downChannelFrequency},
+		   #{upChannelSnr}
+	   )
+	</insert>
+	
+	<insert id="insertCm3Signal" parameterType="com.topvision.ems.cmc.cm.domain.Cm3Signal">
+	   INSERT INTO Cm3Signal
+	   (
+	      cmId,
+    	  channelType,
+    	  channelId,
+    	  downChannelSnr,
+    	  downChannelTx,
+    	  upChannelTx,
+          upChannelSnr,
+	      collectTime
+	   )
+	   VALUES 
+	   (
+	       #{cmId},
+		   #{channelType}, 
+		   #{channelId}, 
+		   #{downChannelSnr},
+		   #{downChannelTx},
+		   #{upChannelTx},
+    	   #{upChannelSnr},
+	       #{collectTime}
+	   )
+	</insert>
+	<!-- ################################## insert end ######################################### -->
+	
+	<!-- ################################## update start ####################################### -->
+	<update id="updateCmConfigFile" parameterType = "map">
+	   update cmattribute set fileName = #{fileName} where cmId = #{cmId}
+	</update>
+	<update id="updateCmAttribute" parameterType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+		update
+			cmattribute
+		set
+			statusIndex=#{statusIndex},
+			statusMacAddress=#{statusMacAddress},
+			statusIpAddress=#{statusIpAddress},
+			statusDownChannelIfIndex=#{statusDownChannelIfIndex},
+			statusUpChannelIfIndex=#{statusUpChannelIfIndex},
+			statusRxPower=#{statusRxPower},
+			statusTimingOffset=#{statusTimingOffset},
+			statusEqualizationData=#{statusEqualizationData},
+			statusValue=#{statusValue},
+			statusUnerroreds=#{statusUnerroreds},
+			statusCorrecteds=#{statusCorrecteds},
+			statusUncorrectables=#{statusUncorrectables},
+			statusExtUnerroreds=#{statusExtUnerroreds},
+			statusExtCorrecteds=#{statusExtCorrecteds},
+			statusExtUncorrectables=#{statusExtUncorrectables},
+			statusSignalNoise=#{statusSignalNoise},
+			statusMicroreflections=#{statusMicroreflections},
+			statusDocsisRegMode=#{statusDocsisRegMode},
+			statusModulationType=#{statusModulationType},
+			statusInetAddressType=#{statusInetAddressType},
+			statusInetAddress=#{statusInetAddress},
+			statusValueLastUpdate=#{statusValueLastUpdate},
+			statusHighResolutionTO=#{statusHighResolutionTO}
+		where 
+			cmcId=#{cmcId} AND statusMacAddress=#{statusMacAddress}
+	</update>
+	
+	<update id="updateCmStatusValue" parameterType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+		update
+			cmattribute
+		set
+			statusValue=#{statusValue}
+		where 
+			cmcId=#{cmcId} AND statusMacAddress=#{statusMacAddress}
+	</update>
+	
+	<update id="updateCmSignal" parameterType="com.topvision.ems.cmc.facade.domain.CmStatus">
+       UPDATE 
+       	   CmSignal
+       SET 
+       	   downChannelSnr = #{downChannelSnr},
+       	   downChannelTx = #{downChannelTx},
+       	   upChannelTx = #{upChannelTx},
+       	   collectTime = #{collectTime},
+       	   downChannelFrequency = #{downChannelFrequency},
+       	   upChannelFrequency = #{upChannelFrequency}
+       WHERE 
+           cmId = #{cmId} 
+    </update>
+    
+	<update id="updateCm2Signal" parameterType="com.topvision.ems.cmc.cm.domain.CmSignal">
+       UPDATE 
+       	   CmSignal
+       SET 
+      	   upChannelTx = #{upChannelTx},
+       	   upChannelSnr = #{upChannelSnr},
+       	   upChannelFrequency = #{upChannelFrequency},
+       	   downChannelSnr = #{downChannelSnr},
+       	   downChannelTx = #{downChannelTx},
+       	   downChannelFrequency = #{downChannelFrequency},
+       	   collectTime = #{collectTime}
+       WHERE 
+           cmId = #{cmId} 
+    </update>
+    
+	<update id="updateCm3Signal" parameterType="com.topvision.ems.cmc.cm.domain.Cm3Signal">
+       UPDATE 
+       	   Cm3Signal
+       SET 
+      	   upChannelTx = #{upChannelTx},
+       	   upChannelSnr = #{upChannelSnr},
+       	   downChannelSnr = #{downChannelSnr},
+       	   downChannelTx = #{downChannelTx},
+       	   collectTime = #{collectTime}
+       WHERE 
+           cmId = #{cmId}
+       AND
+       	   channelId = #{channelId}
+       AND 
+           channelType = #{channelType}
+    </update>
+	
+    
+	<update id="updateUpChannelSnr" parameterType="map">
+	    UPDATE
+	    	cmattribute
+	    SET 
+	    	StatusSignalNoise = #{statusSignalNoise}
+	    WHERE 
+	    	cmId = #{cmId}
+	</update>
+	
+	<update id="updateStatusValue" parameterType="map">
+       UPDATE cmattribute SET statusValue=#{statusValue} WHERE cmId=#{cmId}
+    </update>
+	
+	<!-- ################################## update end ######################################### -->
+	
+	<!-- ################################## delete start ####################################### -->
+	<delete id="deleteCmCpeInfo" parameterType="map">
+       DELETE FROM cmcpe WHERE cmId=#{cmId} AND topCmCpeMacAddress=#{topCmCpeMacAddress}
+    </delete>
+    
+    <delete id="deleteClearedCmInCmAttribute" parameterType="Long">
+       delete from cmattribute
+       where cmId =#{cmid}
+    </delete>
+    
+    <delete id="deleteClearedCmInCmcCmRelation" parameterType="Long">
+       delete from cmccmrelation
+       where cmId =#{cmid}
+    </delete>
+    
+    <delete id="deleteCmSignal" parameterType="long">
+        DELETE FROM cmsignal WHERE cmId = #{cmId}
+    </delete>
+    
+     <delete id="deleteCm3Signal" parameterType="long">
+        DELETE FROM cm3signal WHERE cmId = #{cmId}
+    </delete>
+	
+	<!-- ################################## delete end ######################################### -->
+	
+</mapper>

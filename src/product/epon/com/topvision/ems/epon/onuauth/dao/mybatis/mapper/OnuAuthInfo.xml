@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.onuauth.domain.OnuAuthInfo">
+	<select id="selectOnuAuthList" parameterType="map" resultType="onuAuthInfo">
+		select a.entityId, a.ponId, a.onuIndex, a.onuPreType, a.authType,
+		a.authAction as action, a.onuAuthenMacAddress as mac, a.onuSnMode,
+		a.topOnuAuthLogicSn as sn
+		,a.topOnuAuthPassword as password,
+		b.topPonOnuAutoAuthEnable as authType
+		from
+		oltauthentication a
+		left join oltpononuautoauthmode b on a.entityId = b.entityId and a.ponId = b.ponId
+		where a.entityId in (select entityId from ${Authority})
+		<if test="entityId != null">
+			AND a.entityId = #{entityId}
+		</if>
+		<if test="ponId != null">
+			AND a.ponId = #{ponId}
+		</if>
+		<if test="authType != null">
+			AND a.authType = #{authType}
+		</if>
+		limit ${start} , ${limit}
+	</select>
+	
+	<select id="selectOnuAuthListCount" parameterType="map" resultType="long">
+		select count(a.onuIndex)
+		from
+		oltauthentication a
+		left join oltpononuautoauthmode b on a.entityId = b.entityId and a.ponId = b.ponId
+		where a.entityId in (select entityId from ${Authority})
+		<if test="entityId != null">
+			AND a.entityId = #{entityId}
+		</if>
+		<if test="ponId != null">
+			AND a.ponId = #{ponId}
+		</if>
+		<if test="authType != null">
+			AND a.authType = #{authType}
+		</if>
+	</select>
+	
+	<select id="selectOnuAuthFailList" parameterType="map" resultType="onuAuthFail">
+		select a.onuAuthenBlockMacAddress as mac, a.entityId, a.onuIndex, a.ponId, a.topOnuAuthBlockedExtLogicSn as sn,
+		a.topOnuAuthBlockedExtPwd as password, a.authenTime as lastAuthTime, b.topPonOnuAuthModeMode as authMode, e.ip as manageIp, f.ponIndex
+		from
+		onublockauthen a
+		left join oltpononuauthmode b on a.ponId = b.ponId
+		left join entity e on a.entityId = e.entityId
+		left join oltponrelation f on a.ponId = f.ponId
+		where a.entityId in (select entityId from ${Authority})
+		<if test="entityId != null">
+			AND a.entityId = #{entityId}
+		</if>
+		<if test="onuIndex != null">
+			AND a.onuIndex = #{onuIndex}
+		</if>
+		<if test="ponId != null">
+			AND a.ponId = #{ponId}
+		</if>
+		limit ${start} , ${limit}
+	</select>
+	
+	<select id="selectOnuAuthFailListCount" parameterType="map" resultType="long">
+		select count(a.onuAuthenBlockMacAddress)
+		from
+		onublockauthen a
+		where a.entityId in (select entityId from ${Authority})
+		<if test="entityId != null">
+			AND a.entityId = #{entityId}
+		</if>
+		<if test="ponId != null">
+			AND a.ponId = #{ponId}
+		</if>
+	</select>
+
+	<select id="selectOltOnuAuthStatistics" parameterType="map"
+		resultType="oltOnuAuthStatistics">
+		select a.entityId, b.ip, b.name, c.macAuthCount, d.snAuthCount,	e.authFailCount,f.gponAuthCount,g.gponAutoFindCount
+		from oltAttribute a
+		left join entity b on a.entityId =b.entityId
+		left join (select count(authId) as macAuthCount , entityId from oltauthentication where authType = 1 group by entityId) c on a.entityId = c.entityId
+		left join (select count(authId) as snAuthCount , entityId from oltauthentication where authType = 2 group by entityId) d on a.entityId = d.entityId
+		left join (select count(onuAuthenBlockMacAddress) as authFailCount ,entityId from onublockauthen group by entityId) e on a.entityId = e.entityId
+		left join (select count(authenOnuId) as gponAuthCount ,entityId from gpononuauthconfig group by entityId) f on a.entityId = f.entityId
+		left join (select count(onuindex) as gponAutoFindCount ,entityId from gpononuautofind group by entityId) g on a.entityId = g.entityId
+		where a.entityId in (select entityId from ${Authority})
+		<if test="name != null">
+			AND b.name LIKE '%${name}%'
+		</if>
+		<if test="ip != null">
+			AND b.ip LIKE '%${ip}%'
+		</if>
+		limit ${start} , ${limit}
+	</select>
+	
+	<select id="selectOltOnuAuthStatisticsCount" parameterType="map"
+		resultType="long">
+		select count(a.entityId) from oltAttribute a
+		left join entity b on a.entityId =b.entityId
+		left join (select count(authId) as macAuthCount , entityId from oltauthentication where authType = 1 group by entityId) c on a.entityId = c.entityId
+		left join (select count(authId) as snAuthCount , entityId from oltauthentication where authType = 2 group by entityId) d on a.entityId = d.entityId
+		left join (select count(onuAuthenBlockMacAddress) as authFailCount ,entityId from onublockauthen group by entityId) e on a.entityId = e.entityId
+		left join (select count(authenOnuId) as gponauthCount ,entityId from gpononuauthconfig group by entityId) f on a.entityId = f.entityId
+		left join (select count(onuindex) as gponAutoFindCount ,entityId from gpononuautofind group by entityId) g on a.entityId = g.entityId
+		where a.entityId in (select entityId from ${Authority})
+		<if test="name != null">
+			AND b.name LIKE '%${name}%'
+		</if>
+		<if test="ip != null">
+			AND b.ip LIKE '%${ip}%'
+		</if>
+	</select>
+	
+	<select id="selectPonOnuAuthStatistics" parameterType="long"
+		resultType="ponOnuAuthStatistics">
+		SELECT
+			a.ponId,h.ponPortType, a.ponIndex, a.entityId,b.topPonOnuAuthModeMode as ponAuthMode, c.macAuthCount,d.snAuthCount,e.authFailCount,f.gponauthCount,g.gponAutoFindCount,j.pononuauthenmode gponAuthMode
+		FROM 
+			oltponrelation a
+	  	LEFT JOIN oltponattribute h on a.ponId=h.ponId
+		left join oltpononuauthmode b on a.entityId = b.entityId and a.ponId = b.ponId
+		left join (select count(authId) as macAuthCount , entityId , ponId from oltauthentication where authType = 1 group by ponId) c on a.entityId = c.entityId and a.ponId = c.ponId
+		left join (select count(authId) as snAuthCount , entityId , ponId from oltauthentication where authType = 2 group by ponId) d on a.entityId = d.entityId and a.ponId = d.ponId
+		left join (select count(onuAuthenBlockMacAddress) as authFailCount ,entityId , ponId from onublockauthen group by ponId) e on a.entityId = e.entityId and a.ponId = e.ponId
+		left join (select count(authenOnuId) as gponauthCount,entityId,ponIndex from gpononuauthconfig group by ponIndex) f on a.entityId = f.entityId and a.ponIndex = f.ponIndex
+		left join (select count(onuindex) as gponAutoFindCount,entityId,ponIndex from gpononuautofind group by ponIndex) g on a.entityId = g.entityId and a.ponIndex = g.ponIndex
+		LEFT JOIN gpononuauthmode j on  j.entityid=a.entityId and j.ponindex=a.ponindex
+		WHERE 
+			a.entityId = #{entityId} order by a.ponIndex
+	</select>
+	
+	<select id="getOnuAuthIndex" parameterType="map" resultType="long">
+		select onuIndex
+		from
+		oltauthentication 
+		where authAction=#{authAction} and ponId = (select ponId from oltponrelation where ponIndex = #{ponIndex} and entityId = #{entityId})
+	</select>
+	
+</mapper>

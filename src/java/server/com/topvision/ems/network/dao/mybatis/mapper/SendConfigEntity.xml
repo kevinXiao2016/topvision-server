@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.network.domain.SendConfigEntity">
+	<select id="selectEntityList" parameterType="map" resultType="com.topvision.ems.facade.domain.Entity">
+		select 
+			distinct(a.entityId), 
+			a.name, 
+			a.sysName,
+			a.typeId, 
+			IFNULL(a.ip,en.ip) as ip, 
+			a.mac,
+			a.createTime,
+			c.name as location, 
+			d.displayName as typeName, 
+			MIN(b.folderId) folderId,
+			GROUP_CONCAT(c.name) folderName,
+			IFNULL(a.ip,CONCAT(en.name,'(',en.ip,')')) AS uplinkDevice
+		from 
+			entity a
+			left join entityfolderrela b on a.entityId = b.entityId	
+			left join topofolder c on b.folderId = c.folderId
+			left join entityType d on a.typeId = d.typeId
+			LEFT JOIN entity en on a.parentId = en.entityId
+		where 1=1
+		<if test="ip != null">and IFNULL(a.ip,CONCAT(en.name,'(',en.ip,')')) like '%${ip}%'</if>
+		<if test="name != null">and A.name like '%${name}%'</if>
+		<if test="mac != null">and (A.mac like '%${mac}%'
+			<if test="queryMacWithoutSplit != null">
+				OR REPLACE(A.mac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+			</if>
+			)
+		</if>
+		<if test="regionId != null">and (B.folderId IN (${regionId}))</if>
+		<if test="typeId != null">and (A.typeId = #{typeId} or  a.typeId in (select typeId from entityTypeRelation where type = #{typeId}))</if>
+		<if test="createTime != null">and <![CDATA[a.createTime >= #{createTime}]]></if>
+		<if test="endTime != null">and <![CDATA[a.createTime <= #{endTime}]]></if>
+		and a.typeId in (select typeId from entityTypeRelation where type = 130000)
+		and a.entityId in (select entityId from ${Authority}) 
+		GROUP BY a.entityId
+		<if test="sort != null">order by ${sort} ${dir}</if>
+		limit ${start} , ${limit}
+	</select>
+	<select id="selectEntityListNum" parameterType="map" resultType="long">
+		select 
+			count(distinct(a.entityId)) 
+		from 
+			entity a
+			left join entityfolderrela b on a.entityId = b.entityId
+			left join topofolder c on b.folderId = c.folderId
+			left join entityType d on a.typeId = d.typeId
+			left join entity en on a.parentId = en.entityId
+		where 1=1
+		<if test="ip != null">and IFNULL(a.ip,CONCAT(en.name,'(',en.ip,')')) like '%${ip}%'</if>
+		<if test="name != null">and A.name like '%${name}%'</if>
+		<if test="mac != null">and (A.mac like '%${mac}%'
+			<if test="queryMacWithoutSplit != null">
+				OR REPLACE(A.mac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+			</if>
+			)
+		</if>
+		<if test="regionId != null">and (B.folderId IN (${regionId}))</if>
+		<if test="typeId != null">and (A.typeId = #{typeId} or  a.typeId in (select typeId from entityTypeRelation where type = #{typeId}))</if>
+		<if test="createTime != null">and <![CDATA[a.createTime >= #{createTime}]]></if>
+		<if test="endTime != null">and <![CDATA[a.createTime <= #{endTime}]]></if>
+		and a.typeId in (select typeId from entityTypeRelation where type = 130000)
+		and a.entityId in (select entityId from ${Authority}) 
+	</select>
+	<select id="getUncompleteEntitys" parameterType="string" resultType="com.topvision.ems.network.domain.SendConfigEntity">
+		select a.entityId,cer.cmcIndex,oor.onuIndex, IFNULL(b.ip,en.ip) as ipString, a.state, a.resultId, a.dt, b.typeId, b.parentId
+		from sendconfigentity a 
+		left join cmcentityrelation cer on a.entityId = cer.cmcId
+		left join oltonurelation oor on a.entityId = oor.onuId
+		left join entity b on a.entityId = b.entityId
+		LEFT JOIN entity en on b.parentId = en.entityId
+		where a.entityId in (select entityId from ${Authority}) 
+		and <![CDATA[a.state < 4]]>
+	</select>
+	
+	<select id="selectFailedEntitys" parameterType="string" resultType="com.topvision.ems.network.domain.SendConfigEntity">
+		select a.entityId,cer.cmcIndex,oor.onuIndex, IFNULL(b.ip,en.ip) as ipString, a.state, a.resultId, a.dt, b.typeId, b.parentId
+		from sendconfigentity a 
+		left join cmcentityrelation cer on a.entityId = cer.cmcId
+		left join oltonurelation oor on a.entityId = oor.onuId
+		left join entity b on a.entityId = b.entityId
+		LEFT JOIN entity en on b.parentId = en.entityId
+		where a.entityId in (select entityId from ${Authority}) 
+		and a.state in (2,3,5)
+	</select>
+	
+	<select id="selectUnstartEntitys" parameterType="string" resultType="com.topvision.ems.network.domain.SendConfigEntity">
+		select a.entityId,cer.cmcIndex,oor.onuIndex, IFNULL(b.ip,en.ip) as ipString, a.state, a.resultId, a.dt, b.typeId, b.parentId
+		from sendconfigentity a 
+		left join cmcentityrelation cer on a.entityId = cer.cmcId
+		left join oltonurelation oor on a.entityId = oor.onuId
+		left join entity b on a.entityId = b.entityId
+		LEFT JOIN entity en on b.parentId = en.entityId
+		where a.entityId in (select entityId from ${Authority}) 
+		and a.state = 1
+	</select>
+	
+	<update id="updateSendConfigEntity" parameterType="com.topvision.ems.network.domain.SendConfigEntity">
+		update sendconfigentity set 
+		state = #{state}, 
+		resultId = #{resultId},
+		dt =  #{dt},
+		result = #{result}
+		where entityId = #{entityId}
+	</update>
+	<update id="updateCommandSendStatue" parameterType="map">
+		update sendconfigentity set 
+		state = #{state}, 
+		dt =  #{dt}
+		where entityId = #{entityId}
+	</update>
+	<select id="selectCommandSendEntityList" parameterType="map" resultType="com.topvision.ems.network.domain.SendConfigEntity">
+		select 
+			a.entityId, 
+			IFNULL(b.ip,en.ip)  
+			as ipString, 
+			a.state, 
+			a.dt, 
+			a.resultId, 
+			b.name, 
+			b.mac, 
+			c.displayName as typeName, 
+			MIN(d.folderId) folderId,
+			GROUP_CONCAT(e.name) folderName,
+			IFNULL(b.ip,CONCAT(en.name,'(',en.ip,')')) AS uplinkDevice
+		from 
+			sendconfigentity a
+			left join entity b on a.entityId = b.entityId
+			left join entityType c on b.typeId = c.typeId 
+			left join entityfolderrela d on a.entityId = d.entityId
+			left join topofolder e on d.folderId = e.folderId
+			LEFT JOIN entity en on b.parentId = en.entityId
+		where 
+			a.entityId in (select entityId from ${Authority}) 
+			<if test="typeId != null">and (b.typeId = #{typeId} or b.typeId in (select typeId from entityTypeRelation where type = #{typeId}))</if>
+			<if test="regionId != null">and (d.folderId IN (${regionId}))</if>
+			<if test="state != null">and A.state = #{state}</if>
+		group by a.entityId
+		<if test="sort != null">order by ${sort} ${dir}</if>
+		limit ${start} , ${limit}
+	</select>
+	<select id="selectCommandSendEntityListNum" parameterType="map" resultType="long">
+		select count(distinct(a.entityId))
+		from sendconfigentity a
+		left join entity b on a.entityId = b.entityId
+		left join entityType c on b.typeId = c.typeId 
+		left join entityfolderrela d on a.entityId = d.entityId
+		left join topofolder e on d.folderId = e.folderId
+		where a.entityId in (select entityId from ${Authority}) 
+		<if test="typeId != null">and (b.typeId = #{typeId} or  b.typeId in (select typeId from entityTypeRelation where type = #{typeId}))</if>
+		<if test="regionId != null">and (d.folderId IN (${regionId}))</if>
+		<if test="state != null">and A.state = #{state}</if>
+	</select>
+	<select id="selectCommandSendEntityByEntityId" parameterType="map" resultType="com.topvision.ems.network.domain.SendConfigEntity">
+		select a.entityId,cer.cmcIndex,oor.onuIndex, IFNULL(b.ip,en.ip) as ipString, a.state, a.resultId, a.dt, b.typeId, b.parentId
+		from sendconfigentity a 
+		left join cmcentityrelation cer on a.entityId = cer.cmcId
+		left join oltonurelation oor on a.entityId = oor.onuId
+		left join entity b on a.entityId = b.entityId
+		LEFT JOIN entity en on b.parentId = en.entityId
+		where a.entityId in (select entityId from ${Authority}) 
+		and a.entityId = #{entityId}
+	</select>
+	<select id="selectEntityFolder" parameterType="long" resultType="string">
+		select a.name from topofolder a left join entityfolderrela b on 
+		a.folderId = b.folderId where b.entityId = #{entityId}
+	</select>
+	<!-- ################################## select start ####################################### -->
+	<select id="getCommonConfigs" parameterType="long" resultType="string">
+        select config from entityCommonConfig where type = #{type};
+    </select>
+    
+    <select id="getCommonConfigsWithFolder" parameterType="map" resultType="string">
+    	select config from entityCommonConfig where type = #{type} and folderId = #{folderId};
+    </select>
+    
+    <select id="selectSendConfigResult" parameterType="long" resultType="string">
+        select result from sendconfigentity where entityId = #{entityId};
+    </select>
+	<!-- ################################## insert start ####################################### -->
+	<insert id="addCommonConfig" parameterType="map">
+        insert into entityCommonConfig(config, type) values(#{config}, #{type});
+    </insert>
+    
+    <insert id="addCommonConfigWithFolder" parameterType="map">
+    	insert into entityCommonConfig(config, type, folderId) values(#{config}, #{type}, #{folderId});
+    </insert>
+    
+    <insert id="insertSendConfigEntity" parameterType="long">
+        insert into sendconfigentity(entityId, ip, state, dt) 
+        values(#{entityId}, (select inet_aton(ip) from entity where entityId = #{entityId}), 1, now());
+    </insert>
+	<!-- ################################## delete start ####################################### -->
+	<delete id="clearCommonConfig" parameterType="long">
+        delete from entityCommonConfig where type = #{type};
+    </delete>
+    
+    <delete id="clearCommonConfigWithFolder" parameterType="map">
+        delete from entityCommonConfig where type = #{type} and folderId = #{folderId};
+    </delete>
+    
+    <delete id="deleteSendConfigEntity" parameterType="long">
+        delete from sendconfigentity where entityId = #{entityId};
+    </delete>
+</mapper>

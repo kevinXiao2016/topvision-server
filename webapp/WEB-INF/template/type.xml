@@ -1,0 +1,1485 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Templates>
+	<t>
+		<displayName><![CDATA[root]]></displayName>
+		<sysObjId><![CDATA[1.3.6.1.4.1]]></sysObjId>
+		<name><![CDATA[root]]></name>
+		<type>0</type>
+		<icon16><![CDATA[root_16.gif]]></icon16>
+		<icon32><![CDATA[root_32.gif]]></icon32>
+		<icon48><![CDATA[root_48.gif]]></icon48>
+		<icon64><![CDATA[root_64.gif]]></icon64>
+		<note><![CDATA[root]]></note>
+		<properties />
+		<t.11>
+			<displayName><![CDATA[惠普]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.11]]></sysObjId>
+			<name><![CDATA[HP]]></name>
+			<type>2</type>
+			<icon16><![CDATA[hp/hp_16.gif]]></icon16>
+			<icon32><![CDATA[hp/hp_32.gif]]></icon32>
+			<icon48><![CDATA[hp/hp_48.gif]]></icon48>
+			<icon64><![CDATA[hp/hp_64.gif]]></icon64>
+			<note><![CDATA[HP]]></note>
+			<properties />
+		</t.11>
+		<t.111>
+			<displayName><![CDATA[Oracle]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.111]]></sysObjId>
+			<name><![CDATA[Oracle]]></name>
+			<type>2</type>
+			<icon16><![CDATA[oracle/oracle_16.gif]]></icon16>
+			<icon32><![CDATA[oracle/oracle_32.gif]]></icon32>
+			<icon48><![CDATA[oracle/oracle_48.gif]]></icon48>
+			<icon64><![CDATA[oracle/oracle_64.gif]]></icon64>
+			<note><![CDATA[Oracle]]></note>
+			<properties />
+		</t.111>
+		<t.122>
+			<displayName><![CDATA[索尼]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.122]]></sysObjId>
+			<name><![CDATA[Sony]]></name>
+			<type>2</type>
+			<icon16><![CDATA[sony/sony_16.gif]]></icon16>
+			<icon32><![CDATA[sony/sony_32.gif]]></icon32>
+			<icon48><![CDATA[sony/sony_48.gif]]></icon48>
+			<icon64><![CDATA[sony/sony_64.gif]]></icon64>
+			<note><![CDATA[索尼]]></note>
+			<properties />
+		</t.122>
+		<t.12284>
+			<displayName><![CDATA[联想]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.12284]]></sysObjId>
+			<name><![CDATA[Lenovo]]></name>
+			<type>2</type>
+			<icon16><![CDATA[lenovo/lenovo_16.gif]]></icon16>
+			<icon32><![CDATA[lenovo/lenovo_32.gif]]></icon32>
+			<icon48><![CDATA[lenovo/lenovo_48.gif]]></icon48>
+			<icon64><![CDATA[lenovo/lenovo_64.gif]]></icon64>
+			<note><![CDATA[联想]]></note>
+			<properties />
+		</t.12284>
+		<t.161>
+			<displayName><![CDATA[摩托罗拉]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.161]]></sysObjId>
+			<name><![CDATA[Motorola]]></name>
+			<type>2</type>
+			<icon16><![CDATA[motorola/motorola_16.gif]]></icon16>
+			<icon32><![CDATA[motorola/motorola_32.gif]]></icon32>
+			<icon48><![CDATA[motorola/motorola_48.gif]]></icon48>
+			<icon64><![CDATA[motorola/motorola_64.gif]]></icon64>
+			<note><![CDATA[摩托罗拉]]></note>
+			<properties />
+		</t.161>
+		<t.171>
+			<displayName><![CDATA[DLink]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.171]]></sysObjId>
+			<name><![CDATA[DLink]]></name>
+			<type>2</type>
+			<icon16><![CDATA[dlink/dlink_16.gif]]></icon16>
+			<icon32><![CDATA[dlink/dlink_32.gif]]></icon32>
+			<icon48><![CDATA[dlink/dlink_48.gif]]></icon48>
+			<icon64><![CDATA[dlink/dlink_64.gif]]></icon64>
+			<note><![CDATA[DLink]]></note>
+			<properties />
+		</t.171>
+		<t.1991>
+			<displayName><![CDATA[Foundry]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.1991]]></sysObjId>
+			<name><![CDATA[Foundry]]></name>
+			<type>2</type>
+			<icon16><![CDATA[foundry/foundry_16.gif]]></icon16>
+			<icon32><![CDATA[foundry/foundry_32.gif]]></icon32>
+			<icon48><![CDATA[foundry/foundry_48.gif]]></icon48>
+			<icon64><![CDATA[foundry/foundry_64.gif]]></icon64>
+			<note><![CDATA[Foundry]]></note>
+			<properties>
+				<monitors>
+					<monitor>
+						<desc><![CDATA[Foundry设备最近1秒钟内CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.1991.1.1.2.1.50]]></formula>
+						<name><![CDATA[Foundry CPU使用率(last 1s)]]></name>
+						<type><![CDATA[cpu1s]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[Foundry设备最近5秒钟内CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.1991.1.1.2.1.51]]></formula>
+						<name><![CDATA[Foundry CPU使用率(last 5s)]]></name>
+						<type><![CDATA[cpu5s]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[Foundry设备最近1分钟内CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.1991.1.1.2.1.52]]></formula>
+						<name><![CDATA[Foundry CPU使用率(last 1m)]]></name>
+						<type><![CDATA[cpu1m]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[Foundry设备内存使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.1991.1.1.2.1.53]]></formula>
+						<name><![CDATA[Foundry内存使用率]]></name>
+						<type><![CDATA[mem]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[Foundry设备温度]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.1991.1.1.1.1.18 / 2]]></formula>
+						<name><![CDATA[Foundry 温度]]></name>
+						<type><![CDATA[temperature]]></type>
+					</monitor>
+				</monitors>
+			</properties>
+		</t.1991>
+		<t.2>
+			<displayName><![CDATA[IBM]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.2]]></sysObjId>
+			<name><![CDATA[IBM]]></name>
+			<type>2</type>
+			<icon16><![CDATA[ibm/ibm_16.gif]]></icon16>
+			<icon32><![CDATA[ibm/ibm_32.gif]]></icon32>
+			<icon48><![CDATA[ibm/ibm_48.gif]]></icon48>
+			<icon64><![CDATA[ibm/ibm_64.gif]]></icon64>
+			<note><![CDATA[IBM]]></note>
+			<properties />
+		</t.2>
+		<t.2011>
+			<displayName><![CDATA[华为]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.2011]]></sysObjId>
+			<name><![CDATA[Huawei]]></name>
+			<type>2</type>
+			<icon16><![CDATA[huawei/huawei_16.gif]]></icon16>
+			<icon32><![CDATA[huawei/huawei_32.gif]]></icon32>
+			<icon48><![CDATA[huawei/huawei_48.gif]]></icon48>
+			<icon64><![CDATA[huawei/huawei_64.gif]]></icon64>
+			<note><![CDATA[华为]]></note>
+			<properties>
+				<monitors>
+					<monitor>
+						<desc><![CDATA[华为设备最近5秒钟内CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.2011.6.1.1.1.2.0]]></formula>
+						<name><![CDATA[华为CPU使用率(last 5s)]]></name>
+						<type><![CDATA[cpu5s]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[华为设备最近1分钟内CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.2011.6.1.1.1.3.0]]></formula>
+						<name><![CDATA[华为CPU使用率(last 1m)]]></name>
+						<type><![CDATA[cpu1m]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[华为设备最近5分钟内CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.2011.6.1.1.1.4.0]]></formula>
+						<name><![CDATA[华为CPU使用率(last 5m)]]></name>
+						<type><![CDATA[cpu5m]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[华为设备内存使用率]]></desc>
+						<formula><![CDATA[((1.3.6.1.4.1.2011.6.1.2.1.1.2.0 - 1.3.6.1.4.1.2011.6.1.2.1.1.3.0) / 1.3.6.1.4.1.2011.6.1.2.1.1.2.0) * 100]]></formula>
+						<name><![CDATA[华为设备内存使用率]]></name>
+						<type><![CDATA[mem]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[华为设备系统CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.2011.2.23.1.18.1.3.0]]></formula>
+						<name><![CDATA[华为系统CPU使用率]]></name>
+						<type><![CDATA[cpu]]></type>
+					</monitor>
+				</monitors>
+			</properties>
+			<t.2011.1.1.1.1600>
+				<displayName><![CDATA[华为1600]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.2011.1.1.1.1600]]></sysObjId>
+				<name><![CDATA[Huawei 1600]]></name>
+				<type>2</type>
+				<icon16><![CDATA[huawei/1600_16.gif]]></icon16>
+				<icon32><![CDATA[huawei/1600_32.gif]]></icon32>
+				<icon48><![CDATA[huawei/1600_48.gif]]></icon48>
+				<icon64><![CDATA[huawei/1600_64.gif]]></icon64>
+				<note><![CDATA[华为1600]]></note>
+				<properties />
+			</t.2011.1.1.1.1600>
+			<t.2011.1.1.1.1760>
+				<displayName><![CDATA[华为1760]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.2011.1.1.1.1760]]></sysObjId>
+				<name><![CDATA[Huawei 1760]]></name>
+				<type>2</type>
+				<icon16><![CDATA[huawei/1760_16.gif]]></icon16>
+				<icon32><![CDATA[huawei/1760_32.gif]]></icon32>
+				<icon48><![CDATA[huawei/1760_48.gif]]></icon48>
+				<icon64><![CDATA[huawei/1760_64.gif]]></icon64>
+				<note><![CDATA[华为1760]]></note>
+				<properties />
+			</t.2011.1.1.1.1760>
+			<t.2011.2>
+				<displayName><![CDATA[华为路由器]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.2011.2]]></sysObjId>
+				<name><![CDATA[Huawei Router]]></name>
+				<type>4</type>
+				<icon16><![CDATA[huawei/router_16.gif]]></icon16>
+				<icon32><![CDATA[huawei/router_32.gif]]></icon32>
+				<icon48><![CDATA[huawei/router_48.gif]]></icon48>
+				<icon64><![CDATA[huawei/router_64.gif]]></icon64>
+				<note><![CDATA[华为路由器]]></note>
+				<properties />
+			</t.2011.2>
+			<t.2011.2.6.2.30>
+				<displayName><![CDATA[华为5200G]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.2011.2.6.2.30]]></sysObjId>
+				<name><![CDATA[Huawei 5200G]]></name>
+				<type>4</type>
+				<icon16><![CDATA[huawei/5200_16.gif]]></icon16>
+				<icon32><![CDATA[huawei/5200_32.gif]]></icon32>
+				<icon48><![CDATA[huawei/5200_48.gif]]></icon48>
+				<icon64><![CDATA[huawei/5200_64.gif]]></icon64>
+				<note><![CDATA[华为5200G]]></note>
+				<properties />
+			</t.2011.2.6.2.30>
+			<t.2011.2.6.2.28.0>
+				<displayName><![CDATA[华为5200F]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.2011.2.6.2.28.0]]></sysObjId>
+				<name><![CDATA[Huawei 5200F]]></name>
+				<type>4</type>
+				<icon16><![CDATA[huawei/5200_16.gif]]></icon16>
+				<icon32><![CDATA[huawei/5200_32.gif]]></icon32>
+				<icon48><![CDATA[huawei/5200_48.gif]]></icon48>
+				<icon64><![CDATA[huawei/5200_64.gif]]></icon64>
+				<note><![CDATA[华为5200F]]></note>
+				<properties />
+			</t.2011.2.6.2.28.0>
+			<t.2011.2.17>
+				<displayName><![CDATA[华为NE80E]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.2011.2.17]]></sysObjId>
+				<name><![CDATA[Huawei NE80E]]></name>
+				<type>4</type>
+				<icon16><![CDATA[huawei/ne80_16.gif]]></icon16>
+				<icon32><![CDATA[huawei/ne80_32.gif]]></icon32>
+				<icon48><![CDATA[huawei/ne80_48.gif]]></icon48>
+				<icon64><![CDATA[huawei/ne80_64.gif]]></icon64>
+				<note><![CDATA[华为NE80E]]></note>
+				<properties>
+					<monitors>
+						<monitor>
+							<desc><![CDATA[华为设备最近5秒钟内CPU使用率]]></desc>
+							<formula><![CDATA[1.3.6.1.4.1.2011.6.1.1.1.2.6]]></formula>
+							<name><![CDATA[华为CPU使用率(last 5s)]]></name>
+							<type><![CDATA[cpu5s]]></type>
+						</monitor>
+						<monitor>
+							<desc><![CDATA[华为设备最近1分钟内CPU使用率]]></desc>
+							<formula><![CDATA[1.3.6.1.4.1.2011.6.1.1.1.3.6]]></formula>
+							<name><![CDATA[华为CPU使用率(last 1m)]]></name>
+							<type><![CDATA[cpu1m]]></type>
+						</monitor>
+						<monitor>
+							<desc><![CDATA[华为设备最近5分钟内CPU使用率]]></desc>
+							<formula><![CDATA[1.3.6.1.4.1.2011.6.1.1.1.4.6]]></formula>
+							<name><![CDATA[华为CPU使用率(last 5m)]]></name>
+							<type><![CDATA[cpu5m]]></type>
+						</monitor>
+						<monitor>
+							<desc><![CDATA[华为设备内存使用率]]></desc>
+							<formula><![CDATA[((1.3.6.1.4.1.2011.6.1.2.1.1.2.6 - 1.3.6.1.4.1.2011.6.1.2.1.1.3.6) / 1.3.6.1.4.1.2011.6.1.2.1.1.2.6) * 100]]></formula>
+							<name><![CDATA[华为设备内存使用率]]></name>
+							<type><![CDATA[mem]]></type>
+						</monitor>
+					</monitors>
+				</properties>
+			</t.2011.2.17>
+			<t.2011.2.26.2>
+				<displayName><![CDATA[华为NE08]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.2011.2.26.2]]></sysObjId>
+				<name><![CDATA[Huawei NE08]]></name>
+				<type>4</type>
+				<icon16><![CDATA[huawei/ne08_16.gif]]></icon16>
+				<icon32><![CDATA[huawei/ne08_32.gif]]></icon32>
+				<icon48><![CDATA[huawei/ne08_48.gif]]></icon48>
+				<icon64><![CDATA[huawei/ne08_64.gif]]></icon64>
+				<note><![CDATA[华为NE08]]></note>
+				<properties>
+					<monitors>
+						<monitor>
+							<desc><![CDATA[华为设备最近5秒钟内CPU使用率]]></desc>
+							<formula><![CDATA[1.3.6.1.4.1.2011.6.1.1.1.2.6]]></formula>
+							<name><![CDATA[华为CPU使用率(last 5s)]]></name>
+							<type><![CDATA[cpu5s]]></type>
+						</monitor>
+						<monitor>
+							<desc><![CDATA[华为设备最近1分钟内CPU使用率]]></desc>
+							<formula><![CDATA[1.3.6.1.4.1.2011.6.1.1.1.3.6]]></formula>
+							<name><![CDATA[华为CPU使用率(last 1m)]]></name>
+							<type><![CDATA[cpu1m]]></type>
+						</monitor>
+						<monitor>
+							<desc><![CDATA[华为设备最近5分钟内CPU使用率]]></desc>
+							<formula><![CDATA[1.3.6.1.4.1.2011.6.1.1.1.4.6]]></formula>
+							<name><![CDATA[华为CPU使用率(last 5m)]]></name>
+							<type><![CDATA[cpu5m]]></type>
+						</monitor>
+						<monitor>
+							<desc><![CDATA[华为设备内存使用率]]></desc>
+							<formula><![CDATA[((1.3.6.1.4.1.2011.6.1.2.1.1.2.6 - 1.3.6.1.4.1.2011.6.1.2.1.1.3.6) / 1.3.6.1.4.1.2011.6.1.2.1.1.2.6) * 100]]></formula>
+							<name><![CDATA[华为设备内存使用率]]></name>
+							<type><![CDATA[mem]]></type>
+						</monitor>
+					</monitors>
+				</properties>
+			</t.2011.2.26.2>
+			<t.2011.2.26.3>
+				<displayName><![CDATA[华为NE05]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.2011.2.26.3]]></sysObjId>
+				<name><![CDATA[Huawei NE05]]></name>
+				<type>4</type>
+				<icon16><![CDATA[huawei/ne05_16.gif]]></icon16>
+				<icon32><![CDATA[huawei/ne05_32.gif]]></icon32>
+				<icon48><![CDATA[huawei/ne05_48.gif]]></icon48>
+				<icon64><![CDATA[huawei/ne05_64.gif]]></icon64>
+				<note><![CDATA[华为NE05]]></note>
+				<properties>
+					<monitors>
+						<monitor>
+							<desc><![CDATA[华为设备最近5秒钟内CPU使用率]]></desc>
+							<formula><![CDATA[1.3.6.1.4.1.2011.6.1.1.1.2.6]]></formula>
+							<name><![CDATA[华为CPU使用率(last 5s)]]></name>
+							<type><![CDATA[cpu5s]]></type>
+						</monitor>
+						<monitor>
+							<desc><![CDATA[华为设备最近1分钟内CPU使用率]]></desc>
+							<formula><![CDATA[1.3.6.1.4.1.2011.6.1.1.1.3.6]]></formula>
+							<name><![CDATA[华为CPU使用率(last 1m)]]></name>
+							<type><![CDATA[cpu1m]]></type>
+						</monitor>
+						<monitor>
+							<desc><![CDATA[华为设备最近5分钟内CPU使用率]]></desc>
+							<formula><![CDATA[1.3.6.1.4.1.2011.6.1.1.1.4.6]]></formula>
+							<name><![CDATA[华为CPU使用率(last 5m)]]></name>
+							<type><![CDATA[cpu5m]]></type>
+						</monitor>
+						<monitor>
+							<desc><![CDATA[华为设备内存使用率]]></desc>
+							<formula><![CDATA[((1.3.6.1.4.1.2011.6.1.2.1.1.2.6 - 1.3.6.1.4.1.2011.6.1.2.1.1.3.6) / 1.3.6.1.4.1.2011.6.1.2.1.1.2.6) * 100]]></formula>
+							<name><![CDATA[华为设备内存使用率]]></name>
+							<type><![CDATA[mem]]></type>
+						</monitor>
+					</monitors>
+				</properties>
+			</t.2011.2.26.3>
+			<t.2011.2.23>
+				<displayName><![CDATA[华为交换机]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.2011.2.23]]></sysObjId>
+				<name><![CDATA[Huawei Switch]]></name>
+				<type>2</type>
+				<icon16><![CDATA[huawei/switch_16.gif]]></icon16>
+				<icon32><![CDATA[huawei/switch_32.gif]]></icon32>
+				<icon48><![CDATA[huawei/switch_48.gif]]></icon48>
+				<icon64><![CDATA[huawei/switch_64.gif]]></icon64>
+				<note><![CDATA[华为交换机]]></note>
+				<properties />
+			</t.2011.2.23>
+			<t.2011.2.23.13>
+				<displayName><![CDATA[华为3026]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.2011.2.23.13]]></sysObjId>
+				<name><![CDATA[Huawei 3026]]></name>
+				<type>2</type>
+				<icon16><![CDATA[huawei/3026_16.gif]]></icon16>
+				<icon32><![CDATA[huawei/3026_32.gif]]></icon32>
+				<icon48><![CDATA[huawei/3026_48.gif]]></icon48>
+				<icon64><![CDATA[huawei/3026_64.gif]]></icon64>
+				<note><![CDATA[华为3026]]></note>
+				<properties />
+			</t.2011.2.23.13>
+			<t.2011.2.23.19>
+				<displayName><![CDATA[华为S6500]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.2011.2.23.19]]></sysObjId>
+				<name><![CDATA[Huawei S6500]]></name>
+				<type>2</type>
+				<icon16><![CDATA[huawei/6500_16.gif]]></icon16>
+				<icon32><![CDATA[huawei/6500_32.gif]]></icon32>
+				<icon48><![CDATA[huawei/6500_48.gif]]></icon48>
+				<icon64><![CDATA[huawei/6500_64.gif]]></icon64>
+				<note><![CDATA[华为S6500]]></note>
+				<properties />
+			</t.2011.2.23.19>
+			<t.2011.2.23.29>
+				<displayName><![CDATA[华为S3050C]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.2011.2.23.29]]></sysObjId>
+				<name><![CDATA[Huawei S3050C]]></name>
+				<type>2</type>
+				<icon16><![CDATA[huawei/3050_16.gif]]></icon16>
+				<icon32><![CDATA[huawei/3050_32.gif]]></icon32>
+				<icon48><![CDATA[huawei/3050_48.gif]]></icon48>
+				<icon64><![CDATA[huawei/3050_64.gif]]></icon64>
+				<note><![CDATA[华为S3050C]]></note>
+				<properties />
+			</t.2011.2.23.29>
+			<t.2011.2.23.31>
+				<displayName><![CDATA[华为S8512]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.2011.2.23.31]]></sysObjId>
+				<name><![CDATA[Quidway S8512]]></name>
+				<type>6</type>
+				<icon16><![CDATA[huawei/8512_16.gif]]></icon16>
+				<icon32><![CDATA[huawei/8512_32.gif]]></icon32>
+				<icon48><![CDATA[huawei/8512_48.gif]]></icon48>
+				<icon64><![CDATA[huawei/8512_64.gif]]></icon64>
+				<note><![CDATA[QuidwayS8512]]></note>
+				<properties>
+					<monitors>
+						<monitor>
+							<desc><![CDATA[华为设备最近5秒钟内CPU使用率]]></desc>
+							<formula><![CDATA[1.3.6.1.4.1.2011.6.1.1.1.2.7]]></formula>
+							<name><![CDATA[华为CPU使用率(last 5s)]]></name>
+							<type><![CDATA[cpu5s]]></type>
+						</monitor>
+						<monitor>
+							<desc><![CDATA[华为设备最近1分钟内CPU使用率]]></desc>
+							<formula><![CDATA[1.3.6.1.4.1.2011.6.1.1.1.3.7]]></formula>
+							<name><![CDATA[华为CPU使用率(last 1m)]]></name>
+							<type><![CDATA[cpu1m]]></type>
+						</monitor>
+						<monitor>
+							<desc><![CDATA[华为设备最近5分钟内CPU使用率]]></desc>
+							<formula><![CDATA[1.3.6.1.4.1.2011.6.1.1.1.4.7]]></formula>
+							<name><![CDATA[华为CPU使用率(last 5m)]]></name>
+							<type><![CDATA[cpu5m]]></type>
+						</monitor>
+						<monitor>
+							<desc><![CDATA[华为设备内存使用率]]></desc>
+							<formula><![CDATA[((1.3.6.1.4.1.2011.6.1.2.1.1.2.7 - 1.3.6.1.4.1.2011.6.1.2.1.1.3.7) / 1.3.6.1.4.1.2011.6.1.2.1.1.2.7) * 100]]></formula>
+							<name><![CDATA[华为设备内存使用率]]></name>
+							<type><![CDATA[mem]]></type>
+						</monitor>
+						<monitor>
+							<desc><![CDATA[华为设备系统CPU使用率]]></desc>
+							<formula><![CDATA[1.3.6.1.4.1.2011.2.23.1.18.1.3.0]]></formula>
+							<name><![CDATA[华为系统CPU使用率]]></name>
+							<type><![CDATA[cpu]]></type>
+						</monitor>
+					</monitors>
+				</properties>
+			</t.2011.2.23.31>
+			<t.2011.2.23.32>
+				<displayName><![CDATA[华为S8505]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.2011.2.23.32]]></sysObjId>
+				<name><![CDATA[Quidway S8505]]></name>
+				<type>6</type>
+				<icon16><![CDATA[huawei/8505_16.gif]]></icon16>
+				<icon32><![CDATA[huawei/8505_32.gif]]></icon32>
+				<icon48><![CDATA[huawei/8505_48.gif]]></icon48>
+				<icon64><![CDATA[huawei/8505_64.gif]]></icon64>
+				<note><![CDATA[QuidwayS8505]]></note>
+				<properties />
+			</t.2011.2.23.32>
+			<t.2011.2.23.33>
+				<displayName><![CDATA[华为S6506R]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.2011.2.23.33]]></sysObjId>
+				<name><![CDATA[Quidway S6506R]]></name>
+				<type>6</type>
+				<icon16><![CDATA[huawei/6506_16.gif]]></icon16>
+				<icon32><![CDATA[huawei/6506_32.gif]]></icon32>
+				<icon48><![CDATA[huawei/6506_48.gif]]></icon48>
+				<icon64><![CDATA[huawei/6506_64.gif]]></icon64>
+				<note><![CDATA[QuidwayS6506R]]></note>
+				<properties />
+			</t.2011.2.23.33>
+			<t.2011.10.1.45>
+				<displayName><![CDATA[华为S5648]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.2011.10.1.45]]></sysObjId>
+				<name><![CDATA[Quidway S5648]]></name>
+				<type>2</type>
+				<icon16><![CDATA[huawei/5648_16.gif]]></icon16>
+				<icon32><![CDATA[huawei/5648_32.gif]]></icon32>
+				<icon48><![CDATA[huawei/5648_48.gif]]></icon48>
+				<icon64><![CDATA[huawei/5648_64.gif]]></icon64>
+				<note><![CDATA[华为S5648]]></note>
+				<properties>
+					<monitors>
+						<monitor>
+							<desc><![CDATA[华为设备最近5秒钟内CPU使用率]]></desc>
+							<formula><![CDATA[1.3.6.1.4.1.2011.6.1.1.1.2.65536]]></formula>
+							<name><![CDATA[华为CPU使用率(last 5s)]]></name>
+							<type><![CDATA[cpu5s]]></type>
+						</monitor>
+						<monitor>
+							<desc><![CDATA[华为设备最近1分钟内CPU使用率]]></desc>
+							<formula><![CDATA[1.3.6.1.4.1.2011.6.1.1.1.3.65536]]></formula>
+							<name><![CDATA[华为CPU使用率(last 1m)]]></name>
+							<type><![CDATA[cpu1m]]></type>
+						</monitor>
+						<monitor>
+							<desc><![CDATA[华为设备最近5分钟内CPU使用率]]></desc>
+							<formula><![CDATA[1.3.6.1.4.1.2011.6.1.1.1.4.65536]]></formula>
+							<name><![CDATA[华为CPU使用率(last 5m)]]></name>
+							<type><![CDATA[cpu5m]]></type>
+						</monitor>
+						<monitor>
+							<desc><![CDATA[华为设备内存使用率]]></desc>
+							<formula><![CDATA[((1.3.6.1.4.1.2011.6.1.2.1.1.2.65536 - 1.3.6.1.4.1.2011.6.1.2.1.1.3.65536) / 1.3.6.1.4.1.2011.6.1.2.1.1.2.65536) * 100]]></formula>
+							<name><![CDATA[华为设备内存使用率]]></name>
+							<type><![CDATA[mem]]></type>
+						</monitor>
+						<monitor>
+							<desc><![CDATA[华为设备系统CPU使用率]]></desc>
+							<formula><![CDATA[1.3.6.1.4.1.2011.2.23.1.18.1.3.0]]></formula>
+							<name><![CDATA[华为系统CPU使用率]]></name>
+							<type><![CDATA[cpu]]></type>
+						</monitor>
+					</monitors>
+				</properties>
+			</t.2011.10.1.45>
+		</t.2011>
+		<t.25506>
+			<displayName><![CDATA[华三]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.25506]]></sysObjId>
+			<name><![CDATA[H3C]]></name>
+			<type>2</type>
+			<icon16><![CDATA[h3c/h3c_16.gif]]></icon16>
+			<icon32><![CDATA[h3c/h3c_32.gif]]></icon32>
+			<icon48><![CDATA[h3c/h3c_48.gif]]></icon48>
+			<icon64><![CDATA[h3c/h3c_64.gif]]></icon64>
+			<note><![CDATA[华三]]></note>
+			<properties>
+				<monitors>
+					<monitor>
+						<desc><![CDATA[华三设备最近5秒钟内CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.2011.6.1.1.1.2.65536]]></formula>
+						<name><![CDATA[华三CPU使用率(last 5s)]]></name>
+						<type><![CDATA[cpu5s]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[华三设备最近1分钟内CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.2011.6.1.1.1.3.65536]]></formula>
+						<name><![CDATA[华三CPU使用率(last 1m)]]></name>
+						<type><![CDATA[cpu1m]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[华三设备最近5分钟内CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.2011.6.1.1.1.4.65536]]></formula>
+						<name><![CDATA[华三CPU使用率(last 5m)]]></name>
+						<type><![CDATA[cpu5m]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[华三设备内存使用率]]></desc>
+						<formula><![CDATA[((1.3.6.1.4.1.2011.6.1.2.1.1.2.65536 - 1.3.6.1.4.1.2011.6.1.2.1.1.3.65536) / 1.3.6.1.4.1.2011.6.1.2.1.1.2.65536) * 100]]></formula>
+						<name><![CDATA[华三设备内存使用率]]></name>
+						<type><![CDATA[mem]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[华三设备系统CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.2011.2.23.1.18.1.3.0]]></formula>
+						<name><![CDATA[华三系统CPU使用率]]></name>
+						<type><![CDATA[cpu]]></type>
+					</monitor>
+				</monitors>
+			</properties>
+			<t.25506.1.23>
+				<displayName><![CDATA[华三S3100]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.25506.1.23]]></sysObjId>
+				<name><![CDATA[H3C S3100]]></name>
+				<type>2</type>
+				<icon16><![CDATA[h3c/3100_16.gif]]></icon16>
+				<icon32><![CDATA[h3c/3100_32.gif]]></icon32>
+				<icon48><![CDATA[h3c/3100_48.gif]]></icon48>
+				<icon64><![CDATA[h3c/3100_64.gif]]></icon64>
+				<note><![CDATA[华三S3100]]></note>
+				<properties />
+			</t.25506.1.23>
+			<t.25506.1.42>
+				<displayName><![CDATA[华三S5624]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.25506.1.42]]></sysObjId>
+				<name><![CDATA[H3C S5624]]></name>
+				<type>2</type>
+				<icon16><![CDATA[h3c/5624_16.gif]]></icon16>
+				<icon32><![CDATA[h3c/5624_32.gif]]></icon32>
+				<icon48><![CDATA[h3c/5624_48.gif]]></icon48>
+				<icon64><![CDATA[h3c/5624_64.gif]]></icon64>
+				<note><![CDATA[华三S5624]]></note>
+				<properties />
+			</t.25506.1.42>
+			<t.25506.1.192>
+				<displayName><![CDATA[华三S2126]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.25506.1.192]]></sysObjId>
+				<name><![CDATA[H3C S2126]]></name>
+				<type>2</type>
+				<icon16><![CDATA[h3c/2126_16.gif]]></icon16>
+				<icon32><![CDATA[h3c/2126_32.gif]]></icon32>
+				<icon48><![CDATA[h3c/2126_48.gif]]></icon48>
+				<icon64><![CDATA[h3c/2126_64.gif]]></icon64>
+				<note><![CDATA[华三S2126]]></note>
+				<properties />
+			</t.25506.1.192>
+		</t.25506>
+		<t.23>
+			<displayName><![CDATA[Novell]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.23]]></sysObjId>
+			<name><![CDATA[Novell]]></name>
+			<type>2</type>
+			<icon16><![CDATA[novell/novell_16.gif]]></icon16>
+			<icon32><![CDATA[novell/novell_32.gif]]></icon32>
+			<icon48><![CDATA[novell/novell_48.gif]]></icon48>
+			<icon64><![CDATA[novell/novell_64.gif]]></icon64>
+			<note><![CDATA[Novell]]></note>
+			<properties />
+		</t.23>
+		<t.2636>
+			<displayName><![CDATA[Juniper]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.2636]]></sysObjId>
+			<name><![CDATA[Juniper]]></name>
+			<type>2</type>
+			<icon16><![CDATA[juniper/juniper_16.gif]]></icon16>
+			<icon32><![CDATA[juniper/juniper_32.gif]]></icon32>
+			<icon48><![CDATA[juniper/juniper_48.gif]]></icon48>
+			<icon64><![CDATA[juniper/juniper_64.gif]]></icon64>
+			<note><![CDATA[Juniper]]></note>
+			<properties>
+				<monitors>
+					<monitor>
+						<desc><![CDATA[Juniper设备CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.2636.3.1.13.1.8]]></formula>
+						<name><![CDATA[JuniperCPU使用率]]></name>
+						<type><![CDATA[cpu]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[Juniper设备栈使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.2636.3.1.13.1.11]]></formula>
+						<name><![CDATA[Juniper栈使用率]]></name>
+						<type><![CDATA[stack]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[Juniper设备堆使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.2636.3.1.13.1.12]]></formula>
+						<name><![CDATA[Juniper堆使用率]]></name>
+						<type><![CDATA[heap]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[Juniper设备温度]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.2636.3.1.13.1.7]]></formula>
+						<name><![CDATA[Juniper 温度]]></name>
+						<type><![CDATA[temperature]]></type>
+					</monitor>
+				</monitors>
+			</properties>
+		</t.2636>
+		<t.28>
+			<displayName><![CDATA[Interlan]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.28]]></sysObjId>
+			<name><![CDATA[Interlan]]></name>
+			<type>2</type>
+			<icon16><![CDATA[interlan/interlan_16.gif]]></icon16>
+			<icon32><![CDATA[interlan/interlan_32.gif]]></icon32>
+			<icon48><![CDATA[interlan/interlan_48.gif]]></icon48>
+			<icon64><![CDATA[interlan/interlan_64.gif]]></icon64>
+			<note><![CDATA[Interlan]]></note>
+			<properties />
+		</t.28>
+		<t.311>
+			<displayName><![CDATA[微软]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.311]]></sysObjId>
+			<name><![CDATA[Microsoft]]></name>
+			<type>2</type>
+			<icon16><![CDATA[microsoft/windows_16.gif]]></icon16>
+			<icon32><![CDATA[microsoft/windows_32.gif]]></icon32>
+			<icon48><![CDATA[microsoft/windows_48.gif]]></icon48>
+			<icon64><![CDATA[microsoft/windows_64.gif]]></icon64>
+			<note><![CDATA[微软]]></note>
+			<properties />
+			<t.311.1.1.3.1.1>
+				<displayName><![CDATA[WindowsXP]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.311.1.1.3.1.1]]></sysObjId>
+				<name><![CDATA[Windows Xp]]></name>
+				<type>72</type>
+				<icon16><![CDATA[microsoft/xp_16.gif]]></icon16>
+				<icon32><![CDATA[microsoft/xp_32.gif]]></icon32>
+				<icon48><![CDATA[microsoft/xp_48.gif]]></icon48>
+				<icon64><![CDATA[microsoft/xp_64.gif]]></icon64>
+				<note><![CDATA[WindowsXP]]></note>
+				<properties />
+			</t.311.1.1.3.1.1>
+			<t.311.1.1.3.1.2>
+				<displayName><![CDATA[Windows 2003]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.311.1.1.3.1.2]]></sysObjId>
+				<name><![CDATA[Windows 2003]]></name>
+				<type>72</type>
+				<icon16><![CDATA[microsoft/2003_16.gif]]></icon16>
+				<icon32><![CDATA[microsoft/2003_32.gif]]></icon32>
+				<icon48><![CDATA[microsoft/2003_48.gif]]></icon48>
+				<icon64><![CDATA[microsoft/2003_64.gif]]></icon64>
+				<note><![CDATA[Windows 2003]]></note>
+				<properties />
+			</t.311.1.1.3.1.2>
+		</t.311>
+		<t.3955>
+			<displayName><![CDATA[Linksys]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.3955]]></sysObjId>
+			<name><![CDATA[Linksys]]></name>
+			<type>2</type>
+			<icon16><![CDATA[linksys/linksys_16.gif]]></icon16>
+			<icon32><![CDATA[linksys/linksys_32.gif]]></icon32>
+			<icon48><![CDATA[linksys/linksys_48.gif]]></icon48>
+			<icon64><![CDATA[linksys/linksys_64.gif]]></icon64>
+			<note><![CDATA[Linksys]]></note>
+			<properties />
+		</t.3955>
+		<t.4>
+			<displayName><![CDATA[Unix]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.4]]></sysObjId>
+			<name><![CDATA[Unix]]></name>
+			<type>2</type>
+			<icon16><![CDATA[unix/unix_16.gif]]></icon16>
+			<icon32><![CDATA[unix/unix_32.gif]]></icon32>
+			<icon48><![CDATA[unix/unix_48.gif]]></icon48>
+			<icon64><![CDATA[unix/unix_64.gif]]></icon64>
+			<note><![CDATA[Unix]]></note>
+			<properties />
+		</t.4>
+		<t.42>
+			<displayName><![CDATA[Sun]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.42]]></sysObjId>
+			<name><![CDATA[Sun]]></name>
+			<type>2</type>
+			<icon16><![CDATA[sun/sun_16.gif]]></icon16>
+			<icon32><![CDATA[sun/sun_32.gif]]></icon32>
+			<icon48><![CDATA[sun/sun_48.gif]]></icon48>
+			<icon64><![CDATA[sun/sun_64.gif]]></icon64>
+			<note><![CDATA[Sun]]></note>
+			<properties />
+		</t.42>
+		<t.43>
+			<displayName><![CDATA[3Com]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.43]]></sysObjId>
+			<name><![CDATA[3Com]]></name>
+			<type>2</type>
+			<icon16><![CDATA[3com/3com_16.gif]]></icon16>
+			<icon32><![CDATA[3com/3com_32.gif]]></icon32>
+			<icon48><![CDATA[3com/3com_48.gif]]></icon48>
+			<icon64><![CDATA[3com/3com_64.gif]]></icon64>
+			<note><![CDATA[3Com]]></note>
+			<properties />
+		</t.43>
+		<t.63>
+			<displayName><![CDATA[苹果]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.63]]></sysObjId>
+			<name><![CDATA[Apple]]></name>
+			<type>2</type>
+			<icon16><![CDATA[apple/apple_16.gif]]></icon16>
+			<icon32><![CDATA[apple/apple_32.gif]]></icon32>
+			<icon48><![CDATA[apple/apple_48.gif]]></icon48>
+			<icon64><![CDATA[apple/apple_64.gif]]></icon64>
+			<note><![CDATA[苹果]]></note>
+			<properties />
+		</t.63>
+		<t.674>
+			<displayName><![CDATA[戴尔]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.674]]></sysObjId>
+			<name><![CDATA[Dell]]></name>
+			<type>2</type>
+			<icon16><![CDATA[dell/dell_16.gif]]></icon16>
+			<icon32><![CDATA[dell/dell_32.gif]]></icon32>
+			<icon48><![CDATA[dell/dell_48.gif]]></icon48>
+			<icon64><![CDATA[dell/dell_64.gif]]></icon64>
+			<note><![CDATA[戴尔]]></note>
+			<properties />
+		</t.674>
+		<t.9>
+			<displayName><![CDATA[思科]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.9]]></sysObjId>
+			<name><![CDATA[Cisco]]></name>
+			<type>2</type>
+			<icon16><![CDATA[cisco/cisco_16.gif]]></icon16>
+			<icon32><![CDATA[cisco/cisco_32.gif]]></icon32>
+			<icon48><![CDATA[cisco/cisco_48.gif]]></icon48>
+			<icon64><![CDATA[cisco/cisco_64.gif]]></icon64>
+			<note><![CDATA[思科]]></note>
+			<properties>
+				<monitors>
+					<monitor>
+						<desc><![CDATA[Cisco CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.9.9.109.1.1.1.1.5]]></formula>
+						<name><![CDATA[CiscoCPU使用率]]></name>
+						<type><![CDATA[cpu]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[Cisco CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.9.2.1.57.0]]></formula>
+						<name><![CDATA[CiscoCPU使用率(last 1m)]]></name>
+						<type><![CDATA[cpu1m]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[Cisco CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.9.2.1.58.0]]></formula>
+						<name><![CDATA[CiscoCPU使用率(last 5m)]]></name>
+						<type><![CDATA[cpu5m]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[Cisco内存使用率]]></desc>
+						<formula><![CDATA[(1.3.6.1.4.1.9.9.48.1.1.1.5 / (1.3.6.1.4.1.9.9.48.1.1.1.5 + 1.3.6.1.4.1.9.9.48.1.1.1.6)) * 100]]></formula>
+						<name><![CDATA[Cisco内存使用率]]></name>
+						<type><![CDATA[mem]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[Cisco PVC的总流量]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.9.9.66.1.1.1.1.3 + 1.3.6.1.4.1.9.9.66.1.1.1.1.4]]></formula>
+						<name><![CDATA[Cisco PVC总流量]]></name>
+						<type><![CDATA[pvc]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[Cisco模块温度]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.9.9.13.1.3.1.3]]></formula>
+						<name><![CDATA[Cisco 温度]]></name>
+						<type><![CDATA[temperature]]></type>
+					</monitor>
+				</monitors>
+			</properties>
+			<t.9.1.45>
+				<displayName><![CDATA[思科7507]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.9.1.45]]></sysObjId>
+				<name><![CDATA[Cisco 7507]]></name>
+				<type>4</type>
+				<icon16><![CDATA[cisco/7507_16.gif]]></icon16>
+				<icon32><![CDATA[cisco/7507_32.gif]]></icon32>
+				<icon48><![CDATA[cisco/7507_48.gif]]></icon48>
+				<icon64><![CDATA[cisco/7507_64.gif]]></icon64>
+				<note><![CDATA[思科7507]]></note>
+				<properties />
+			</t.9.1.45>
+			<t.9.1.185>
+				<displayName><![CDATA[思科2610]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.9.1.185]]></sysObjId>
+				<name><![CDATA[Cisco 2610]]></name>
+				<type>2</type>
+				<icon16><![CDATA[cisco/2610_16.gif]]></icon16>
+				<icon32><![CDATA[cisco/2610_32.gif]]></icon32>
+				<icon48><![CDATA[cisco/2610_48.gif]]></icon48>
+				<icon64><![CDATA[cisco/2610_64.gif]]></icon64>
+				<note><![CDATA[思科2610]]></note>
+				<properties />
+			</t.9.1.185>
+			<t.9.1.222>
+				<displayName><![CDATA[思科7206VXR]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.9.1.222]]></sysObjId>
+				<name><![CDATA[Cisco 7206VXR]]></name>
+				<type>4</type>
+				<icon16><![CDATA[cisco/7206_16.gif]]></icon16>
+				<icon32><![CDATA[cisco/7206_32.gif]]></icon32>
+				<icon48><![CDATA[cisco/7206_48.gif]]></icon48>
+				<icon64><![CDATA[cisco/7206_64.gif]]></icon64>
+				<note><![CDATA[思科7206VXR]]></note>
+				<properties />
+			</t.9.1.222>
+			<t.9.1.248>
+				<displayName><![CDATA[思科3524XL]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.9.1.248]]></sysObjId>
+				<name><![CDATA[Cisco 3524XL]]></name>
+				<type>6</type>
+				<icon16><![CDATA[cisco/3524_16.gif]]></icon16>
+				<icon32><![CDATA[cisco/3524_32.gif]]></icon32>
+				<icon48><![CDATA[cisco/3524_48.gif]]></icon48>
+				<icon64><![CDATA[cisco/3524_64.gif]]></icon64>
+				<note><![CDATA[思科3524XL]]></note>
+				<properties />
+			</t.9.1.248>
+			<t.9.1.283>
+				<displayName><![CDATA[思科6509]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.9.1.283]]></sysObjId>
+				<name><![CDATA[Cisco 6509]]></name>
+				<type>6</type>
+				<icon16><![CDATA[cisco/6509_16.gif]]></icon16>
+				<icon32><![CDATA[cisco/6509_32.gif]]></icon32>
+				<icon48><![CDATA[cisco/6509_48.gif]]></icon48>
+				<icon64><![CDATA[cisco/6509_64.gif]]></icon64>
+				<note><![CDATA[思科6509]]></note>
+				<properties />
+			</t.9.1.283>
+			<t.9.1.288>
+				<displayName><![CDATA[思科7507Z]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.9.1.288]]></sysObjId>
+				<name><![CDATA[Cisco 7507Z]]></name>
+				<type>6</type>
+				<icon16><![CDATA[cisco/7507_16.gif]]></icon16>
+				<icon32><![CDATA[cisco/7507_32.gif]]></icon32>
+				<icon48><![CDATA[cisco/7507_48.gif]]></icon48>
+				<icon64><![CDATA[cisco/7507_64.gif]]></icon64>
+				<note><![CDATA[思科7507Z]]></note>
+				<properties />
+			</t.9.1.288>
+			<t.9.1.290>
+				<displayName><![CDATA[思科7507MX]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.9.1.290]]></sysObjId>
+				<name><![CDATA[Cisco 7507MX]]></name>
+				<type>6</type>
+				<icon16><![CDATA[cisco/7507_16.gif]]></icon16>
+				<icon32><![CDATA[cisco/7507_32.gif]]></icon32>
+				<icon48><![CDATA[cisco/7507_48.gif]]></icon48>
+				<icon64><![CDATA[cisco/7507_64.gif]]></icon64>
+				<note><![CDATA[思科7507MX]]></note>
+				<properties />
+			</t.9.1.290>
+			<t.9.1.301>
+				<displayName><![CDATA[思科6509R]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.9.1.301]]></sysObjId>
+				<name><![CDATA[Cisco 6509R]]></name>
+				<type>6</type>
+				<icon16><![CDATA[cisco/6509_16.gif]]></icon16>
+				<icon32><![CDATA[cisco/6509_32.gif]]></icon32>
+				<icon48><![CDATA[cisco/6509_48.gif]]></icon48>
+				<icon64><![CDATA[cisco/6509_64.gif]]></icon64>
+				<note><![CDATA[思科6509R]]></note>
+				<properties />
+			</t.9.1.301>
+			<t.9.1.324>
+				<displayName><![CDATA[思科2950-24]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.9.1.324]]></sysObjId>
+				<name><![CDATA[Cisco 2950-24]]></name>
+				<type>2</type>
+				<icon16><![CDATA[cisco/2950_16.gif]]></icon16>
+				<icon32><![CDATA[cisco/2950_32.gif]]></icon32>
+				<icon48><![CDATA[cisco/2950_48.gif]]></icon48>
+				<icon64><![CDATA[cisco/2950_64.gif]]></icon64>
+				<note><![CDATA[思科2950-24]]></note>
+				<properties />
+			</t.9.1.324>
+			<t.9.1.325>
+				<displayName><![CDATA[思科2950-24C]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.9.1.325]]></sysObjId>
+				<name><![CDATA[Cisco 2950-24C]]></name>
+				<type>2</type>
+				<icon16><![CDATA[cisco/2950_16.gif]]></icon16>
+				<icon32><![CDATA[cisco/2950_32.gif]]></icon32>
+				<icon48><![CDATA[cisco/2950_48.gif]]></icon48>
+				<icon64><![CDATA[cisco/2950_64.gif]]></icon64>
+				<note><![CDATA[思科2950-24C]]></note>
+				<properties />
+			</t.9.1.325>
+			<t.9.1.366>
+				<displayName><![CDATA[思科3550-24]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.9.1.366]]></sysObjId>
+				<name><![CDATA[Cisco 3550-24]]></name>
+				<type>2</type>
+				<icon16><![CDATA[cisco/3550_16.gif]]></icon16>
+				<icon32><![CDATA[cisco/3550_32.gif]]></icon32>
+				<icon48><![CDATA[cisco/3550_48.gif]]></icon48>
+				<icon64><![CDATA[cisco/3550_64.gif]]></icon64>
+				<note><![CDATA[思科3550-24]]></note>
+				<properties />
+			</t.9.1.366>
+			<t.9.1.367>
+				<displayName><![CDATA[思科3550-48]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.9.1.367]]></sysObjId>
+				<name><![CDATA[Cisco 3550-48]]></name>
+				<type>2</type>
+				<icon16><![CDATA[cisco/3550_16.gif]]></icon16>
+				<icon32><![CDATA[cisco/3550_32.gif]]></icon32>
+				<icon48><![CDATA[cisco/3550_48.gif]]></icon48>
+				<icon64><![CDATA[cisco/3550_64.gif]]></icon64>
+				<note><![CDATA[思科3550-48]]></note>
+				<properties />
+			</t.9.1.367>
+			<t.9.1.385>
+				<displayName><![CDATA[思科12416]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.9.1.385]]></sysObjId>
+				<name><![CDATA[Cisco 12416]]></name>
+				<type>2</type>
+				<icon16><![CDATA[cisco/12416_16.gif]]></icon16>
+				<icon32><![CDATA[cisco/12416_32.gif]]></icon32>
+				<icon48><![CDATA[cisco/12416_48.gif]]></icon48>
+				<icon64><![CDATA[cisco/12416_64.gif]]></icon64>
+				<note><![CDATA[思科12416]]></note>
+				<properties />
+			</t.9.1.385>
+			<t.9.1.394>
+				<displayName><![CDATA[思科12410 GSR]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.9.1.394]]></sysObjId>
+				<name><![CDATA[Cisco 12410 GSR]]></name>
+				<type>6</type>
+				<icon16><![CDATA[cisco/12410_16.gif]]></icon16>
+				<icon32><![CDATA[cisco/12410_32.gif]]></icon32>
+				<icon48><![CDATA[cisco/12410_48.gif]]></icon48>
+				<icon64><![CDATA[cisco/12410_64.gif]]></icon64>
+				<note><![CDATA[思科12410 GSR]]></note>
+				<properties />
+			</t.9.1.394>
+			<t.9.1.402>
+				<displayName><![CDATA[思科7606]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.9.1.402]]></sysObjId>
+				<name><![CDATA[Cisco 7606]]></name>
+				<type>6</type>
+				<icon16><![CDATA[cisco/7606_16.gif]]></icon16>
+				<icon32><![CDATA[cisco/7606_32.gif]]></icon32>
+				<icon48><![CDATA[cisco/7606_48.gif]]></icon48>
+				<icon64><![CDATA[cisco/7606_64.gif]]></icon64>
+				<note><![CDATA[思科7606]]></note>
+				<properties />
+			</t.9.1.402>
+			<t.9.1.509>
+				<displayName><![CDATA[思科7609]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.9.1.509]]></sysObjId>
+				<name><![CDATA[Cisco 7609]]></name>
+				<type>6</type>
+				<icon16><![CDATA[cisco/7609_16.gif]]></icon16>
+				<icon32><![CDATA[cisco/7609_32.gif]]></icon32>
+				<icon48><![CDATA[cisco/7609_48.gif]]></icon48>
+				<icon64><![CDATA[cisco/7609_64.gif]]></icon64>
+				<note><![CDATA[思科7609]]></note>
+				<properties />
+			</t.9.1.509>
+		</t.9>
+		<t.94>
+			<displayName><![CDATA[诺基亚]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.94]]></sysObjId>
+			<name><![CDATA[Nokia]]></name>
+			<type>2</type>
+			<icon16><![CDATA[nokia/nokia_16.gif]]></icon16>
+			<icon32><![CDATA[nokia/nokia_32.gif]]></icon32>
+			<icon48><![CDATA[nokia/nokia_48.gif]]></icon48>
+			<icon64><![CDATA[nokia/nokia_64.gif]]></icon64>
+			<note><![CDATA[诺基亚]]></note>
+			<properties />
+		</t.94>
+		<t.6339>
+			<displayName><![CDATA[神州数码]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.6339]]></sysObjId>
+			<name><![CDATA[DigitalChina Network]]></name>
+			<type>2</type>
+			<icon16><![CDATA[digitalchina/digitalchina_16.gif]]></icon16>
+			<icon32><![CDATA[digitalchina/digitalchina_32.gif]]></icon32>
+			<icon48><![CDATA[digitalchina/digitalchina_48.gif]]></icon48>
+			<icon64><![CDATA[digitalchina/digitalchina_64.gif]]></icon64>
+			<note><![CDATA[神州数码]]></note>
+			<properties>
+				<monitors>
+					<monitor>
+						<desc><![CDATA[神州数码设备最近5秒CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.6339.100.1.8.1.3]]></formula>
+						<name><![CDATA[神州数码CPU使用率新版本(last 5s)]]></name>
+						<type><![CDATA[cpu5s]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[神州数码设备内存使用率]]></desc>
+						<formula><![CDATA[(1.3.6.1.4.1.6339.100.1.8.1.5 / 1.3.6.1.4.1.6339.100.1.8.1.4 ) * 100]]></formula>
+						<name><![CDATA[神州数码内存使用率]]></name>
+						<type><![CDATA[mem]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[神州数码模块温度]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.6339.100.1.8.1.10]]></formula>
+						<name><![CDATA[DCRS 温度新版本]]></name>
+						<type><![CDATA[temperature]]></type>
+					</monitor>
+				</monitors>
+			</properties>
+		</t.6339>
+		<t.6486>
+			<displayName><![CDATA[神州数码]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.6486]]></sysObjId>
+			<name><![CDATA[DigitalChina Network]]></name>
+			<type>2</type>
+			<icon16><![CDATA[digitalchina/digitalchina_16.gif]]></icon16>
+			<icon32><![CDATA[digitalchina/digitalchina_32.gif]]></icon32>
+			<icon48><![CDATA[digitalchina/digitalchina_48.gif]]></icon48>
+			<icon64><![CDATA[digitalchina/digitalchina_64.gif]]></icon64>
+			<note><![CDATA[神州数码]]></note>
+			<properties>
+				<monitors>
+					<monitor>
+						<desc><![CDATA[神州数码设备最近1分CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.6486.800.1.2.1.16.1.1.1.14]]></formula>
+						<name><![CDATA[神州数码CPU使用率旧版本(last 1m)]]></name>
+						<type><![CDATA[cpu1m]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[神州数码设备最近1分钟内存使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.6486.800.1.2.1.16.1.1.1.10]]></formula>
+						<name><![CDATA[神州数码内存使用率旧版本]]></name>
+						<type><![CDATA[mem]]></type>
+					</monitor>
+				</monitors>
+			</properties>
+		</t.6486>
+		<t.45>
+			<displayName><![CDATA[北电]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.45]]></sysObjId>
+			<name>Nortel</name>
+			<type>2</type>
+			<icon16><![CDATA[nortel/nortel_16.gif]]></icon16>
+			<icon32><![CDATA[nortel/nortel_32.gif]]></icon32>
+			<icon48><![CDATA[nortel/nortel_48.gif]]></icon48>
+			<icon64><![CDATA[nortel/nortel_64.gif]]></icon64>
+			<note><![CDATA[北电]]></note>
+			<properties>
+				<monitors>
+					<monitor>
+						<desc><![CDATA[北电设备最近1分钟内CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.45.1.6.3.8.1.1.5]]></formula>
+						<name><![CDATA[北电CPU使用率(last 1m)]]></name>
+						<type><![CDATA[cpu1m]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[北电设备最近10分钟内CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.45.1.6.3.8.1.1.6]]></formula>
+						<name><![CDATA[北电CPU使用率(last 10m)]]></name>
+						<type><![CDATA[cpu10m]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[北电设备最近10秒钟内CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.45.1.6.3.8.1.1.11]]></formula>
+						<name><![CDATA[北电CPU使用率(last 10s)]]></name>
+						<type><![CDATA[cpu10s]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[北电设备内存使用率]]></desc>
+						<formula><![CDATA[(100 - 1.3.6.1.4.1.45.1.6.3.8.1.1.9)]]></formula>
+						<name><![CDATA[北电内存使用率]]></name>
+						<type><![CDATA[mem]]></type>
+					</monitor>
+				</monitors>
+			</properties>
+		</t.45>
+		<t.2272>
+			<displayName><![CDATA[北电]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.2272]]></sysObjId>
+			<name>Nortel</name>
+			<type>2</type>
+			<icon16><![CDATA[nortel/nortel_16.gif]]></icon16>
+			<icon32><![CDATA[nortel/nortel_32.gif]]></icon32>
+			<icon48><![CDATA[nortel/nortel_48.gif]]></icon48>
+			<icon64><![CDATA[nortel/nortel_64.gif]]></icon64>
+			<note><![CDATA[北电]]></note>
+			<properties>
+				<monitors>
+					<monitor>
+						<desc><![CDATA[北电BayStack86系列设备CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.2272.1.1.20]]></formula>
+						<name><![CDATA[北电CPU使用率(BayStack86XX)]]></name>
+						<type><![CDATA[cpu]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[北电BayStack86系列设备内存使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.2272.1.1.47]]></formula>
+						<name><![CDATA[北电内存使用率(BayStack86XX)]]></name>
+						<type><![CDATA[mem]]></type>
+					</monitor>
+				</monitors>
+			</properties>
+		</t.2272>
+		<t.14331>
+			<displayName><![CDATA[天融信]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.14331]]></sysObjId>
+			<name>Topsec</name>
+			<type>2</type>
+			<icon16><![CDATA[topsec/topsec_16.gif]]></icon16>
+			<icon32><![CDATA[topsec/topsec_32.gif]]></icon32>
+			<icon48><![CDATA[topsec/topsec_48.gif]]></icon48>
+			<icon64><![CDATA[topsec/topsec_64.gif]]></icon64>
+			<note><![CDATA[天融信]]></note>
+			<properties>
+				<monitors>
+					<monitor>
+						<desc><![CDATA[天融信防火墙CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.14331.5.5.1.4.2 / 10]]></formula>
+						<name><![CDATA[天融信防火墙CPU使用率]]></name>
+						<type><![CDATA[cpu]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[天融信防火墙内存使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.14331.5.5.1.4.3 / 10]]></formula>
+						<name><![CDATA[天融信防火墙内存使用率]]></name>
+						<type><![CDATA[mem]]></type>
+					</monitor>
+				</monitors>
+			</properties>
+		</t.14331>
+		<t.8212>
+			<displayName><![CDATA[港湾]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.8212]]></sysObjId>
+			<name>harbour</name>
+			<type>2</type>
+			<icon16><![CDATA[harbour/harbour_16.gif]]></icon16>
+			<icon32><![CDATA[harbour/harbour_32.gif]]></icon32>
+			<icon48><![CDATA[harbour/harbour_48.gif]]></icon48>
+			<icon64><![CDATA[harbour/harbour_64.gif]]></icon64>
+			<note><![CDATA[港湾]]></note>
+			<properties>
+				<monitors>
+					<monitor>
+						<desc><![CDATA[港湾CPU百分比]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.8212.1.1.4.1.1.4 / 100]]></formula>
+						<name><![CDATA[港湾CPU使用率]]></name>
+						<type><![CDATA[cpu]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[港湾内存使用率]]></desc>
+						<formula><![CDATA[((1.3.6.1.4.1.8212.1.1.4.1.1.7 - 1.3.6.1.4.1.8212.1.1.4.1.1.8) / 1.3.6.1.4.1.8212.1.1.4.1.1.7) * 100]]></formula>
+						<name><![CDATA[港湾内存使用率]]></name>
+						<type><![CDATA[mem]]></type>
+					</monitor>
+				</monitors>
+			</properties>
+		</t.8212>
+		<t.5624>
+			<displayName><![CDATA[凯创]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.5624]]></sysObjId>
+			<name>Enterasys</name>
+			<type>2</type>
+			<icon16><![CDATA[enterasys/enterasys_16.gif]]></icon16>
+			<icon32><![CDATA[enterasys/enterasys_32.gif]]></icon32>
+			<icon48><![CDATA[enterasys/enterasys_48.gif]]></icon48>
+			<icon64><![CDATA[enterasys/enterasys_64.gif]]></icon64>
+			<note><![CDATA[凯创]]></note>
+			<properties>
+				<monitors>
+					<monitor>
+						<desc><![CDATA[凯创CPU百分比]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.5624.1.2.49.1.1.1.1.4.1]]></formula>
+						<name><![CDATA[凯创CPU使用率]]></name>
+						<type><![CDATA[cpu]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[凯创内存使用率]]></desc>
+						<formula><![CDATA[(1.3.6.1.4.1.5624.1.2.49.1.3.1.1.5.1.2 / 1.3.6.1.4.1.5624.1.2.49.1.3.1.1.4.1.2) * 100]]></formula>
+						<name><![CDATA[凯创内存使用率]]></name>
+						<type><![CDATA[mem]]></type>
+					</monitor>
+				</monitors>
+			</properties>
+		</t.5624>
+		<t.52>
+			<displayName><![CDATA[凯创]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.52]]></sysObjId>
+			<name>Enterasys</name>
+			<type>2</type>
+			<icon16><![CDATA[enterasys/enterasys_16.gif]]></icon16>
+			<icon32><![CDATA[enterasys/enterasys_32.gif]]></icon32>
+			<icon48><![CDATA[enterasys/enterasys_48.gif]]></icon48>
+			<icon64><![CDATA[enterasys/enterasys_64.gif]]></icon64>
+			<note><![CDATA[凯创]]></note>
+			<properties>
+				<monitors>
+					<monitor>
+						<desc><![CDATA[凯创CPU百分比]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.52.2501.1.270.2.1.1.2]]></formula>
+						<name><![CDATA[凯创CPU使用率]]></name>
+						<type><![CDATA[cpu]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[凯创内存使用率]]></desc>
+						<formula><![CDATA[(1.3.6.1.4.1.52.2501.1.270.4.1.1.6 / 1.3.6.1.4.1.52.2501.1.270.4.1.1.4) * 100]]></formula>
+						<name><![CDATA[凯创内存使用率]]></name>
+						<type><![CDATA[mem]]></type>
+					</monitor>
+				</monitors>
+			</properties>
+		</t.52>
+		<t.89>
+			<displayName><![CDATA[LinkProof]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.89]]></sysObjId>
+			<name><![CDATA[LinkProof]]></name>
+			<type>2</type>
+			<icon16><![CDATA[linkproof/linkproof_16.gif]]></icon16>
+			<icon32><![CDATA[linkproof/linkproof_32.gif]]></icon32>
+			<icon48><![CDATA[linkproof/linkproof_48.gif]]></icon48>
+			<icon64><![CDATA[linkproof/linkproof_64.gif]]></icon64>
+			<note><![CDATA[LinkProof]]></note>
+			<properties>
+				<monitors>
+					<monitor>
+						<desc><![CDATA[LinkProof CPU百分比]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.89.35.1.53]]></formula>
+						<name><![CDATA[LinkProof CPU使用率]]></name>
+						<type><![CDATA[cpu]]></type>
+					</monitor>
+				</monitors>
+			</properties>
+		</t.89>
+		<t.3224>
+			<displayName><![CDATA[NetScreen]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.3224]]></sysObjId>
+			<name><![CDATA[NetScreen]]></name>
+			<type>2</type>
+			<icon16><![CDATA[netscreen/netscreen_16.gif]]></icon16>
+			<icon32><![CDATA[netscreen/netscreen_32.gif]]></icon32>
+			<icon48><![CDATA[netscreen/netscreen_48.gif]]></icon48>
+			<icon64><![CDATA[netscreen/netscreen_64.gif]]></icon64>
+			<note><![CDATA[NetScreen]]></note>
+			<properties>
+				<monitors>
+					<monitor>
+						<desc><![CDATA[NetScreen设备最近1分钟内CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.3224.16.1.2]]></formula>
+						<name><![CDATA[NetScreen CPU使用率(last 1m)]]></name>
+						<type><![CDATA[cpu1m]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[NetScreen设备内存使用率]]></desc>
+						<formula><![CDATA[(1.3.6.1.4.1.3224.16.2.1 / (1.3.6.1.4.1.3224.16.2.1 + 1.3.6.1.4.1.3224.16.2.2)) * 100]]></formula>
+						<name><![CDATA[NetScreen 内存使用率]]></name>
+						<type><![CDATA[mem]]></type>
+					</monitor>
+				</monitors>
+			</properties>
+		</t.3224>
+		<t.3902>
+			<displayName><![CDATA[中兴]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.3902]]></sysObjId>
+			<name>ZTE</name>
+			<type>2</type>
+			<icon16><![CDATA[zte/zte_16.gif]]></icon16>
+			<icon32><![CDATA[zte/zte_32.gif]]></icon32>
+			<icon48><![CDATA[zte/zte_48.gif]]></icon48>
+			<icon64><![CDATA[zte/zte_64.gif]]></icon64>
+			<note><![CDATA[中兴]]></note>
+			<properties>
+				<monitors>
+					<monitor>
+						<desc><![CDATA[中兴设备最近5秒钟内CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.3902.15.2.6.1.1]]></formula>
+						<name><![CDATA[中兴CPU使用率(last 5s)]]></name>
+						<type><![CDATA[cpu5s]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[中兴设备最近30秒钟内CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.3902.15.2.6.1.2]]></formula>
+						<name><![CDATA[中兴CPU使用率(last 30s)]]></name>
+						<type><![CDATA[cpu30s]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[中兴设备最近2分钟内CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.3902.15.2.6.1.3]]></formula>
+						<name><![CDATA[中兴CPU使用率(last 2m)]]></name>
+						<type><![CDATA[cpu2m]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[中兴设备内存使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.3902.15.2.6.1.5]]></formula>
+						<name><![CDATA[中兴设备内存使用率]]></name>
+						<type><![CDATA[mem]]></type>
+					</monitor>
+				</monitors>
+			</properties>
+			<t.3902.3.100.5000>
+				<displayName><![CDATA[中兴10600]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.3902.3.100.5000]]></sysObjId>
+				<name><![CDATA[ZTE 10600]]></name>
+				<type>2</type>
+				<icon16><![CDATA[zte/10600_16.gif]]></icon16>
+				<icon32><![CDATA[zte/10600_32.gif]]></icon32>
+				<icon48><![CDATA[zte/10600_48.gif]]></icon48>
+				<icon64><![CDATA[zte/10600_64.gif]]></icon64>
+				<note><![CDATA[中兴10600]]></note>
+				<properties />
+			</t.3902.3.100.5000>
+		</t.3902>
+		<t.4881>
+			<displayName><![CDATA[锐捷]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.4881]]></sysObjId>
+			<name>Ruijie</name>
+			<type>2</type>
+			<icon16><![CDATA[ruijie/ruijie_16.gif]]></icon16>
+			<icon32><![CDATA[ruijie/ruijie_32.gif]]></icon32>
+			<icon48><![CDATA[ruijie/ruijie_48.gif]]></icon48>
+			<icon64><![CDATA[ruijie/ruijie_64.gif]]></icon64>
+			<note><![CDATA[锐捷]]></note>
+			<properties>
+				<monitors>
+					<monitor>
+						<desc><![CDATA[锐捷设备最近5秒钟内CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.4881.1.1.10.2.36.1.1.1]]></formula>
+						<name><![CDATA[锐捷CPU使用率(last 5s)]]></name>
+						<type><![CDATA[cpu5s]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[锐捷设备最近1分钟内CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.4881.1.1.10.2.36.1.1.2]]></formula>
+						<name><![CDATA[锐捷CPU使用率(last 1m)]]></name>
+						<type><![CDATA[cpu1m]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[锐捷设备最近5分钟内CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.4881.1.1.10.2.36.1.1.3]]></formula>
+						<name><![CDATA[锐捷CPU使用率(last 5m)]]></name>
+						<type><![CDATA[cpu5m]]></type>
+					</monitor>
+					<monitor>
+						<desc><![CDATA[锐捷设备内存使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.4881.1.1.10.2.35.1.1.1.3]]></formula>
+						<name><![CDATA[锐捷设备内存使用率]]></name>
+						<type><![CDATA[mem]]></type>
+					</monitor>
+				</monitors>
+			</properties>
+		</t.4881>
+		<t.1916>
+			<displayName><![CDATA[Extreme]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.1916]]></sysObjId>
+			<name><![CDATA[Extreme]]></name>
+			<type>2</type>
+			<icon16><![CDATA[extreme/extreme_16.gif]]></icon16>
+			<icon32><![CDATA[extreme/extreme_32.gif]]></icon32>
+			<icon48><![CDATA[extreme/extreme_48.gif]]></icon48>
+			<icon64><![CDATA[extreme/extreme_64.gif]]></icon64>
+			<note><![CDATA[Extreme]]></note>
+			<properties>
+				<monitors>
+					<monitor>
+						<desc><![CDATA[Extreme设备CPU使用率]]></desc>
+						<formula><![CDATA[1.3.6.1.4.1.1916.1.1.1.28]]></formula>
+						<name><![CDATA[Extreme CPU使用率]]></name>
+						<type><![CDATA[cpu]]></type>
+					</monitor>
+				</monitors>
+			</properties>
+		</t.1916>
+		<t.3375>
+			<displayName><![CDATA[Extreme]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.3375]]></sysObjId>
+			<name><![CDATA[Extreme]]></name>
+			<type>2</type>
+			<icon16><![CDATA[extreme/extreme_16.gif]]></icon16>
+			<icon32><![CDATA[extreme/extreme_32.gif]]></icon32>
+			<icon48><![CDATA[extreme/extreme_48.gif]]></icon48>
+			<icon64><![CDATA[extreme/extreme_64.gif]]></icon64>
+			<note><![CDATA[Extreme]]></note>
+			<properties>
+				<monitors>
+					<monitor>
+						<desc><![CDATA[Extreme设备内存使用率]]></desc>
+						<formula><![CDATA[(1.3.6.1.4.1.3375.1.1.77 / (1.3.6.1.4.1.3375.1.1.78 / 1024)) * 100]]></formula>
+						<name><![CDATA[Extreme 内存使用率]]></name>
+						<type><![CDATA[mem]]></type>
+					</monitor>
+				</monitors>
+			</properties>
+		</t.3375>
+		<t.6527>
+			<displayName><![CDATA[阿尔卡特朗讯]]></displayName>
+			<sysObjId><![CDATA[1.3.6.1.4.1.6527]]></sysObjId>
+			<name><![CDATA[Alcatel-Lucent]]></name>
+			<type>2</type>
+			<icon16><![CDATA[alcatel/alcatel_16.gif]]></icon16>
+			<icon32><![CDATA[alcatel/alcatel_32.gif]]></icon32>
+			<icon48><![CDATA[alcatel/alcatel_48.gif]]></icon48>
+			<icon64><![CDATA[alcatel/alcatel_64.gif]]></icon64>
+			<note><![CDATA[Alcatel-Lucent]]></note>
+			<properties />
+			<t.6527.1.3.1>
+				<displayName><![CDATA[阿尔卡特朗讯7750]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.6527.1.3.1]]></sysObjId>
+				<name><![CDATA[Alcatel 7750]]></name>
+				<type>2</type>
+				<icon16><![CDATA[alcatel/7750_16.gif]]></icon16>
+				<icon32><![CDATA[alcatel/7750_32.gif]]></icon32>
+				<icon48><![CDATA[alcatel/7750_48.gif]]></icon48>
+				<icon64><![CDATA[alcatel/7750_64.gif]]></icon64>
+				<note><![CDATA[Alcatel7750]]></note>
+				<properties />
+			</t.6527.1.3.1>
+			<t.6527.1.3.4>
+				<displayName><![CDATA[阿尔卡特朗讯7750]]></displayName>
+				<sysObjId><![CDATA[1.3.6.1.4.1.6527.1.3.4]]></sysObjId>
+				<name><![CDATA[Alcatel 7750]]></name>
+				<type>2</type>
+				<icon16><![CDATA[alcatel/7750_16.gif]]></icon16>
+				<icon32><![CDATA[alcatel/7750_32.gif]]></icon32>
+				<icon48><![CDATA[alcatel/7750_48.gif]]></icon48>
+				<icon64><![CDATA[alcatel/7750_64.gif]]></icon64>
+				<note><![CDATA[Alcatel7750]]></note>
+				<properties />
+			</t.6527.1.3.4>
+		</t.6527>
+	</t>
+</Templates>

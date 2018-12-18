@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="onuPerfGraph" namespace="/onu/onuPerfGraph" extends="default">
+    	<action name="showOnuPerfView" class="onuPerfGraphAction" method="showOnuPerfView">
+			<result>/epon/onu/onuPerfView.jsp</result>
+		</action>
+		<action name="loadOnuPerfTargetGroups" class="onuPerfGraphAction" method="loadOnuPerfTargetGroups">
+		</action>
+		<action name="loadOnuTargetsByGroup" class="onuPerfGraphAction" method="loadOnuTargetsByGroup">
+		</action>
+		<action name="loadOnuOptSubPerfTargets" class="onuPerfGraphAction" method="loadOnuOptSubPerfTargets">
+		</action>
+		<action name="loadOnuOptPerfData" class="onuPerfGraphAction" method="loadOnuOptPerfData">
+		</action>
+		<action name="loadOnuPonList" class="onuPerfGraphAction" method="loadOnuPonList" />		
+		<action name="loadOnuUniList" class="onuPerfGraphAction" method="loadOnuUniList" />
+		<action name="loadOnuFlowPerfData" class="onuPerfGraphAction" method="loadOnuFlowPerfData" />
+		
+		<action name="showOnuPerfManage" class="onuPerfManageAction" method="showOnuPerfManage">
+			<result>/performance/perfTarget/onuPerfTargetManage.jsp</result>
+		</action>
+		
+		<action name="loadOnuPerfTargetList" class="onuPerfManageAction" method="loadOnuPerfTargetList" />
+		<action name="loadOnuPerfTarget" class="onuPerfManageAction" method="loadOnuPerfTarget" />
+		<action name="modifyOnuPerfTarget" class="onuPerfManageAction" method="modifyOnuPerfTarget" />
+		<action name="saveAsOnuGlobalTarget" class="onuPerfManageAction" method="saveAsOnuGlobalTarget" />
+		<action name="applyCurrentTargetToAllOnu" class="onuPerfManageAction" method="applyCurrentTargetToAllOnu" />
+		<action name="showOnuGlobalPerfTarget" class="onuPerfManageAction" method="showOnuGlobalPerfTarget">
+			<result>/performance/perfTarget/onuGlobalTargetConfig.jsp</result>
+		</action>
+		<action name="modifyOnuGlobalTarget" class="onuPerfManageAction" method="modifyOnuGlobalTarget" />
+		<action name="showOnuPerfTemplate" class="onuPerfManageAction" method="showOnuPerfTemplate">
+			<result>/performance/perfTarget/onuPerfTemplateConfig.jsp</result>
+		</action>
+		<action name="loadOnuPerfTemplateList" class="onuPerfManageAction" method="loadOnuPerfTemplateList" />
+	</package>
+</struts>

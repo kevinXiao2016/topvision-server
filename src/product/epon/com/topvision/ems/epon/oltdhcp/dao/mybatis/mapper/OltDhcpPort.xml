@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="OltDhcpPort">
+	
+	<select id="getPortAttributes" parameterType="map" resultType="topOltDhcpPortAttribute">
+		select * from topOltDhcpPortAttribute
+		where entityId = #{entityId} and topOltDhcpPortProtIndex = #{portProtIndex}
+	</select>
+	
+	<select id="getPortAttribute" parameterType="map" resultType="topOltDhcpPortAttribute">
+		select * from topOltDhcpPortAttribute
+		where entityId = #{entityId} and topOltDhcpPortProtIndex = #{portProtIndex} 
+			and topOltDhcpPortTypeIndex = #{portTypeIndex}
+			and topOltDhcpSlotIndex = #{slotIndex} and topOltDhcpPortIndex = #{portIndex}
+	</select>
+	
+	<update id="updatePortAttribute" parameterType="topOltDhcpPortAttribute">
+		update topOltDhcpPortAttribute
+		set topOltDhcpPortCascade = #{topOltDhcpPortCascade},
+		topOltDhcpPortTrans = #{topOltDhcpPortTrans},
+		topOltDhcpPortTrust = #{topOltDhcpPortTrust}
+		where entityId = #{entityId} and topOltDhcpPortProtIndex = #{topOltDhcpPortProtIndex} 
+			and topOltDhcpPortTypeIndex = #{topOltDhcpPortTypeIndex} 
+			and topOltDhcpSlotIndex = #{topOltDhcpSlotIndex}
+			and topOltDhcpPortIndex = #{topOltDhcpPortIndex}
+	</update>
+
+</mapper>

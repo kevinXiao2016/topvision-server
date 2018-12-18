@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.fault.domain.EventType">
+	<insert id="insertEntity" databaseId="MySQL" parameterType="eventType"
+		useGeneratedKeys="true" keyProperty="typeId">
+		INSERT INTO EventType (parentId,
+		name, displayName, note)
+		VALUES
+		(#{parentId}, #{name},
+		#{displayName},
+		#{note})
+	</insert>
+	<insert id="insertEntity" databaseId="Oracle" parameterType="eventType">
+		<selectKey keyProperty="typeId" resultType="int" order="BEFORE">
+			select EventType_Seq.nextval as typeId from dual
+		</selectKey>
+		INSERT INTO EventType (typeId, parentId, name, displayName, note)
+		VALUES (#{typeId}, #{parentId}, #{name}, #{displayName}, #{note})
+	</insert>
+
+
+
+	<select id="selectByPrimaryKey" parameterType="string"
+		resultType="eventType">
+		SELECT typeId, parentId, name,
+		displayName, note,
+		alertTypeId
+		FROM EventType A LEFT JOIN
+		Event2Alert B on
+		A.typeId=B.eventTypeId
+		where typeId = #{typeId}
+	</select>
+
+	<select id="selectByMap" parameterType="map" resultType="eventType">
+		SELECT
+		typeId, parentId, name,
+		displayName, note, alertTypeId
+		FROM EventType A
+		LEFT JOIN
+		Event2Alert B on A.typeId=B.eventTypeId
+	</select>
+
+	<select id="getEventType" parameterType="map" resultType="eventType">
+		SELECT
+		typeId, parentId, name,
+		displayName, note FROM EventType order by
+		typeId asc
+	</select>
+
+
+
+	<select id="getAllEventType" parameterType="String" resultType="eventType">
+		SELECT A.typeId, A.parentId,
+		A.displayName , B.alertTypeId FROM
+		eventType A
+		left join event2alert B on A.typeId = B.eventTypeId
+		WHERE
+		A.parentId != 0  
+	</select>
+</mapper>

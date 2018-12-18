@@ -1,0 +1,1405 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.onu.domain.Onu">
+
+	<insert id="insertOltOnuRelation" parameterType="oltOnuAttribute">
+		insert into
+		OltOnuRelation(onuId,ponId,onuIndex,entityId)
+		values
+		(#{onuId},#{ponId},#{onuIndex},#{entityId})
+	</insert>
+	<insert id="insertOnuPonRelation" databaseId="MySQL"
+		parameterType="oltOnuPonAttribute" useGeneratedKeys="true"
+		keyProperty="onuPonId">
+		insert into
+		OltOnuPonRelation(onuId,onuPonIndex,entityId)
+		values
+		(#{onuId},#{onuPonIndex},#{entityId})
+	</insert>
+	<insert id="insertOnuPonRelation" databaseId="Oracle"
+		parameterType="oltOnuPonAttribute">
+		<selectKey keyProperty="onuPonId" resultType="long" order="BEFORE">
+			SELECT
+			OltOnuPonRelation_Seq.nextval AS
+			onuPonId from dual
+		</selectKey>
+		insert into OltOnuPonRelation(onuPonId,onuId,onuPonIndex,entityId)
+		values
+		(#{onuPonId},#{onuId},#{onuPonIndex},#{entityId})
+	</insert>
+	<select id="getOltOnuCount" parameterType="OltOnuAttribute"
+		resultType="int">
+		SELECT
+		count(B.onuId)
+		FROM
+		OltOnuRelation B
+		WHERE
+		B.entityId =
+		#{entityId} and B.onuIndex = #{onuIndex}
+	</select>
+	<select id="getOnuPonCount" parameterType="OltOnuPonAttribute"
+		resultType="int">
+		SELECT
+		count(B.onuPonId)
+		FROM
+		OltOnuPonRelation B
+		WHERE
+		B.entityId = #{entityId} and B.onuPonIndex = #{onuPonIndex}
+	</select>
+
+	<select id="getOnuAttributeByIndex" parameterType="map"
+		resultType="oltOnuAttribute">
+		select A.* , B.onuIndex onuIndex from
+		oltonuattribute A ,
+		oltonurelation B where A.onuId=B.onuId and B.onuIndex=#{onuIndex} and
+		B.entityId=#{entityId}
+	</select>
+	
+	<select id="getOnuAttributeByUniqueId" parameterType="map"
+		resultType="oltOnuAttribute">
+		select * from oltonuattribute  where onuUniqueIdentification = #{uniqueId} 
+		and entityId=#{entityId}
+	</select>
+
+	<select id="getOnuId" parameterType="oltOnuAttribute"
+		resultType="long">
+		SELECT
+		onuId
+		FROM
+		OltOnuRelation
+		WHERE
+		entityId =
+		#{entityId}
+		and
+		onuIndex = #{onuIndex}
+	</select>
+
+	<select id="getOltOnuPonAttribute" parameterType="long"
+		resultType="onuPonPort">
+		SELECT
+		A.onuPonId,
+		B.onuPonIndex,
+		onuReceivedOpticalPower,
+		onuTramsmittedOpticalPower,
+		onuBiasCurrent,
+		onuWorkingVoltage,
+		onuWorkingTemperature
+		FROM
+		oltonuponattribute A,oltonuponrelation B
+		WHERE
+		A.onuPonId = B.onuPonId and
+		B.onuPonId = (SELECT
+		onuPonId FROM
+		oltonuponrelation WHERE onuId = #{onuId})
+	</select>
+
+	<select id="getOnuMap" parameterType="long" resultType="java.util.HashMap">
+		select
+		onuId ID , onuIndex 'INDEX' from
+		OltOnuRelation where
+		entityId =
+		#{entityId}
+		union
+		select uniId ID , uniIndex 'INDEX' from
+		OltUniRelation
+		where
+		entityId =
+		#{entityId}
+		union
+		select onuPonId ID ,
+		onuPonIndex 'INDEX'
+		from OltOnuPonRelation where
+		entityId =
+		#{entityId}
+	</select>
+	<select id="selectOnuTypeInfo" parameterType="int" resultType="onuTypeInfo">
+		select onuTypeName, onuTypeId, gePortNum,
+		fePortNum, onuPonNum,
+		onuDesc,
+		onuIcon
+		from
+		oltonutypeinfo
+		where onuTypeId=#{onuTypeId}
+	</select>
+	<select id="getOnuEntityById" parameterType="map" resultType="oltOnuAttribute">
+		SELECT
+		A.entityId,
+		A.onuId,
+	    A.onuUniqueIdentification,
+		A.onuName,
+		A.onuType,
+		A.onuPreType,
+		A.onuMacAddress,
+		A.onuOperationStatus,
+		A.onuAdminStatus,
+		A.onuChipVendor,
+		A.onuChipType,
+		A.onuChipVersion,
+		A.onuSoftwareVersion,
+		A.onuFirmwareVersion,
+		A.topOnuHardwareVersion,
+		A.onuTestDistance,
+		A.onuLlidId,
+		A.onuIcon,
+		A.changeTime,
+		A.onuIsolationEnable,
+		A.ponPerfStats15minuteEnable,
+		A.temperatureDetectEnable,
+		A.onuTimeSinceLastRegister,
+		A.topOnuExtAttr,
+		A.onuEorG,
+		A.onuUniqueIdentification,
+		F.userId attention,
+		C.onuIndex,
+		D.laserSwitch
+		FROM
+		oltonuattribute A 
+		left join (select * from userAttention where entityId = #{onuId} 
+		<if test="userId != null ">
+			and userId = #{userId}
+		</if>) F  
+		on A.onuId = F.entityId
+		left join oltonurelation C on C.onuId = A.onuId
+		left join onuLaser D on A.onuId = D.onuId
+		WHERE
+		A.onuId = #{onuId}
+	</select>
+	<select id="getOnuByOnuId" parameterType="long" resultType="onu">
+		SELECT
+		E.displayName typeName,
+		A.onuId,
+		B.onuIndex,
+		B.entityId,
+		C.name	onuName,
+		A.onuEorG,
+		A.onuUniqueIdentification,
+		A.topOnuExtAttr,
+		onuType,
+		onuPreType,
+		onuMacAddress,
+		D.state AS
+		onuOperationStatus,
+		onuAdminStatus,
+		onuChipVendor,
+		onuChipType,
+		onuChipVersion,
+		onuSoftwareVersion,
+		onuFirmwareVersion,
+		onuTestDistance,
+		onuLlidId,
+		onuIcon,
+		temperatureDetectEnable,
+		currentTemperature
+		topOnuCurrentTemperature,
+		onuIsolationEnable,
+		topOnuAction,
+		topOnuHardwareVersion,
+		onuFecEnable,
+		ponPerfStats15minuteEnable,
+		ponPerfStats24hourEnable,
+		changeTime,
+		onuTimeSinceLastRegister,
+		sysName,
+		sysLocation,
+		lastDeregisterTime,
+		C.typeId,
+		C.location,
+		F.laserSwitch,
+		I.userId AS attention
+		FROM
+		oltonuattribute A 
+		LEFT JOIN userAttention I ON I.entityId = A.onuId
+		LEFT JOIN onuLaser F ON A.onuId=F.onuId,
+		oltonurelation B, entitysnap D, entity C 
+		LEFT JOIN entitytype E ON C.typeid=E.typeId
+		WHERE
+		A.onuId =
+		B.onuId and A.onuId = C.entityId
+		and A.onuId = D.entityId and A.onuId =
+		#{onuId}
+	</select>
+	<select id="getOnuPonAttribute" parameterType="long"
+		resultType="oltOnuPonAttribute">
+		SELECT
+		onuPonId,
+		onuReceivedOpticalPower,
+		onuTramsmittedOpticalPower,
+		onuBiasCurrent,
+		onuWorkingVoltage,
+		onuWorkingTemperature
+		FROM
+		oltonuponattribute
+		WHERE
+		onuPonId = #{onuPonId}
+	</select>
+
+
+	<select id="getOnuListByPonId" parameterType="long" resultType="oltOnuAttribute">
+		SELECT
+		B.entityId,
+		A.onuId,
+		C.onuIndex,
+		onuUniqueIdentification,
+		onuName,
+		onuType,
+		onuPreType,
+		onuMacAddress,
+		onuOperationStatus,
+		onuAdminStatus,
+		onuChipVendor,
+		onuChipType,
+		onuChipVersion,
+		IF(A.onuEorG='E',A.onuSoftwareVersion, IF(GSOFT.onuSoftware0Active=1,GSOFT.onuSoftware0Version,GSOFT.onuSoftware1Version)) onuSoftwareVersion,
+		topOnuHardwareVersion,
+		onuFirmwareVersion,
+		onuTestDistance,
+		onuLlidId,
+		onuIcon,
+		A.changeTime,
+		onuTimeSinceLastRegister
+		FROM
+		OltOnuAttribute A 
+		INNER JOIN OltOnuRelation C ON A.onuId = C.onuId
+		INNER JOIN OltPonRelation B ON B.ponId = C.ponId
+		LEFT JOIN gpon_onuinfosoftware GSOFT ON GSOFT.onuId = A.onuId
+		WHERE
+		B.ponId = #{ponId}
+	</select>
+	<select id="getOnuList" parameterType="java.util.Map"
+		resultType="oltOnuAttribute">
+		SELECT
+		B.entityId,
+		V.typeId,
+		A.onuId,
+		A.onuUniqueIdentification,
+		C.onuIndex,
+		V.name as onuName,
+		onuType,
+		A.onuPreType,
+		onuMacAddress,
+		onuSerialNum,
+		E.state AS onuOperationStatus,
+		onuAdminStatus,
+		onuChipVendor,
+		onuChipType,
+		onuChipVersion,
+		onuSoftwareVersion,
+		onuFirmwareVersion,
+		onuTestDistance,
+		onuLlidId,
+		onuIcon,
+		A.changeTime,
+		onuTimeSinceLastRegister,
+		onuEorG
+		FROM
+		OltOnuAttribute A,
+		OltPonRelation B,
+		OltOnuRelation C,
+		entity V,
+		entitysnap E
+		WHERE
+		B.entityId=#{entityId} and
+		B.ponId = C.ponId and C.onuId = A.onuId
+		and A.onuId = V.entityId and
+		A.onuId = E.entityId
+		and V.entityId in (select entityId from
+		${Authority})
+		<if test="slotId != -1">
+			and B.slotId = #{slotId}
+		</if>
+		<if test="ponId != -1">
+			and B.ponId = #{ponId}
+		</if>
+		<if test="llid != -1">
+			and A.onuLlidId = #{llid}
+		</if>
+		<if test="mac != null">
+			and V.mac like '%${mac}%'
+		</if>
+		<if test="onuName != null">
+			and V.name LIKE '%${onuName}%'
+		</if>
+		ORDER BY C.onuIndex
+	</select>
+
+
+	<select id="getOltOnuCapability" parameterType="long"
+		resultType="oltOnuCapability">
+		SELECT
+		onuId,
+		onuGePortNum,
+		onuGePortBitMap,
+		onuFePortNum,
+		onuFePortBitMap,
+		onuQueueNumUpLink,
+		onuMaxQueueNumUpLink,
+		onuQueueNumDownLink,
+		onuMaxQueueNumDownLink,
+		onuFecEnable,
+		onuEncryptMode,
+		onuEncryptKeyExchangeTime
+		FROM
+		oltonuattribute
+		WHERE onuId
+		= #{onuId}
+	</select>
+	<select id="getOltTopOnuCapability" parameterType="long"
+		resultType="oltTopOnuCapability">
+		SELECT
+		onuId,
+		capAddrMaxQuantity AS
+		capAddrMaxQuantity
+		FROM
+		oltonuattribute
+		WHERE onuId = #{onuId}
+	</select>
+	<select id="getOltOnuRstp" parameterType="long" resultType="oltOnuRstp">
+		SELECT
+		onuId,
+		rstpBridgeMode
+		FROM
+		oltonuattribute
+		WHERE onuId =
+		#{onuId}
+	</select>
+	<select id="getUniAttrMacAddrLearnMaxNum" parameterType="long"
+		resultType="Long">
+		SELECT
+		macAddrLearnMaxNum
+		FROM
+		oltuniattribute
+		WHERE uniId =
+		#{uniId}
+	</select>
+
+	<select id="getAllOnuMacAndIndex" parameterType="long"
+		resultType="java.util.HashMap">
+		select A.onuIndex , B.onuMacAddress from
+		oltonurelation A,
+		oltonuattribute B where
+		A.onuId=B.onuId and A.entityId = B.entityId
+		and
+		B.entityId = #{entityId}
+	</select>
+    
+    <select id="getOnuCountByOnuId" parameterType="long" resultType="int">
+        select count(*) from oltonuattribute where onuId = #{onuId}
+    </select>
+
+	<insert id="insertOltOnuAttribute" parameterType="oltOnuAttribute">
+		INSERT INTO
+		OltOnuAttribute(
+		onuId,
+		onuUniqueIdentification,
+		onuType,
+		onuName,
+		onuPreType,
+		onuMac,
+		onuMacAddress,
+		onuOperationStatus,
+		onuAdminStatus,
+		onuChipVendor,
+		onuChipType,
+		onuChipVersion,
+		onuSoftwareVersion,
+		onuFirmwareVersion,
+		onuTestDistance,
+		onuLlidId,
+		onuTimeSinceLastRegister,
+		onuIcon,
+		changeTime,
+		entityId,
+		onuSerialNum
+		)
+		VALUES
+		(
+		#{onuId},
+		#{onuUniqueIdentification},
+		#{onuType},
+		#{onuName},
+		#{onuPreType},
+		#{onuMac},
+		#{onuMacAddress},
+		#{onuOperationStatus},
+		#{onuAdminStatus},
+		#{onuChipVendor},
+		#{onuChipType},
+		#{onuChipVersion},
+		#{onuSoftwareVersion},
+		#{onuFirmwareVersion},
+		#{onuTestDistance},
+		#{onuLlidId},
+		#{onuTimeSinceLastRegister},
+		#{onuIcon},
+		<choose>
+			<when test="_databaseId == 'MySQL'">
+				now(),
+			</when>
+			<when test="_databaseId == 'Oracle'">
+				sysdate,
+			</when>
+		</choose>
+		#{entityId},
+		#{onuSerialNum}
+		)
+	</insert>
+
+	<insert id="insertGponOltOnuAttribute" parameterType="gponOnuAttribute">
+		INSERT INTO
+		OltOnuAttribute(
+		onuId,
+		onuUniqueIdentification,
+		onuType,
+		onuPreType,
+		onuName,
+		onuSerialNum,
+		onuOperationStatus,
+		onuAdminStatus,
+		onuTestDistance,
+		onuTimeSinceLastRegister,
+		topOnuHardwareVersion,
+		onuIcon,
+		onuDeactive,
+		changeTime,
+		onuEorG,
+		entityId
+		)
+		VALUES
+		(
+		#{onuId},
+		#{onuUniqueIdentification},
+		#{onuType},
+		#{onuPreType},
+		#{onuName},
+		#{onuSerialNum},
+		#{onuOperationStatus},
+		#{onuAdminStatus},
+		#{onuTestDistance},
+		#{onuTimeSinceLastRegister},
+		#{onuHardwareVersion},
+		#{onuIcon},
+		#{onuDeactive},
+		<choose>
+			<when test="_databaseId == 'MySQL'">
+				now(),
+			</when>
+			<when test="_databaseId == 'Oracle'">
+				sysdate,
+			</when>
+		</choose>
+		'G',
+		#{entityId}
+		)
+	</insert>
+
+
+	<insert id="insertGponOnuCapability" parameterType="gponOnuAttribute">
+		insert into
+		gpon_onucapability(onuId, onuIndex, entityId) values(#{onuId},
+		#{onuIndex}, #{entityId})
+	</insert>
+
+
+	<update id="updateOnuPonAttribute" parameterType="oltOnuPonAttribute">
+		UPDATE
+		OltOnuPonAttribute
+		SET
+		onuReceivedOpticalPower =
+		#{onuReceivedOpticalPower},
+		onuTramsmittedOpticalPower =
+		#{onuTramsmittedOpticalPower},
+		onuBiasCurrent =
+		#{onuBiasCurrent},
+		onuWorkingVoltage = #{onuWorkingVoltage},
+		onuWorkingTemperature =
+		#{onuWorkingTemperature}
+		WHERE
+		exists
+		(select 1 from OltOnuPonRelation
+		where OltOnuPonRelation.onuPonId =
+		OltOnuPonAttribute.onuPonId and
+		OltOnuPonRelation.entityId=#{entityId} and
+		OltOnuPonRelation.onuPonIndex=#{onuPonIndex})
+	</update>
+
+	<update id="updateOltOnuAttribute" parameterType="oltOnuAttribute">
+		UPDATE
+		OltOnuAttribute
+		SET
+		onuType = #{onuType},
+		onuPreType =
+		#{onuPreType},
+		onuMacAddress = #{onuMacAddress},
+		onuMac = #{onuMac},
+		onuOperationStatus =
+		#{onuOperationStatus},
+		onuAdminStatus =
+		#{onuAdminStatus},
+		onuChipVendor =
+		#{onuChipVendor},
+		onuChipType =
+		#{onuChipType},
+		onuChipVersion =
+		#{onuChipVersion},
+		onuSoftwareVersion =
+		#{onuSoftwareVersion},
+		onuFirmwareVersion = #{onuFirmwareVersion},
+		topOnuHardwareVersion = #{topOnuHardwareVersion},
+		onuTestDistance =
+		#{onuTestDistance},
+		onuLlidId = #{onuLlidId},
+		onuTimeSinceLastRegister = #{onuTimeSinceLastRegister},
+		onuDeactive = #{onuDeactive},
+		<choose>
+			<when test="_databaseId == 'MySQL'">
+				changeTime = now()
+			</when>
+			<when test="_databaseId == 'Oracle'">
+				changeTime = sysdate
+			</when>
+		</choose>
+		WHERE onuId = #{onuId}
+	</update>
+
+	<update id="updateOnuAdminStatus" parameterType="oltOnuAttribute">
+		UPDATE
+		OltOnuAttribute SET onuAdminStatus = #{onuAdminStatus}
+		WHERE onuId =
+		#{onuId}
+	</update>
+	<update id="updateOnuName" parameterType="oltOnuAttribute">
+		UPDATE
+		OltOnuAttribute
+		SET onuName = #{onuName} WHERE onuId =
+		#{onuId}
+	</update>
+	<update id="updateOnuDeactive" parameterType="map">
+		UPDATE
+		OltOnuAttribute
+		SET onuDeactive = #{onuDeactive} WHERE onuId = #{onuId}
+	</update>
+
+	<update id="updateOnuAttribute" parameterType="oltOnuAttribute">
+		UPDATE
+		oltonuattribute SET onuType = #{onuType},
+		onuMacAddress =
+		#{onuMacAddress}, onuOperationStatus =
+		#{onuOperationStatus},
+		onuAdminStatus = #{onuAdminStatus},
+		onuChipVendor=
+		#{onuChipVendor},
+		onuChipType = #{onuChipType}, onuChipVersion =
+		#{onuChipVersion},
+		onuSoftwareVersion =
+		#{onuSoftwareVersion},
+		onuFirmwareVersion =
+		#{onuFirmwareVersion}, onuTestDistance =
+		#{onuTestDistance}, onuLlidId
+		= #{onuLlidId}, onuTimeSinceLastRegister
+		=
+		#{onuTimeSinceLastRegister},
+		onuMac = #{onuMac}
+		WHERE onuId = #{onuId}
+	</update>
+
+	<update id="syncOltOnuAttribute" parameterType="oltOnuAttribute">
+		UPDATE
+		oltonuattribute SET onuType = #{onuType},
+		onuPreType = #{onuPreType},
+		onuMacAddress = #{onuMacAddress}, 
+		<if test="onuMac != null and onuMac != '' ">
+			onuUniqueIdentification = #{onuMac},
+		</if>
+		onuOperationStatus = #{onuOperationStatus},
+		onuAdminStatus = #{onuAdminStatus},
+		onuChipVendor= #{onuChipVendor},
+		onuChipType = #{onuChipType},
+		onuChipVersion = #{onuChipVersion},
+		onuSoftwareVersion = #{onuSoftwareVersion},
+		onuFirmwareVersion = #{onuFirmwareVersion},
+		onuTestDistance = #{onuTestDistance}, 
+		onuLlidId = #{onuLlidId},
+		onuTimeSinceLastRegister=#{onuTimeSinceLastRegister},
+		onuMac = #{onuMac},
+		topOnuHardwareVersion = #{topOnuHardwareVersion},
+		onuDeactive = #{onuDeactive}
+		WHERE onuId = #{onuId}
+	</update>
+
+	<update id="createEntityRelation" parameterType="entity">
+		UPDATE
+		Entity
+		SET
+		parentId = #{parentId} WHERE entityId =
+		#{entityId}
+	</update>
+
+	<select id="selectOnuSubEntityId" parameterType="long"
+		resultType="long">
+		select entityId from entity where parentId = #{entityId}
+	</select>
+
+	<update id="deleteSubEntityRelation" parameterType="long">
+		update entity
+		set parentId = null where entityId = #{entityId}
+	</update>
+
+	<update id="deleteSubCmtsRelation" parameterType="long">
+		update
+		cmcentityrelation set onuId = null, cmcentityId = cmcId where
+		cmcId=#{entityId}
+	</update>
+
+
+	<update id="updateOnuTemperatureDetectEnable" parameterType="java.util.Map">
+		UPDATE
+		oltonuattribute SET temperatureDetectEnable
+		=
+		#{temperatureDetectEnable}
+		WHERE onuId = #{onuId}
+	</update>
+	<update id="updateOnuFecEnable" parameterType="java.util.Map">
+		UPDATE
+		oltonuattribute SET onuFecEnable = #{onuFecEnable}
+		WHERE
+		onuId =
+		#{onuId}
+	</update>
+	<update id="updateOnuIsolationEnable" parameterType="java.util.Map">
+		UPDATE
+		oltonuattribute SET onuIsolationEnable =
+		#{onuIsolationEnable}
+		WHERE
+		onuId = #{onuId}
+	</update>
+	<update id="updateOnu15minEnable" parameterType="java.util.Map">
+		UPDATE
+		oltonuattribute SET ponPerfStats15minuteEnable =
+		#{onu15minEnable}
+		WHERE onuId = #{onuId}
+	</update>
+	<update id="updateOnu24hEnable" parameterType="java.util.Map">
+		UPDATE
+		oltonuattribute SET ponPerfStats24hourEnable =
+		#{onu24hEnable}
+		WHERE
+		onuId = #{onuId}
+	</update>
+
+	<update id="updateTopOnuMacMaxNum" parameterType="oltTopOnuCapability">
+		UPDATE
+		oltonuattribute SET capAddrMaxQuantity =
+		#{capAddrMaxQuantity}
+		WHERE
+		onuId = #{onuId}
+	</update>
+	<update id="updateOltOnuRstp" parameterType="oltOnuRstp">
+		UPDATE
+		oltonuattribute SET rstpBridgeMode = #{rstpBridgeMode}
+		WHERE onuId =
+		#{onuId}
+	</update>
+
+	<delete id="deleteOltOnuPonRelation" parameterType="Long">
+		delete from
+		OltOnuPonRelation where onuPonIndex=#{Index}
+	</delete>
+
+	<select id="getOnuIndex" parameterType="long" resultType="long">
+		SELECT
+		onuIndex FROM OltOnuRelation WHERE onuId =
+		#{onuId}
+	</select>
+	<select id="getOnuIdByIndex" parameterType="map" resultType="long">
+		SELECT onuId FROM OltOnuRelation WHERE onuIndex =
+		#{onuIndex}
+		AND
+		entityId = #{entityId}
+	</select>
+	<select id="getOnuIdByPonId" parameterType="map" resultType="long">
+		SELECT onuId FROM OltOnuRelation WHERE ponId =
+		#{ponId}
+		AND
+		entityId =
+		#{entityId}
+	</select>
+	
+	<select id="getOnuIdsByPonIds" parameterType="map" resultType="long">
+		SELECT 
+		onuId 
+		FROM OltOnuRelation 
+		WHERE 
+		entityId = #{entityId}
+		and 
+		ponId in
+		<foreach item="item" index="index" collection="ponIds" open="(" separator="," close=")">  
+	  		#{item}  
+	 	</foreach>  
+	</select>
+
+	<select id="getOnuPonAttributeByOnuId" parameterType="long"
+		resultType="oltOnuPonAttribute">
+		SELECT
+		a.* ,b.onuponindex
+		,c.onuPonRevPower,c.onuPonTransPower,c.oltPonRevPower,
+		d.state onuStatus
+		FROM
+		oltonuPonAttribute a ,
+		oltonuponrelation b LEFT JOIN
+		perfonulinkqualitylast c ON B.onuId=C.onuId
+		left join entitySnap d on d.entityId = b.onuId
+		WHERE a.onuPonId =
+		b.onuPonId AND b.onuId = #{onuId}
+	</select>
+
+	<select id="getOnuDeviceListItem" parameterType="map"
+		resultType="OltOnuAttribute">
+		SELECT A.onuId, A.onuName, A.entityId,
+		A.onuPreType,D.Ip as
+		entityIp,C.onuIndex,
+		A.onuMacAddress,A.onuOperationStatus,A.onuAdminStatus
+		FROM
+		oltonuattribute A, entity B , entity D
+		,oltonurelation C
+		where A.onuId =
+		B.entityId and A.onuId = C.onuId and
+		A.entityId = D.entityId and
+		B.entityId in (select entityId from ${Authority})
+		ORDER BY ${sortName}
+	</select>
+
+	<update id="updateOnuCapatility" parameterType="oltOnuCapability">
+		update
+		OltOnuAttribute
+		set onuGePortNum = #{onuGePortNum} ,
+		onuGePortBitMap=#{onuGePortBitmap},onuFePortNum=#{onuFePortNum},onuFePortBitMap=#{onuFePortBitmap},onuQueueNumUpLink=#{onuQueueNumUplink},
+		onuMaxQueueNumUpLink=#{onuMaxQueueNumUplink},onuQueueNumDownLink=#{onuQueueNumDownlink},onuMaxQueueNumDownLink=#{onuMaxQueueNumDownlink},onuFecEnable=#{onuFecEnable},onuEncryptMode=#{onuEncryptMode},
+		onuEncryptKeyExchangeTime=#{onuEncryptKeyExchangeTime}
+		where
+		onuId=#{onuId}
+	</update>
+	<update id="updateTopOnuCapatility" parameterType="oltTopOnuCapability">
+		update
+		OltOnuAttribute
+		set
+		capDeregister=#{capDeregister},capAddrMaxQuantity=#{capAddrMaxQuantity},ponPerfStats15minuteEnable=#{ponPerfStats15minuteEnable},
+		ponPerfStats24hourEnable=#{ponPerfStats24hourEnable},temperatureDetectEnable=#{temperatureDetectEnable},
+		onuIsolationEnable = #{onuIsolationEnable},
+		topOnuAction =
+		#{topOnuAction},
+		topOnuHardwareVersion = #{topOnuHardwareVersion},
+		currentTemperature=#{currentTemperature},
+		topOnuMgmtIp =
+		#{topOnuMgmtIp},
+		topOnuNetMask = #{topOnuNetMask},
+		topOnuGateway =
+		#{topOnuGateway},
+		topOnuExtAttr = #{topOnuExtAttr},
+		topOnuCapabilityStr = #{topOnuCapabilityStr}
+		where onuId=#{onuId}
+	</update>
+	<update id="updateOnuCatv" parameterType="oltOnuCatv">
+		update
+		OltOnuAttribute
+		set
+		catvEnable=#{onuCatvEnable}
+		where
+		onuId=#{onuId}
+	</update>
+	<update id="updateOnuVoip" parameterType="oltOnuVoip">
+		update
+		OltOnuAttribute
+		set
+		VoipEnable=#{onuVoipEnable}
+		where
+		onuId=#{onuId}
+	</update>
+	<update id="updateOnuRstp" parameterType="oltOnuRstp">
+		update
+		OltOnuAttribute
+		set
+		rstpBridgeMode=#{rstpBridgeMode}
+		where
+		onuId=#{onuId}
+	</update>
+
+	<update id="synOltOnuRelationForCmcAtVersionUpdate"
+		parameterType="long">
+		update
+		oltonurelation
+		inner join entity on
+		oltonurelation.onuId = entity.entityId
+		and entity.typeId in (select
+		typeId from entitytyperelation where type
+		=80000)
+		and
+		oltonurelation.entityId = #{entityId}
+		set
+		oltonurelation.onuIndex =
+		oltonurelation.onuIndex - 0x0000400000
+	</update>
+
+	<update id="synOltOnuPonRelationForCmcAtVersionUpdate"
+		parameterType="long">
+		update
+		oltonuponrelation
+		inner join entity on
+		oltonuponrelation.onuId = entity.entityId
+		and entity.typeId in (select
+		typeId from entitytyperelation where type
+		=80000)
+		and
+		oltonuponrelation.entityId = #{entityId}
+		set
+		oltonuponrelation.onuPonIndex = oltonuponrelation.onuPonIndex -
+		0x0000400000
+	</update>
+
+	<select id="getUnknownOnuType" parameterType="int" resultType="entityType">
+		select * from entityType where typeId = #{typeId}
+	</select>
+
+	<select id="getOnuTotleNum" parameterType="long" resultType="int">
+		select
+		count(*)
+		from
+		oltonurelation A, entity B
+		where
+		A.entityId = #{olt}
+		AND A.onuId = B.entityId
+		AND B.typeId in (select typeId from
+		entitytyperelation where type =
+		13000)
+	</select>
+	<delete id="deleteAllOnuInfoByEntityId" parameterType="long">
+		DELETE
+		FROM
+		oltonurelation
+		WHERE
+		entityId = #{entityId}
+	</delete>
+	<delete id="deleteAllOnuInSlot" parameterType="long">
+		DELETE
+		FROM
+		oltonurelation
+		WHERE
+		ponId in (SELECT ponId FROM
+		OltPonRelation WHERE
+		slotId = #{slotId})
+	</delete>
+	<delete id="deleteAllOnuInPon" parameterType="long">
+		DELETE
+		FROM
+		oltonurelation
+		WHERE
+		ponId = #{ponId}
+	</delete>
+	<select id="getOnuListByEntity" parameterType="long" resultType="oltOnuAttribute">
+		select a.entityId, a.onuId,c.typeId,c.name,c.mac,b.onuName,b.onuEorG,
+		a.onuIndex,b.onumac, b.onuPreType,b.onuOperationStatus,b.onuUniqueIdentification,b.onuAdminStatus from
+		oltonurelation a , oltonuattribute b, entity c where a.onuid = b.onuid
+		and a.onuId =
+		c.entityId and
+		a.entityId=#{entityId}
+	</select>
+
+	<select id="getOnuListByParams" parameterType="map" resultType="oltOnuAttribute">
+		SELECT
+		A.onuId,
+		A.entityId,
+		E.ip entityIp,
+		C.onuIndex,
+		b.name,
+		A.onuType,
+		A.onuPreType,
+		A.onuMacAddress,
+		A.onuMac,
+		A.onuOperationStatus,
+		A.onuAdminStatus,
+		A.onuSoftwareVersion,
+		A.onuLlidId
+		FROM
+		oltonuAttribute
+		A,entity B,
+		oltonurelation C,OltPonRelation D, entity E
+		where B.typeId
+		in(select typeId from entitytyperelation where type = 13000)
+		and
+		B.entityId in (select entityId from ${Authority})
+		<if test="entityId != null">
+			and A.entityId = #{entityId}
+		</if>
+		<if test="slotId != null">
+			and D.slotId = #{slotId}
+		</if>
+		<if test="ponId != null">
+			and D.ponId = #{ponId}
+		</if>
+		<if test="onuName != null">
+			and B.name LIKE '%${onuName}%'
+		</if>
+		<if test="onuPreType != null">
+			and A.onuPreType LIKE '%${onuPreType}%'
+		</if>
+		<if test="macAddress != null">
+			AND (A.onuMac LIKE '%${macAddress}%'
+			<if test="queryMacWithoutSplit != null">
+				OR REPLACE(A.onuMac, ':', '') LIKE
+				'%${queryMacWithoutSplit}%'
+			</if>
+			)
+		</if>
+		and A.onuId = B.entityId and A.entityId = E.entityId
+		and C.onuId =
+		A.onuId and D.ponId = C.ponId
+		<if test="sort != null and dir != ''">
+			<choose>
+				<when test="sort == 'entityIp'.toString()">
+					ORDER BY inet_aton(entityIp) ${dir}
+				</when>
+				<otherwise>
+					order by ${sort} ${dir}
+				</otherwise>
+			</choose>
+		</if>
+		limit ${start},${limit}
+	</select>
+	<select id="getOnuListCountByParams" parameterType="map"
+		resultType="int">
+		SELECT count(*)
+		FROM
+		oltonuAttribute A,entity B,
+		oltonurelation
+		C,OltPonRelation D, entity E
+		where B.typeId in (select typeId from
+		entitytyperelation where type =
+		13000) and B.entityId in (select
+		entityId from ${Authority})
+		<if test="entityId != null">
+			and A.entityId = #{entityId}
+		</if>
+		<if test="slotId != null">
+			and D.slotId = #{slotId}
+		</if>
+		<if test="ponId != null">
+			and D.ponId = #{ponId}
+		</if>
+		<if test="onuName != null">
+			and B.name LIKE '%${onuName}%'
+		</if>
+		<if test="onuPreType != null">
+			and A.onuPreType LIKE '%${onuPreType}%'
+		</if>
+		<if test="macAddress != null">
+			AND (A.onuMac LIKE '%${macAddress}%'
+			<if test="queryMacWithoutSplit != null">
+				OR REPLACE(A.onuMac, ':', '') LIKE
+				'%${queryMacWithoutSplit}%'
+			</if>
+			)
+		</if>
+		and A.onuId = B.entityId and A.entityId = E.entityId
+		and C.onuId =
+		A.onuId and D.ponId = C.ponId
+	</select>
+
+	<select id="getOnuHwList" parameterType="long" resultType="String">
+		select distinct(topOnuHardwareVersion) from
+		oltonuAttribute where
+		entityId=#{entityId}
+		and topOnuHardwareVersion != ""
+	</select>
+
+	<select id="getPonIdByOnuId" parameterType="long" resultType="long">
+		select ponId from oltonurelation where onuId =
+		#{onuId}
+	</select>
+
+	<select id="getOnuIdByFolder" parameterType="map" resultType="long">
+		select
+		B.parentId
+		from
+		entityfolderrela A,entity B
+		where
+		A.entityId =
+		B.entityId AND B.typeId in (select typeId from entitytyperelation
+		where type =
+		#{type})
+		AND folderId =
+		#{folderId}
+	</select>
+
+	<select id="getOnuIdList" parameterType="long" resultType="long">
+		select onuId from oltonurelation where entityId =
+		#{entityId}
+	</select>
+	<update id="updateOnuEntityName" parameterType="map">
+		UPDATE
+		entity SET
+		name = #{name}
+		WHERE entityId = #{entityId}
+	</update>
+
+	<select id="getOnuTypes" resultType="entityType">
+		SELECT
+		typeId,name,displayName,module,modulePath,sysObjectID,
+		icon16,icon32,icon48,icon64,properties,remark,corpId,logicPane,physicalPane,categoryId
+		FROM entitytype WHERE
+		typeId in (select typeId from entitytyperelation
+		where type = #{type})
+	</select>
+
+	<select id="getOnuPreTypeByPonId" resultType="oltOnuAttribute">
+		select * from
+		OltOnuAttribute A,
+		OltOnuRelation B
+		where B.ponId =
+		#{ponId} AND A.onuId
+		= B.onuId
+	</select>
+
+	<update id="updateOltOnuAttributeMac" parameterType="oltOnuAttribute">
+		update
+		OltOnuAttribute set onuMacAddress=#{onuMacAddress},
+		onuMac = #{onuMac}
+		where
+		entityId=#{entityId} and
+		onuId = #{onuId}
+	</update>
+
+	<update id="updateOnuPreType" parameterType="oltTopOnuProductTable">
+		update
+		OltOnuAttribute set onuPreType = #{topOnuProductTypeNum}
+		where entityId
+		= #{entityId} AND
+		onuId = (select onuId from OltOnuRelation where
+		entityId = #{entityId} and
+		onuIndex = #{onuIndex})
+	</update>
+
+	<insert id="insertOnuPonAttribute" parameterType="oltOnuPonAttribute">
+		INSERT INTO
+		OltOnuPonAttribute(
+		onuPonId,
+		onuReceivedOpticalPower,
+		onuTramsmittedOpticalPower,
+		onuBiasCurrent,
+		onuWorkingVoltage,
+		onuWorkingTemperature,
+		entityId
+		)
+		VALUES
+		(
+		#{onuPonId},
+		#{onuReceivedOpticalPower},
+		#{onuTramsmittedOpticalPower},
+		#{onuBiasCurrent},
+		#{onuWorkingVoltage},
+		#{onuWorkingTemperature},
+		#{entityId}
+		)
+	</insert>
+
+	<update id="updateOnuTemperature" parameterType="map">
+		UPDATE
+		oltonuattribute
+		SET currentTemperature = #{temperature}
+		WHERE onuId
+		=
+		#{onuId}
+	</update>
+
+	<update id="updateOltOnuPreType" parameterType="oltTopOnuProductTable">
+		update
+		oltonuattribute set onuType = #{onuType} ,
+		onuPreType=#{onuType} where
+		onuId = #{onuId} and
+		entityId=#{entityId}
+	</update>
+	<update id="updateCC8800ARestartTime" parameterType="map">
+		UPDATE
+		OltDeviceRestartTime SET deviceUpTime =
+		${uptime},isOffline=1 where
+		entityId = ${entityId} AND onuId = ${onuId} AND
+		deviceRestartTime >
+		${uptime}
+	</update>
+
+	<update id="modifyOnuMacAgeTime" parameterType="map">
+		UPDATE
+		oltuniattribute b, oltunirelation a
+		SET b.macAge=#{macAge}
+		WHERE
+		a.uniId=b.uniId AND a.onuId= #{onuId}
+	</update>
+
+	<select id="selectOltOunOpticalInfo" parameterType="map"
+		resultType="OltOnuOpticalInfo">
+		select optTxPower as ponOpticalTrans, optRePower as
+		ponOpticalRev
+		from perfeponlinkqualitylast where entityId=#{entityId}
+		and portIndex = #{ponIndex}
+	</select>
+
+	<select id="selectOltCcmtsOpticalInfo" parameterType="map"
+		resultType="OltOnuOpticalInfo">
+		select optTxPower as ponOpticalTrans, optRePower as
+		ponOpticalRev
+		from perfcmclinkqualitylast where cmcId=#{cmcId} and
+		portIndex = #{ponIndex}
+	</select>
+
+	<select id="selectOltCcmtsStatus" parameterType="long"
+		resultType="int">
+		select topCcmtsSysStatus
+		from cmcAttribute where
+		cmcId=#{entityId}
+	</select>
+
+	<update id="updateOnuBaseInfo" parameterType="onuBaseInfo">
+		UPDATE OltOnuAttribute
+        SET
+	        onuMacAddress = #{onuMacAddress},
+	        onuMac = #{onuMac},
+	        onuUniqueIdentification = #{onuMac},
+	        onuOperationStatus = #{onuOperationStatus},
+	        onuAdminStatus = #{onuAdminStatus},
+	        onuChipVendor = #{onuChipVendor},
+	        onuChipType = #{onuChipType},
+	        onuChipVersion = #{onuChipVersion},
+	        onuTimeSinceLastRegister = #{onuTimeSinceLastRegister},
+	        <if test="onuSoftwareVersion != null and onuSoftwareVersion != ''">
+	        	onuSoftwareVersion = #{onuSoftwareVersion},
+	        </if>
+	        <if test="onuSerialNum != null and onuSerialNum != ''">
+                onuSerialNum = #{onuSerialNum},
+            </if>
+	        onuTestDistance = #{onuTestDistance},
+	        onuLlidId = #{onuLlidId}
+        WHERE onuId = #{onuId}
+	</update>
+
+	<update id="updateCC8800AInfo" parameterType="cmcBfsxSnapInfo">
+		update
+		cmcattribute
+		set
+		topCcmtsSysObjectId = #{cmcSysObjectId},
+		topCcmtsSysUpTime =
+		#{cmcSysUpTime},
+		topCcmtsSysName = #{cmcSysName},
+		topCcmtsSysLocation =
+		#{cmcSysLocation},
+		topCcmtsSysMacAddrLong = #{macAddrLong},
+		topCcmtsSysMacAddr = #{cmcSysMacAddr},
+		topCcmtsSysStatus =
+		#{cmcSysStatus},
+		topCcmtsSysSwVersion = #{cmcSysSwVersion}
+		where cmcId =
+		#{entityId}
+	</update>
+
+	<select id="getOnuPonIdByOnuId" parameterType="long" resultType="long">
+		select onuPonId from oltonuponrelation where onuId = #{onuId}
+	</select>
+
+	<select id="getOnuPonIndexByOnuId" parameterType="long"
+		resultType="long">
+		select onuPonIndex from oltonuponrelation where onuId =
+		#{onuId}
+	</select>
+
+	<update id="updateOnuOpticalInfo" parameterType="onuPonOptical">
+		UPDATE
+		OltOnuPonAttribute
+		SET
+		onuReceivedOpticalPower = #{rxPower},
+		onuTramsmittedOpticalPower = #{txPower},
+		onuBiasCurrent =
+		#{biasCurrent},
+		onuWorkingVoltage = #{workingVoltage},
+		onuWorkingTemperature = #{workingTemp}
+		WHERE
+		onuPonId = #{onuPonId}
+	</update>
+
+	<update id="updateCmcOpticalInfo" parameterType="onuPonOptical">
+		update
+		perfcmclinkqualitylast
+		set optTxPower = #{onuTransPower}, optRePower =
+		#{onuRevPower}
+		where cmcId=#{entityId} and portIndex = #{onuPonIndex}
+	</update>
+
+	<select id="getPerfOnuInfo" parameterType="long" resultType="onuInfo">
+		select a.*,b.onuEorG from oltonurelation a, oltonuattribute b where
+		a.onuId=b.onuId and a.onuId = #{onuId}
+	</select>
+
+	<select id="queryOnuIdByEntityId" parameterType="long"
+		resultType="long">
+		select A.onuId from oltonurelation A, oltonuattribute B
+		where A.onuId = B.onuId and A.entityId = #{entityId}
+		and B.onuPreType
+		in (select typeId from entitytyperelation where type =
+		13000)
+	</select>
+
+	<update id="updateOnuOperationStatus" parameterType="map">
+		update
+		oltonuattribute
+		set onuOperationStatus = #{operationStatus}
+		where onuId
+		= #{onuId}
+	</update>
+
+	<select id="getOnuByMacAndParentId" parameterType="map"
+		resultType="onu">
+		select B.onuId, B.entityId, B.onuIndex, A.typeId
+		from entity
+		A,
+		oltonurelation B
+		where A.parentId = #{parentId} AND A.mac = #{mac}
+		AND B.entityId =
+		#{parentId} AND A.entityId = B.onuId
+	</select>
+	
+	<update id="updateOnuSoftVersion" parameterType="map">
+    	update oltonuattribute
+    	set onuSoftwareVersion = #{onuSoftwareVersion}
+    	where onuId = #{onuId}
+    </update>
+    
+    <update id="updateOnuHardVersion" parameterType="map">
+    	update oltonuattribute
+    	set topOnuHardwareVersion = #{topOnuHardwareVersion}
+    	where onuId = #{onuId}
+    </update>
+    
+    <select id="getPonIdByOnuIndex" parameterType="map" resultType="long">
+    	select ponId from  oltonurelation
+    	where entityId = #{entityId} and onuIndex = #{onuIndex}
+    </select>
+    
+    
+    <select id="getOnuAttributeByLoid" parameterType="map" resultType="oltOnuAttribute">
+    	SELECT
+        A.entityId,
+        A.onuId,
+        A.onuName,
+        A.onuType,
+        A.onuPreType,
+        A.onuMacAddress,
+        A.onuOperationStatus,
+        A.onuAdminStatus,
+        A.onuChipVendor,
+        A.onuChipType,
+        A.onuChipVersion,
+        A.onuSoftwareVersion,
+        A.onuFirmwareVersion,
+        A.topOnuHardwareVersion,
+        A.onuTestDistance,
+        A.onuLlidId,
+        A.onuIcon,
+        A.changeTime,
+        A.onuIsolationEnable,
+        A.ponPerfStats15minuteEnable,
+        A.temperatureDetectEnable,
+        A.onuTimeSinceLastRegister,
+        A.topOnuExtAttr,
+        B.onuIndex
+        FROM
+        oltonuattribute A
+        left join oltonurelation B on A.onuId = B.onuId
+        where (A.onuSerialNum=#{loid} or A.onuSerialNum=#{loidWithMaohao}) AND A.entityId=#{entityId}
+    </select>
+    <select id="getOnuAttributeByMac" parameterType="map" resultType="oltOnuAttribute">
+    	SELECT
+        A.entityId,
+        A.onuId,
+        A.onuName,
+        A.onuType,
+        A.onuPreType,
+        A.onuMacAddress,
+        A.onuOperationStatus,
+        A.onuAdminStatus,
+        A.onuChipVendor,
+        A.onuChipType,
+        A.onuChipVersion,
+        A.onuSoftwareVersion,
+        A.onuFirmwareVersion,
+        A.topOnuHardwareVersion,
+        A.onuTestDistance,
+        A.onuLlidId,
+        A.onuIcon,
+        A.changeTime,
+        A.onuIsolationEnable,
+        A.ponPerfStats15minuteEnable,
+        A.temperatureDetectEnable,
+        A.onuTimeSinceLastRegister,
+        A.topOnuExtAttr,
+        B.onuIndex
+        FROM
+        oltonuattribute A
+        left join oltonurelation B on A.onuId = B.onuId
+        WHERE A.onumac=#{macaddress} AND A.entityId=#{entityId}
+    </select>
+    
+    <update id="updateOnuLastDeregisterTime" parameterType="oltOnuAttribute">
+    	update oltOnuAttribute set lastDeregisterTime = #{lastDeregisterTime}
+    	where onuId = #{onuId}
+    </update>
+    
+    <select id="getOnuTl1InfoByIndex" parameterType="map" resultType="com.topvision.nbi.tl1.api.domain.OnuInfo">
+	    SELECT
+		    B.onuMac mac,
+		    B.onuSoftwareVersion softwareVersion,
+		    B.onuName onuName,
+		    B.onuPreType,
+		    C.sysName onuDesc,
+		    C.ip,
+		    E.authType,
+		    E.topOnuAuthLogicSn sn,
+		    E.topOnuAuthPassword onuPassword
+		FROM
+		    oltonurelation A
+		INNER JOIN oltonuattribute B ON A.onuId = B.onuId
+		INNER JOIN entity C ON A.onuId = C.entityId
+		INNER JOIN oltauthentication E ON A.entityId = E.entityId AND A.onuIndex = E.onuIndex
+		WHERE
+		    A.entityId = #{entityId} AND A.onuIndex = #{onuIndex}
+    </select>
+	
+	<select id="selectEponOnuCount" parameterType="map" resultType="int">
+    	SELECT 
+    		COUNT(A.onuEorG) 
+    	FROM oltonuattribute A 
+    	LEFT JOIN entity E ON A.onuId = E.entityId
+    	LEFT JOIN entitytype G ON G.typeId = E.typeId
+    	LEFT JOIN entitytyperelation H ON H.typeId = G.typeId
+    	WHERE
+    		H.type=13000
+			AND A.onuId in (select entityId from  ${Authority})
+    		AND A.onuEorG = 'E'
+    </select>
+	
+	 <select id="selectGponOnuCount" parameterType="map" resultType="int">
+    	SELECT 
+    		COUNT(A.onuEorG) 
+    	FROM oltonuattribute A 
+    	LEFT JOIN entity E ON A.onuId = E.entityId
+    	LEFT JOIN entitytype G ON G.typeId = E.typeId
+    	LEFT JOIN entitytyperelation H ON H.typeId = G.typeId
+    	WHERE
+    		H.type=13000
+			AND A.onuId in (select entityId from  ${Authority})
+    		AND A.onuEorG = 'G'
+    </select>
+	
+	<insert id="insertOrUpdateOnuTagRelation" parameterType="map">
+		INSERT INTO onutagrelation(onuId, tagId) VALUES(#{onuId}, #{tagId})
+		ON DUPLICATE KEY UPDATE
+		tagId = #{tagId}
+	</insert>
+</mapper>

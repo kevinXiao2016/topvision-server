@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC 
+	"-//SPRING//DTD BEAN//EN" 
+	"http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+    <bean id="mibService" class="com.topvision.ems.realtime.service.impl.MibServiceImpl"
+        init-method="initialize" destroy-method="destroy"
+    >
+        <property name="mibs">
+            <list>
+                <bean class="com.topvision.ems.realtime.service.mib.IfTable">
+                    <property name="entityDao" ref="entityDao"></property>
+                    <property name="facadeFactory" ref="facadeFactory" />
+                </bean>
+                <bean class="com.topvision.ems.realtime.service.mib.IpRouteTable">
+                    <property name="entityDao" ref="entityDao"></property>
+                    <property name="facadeFactory" ref="facadeFactory" />
+                </bean>
+            </list>
+        </property>
+    </bean>
+</beans>

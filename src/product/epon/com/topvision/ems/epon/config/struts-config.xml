@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="config" namespace="/config" extends="default">
+		<action name="showOltConfigJsp" class="oltConfigInfoAction" method="showOltConfigJsp">
+            <result>/epon/oltConfigInfo.jsp</result>
+        </action>
+        <action name="loadAvailableVlanList" class="oltConfigInfoAction" method="loadAvailableVlanList" />
+		<action name="saveBasicConfig" class="oltConfigInfoAction" method="saveBasicConfig" />
+		<action name="saveInbandParamAndIP" class="oltConfigInfoAction" method="saveInbandParamAndIP" />
+		<action name="saveOutbandParamAndIP" class="oltConfigInfoAction" method="saveOutbandParamAndIP" />
+		<action name="saveServerSnmp" class="oltConfigInfoAction" method="saveServerSnmp" />
+		<action name="saveServerInfo" class="oltConfigInfoAction" method="saveServerInfo" />
+		<action name="checkEmsIpAddress" class="oltConfigInfoAction" method="checkEmsIpAddress" />
+		<action name="updateEmsIpAddress" class="oltConfigInfoAction" method="updateEmsIpAddress" />
+		<action name="saveEntitySnmp" class="oltConfigInfoAction" method="saveEntitySnmp" />
+		<action name="downLoadConfig" class="oltConfigFileAction" method="downLoadConfig" />
+		<action name="updateEmsSnmpparam" class="oltConfigInfoAction" method="updateEmsSnmpparam" />
+		<action name="updateOltEntityIp" class="oltConfigInfoAction" method="updateOltEntityIp" />
+		<action name="showmModifyEmsIpJSP" class="oltConfigInfoAction" method="showmModifyEmsIpJSP">
+			<result>/epon/modifyEmsIp.jsp</result>
+		</action>
+		<action name="modifySnmpV2CCfg" class="oltConfigInfoAction" method="modifySnmpV2CCfg" />
+		<action name="downFile" class="oltConfigFileAction" method="downFile" />
+		<action name="refreshOltConfigInfo" class="oltConfigInfoAction" method="refreshOltConfigInfo" />
+	</package>
+</struts>

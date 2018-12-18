@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.fault.domain.AlertType">
+
+	<insert id="insertEntity" parameterType="alertType">
+		INSERT INTO AlertType
+		(typeId, category,
+		name, displayName, levelId, updateLevel, alertTimes,
+		smartUpdate,
+		terminate) values(
+		#{typeId},
+		#{category}, #{name},
+		#{displayName}, #{levelId}, #{updateLevel}, #{alertTimes},
+		#{smartUpdate},
+		#{terminate})
+	</insert>
+
+	<select id="selectByPrimaryKey" parameterType="int" resultType="alertType">
+		SELECT typeId,
+		category, name, displayName, levelId,
+		active,updateLevel, alertTimes,
+		threshold, smartUpdate,terminate,note
+		FROM
+		AlertType WHERE typeId = #{typeId}
+	</select>
+
+	<select id="selectByMap" parameterType="map" resultType="alertType">
+		SELECT
+		typeId, category,
+		active, name, displayName, levelId,
+		updateLevel,
+		alertTimes, threshold,
+		smartUpdate,terminate,note FROM
+		AlertType
+		ORDER BY
+		typeId asc
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="int">
+		DELETE FROM
+		AlertType WHERE typeId =
+		#{typeId}
+	</delete>
+
+	<update id="updateEntity" parameterType="alertType">
+		UPDATE AlertType SET
+		category = #{category}, name
+		= #{name},
+		displayName = #{displayName},
+		levelId = #{levelId}, alertTimes =
+		#{alertTimes},
+		updateLevel=#{updateLevel},
+		smartUpdate = #{smartUpdate}, terminate =
+		#{terminate} WHERE typeId = #{typeId}
+	</update>
+
+	<update id="updateLevelByAlertType" parameterType="alertType">
+		UPDATE
+		AlertType SET active =
+		#{active}, levelId = #{levelId}, note = #{note},
+		updateLevel=#{updateLevel},
+		alertTimes=#{alertTimes},
+		smartUpdate=#{smartUpdate} WHERE
+		typeId = #{typeId}
+	</update>
+
+	<select id="getActionsOfAlertType" parameterType="int"
+		resultType="long">
+		SELECT actionId FROM
+		AlertTypeActionRela WHERE alertTypeId
+		=
+		#{id}
+	</select>
+	
+	<select id="getUserActionOfAlertType"  parameterType="int"
+		resultType="action">
+		SELECT userId,actionTypeId FROM
+		alerttypeaboutusers WHERE alertTypeId
+		=
+		#{id}
+	</select>
+	
+	
+	<select id="getUserAlertListCount" resultType="int">
+	SELECT COUNT(*) FROM Users
+	</select>
+
+	<delete id="deleteActionRelaByAlertTypeId" parameterType="int">
+		DELETE
+		FROM AlertTypeActionRela
+		WHERE alertTypeId = #{id}
+	</delete>
+
+	<insert id="insertAlertTypeActionRela" parameterType="map">
+		INSERT
+		INTO
+		AlertTypeActionRela
+		(alertTypeId, actionId)
+		values(#{alertTypeId},
+		#{actionId})
+	</insert>
+
+	<select id="getUserAlertActions" parameterType="map"
+		resultType="Integer">
+		SELECT actionTypeId FROM
+		AlertTypeAboutUsers WHERE alertTypeId=#{alertTypeId} 
+		AND userId=#{userId}
+	</select>
+
+	<insert id="insertAlertAboutUsers" parameterType="map">
+		INSERT INTO
+		AlertTypeAboutUsers
+		(alertTypeId,userId,actionTypeId)
+		values(#{alertTypeId},#{userId},#{userAlertActionChoose})
+	</insert>
+
+	<delete id="deleteAlertAboutUsersByAlertTypeId" parameterType="map">
+		DELETE
+		FROM AlertTypeAboutUsers
+		WHERE alertTypeId = #{alertTypeId} AND userId=#{userId}
+	</delete>
+	
+	<delete id="deleteDumpTrapByAlertTypeId" parameterType="map">
+        DELETE
+        FROM AlertTypeAboutUsers
+        WHERE alertTypeId = #{alertTypeId} AND actionTypeId=3
+    </delete>
+
+	<select id="getAlertAboutUsersOfuserName" parameterType="int"
+		resultType="String">
+		SELECT userName FROM
+		AlertTypeAboutUsers WHERE alertTypeId
+		=
+		#{id}
+	</select>
+
+<!-- 	<update id="updateUserActionCs" parameterType="map"> -->
+<!-- 		UPDATE Users SET choose=#{choose} WHERE userId=#{userId} -->
+<!-- 	</update> -->
+
+	<select id="getAllAlertType" resultType="alertType">
+		SELECT typeId,
+		category,
+		active, name, displayName, levelId, updateLevel, alertTimes,
+		threshold,
+		smartUpdate,terminate,note, localeName FROM AlertType
+		ORDER BY typeId
+		asc
+	</select>
+
+	<select id="getCmcAllAlertType" resultType="alertType">
+		SELECT typeId,
+		category,
+		active, name, displayName, levelId,
+		updateLevel, alertTimes,
+		threshold,
+		smartUpdate,terminate,note FROM
+		AlertType
+		where typeId > 100000 or typeId <![CDATA[<]]>
+		-200 or typeId = 11181
+		ORDER BY typeId
+		asc
+	</select>
+	<select id="getSendingInfomationOfUsers" parameterType="int"
+		resultType="AlertAboutUsers">
+		SELECT B.userId,B.userName,B.email,B.mobile
+		FROM alerttypeaboutusers A
+		left join Users B
+		on A.userId=B.userId
+		WHERE A.alertTypeId=#{alertTypeId}
+	</select>
+
+	<select id="getOneUserActionChoose" parameterType="Long"
+		resultType="AlertAboutUsers">
+		SELECT email,mobile FROM
+		Users WHERE userId
+		=#{userId}
+	</select>
+	
+	<update id="updateLocaleName" parameterType="map">
+		UPDATE alertType SET localeName = #{localeName} WHERE typeId = #{typeId};
+	</update>
+	
+
+</mapper>

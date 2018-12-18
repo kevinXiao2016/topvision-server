@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.performance.domain.OltPerfGraph">
+    
+    <!-- *********************************Select Begin************************************ -->
+    <select id="getOltSlotListByEntityId" parameterType="long"
+        resultType="oltSlotAttribute">
+        select A.entityId,A.slotId,A.slotIndex,B.slotNo,B.bAttribute,B.bOperationStatus,B.topSysBdPreConfigType
+        from oltslotrelation A ,oltslotattribute B
+		where A.slotId = B.slotId and B.entityId = #{entityId} and A.entityId = B.entityId
+		order by B.slotNo ASC
+    </select>
+    
+    <select id="getOltFanListByEntityId" parameterType="long"
+        resultType="oltFanAttribute">
+        select A.fanCardId, A.entityId,B.fanCardIndex from oltFanAttribute a,oltfanrelation b
+		where B.entityId = #{entityId} and A.fanCardId = B.fanCardId
+		order by A.fanCardId ASC
+    </select>
+    
+    <select id="getOltSniListByEntityId" parameterType="long"
+        resultType="oltSniAttribute">
+        select A.entityId,A.sniId,A.sniOperationStatus, B.sniIndex, B.slotId, A.sniDisplayName
+        from oltsniattribute A , oltsnirelation B
+		where A.entityId=#{entityId} and A.sniId=B.sniId  
+		order by B.sniIndex
+    </select>
+    
+     <select id="getOltPonListByEntityId" parameterType="long"
+        resultType="oltPonAttribute">
+        select A.entityId,A.ponId,A.ponOperationStatus, B.ponIndex,B.slotId  
+        from oltponattribute A , oltponrelation B
+		where B.entityId=#{entityId} and A.ponId=B.ponId 
+    </select>
+    
+    <select id="getOltOnuPonListByEntityId" parameterType="long"
+        resultType="oltOnuPonAttribute">
+        select A.entityId,A.onuPonId,B.onuPonIndex from oltonuponattribute A , oltonuponrelation B
+		where A.entityId=#{entityId} and A.onuPonId=B.onuPonId 
+    </select>
+    
+    <select id="getOltUniListByEntityId" parameterType="long"
+        resultType="oltUniAttribute">
+  		select A.entityId,A.uniId,B.uniIndex from oltuniattribute A , oltunirelation B
+		where A.entityId=#{entityId} and A.uniId=B.uniId
+    </select>
+    
+    <select id="getOltSniFirberListByEntityId" parameterType="long"
+        resultType="oltSniAttribute">
+  		select A.entityId,A.sniId,A.sniOperationStatus, A.sniDisplayName,B.sniIndex, B.slotId
+  		from oltsniattribute A , oltsnirelation B
+		where A.sniMediaType = 2 and A.entityId=#{entityId} and A.sniId=B.sniId
+		order by B.sniIndex ASC
+    </select>
+    
+    <select id="getOltCpuUsedPerfPoints" parameterType="map"
+        resultType="point">
+  		select collectValue y,collectTime xTime from perfeponcpuquality 
+  		where entityId = #{entityId} and slotIndex = #{slotIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    
+    <select id="getOltMemUsedPerfPoints" parameterType="map"
+        resultType="point">
+  		select collectValue y,collectTime xTime from perfeponmemquality 
+  		where entityId = #{entityId} and slotIndex = #{slotIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    
+    <select id="getOltFlashUsedPerfPoints" parameterType="map"
+        resultType="point">
+  		select collectValue y,collectTime xTime from perfeponflashquality 
+  		where entityId = #{entityId} and slotIndex = #{slotIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    
+     <select id="getOltBoardTempPerfPoints" parameterType="map"
+        resultType="point">
+  		select collectValue y,collectTime xTime from perfeponboardtempquality 
+  		where entityId = #{entityId} and slotIndex = #{slotIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    
+     <select id="getOltFanSpeedPerfPoints" parameterType="map"
+        resultType="point">
+  		select collectValue y,collectTime xTime from perfeponfanspeedquality 
+  		where entityId = #{entityId} and slotIndex = #{slotIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    
+    <select id="getOltOptTxPowerPoints" parameterType="map"
+        resultType="point">
+  		select collectTime xTime,optTxPower y  from perfeponlinkquality 
+  		where entityId = #{entityId} and portIndex = #{portIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    <select id="getOltOptRxPowerPoints" parameterType="map"
+        resultType="point">
+  		select collectTime xTime,optRePower y  from perfeponlinkquality 
+  		where entityId = #{entityId} and portIndex = #{portIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    <select id="getOltOptCurrentPoints" parameterType="map"
+        resultType="point">
+  		select collectTime xTime,optCurrent y  from perfeponlinkquality 
+  		where entityId = #{entityId} and portIndex = #{portIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    <select id="getOltOptVoltagePoints" parameterType="map"
+        resultType="point">
+  		select collectTime xTime,optVoltage y  from perfeponlinkquality 
+  		where  entityId = #{entityId} and portIndex = #{portIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    <select id="getOltOptTempPoints" parameterType="map"
+        resultType="point">
+  		select collectTime xTime,optTemp y  from perfeponlinkquality 
+  		where  entityId = #{entityId} and portIndex = #{portIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    
+    <select id="getPortInFlowPerfPoints" parameterType="map"
+        resultType="point">
+  		select portInSpeed y,collectTime xTime from perfeponflowquality 
+  		where entityId = #{entityId} and portIndex = #{portIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    
+    <select id="getPortInUsedPerfPoints" parameterType="map"
+        resultType="point">
+  		select portInUsed y,collectTime xTime from perfeponflowquality 
+  		where entityId = #{entityId} and portIndex = #{portIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    
+    <select id="getPortOutFlowPerfPoints" parameterType="map"
+        resultType="point">
+  		select portOutSpeed y,collectTime xTime from perfeponflowquality 
+  		where entityId = #{entityId} and portIndex = #{portIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    
+    <select id="getPortOutUsedPerfPoints" parameterType="map"
+        resultType="point">
+  		select portOutUsed y,collectTime xTime from perfeponflowquality 
+  		where entityId = #{entityId} and portIndex = #{portIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    
+    <select id="getOltUniList" parameterType="map" resultType="oltUniAttribute">
+    	select A.entityId,A.uniId,B.uniIndex from oltuniattribute A , oltunirelation B
+		where A.entityId=#{entityId} and A.uniId=B.uniId limit ${start} , ${limit}
+    </select>
+    
+    <select id="queryOltUniCount" parameterType="map" resultType="int">
+    	select count(*) from oltuniattribute A , oltunirelation B
+		where A.entityId=#{entityId} and A.uniId=B.uniId
+    </select>
+    
+    <select id="queryOltOnuPonList" parameterType="map" resultType="oltOnuPonAttribute">
+        select A.entityId,A.onuPonId,B.onuPonIndex from oltonuponattribute A , oltonuponrelation B
+		where A.entityId=#{entityId} and A.onuPonId=B.onuPonId limit ${start} , ${limit}
+    </select>
+    
+    <select id="queryOltOntPonCount" parameterType="map" resultType="int">
+    	select count(*) from oltonuponattribute A , oltonuponrelation B
+		where A.entityId=#{entityId} and A.onuPonId=B.onuPonId
+    </select>
+    
+    <select id="getOltRelayPerfPoints" parameterType="map"
+        resultType="point">
+  		select collectValue y,collectTime xTime from perfconnectivity
+  		where entityId = #{entityId} 
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    
+</mapper>

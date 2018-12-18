@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.fault.domain.ActionType">
+	<insert id="insertEntity" databaseId="MySQL" parameterType="actionType" useGeneratedKeys="true" keyProperty="actionTypeId">
+		INSERT INTO ActionType (name, enabled, params) VALUES (#{name},
+		#{enabled}, #{params})
+	</insert>
+	<insert id="insertEntity" databaseId="Oracle" parameterType="actionType">
+	    <selectKey keyProperty="actionTypeId" resultType="int" order="BEFORE">
+    			select ActionType_Seq.nextval as actionTypeId from dual
+		</selectKey>
+		INSERT INTO ActionType (actionTypeId, name, enabled, params) VALUES
+		(#{actionTypeId}, #{name}, #{enabled}, #{params})
+	</insert>
+	
+	
+
+	<select id="selectByPrimaryKey" parameterType="int"
+		resultType="actionType">
+		SELECT actionTypeId, name, enabled, params FROM ActionType WHERE
+		actionTypeId = #{actionTypeId}
+	</select>
+
+	<select id="selectByMap" parameterType="map"
+		resultType="actionType">
+		SELECT actionTypeId, name, enabled, params FROM ActionType
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="int">
+		DELETE FROM ActionType WHERE actionTypeId = #{actionTypeId}
+	</delete>
+
+	<update id="updateEntity" parameterType="actionType">
+		UPDATE ActionType SET name = #{name}, enabled = #{enabled}, params
+		= #{params} WHERE actionTypeId = #{actionTypeId}
+	</update>
+
+</mapper>

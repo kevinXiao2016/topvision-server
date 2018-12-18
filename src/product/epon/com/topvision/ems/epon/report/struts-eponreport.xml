@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="eponreport" namespace="/epon/report" extends="default">
+		<!-- olt board -->
+		<action name="showEponBoardReport" class="oltBoardReportAction"
+			method="showEponBoardReport">
+			<result>/report/oltBoardReportCreator/eponDeviceBoardReport.jsp
+			</result>
+		</action>
+		<action name="exportDeviceBoardToExcel" class="oltBoardReportAction"
+			method="exportDeviceBoardToExcel" />
+
+		<!-- olt cpu -->
+		<action name="showEponCpuRankReport" class="oltCpuReportAction"
+			method="showEponCpuRankReport">
+			<result>/report/oltCpuReportCreator/eponCpuRankReport.jsp</result>
+		</action>
+		<action name="exportCpuRankReportToExcel" class="oltCpuReportAction"
+			method="exportCpuRankReportToExcel" />
+
+		<!-- olt list -->
+		<action name="showEponDeviceAsset" class="oltDeviceListReportAction"
+			method="showEponDeviceAsset">
+			<result>/report/oltDeviceListReportCreator/eponDeviceAssetReport.jsp
+			</result>
+		</action>
+		<action name="exportEponDeviceAssetToExcel" class="oltDeviceListReportAction"
+			method="exportEponDeviceAssetToExcel" />
+
+		<!-- olt mem -->
+		<action name="showEponMemRankReport" class="oltMemReportAction"
+			method="showEponMemRankReport">
+			<result>/report/oltMemReportCreator/eponMemRankReport.jsp</result>
+		</action>
+		<action name="exportMenRankReportToExcel" class="oltMemReportAction"
+			method="exportMenRankReportToExcel" />
+
+		<!-- olt pon port -->
+		<action name="showEponPonPortReport" class="oltPonPortReportAction"
+			method="showEponPonPortReport">
+			<result>/report/oltPonPortReportCreator/eponDevicePonPortReport.jsp
+			</result>
+		</action>
+		<action name="exportDevicePonToExcel" class="oltPonPortReportAction"
+			method="exportDevicePonToExcel" />
+
+		<!-- olt pon flow -->
+		<action name="queryPonFlowStastic" class="oltPonPortFlowReportAction"
+			method="queryPonFlowStastic">
+			<result>/report/oltPonPortFlowReportCreator/ponPortFlow.jsp</result>
+		</action>
+		<action name="exportPonReportToExcel" class="oltPonPortFlowReportAction"
+			method="exportPonPortFlowPortToExcel" />
+		<action name="queryPonFlowDetail" class="oltPonPortFlowReportAction"
+			method="queryPonFlowDetail">
+			<result>/report/oltPonPortFlowReportCreator/ponPortFlowDetail.jsp
+			</result>
+		</action>
+		<action name="exportPonFlowDetailToExcel" class="oltPonPortFlowReportAction"
+			method="exportPonFlowDetailToExcel" />
+
+		<!-- olt response -->
+		<action name="showEponDelayRankReport" class="oltResponseReportAction"
+			method="showEponDelayRankReport">
+			<result>/report/oltResponseReportCreator/eponDelayRankReport.jsp
+			</result>
+		</action>
+		<action name="exportDelayRankReportToExcel" class="oltResponseReportAction"
+			method="exportDelayRankReportToExcel" />
+
+		<!-- olt sni -->
+		<action name="showEponSniPortReport" class="oltSniPortReportAction"
+			method="showEponSniPortReport">
+			<result>/report/oltSniPortReportCreator/eponDeviceSniPortReport.jsp
+			</result>
+		</action>
+		<action name="exportDeviceSniToExcel" class="oltSniPortReportAction"
+			method="exportDeviceSniToExcel" />
+
+		<!-- olt sni flow -->
+		<action name="querySniFlowStastic" class="oltSniPortFlowReportAction"
+			method="querySniFlowStastic">
+			<result>/report/oltSniPortFlowReportCreator/sniPortFlow.jsp</result>
+		</action>
+		<action name="exportSniReportToExcel" class="oltSniPortFlowReportAction"
+			method="exportSniPortFlowPortToExcel" />
+		<action name="querySniFlowDetail" class="oltSniPortFlowReportAction"
+			method="querySniFlowDetail">
+			<result>/report/oltSniPortFlowReportCreator/sniPortFlowDetail.jsp
+			</result>
+		</action>
+		<action name="exportSniFlowDetailToExcel" class="oltSniPortFlowReportAction"
+			method="exportSniFlowDetailToExcel" />
+
+		<!-- onu list -->
+		<action name="showOnuDeviceAsset" class="onuDeviceListReportAction"
+			method="showOnuDeviceAsset">
+			<result>/report/onuDeviceListReportCreator/onuDeviceAssetReport.jsp
+			</result>
+		</action>
+		<action name="exportOnuAssetToExcel" class="onuDeviceListReportAction"
+			method="exportOnuAssetToExcel" />
+
+		<!-- current alarm list -->
+		<action name="exportCurrentDetailToExcel" class="currentAlarmReportAction"
+			method="exportCurrentDetailToExcel" />
+		<action name="exportCurAlertReportToExcel" class="currentAlarmReportAction"
+			method="exportCurAlertReportToExcel" />
+		<action name="showCurAlertReport" class="currentAlarmReportAction"
+			method="showCurAlertReport">
+			<result>/report/currentAlarmReportCreator/curAlertReport.jsp</result>
+		</action>
+		<action name="showCurAlertReportDetail" class="currentAlarmReportAction"
+			method="showCurAlertReportDetail">
+			<result>/report/currentAlarmReportCreator/curAlertReportDetail.jsp</result>
+		</action>
+
+		<!-- history alarm list -->
+		<action name="exportHistoryDetailToExcel" class="historyAlarmReportAction"
+			method="exportHistoryDetailToExcel" />
+		<action name="exportHistoryAlertReportToExcel" class="historyAlarmReportAction"
+			method="exportHistoryAlertReportToExcel" />
+		<action name="showHistoryAlarmReport" class="historyAlarmReportAction"
+			method="showHistoryAlarmReport">
+			<result>/report/historyAlarmReportCreator/historyAlarmReport.jsp</result>
+		</action>
+		<action name="showHistoryAlertReportDetail" class="historyAlarmReportAction"
+			method="showHistoryAlertReportDetail">
+			<result>/report/historyAlarmReportCreator/historyAlarmReportDetail.jsp</result>
+		</action>
+	</package>
+</struts>

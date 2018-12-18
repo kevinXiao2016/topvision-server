@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="onucpe" namespace="/epon/onucpe" extends="default">
+        <action name="showOnuCpeList" class="onuCpeAction" method="showOnuCpeList">
+            <result name="success">/epon/onucpe/onuCpeList.jsp</result>
+        </action>
+        <action name="showOltCpeList" class="onuCpeAction" method="showOltCpeList">
+            <result name="success">/epon/onucpe/oltCpeList.jsp</result>
+        </action>
+        <action name="loadOnuUniCpeList" class="onuCpeAction" method="loadOnuUniCpeList"></action>
+        <action name="loadOltUniCpeList" class="onuCpeAction" method="loadOltUniCpeList"></action>
+        <action name="refreshOnuUniCpe" class="onuCpeAction" method="refreshOnuUniCpe"></action>
+        <action name="modifyOnuCpeConfig" class="onuCpeAction" method="modifyOnuCpeConfig" />
+        <action name="loadOnuUniCpeListByIndex" class="onuCpeAction" method="loadOnuUniCpeListByIndex" />
+    </package>
+</struts>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.report.domain.CmDailyNumStaticReport">
+
+	<select id="loadIdAndNamePairsFromTable" parameterType="map" resultType="map">
+    	<![CDATA[${value}]]>
+	</select>
+	
+	<select id="loadIdAndNamePairsFromEntity" parameterType="map" resultType="map">
+    	SELECT 
+    		entityId as id, 
+    		name as name 
+    	FROM 
+    		entity 
+    	WHERE 
+    		typeId in (select typeId from entitytyperelation where type = #{deviceType})
+            AND entityId in (select entityId from ${Authority})
+	</select>
+
+	<select id="loadCmcDailyMaxCmNum" parameterType="map" resultType="com.topvision.ems.cmc.report.domain.CmDailyNumStaticReport">
+  		<![CDATA[
+  		select 
+	  		folderId, Y.entityId as oltId, cmcId, onlineNum as cmNumOnlineMax, otherNum, offlineNum, 
+	  		(onlineNum+offlineNum+otherNum) as totalCmNum, substring(realtime,1,10) as realtime 
+		from 
+			(select X.* , 
+			if(@entityId = X.entityId && @ccIfIndex = X.ccIfIndex && @realTime = substring(X.realtime,1,10), 
+			@rank := @rank +1 , @rank :=1) as rank, @entityId:=X.entityId, @ccIfIndex := X.ccIfIndex, @realTime := substring(X.realtime,1,10)
+			from (
+			select @entityId:=null, @ccIfIndex:=null, @realTime:=null, @rank:=0, entityId, ccIfIndex, onlineNum, otherNum, offlineNum, realTime 
+			from usernumhisccmts 
+			where realtime BETWEEN #{startTime} AND #{endTime} 
+			order by entityId, ccIfIndex, substring(realtime,1,10), onlineNum desc) X ) Y, cmcentityrelation Z, entityfolderrela N 
+		where rank = 1 and Y.entityId = Z.cmcentityid and Z.cmcId = N.entityId and Y.ccIfIndex = Z.cmcindex
+		]]>
+		<if test="folderId != null">
+			AND folderId=#{folderId}
+		</if>
+		<if test="oltId != null">
+			AND Y.entityId=#{oltId}
+		</if>
+		<if test="cmcId != null">
+			AND cmcId=#{cmcId}
+		</if>
+	</select>
+
+</mapper>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="ccmtsspectrumgp" namespace="/ccmtsspectrumgp" extends="default">
+		<action name="showDeviceGpGlobal" class="frequencyHoppingAction"	method="showDeviceGpGlobal">
+			<result>/cmc/showSpectrumGpGlobal.jsp</result>
+		</action>
+		<action name="modifyDeviceGpGlobal" class="frequencyHoppingAction" method="modifyDeviceGpGlobal" />
+		<action name="refreshGpGlobalFromDevice" class="frequencyHoppingAction" method="refreshGpGlobalFromDevice" />
+		<action name="loadAllDeviceGroup" class="frequencyHoppingAction"	method="loadAllDeviceGroup" />
+		<action name="showGroupHopHisPage" class="frequencyHoppingAction" method="showGroupHopHisPage">
+			<result>/cmc/showGroupHopHis.jsp</result>
+		</action>
+		<action name="loadGroupHopHisList" class="frequencyHoppingAction" method="loadGroupHopHisList" />
+		<action name="deleteGroupHopHis" class="frequencyHoppingAction" method="deleteGroupHopHis" />
+		<action name="refreshGpHopHisFromDevice" class="frequencyHoppingAction" method="refreshGpHopHisFromDevice" />
+		<action name="showGlobalSpectrumGp" class="frequencyHoppingAction" method="showGlobalSpectrumGp">
+			<result>/cmc/showGlobalSpectrumGpMgmt.jsp</result>
+		</action>
+		<action name="loadGlobalSpectrumGpList" class="frequencyHoppingAction" method="loadGlobalSpectrumGpList" />
+		<action name="deleteGlobalSpectrumGp" class="frequencyHoppingAction" method="deleteGlobalSpectrumGp" />
+		<action name="showNewGlobalSpectrumGp" class="frequencyHoppingAction" method="showNewGlobalSpectrumGp">
+			<result>/cmc/showNewGlobalSpectrumGp.jsp</result>
+		</action>
+		<action name="showGlobalGroupList" class="frequencyHoppingAction" method="showGlobalGroupList">
+			<result>/cmc/showGlobalGroupList.jsp</result>
+		</action>
+		<action name="addDeviceGroupFromGlobal" class="frequencyHoppingAction" method="addDeviceGroupFromGlobal" />
+		<action name="loadLogDetailList" class="frequencyHoppingAction" method="loadLogDetailList" />
+		<action name="loadGroupChlNum" class="frequencyHoppingAction" method="loadGroupChlNum" />
+			
+		<action name="confSpectrumGpTempLate" class="frequencyHoppingAction"	method="confSpectrumGpTempLate" />
+		<action name="loadTempConfigLogList" class="frequencyHoppingAction" method="loadTempConfigLogList" />
+		<action name="loadTempRelationGp" class="frequencyHoppingAction" method="loadTempRelationGp" />
+		<action name="loadAllGlobalGroup" class="frequencyHoppingAction"	method="loadAllGlobalGroup" />
+		<action name="modifySpectrumGpTempLate" class="frequencyHoppingAction" method="modifySpectrumGpTempLate" />
+		<action name="addSpectrumGpTempLate" class="frequencyHoppingAction" method="addSpectrumGpTempLate" />
+		<action name="deleteSpectrumGpTempLate" class="frequencyHoppingAction" method="deleteSpectrumGpTempLate" />
+		<action name="loadSpectrumGpTempLateList" class="frequencyHoppingAction" method="loadSpectrumGpTempLateList" />
+		<action name="showSpectrumGpTempLate" class="frequencyHoppingAction" method="showSpectrumGpTempLate">
+			<result>/cmc/showSpectrumGpTempLate.jsp</result>
+		</action>
+		<action name="showNewGpTempLate" class="frequencyHoppingAction" method="showNewGpTempLate">
+			<result>/cmc/showNewGpTempLate.jsp</result>
+		</action>
+		<action name="showTempLateConfig" class="frequencyHoppingAction" method="showTempLateConfig">
+			<result>/cmc/showGpTempLateConfig.jsp</result>
+		</action>
+		<action name="showTemplateConfigLog" class="frequencyHoppingAction" method="showTemplateConfigLog">
+			<result>/cmc/showTemplateConfigLog.jsp</result>
+		</action>
+		<action name="showConfigLogDetail" class="frequencyHoppingAction" method="showConfigLogDetail">
+			<result>/cmc/showConfigLogDetail.jsp</result>
+		</action>
+			
+		<action name="modifyDeviceGroup" class="frequencyHoppingAction" method="modifyDeviceGroup" />
+		<action name="addGlobalSpectrumGp" class="frequencyHoppingAction" method="addGlobalSpectrumGp" />
+		<action name="modifyGlobalSpectrumGp" class="frequencyHoppingAction"	method="modifyGlobalSpectrumGp" />
+		<action name="transGroupFromDeviceToGlobal" class="frequencyHoppingAction" method="transGroupFromDeviceToGlobal" />
+		<action name="addDeviceGroup" class="frequencyHoppingAction"	method="addDeviceGroup" />
+		<action name="refreshGroupFromDevice" class="frequencyHoppingAction"	method="refreshGroupFromDevice" />
+		<action name="deleteDeviceGroup" class="frequencyHoppingAction" 	method="deleteDeviceGroup"/>
+		<action name="loadDeviceGroupList" class="frequencyHoppingAction" method="loadDeviceGroupList"/>
+		<action name="showGroupManagePage" class="frequencyHoppingAction" method="showGroupManagePage">
+			<result>/cmc/showSpectrumGpMgmt.jsp</result>
+		</action>
+		<action name="showNewDeviceGroup" class="frequencyHoppingAction" method="showNewDeviceGroup">
+			<result>/cmc/showNewDeviceGroup.jsp</result>
+		</action>
+	</package>
+</struts>

@@ -1,0 +1,62 @@
+/*+------------------------------  
+ * FileName: CSS Document
+ * Edition : R200
+ * Author  : 软件部TBS组
+ * Modify  : 2009-02-10 change new style Compatible in IE6.0/Firefox 2.0/Opera9.25/Chrom1.0
+--------------------------------+*/
+body { font:14px "Times New Roman", Times, serif; margin:3px; padding:0px; background:#F0F0F0;}
+a { text-decoration:none;}
+img { margin:0px; padding:0px; border:0px;}
+/* for firefox */
+input[type=text]{ border:1px solid #aaa; width:131px; height:20px; font-size:12px; padding:3px 5px 0px;}
+input[type=password]{ border:1px solid #aaa; width:131px; height:20px; font-size:12px; padding:3px 5px 0px;}
+/* for IE */
+input { width:expression((this.type=="text"||this.type=="password")?"129px":""); height:expression((this.type=="text"||this.type=="password")?"19px":"");padding:expression((this.type=="text"||this.type=="password")?"2px 5px 0px":""); font-size:expression((this.type=="text"||this.type=="password")?"12px":"");}
+/* header */
+#Header { margin:0px; padding:0px; height:85px; background:url("/html/skin/logo.jpg") no-repeat; min-width:1000px;}
+	#Logo { height:45px;}
+		#Logo p { margin:0px;}
+		p#Logout { float:right; margin:8px 8px 0px 0px;}
+	#Navigation { height:40px; min-width:1000px; width:expression((document.documentElement.clientWidth||document.body.clientWidth) < 1000? "1000px": "auto" );}
+		ul.M0 { margin:0px; padding-left:18%;}
+		ul.M0 li { float:left; list-style-type:none;}
+		.M0 a { background: url("/html/skin/bck.gif") no-repeat;}
+		.M0 a:link,.M0 a:visited{ float:left;background-position:left -66px;text-decoration: none; margin-left:1px; padding-right:0px;}
+		.M0 a:link span,.M0 a:visited span{ display:block; font:13px Arial, Helvetica, sans-serif; background: url("/html/skin/bck.gif") no-repeat; padding:11px 27px 6px 27px; color:#000; background-position:right -98px;}
+		.M0 a:hover,.M0 a:active{ background-position:left -130px;} 
+		.M0 a:hover span,.M0 a:active span{ background-position:right -162px;}  
+		.M0 .on a:link,.M0 .on a:visited{ background-position:left 2px;} 
+		.M0 .on a span,.M0 .on a:link span,.M0 .on a:visited span{ background-position:right -32px;color:#000; font-weight:bold;}
+/* maincontent */
+#Main { margin-top:3px; height:652px; min-width:1000px; width:expression((document.documentElement.clientWidth||document.body.clientWidth) < 1000? "1000px": "auto" );}
+	/* left menu */
+	#Menu { margin:0px; border:1px solid #B1D3EC; width:18%; height:650px; background:#fff; float:left; font-size:12px;}
+		#MenuTitle { margin:1px;background:url("/html/skin/MenuBar.gif") repeat-x; width:auto; height:27px;}
+			.Word { float:left; color:#0D6EB7; top:5px; left:10px; position:relative; width:auto; font-weight:bold; font-size:14px;}
+			#ShrinkMark { float:right; top:110px; left:16%; position:absolute;}
+		.M1 { margin:1px;}
+			.M1 p { margin:0px; border-bottom:1px solid #EEEEEE;}
+			.M1 a { color:gray; padding:8px 0px 8px 30px; display:block;}
+			.M1 a:hover { text-decoration:underline;}
+			.M1 ul { margin:0px; padding:0px;}
+				.M1 ul li { margin:0px; padding:0px; border-bottom:1px solid #EEEEEE;}
+				.M1 ul li a { padding-left:60px;}
+				#up a { color:#005B58; background:#f4f4f4;}
+	/* content */
+	#Content { margin:0px; border:1px solid #B1D3EC; width:100%; height:410px; background:#fff; float:right;}
+		.MainTittle { margin:0px; padding:10px; font-weight:bold; font-size:16px; color:#005B58;}
+		.Embody { margin:10px;}
+			.tips {border:1px dashed gray;margin:0px 28px; padding:10px;}
+			.div_left { float:left; width:140px; text-align:right; margin:3px 15px 0 0;}
+			.div_middle { float:left; width:auto; margin-right:5px;}
+				.hold { margin-left:4px; width:65px;}
+			.div_right { margin:10px 0; padding:3px; color:#FF9122; font-weight:bold;}
+			.div_button { margin:5px; display:inline;}
+				.setDis { color:#aaa;}
+				.do { margin:10px 0 0 27px;}
+		.SmallTittle { margin:14px 0 10px; padding:0px; text-indent:29px; font-weight:bold; color:#005B58;}
+		#MainTable { margin:10px;}
+			.td_table { margin-left:50px ; padding:0px; border:1px solid #aaa; border-collapse:collapse; border-spacing:0px; font-size:14px;}
+			td { padding:5px 8px; border:1px solid #aaa; width:auto; text-align:center;}
+/* loading */
+	

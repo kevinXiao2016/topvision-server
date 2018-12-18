@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.cm.domain.CcmtsCmList">
+
+	<select id="getCmAttributeById" parameterType="map" 
+			resultType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+		SELECT
+			a.cmId,
+			a.cmcId,
+			statusIndex,
+			statusMacAddress,
+			statusIpAddress,
+			statusDownChannelIfIndex,
+			statusUpChannelIfIndex,
+			statusRxPower,
+			statusTimingOffset,
+			statusEqualizationData,
+			statusValue,
+			statusUnerroreds,
+			statusCorrecteds,
+			statusUncorrectables,
+			statusExtUnerroreds,
+			statusExtCorrecteds,
+			statusExtUncorrectables,
+			statusSignalNoise,
+			statusMicroreflections,
+			statusDocsisRegMode,
+			statusModulationType,
+			statusInetAddressType,
+			statusInetAddress,
+			statusValueLastUpdate,
+			statusHighResolutionTO,
+			b.userAddr cmAlias,
+	        b.classification cmClassified,
+			c.topCmFlapInsertionFailNum
+		FROM
+			cmattribute a
+			left join cmbossinfo b on a.StatusMacAddress = b.cmMac
+			left join cmflap c on a.StatusMacAddress = c.topCmFlapMacAddr
+			left join cmccmrelation d on a.cmId = d.cmId
+		WHERE
+			a.cmId = #{cmId}
+	</select>
+
+	<select id="getCmAttributeByMac" parameterType="map" resultType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+        select * from cmAttribute where cmcId = #{cmcId} AND StatusMacAddress=#{StatusMacAddress}
+	</select>
+
+	<select id="getCmByCpeIp" parameterType="String" resultType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+    	select * 
+    	from cmattribute 
+    	where 
+    	cmId in 
+    	(
+			select cmId 
+			from cpecmrelation 
+			where cpeId in 
+			(
+				select cpeId 
+				from cpeattribute 
+				where docsSubMgtCpeIpAddr 
+				like '${cpeIp}%'
+			)
+		)
+	</select>
+	
+	<update id="updateCmStatus" parameterType="map">
+       UPDATE 
+       	   cmAttribute
+       SET 
+           StatusValue = #{StatusValue}
+       WHERE 
+           cmcId = #{cmcId} AND StatusMacAddress=#{StatusMacAddress}
+    </update>
+    
+    <select id="getCmSignalByCmId" parameterType="com.topvision.ems.cmc.facade.domain.CmAttribute" resultType="com.topvision.ems.cmc.cm.domain.CmSignal">
+    	select 
+    		* 
+    	from 
+    		CmSignal 
+    	where
+    		CmId = #{cmId}
+    </select>
+    
+    <update id="updateCmSignal" parameterType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+       UPDATE 
+       	   CmSignal
+       SET 
+       	   downChannelSnr = #{downChannelSnr},
+       	   downChannelTx = #{downChannelTx},
+       	   upChannelTx = #{upChannelTx},
+       	   collectTime = #{collectTime},
+       	   downChannelFrequency = #{downChannelFrequency},
+       	   upChannelFrequency = #{upChannelFrequency}
+       WHERE 
+           cmId = #{cmId} 
+    </update>
+    
+    <insert id="insertCmSignal" parameterType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+	   INSERT INTO CmSignal
+	   (
+	   	   cmId,
+		   downChannelSnr, 
+		   downChannelTx, 
+		   upChannelTx, 
+		   collectTime,
+		   upChannelFrequency,
+		   downChannelFrequency
+	   )
+	   VALUES 
+	   (
+	       #{cmId},
+		   #{downChannelSnr}, 
+		   #{downChannelTx}, 
+		   #{upChannelTx}, 
+		   #{collectTime},
+		   #{upChannelFrequency},
+		   #{downChannelFrequency}
+	   )
+	</insert>
+	
+	<select id="queryCmListByCmcId" parameterType="long" resultType="com.topvision.ems.cmc.facade.domain.CmAttribute">
+		SELECT *
+		FROM 
+			cmattribute 
+		WHERE
+			cmcId = #{cmcId} 
+	</select>
+	
+</mapper>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.mirror.domain.OltMirror">
+
+	<update id="updateMirrorPortList" parameterType="oltSniMirrorConfig">
+		UPDATE
+		oltportmirrorconfig
+		SET
+		portMirrorGroupDstPortList =
+		#{sniMirrorGroupDstPortList},
+		portMirrorGroupSrcInPortList =
+		#{sniMirrorGroupSrcInPortList},
+		portMirrorGroupSrcOutPortList =
+		#{sniMirrorGroupSrcOutPortList}
+		WHERE
+		entityId = #{entityId} and
+		portMirrorGroupIndex=#{sniMirrorGroupIndex}
+	</update>
+	
+	<delete id="deleteAllOltSniMirrorConfig" parameterType="long">
+		DELETE
+		FROM
+		oltportmirrorconfig where entityId = #{entityId}		 
+	</delete>
+	
+	<select id="getMirrorConfigList" parameterType="Long"
+		resultType="OltSniMirrorConfig">
+		SELECT
+		entityId,portMirrorGroupIndex
+		sniMirrorGroupIndex,portMirrorGroupName sniMirrorGroupName,
+		portMirrorGroupDstPortList
+		sniMirrorGroupDstPortList,portMirrorGroupSrcInPortList
+		sniMirrorGroupSrcInPortList,
+		portMirrorGroupSrcOutPortList
+		sniMirrorGroupSrcOutPortList
+		FROM
+		oltportmirrorconfig
+		WHERE
+		entityId =
+		#{entityId}
+	</select>
+	
+	<insert id="insertOltSniMirrorConfig" parameterType="oltSniMirrorConfig">
+		INSERT INTO
+		oltportmirrorconfig
+		(
+		entityId,
+		portMirrorGroupIndex,
+		portMirrorGroupName,
+		portMirrorGroupDstPortList,
+		portMirrorGroupSrcInPortList,
+		portMirrorGroupSrcOutPortList
+		)
+		VALUES
+		(
+		#{entityId},
+		#{sniMirrorGroupIndex},
+		#{sniMirrorGroupName},
+		#{sniMirrorGroupDstPortList},
+		#{sniMirrorGroupSrcInPortList},
+		#{sniMirrorGroupSrcOutPortList}
+		)
+	</insert>
+	
+	<update id="modifyMirrorName" parameterType="map">
+		UPDATE
+		oltportmirrorconfig
+		SET portMirrorGroupName = #{sniMirrorGroupName}
+		WHERE entityId = #{entityId} and
+		portMirrorGroupIndex =
+		#{sniMirrorGroupIndex}  
+	</update>
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="dispersion" namespace="/dispersion" extends="default">
+		<action name="showDispersion" class="dispersionAction" method="showDispersion">
+			<result>/dispersion/dispersion-list.jsp</result>
+		</action>
+		
+		<action name="loadDispersions" class="dispersionAction" method="loadDispersions"></action>
+		
+		<action name="showDispersionDetail" class="dispersionAction" method="showDispersionDetail">
+			<result>/dispersion/dispersion-detail.jsp</result>
+		</action>
+		
+		<action name="loadDispersionTrend" class="dispersionAction" method="loadDispersionTrend"></action>
+		<action name="loadDispersionByIdAndTime" class="dispersionAction" method="loadDispersionByIdAndTime"></action>
+	</package>
+</struts>

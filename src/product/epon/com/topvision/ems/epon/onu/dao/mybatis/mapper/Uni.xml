@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.onu.domain.Uni">
+
+	<select id="getUniMap" parameterType="long" resultType="java.util.HashMap">
+		select
+		uniId ID , uniIndex 'INDEX' from
+		OltUniRelation where
+		entityId =
+		#{entityId}
+	</select>
+
+	<delete id="deleteOnuUniRelation" parameterType="long">
+		delete from
+		oltunirelation where
+		uniId = #{uniId}
+	</delete>
+
+	<insert id="insertOltUniRelation" databaseId="MySQL"
+		parameterType="oltUniAttribute" useGeneratedKeys="true" keyProperty="uniId">
+		insert into
+		OltUniRelation(onuId,uniIndex,entityId) values
+		(#{onuId},#{uniIndex},#{entityId})
+	</insert>
+	<insert id="insertOltUniRelation" databaseId="Oracle"
+		parameterType="oltUniAttribute">
+		<selectKey keyProperty="uniId" resultType="long" order="BEFORE">
+			SELECT
+			OltUniRelation_Seq.nextval AS uniId from dual
+		</selectKey>
+		insert into OltUniRelation(uniId,onuId,uniIndex,entityId) values
+		(#{uniId},#{onuId},#{uniIndex},#{entityId})
+	</insert>
+	<select id="getOltUniCount" parameterType="OltUniAttribute"
+		resultType="int">
+		SELECT
+		count(B.uniId)
+		FROM
+		OltUniRelation B
+		WHERE
+		B.entityId =
+		#{entityId} and B.uniIndex = #{uniIndex}
+	</select>
+
+	<select id="getUniAttribute" parameterType="long" resultType="onuUniPort">
+		SELECT
+		A.uniId,
+		B.uniIndex,
+		uniOperationStatus,
+		uniAdminStatus,
+		uniAutoNegotiationEnable,
+		autoNegAdvertisedTechAbility,
+		A.uniDSLoopBackEnable,
+		A.uniUSUtgPri,
+		perfStats15minuteEnable,
+		perfStats24hourEnable,
+		isolationEnable,
+		flowCtrl,
+		topUniLoopDetectEnable
+		FROM OltUniAttribute
+		A,OltUniRelation B
+		WHERE A.uniId =
+		B.uniId and
+		A.uniId = #{uniId}
+	</select>
+
+	<select id="getUniIndexAttributes" parameterType="long"
+		resultType="oltUniAttribute">
+		SELECT
+		uniId,
+		uniIndex,
+		entityId
+		FROM
+		OltUniRelation
+		WHERE
+		onuId =
+		#{onuId}
+	</select>
+
+	<select id="getUniId" parameterType="oltUniAttribute"
+		resultType="long">
+		SELECT
+		uniId
+		FROM
+		OltUniRelation
+		WHERE
+		entityId = #{entityId}
+		and uniIndex = #{uniIndex}
+	</select>
+
+	<select id="getOltUniIdList" parameterType="long" resultType="long">
+		SELECT
+		uniId
+		FROM
+		oltunirelation
+		WHERE
+		onuId = #{onuId}
+	</select>
+
+	<select id="getOltUniAttribute" parameterType="long" resultType="onuUniPort">
+		SELECT
+		uniId,
+		uniOperationStatus,
+		uniAdminStatus,
+		uniAutoNegotiationEnable,
+		uniAutoNegLocalTechAbility,
+		flowCtrl
+		FROM
+		oltonuponattribute
+		WHERE
+		onuPonId = (SELECT onuPonId
+		FROM
+		oltonuponrelation WHERE onuId = #{onuId})
+	</select>
+
+	<select id="getOnuUniAttribute" parameterType="long" resultType="oltUniAttribute">
+		SELECT
+		oua.uniId,
+		oua.uniOperationStatus,
+		oua.uniAdminStatus,
+		oua.uniAutoNegotiationEnable,
+		oua.uniAutoNegLocalTechAbility,
+		oua.flowCtrl,
+		our.onuId,
+		our.uniIndex,
+		our.entityId
+		FROM
+		oltuniattribute oua
+		left join oltunirelation our on oua.uniId = our.uniId
+		WHERE
+		oua.uniId = #{uniId}
+	</select>
+	<select id="getSlotUniList" parameterType="Long" resultType="oltUniAttribute">
+		SELECT
+		A.entityId,
+		A.uniId,
+		B.uniIndex,
+		B.onuId,
+		uniOperationStatus,
+		uniAdminStatus,
+		uniAutoNegotiationEnable,
+		uniAutoNegLocalTechAbility,
+		perfStats15minuteEnable,
+		perfStats24hourEnable,
+		isolationEnable,
+		flowCtrl
+		FROM OltUniAttribute
+		A,OltUniRelation B
+		WHERE A.uniId =
+		B.uniId
+		and B.onuId = #{onuId}
+	</select>
+
+	<select id="getOltUniPortRateLimit" parameterType="long"
+		resultType="oltUniRateLimit">
+		SELECT
+		uniId,
+		uniPortInCIR,
+		uniPortInCBS,
+		uniPortInEBS,
+		uniPortOutPIR,
+		uniPortOutCIR,
+		uniPortInRateLimitEnable,
+		uniPortOutRateLimitEnable
+		FROM
+		oltUniRateLimit
+		WHERE uniId = #{uniId}
+	</select>
+	<select id="getOltUniExtAttribute" parameterType="long"
+		resultType="oltUniExtAttribute">
+		SELECT
+		uniId,
+		uniDSLoopBackEnable,
+		uniUSUtgPri,
+		autoNegAdvertisedTechAbility,
+		PerfStats15minuteEnable,
+		PerfStats24hourEnable,
+		FlowCtrl,
+		macAge
+		FROM
+		oltUniAttribute
+		WHERE uniId =
+		#{uniId}
+	</select>
+	<select id="getUniStormSuppression" parameterType="long"
+		resultType="oltUniStormSuppressionEntry">
+		SELECT
+		uniId,
+		uniUnicastStormEnable unicastStormEnable,
+		uniUnicastStormInPacketRate unicastStormInPacketRate,
+		uniUnicastStormOutPacketRate unicastStormOutPacketRate,
+		uniMulticastStormEnable multicastStormEnable,
+		uniMulticastStormInPacketRate multicastStormInPacketRate,
+		uniMulticastStormOutPacketRate multicastStormOutPacketRate,
+		uniBroadcastStormEnable broadcastStormEnable,
+		uniBroadcastStormInPacketRate broadcastStormInPacketRate,
+		uniBroadcastStormOutPacketRate broadcastStormOutPacketRate
+		FROM
+		oltunistorminfo
+		WHERE uniId = #{uniId}
+	</select>
+
+	<select id="getUniIndexListByEntityIdAndOnuIndex" parameterType="map"
+		resultType="long">
+		select uniIndex from oltunirelation where onuId =
+		(select
+		onuId from oltonurelation where entityId = #{entityId} and onuIndex=
+		#{onuIndex})
+	</select>
+
+	<insert id="insertOltUniAttribute" parameterType="oltUniAttribute">
+		INSERT INTO
+		OltUniAttribute (
+		uniId,
+		uniOperationStatus,
+		uniAdminStatus,
+		uniAutoNegotiationEnable,
+		uniAutoNegLocalTechAbility,
+		flowCtrl,
+		entityId
+		)
+		VALUES(
+		#{uniId},
+		#{uniOperationStatus},
+		#{uniAdminStatus},
+		#{uniAutoNegotiationEnable},
+		#{uniAutoNegLocalTechAbility},
+		#{flowCtrl},
+		#{entityId}
+		)
+	</insert>
+
+	<insert id="insertGponUniAttribute" parameterType="gponUniAttribute">
+		INSERT INTO
+		OltUniAttribute (
+		uniId,
+		uniOperationStatus,
+		uniAdminStatus,
+		uniDuplexRate,
+		perfStats15minuteEnable,
+		perfStats24hourEnable,
+		entityId
+		)
+		VALUES(
+		#{uniId},
+		#{ethOperationStatus},
+		#{ethAdminStatus},
+		#{ethDuplexRate},
+		#{ethPerfStats15minuteEnable},
+		#{ethPerfStats24hourEnable},
+		#{entityId}
+		)
+	</insert>
+
+
+	<insert id="insertUniStormInfo" parameterType="oltUniStormSuppressionEntry">
+		insert into
+		oltunistorminfo
+		(uniId, uniUnicastStormEnable,
+		uniUnicastStormInPacketRate,
+		uniUnicastStormOutPacketRate,
+		uniMulticastStormEnable,
+		uniMulticastStormInPacketRate,
+		uniMulticastStormOutPacketRate,
+		uniBroadcastStormEnable,
+		uniBroadcastStormInPacketRate,
+		uniBroadcastStormOutPacketRate,
+		entityId
+		)
+		values
+		(#{uniId}, #{unicastStormEnable}, #{unicastStormInPacketRate},
+		#{unicastStormOutPacketRate},
+		#{multicastStormEnable},
+		#{multicastStormInPacketRate},
+		#{multicastStormOutPacketRate},
+		#{broadcastStormEnable},
+		#{broadcastStormInPacketRate},
+		#{broadcastStormOutPacketRate},
+		#{entityId}
+		)
+	</insert>
+
+	<insert id="insertUniRateLimit" parameterType="oltUniRateLimit">
+		insert into
+		oltuniratelimit
+		(uniId, uniPortInCIR, uniPortInCBS, uniPortInEBS,
+		uniPortOutPIR,
+		uniPortOutCIR,
+		uniPortInRateLimitEnable,
+		uniPortOutRateLimitEnable,
+		entityId
+		)
+		values
+		(#{uniId}, #{uniPortInCIR},
+		#{uniPortInCBS}, #{uniPortInEBS}, #{uniPortOutPIR},
+		#{uniPortOutCIR},
+		#{uniPortInRateLimitEnable},
+		#{uniPortOutRateLimitEnable},
+		#{entityId}
+		)
+	</insert>
+
+	<update id="updateOnuUniAttribute" parameterType="oltUniAttribute">
+		UPDATE
+		OltUniAttribute
+		SET
+		uniOperationStatus = #{uniOperationStatus},
+		uniAdminStatus = #{uniAdminStatus},
+		uniAutoNegotiationEnable =
+		#{uniAutoNegotiationEnable},
+		uniAutoNegLocalTechAbility =
+		#{uniAutoNegLocalTechAbility},
+		flowCtrl =
+		#{flowCtrl}
+		WHERE uniId=#{uniId}
+	</update>
+
+
+	<update id="updateGponUniAttribute" parameterType="gponUniAttribute">
+		UPDATE
+		OltUniAttribute
+		SET
+		uniOperationStatus = #{ethOperationStatus},
+		uniAdminStatus = #{ethAdminStatus},
+		uniDuplexRate = #{ethDuplexRate},
+		perfStats15minuteEnable = #{ethPerfStats15minuteEnable},
+		perfStats24hourEnable = #{ethPerfStats24hourEnable}
+		where
+		uniId=#{uniId}
+	</update>
+
+	<update id="updateUniAutoNegoMode" parameterType="oltUniExtAttribute">
+		UPDATE
+		OltUniAttribute
+		SET autoNegAdvertisedTechAbility =
+		#{autoNegAdvertisedTechAbility}
+		WHERE uniId = #{uniId}
+	</update>
+
+	<update id="updateOltUniPortRateLimit" parameterType="oltUniRateLimit">
+		UPDATE
+		oltUniRateLimit set
+		uniPortInRateLimitEnable =
+		#{uniPortInRateLimitEnable} ,
+		uniPortOutRateLimitEnable =
+		#{uniPortOutRateLimitEnable}
+		<if test="uniPortInCIR != null">
+			,uniPortInCIR =
+			#{uniPortInCIR}
+		</if>
+		<if test="uniPortInCBS != null">
+			,uniPortInCBS =
+			#{uniPortInCBS}
+		</if>
+		<if test="uniPortInEBS != null">
+			,uniPortInEBS =
+			#{uniPortInEBS}
+		</if>
+		<if test="uniPortOutPIR != null">
+			,uniPortOutPIR =
+			#{uniPortOutPIR}
+		</if>
+		<if test="uniPortOutCIR != null">
+			,uniPortOutCIR =
+			#{uniPortOutCIR}
+		</if>
+		WHERE uniId =#{uniId}
+	</update>
+
+	<update id="updateUniAutoNegotiationStatus" parameterType="oltUniAttribute">
+		UPDATE OltUniAttribute SET uniAutoNegotiationEnable =
+		#{uniAutoNegotiationEnable} WHERE uniId = #{uniId}
+	</update>
+
+	<update id="updateUniAdminStatus" parameterType="oltUniAttribute">
+		UPDATE
+		OltUniAttribute SET uniAdminStatus = #{uniAdminStatus}
+		<if test="uniOperationStatus != null">
+			,uniOperationStatus = #{uniOperationStatus}
+		</if>
+		WHERE uniId = #{uniId}
+	</update>
+	
+	<update id="updateUniAdminStatusById" parameterType="map">
+		UPDATE
+		OltUniAttribute SET uniAdminStatus = #{uniAdminStatus}
+		WHERE uniId = #{uniId}
+	</update>
+
+	
+	<update id="updateUniOperaStatus" parameterType="map">
+		UPDATE
+		OltUniAttribute SET uniOperationStatus = #{uniOperationStatus}
+		WHERE uniId = #{uniId}
+	</update>
+
+	<update id="updateUniExtAttribute" parameterType="oltUniExtAttribute">
+		update
+		oltuniattribute set flowCtrl=#{flowCtrl} ,
+		uniDSLoopBackEnable =
+		#{uniDSLoopBackEnable},
+		uniUSUtgPri = #{uniUSUtgPri},
+		perfStats15minuteEnable=#{perfStats15minuteEnable},
+		perfStats24hourEnable=#{perfStats24hourEnable} ,
+		lastChangeTime=#{lastChangeTime},
+		isolationEnable=#{isolationEnable},
+		macAddrLearnMaxNum=#{macAddrLearnMaxNum} ,
+		autoNegAdvertisedTechAbility=#{autoNegAdvertisedTechAbility},
+		macAddrClearByPort=#{macAddrClearByPort},
+		macAge=#{macAge},
+		topUniLoopDetectEnable = #{topUniLoopDetectEnable}
+		where
+		uniId=#{uniId}
+	</update>
+	<update id="updateUniStormSuppression" parameterType="oltUniStormSuppressionEntry">
+		update
+		oltunistorminfo
+		set uniUnicastStormEnable=#{unicastStormEnable} ,
+		uniUnicastStormInPacketRate=#{unicastStormInPacketRate},
+		uniUnicastStormOutPacketRate=#{unicastStormOutPacketRate} ,
+		uniMulticastStormEnable=#{multicastStormEnable},
+		uniMulticastStormInPacketRate=#{multicastStormInPacketRate},
+		uniMulticastStormOutPacketRate=#{multicastStormOutPacketRate} ,
+		uniBroadcastStormEnable=#{broadcastStormEnable},
+		uniBroadcastStormInPacketRate=#{broadcastStormInPacketRate},
+		uniBroadcastStormOutPacketRate=#{broadcastStormOutPacketRate}
+		where
+		uniId=#{uniId}
+	</update>
+
+	<update id="updateUniIsolationEnable" parameterType="java.util.Map">
+		UPDATE
+		oltuniattribute SET isolationEnable = #{uniIsolationEnable}
+		WHERE uniId
+		= #{uniId}
+	</update>
+	<update id="updateUni15minEnable" parameterType="java.util.Map">
+		UPDATE
+		oltuniattribute SET perfStats15minuteEnable =
+		#{uni15minEnable}
+		WHERE
+		uniId = #{uniId}
+	</update>
+	<update id="updateUni24hEnable" parameterType="java.util.Map">
+		UPDATE
+		oltuniattribute SET perfStats24hourEnable = #{uni24hEnable}
+		WHERE uniId
+		= #{uniId}
+	</update>
+
+	<update id="modifyUniMacAddrLearnMaxNum" parameterType="java.util.Map">
+		UPDATE
+		oltuniattribute SET macAddrLearnMaxNum =
+		#{macAddrLearnMaxNum}
+		WHERE
+		uniId = #{uniId}
+	</update>
+
+	<delete id="deleteUniRateLimit" parameterType="Long">
+		delete from
+		oltuniratelimit where uniId=#{uniId}
+	</delete>
+	<delete id="deleteUniStormInfo" parameterType="Long">
+		delete from
+		oltunistorminfo where uniId=#{uniId}
+	</delete>
+	<delete id="deleteOltUniRelation" parameterType="Long">
+		delete from
+		OltUniRelation where uniIndex=#{Index}
+	</delete>
+
+	<update id="updateUniAutoNegoStatus" parameterType="oltUniAttribute">
+		UPDATE
+		OltUniAttribute SET uniAutoNegLocalTechAbility =
+		#{uniAutoNegLocalTechAbility} WHERE uniId =
+		#{uniId}
+	</update>
+
+	<select id="getUniIndex" parameterType="long" resultType="long">
+		SELECT
+		uniIndex FROM OltUniRelation WHERE uniId = #{uniId}
+	</select>
+
+	<select id="getUniIdByIndex" parameterType="map" resultType="long">
+		SELECT
+		uniId FROM OltUniRelation WHERE uniIndex = #{uniIndex} and
+		entityId = #{entityId}
+	</select>
+
+	<update id="updateUniFlowCtrlEnable" parameterType="oltUniAttribute">
+		UPDATE
+		OltUniAttribute SET flowCtrl = #{flowCtrl} WHERE uniId =
+		#{uniId}
+	</update>
+	<update id="updateUniAutoNegoEnable" parameterType="oltUniAttribute">
+		UPDATE
+		OltUniAttribute SET uniAutoNegotiationEnable =
+		#{uniAutoNegotiationEnable} WHERE
+		uniId =
+		#{uniId}
+	</update>
+
+	<update id="updateUniMacAgeTime" parameterType="map">
+		UPDATE
+		oltuniattribute
+		SET macAge = #{uniMacAgeTime}
+		WHERE uniId =
+		#{uniId}
+	</update>
+
+	<update id="updateOltUniExtAttribute" parameterType="oltUniExtAttribute">
+		UPDATE
+		OltUniAttribute SET
+		FlowCtrl = #{flowCtrl},
+		perfStats15minuteEnable
+		=#{perfStats15minuteEnable},
+		perfStats24hourEnable
+		=#{perfStats24hourEnable},
+		lastChangeTime =#{lastChangeTime},
+		macAddrLearnMaxNum = #{macAddrLearnMaxNum},
+		autoNegAdvertisedTechAbility = #{autoNegAdvertisedTechAbility},
+		macAddrClearByPort = #{macAddrClearByPort},
+		macAge = #{macAge},
+		uniDSLoopBackEnable = #{uniDSLoopBackEnable},
+		uniUSUtgPri =
+		#{uniUSUtgPri}
+		WHERE uniId = #{uniId}
+	</update>
+
+	<update id="updateUniDSLoopBackEnable" parameterType="oltUniExtAttribute">
+		UPDATE
+		OltUniAttribute SET
+		uniDSLoopBackEnable = #{uniDSLoopBackEnable}
+		WHERE
+		uniId = #{uniId}
+	</update>
+
+	<update id="updateUniUSUtgPri" parameterType="oltUniExtAttribute">
+		UPDATE
+		OltUniAttribute SET
+		uniUSUtgPri = #{uniUSUtgPri}
+		WHERE uniId = #{uniId}
+	</update>
+
+	<update id="updateUniLoopDetectEnable" parameterType="oltUniExtAttribute">
+		UPDATE
+		OltUniAttribute SET
+		topUniLoopDetectEnable = #{topUniLoopDetectEnable}
+		WHERE uniId = #{uniId}
+	</update>
+	<select id="getUniAttrMacAddrLearnMaxNum" parameterType="long"
+		resultType="Long">
+		SELECT
+		macAddrLearnMaxNum
+		FROM
+		oltuniattribute
+		WHERE uniId =
+		#{uniId}
+	</select>
+	<delete id="deleteEntityUniStormInfo" parameterType="Long">
+		delete from
+		oltunistorminfo where entityId = #{entityId}
+	</delete>
+	
+	<select id="getOnuEorGByUniId" parameterType="long" resultType="String">
+		select B.onuEorG from  oltunirelation A 
+		left join oltonuAttribute B on A.onuId = B.onuId
+		where A.uniId = #{uniId}
+	</select>
+</mapper>

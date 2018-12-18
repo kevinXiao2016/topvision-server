@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="univlanprofile" namespace="/epon/univlanprofile" extends="default">
+    	<action name="showUniVlanProfile" class="uniVlanProfileAction" method="showUniVlanProfile">
+    		<result>/epon/univlanprofile/uniVlanProfile.jsp</result>
+    	</action>
+    	<action name="loadUniVlanProfileList" class="uniVlanProfileAction" method="loadUniVlanProfileList" />
+    	<action name="addUniVlanProfile" class="uniVlanProfileAction" method="addUniVlanProfile" />
+    	<action name="modifyProfile" class="uniVlanProfileAction" method="modifyProfile" />
+    	<action name="deleteProfile" class="uniVlanProfileAction" method="deleteProfile" />
+    	<action name="refreshProfileData" class="uniVlanProfileAction" method="refreshProfileData" />
+        
+    	<action name="showProfileRule" class="uniVlanProfileAction" method="showProfileRule">
+    		<result>/epon/univlanprofile/profileRule.jsp</result>
+    	</action>
+    	<action name="loadProfileRuleList" class="uniVlanProfileAction" method="loadProfileRuleList" />
+    	<action name="addProfileRule" class="uniVlanProfileAction" method="addProfileRule" />
+    	<action name="deleteProfileRule" class="uniVlanProfileAction" method="deleteProfileRule" />
+    	<action name="refershRuleData" class="uniVlanProfileAction" method="refershRuleData" />
+    	
+    	<action name="showAggRule" class="uniVlanProfileAction" method="showAggRule">
+    		<result>/epon/univlanprofile/showAggRule.jsp</result>
+    	</action>
+    	<action name="showProfileBind" class="uniVlanProfileAction" method="showProfileBind">
+    		<result>/epon/univlanprofile/profileBind.jsp</result>
+    	</action>
+    	<action name="saveProfileBind" class="uniVlanProfileAction" method="saveProfileBind" />
+    	<action name="showBatchUnBind" class="uniVlanProfileAction" method="showBatchUnBind">
+    		<result>/epon/univlanprofile/batchUnBind.jsp</result>
+    	</action>
+    	<action name="unBindProfile" class="uniVlanProfileAction" method="unBindProfile" />
+    	<action name="batchUnBindProfile" class="uniVlanProfileAction" method="batchUnBindProfile" />
+    	
+    	<action name="showUniBindInfo" class="uniVlanProfileAction" method="showUniBindInfo">
+    		<result>/epon/univlanprofile/uniVlanBindInfo.jsp</result>
+    	</action>
+    	<action name="modifyUniPvid" class="uniVlanProfileAction" method="modifyUniPvid" />
+    	<action name="refreshBindInfo" class="uniVlanProfileAction" method="refreshBindInfo" />
+    	<action name="showRelateProfile" class="uniVlanProfileAction" method="showRelateProfile">
+    		<result>/epon/univlanprofile/showRelateProfile.jsp</result>
+    	</action>
+    	<action name="replaceBindProfile" class="uniVlanProfileAction" method="replaceBindProfile" />
+    	<action name="unBindUniProfile" class="uniVlanProfileAction" method="unBindUniProfile" />
+    	
+    	<!-- UNI PORT VLAN  -->
+    	<action name="showUniVlanView"  class="uniPortVlanAction" method="showUniVlanView">
+    		<result name="tag">/epon/uniportvlan/tagMode.jsp</result>
+    		<result name="translation">/epon/uniportvlan/translateMode.jsp</result>
+    		<result name="aggregation">/epon/uniportvlan/aggregateMode.jsp</result>
+    		<result name="trunk">/epon/uniportvlan/trunkMode.jsp</result>
+    	</action>
+    </package>
+</struts>

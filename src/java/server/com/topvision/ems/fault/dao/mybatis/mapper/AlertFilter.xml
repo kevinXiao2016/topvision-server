@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.fault.domain.AlertFilter">
+
+    <select id="updateEntity" parameterType="alertFilter">
+        UPDATE
+            alertfilter
+        SET
+            name = #{name},
+            ip = #{ip},
+            note = #{note},
+            onuLevel = #{onuLevel},
+            typeIds = #{typeIds}
+        WHERE
+            filterId = #{filterId}
+    </select>
+
+	<select id="selectByMap" parameterType="map" resultType="alertFilter">
+		select
+		A.filterId, A.name, A.typeIds, A.onuLevel, A.ip, A.typeId, B.displayName AS
+		typeName from
+		AlertFilter A left join AlertType B on A.typeId =
+		B.typeId ORDER BY
+		A.combined desc, A.type asc
+	</select>
+
+	<select id="getAlertFilterByType" parameterType="int"
+		resultType="alertFilter">
+		select A.filterId, A.type, A.ip, A.note, A.typeId,
+		B.displayName AS
+		typeName from AlertFilter A left join AlertType B on
+		A.typeId =
+		B.typeId WHERE A.type = #{type}
+	</select>
+
+	<insert id="insertEntity" databaseId="MySQL" parameterType="alertFilter"
+		useGeneratedKeys="true" keyProperty="filterId">
+		INSERT INTO 
+		  AlertFilter (name, ip, note, typeIds, onuLevel) 
+		VALUES 
+		  (#{name}, #{ip}, #{note}, #{typeIds}, #{onuLevel})
+	</insert>
+	<insert id="insertEntity" databaseId="Oracle" parameterType="alertFilter">
+		<selectKey keyProperty="filterId" resultType="long" order="BEFORE">
+			select AlertFilter_Seq.nextval as filterId from dual
+		</selectKey>
+		INSERT INTO AlertFilter (filterId, name, ip, note, typeIds, onuLevel) VALUES
+		(#{filterId}, #{name}, #{ip}, #{note}, #{typeIds}, #{onuLevel})
+	</insert>
+
+	<delete id="deleteByPrimaryKey" parameterType="long">
+		DELETE FROM
+		AlertFilter WHERE filterId = #{filterId}
+	</delete>
+
+	<delete id="deleteAlertFilterByType" parameterType="int">
+		DELETE FROM
+		AlertFilter WHERE type = #{type}
+	</delete>
+	
+	<select id="getAlertFilter" parameterType="map" resultType="alertFilter">
+	   SELECT * FROM alertfilter
+	   <if test="start != null and limit != null">
+	   limit ${start} , ${limit}
+	   </if>;
+	</select>
+	
+    <select id="getAlertFilterCount" parameterType="map" resultType="int">
+       SELECT count(filterId) FROM alertfilter
+    </select>
+</mapper>

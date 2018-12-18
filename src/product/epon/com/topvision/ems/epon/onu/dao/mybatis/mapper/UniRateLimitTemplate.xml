@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.onu.domain.UniRateLimitTemplate">
+	<select id="queryTemplateList" parameterType="long" resultType="uniRateLimitTemplate">
+		SELECT *
+		FROM uniratelimittemplate
+		WHERE entityId = #{entityId}
+	</select>
+	
+	<select id="selectTemplateById" parameterType="map" resultType="uniRateLimitTemplate">
+		SELECT *
+		FROM uniratelimittemplate
+		WHERE entityId = #{entityId} and templateId = #{templateId}
+	</select>
+	
+	<insert id="insertTemplate" parameterType="uniRateLimitTemplate">
+		INSERT INTO uniratelimittemplate
+		(templateName,entityId,portInLimitEnable,portInCIR,portInCBS,portInEBS,
+		portOutLimtEnable,portOutCIR,portOutPIR,createTime,updateTime)
+		VALUES 
+		(#{templateName},
+		#{entityId},
+		#{portInLimitEnable}, 
+		#{portInCIR},
+		#{portInCBS},
+		#{portInEBS},
+		#{portOutLimtEnable},
+		#{portOutCIR},
+		#{portOutPIR},
+		#{createTime},
+		#{updateTime})
+	</insert>
+	
+	<update id="updateTemplate" parameterType="uniRateLimitTemplate">
+		UPDATE uniratelimittemplate
+		SET templateName = #{templateName}, portInLimitEnable = #{portInLimitEnable},
+			portInCIR = #{portInCIR}, portInCBS = #{portInCBS}, portInEBS = #{portInEBS}, 
+			portOutLimtEnable = #{portOutLimtEnable}, portOutCIR = #{portOutCIR},
+			portOutPIR = #{portOutPIR}, updateTime = #{updateTime}
+		WHERE templateId = #{templateId}
+	</update>
+	
+	<delete id="deleteTemplate" parameterType="int">
+		DELETE FROM uniratelimittemplate
+		WHERE templateId = #{templateId}
+	</delete>
+	
+	<update id="updateUniPortRateLimit" parameterType="uniRateLimitTemplate">
+		UPDATE
+		oltUniRateLimit set
+		uniPortInRateLimitEnable =
+		#{portInLimitEnable} ,
+		uniPortOutRateLimitEnable =
+		#{portOutLimtEnable}
+		<if test="portInCIR != null">
+		 ,uniPortInCIR = #{portInCIR}
+		</if>
+		<if test="portInCBS != null">
+			,uniPortInCBS =	#{portInCBS}
+		</if>
+		<if test="portInEBS != null">
+			,uniPortInEBS = #{portInEBS}
+		</if>
+		<if test="portOutPIR != null">
+			,uniPortOutPIR = #{portOutPIR}
+		</if>
+		<if test="portOutCIR != null">
+			,uniPortOutCIR = #{portOutCIR}
+		</if>
+		WHERE entityId = #{entityId} and uniId = #{uniId}
+	</update>
+</mapper>

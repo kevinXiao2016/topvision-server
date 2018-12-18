@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="OltDhcpVif">
+
+	<select id="getOltDhcpVifCfgs" parameterType="long" resultType="topOltDhcpVifCfg">
+		select * from topOltDhcpVifCfg where entityId = #{entityId}
+	</select>
+	
+	<select id="getOltDhcpVifCfg" parameterType="map" resultType="topOltDhcpVifCfg">
+		select * from topOltDhcpVifCfg where entityId = #{entityId}
+			and topOltDhcpVifIndex = #{vifIndex} and topOltDhcpVifOpt60StrIndex = #{opt60StrIndex}
+	</select>
+	
+	<insert id="insertOltDhcpVifCfg" parameterType="topOltDhcpVifCfg">
+		insert into topOltDhcpVifCfg
+            (entityId,topOltDhcpVifIndex,topOltDhcpVifOpt60StrIndex,topOltDhcpVifAgentAddr,
+            topOltDhcpVifServerGroup)
+        values
+            (#{entityId},#{topOltDhcpVifIndex},#{topOltDhcpVifOpt60StrIndex},#{topOltDhcpVifAgentAddr},
+            #{topOltDhcpVifServerGroup})
+	</insert>
+	
+	<update id="updateOltDhcpVifCfg" parameterType="topOltDhcpVifCfg">
+		update topOltDhcpVifCfg
+		set topOltDhcpVifAgentAddr = #{topOltDhcpVifAgentAddr},
+			topOltDhcpVifServerGroup = #{topOltDhcpVifServerGroup}
+		where entityId = #{entityId} and topOltDhcpVifIndex = #{topOltDhcpVifIndex} and
+			topOltDhcpVifOpt60StrIndex = #{topOltDhcpVifOpt60StrIndex}
+	</update>
+	
+	<delete id="deleteOltDhcpVifCfg" parameterType="map">
+		delete from topOltDhcpVifCfg 
+		where entityId = #{entityId} and topOltDhcpVifIndex = #{vifIndex} and
+			topOltDhcpVifOpt60StrIndex = #{opt60StrIndex}
+	</delete>
+	
+	<select id="getOltLogicInterfaceByType" parameterType="map" resultType="logicInterface">
+		select * from oltlogicInterface oli
+		left join topoltdhcpvlancfg odv 
+		on oli.entityId = odv.entityId and oli.interfaceId = odv.topOltDhcpVLANIndex
+		where oli.entityId = #{entityId} and oli.interfaceType = #{interfaceType}
+			and odv.topOltDhcpVLANMode = 2
+	</select>
+
+</mapper>

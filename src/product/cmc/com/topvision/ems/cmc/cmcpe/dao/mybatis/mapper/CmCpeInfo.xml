@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.cmcpe.domain.CmCpeInfo">
+	<select id="selectCmCpeList" parameterType="map" resultType="cmCpeInfo">
+		SELECT DISTINCT 
+		    A.topCmCpeIpAddress AS cpeIp,
+		    A.topCmCpeMacAddress AS cpeMac,
+		    B.StatusMacAddress AS cmMac,
+		    B.displayIp AS cmIp,
+		    C.ip AS cmcIp,
+		    C.`name` AS cmcAlias
+		FROM
+		    cmcpe AS A 
+		    LEFT JOIN cmattribute AS B ON A.cmId = B.cmId
+		    LEFT JOIN entity AS C ON B.cmcId = C.entityId
+		<if test = "queryContent != null" >
+		WHERE 
+		  A.topCmCpeIpAddress in 
+		  <foreach item="item" index="index" collection="queryContent" open="(" separator="," close=")">
+                #{item}
+          </foreach>
+		  OR A.topCmCpeMacAddress in 
+		  <foreach item="item" index="index" collection="queryContent" open="(" separator="," close=")">
+                #{item}
+          </foreach>
+          OR C.name in
+          <foreach item="item" index="index" collection="queryContent" open="(" separator="," close=")">
+                #{item}
+          </foreach>
+          OR C.ip in
+          <foreach item="item" index="index" collection="queryContent" open="(" separator="," close=")">
+                #{item}
+          </foreach>
+		</if >
+		LIMIT ${start}, ${limit}
+	</select>
+	<select id="selectCmCpeListNum" parameterType="map" resultType="int">
+		SELECT
+            count(*)
+        FROM
+            cmcpe AS A 
+            LEFT JOIN cmattribute AS B ON A.cmId = B.cmId
+            LEFT JOIN entity AS C ON B.cmcId = C.entityId
+        <if test = "queryContent != null" >
+        WHERE 
+          A.topCmCpeIpAddress in 
+          <foreach item="item" index="index" collection="queryContent" open="(" separator="," close=")">
+                #{item}
+          </foreach>
+          OR A.topCmCpeMacAddress in 
+          <foreach item="item" index="index" collection="queryContent" open="(" separator="," close=")">
+                #{item}
+          </foreach>
+          OR C.name in
+          <foreach item="item" index="index" collection="queryContent" open="(" separator="," close=")">
+                #{item}
+          </foreach>
+          OR C.ip in
+          <foreach item="item" index="index" collection="queryContent" open="(" separator="," close=")">
+                #{item}
+          </foreach>
+        </if >
+	</select>
+</mapper>

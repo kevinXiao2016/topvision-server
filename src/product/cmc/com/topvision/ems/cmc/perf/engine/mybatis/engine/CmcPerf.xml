@@ -1,0 +1,1518 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.perf.domain.CmcPerf">
+    <!-- ################################## select start ####################################### -->
+    <select id="isExistCmc" parameterType="long" resultType="long">
+        select cmcId from cmcentityrelation where cmcId =
+        #{cmcId}
+    </select>
+    <select id="getTopoEntityIdByCmcId" parameterType="long"  resultType="long">
+        select entityId from entity where parentId=#{cmcId} and typeId in 
+        (select typeId from entitytyperelation where type = #{type})
+    </select>
+    <select id="selectNoiseRateCount" resultType="long">
+        select
+        count(1)
+        from
+        perfcmcsnrqualitylast a , cmcAttribute b, cmcportrelation c,entity d,entity e
+        where a.cmcId = b.cmcId AND c.cmcId = a.cmcId AND c.channellIndex = a.channelIndex 
+        and a.cmcId = d.entityId and d.parentId = e.entityId
+        and d.entityId in (select entityId from ${Authority})
+        <if test="name != null and name !=''">
+            and (d.name like '%${name}%' or d.ip like '%${name}%' or b.topCcmtsSysMacAddr like '%${name}%')
+        </if>
+        <if test="deviceType != -1 and deviceType != null">
+            and d.typeId = #{deviceType}
+        </if>
+    </select>
+
+    <!-- ################################## select end ######################################### -->
+
+    <select id="getCmStatusMonitorId" parameterType="long" resultType="long">
+        select monitorId from perfmonitor where
+        identifyKey=#{entityId} and
+        category='CC_CMSTATUS'
+    </select>
+
+    <select id="getCpeStatusMonitorId" parameterType="long" resultType="long">
+        select monitorId from perfmonitor where
+        identifyKey=#{entityId} and
+        category='CPE_CMSTATUS'
+    </select>
+    <select id="getSpectrumMonitorId" parameterType="long" resultType="long">
+        select monitorId from perfmonitor where
+        identifyKey=#{cmcId} and
+        category='CC_CCSPECTRUM'
+    </select>
+    <select id="getAllSpectrumMonitor" resultType="scheduleMessage">
+        select
+            monitorId,identifyKey,category,snmpParam as    snmpParamString
+        from
+            PerfMonitor 
+        where
+            category='CC_CCSPECTRUM'
+    </select>
+
+    <update id="changeCmStatusOffine" parameterType="long">
+        update cmattribute set StatusValue=1 where cmcId = #{cmcId}
+    </update>
+    <update id="updateCcmtsIfSpeed" parameterType="map">
+        UPDATE cmcportattribute
+        SET ifSpeed=#{ifSpeed}
+        WHERE cmcId =
+        #{cmcId} AND ifIndex = #{ifIndex}
+    </update>
+    <update id="updateCcmtsSysStatus" parameterType="map">
+        update cmcattribute set topCcmtsSysStatus=#{status} where
+        cmcId=#{cmcId};
+    </update>
+    <update id="updateCcmtsPortStatus" parameterType="map">
+        update cmcportattribute set
+        ifOperStatus=#{ifOperStatus} ,
+        ifAdminStatus=#{ifAdminStatus}
+        where cmcId=#{cmcId}
+        <if test="ifIndex != null">
+            AND ifIndex =
+            #{ifIndex}
+        </if>
+    </update>
+    <insert id="insertCmcCpuQuality" parameterType="map">
+        insert into
+        perfcmccpuquality
+        (cmcId,
+        collectValue,
+        collectTime)
+        values
+        (#{cmcId},
+        #{collectValue}, #{collectTime})
+    </insert>
+    <insert id="insertCmcMemQuality" parameterType="map">
+        insert into
+        perfcmcmemquality
+        (cmcId,
+        collectValue,
+        collectTime)
+        values
+        (#{cmcId},
+        #{collectValue}, #{collectTime})
+    </insert>
+    <insert id="insertCmcFlashQuality" parameterType="map">
+        insert into
+        perfcmcflashquality
+        (cmcId,
+        collectValue,
+        collectTime)
+        values
+        (#{cmcId},
+        #{collectValue}, #{collectTime})
+    </insert>
+    
+    <insert id="insertCmcSnrQuality" parameterType="map">
+        insert into
+        perfcmcsnrquality
+        (cmcId,channelIndex, collectValue,
+        collectTime)
+        values
+        (#{cmcId},#{channelIndex},
+        #{collectValue},
+        #{collectTime})
+    </insert>
+    <insert id="batchInsertCmcSnrQuality" parameterType="List">
+        insert into
+        perfcmcsnrquality
+        (cmcId,channelIndex, collectValue,
+        collectTime)
+        values
+        <foreach collection="list" item="snr" index="index" separator="," >
+        (#{snr.cmcId},#{snr.channelIndex},
+        #{snr.collectValue},
+        #{snr.collectTime})
+        </foreach>
+    </insert>
+    
+    <update id="syncCmcSnrQuality" parameterType="cmcSnrQuality">
+        update
+        cmcupchannelsignalqualityinfo 
+        set
+        docsIfSigQSignalNoise=#{collectValue} 
+        where cmcId=#{cmcId} and channelIndex=#{channelIndex}
+    </update>
+    <update id="batchSyncCmcSnrQuality" parameterType="list">
+    	<foreach collection="list" item="snr" index="index" separator=";" >
+        update
+        cmcupchannelsignalqualityinfo 
+        set
+        docsIfSigQSignalNoise=#{snr.collectValue} 
+        where cmcId=#{snr.cmcId} and channelIndex=#{snr.channelIndex}
+    	</foreach>
+    </update>
+    
+    <insert id="insertNoiseSummary" parameterType="map">        
+        INSERT INTO perfnoiseSummary(entityId,cmcId,ifindex,noise,noiseMin,dt,summarized)       
+        values((select cmcentityId from cmcentityrelation where cmcId =#{cmcId}),
+        #{cmcId},#{channelIndex},#{collectValue},#{collectValue},#{collectTime},0)    
+    </insert> 
+    <insert id="batchInsertNoiseSummary" parameterType="List">        
+        INSERT INTO 
+        	perfnoiseSummary(entityId,cmcId,ifindex,noise,noiseMin,dt,summarized)       
+        values
+        <foreach collection="list" item="noise" index="index" separator="," >
+        	((select cmcentityId from cmcentityrelation where cmcId =#{noise.cmcId}), 
+        	#{noise.cmcId}, #{noise.channelIndex}, #{noise.collectValue}, #{noise.collectValue}, #{noise.collectTime}, 0) 
+        </foreach>   
+    </insert>
+           
+    <insert id="insertCmcErrorCodeQuality" parameterType="map">
+        insert into
+        perfcmcerrorcodequality
+        (cmcId,channelIndex,
+        ccerCode,ucerCode,ccerRate,ucerRate,noerCode,noerRate,
+        collectTime)
+        values
+        (#{cmcId},#{channelIndex},
+        #{ccerCode},#{ucerCode},#{ccerRate},#{ucerRate},#{noerCode},#{noerRate},
+        #{collectTime})
+    </insert>
+    <insert id="batchInsertCmcErrorCodeQuality" parameterType="List">
+        insert into
+        perfcmcerrorcodequality
+        (cmcId,channelIndex,
+        ccerCode,ucerCode,ccerRate,ucerRate,noerCode,noerRate,
+        collectTime)
+        values
+        <foreach collection="list" item="noise" index="index" separator="," >
+        (#{noise.cmcId},#{noise.channelIndex},
+        #{noise.ccerCode},#{noise.ucerCode},#{noise.ccerRate},#{noise.ucerRate},#{noise.noerCode},#{noise.noerRate},
+        #{noise.collectTime})
+        </foreach>   
+    </insert>
+    
+    <insert id="insertCmcLinkQuality" parameterType="cmcLinkQualityData">
+        insert into
+        perfcmclinkquality
+        (cmcId, portIndex,
+        optTxPower,
+        optRePower,
+        optCurrent,
+        optVoltage,
+        optTemp,
+        collectTime
+        )
+        values
+        (#{cmcId},
+        #{portIndex},
+        #{optTxPowerFloat},
+        #{optRePowerFloat},
+        #{optCurrentFloat},
+        #{optVoltageFloat},
+        #{optTempFloat},
+        #{collectTime}
+        )
+    </insert>
+    <insert id="batchInsertCmcLinkQuality" parameterType="List">
+        insert into
+        perfcmclinkquality
+        (cmcId, portIndex,
+        optTxPower,
+        optRePower,
+        optCurrent,
+        optVoltage,
+        optTemp,
+        collectTime
+        )
+        values
+        <foreach collection="list" item="link" index="index" separator="," >
+        (#{link.cmcId},
+        #{link.portIndex},
+        #{link.optTxPowerFloat},
+        #{link.optRePowerFloat},
+        #{link.optCurrentFloat},
+        #{link.optVoltageFloat},
+        #{link.optTempFloat},
+        #{link.collectTime}
+        )
+        </foreach>
+    </insert>
+
+    <insert id="insertCmcCmNumberQuality" parameterType="cmcCmNumber">
+        insert into
+        perfCmcCmNumberQuality(cmcId, channelIndex, topCcmtsCmNumTotal,
+        topCcmtsCmNumOutline, topCcmtsCmNumOnline, collectTime)
+        VALUES
+        (#{cmcId},#{channelIndex},#{cmNumTotal},#{cmNumOnline},#{cmNumOffline},#{collectTime})
+    </insert>
+    <insert id="batchInsertCmcCmNumberQuality" parameterType="List">
+        insert into
+        perfCmcCmNumberQuality(cmcId, channelIndex, topCcmtsCmNumTotal,
+        topCcmtsCmNumOutline, topCcmtsCmNumOnline, collectTime)
+        VALUES
+        <foreach collection="list" item="cmc" index="index" separator="," >
+        (#{cmc.cmcId},#{cmc.channelIndex},#{cmc.cmNumTotal},#{cmc.cmNumOnline},#{cmc.cmNumOffline},#{cmc.collectTime})
+        </foreach>
+    </insert>
+    
+    <insert id="insertCmcFlowQuality" parameterType="cmcFlowQuality">
+        insert into
+        perfcmcflowquality
+        (cmcId, channelIndex, channelInOctets,
+        channelOutOctets, channelOctets,
+        channelInSpeed,channelOutSpeed,
+        channelUtilization,
+        collectTime,portBandWidth
+        )
+        values
+        (#{cmcId}, #{ifIndex}, #{ifInOctets}, #{ifOutOctets},
+        #{ifOctets},#{ifInSpeed},#{ifOutSpeed},
+        #{ifUtilization},
+        #{collectTime},#{ifHighSpeed}
+        )
+    </insert>
+    <insert id="batchInsertCmcFlowQuality" parameterType="List">
+        insert into
+        perfcmcflowquality
+        (cmcId, channelIndex, channelInOctets,
+        channelOutOctets, channelOctets,
+        channelInSpeed,channelOutSpeed,
+        channelUtilization,
+        collectTime,portBandWidth
+        )
+        values
+        <foreach collection="list" item="flow" index="index" separator="," >
+        (#{flow.cmcId}, #{flow.ifIndex}, #{flow.ifInOctets}, #{flow.ifOutOctets},
+        #{flow.ifOctets},#{flow.ifInSpeed},#{flow.ifOutSpeed},
+        #{flow.ifUtilization},
+        #{flow.collectTime},#{flow.ifHighSpeed}
+        )
+        </foreach>
+    </insert>
+    
+    <insert id="insertCmcTempQuality" parameterType="cmcTempQualityFor8800B">
+        insert into perfcmctempquality
+        (cmcId, cmcIndex, usTemp, dsTemp, outsideTemp, insideTemp,
+        collectTime
+        )
+        values
+        (#{cmcId}, #{cmcIndex}, #{usModuleTemp}, #{dsModuleTemp},
+        #{outsideTemp}, #{insideTemp},
+        #{collectTime}
+        )
+    </insert>
+    <insert id="batchInsertCmcTempQuality" parameterType="List">
+        insert into perfcmctempquality
+        (cmcId, cmcIndex, usTemp, dsTemp, outsideTemp, insideTemp,
+        collectTime
+        )
+        values
+        <foreach collection="list" item="temp" index="index" separator="," >
+        (#{temp.cmcId}, #{temp.cmcIndex}, #{temp.usModuleTemp}, #{temp.dsModuleTemp},
+        #{temp.outsideTemp}, #{temp.insideTemp},
+        #{temp.collectTime}
+        )
+        </foreach>
+    </insert>
+
+    <select id="getCmcPerformanceMonitorId" parameterType="map" resultType="int">
+        select monitorId from perfmonitor
+        where
+        identifyKey=#{cmcId} and
+        category=#{category}
+    </select>
+
+     <!-- ################################## 昆山设备不在线临时解决方�?######################################### -->
+       <update id="updateCmcStatus" parameterType="cmcServiceQuality">
+        update CmcAttribute set 
+        topCcmtsSysRAMRatio = #{topCcmtsSysRAMRatio},
+        topCcmtsSysCPURatio = #{topCcmtsSysCPURatio},
+        topCcmtsSysFlashRatio = #{topCcmtsSysFlashRatio},
+        topCcmtsSysUpTime = #{topCcmtsSysUpTime}, 
+        topCcmtsSysStatus = #{topCcmtsSysStatus} 
+        where cmcId = #{cmcId}
+    </update>
+    <!-- ################################## 昆山设备不在线临时解决方�?######################################### -->
+
+    <select id="selectLastNoise" resultType="singleNoise">
+        select * from perfcmcsnrqualitylast where
+        cmcId=#{cmcId} and
+        channelIndex=#{ifIndex}
+    </select>
+    <select id="getDeviceCcmtsCpuLoadingTop" resultType="com.topvision.ems.cmc.domain.Cmc">
+       select
+        a.cmcId,a.cmcDeviceStyle,a.topCcmtsSysName,ifnull(a.nmname,
+        a.topCcmtsSysName) nmname,
+        a.topCcmtsSysCPURatio,a.topCcmtsSysMacAddrLong,
+        a.dt snapTime
+        FROM
+        cmcattribute a
+        ORDER BY a.topCcmtsSysCPURatio DESC limit 0, 10
+    </select>
+
+    <select id="getDeviceCcmtsMemLoadingTop" resultType="com.topvision.ems.cmc.domain.Cmc">
+       select
+        a.cmcId,a.cmcDeviceStyle,a.topCcmtsSysName,ifnull(a.nmname,
+        a.topCcmtsSysName) nmname,
+        a.topCcmtsSysRAMRatio,a.topCcmtsSysMacAddrLong,
+        a.dt snapTime
+        FROM
+        cmcattribute a
+        ORDER BY a.topCcmtsSysRAMRatio DESC limit 0, 10
+    </select>
+    <insert id="insertLastNoise" parameterType="singleNoise">
+        INSERT
+        INTO
+        perfcmcsnrqualitylast (cmcId, channelIndex,collectValue,collectTime)
+        VALUES (
+        #{cmcId}, #{ifIndex}, #{noise}, #{dt})
+    </insert>
+    <insert id="insertHisNoise" parameterType="singleNoise">
+        INSERT
+        INTO
+        perfcmcsnrqualitylast (cmcId, channelIndex,collectValue,collectTime)
+        VALUES (
+        #{cmcId}, #{ifIndex}, #{noise}, #{dt})
+    </insert>
+    <update id="updateLastNoise" parameterType="singleNoise">
+        UPDATE
+        perfcmcsnrqualitylast
+        SET collectValue = #{noise},
+        collectTime = #{dt}
+        WHERE
+        cmcId=#{cmcId} and
+        channelIndex=#{ifIndex}
+    </update>
+    <select id="selectLastChannelUtilization" resultType="channelUtilization">
+        select *
+        from PerfChannelUtilizationLast where
+        entityId=#{entityId} and
+        cmcId=#{cmcId} and
+        channelIndex=#{channelIndex}
+    </select>
+    <select id="getTopPortletErrorCodesLoading" parameterType="map" resultType="UsBitErrorRate">
+        select 
+        a.cmcId entityId,
+        a.cmcId,
+        a.channelIndex,
+        a.ccerValue ccerRate,
+        a.ucerValue ucerRate,
+        (a.ccerValue + a.ucerValue) as errorRate,
+        a.collectTime dt,
+        ifnull(d.name, b.topCcmtsSysName) as cmcName,
+        b.topCcmtsSysMacAddr as macAddress,
+        b.cmcDeviceStyle as cmcType,
+        c.cmcPortId,
+        H.ifType, 
+        H.ifDescr
+        from 
+        (select 
+        cmcId, channelIndex , collectTime,
+        sum(ccerRate) ccerValue,
+        sum(ucerRate) ucerValue
+        from perfcmcerrorcodequalitylast
+        group by cmcId, channelIndex, collectTime
+        ) a , cmcAttribute b , cmcportrelation c, entity d, entity V, cmcportattribute H
+        where a.cmcId = V.entityId and a.cmcId = d.entityId 
+        and a.cmcId = b.cmcId 
+        AND c.cmcId = a.cmcId 
+        AND c.channellIndex = a.channelIndex
+        and C.cmcPortId = H.cmcPortId
+        and V.entityId in (select entityId from ${Authority})
+        order by
+        ccerValue desc,a.cmcId,a.channelIndex ASC 
+        limit #{start}, #{limit}  
+    </select>
+    
+    <select id="getChannelBerRateList" parameterType="map" resultType="UsBitErrorRate">
+        select 
+        a.cmcId entityId,
+        a.cmcId,
+        a.channelIndex,
+        a.ccerRate,
+        a.ucerRate,
+        (a.ccerRate + a.ucerRate)  errorRate,
+        a.collectTime,
+        b.topCcmtsSysName cmcName,
+        b.topCcmtsSysMacAddr  macAddress,
+        b.cmcDeviceStyle  cmcType,
+        IFNULL(d.ip,(SELECT e2.ip FROM entity e1, entity e2 WHERE e1.parentId=e2.entityId AND e1.entityId=d.entityId )) ip,
+        type.displayName,
+        c.cmcPortId,
+        d.parentId,
+        H.ifType, 
+        H.ifDescr
+        from perfcmcerrorcodequalitylast a, 
+        cmcAttribute b, cmcportrelation c, 
+        entity d,cmcportattribute H,
+        entityType type,entity F
+        where a.cmcId = d.entityId and d.parentId = F.entityId
+        and B.cmcDeviceStyle = type.typeId
+        and a.cmcId = b.cmcId 
+        AND c.cmcId = a.cmcId 
+        AND c.channellIndex = a.channelIndex
+        and C.cmcPortId = H.cmcPortId
+        and d.entityId in (select entityId from ${Authority})
+        <if test="name != null and name !=''">
+            and (b.topCcmtsSysName like '%${name}%' or b.topCcmtsSysMacAddr like '%${name}%'  or F.ip like '%${name}%')
+        </if>
+        <if test="deviceType != -1 and deviceType != null">
+            and b.cmcDeviceStyle = #{deviceType}
+        </if>
+        <if test="sort != null and dir != null">
+            order by ${sort} ${dir}
+        </if>
+        <if test="sort == null and dir == null">
+            order by a.ccerRate desc,a.cmcId,a.channelIndex ASC 
+        </if>
+        <if test="start != -1 and limit != -1">
+             limit #{start}, #{limit}  
+        </if>
+    </select>
+    
+    <select id="getChannelBerRateListCount" parameterType="map" resultType="int">
+        select count(a.channelIndex)
+        from 
+        (select 
+        cmcId, channelIndex , collectTime,
+        sum(ccerRate) ccerValue,
+        sum(ucerRate) ucerValue
+        from perfcmcerrorcodequalitylast
+        group by cmcId, channelIndex, collectTime
+        ) a , cmcAttribute b , cmcportrelation c, entity d, entity F, cmcportattribute H
+        where d.parentId = F.entityId and a.cmcId = d.entityId 
+        and a.cmcId = b.cmcId 
+        AND c.cmcId = a.cmcId 
+        AND c.channellIndex = a.channelIndex
+        and C.cmcPortId = H.cmcPortId
+        and d.entityId in (select entityId from ${Authority})
+        <if test="name != null and name !=''">
+            and (b.topCcmtsSysName like '%${name}%' or b.topCcmtsSysMacAddr like '%${name}%'  or F.ip like '%${name}%')
+        </if>
+        <if test="deviceType != -1 and deviceType != null">
+            and b.cmcDeviceStyle = #{deviceType}
+        </if>
+    </select>
+    
+    <select id="getErrorCodesByPortId" parameterType="map" resultType="UsBitErrorRate">
+        select
+        cmcId,
+        channelIndex,
+        ccerRate bitErrorRate
+        from
+        perfcmcerrorcodequalitylast
+        where
+        cmcId = #{cmcId} and
+        channelIndex = #{portIndex}
+    </select>
+    
+     <select id="getUnErrorCodesByPortId" parameterType="map" resultType="UsBitErrorRate">
+       select
+        cmcId,
+        channelIndex,
+        ucerRate unBitErrorRate
+        from
+        perfcmcerrorcodequalitylast
+        where
+        cmcId = #{cmcId} and
+        channelIndex =
+        #{portIndex} 
+    </select>
+    <select id="getTopPortletFlapInsGrowthLoading" parameterType="map" resultType="cmFlap">
+        SELECT
+            cmflaphis.cmId cmId,
+            MAX(cmflaphis.collectTime) dt,
+            T.cmcId cmcId,
+            T.topCcmtsSysMacAddr cmcMac,
+            T.topCmFlapMacAddr,
+            T.ccname cmcName,
+            T.cctype cmcType,
+            T.increaseInsNum
+        FROM cmflaphis
+        INNER JOIN (
+            SELECT  
+                a.*,
+                b.topCcmtsSysMacAddr,
+                ifnull(c.name, b.topCcmtsSysName) ccname,       
+                b.cmcDeviceStyle cctype
+            FROM 
+                cmflap a,cmcattribute b, entity c
+            WHERE 
+                a.cmcId = c.entityId and b.topCcmtsSysStatus = 4 and b.cmcId = c.entityId and c.entityId in (select entityId from ${Authority}) and a.dt is not null
+            ORDER BY increaseInsNum DESC,a.cmcId,a.cmId ASC 
+            limit #{start}, #{limit}
+        ) T 
+        WHERE 
+            cmflaphis.cmId = T.cmId 
+        GROUP BY cmId
+        ORDER BY T.increaseInsNum DESC 
+    </select>
+    
+    <select id="getCmFlapInsList" parameterType="map" resultType="cmFlap">
+        SELECT
+            cmflaphis.cmId cmId,
+            MAX(cmflaphis.collectTime) dt,
+            T.cmcId cmcId,
+            T.topCcmtsSysMacAddr cmcMac,
+            T.topCmFlapMacAddr,
+            T.topCcmtsSysName cmcName,
+            T.cmcDeviceStyle cmcType,
+            T.increaseInsNum,
+            T.displayName,
+            T.parentId
+        FROM cmflaphis
+        INNER JOIN (
+            SELECT  
+                a.*,c.parentId,d.displayName,
+                b.topCcmtsSysMacAddr,
+                b.topCcmtsSysName,    
+                b.cmcDeviceStyle
+            FROM 
+                cmflap a,cmcattribute b, entity c,entityType d
+            WHERE 
+                a.cmcId = c.entityId and b.topCcmtsSysStatus = 4 and b.cmcId = c.entityId 
+                and c.entityId in (select entityId from ${Authority}) and a.dt is not null
+                and b.cmcDeviceStyle = d.typeId
+                <if test="name != null and name !=''">
+                    and (b.topCcmtsSysName like '%${name}%' or a.topCmFlapMacAddr like '%${name}%')
+                </if>
+                <if test="deviceType != -1 and deviceType != null">
+                    and b.cmcDeviceStyle = #{deviceType}
+                </if>
+                <if test="sort != null and dir != null">
+                    order by ${sort} ${dir}
+                </if>
+                <if test="sort == null and dir == null">
+                    ORDER BY increaseInsNum DESC,a.cmId ASC 
+                </if>
+                <if test="start != -1 and limit != -1">
+                    limit #{start}, #{limit}  
+                </if>
+        ) T 
+        WHERE 
+            cmflaphis.cmId = T.cmId 
+        GROUP BY cmId
+    </select>
+    
+    <select id="getCmFlapInsCount" parameterType="map" resultType="int">
+        SELECT
+            cmflaphis.cmId cmId,
+            MAX(cmflaphis.collectTime) dt,
+            T.cmcId cmcId,
+            T.topCcmtsSysMacAddr cmcMac,
+            T.topCmFlapMacAddr,
+            T.ccname cmcName,
+            T.cctype cmcType,
+            T.increaseInsNum,
+            T.displayName,
+            T.parentId
+        FROM cmflaphis
+        INNER JOIN (
+            SELECT  
+                a.*,c.parentId,d.displayName,
+                b.topCcmtsSysMacAddr,
+                ifnull(c.name, b.topCcmtsSysName) ccname,       
+                b.cmcDeviceStyle cctype
+            FROM 
+                cmflap a,cmcattribute b, entity c,entityType d
+            WHERE 
+                a.cmcId = c.entityId and b.topCcmtsSysStatus = 4 and b.cmcId = c.entityId 
+                and c.entityId in (select entityId from ${Authority}) and a.dt is not null
+                and b.cmcDeviceStyle = d.typeId
+                <if test="name != null and name !=''">
+                    and (b.topCcmtsSysName like '%${name}%' or a.topCmFlapMacAddr like '%${name}%')
+                </if>
+                <if test="deviceType != -1 and deviceType != null">
+                    and b.cmcDeviceStyle = #{deviceType}
+                </if>
+        ) T 
+        WHERE 
+            cmflaphis.cmId = T.cmId 
+        GROUP BY cmId
+    </select>
+    
+    <select id="getTopLowNoiseLoading" parameterType="map" resultType="SingleNoise">
+       select
+        a.cmcId entityId,
+        a.cmcId,
+        a.channelIndex ifIndex,
+        a.collectValue noise,
+        a.collectTime dt,
+        ifnull(d.name, b.topCcmtsSysName)
+        as cmcName,
+        b.topCcmtsSysMacAddr as macAddress,
+        b.cmcDeviceStyle as
+        cmcType,
+        c.cmcPortId,
+        f.ifDescr,
+        f.ifType,
+        d.typeId
+        from
+        perfcmcsnrqualitylast a , cmcAttribute b,
+        cmcportrelation c,entity d, cmcportattribute f,
+        entity V
+        where
+        a.cmcId =
+        V.entityId and d.entityId = a.cmcId and (b.topCcmtsSysStatus=4 or d.status=1) and
+        a.collectValue!=0 and
+        a.cmcId = b.cmcId AND
+        c.cmcId = a.cmcId AND c.channellIndex = a.channelIndex
+        and
+        f.cmcId=b.cmcId and f.ifIndex=a.channelIndex and
+        f.ifOperStatus='1'
+        and
+        V.entityId in (select entityId from ${Authority})
+        order by
+        a.collectValue ASC ,a.cmcId,a.channelIndex ASC 
+        limit #{start}, #{limit}
+    </select>
+    <select id="selectNoiseRate" resultType="SingleNoise" parameterType="map">
+        select 
+        a.cmcId entityId,
+        a.cmcId,
+        a.channelIndex ifIndex,
+        a.collectValue noise,
+        a.collectTime dt,
+        d.name cmcName,
+        d.parentId,
+        b.topCcmtsSysMacAddr as macAddress,
+        b.cmcDeviceStyle as cmcType,
+        c.cmcPortId,
+        IFNULL(d.ip,(SELECT e2.ip FROM entity e1, entity e2 WHERE e1.parentId=e2.entityId AND e1.entityId=d.entityId )) ip,
+        type.displayName typeName,
+        f.ifDescr,
+        f.ifType
+        from 
+        perfcmcsnrqualitylast a , cmcAttribute b, cmcportrelation c,entity d,entity e,
+        cmcportattribute f, entityType type
+        where 
+        a.cmcId = d.entityId and   d.parentId = e.entityId and
+        a.cmcId = b.cmcId AND c.cmcId = a.cmcId AND c.channellIndex = a.channelIndex and f.cmcId=b.cmcId and f.ifIndex=a.channelIndex
+        and d.entityId in (select entityId from ${Authority}) and b.cmcDeviceStyle = type.typeId
+        <if test="name != null and name !=''">
+            and (d.name like '%${name}%' or e.ip like '%${name}%' or B.topCcmtsSysMacAddr like '%${name}%')
+        </if>
+        <if test="deviceType != -1 and deviceType != null">
+            and d.typeId = #{deviceType}
+        </if>
+        <if test="sort != null and dir != null">
+            order by ${sort} ${dir}
+        </if>
+        <if test="sort == null and dir == null">
+            order by a.collectValue desc ,a.cmcId,a.channelIndex
+        </if>
+        <if test="start != -1 and limit != -1">
+            limit #{start}, #{limit}  
+        </if>
+    </select>
+    <insert id="insertLastChannelUtilization" parameterType="channelUtilization">
+        INSERT
+        INTO PerfChannelUtilizationLast (entityId, cmcId,
+        channelIndex,channelUtilization,dt)
+        VALUES (#{entityId}, #{cmcId},
+        #{channelIndex}, #{channelUtilization}, #{dt})
+    </insert>
+    <insert id="insertHisChannelUtilization" parameterType="channelUtilization">
+        INSERT
+        INTO PerfChannelUtilizationHis(entityId, cmcId,
+        channelIndex,channelUtilization,dt)
+        VALUES (#{entityId}, #{cmcId},
+        #{channelIndex}, #{channelUtilization}, #{dt})
+    </insert>
+    <update id="updateLastChannelUtilization" parameterType="channelUtilization">
+        UPDATE
+        PerfChannelUtilizationLast
+        SET channelUtilization =
+        #{channelUtilization},
+        dt = #{dt}
+        WHERE
+        entityId=#{entityId} and
+        cmcId=#{cmcId} and
+        channelIndex=#{channelIndex}
+    </update>
+    <select id="getSNRMonitorId" parameterType="long" resultType="long">
+        select monitorId from perfmonitor where
+        identifyKey=#{cmcId} and
+        category='CC_NOISE'
+    </select>
+    <select id="getUpChannelIfIndexByCmcId" parameterType="long"
+        resultType="int">
+        SELECT a.channelIndex
+        FROM cmcupchannelbaseinfo a
+        WHERE a.cmcId=#{cmcId}
+    </select>
+    <select id="getIfIndexByCmcId" parameterType="map" resultType="int">
+        SELECT a.ifIndex
+        FROM cmcportattribute a
+        WHERE a.cmcId=#{cmcId} AND
+        a.ifType=#{ifType}
+    </select>
+    <select id="getSnrDataBetweenStartAndEnd" parameterType="map"
+        resultType="singleNoise">
+        SELECT a.noise,a.dt
+        FROM perfnoisehis a
+        WHERE
+        a.cmcId=#{cmcId} AND a.ifIndex=#{ifIndex} AND dt BETWEEN #{timeStart} AND
+        #{timeEnd}
+        ORDER BY a.dt ASC
+    </select>
+    <select id="selectNoiseHisPerf"  resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="com.topvision.ems.performance.domain.ViewerParam">
+        SELECT
+        a.collectValue/10 as y,
+        a.collectTime as xTime
+        FROM
+        perfcmcsnrquality a
+        where
+        a.cmcId=#{cmcId} and
+        a.channelIndex=#{index} and
+        a.collectTime
+        BETWEEN #{startTime} and #{endTime}
+        ORDER BY a.collectTime ASC
+    </select>
+    <select id="selectCpuHisPerf"  resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="com.topvision.ems.performance.domain.ViewerParam">
+        SELECT
+        a.cpuRatio AS y,
+        a.dt AS xTime
+        FROM
+        perfsystemhis AS a
+        where
+        a.cmcId=#{cmcId} and
+        a.dt BETWEEN #{startTime} and #{endTime}
+        ORDER BY a.dt ASC
+    </select>
+    <select id="selectMemHisPerf"  resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="com.topvision.ems.performance.domain.ViewerParam">
+        SELECT
+        a.memRatio AS y,
+        a.dt AS xTime
+        FROM
+        perfsystemhis AS a
+        where
+        a.cmcId=#{cmcId} and
+        a.dt BETWEEN #{startTime} and #{endTime}
+        ORDER BY a.dt ASC
+    </select>
+    <select id="getSnrDataBySize" parameterType="map" resultType="singleNoise">
+        SELECT a.noise,a.dt
+        FROM perfnoisehis a
+        WHERE a.cmcId=#{cmcId} AND
+        a.ifIndex=#{ifIndex}
+    </select>
+    <select id="getSnrDataCount" parameterType="map" resultType="long">
+        SELECT COUNT(a.dt)
+        FROM perfnoisehis a
+        WHERE a.cmcId=#{cmcId} AND
+        a.ifIndex=#{ifIndex}
+    </select>
+    <select id="getSNRPeriod" parameterType="long" resultType="int">
+        select period from perfmonitor where
+        identifyKey=#{cmcId} and
+        category='CC_NOISE'
+    </select>
+    <select id="getUtilizationDataBetweenStartAndEnd"
+        parameterType="map" resultType="channelUtilization">
+        SELECT a.channelUtilization,a.dt
+        FROM
+        perfchannelutilizationhis a
+        WHERE a.cmcId=#{cmcId} AND
+        a.channelIndex=#{ifIndex} AND dt BETWEEN #{timeStart} AND #{timeEnd}
+        ORDER BY a.dt ASC
+    </select>
+    <select id="getUtilizationDataBySize" parameterType="map"
+        resultType="channelUtilization">
+        SELECT a.channelUtilization,a.dt
+        FROM
+        perfchannelutilizationhis a
+        WHERE a.cmcId=#{cmcId} AND
+        a.channelIndex=#{ifIndex}
+    </select>
+    <select id="getUtilizationDataCount" parameterType="map"
+        resultType="long">
+        SELECT COUNT(a.dt)
+        FROM perfchannelutilizationhis a
+        WHERE
+        a.cmcId=#{cmcId} AND a.channelIndex=#{ifIndex}
+    </select>
+    <select id="getCmcAttributeByMacLong" parameterType="cmcAttribute" resultType="cmcAttribute">
+        select
+        a.cmcId,a.cmcDeviceStyle,a.topCcmtsSysDescr,a.topCcmtsSysObjectId,a.topCcmtsSysUpTime,
+        a.topCcmtsSysContact,a.topCcmtsSysName,ifnull(a.nmname, a.topCcmtsSysName) nmname,a.topCcmtsSysLocation,a.topCcmtsSysService,
+        a.topCcmtsSysORLastChange,a.topCcmtsDocsisBaseCapability,a.topCcmtsSysRAMRatio,
+        a.topCcmtsSysCPURatio,a.topCcmtsSysMacAddrLong,a.topCcmtsSysFlashRatio,a.topCcmtsSysStatus,
+        a.topCcmtsSysSwVersion
+        FROM
+        cmcattribute a 
+        where a.cmcId = #{cmcId} and a.topCcmtsSysMacAddrLong = #{topCcmtsSysMacAddrLong}
+    </select>
+    <insert id="insertSystemHis" parameterType="cmcAttribute">
+        INSERT
+        INTO perfsystemhis(cmcId, ifIndex, topCcmtsSysUpTime, cpuRatio,memRatio,dt)
+        VALUES (#{cmcId}, #{cmcIndex}, #{topCcmtsSysUpTime}, #{topCcmtsSysCPURatio}, #{topCcmtsSysRAMRatio}, #{dt})
+    </insert>
+    <update id="updateCmcAttribute" parameterType="cmcAttribute">
+        update
+        cmcattribute
+        set
+        cmcDeviceStyle=#{cmcDeviceStyle},
+        topCcmtsSysDescr=#{topCcmtsSysDescr},
+        topCcmtsSysObjectId=#{topCcmtsSysObjectId},
+        topCcmtsSysUpTime=#{topCcmtsSysUpTime},
+        topCcmtsSysContact=#{topCcmtsSysContact},
+        topCcmtsSysName=#{topCcmtsSysName},
+        topCcmtsSysLocation=#{topCcmtsSysLocation},
+        topCcmtsSysService=#{topCcmtsSysService},
+        topCcmtsSysORLastChange=#{topCcmtsSysORLastChange},
+        topCcmtsDocsisBaseCapability=#{topCcmtsDocsisBaseCapability},
+        topCcmtsSysRAMRatio=#{topCcmtsSysRAMRatio},
+        topCcmtsSysCPURatio=#{topCcmtsSysCPURatio},
+        topCcmtsSysMacAddrLong=#{topCcmtsSysMacAddrLong},
+        topCcmtsSysFlashRatio=#{topCcmtsSysFlashRatio},
+        topCcmtsSysMacAddr = #{topCcmtsSysMacAddr},
+        topCcmtsSysStatus = #{topCcmtsSysStatus},
+        topCcmtsSysSwVersion =#{topCcmtsSysSwVersion},
+        dt = #{dt}
+        where cmcId=#{cmcId}
+    </update>
+    <select id="getMonitorId" parameterType="map" resultType="long">
+        select monitorId from perfmonitor where
+        identifyKey=#{cmcId} and
+        category=#{category}
+    </select>
+    <select id="getPeriod" parameterType="map" resultType="int">
+        select period from perfmonitor where
+        identifyKey=#{cmcId} and
+        category=#{category}
+    </select>
+    <select id="getTopChnlUtiliLoading" parameterType="map" resultType="portalChannelUtilization"> 
+        select
+            A.cmcId entityId, A.cmcId, A.channelIndex, A.channelUtilization channelUsed, A.collectTime dt,
+            C.ip, D.topCcmtsSysMacAddr AS cmcMac ,ifnull(F.name, d.topCcmtsSysName) as cmcName, D.cmcDeviceStyle as cmcType,
+            E.cmcPortId,G.ifDescr, G.ifType
+        FROM
+            perfcmcflowqualitylast A, cmcentityrelation B, entity C,
+            cmcattribute D , cmcportrelation E, entity F, cmcportattribute G
+        WHERE A.channelUtilization >= 0 AND A.cmcId = B.cmcId AND D.topCcmtsSysStatus = 4
+            AND B.cmcId = C.entityId AND A.cmcId = D.cmcId AND A.channelIndex = E.channellIndex AND A.cmcId = E.cmcId AND A.cmcId = F.entityId
+            AND E.cmcPortId = G.cmcPortId
+            and <![CDATA[A.channelUtilization < 100 ]]>
+            and C.entityId in (select entityId from ${Authority})
+        ORDER BY
+            A.channelUtilization DESC,A.cmcId,A.channelIndex ASC 
+        LIMIT #{start}, #{limit}
+    </select>
+    <select id="selectChannelUsed" parameterType="map" resultType="portalChannelUtilization"> 
+        select
+            A.cmcId entityId, A.cmcId, A.channelIndex, A.channelUtilization channelUsed, A.collectTime dt,
+            D.topCcmtsSysMacAddr cmcMac ,C.name cmcName, D.cmcDeviceStyle cmcType,
+            E.cmcPortId,G.ifDescr, G.ifType,C.parentId,
+            IFNULL(c.ip,(SELECT e2.ip FROM entity e1, entity e2 WHERE e1.parentId=e2.entityId AND e1.entityId=C.entityId )) ip,
+            type.displayName typeName
+        FROM
+            perfcmcflowqualitylast A, cmcentityrelation B, entity C,entity F,
+            cmcattribute D , cmcportrelation E, cmcportattribute G,EntityType type
+        WHERE A.channelUtilization >= 0 AND A.cmcId = B.cmcId and C.parentId = F.entityId
+            AND B.cmcId = C.entityId AND A.cmcId = D.cmcId AND A.channelIndex = E.channellIndex AND A.cmcId = E.cmcId AND A.cmcId = C.entityId
+            AND E.cmcPortId = G.cmcPortId and D.cmcDeviceStyle = type.typeId
+            and C.entityId in (select entityId from ${Authority})
+        <if test="name != null and name !=''">
+            and (C.name like '%${name}%' or F.ip like '%${name}%' or D.topCcmtsSysMacAddr like '%${name}%')
+        </if>
+        <if test="deviceType != -1 and deviceType != null">
+            and C.typeId = #{deviceType}
+        </if>
+        <if test="sort != null and dir != null">
+            order by ${sort} ${dir}
+        </if>
+        <if test="sort == null and dir == null">
+            order by
+             A.channelUtilization DESC,A.cmcId,A.channelIndex ASC 
+        </if>
+        <if test="start != -1 and limit != -1">
+            limit #{start}, #{limit}  
+        </if>
+    </select>
+    
+    <select id="selectChannelUsedCount" resultType="long">
+        select
+        count(1)
+        from
+        perfcmcflowqualitylast a , cmcAttribute b, cmcportrelation c,entity d,entity e
+        where a.cmcId = b.cmcId AND c.cmcId = a.cmcId AND c.channellIndex = a.channelIndex 
+        and a.cmcId = d.entityId and d.parentId = e.entityId
+        and d.entityId in (select entityId from ${Authority})
+        <if test="name != null and name !=''">
+            and (d.name like '%${name}%' or e.ip like '%${name}%' or b.topCcmtsSysMacAddr like '%${name}%')
+        </if>
+        <if test="deviceType != -1 and deviceType != null">
+            and d.typeId = #{deviceType}
+        </if>
+    </select>
+    
+    <select id="getChannelCmNumMonitorId" parameterType="long"
+        resultType="long">
+        select monitorId from perfmonitor where
+        identifyKey=#{cmcId} and
+        category='CC_CHANNELCMNUM'
+    </select>
+    <select id="getChannelCmPeriod" parameterType="long"
+        resultType="int">
+        select period from perfmonitor where
+        identifyKey=#{cmcId} and
+        category='CC_CHANNELCMNUM'
+    </select>
+    <select id="getUsBitErrorRatePeriod" parameterType="long"
+        resultType="int">
+        select period from perfmonitor where
+        identifyKey=#{cmcId} and
+        category='CC_USBITERRORRATE'
+    </select>
+    <select id="getUsBitErrorRateMonitorId" parameterType="long"
+        resultType="long">
+        select monitorId from perfmonitor where
+        identifyKey=#{cmcId} and
+        category='CC_USBITERRORRATE'
+    </select>
+
+    <select id="selectLastChannelCmNum" resultType="channelCmNum">
+        select * from
+        usernumlastport unlp
+        LEFT JOIN cmcentityrelation cer on (cer.cmcIndex is null and unlp.entityId = cer.cmcEntityId )  or (unlp.entityId = cer.cmcEntityId and unlp.ccIfIndex = cer.cmcIndex)
+        where
+        unlp.entityId=#{entityId} and
+        cer.cmcId=#{cmcId} and
+        unlp.portIfIndex=#{channelIndex}
+    </select>
+
+    <insert id="insertHisChannelCmNum" parameterType="channelCmNum">
+        INSERT
+        INTO
+        perfchannelcmnumhis(entityId, cmcId,
+        channelIndex,channelType,cmNumTotal,cmNumOnline,cmNumActive,cmNumUnregistered,cmNumOffline,CmNumRregistered,dt)
+        VALUES (#{entityId}, #{cmcId}, #{channelIndex}, #{channelType},
+        #{cmNumTotal},
+        #{cmNumOnline}, #{cmNumActive}, #{cmNumUnregistered},
+        #{cmNumOffline},
+        #{CmNumRregistered}, #{dt})
+    </insert>
+
+    <select id="selectLastUsBitErrorRate" resultType="usBitErrorRate">
+        select * from
+        perfusbiterrorratelast where
+        entityId=#{entityId} and
+        cmcId=#{cmcId} and
+        channelIndex=#{channelIndex}
+    </select>
+    <insert id="insertLastUsBitErrorRate" parameterType="usBitErrorRate">
+        INSERT
+        INTO
+        perfusbiterrorratelast(entityId, cmcId,
+        channelIndex,bitErrorRate,unBitErrorRate,dt)
+        VALUES (#{entityId},
+        #{cmcId}, #{channelIndex}, #{bitErrorRate}, #{unBitErrorRate},
+        #{dt})
+    </insert>
+    <insert id="insertHisUsBitErrorRate" parameterType="usBitErrorRate">
+        INSERT
+        INTO
+        perfusbiterrorratehis(entityId, cmcId,
+        channelIndex,bitErrorRate,unBitErrorRate,dt)
+        VALUES (#{entityId},
+        #{cmcId}, #{channelIndex}, #{bitErrorRate}, #{unBitErrorRate},
+        #{dt})
+    </insert>
+    <update id="updateLastUsBitErrorRate" parameterType="usBitErrorRate">
+        UPDATE
+        perfusbiterrorratelast
+        SET bitErrorRate = #{bitErrorRate},
+        dt = #{dt},
+        unBitErrorRate = #{unBitErrorRate}
+        WHERE
+        entityId=#{entityId} and
+        cmcId=#{cmcId} and
+        channelIndex=#{channelIndex}
+    </update>
+
+    <select id="getChannelSpeedStaticPeriod" parameterType="long"
+        resultType="int">
+        select period from perfmonitor where
+        identifyKey=#{cmcId} and
+        category='CC_CHANNELSPEEDSTATIC'
+    </select>
+    <select id="getChannelSpeedStaticMonitorId" parameterType="long"
+        resultType="long">
+        select monitorId from perfmonitor where
+        identifyKey=#{cmcId} and
+        category='CC_CHANNELSPEEDSTATIC'
+    </select>
+
+
+    <select id="selectLastChannelSpeedStatic" resultType="channelSpeedStatic">
+        select *
+        from PerfChannelSpeedStaticLast where
+        entityId=#{entityId} and
+        cmcId=#{cmcId} and
+        channelIndex=#{channelIndex}
+    </select>
+    <insert id="insertLastChannelSpeedStatic" parameterType="channelSpeedStatic">
+        INSERT
+        INTO PerfChannelSpeedStaticLast(entityId, cmcId,
+        channelIndex,channelType,channelInOctets,channelInOctetsRate,channelOutOctets,channelOutOctetsRate,channelOctetsRate,dt)
+        VALUES (#{entityId}, #{cmcId}, #{channelIndex}, #{channelType},
+        #{channelInOctets},#{channelInOctetsRate},#{channelOutOctets},#{channelOutOctetsRate},
+        #{channelOctetsRate},#{dt})
+    </insert>
+    <insert id="insertHisChannelSpeedStatic" parameterType="channelSpeedStatic">
+        INSERT
+        INTO PerfChannelSpeedStaticHis(entityId, cmcId,
+        channelIndex,channelType,channelInOctets,channelInOctetsRate,channelOutOctets,channelOutOctetsRate,channelOctetsRate,dt)
+        VALUES (#{entityId}, #{cmcId}, #{channelIndex}, #{channelType},
+        #{channelInOctets},#{channelInOctetsRate},#{channelOutOctets},#{channelOutOctetsRate},
+        #{channelOctetsRate},#{dt})
+    </insert>
+    <update id="updateLastChannelSpeedStatic" parameterType="channelSpeedStatic">
+        UPDATE
+        PerfChannelSpeedStaticLast
+        SET channelType = #{channelType},
+        dt = #{dt},
+        channelInOctetsRate = #{channelInOctetsRate},
+        channelOutOctetsRate = #{channelOutOctetsRate},
+        channelInOctets = #{channelInOctets},
+        channelOutOctets = #{channelOutOctets} ,
+        channelOctetsRate =
+        #{channelOctetsRate}
+        WHERE
+        entityId=#{entityId} and
+        cmcId=#{cmcId} and
+        channelIndex=#{channelIndex}
+    </update>
+    <select id="selectBitErrorRateHisPerf"  resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="com.topvision.ems.performance.domain.ViewerParam">
+           SELECT
+        a.ccerRate as y,
+        a.collectTime as xTime
+        FROM
+        perfcmcerrorcodequality a
+        where
+        a.cmcId=#{cmcId} and
+        a.channelIndex=#{index} and
+        a.collectTime
+        BETWEEN #{startTime} and #{endTime}
+        ORDER BY a.collectTime ASC
+    </select>
+    <select id="selectUnBitErrorRateHisPerf"  resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="com.topvision.ems.performance.domain.ViewerParam">
+        SELECT
+        a.ucerRate as y,
+        a.collectTime as xTime
+        FROM
+        perfcmcerrorcodequality a
+        where
+        a.cmcId=#{cmcId} and
+        a.channelIndex=#{index} and
+        a.collectTime
+        BETWEEN #{startTime} and #{endTime}
+        ORDER BY a.collectTime ASC
+    </select>
+    <select id="selectCmNumTotalHisPerf"  resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="com.topvision.ems.performance.domain.ViewerParam">
+        SELECT
+            (onlineNum + otherNum + offlineNum) as y,
+            a.realtime as xTime
+        FROM
+            usernumhisport a
+        where
+            a.entityId=#{entityId} and
+            a.portIfIndex=#{index} and
+            a.realtime BETWEEN #{startTime} and #{endTime}
+        ORDER BY a.realtime ASC 
+    </select>
+    <select id="selectCmNumOnlineHisPerf"  resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="com.topvision.ems.performance.domain.ViewerParam">
+        SELECT
+            onlineNum as y,
+            a.realtime as xTime
+        FROM
+            usernumhisport a
+        where
+            a.entityId=#{entityId} and
+            a.portIfIndex=#{index} and
+            a.realtime BETWEEN #{startTime} and #{endTime}
+        ORDER BY a.realtime ASC
+    </select>
+    <select id="selectCmNumActiveHisPerf"  resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="com.topvision.ems.performance.domain.ViewerParam">
+        SELECT
+            otherNum as y,
+            a.realtime as xTime
+        FROM
+            usernumhisport a
+        where
+            a.entityId=#{entityId} and
+            a.portIfIndex=#{index} and
+            a.realtime BETWEEN #{startTime} and #{endTime}
+        ORDER BY a.realtime ASC
+    </select>
+    
+    <select id="selectDsSpeedHisPerf"  resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="com.topvision.ems.performance.domain.ViewerParam">
+        SELECT
+            a.channelOutOctetsRate*8/1000000 as y,
+            a.dt as xTime
+        FROM
+            perfchannelspeedstatichis a
+        where
+            a.entityId=#{entityId} and
+            a.cmcId=#{cmcId} and
+            channelType = 1 and
+            a.channelIndex=#{index} and
+            a.dt BETWEEN #{startTime} and #{endTime}
+        ORDER BY a.dt ASC
+    </select>
+    <select id="selectCmNumUnregisteredHisPerf"  resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="com.topvision.ems.performance.domain.ViewerParam">
+        SELECT
+            cmNumUnregistered as y,
+            a.dt as xTime
+        FROM
+            perfchannelcmnumhis a
+        where
+            a.entityId=#{entityId} and
+            a.cmcId=#{cmcId} and
+            a.channelIndex=#{index} and
+            a.dt BETWEEN #{startTime} and #{endTime}
+        ORDER BY a.dt ASC
+    </select>
+    <select id="selectCmNumOfflineHisPerf"  resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="com.topvision.ems.performance.domain.ViewerParam">
+        SELECT
+            offlineNum as y,
+            a.realtime as xTime
+        FROM
+            usernumhisport a
+        where
+            a.entityId=#{entityId} and
+            a.portIfIndex=#{index} and
+            a.realtime BETWEEN #{startTime} and #{endTime}
+        ORDER BY a.realtime ASC
+    </select>
+    <select id="selectCmNumRegisteredHisPerf"  resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="com.topvision.ems.performance.domain.ViewerParam">
+        SELECT
+            CmNumRregistered as y,
+            a.dt as xTime
+        FROM
+            perfchannelcmnumhis a
+        where
+            a.entityId=#{entityId} and
+            a.cmcId=#{cmcId} and
+            a.channelIndex=#{index} and
+            a.dt BETWEEN #{startTime} and #{endTime}
+        ORDER BY a.dt ASC
+    </select>
+    <select id="selectChannelUtilizationHisPerf"  resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="com.topvision.ems.performance.domain.ViewerParam">
+       <![CDATA[
+        SELECT
+            if( a.channelUtilization < 0, 0, a.channelUtilization) AS y,
+            a.collectTime as xTime
+        FROM
+            perfcmcflowquality a
+        where
+            a.cmcId=#{cmcId} and
+            a.channelIndex=#{index} and
+            a.collectTime BETWEEN #{startTime} and #{endTime}
+            and a.channelUtilization < 100
+        ORDER BY a.collectTime ASC
+        ]]>
+    </select>
+    
+    <select id="selectUsSpeedHisPerf"  resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="com.topvision.ems.performance.domain.ViewerParam">
+        SELECT
+            a.channelInOctetsRate*8/1000000 as y,
+            a.dt as xTime
+        FROM
+            perfchannelspeedstatichis a
+        where
+            a.entityId=#{entityId} and
+            a.cmcId=#{cmcId} and
+            channelType = 0 and
+            a.channelIndex=#{index} and
+            a.dt BETWEEN #{startTime} and #{endTime}
+        ORDER BY a.dt ASC
+    </select>
+    
+    <select id="getCmTotalUsersNum" parameterType="map" resultType="channelCmNum">        
+        select unlp.entityId,
+        cer.cmcId,
+        unlp.portIfIndex channelIndex,
+        unlp.portType channelType,
+        unlp.onlineNum + unlp.offlineNum + unlp.otherNum cmNumTotal,
+        unlp.onlineNum cmNumOnline,
+        unlp.otherNum cmNumActive,
+        unlp.otherNum cmNumUnregistered,
+        unlp.offlineNum cmNumOffline,
+        unlp.onlineNum  CmNumRregistered,
+        unlp.time dt,
+        ca.topCcmtsSysMacAddr  cmcMac,
+        e.name cmcName,
+        e.parentId,
+        ca.cmcDeviceStyle  cmcType,
+        cpr.cmcPortId,
+        p.ifDescr,
+        p.ifType,
+        deType.displayName
+        from usernumlastport unlp
+        LEFT JOIN cmcentityrelation cer on (cer.cmcIndex is null and unlp.entityId = cer.cmcEntityId )  or (unlp.entityId = cer.cmcEntityId and unlp.ccIfIndex = cer.cmcIndex)
+        LEFT JOIN entity e on cer.cmcId = e.entityId
+        LEFT JOIN cmcattribute ca on ca.cmcId = cer.cmcId
+        LEFT JOIN cmcportrelation cpr on cer.cmcId = cpr.cmcId and unlp.portIfIndex = cpr.channellIndex
+        left join cmcportattribute p on p.cmcId = cpr.cmcId and p.ifIndex = cpr.channellIndex
+        LEFT JOIN entityType deType on deType.typeId = ca.cmcDeviceStyle
+        where cer.cmcId in (select entityId from ${Authority})
+        and unlp.portType = #{channelType}
+        <if test="name != null and name !=''">
+            and (e.name like '%${name}%' or ca.topCcmtsSysMacAddr like '%${name}%')
+        </if>
+        <if test="deviceType != -1 and deviceType != null">
+            and ca.cmcDeviceStyle = #{deviceType}
+        </if>
+        <if test="sort != null and dir != null">
+            order by ${sort} ${dir}
+        </if>
+        <if test="sort == null and dir == null">
+            ORDER BY cmNumTotal DESC,unlp.portIfIndex ASC
+        </if>
+        <if test="start != -1 and limit != -1">
+             limit #{start}, #{limit}  
+        </if>
+    </select>
+    
+    <select id="getCmTotalUsersCount" parameterType="map" resultType="int">        
+        select count(unlp.portIfIndex)
+        from usernumlastport unlp
+        LEFT JOIN cmcentityrelation cer on (cer.cmcIndex is null and unlp.entityId = cer.cmcEntityId )  or (unlp.entityId = cer.cmcEntityId and unlp.ccIfIndex = cer.cmcIndex)
+        LEFT JOIN entity e on cer.cmcId = e.entityId
+        LEFT JOIN cmcattribute ca on ca.cmcId = cer.cmcId
+        LEFT JOIN cmcportrelation cpr on cer.cmcId = cpr.cmcId and unlp.portIfIndex = cpr.channellIndex
+        left join cmcportattribute p on p.cmcId = cpr.cmcId and p.ifIndex = cpr.channellIndex
+        where cer.cmcId in (select entityId from ${Authority})
+        and unlp.portType = #{channelType}
+            <if test="name != null and name !=''">
+                and (e.name like '%${name}%' or ca.topCcmtsSysMacAddr like '%${name}%')
+            </if>
+            <if test="deviceType != -1 and deviceType != null">
+                and ca.cmcDeviceStyle = #{deviceType}
+            </if>
+    </select>
+    
+    <select id="getDevCmTotalUsersNum" parameterType="map" resultType="channelCmNum">         
+        select unlp.entityId,
+        cer.cmcId,
+        unlp.cmNumTotal,
+        unlp.cmNumOnline,
+        unlp.cmNumActive,
+        unlp.cmNumUnregistered,
+        unlp.cmNumOffline,
+        unlp.CmNumRregistered,
+        unlp.dt,
+        e.parentId,
+        ca.topCcmtsSysMacAddr cmcMac,
+        e.name cmcName,
+        ca.cmcDeviceStyle cmcType,
+        deType.displayName
+        from
+            (select entityId,
+                        ccIfIndex,
+            sum(onlineNum + offlineNum + otherNum) cmNumTotal,
+            sum(onlineNum) cmNumOnline,
+            sum(otherNum) cmNumActive,
+            sum(otherNum) cmNumUnregistered,
+            sum(offlineNum) cmNumOffline,
+            sum(onlineNum)  CmNumRregistered,
+            time dt from usernumlastccmts
+            group by entityId,ccIfIndex) unlp
+        LEFT JOIN cmcentityrelation cer on (cer.cmcIndex is null and unlp.entityId = cer.cmcEntityId )  or (unlp.entityId = cer.cmcEntityId and unlp.ccIfIndex = cer.cmcIndex)
+        LEFT JOIN entity e on cer.cmcId = e.entityId
+        LEFT JOIN cmcattribute ca on ca.cmcId = cer.cmcId
+        LEFT JOIN entityType deType on deType.typeId = ca.cmcDeviceStyle
+        where cer.cmcId in (select entityId from ${Authority})
+        <if test="name != null and name !=''">
+            and (e.name like '%${name}%' or ca.topCcmtsSysMacAddr like '%${name}%')
+        </if>
+        <if test="deviceType != -1 and deviceType != null">
+            and ca.cmcDeviceStyle = #{deviceType}
+        </if>
+        <if test="sort != null and dir != null">
+            order by ${sort} ${dir}
+        </if>
+        <if test="sort == null and dir == null">
+            ORDER BY cmNumTotal DESC
+        </if>
+        <if test="start != -1 and limit != -1">
+             limit #{start}, #{limit}  
+        </if>
+    </select>
+    
+     <select id="getDevCmTotalUsersCount" parameterType="map" resultType="int">        
+        select count(unlp.entityId)
+        from
+            (select entityId,
+                        ccIfIndex,
+            sum(onlineNum + offlineNum + otherNum) cmNumTotal,
+            sum(onlineNum) cmNumOnline,
+            sum(otherNum) cmNumActive,
+            sum(otherNum) cmNumUnregistered,
+            sum(offlineNum) cmNumOffline,
+            sum(onlineNum)  CmNumRregistered,
+            time dt from usernumlastccmts
+            group by entityId,ccIfIndex) unlp
+        LEFT JOIN cmcentityrelation cer on (cer.cmcIndex is null and unlp.entityId = cer.cmcEntityId )  or (unlp.entityId = cer.cmcEntityId and unlp.ccIfIndex = cer.cmcIndex)
+        LEFT JOIN entity e on cer.cmcId = e.entityId
+        LEFT JOIN cmcattribute ca on ca.cmcId = cer.cmcId
+        where cer.cmcId in (select entityId from ${Authority})
+        <if test="name != null and name !=''">
+            and (e.name like '%${name}%' or ca.topCcmtsSysMacAddr like '%${name}%')
+        </if>
+        <if test="deviceType != -1 and deviceType != null">
+            and ca.cmcDeviceStyle = #{deviceType}
+        </if>
+    </select>
+    
+    <select id="getLastCmcChannelSpeedStaticList"  resultType="channelSpeedStatic" parameterType="long">
+        SELECT
+            *
+        FROM
+            perfchannelspeedstaticlast a
+        where
+            a.cmcId=#{cmcId}
+    </select>
+    <select id="getCmcCmNumStatic"  resultType="cmcCmNumStatic" parameterType="long">
+        select 
+        sum(IFNULL(unlc.onlineNum + unlc.offlineNum + unlc.otherNum,0))  as cmNumTotal,
+        sum(IFNULL(unlc.onlineNum,0) as cmNumOnline)  as cmNumTotal,
+        sum(IFNULL(unlc.otherNum,0) as cmNumActive)  as cmNumTotal,
+        sum(IFNULL(unlc.otherNum,0) as cmNumUnregistered)  as cmNumTotal,
+        sum(IFNULL(unlc.offlineNum,0) as cmNumOffline)  as cmNumTotal,
+        sum(IFNULL(unlc.onlineNum,0) as CmNumRregistered)  as cmNumTotal
+        from
+        usernumlastccmts unlc
+        LEFT JOIN cmcentityrelation cer on (cer.cmcIndex is null and unlc.entityId = cer.cmcEntityId )  or (unlc.entityId = cer.cmcEntityId and unlc.ccIfIndex = cer.cmcIndex)
+        where cer.cmcId=#{cmcId} group by cer.cmcId
+    </select>  
+    
+    <update id="syncOnuPonOptical" parameterType="cmcLinkQualityFor8800A">
+        update
+        oltonuponattribute A, oltonuponrelation B
+        set A.onuReceivedOpticalPower
+        = #{onuReceivedOpticalPower},
+        A.onuTramsmittedOpticalPower =
+        #{onuTramsmittedOpticalPower},
+        A.onuBiasCurrent = #{onuBiasCurrent},
+        A.onuWorkingVoltage = #{onuWorkingVoltage},
+        A.onuWorkingTemperature =
+        #{onuWorkingTemperature}
+        where A.onuPonId = B.onuPonId and B.onuId =
+        #{cmcId}
+    </update>
+    
+    <select id="getChannelCmNumParam" resultType="channelCmNum" parameterType="long">
+        select a.parentId entityId,b.channellIndex channelIndex 
+        from entity a LEFT JOIN cmcportrelation b on a.entityId = b.cmcId where b.cmcPortId = #{cmcPortId}
+    </select>
+    
+    <select id="getChannelCmNum" resultType="channelCmNum" parameterType="channelCmNum">
+        select entityId,portifIndex channelIndex,onlineNum cmNumOnline,offlineNum cmNumOffline
+        from usernumlastport where entityId=#{entityId} and portifIndex=#{channelIndex}
+    </select>
+    
+    <select id="selectponCmNumOfflineHisPerf"  resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="com.topvision.ems.performance.domain.ViewerParam">
+        SELECT
+            offlineNum as y,
+            a.realtime as xTime
+        FROM
+            usernumhispon a
+        where
+            a.entityId=#{entityId} and
+            a.ponIndex=#{index} and
+            a.realtime BETWEEN #{startTime} and #{endTime}
+        ORDER BY a.realtime ASC
+    </select>
+    <select id="selectponCmNumOnlineHisPerf"  resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="com.topvision.ems.performance.domain.ViewerParam">
+        SELECT
+            onlineNum as y,
+            a.realtime as xTime
+        FROM
+            usernumhispon a
+        where
+            a.entityId=#{entityId} and
+            a.ponIndex=#{index} and
+            a.realtime BETWEEN #{startTime} and #{endTime}
+        ORDER BY a.realtime ASC
+    </select>
+    <select id="selectponCmNumActiveHisPerf"  resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="com.topvision.ems.performance.domain.ViewerParam">
+        SELECT
+            otherNum as y,
+            a.realtime as xTime
+        FROM
+            usernumhispon a
+        where
+            a.entityId=#{entityId} and
+            a.ponIndex=#{index} and
+            a.realtime BETWEEN #{startTime} and #{endTime}
+        ORDER BY a.realtime ASC
+    </select>
+    <select id="selectponCmNumTotalHisPerf"  resultType="com.topvision.platform.util.highcharts.domain.Point" parameterType="com.topvision.ems.performance.domain.ViewerParam">
+        SELECT
+            (onlineNum + otherNum + offlineNum) as y,
+            a.realtime as xTime
+        FROM
+            usernumhispon a
+        where
+            a.entityId=#{entityId} and
+            a.ponIndex=#{index} and
+            a.realtime BETWEEN #{startTime} and #{endTime}
+        ORDER BY a.realtime ASC
+    </select> 
+    
+    <select id="queryCmcOpticalInfo" resultType="cmcLinkQualityData" parameterType="map">
+        select A.*, B.name, B.typeId, B.mac, C.displayName,
+        IFNULL(D.ip,(SELECT e2.ip FROM entity e1, entity e2 WHERE e1.parentId=e2.entityId AND e1.entityId=B.entityId )) ip
+        from perfcmclinkqualitylast A, entity B, entitytype C,entity D
+        where B.typeId = C.typeId
+        and A.cmcId = B.entityId
+        and B.parentId = D.entityId
+        and B.entityId in (select entityId from ${Authority})
+        <if test="name != null and name !=''">
+            and (B.name like '%${name}%' or D.ip like '%${name}%' or B.mac like '%${name}%')
+        </if>
+        <if test="deviceType != -1 and deviceType != null">
+            and B.typeId = #{deviceType}
+        </if>
+        <if test="sort != null and dir != null">
+            order by ${sort} ${dir}
+        </if>
+        <if test="sort == null and dir == null">
+            ORDER BY A.optRePower DESC
+        </if>
+        <if test="start != -1 and limit != -1">
+            LIMIT #{start}, #{limit}
+        </if>
+    </select>
+    
+    <select id="queryCmcOpticalNum" resultType="int" parameterType="map">
+        select count(*) from perfcmclinkqualitylast A, entity B, entityType C,entity D
+        where B.typeId = C.typeId and A.cmcId = B.entityId
+        and B.parentId = D.entityId
+        and B.entityId in (select entityId from ${Authority})
+        <if test="name != null and name !=''">
+            and (B.name like '%${name}%' or D.ip like '%${name}%' or B.mac like '%${name}%')
+        </if>
+        <if test="deviceType != -1 and deviceType != null">
+            and B.typeId = #{deviceType}
+        </if>
+    </select> 
+    
+    <select id="getCmcPortList" parameterType="long"
+        resultType="cmcPortAttribute">
+        select cmcId,ifSpeed,ifAdminStatus,ifOperStatus,ifType   
+		from cmcportattribute where cmcId = #{entityId}
+    </select>
+    
+    <insert id="insertCmcDorOptTempQuality" parameterType="cmcDorOptTempQuality">
+        INSERT INTO perfCmcDorOptNodeTempquality(cmcId, cmcIndex,dorOptNodeTemp,collectTime)
+        VALUES 
+        (#{cmcId}, #{cmcIndex}, #{dorOptNodeTemp}, #{collectTime})
+    </insert>
+    <insert id="insertCmcDorLinePowerQuality" parameterType="cmcDorLinePowerQuality">
+        INSERT INTO perfCmcDorLinePowerquality(cmcId, cmcIndex,dorLinePower,collectTime)
+        VALUES 
+        (#{cmcId}, #{cmcIndex}, #{dorLinePower}, #{collectTime})
+    </insert>
+</mapper> 

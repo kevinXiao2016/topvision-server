@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.onu.domain.OnuUpdate">
+	<select id="getOnuUpgradeHistory" parameterType="long"
+		resultType="oltOnuUpgrade">
+		SELECT onuUpgradeId,
+		entityId,
+		topOnuUpgradeTransactionIndex,
+		topOnuUpgradeSlotNum,
+		topOnuUpgradeOnuType,
+		topOnuUpgradeFileName,
+		topOnuUpgradeFileType,
+		topOnuUpgradeMode,
+		topOnuUpgradeOnuList,
+		topOnuUpgradeOperAction,
+		topOnuUpgradeStatus,
+		upgradeTime
+		FROM OltOnuUpgrade
+		WHERE entityId =
+		#{entityId}
+		order by onuUpgradeId
+	</select>
+	
+	
+	<insert id="insertOnuUpgrade" parameterType="oltOnuUpgrade">
+		INSERT INTO
+		OltOnuUpgrade (
+		entityId,
+		topOnuUpgradeTransactionIndex,
+		topOnuUpgradeSlotNum,
+		topOnuUpgradeOnuType,
+		topOnuUpgradeFileName,
+		topOnuUpgradeFileType,
+		topOnuUpgradeMode,
+		topOnuUpgradeOnuList,
+		topOnuUpgradeOperAction,
+		topOnuUpgradeStatus
+		) VALUES (
+		#{entityId},
+		#{topOnuUpgradeTransactionIndex},
+		#{topOnuUpgradeSlotNum},
+		#{topOnuUpgradeOnuType},
+		#{topOnuUpgradeFileName},
+		#{topOnuUpgradeFileType},
+		#{topOnuUpgradeMode},
+		#{topOnuUpgradeOnuList},
+		#{topOnuUpgradeOperAction},
+		#{topOnuUpgradeStatus}
+		)
+	</insert>
+	
+
+	<select id="getOnuAutoUpgBand" parameterType="long" resultType="oltOnuAutoUpgBand">
+		select
+		entityId,
+		profileId,
+		ponId,
+		ponIndex,
+		installStat
+		from onuautoupgband
+		where entityId = #{entityId}
+	</select>
+	<select id="getOnuAutoUpgProfile" parameterType="long"
+		resultType="oltOnuAutoUpgProfile">
+		select
+		entityId,
+		profileId,
+		proName,
+		proOnuType,
+		proHwVersion,
+		proMode,
+		proNewVersion,
+		proUpgTime,
+		boot,
+		app,
+		webs,
+		other,
+		pers,
+		proPri,
+		proBandStat
+		from onuautoupgprofile
+		where entityId = #{entityId}
+	</select>
+	<insert id="addOnuAutoUpgProfile" parameterType="oltOnuAutoUpgProfile">
+		insert into
+		onuautoupgprofile
+		(entityId,
+		profileId,
+		proName,
+		proOnuType,
+		proHwVersion,
+		proMode,
+		proNewVersion,
+		proUpgTime,
+		boot,
+		app,
+		webs,
+		other,
+		pers,
+		proPri,
+		proBandStat)
+		values
+		(#{entityId},
+		#{profileId},
+		#{proName},
+		#{proOnuType},
+		#{proHwVersion},
+		#{proMode},
+		#{proNewVersion},
+		#{upgradeTimeStr},
+		#{boot},
+		#{app},
+		#{webs},
+		#{other},
+		#{pers},
+		#{proPri},
+		#{proBandStat})
+	</insert>
+	<insert id="bandOnuAutoUpgProfile" parameterType="oltOnuAutoUpgBand">
+		insert into
+		onuautoupgband
+		(entityId,
+		profileId,
+		ponId,
+		ponIndex,
+		installStat)
+		values
+		(#{entityId},
+		#{profileId},
+		#{ponId},
+		#{ponIndex},
+		#{installStat})
+	</insert>
+	<update id="updateOnuAutoUpgProfile" parameterType="oltOnuAutoUpgProfile">
+		update
+		onuautoupgprofile set
+		proName = #{proName},
+		proOnuType = #{proOnuType},
+		proHwVersion = #{proHwVersion},
+		proMode = #{proMode},
+		proNewVersion =
+		#{proNewVersion},
+		proUpgTime = #{upgradeTimeStr},
+		boot = #{boot},
+		app =
+		#{app},
+		webs = #{webs},
+		other = #{other},
+		pers = #{pers},
+		proPri =
+		#{proPri}
+		where entityId = #{entityId} and profileId = #{profileId}
+	</update>
+	<update id="updateOnuAutoUpgBandStat" parameterType="oltOnuAutoUpgProfile">
+		update
+		onuautoupgprofile set
+		proBandStat = #{proBandStat}
+		where entityId =
+		#{entityId} and profileId =
+		#{profileId}
+	</update>
+	<delete id="delOnuAutoUpgProfile" parameterType="oltOnuAutoUpgProfile">
+		DELETE FROM
+		onuautoupgprofile WHERE entityId = #{entityId} and profileId =
+		#{profileId}
+	</delete>
+	<delete id="unbandOnuAutoUpgProfile" parameterType="oltOnuAutoUpgBand">
+		DELETE FROM
+		onuautoupgband WHERE entityId = #{entityId} and profileId =
+		#{profileId} and ponIndex = #{ponIndex}
+	</delete>
+	<delete id="deleteAllOnuAutoUpgProfile" parameterType="long">
+		delete
+		from onuautoupgprofile where entityId = #{entityId}
+	</delete>
+	<delete id="deleteAllOnuAutoUpgBand" parameterType="long">
+		delete from
+		onuautoupgband where entityId = #{entityId}
+	</delete>
+	
+	<select id="getOnuIndexListByHwVeList" parameterType="map" resultType="long">
+		select B.onuIndex
+		from oltonuattribute A left join oltonurelation B on A.entityId = B.entityId and A.onuId = B.onuId
+		where A.entityId = #{entityId} and A.topOnuHardwareVersion = #{hwVersion}
+	</select>
+</mapper>

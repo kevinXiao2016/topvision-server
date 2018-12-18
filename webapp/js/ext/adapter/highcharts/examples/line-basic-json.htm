@@ -1,0 +1,162 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <title>line-basic</title>
+    <!-- ExtJS includes -->
+    <script type="text/javascript" src="../../../ext-base.js"></script>
+    <script type="text/javascript" src="../../../ext-all.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../../css/ext-all.css"/>
+
+    <!-- Common Styles for the examples -->
+
+    <!-- ExtJS adapter for Highcharts -->
+    <script type="text/javascript" src="../adapter-extjs.js"></script>
+
+    <!-- Highcharts includes -->
+    <script type="text/javascript" src="../../../../highcharts/highcharts.src.js"></script>
+    <!--[if IE]><script type="text/javascript" src="../Highcharts-1.2.2/js/excanvas.compiled.js"></script><![endif]-->
+
+    <!-- ExtJS Plugin for Highcharts -->
+    <script type="text/javascript" src="../Ext.ux.HighchartPanel.js"></script>
+    <script type="text/javascript" src="../Ext.ux.HighchartsPanelJson.js"></script>
+
+    <script type="text/javascript" src="line-basic-json.js"></script>
+
+
+    <style type="text/css">
+        #container {
+            padding: 10px;
+        }
+
+        #container .x-panel {
+            margin: 10px;
+        }
+
+        #container .x-panel-ml {
+            padding-left: 1px;
+        }
+
+        #container .x-panel-mr {
+            padding-right: 1px;
+        }
+
+        #container .x-panel-bl {
+            padding-left: 2px;
+        }
+
+        #container .x-panel-br {
+            padding-right: 2px;
+        }
+
+        #container .x-panel-body {
+
+        }
+
+        #container .x-panel-mc {
+            padding-top: 0;
+        }
+
+        #container .x-panel-bc .x-panel-footer {
+            padding-bottom: 2px;
+        }
+
+        #container .x-panel-nofooter .x-panel-bc {
+            height: 2px;
+        }
+
+        #container .x-toolbar {
+            border: 1px solid #99BBE8;
+            border-width: 0 0 1px 0;
+        }
+    </style>
+</head>
+<body>
+<!-- EXAMPLES -->
+
+<script type="text/javascript">
+    // Conteneur de démarrage
+    var start = {
+        id: 'start-panel',
+        title: 'Vue d\'ensemble des crédits',
+        layout:'border',
+        defaults: {
+            collapsible: true,
+            split: true
+        },
+        items: [{
+            title: 'Années',
+            region:'east',
+            margins: '5 0 0 0',
+            cmargins: '5 5 0 0',
+            width: 175,
+            minSize: 200,
+            maxSize: 200
+        },{
+            title: 'Données',
+            collapsible: false,
+            height: 200,
+            minSize: 200,
+            maxSize: 200,
+            region:'center',
+            margins: '5 0 0 0',
+            items: {
+                xtype: 'highchartpanel',
+                titleCollapse: true,
+                layout:'fit',
+                border: true,
+                chartConfig: {
+                    chart: { defaultSeriesType: 'column' },
+                    title: { text: 'Monthly Average Rainfall' },
+                    subtitle: { text: 'Source: WorldClimate.com' },
+                    xAxis: { categories: ['Jan'] },
+                    yAxis: { min: 0, title: { text: 'Rainfall (mm)' } },
+                    legend: { layout: 'vertical' },
+                    series: [{
+                        name: 'Tokyo',
+                        data: [49.9]
+
+                    }]
+                }
+            }
+        }]};
+    new Ext.Viewport({
+        layout: 'border',
+        title: 'Culture Layout',
+        items: [{
+            // entete de titre
+            xtype: 'box',
+            region: 'north',
+            applyTo: 'header',
+            height: 30
+        },{
+            // menu et bloc de détail
+            layout: 'border',
+            id: 'navigation',
+            region:'west',
+            border: false,
+            split:true,
+            margins: '2 0 5 5',
+            width: 275,
+            minSize: 100,
+            maxSize: 500,
+            items: [treePanel, detailsPanel]
+        }, {
+            id: 'content-panel',
+            region: 'center', // le centre
+            layout: 'card',
+            margins: '2 5 5 0',
+            activeItem: 0,
+            border: false,
+            items: [start]
+        }],
+        renderTo: Ext.getBody()
+    });
+</script>
+
+<div id="container">
+
+</div>
+
+</body>
+</html>

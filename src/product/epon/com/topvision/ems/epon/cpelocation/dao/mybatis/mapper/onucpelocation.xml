@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.cpelocation.domain.OnuCpeLocation">
+	
+	<insert id="insertOrUpdateCpeLoc" parameterType="onuCpeLocation">
+	    INSERT INTO onucpelocatoin(macLocation, slotLocation, portLocation, onuLocation, uniLocation, entityId, onuId)
+	    VALUES(#{macLocation},#{slotLocation},#{portLocation},#{onuLocation},#{uniLocation},#{entityId},#{onuId})
+	    ON DUPLICATE KEY UPDATE 
+	    slotLocation = #{slotLocation}, portLocation = #{portLocation}, onuLocation = #{onuLocation}, 
+	    uniLocation = #{uniLocation}, entityId = #{entityId}, onuId = #{onuId}
+	</insert>
+	
+	<select id="queryCpeLoc" parameterType="string" resultType="onuCpeLocation">
+	    SELECT * FROM onucpelocatoin
+	    WHERE macLocation = #{cpeMac}
+	</select>
+	
+	<select id="queryOnuCpeRelaInfo" parameterType="onuCpeLocation" resultType="onuCpeLocation">
+	    SELECT A.name AS oltName, A.ip AS oltIp, B.onuId, D.name AS onuName
+		FROM entity A 
+		LEFT JOIN oltonurelation B ON A.entityId  = B.entityId 
+		LEFT JOIN entity D ON B.onuId = D.entityId
+		WHERE A.entityId = #{entityId} AND B.onuIndex = #{onuIndex}
+	</select>
+
+</mapper>

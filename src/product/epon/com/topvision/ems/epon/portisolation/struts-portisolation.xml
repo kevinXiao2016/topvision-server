@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="isolationgroup" namespace="/epon/isolationgroup" extends="default">
+		<action name="addGroup" class="isolationGroupAction" method="addGroup" />
+		<action name="loadGroupList" class="isolationGroupAction" method="loadGroupList" />
+		<action name="modifyGroup" class="isolationGroupAction" method="modifyGroup" />
+		<action name="deleteGroup" class="isolationGroupAction" method="deleteGroup" />
+		<action name="loadGroupMember" class="isolationGroupAction" method="loadGroupMember" />
+		<action name="addGroupMember" class="isolationGroupAction" method="addGroupMember" />
+		<action name="deleteGroupMember" class="isolationGroupAction" method="deleteGroupMember" />
+		<action name="showAddGroupPage" class="isolationGroupAction" method="showAddGroupPage">
+			<result>/epon/addIsolationGroup.jsp</result>
+		</action>
+		<action name="showModifyGroupPage" class="isolationGroupAction" method="showModifyGroupPage">
+			<result>/epon/modifyIsolationGroup.jsp</result>
+		</action>
+		<action name="refreshGroupData" class="isolationGroupAction" method="refreshGroupData" />
+		<action name="checkIndexUseable" class="isolationGroupAction" method="checkIndexUseable" />
+		<action name="batchDeleteGrpMember" class="isolationGroupAction" method="batchDeleteGrpMember" />
+		<action name="batchAddGrpMember" class="isolationGroupAction" method="batchAddGrpMember" />
+		
+	</package>
+</struts>

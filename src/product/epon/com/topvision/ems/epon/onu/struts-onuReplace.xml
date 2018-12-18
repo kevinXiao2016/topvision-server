@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="onuReplace" namespace="/onu/replace" extends="default">
+
+		<action name="showOnuReplaceView" class="onuReplaceAction"
+			method="showOnuReplaceView">
+			<result>/epon/onu/replaceOnu.jsp</result>
+		</action>
+
+		<action name="replaceOnuEntityByMac" class="onuReplaceAction"
+			method="replaceOnuEntityByMac">
+		</action>
+
+		<action name="replaceOnuEntityBySnAndPwd" class="onuReplaceAction"
+			method="replaceOnuEntityBySnAndPwd">
+		</action>
+
+	</package>
+</struts>

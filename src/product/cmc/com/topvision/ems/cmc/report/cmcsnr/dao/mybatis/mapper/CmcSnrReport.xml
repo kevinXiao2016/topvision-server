@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.report.domain.CmcSnrReport">
+
+	<select id="getSnrReportStat" parameterType="map" resultType="com.topvision.ems.cmc.report.domain.CmcSnrReportStatistics">
+		select 
+			C.entityId,B.name entityName, 
+			sum(case when C.minNoise <![CDATA[ < ]]>200 then 1 else 0 end) portNum0To20,
+			count(C.ifIndex) portTotalNum	
+		from(
+			select entityId, ifindex, cmcId, min(noiseMin) minNoise 
+			from perfnoisesummary A 
+			where A.noiseMin!= 0 and ${sql}
+			group by entityId,
+			ifindex, cmcId) C 
+			inner join entity B on C.cmcId = B.entityId 
+		where B.typeId = #{entityType}
+		group by C.entityId
+	</select>
+
+	<select id="getSnrReportDetailForEntity" parameterType="map" resultType="com.topvision.ems.cmc.report.domain.CmcSnrReportDetail">
+		select B.*,
+		D.name as entityName,
+		C.name cmcName 
+		from(
+			select 
+				count(A.ifindex) lowTimes,
+				A.entityId,A.ifindex,A.cmcId 
+			from (
+				SELECT * from perfnoisesummary
+				where noisemin !=0 and entityId = #{entityId} and cmcId in (select
+				entityId from entity) and noisemin <![CDATA[ < ]]>200 
+				and dt between #{stTime} and #{etTime}
+				) A group by A.entityId,A.ifindex,A.cmcId
+			) B 
+			left join entity C on B.cmcId = C.entityId
+			left join entity D on B.entityId = D.entityId
+		where C.typeId = #{entityType}
+	</select>
+
+	<select id="getSnrReportDetailForFolder" parameterType="map" resultType="com.topvision.ems.cmc.report.domain.CmcSnrReportDetail">
+		select B.*,D.name as entityName,C.name cmcName 
+		from(
+			select count(A.ifindex) lowTimes,
+			A.entityId,A.ifindex,A.cmcId from (
+				SELECT * from perfnoisesummary
+				where noise !=0 and entityId in (select entityId from ${folderEntity})
+				and cmcId in (select entityId from entity) and noisemin <![CDATA[ < ]]>	200 
+				and dt between #{stTime} and #{etTime}
+				) A group by A.entityId,A.ifindex,A.cmcId
+			) B left join entity C on B.cmcId =	C.entityId
+			left join entity D on B.entityId = D.entityId
+		where C.typeId = #{entityType}
+	</select>
+
+	<select id="getSnrReportDetailForAll" parameterType="map" resultType="com.topvision.ems.cmc.report.domain.CmcSnrReportDetail">
+		select B.*,D.name as entityName,C.name cmcName 
+		from(
+			select count(A.ifindex) lowTimes,
+			A.entityId,A.ifindex,A.cmcId from (
+				SELECT * from perfnoisesummary
+				where noise !=0 and cmcId in (select entityId from entity) and
+				noisemin <![CDATA[ < ]]> 200 and dt between #{stTime} and #{etTime}
+				) A group by A.entityId,A.ifindex,A.cmcId
+			) B left join entity C on B.cmcId =	C.entityId
+			left join entity D on B.entityId = D.entityId
+		where C.typeId = #{entityType}
+	</select>
+
+	<update id="migrateSnrHourly">
+		call migrateSnrHourly()
+	</update>
+	<update id="summarySnrDaily">
+		call summarySnrDaily()
+	</update>
+</mapper>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="cm" namespace="/cm" extends="default">
+    	<!-- CmAction -->
+        <action name="resetCm" class="cmAction" method="resetCm"></action>
+        <action name="loadCmActionInfo" class="cmAction" method="loadCmActionInfo"></action>
+        <action name="getCmServiceFlowList" class="cmAction" method="getCmServiceFlowList"></action>
+        <action name="refreshCmInfo" class="cmAction" method="refreshCmInfo"></action>
+
+      	<!-- cmListAction -->
+      	<action name="getCmListByDownPort" class="cmListOldAction" method="getCmListByDownPort"></action>
+      	<action name="getCmListByUpPort" class="cmListOldAction" method="getCmListByUpPort"></action>
+      	<action name="getCmListByCmc" class="cmListOldAction" method="getCmListByCmc"></action>
+      	<action name="getCmListByPon" class="cmListOldAction" method="getCmListByPon"></action>
+      	<action name="getCmListByOlt" class="cmListOldAction" method="getCmListByOlt"></action>
+      	<action name="restartCms" class="cmListOldAction" method="restartCms"></action>
+      	<action name="checkCmSnmp" class="cmListOldAction" method="checkCmSnmp"></action>
+        <action name="showCmStaticIpInfo" class="cmListOldAction" method="showCmStaticIpInfo">
+            <result>/cmc/cmStaticIpInfo.jsp</result>
+        </action>
+      	 <action name="showCmInfo" class="cmListOldAction" method="showCmInfo">
+            <result>/cmc/cmInfo.jsp</result>
+        </action>
+      	 <action name="showCmActionInfo" class="cmListOldAction" method="showCmActionInfo">
+            <result>/cmc/cmActionInfo.jsp</result>
+        </action>
+      	<action name="clearCpeInfo" class="cmListOldAction" method="clearCpeInfo"></action>
+        <action name="showCmByCpeIp" class="cmListOldAction" method="showCmByCpeIp"></action>
+        <action name="loadCpeActionInfo" class="cmListOldAction" method="loadCpeActionInfo"></action>
+        <action name="showRealCpeMaxCpe" class="cmListOldAction" method="showRealCpeMaxCpe"></action>
+        <action name="showCpeListByCmId" class="cmListOldAction" method="showCpeListByCmId"></action>
+        <action name="loadCmStaticIpList" class="cmListOldAction" method="loadCmStaticIpList"></action>
+        <action name="showCpeActionInfo" class="cmListOldAction" method="showCpeActionInfo">
+            <result>/cmc/cpeActionInfo.jsp</result>
+        </action>
+       
+        <!-- CmImportAction -->
+        <action name="modifyCmInfo" class="cmImportAction" method="modifyCmInfo"></action>
+        <action name="scanCmImportInfos" class="cmImportAction" method="scanCmImportInfos"></action>
+        <action name="loadCmImportInfoList" class="cmImportAction" method="loadCmImportInfoList"></action>
+        <action name="downLoadCmInfoImportTemplate" class="cmImportAction" method="downLoadCmInfoImportTemplate"></action>
+        <action name="downLoadErrorInfo" class="cmImportAction" method="downLoadErrorInfo"></action>
+        <action name="showCmImportList" class="cmImportAction" method="showCmImportList">
+            <result>/cmc/cmImportList.jsp</result>
+        </action>
+         <action name="showCmInfoUpload" class="cmImportAction" method="showCmInfoUpload">
+            <result>/cmc/cmInfoUpload.jsp</result>
+        </action>
+        <action name="showCmInfoConfig" class="cmImportAction" method="showCmInfoConfig">
+			<result>/cmc/modifyCmProperty.jsp</result>
+		</action>
+      
+      	<!-- ContactedCmAction -->
+      	<action name="restartAllCm" class="ccmtsCmListAction" method="restartAllCm"></action>
+      	<action name="offlineCmAll" class="ccmtsCmListAction" method="offlineCmAll"></action>
+        <action name="restartCmByMac" class="ccmtsCmListAction" method="restartCmByMac"></action>
+        <action name="getCmStatusNum" class="ccmtsCmListAction" method="getCmStatusNum"></action>
+        <action name="queryForCmList" class="ccmtsCmListAction" method="queryForCmList"></action>
+        <action name="getCmListByCmcId" class="ccmtsCmListAction" method="getCmListByCmcId"></action>
+        <action name="refreshCmOnCcmtsInfo" class="ccmtsCmListAction" method="refreshCmOnCcmtsInfo"></action>
+        <action name="showContactedCmList" class="ccmtsCmListAction" method="showContactedCmList">
+            <result>/cmc/contactedCmList.jsp</result>
+        </action>
+        <action name="showServiceFlowContactedToCm" class="ccmtsCmListAction" method="showServiceFlowContactedToCm">
+            <result>/cmc/serviceFlowContactedToCm.jsp</result>
+        </action>
+        
+        <!-- cmServiceType -->		
+		<action name="showCmServiceType" class="cmServiceTypeAction" method="showCmServiceType">
+            <result>/cmc/cm/cmServiceType.jsp</result>
+        </action>
+        <action name="loadCmServiceTypeList" class="cmServiceTypeAction" method="loadCmServiceTypeList"></action>
+        <action name="addCmServiceType" class="cmServiceTypeAction" method="addCmServiceType"></action>
+        <action name="showModifyCmServiceType" class="cmServiceTypeAction" method="showModifyCmServiceType">
+            <result>/cmc/cm/modifyCmServiceType.jsp</result>
+        </action>
+        <action name="modifyCmServiceType" class="cmServiceTypeAction" method="modifyCmServiceType"></action>
+        <action name="deleteCmServiceType" class="cmServiceTypeAction" method="deleteCmServiceType"></action>
+        <action name="showImportCmServiceType" class="cmServiceTypeAction" method="showImportCmServiceType">
+            <result>/cmc/cm/importCmServiceType.jsp</result>
+        </action>
+        <action name="downLoadCmServiceTypeTemplate" class="cmServiceTypeAction" method="downLoadCmServiceTypeTemplate"></action>
+        <action name="scanCmServiceTypeImport" class="cmServiceTypeAction" method="scanCmServiceTypeImport"></action>
+    </package>
+</struts>

@@ -1,0 +1,460 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.ccmts.facade.domain.CmcAttribute">
+
+	<!-- ################################## select start ####################################### -->
+	<select id="getEntityPonInfoList" parameterType="map" resultType="entityPonRelation">
+        select a.entityId
+        ,a.ponId,a.ponIndex ,b.name,b.entityId,b.ip entityIp
+        FROM
+        oltponrelation a ,entity b where a.entityId= b.entityId and b.entityId in (select entityId from ${Authority})
+        order by  ponId ASC,entityIp asc
+    </select>	
+    <select id="queryCmc8800BList" parameterType="map" resultType="cmcAttribute">
+        select
+        a.cmcId,a.cmcDeviceStyle,a.topCcmtsSysDescr,a.topCcmtsSysObjectId,x.sysUpTime topCcmtsSysUpTime,
+        a.topCcmtsSysContact,a.topCcmtsSysName,a.topCcmtsSysLocation,a.topCcmtsSysService,
+        a.topCcmtsSysORLastChange,a.topCcmtsDocsisBaseCapability,a.topCcmtsSysRAMRatio,
+        a.topCcmtsSysCPURatio,a.topCcmtsSysMacAddr, a.topCcmtsSysMacAddrLong,a.topCcmtsSysFlashRatio,a.topCcmtsSysStatus,
+        a.topCcmtsSysSwVersion,c.name nmName, b.cmcEntityId, c.ip as manageIp,a.dt,b.cmcIndex,
+        if(a.statusChangeTime='0000-00-00 00:00:00', sysdate(), a.statusChangeTime) statusChangeTime,
+        x.state status
+        FROM
+        cmcattribute a left join
+        cmcentityrelation b on a.cmcId = b.cmcId
+        left join entity c on b.cmcEntityId = c.entityId
+        left join entitysnap x on x.entityId = c.entityId
+        WHERE 1 = 1 and a.cmcId in (select entityId from ${Authority})
+        <if test="cmcType != null">
+            AND a.cmcDeviceStyle = #{cmcType}
+        </if>
+        <if test="cmcName != null">
+            AND (c.name LIKE '%${cmcName}%' 
+            	OR c.ip LIKE '%${cmcName}%'
+            	OR c.sysName LIKE '%${cmcName}%'
+            	OR a.topCcmtsSysMacAddr LIKE '%${queryContentMac}%' 
+            	<if test="queryMacWithoutSplit != null">
+                	OR REPLACE(a.topCcmtsSysMacAddr, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            	</if>
+            )
+        </if>
+        <if test="status != null and status != -1">
+			AND x.state = #{status}
+		</if>
+		<if test="sort != null and dir != null">
+		    <choose>
+				<when test="sort == 'manageIp'.toString()">
+					ORDER BY inet_aton(manageIp) ${dir}
+				</when>
+				<otherwise>
+					order by ${sort} ${dir}
+				</otherwise>
+			</choose>
+		</if>
+        limit ${start} , ${limit}
+    </select>
+    <select id="queryCmc8800BNum" parameterType="map" resultType="long">
+        SELECT count(distinct(a.cmcId))
+         FROM
+        cmcattribute a left join
+        cmcentityrelation b on a.cmcId = b.cmcId
+        left join entity c on b.cmcEntityId = c.entityId
+        left join entitysnap x on x.entityId = c.entityId
+        WHERE 1 = 1 and a.cmcId in (select entityId from ${Authority})
+        <if test="cmcType != null">
+            AND a.cmcDeviceStyle = #{cmcType}
+        </if>
+        <if test="cmcName != null">
+            AND (c.name LIKE '%${cmcName}%' 
+            	OR c.ip LIKE '%${cmcName}%'
+            	OR c.sysName LIKE '%${cmcName}%'
+            	OR a.topCcmtsSysMacAddr LIKE '%${queryContentMac}%' 
+            	<if test="queryMacWithoutSplit != null">
+                	OR REPLACE(a.topCcmtsSysMacAddr, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            	</if>
+            )
+        </if>
+        <if test="status != null and status != -1">
+			AND x.state = #{status}
+		</if>
+    </select>
+    <select id="queryCmcList" parameterType="map" resultType="cmcAttribute">
+        select * from ( select
+        x.state status,
+		x.sysUpTime topCcmtsSysUpTime,
+		if(a.statusChangeTime='0000-00-00 00:00:00', sysdate(), a.statusChangeTime) statusChangeTime,
+		if(x.state = 1,if(x.sysUpTime>0,x.sysUpTime,f.sysUpTime),datediff(statusChangeTime,SYSDATE())) sysupTimeSortData,
+        a.cmcId,a.cmcDeviceStyle,a.topCcmtsSysDescr,a.topCcmtsSysObjectId,
+        a.topCcmtsSysContact,a.topCcmtsSysName,a.topCcmtsSysLocation,a.topCcmtsSysService,
+        a.topCcmtsSysORLastChange,a.topCcmtsDocsisBaseCapability,a.topCcmtsSysRAMRatio,
+        a.topCcmtsSysCPURatio,a.topCcmtsSysMacAddr, a.topCcmtsSysMacAddrLong,a.topCcmtsSysFlashRatio,a.topCcmtsSysStatus,
+        a.topCcmtsSysSwVersion, h.name nmName,b.cmcIndex,
+        c.ponId,d.entityId,f.ip as manageIp,x.snapTime dt,i.bSoftwareVersion
+        oltVersion, f.name as manageName,h.contact,h.location,h.note
+        FROM
+        oltponrelation d right join oltonurelation c on
+        d.ponId = c.ponId
+        right join cmcentityrelation b on
+        c.onuId = b.onuId
+        right join entity f on f.entityId = b.cmcEntityId
+        right join cmcattribute a on b.cmcId = a.cmcId
+        right join entity h on h.entityId = b.cmcId
+        right join entitysnap x on x.entityId = h.entityId
+        left join oltslotattribute i on (i.entityId = b.cmcEntityId and
+        i.bAttribute=1 )
+        WHERE 1 = 1
+        <if test="deviceType != null">
+            AND a.cmcDeviceStyle = #{deviceType}
+        </if>
+        <if test="entityId != null">
+            AND d.entityId = #{entityId}
+        </if>
+        <if test="ponId != null">
+            AND c.ponId = #{ponId}
+        </if>
+        <if test="cmcMac != null">
+        	AND (a.topCcmtsSysMacAddr LIKE '%${cmcMac}%'
+				<if test="queryMacWithoutSplit != null">
+				OR REPLACE(a.topCcmtsSysMacAddr, ':', '') LIKE '%${queryMacWithoutSplit}%'
+				</if>
+				)
+        </if>
+        <if test="cmcType != null">
+            AND A.cmcDeviceStyle = #{cmcType}
+        </if>
+        <if test="status != null and status != -1">
+			AND x.state = #{status}
+		</if>
+        <if test="cmcName != null">
+            AND h.name LIKE '%${cmcName}%'
+        </if>
+        <if test="connectPerson != null">
+            AND a.topCcmtsSysContact LIKE '${connectPerson}%'
+        </if>
+        <if test="cmcIp != null">
+            AND f.ip LIKE '%${cmcIp}%'
+        </if>
+        ) tmp inner join entity v on tmp.cmcId = v.entityId where v.entityId in (select entityId from ${Authority})
+        <if test="sort != null and dir != null">
+			order by ${sort} ${dir}
+		</if>
+		<if test="sort == null or dir == null">
+		    order by manageIp, cmcIndex
+		</if>
+        limit ${start} , ${limit}
+    </select>
+    <select id="queryCmcListCount" parameterType="map" resultType="long">
+        select 
+			count(0)
+		from cmcattribute A
+		LEFT JOIN entitysnap B ON A.cmcId=B.entityId
+		LEFT JOIN entity C ON A.cmcId=C.entityId
+		LEFT JOIN cmcentityrelation D ON A.cmcId=D.cmcId
+		LEFT JOIN entitytype E ON C.typeId=E.typeId
+		LEFT JOIN oltonurelation F ON D.onuId=F.onuId
+		LEFT JOIN oltponrelation G ON F.ponId=G.ponId
+		LEFT JOIN entity H ON D.cmcEntityId=H.entityId
+		LEFT JOIN oltslotattribute I ON (D.cmcEntityId=I.entityId AND I.bAttribute=1)
+		LEFT JOIN userattention J ON A.cmcId=J.entityId AND J.userId=#{userId}
+		WHERE A.cmcId IN (select entityId from ${Authority})
+		<if test="deviceType != null">
+			AND a.cmcDeviceStyle = #{deviceType}
+		</if>
+		<if test="entityId != null">
+			AND H.entityId = #{entityId}
+		</if>
+		<if test="ponId != null">
+			AND F.ponId = #{ponId}
+		</if>
+		<if test="cmcType != null">
+			AND A.cmcDeviceStyle = #{cmcType}
+		</if>
+		<if test="status != null and status != -1">
+			AND B.state = #{status}
+		</if>
+		<if test="cmcName != null">
+			AND (
+			C.name LIKE '%${cmcName}%' 
+			OR C.sysName LIKE '%${cmcName}%' 
+			OR C.ip like '%${cmcName}%'  
+			OR H.name like '%${cmcName}%' 
+			OR C.entityId in( select E1.entityId from entity E1, entity E2 where E2.ip like '%${cmcName}%' and E2.entityId = E1.parentId)
+			OR A.topCcmtsSysMacAddr LIKE '%${queryContentMac}%' 
+			<if test="queryMacWithoutSplit != null">
+			OR REPLACE(A.topCcmtsSysMacAddr, ':', '') LIKE '%${queryMacWithoutSplit}%'
+			</if>
+			) 
+		</if>
+    </select> 
+    
+    <select id="queryForCmcList" parameterType="map" resultType="cmcAttribute">
+        select 
+			A.cmcId, 
+			A.cmcDeviceStyle, 
+			A.topCcmtsSysDescr, 
+			A.topCcmtsSysObjectId,
+			B.sysUpTime topCcmtsSysUpTime,
+			A.topCcmtsSysContact,
+			A.topCcmtsSysName,
+		  	A.topCcmtsSysLocation,
+			A.topCcmtsSysService,
+			A.topCcmtsSysORLastChange,
+			A.topCcmtsDocsisBaseCapability,
+			A.topCcmtsSysRAMRatio,
+			A.topCcmtsSysCPURatio,
+			A.topCcmtsSysMacAddr,
+			A.topCcmtsSysMacAddrLong,
+			A.topCcmtsSysFlashRatio,
+			A.topCcmtsSysStatus,
+			A.topCcmtsSysSwVersion,
+			C.name as nmName,
+			D.cmcIndex,
+			E.displayName typeName,
+			F.ponId,
+			G.entityId,
+			H.ip as manageIp,
+			B.snapTime dt,
+			I.bSoftwareVersion oltVersion,
+			H.name as manageName,
+			if(A.statusChangeTime='0000-00-00 00:00:00', sysdate(), A.statusChangeTime) statusChangeTime,
+			B.state status,
+			C.contact,C.location,C.note,
+			J.userId attention
+		from cmcattribute A
+		LEFT JOIN entitysnap B ON A.cmcId=B.entityId
+		LEFT JOIN entity C ON A.cmcId=C.entityId
+		LEFT JOIN cmcentityrelation D ON A.cmcId=D.cmcId
+		LEFT JOIN entitytype E ON C.typeId=E.typeId
+		LEFT JOIN oltonurelation F ON D.onuId=F.onuId
+		LEFT JOIN oltponrelation G ON F.ponId=G.ponId
+		LEFT JOIN entity H ON D.cmcEntityId=H.entityId
+		LEFT JOIN oltslotattribute I ON (D.cmcEntityId=I.entityId AND I.bAttribute=1)
+		LEFT JOIN userattention J ON A.cmcId=J.entityId AND J.userId=#{userId}
+		WHERE A.cmcId IN (select entityId from ${Authority})
+		<if test="deviceType != null">
+			AND a.cmcDeviceStyle = #{deviceType}
+		</if>
+		<if test="entityId != null">
+			AND H.entityId = #{entityId}
+		</if>
+		<if test="ponId != null">
+			AND F.ponId = #{ponId}
+		</if>
+		<if test="cmcType != null">
+			AND A.cmcDeviceStyle = #{cmcType}
+		</if>
+		<if test="status != null and status != -1">
+			AND B.state = #{status}
+		</if>
+		<if test="cmcName != null">
+			AND (
+			C.name LIKE '%${cmcName}%' 
+			OR C.sysName LIKE '%${cmcName}%' 
+			OR C.ip like '%${cmcName}%'  
+			OR H.name like '%${cmcName}%' 
+			OR C.entityId in( select E1.entityId from entity E1, entity E2 where E2.ip like '%${cmcName}%' and E2.entityId = E1.parentId)
+			OR A.topCcmtsSysMacAddr LIKE '%${queryContentMac}%' 
+			<if test="queryMacWithoutSplit != null">
+			OR REPLACE(A.topCcmtsSysMacAddr, ':', '') LIKE '%${queryMacWithoutSplit}%'
+			</if>
+			) 
+		</if>
+		<if test="sort != null and dir != null">
+			<choose>
+				<when test="sort == 'topCcmtsSysUpTime'.toString()">
+					ORDER BY status ${dir},CAST(A.topCcmtsSysUpTime AS UNSIGNED) ${dir}
+				</when>
+				<when test="sort == 'manageIp'.toString()">
+					ORDER BY inet_aton(manageIp) ${dir}
+				</when>
+				<otherwise>
+					order by ${sort} ${dir}
+				</otherwise>
+			</choose>
+		</if>
+		<if test="sort == null">
+			order by C.typeId IN(select typeId from entitytyperelation where type = 30000) DESC
+		</if>
+		limit ${start} , ${limit}
+    </select>
+       
+    <select id="getAllOnuIdToCmcNmnameMap" parameterType="long" resultType="java.util.HashMap">
+        select
+        cast(onuid as char)
+        onuid,d.name nmname
+        from cmcentityrelation a left join cmcattribute b on a.cmcId=b.cmcid ,entity d
+        where
+        d.entityId = b.cmcId and cmcentityId = #{entityId} and (cmcType=30001 or cmcType=30005);
+    </select>
+    
+    <select id="queryCmcListByIpsegment" parameterType="java.util.HashMap" resultType="cmcAttribute">
+    	SELECT
+    		B.entityId cmcId, 
+			S.state,
+			C.cmcDeviceStyle cmcType,
+			B.name nmName,
+			B.typeId,
+			C.topCcmtsSysMacAddr macAddr,
+			IFNULL(B.ip,P.ip) ipAddress,
+			B.createTime,
+			S.snapTime dt,
+			S.sysUpTime topCcmtsSysUpTime,
+			IFNULL(D.onlineNum+D.otherNum+D.offlineNum,0) topCcmtsCmNumTotal,
+			IFNULL(D.onlineNum,0) topCcmtsCmNumOnline,
+			IFNULL(B.ip,CONCAT(P.name,'(',P.ip,')')) AS uplinkDevice
+		FROM entity B 
+			LEFT JOIN entitysnap S on B.entityid = S.entityId 
+			LEFT JOIN entity P on B.parentId=P.entityid 
+			LEFT JOIN cmcAttribute C on C.cmcId = B.entityid 
+			LEFT JOIN usernumlastccmts D on d.entityid = c.cmcId
+		WHERE B.typeId in (select typeId from entitytyperelation where type = 30000)
+		      and B.entityId in (select entityId from ${Authority})
+		<if test="upTime != null and upTime != -1">
+			AND  <![CDATA[ (UNIX_TIMESTAMP(now()) - UNIX_TIMESTAMP(dt) + topCcmtsSysUpTime/100) <= #{upTime} ]]> 
+		</if>
+		<if test="ipList != null">
+			AND  (P.ip in
+				<foreach item="item" index="index" collection="ipList" open="(" separator="," close=")">
+					#{item}
+	  			</foreach>
+	  		OR B.ip in 
+  				<foreach item="item" index="index" collection="ipList" open="(" separator="," close=")">
+					#{item}
+  				</foreach>
+  			)
+		</if>
+		ORDER BY topCcmtsSysUpTime ASC
+    	LIMIT ${start} , ${limit}
+    </select>
+    
+    <select id="queryDeviceNum" parameterType="java.util.HashMap" resultType="int">
+        select count(*)
+		FROM entity B 
+			LEFT JOIN entity P on B.parentId=P.entityid 
+			left join entitysnap s on s.entityId = b.entityId
+		WHERE B.typeId in (select typeId from entitytyperelation where type = 30000)
+		      and B.entityId in (select entityId from ${Authority})
+		<if test="upTime != null and upTime != -1">
+			and  <![CDATA[ (UNIX_TIMESTAMP(now()) - UNIX_TIMESTAMP(s.snapTime) + s.sysUpTime/100) <= #{upTime} ]]> 
+		</if>
+		<if test="ipList != null">
+			and  (P.ip in
+				<foreach item="item" index="index" collection="ipList" open="(" separator="," close=")">
+					#{item}
+	  			</foreach>
+  			OR B.ip in 
+  				<foreach item="item" index="index" collection="ipList" open="(" separator="," close=")">
+					#{item}
+  				</foreach>
+  			)
+		</if>
+    </select>
+    
+    <select id="queryCmcListByFolder" parameterType="java.util.HashMap" resultType="cmcAttribute">
+		SELECT 
+		b.entityId cmcId, 
+		S.state,
+		C.cmcDeviceStyle cmcType,
+		B.name manageName,
+		C.topCcmtsSysMacAddr macAddr,
+		IFNULL(B.ip,E.ip) AS ipAddress,
+		B.createTime,
+		S.snapTime dt,
+		S.sysUpTime topCcmtsSysUpTime,
+		IFNULL(D.onlineNum+D.otherNum+D.offlineNum,0) topCcmtsCmNumTotal,
+		IFNULL(D.onlineNum,0) topCcmtsCmNumOnline,
+		IFNULL(B.ip,CONCAT(E.name,'(',E.ip,')')) AS uplinkDevice
+		FROM
+		entity B
+			INNER JOIN ${folderTable} t ON B.entityid = t.entityId
+			LEFT JOIN entity E on B.parentId = E.entityId
+			LEFT JOIN entitysnap S on B.entityid = S.entityId 
+			LEFT JOIN cmcAttribute C on C.cmcId = B.entityid 
+			LEFT JOIN  usernumlastccmts D on D.entityid = B.entityid
+		where B.typeId in (select typeId from entitytyperelation where type = 30000)
+		and B.entityId in (select entityId from ${Authority})
+		<if test="upTime != null and upTime != -1">
+			and  <![CDATA[ (UNIX_TIMESTAMP(now()) - UNIX_TIMESTAMP(dt) + topCcmtsSysUpTime/100) <= #{upTime} ]]> 
+		</if>
+		order by topCcmtsSysUpTime ASC
+    	limit ${start} , ${limit}
+    </select>
+    
+    <select id="queryDeviceNumByFolder" parameterType="java.util.HashMap" resultType="int">
+        SELECT 
+		count(*) 
+		FROM
+		entity B LEFT JOIN cmcAttribute C on b.entityId = C.cmcId
+			INNER JOIN ${folderTable} t ON B.entityid = t.entityId
+			left join entitysnap s on s.entityId = c.cmcId
+		WHERE B.typeId in (select typeId from entitytyperelation where type = 30000)
+ 			and B.entityId in (select entityId from ${Authority})
+		<if test="upTime != null and upTime != -1">
+			and  <![CDATA[ (UNIX_TIMESTAMP(now()) - UNIX_TIMESTAMP(s.snapTime) + s.sysUpTime/100) <= #{upTime} ]]> 
+		</if>
+    </select>
+    
+    <select id="queryDeviceByFolderId" parameterType="long" resultType="entitySnap"> 
+		SELECT
+			B.entityId, B.name, B.typeId, cmc.topCcmtsSysMacAddr mac,C.state,
+			IFNULL(B.ip,(SELECT e2.ip FROM entity e1, entity e2 WHERE e1.parentId=e2.entityId AND e1.entityId=B.entityId )) AS ip
+		FROM
+			entity B
+			LEFT JOIN entitysnap C on B.entityid = C.entityId 
+			LEFT JOIN entityfolderrela E on B.entityId=E.entityId
+			LEFT JOIN cmcAttribute cmc on B.entityId = cmc.cmcId
+		WHERE B.typeId in (select typeId from entitytyperelation where type = 30000) and E.folderId = #{folderId}
+    </select>
+    
+    <select id="queryNoAreaDevice" resultType="entitySnap"> 
+		SELECT
+			B.entityId, B.name, B.typeId, cmc.topCcmtsSysMacAddr mac, C.state,
+			IFNULL(B.ip,(SELECT e2.ip FROM entity e1, entity e2 WHERE e1.parentId=e2.entityId AND e1.entityId=B.entityId )) AS ip
+		FROM
+			entity B
+			LEFT JOIN entitysnap C on B.entityid  = C.entityid 
+			LEFT JOIN cmcAttribute cmc on B.entityId = cmc.cmcId
+		WHERE B.typeId in (select typeId from entitytyperelation where type = 30000) 
+			and not EXISTS ( SELECT 1 from entityfolderrela where entityId = B.entityId )
+    </select>
+    
+    <select id="queryAreaDeviceTotalInfo" parameterType="long" resultType="topoFolderDisplayInfo" >
+		SELECT count(*) totalNum,
+			ifnull(sum(case C.state when 1 then 1 end),0) onlineNum,
+			ifnull(sum(case C.state when 0 then 1 end),0) offineNum
+		FROM entity B 
+			LEFT JOIN entitysnap C on B.entityid = C.entityId
+		WHERE B.typeId in (select typeId from entitytyperelation where type = 30000)
+		 and B.entityId in (select entityId from ${Authority})
+    </select>
+    
+    <select id="queryTopoDisplayInfo" parameterType="map" resultType="topoFolderDisplayInfo" flushCache="true">
+		SELECT count(*) totalNum,
+			ifnull(sum(case C.state when 1 then 1 end),0) onlineNum,
+			ifnull(sum(case C.state when 0 then 1 end),0) offineNum
+		FROM entity B 
+			INNER JOIN ${folderTable} t on B.entityId = t.entityId
+			LEFT JOIN entitysnap C on B.entityid = C.entityId 
+		WHERE B.typeId in (select typeId from entitytyperelation where type = 30000) 
+	</select>
+	
+	<select id="queryNoAreaTotalInfo" resultType="topoFolderDisplayInfo"> 
+    	SELECT
+			count(*) totalNum,
+			ifnull(sum(case C.state when 1 then 1 end),0) onlineNum,
+			ifnull(sum(case C.state when 0 then 1 end),0) offineNum
+		FROM
+			entity B 
+			LEFT JOIN entitysnap C on B.entityid = C.entityId
+		WHERE 
+			B.typeId in (select typeId from entitytyperelation where type = 30000) 
+			and  not EXISTS ( SELECT 1 from entityfolderrela where entityId = b.entityId )
+    </select>
+    
+    <select id="getAllCmcEntityList" resultType="cmcAttribute"> 
+    	select A.*,B.cmcIndex from cmcattribute A left join  cmcentityrelation B on A.cmcId = B.cmcId
+    </select>
+    
+</mapper>

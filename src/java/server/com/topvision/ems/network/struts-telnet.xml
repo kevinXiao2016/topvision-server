@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="systemTelnet" namespace="/system/telnet" extends="default">
+        <!-- telnet clinet -->
+        <action name="showTelnetClientMgt" class="telnetClientAction" method="showTelnetClientMgt">
+            <result>/system/telnet/telnetClientMgt.jsp</result>
+        </action>
+        <action name="loadTelnetClientType" class="telnetClientAction" method="loadTelnetClientType"></action>
+        <action name="saveClientConfig" class="telnetClientAction" method="saveClientConfig"></action>
+        
+        <action name="showTelnetClient" class="telnetClientAction" method="showTelnetClient">
+            <result>/system/telnet/telnetClient.jsp</result>
+        </action>
+        <action name="loadLoginConfig" class="telnetClientAction" method="loadLoginConfig"></action>
+        <action name="connect" class="telnetClientAction" method="connect" />
+        <action name="close" class="telnetClientAction" method="close"></action>
+        <action name="sendUsername" class="telnetClientAction" method="sendUsername" ></action>
+        <action name="sendPassword" class="telnetClientAction" method="sendPassword" ></action>
+        <action name="sendCommand" class="telnetClientAction" method="sendCommand" />
+        
+        <action name="showTelnetRecord" class="telnetClientAction" method="showTelnetRecord">
+            <result>/system/telnet/telnetRecord.jsp</result>
+        </action>
+        <action name="loadTelnetRecord" class="telnetClientAction" method="loadTelnetRecord"></action>
+    </package>
+</struts>

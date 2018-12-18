@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.report.domain.OnuDeviceListReport">
+
+	<select id="getOnuDeviceListItem" parameterType="map" resultType="com.topvision.ems.epon.onu.domain.OltOnuAttribute">
+		SELECT
+			A.onuId,A.onuName,A.entityId,A.onuPreType,D.Ip as entityIp,
+			C.onuIndex,A.onuMacAddress,A.onuOperationStatus,A.onuAdminStatus,
+			et.displayname as onuTypeString
+		FROM
+			oltonuattribute A, entity B , entity D,oltonurelation C, entitytype et
+		where
+			A.onuPreType = et.typeId and
+			A.onuId = B.entityId and A.onuId = C.onuId
+			and	A.entityId = D.entityId
+			and B.entityId in (select entityId from	${Authority})
+			and B.typeId in (select typeId from entitytyperelation where type = #{type})
+		ORDER BY ${sortName}
+	</select>
+
+</mapper>

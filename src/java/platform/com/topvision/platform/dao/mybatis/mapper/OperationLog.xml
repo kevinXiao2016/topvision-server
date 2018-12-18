@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.platform.domain.OperationLog">
+	<insert id="insertEntity" parameterType="operationLog">
+		insert into
+		operatorhistory (operName, clientIpAddress,status,
+		operTime, entityId,
+		operAction)
+		values (#{operName}, #{clientIpAddress},#{status},
+		#{operTime}, #{entityId}, #{operAction} )
+    </insert>
+	<delete id="deleteByPrimaryKey" parameterType="long">
+		DELETE FROM
+		operatorhistory WHERE operId = #{operId}
+    </delete>
+
+	<select id="selectByPrimaryKey" parameterType="long" resultType="operationLog">
+		SELECT * FROM operatorhistory WHERE operId =
+		#{operId}
+    </select>
+
+	<select id="getAllOperationLog" resultType="operationLog">
+		select A.operName,
+		A.clientIpAddress,
+		A.status, A.operTime
+		operTimeString, A.entityId,
+		A.operAction,
+		A.operId
+		, B.ip entityIp
+		from
+		operatorhistory A , entity B
+		where
+		A.entityId =
+		B.entityId
+    </select>
+	<select id="getOperationLogByParams" parameterType="map"
+		resultType="operationLog">
+		select A.operName, A.clientIpAddress, A.status, A.operTime,
+		A.entityId, A.operAction, A.operId, B.ip entityIp
+		from operatorhistory
+		A , entity B where A.entityId = B.entityId
+		<if test="entityIp != null"> AND B.ip like '%${entityIp}%' </if>
+		<if test="clientIpAddress != null"> AND A.clientIpAddress like '%${clientIpAddress}%'</if>
+		<if test="operName != null"> AND A.operName like '%${operName}%'</if>
+		<if test="status != null"> AND A.status = #{status}</if>
+		order by A.operTime desc limit ${start},${limit}
+	</select>
+	<select id="getOperationLogByParamsCounts" parameterType="map"
+		resultType="operationLog">
+		select A.operName, A.clientIpAddress, A.status, A.operTime,
+		A.entityId, A.operAction, A.operId, B.ip entityIp
+		from operatorhistory
+		A , entity B where A.entityId = B.entityId
+		<if test="entityIp != null"> AND B.ip like '%${entityIp}%' </if>
+		<if test="clientIpAddress != null"> AND A.clientIpAddress like '%${clientIpAddress}%'</if>
+		<if test="operName != null"> AND A.operName like '%${operName}%'</if>
+		<if test="status != null"> AND A.status = #{status}</if>
+		order by A.operTime desc
+	</select>
+
+	<select id="getOperationLogByEntityId" parameterType="long"
+		resultType="operationLog">
+		SELECT * FROM operatorhistory WHERE
+		entityId = #{entityId}
+	</select>
+	<select id="getOperationLogByStatus" parameterType="int"
+		resultType="operationLog">
+		SELECT * FROM operatorhistory WHERE
+		status = #{status}
+	</select>
+	<select id="selectWithPage" parameterType="map" resultType="operationLog">
+	</select>
+
+	<select id="getOperationLogClientIp" resultType="String">
+		select
+		distinct(clientIpAddress) from operatorhistory
+    </select>
+	<select id="getOperationLogUserName" resultType="String">
+		select
+		distinct(operName) from operatorhistory
+    </select>
+	<select id="getOperationLogEntityIp" resultType="String">
+		select ip from
+		entity where entityId in (select
+		distinct(entityId) from
+		operatorhistory)
+    </select>
+</mapper>

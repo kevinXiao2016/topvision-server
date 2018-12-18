@@ -1,0 +1,1717 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.network.domain.Entity">
+	<!-- <parameterMap id="folderMap" class="java.util.HashMap"> <parameter 
+		property="entityId" jdbcType="Long" javaType="Long" mode="IN" /> <parameter 
+		property="folderId" jdbcType="Long" javaType="Long" mode="IN" /> </parameterMap> -->
+	<insert id="insertEntity" parameterType="entity"
+		useGeneratedKeys="true" keyProperty="entityId">
+		INSERT INTO Entity (parentId,name,
+		ip, createTime, modifyTime,
+		lastRefreshTime, snmpSupport,
+		agentInstalled, panel,
+		typeId,
+		corpId, mac, os, status, virtual,
+		virtualNetworkStatus,
+		sysName,sysUpTime,
+		authorityUserId) VALUES
+		(#{parentId},#{name},
+		#{ip}, #{createTime}, #{modifyTime},
+		#{lastRefreshTime},
+		#{snmpSupport},
+		#{agentInstalled},
+		#{panel},
+		#{typeId},
+		#{corpId},
+		#{mac},
+		#{os},
+		#{status}, #{virtual},
+		#{virtualNetworkStatus}, #{sysName},#{sysUpTime},
+		#{authorityUserId})
+	</insert>
+
+	<update id="updateEntityLocationAndContact" parameterType="map">
+		update entity set contact=#{ccSysContact},location=#{ccSysLocation}
+		where entityId=#{cmcId}
+	</update>
+
+	<update id="updateEntityFolderRela" parameterType="map">
+		update
+		entityfolderrela set folderId=#{folderId} where entityId=#{entityId}
+	</update>
+	<select id="selectWithPage" parameterType="map" resultType="entity">
+		SELECT A.entityId, A.name,
+		A.ip, A.icon, A.snmpSupport, A.mac,
+		B.displayName AS typeName, B.typeId AS
+		typeId, B.icon48, B.icon64 FROM
+		Entity A,
+		EntityType B WHERE A.entityId IN(SELECT DISTINCT entityId
+		FROM
+		EntityFolderRela)
+		AND A.typeId = B.typeId ORDER BY ${sortName} ASC
+		LIMIT
+		${offset},
+		${pageSize}
+	</select>
+	<select id="getEntitySnmpSupported" parameterType="map"
+		resultType="entity"> SELECT A.entityId,
+		A.name, A.ip, A.icon, A.snmpSupport,
+		B.displayName AS typeName, B.typeId AS
+		typeId, B.icon48, B.icon64
+		FROM
+		Entity A,
+		EntityType B WHERE A.entityId IN(SELECT DISTINCT entityId
+		FROM
+		EntityFolderRela) AND A.typeId = B.typeId AND A.snmpSupport = '1'
+		ORDER BY ${sortName}
+		ASC
+		LIMIT ${offset}, ${pageSize}
+	</select>
+	<select id="getEntityAgentSupported" parameterType="map"
+		resultType="entity"> SELECT A.entityId,
+		A.name, A.ip, A.icon, A.snmpSupport,
+		B.displayName AS typeName, B.typeId AS
+		typeId, B.icon48, B.icon64
+		FROM
+		Entity A,
+		EntityType B WHERE A.entityId IN(SELECT DISTINCT entityId
+		FROM
+		EntityFolderRela) AND A.typeId = B.typeId AND A.agentInstalled =
+		'1'
+		ORDER BY
+		${sortName} ASC
+		LIMIT ${offset}, ${pageSize}
+	</select>
+	<select id="getEntityByType" parameterType="map" resultType="entity">
+		SELECT A.mac,A.parentId,A.entityId, A.name,
+		A.ip, A.icon,
+		A.snmpSupport, A.agentInstalled, B.displayName AS modelName,
+		B.typeId
+		typeId,
+		B.icon48, B.icon64 FROM entity A LEFT JOIN EntityType B ON
+		A.typeId =
+		B.typeId WHERE
+		A.typeId in (select typeId from
+		entitytyperelation where type = #{type})
+		ORDER BY ${sortName} ASC
+		LIMIT
+		${offset},
+		${pageSize}
+	</select>
+
+	<select id="getEntityListByType" parameterType="map" resultType="entity">
+		SELECT A.mac,A.parentId,A.entityId, A.name,a.sysName,A.ip,
+		A.icon,C.type, A.typeId, B.icon16
+		FROM Entity A LEFT JOIN EntityType B
+		ON A.typeId =B.typeId ,entitytyperelation C
+		WHERE A.typeId = C.typeid
+		AND C.type=#{type}
+		AND A.entityId in (select entityId from
+		${Authority})
+		order by A.ip
+	</select>
+
+	<select id="getEntityInLonely" parameterType="map" resultType="entity">
+		SELECT A.entityId, A.ip,
+		A.name, A.modifyTime, A.lastRefreshTime,
+		B.displayName AS typeName FROM
+		(SELECT * from entity group by ip ) A,
+		EntityType B WHERE A.entityId
+		NOT IN (SELECT DISTINCT entityId FROM
+		EntityFolderRela) AND
+		A.typeId = B.typeId ORDER BY
+		${sortName}
+		${sortDirection} LIMIT ${offset}, ${pageSize}
+	</select>
+	<select id="queryEntity" parameterType="map" resultType="entity">
+		SELECT A.entityId, A.name, A.ip, B.displayName AS
+		typeName,A.typeId
+		FROM entity A, EntityType B WHERE
+		A.typeId =
+		B.typeId and A.ip != "" and
+		A.entityId in (select entity from
+		${Authority})
+		<if test="name != null and name != ''">
+			and A.name LIKE #{name}
+		</if>
+		<if test="ip != null and ip != ''">
+			and A.ip LIKE #{ip}
+		</if>
+		<if test="typeId != null and typeId != ''">
+			and A.typeId =
+			#{typeId}
+		</if>
+		<if test="folderId != null and folderId != ''">
+			and A.entityId
+			IN(SELECT entityId FROM
+			EntityFolderRela
+			WHERE folderId =
+			#{folderId})
+		</if>
+		ORDER BY ${sortName} ${sortDirection} LIMIT ${offset}, ${pageSize}
+	</select>
+	<select id="getEntitySnapList" parameterType="map" resultType="entitySnap">
+		SELECT A.entityId,
+		B.name, B.ip, B.typeId, A.cpu, A.mem, A.state,
+		A.snapTime, C.displayName as
+		typeName FROM
+		EntitySnap A, Entity B,
+		EntityType C WHERE A.entityId = B.entityId AND B.typeId
+		= C.typeId
+		ORDER BY ${sortName} ${sortDirection}
+		LIMIT ${offset}, ${pageSize}
+	</select>
+	<select id="getEntitySnapById" parameterType="Long" resultType="entitySnap">
+		SELECT A.*,B.name FROM EntitySnap A , entity B
+		WHERE A.entityId =
+		#{entityId} and A.entityId = b.entityId
+	</select>
+	<select id="getEntitySnapListException" parameterType="map"
+		resultType="entitySnap">
+		SELECT
+		A.entityId,
+		B.name, B.ip, B.typeId, A.cpu, A.mem,
+		A.state, C.displayName as
+		typeName FROM
+		EntitySnap A, Entity B,
+		EntityType C WHERE A.entityId = B.entityId AND B.typeId
+		= C.typeId
+		ORDER BY ${sortName} ${sortDirection}
+		LIMIT ${offset}, ${pageSize}
+	</select>
+	<select id="loadEntitySnapList" parameterType="map" resultType="snap">
+		SELECT
+		D.* , E.userId as
+		attention
+		FROM (SELECT
+		A.entityId,
+		A.parentId,
+		A.name,
+		A.sysName,
+		A.ip,
+		A.mac,
+		A.icon,
+		A.snmpSupport,
+		A.agentInstalled,
+		A.status,
+		A.createTime,
+		A.lastRefreshTime,
+		A.contact,
+		A.location,
+		A.note,
+		B.cpu,
+		B.mem,
+		B.snapTime,
+		B.delay,
+		B.state,
+		B.sysUpTime,
+		B.usedDisk,
+		B.usedMem,
+		C.module,
+		C.modulePath,
+		C.typeId,
+		C.displayName,
+		C.displayName
+		as typeName
+		FROM
+		entity A,
+		entitysnap
+		B,EntityType C
+		WHERE
+		A.typeId =
+		C.typeId AND
+		A.entityId = B.entityId and A.typeId in
+		(select typeId from
+		entitytyperelation where type = ${typeWithIp} or type =
+		-1) and
+		A.entityId in (select
+		entityId from ${Authority})
+		<if test="queryText != null and queryText != ''">
+			and (A.name like '%${queryText}%' or A.ip like
+			'%${queryText}%' or A.sysName like '%${queryText}%')
+		</if>
+		<if test="deviceType != null ">
+			and A.typeId = #{deviceType}
+		</if>
+		<if test="onlineStatus != null ">
+			and B.state = #{onlineStatus}
+		</if>
+		<if test="sort != null and dir != null">
+			<choose>
+				<when test="sort == 'sysUptime'.toString()">
+					ORDER BY CAST(B.sysUpTime AS UNSIGNED) ${dir}
+				</when>
+				<when test="sort == 'ip'.toString()">
+					ORDER BY inet_aton(ip) ${dir}
+				</when>
+				<when test="sort == 'snapTime'.toString()">
+					<if test="dir == 'ASC'.toString()">
+						ORDER BY snapTime DESC
+					</if>
+					<if test="dir == 'DESC'.toString()">
+						ORDER BY snapTime ASC
+					</if>
+				</when>
+				<otherwise>
+					order by ${sort} ${dir}
+				</otherwise>
+			</choose>
+		</if>
+		)
+		D
+		LEFT JOIN
+		userAttention E
+		ON
+		D.entityId =
+		E.entityId
+		AND
+		E.userId =
+		#{userId}
+		LIMIT
+		${start},${limit}
+	</select>
+
+	<select id="getDeviceVersion" parameterType="Long" resultType="String">
+		select bSoftwareVersion from oltslotattribute where entityId =
+		#{entityId}
+		and bAttribute = 1
+	</select>
+
+	<select id="getAuthotityTable" resultType="string">
+		select table_name
+		from
+		information_schema.tables where table_schema = 'ems'
+		and
+		table_name like
+		't_entity_%' and table_type = 'base table';
+	</select>
+
+	<delete id="deleteAuthorityByEntityId" parameterType="map">
+		delete from
+		${tableName} where entityId = #{entityId}
+	</delete>
+
+	<select id="getEntityFolderRelaListByEntityId" parameterType="long"
+		resultType="long">
+		select folderId from entityfolderrela where entityId =
+		#{entityId}
+	</select>
+
+	<select id="getNextFolderByFolderId" parameterType="int"
+		resultType="string">
+		select topoFolderFun(${value}) as result
+	</select>
+
+	<insert id="insertAuthority" parameterType="map">
+		insert into
+		${authorityTable} values(#{entityId})
+	</insert>
+
+	<insert id="insertSnmpParam" parameterType="snmpParam"> INSERT INTO
+		SnmpParam (entityId, version,
+		timeout, retry, port, mibs, community,
+		writeCommunity, username,
+		securityLevel,
+		authProtocol, authPassword,
+		privProtocol, privPassword, authoritativeEngineID,
+		contextName,
+		contextId) VALUES (#{entityId}, #{version}, #{timeout}, #{retry},
+		#{port},
+		#{mibs}, #{community},
+		#{writeCommunity},
+		#{username},
+		#{securityLevel}, #{authProtocol},
+		#{authPassword}, #{privProtocol},
+		#{privPassword},
+		#{authoritativeEngineID},
+		#{contextName}, #{contextId})
+	</insert>
+	<insert id="entity2Folder" parameterType="entity"> INSERT INTO
+		EntityFolderRela (entityId,
+		folderId, x, y, fixed, visible) VALUES
+		(#{entityId}, #{folderId}, #{x}, #{y},
+		#{fixed},
+		#{visible})
+	</insert>
+	<update id="updateEntity" parameterType="entity">
+		UPDATE Entity SET
+		<if test="typeId != null and typeId != 255">
+			typeId = #{typeId},
+		</if>
+		<if test="lastRefreshTime != null">
+			lastRefreshTime = #{lastRefreshTime},
+		</if>
+		<if test="sysName != null">
+			sysName = #{sysName},
+		</if>
+		<if test="sysDescr != null">
+			sysDescr = #{sysDescr},
+		</if>
+		<if test="sysObjectID != null">
+			sysObjectID = #{sysObjectID},
+		</if>
+		<if test="sysContact != null">
+			sysContact = #{sysContact},
+		</if>
+		<if test="sysLocation != null">
+			sysLocation = #{sysLocation},
+		</if>
+		<if test="sysServices != null">
+			sysServices = #{sysServices},
+		</if>
+		<if test="sysUpTime != null">
+			sysUpTime = #{sysUpTime},
+		</if>
+			contact=IFNULL(contact,#{sysContact}),
+			location=IFNULL(location,#{sysLocation}),
+		<if test="mac != null">
+			mac = #{mac},
+		</if>
+		modifyTime = #{modifyTime}
+		WHERE entityId =
+		#{entityId}
+	</update>
+
+	<update id="updateEntityBasic" parameterType="entity">
+		UPDATE
+		entity
+		SET
+		name
+		=
+		#{name},sysName=#{sysName},note = #{note},
+		sysLocation =
+		#{sysLocation} ,sysContact
+		=
+		#{sysContact} , ip = #{ip}
+		WHERE entityId =
+		#{entityId}
+	</update>
+
+
+	<update id="updateEntity1" parameterType="entity">
+		UPDATE Entity SET
+		typeId = #{typeId}, type =
+		#{type}, corpId=#{corpId}
+		<if test="name != null">
+			,name = #{name}
+		</if>
+		<if test="duty != null">
+			,duty = #{duty}
+		</if>
+		<if test="modifyTime != null">
+			,modifyTime = #{modifyTime}
+		</if>
+		<if test="lastRefreshTime != null">
+			,lastRefreshTime = #{lastRefreshTime}
+		</if>
+		<if test="snmpSupport != null">
+			,snmpSupport = #{snmpSupport}
+		</if>
+		<if test="extend1 != null">
+			,extend1 = #{extend1}
+		</if>
+		<if test="sysName != null">
+			,sysName = #{sysName}
+		</if>
+		<if test="sysDescr != null">
+			,sysDescr = #{sysDescr}
+		</if>
+		<if test="sysObjectID != null">
+			,sysObjectID = #{sysObjectID}
+		</if>
+		<if test="sysContact != null">
+			,sysContact = #{sysContact}
+		</if>
+		<if test="sysLocation != null">
+			,sysLocation = #{sysLocation}
+		</if>
+		<if test="sysServices != null">
+			,sysServices = #{sysServices}
+		</if>
+		<if test="sysUpTime != null">
+			,sysUpTime = #{sysUpTime}
+		</if>
+		<if test="panel != null">
+			,panel = #{panel}
+		</if>
+		<if test="mac != null">
+			,mac = #{mac}
+		</if>
+		<if test="os != null">
+			,os = #{os}
+		</if>
+		<if test="location != null">
+			,location = #{location}
+		</if>
+		WHERE entityId =
+		#{entityId}
+	</update>
+
+	<update id="updateEntityPerf" parameterType="entitySnap">
+		UPDATE EntitySnap SET cpu = #{cpu}, mem =
+		#{mem}, vmem =
+		#{vmem}/1024/1024,
+		usedMem = #{usedMem}, disk = #{disk}, snapTime =
+		#{snapTime}, usedDisk = #{usedDisk}
+		<if test="state != null and state != ''">
+			,state=#{state}
+		</if>
+		WHERE
+		entityId = #{entityId}
+	</update>
+	<update id="updateEntityLastRefreshTime" parameterType="map">
+		update
+		Entity set lastRefreshTime = #{lastRefreshTime} where entityId =
+		#{entityId}
+	</update>
+	<update id="updateSnmpParam" parameterType="snmpParam">
+		UPDATE SnmpParam
+		SET
+		version = #{version},
+		timeout = #{timeout}, retry =
+		#{retry}, port =
+		#{port}, mibs =
+		#{mibs},
+		community = #{community},
+		writeCommunity =
+		#{writeCommunity}, username =
+		#{username},
+		securityLevel =
+		#{securityLevel}, authProtocol = #{authProtocol},
+		authPassword =
+		#{authPassword}, privProtocol =
+		#{privProtocol},
+		privPassword =
+		#{privPassword}, authoritativeEngineID =
+		#{authoritativeEngineID},
+		contextName =
+		#{contextName},
+		contextId =
+		#{contextId} WHERE entityId =
+		#{entityId}
+	</update>
+	<update id="updateSnmpParamMibs" parameterType="snmpParam">
+		UPDATE SnmpParam
+		SET mibs =#{mibs} WHERE entityId = #{entityId}
+	</update>
+	<update id="updateSnmpConfig" parameterType="snmpParam">
+		UPDATE SnmpParam SET
+		timeout = #{timeout} , retry = #{retry} , port =
+		#{port}
+	</update>
+	<update id="updateSnmpV2Param" parameterType="snmpParam">
+		UPDATE SnmpParam
+		SET
+		community = #{community},
+		writeCommunity = #{writeCommunity}
+		WHERE
+		entityId = #{entityId}
+	</update>
+	<select id="selectByPrimaryKey" parameterType="long" resultType="entity">
+		SELECT
+		A.entityId,A.parentId,
+		A.name, A.icon, A.ip, A.status, A.mac,
+		A.location, A.duty,
+		A.snmpSupport, A.agentInstalled,
+		A.sysObjectID,
+		A.sysName, A.sysDescr,
+		A.sysUpTime,
+		A.sysContact,A.sysLocation,
+		A.sysServices,
+		A.url,
+		A.note, A.type,A.contact,
+		A.typeId,A.extend1,A.authorityUserId,
+		B.displayName AS typeName,
+		B.icon48, B.icon64,B.modulePath AS
+		typePath,
+		D.displayName AS modelName,
+		C.displayName AS
+		corpName,B.modulePath AS
+		modulePath
+		FROM (
+		select * from
+		entity e left
+		join
+		(select type,typeid tid from entitytyperelation where
+		type in
+		(select typeId from entitytyperelation where type = 4))
+		etr on
+		e.typeId
+		= etr.tid
+		) A
+		LEFT JOIN EntityType B
+		ON
+		B.typeId = A.typeId
+		LEFT
+		JOIN
+		EntityCorp C ON A.corpId = C.corpId
+		LEFT JOIN EntityType D ON
+		D.typeId =
+		A.type
+		WHERE
+		A.entityId =
+		#{entityId}
+	</select>
+	<select id="getEntityInFolder" parameterType="entity"
+		resultType="entity"> SELECT A.entityId,
+		E.fixed, A.name, E.nameInFolder,
+		E.iconInFolder, A.icon, B.icon48, B.icon64, A.ip,
+		A.status, A.mac,
+		A.location,
+		A.duty, A.snmpSupport, A.agentInstalled, A.url, A.note,
+		A.sysObjectID,
+		A.sysName, A.sysDescr, A.sysLocation, A.sysServices,
+		A.type,
+		B.displayName AS
+		typeName,
+		A.typeId, C.displayName AS modelName,
+		D.displayName AS corpName FROM (
+		select * from entity e left join
+		(select type,typeid tid from entitytyperelation where type in
+		(select
+		typeId from entitytyperelation where type = 4))
+		etr on e.typeId =
+		etr.tid
+		) A,
+		EntityType B,
+		EntityType C,
+		EntityCorp D,
+		EntityFolderRela E
+		WHERE A.entityId = #{entityId}
+		AND
+		E.folderId
+		=
+		#{folderId} AND A.entityId
+		= E.entityId AND A.typeId =
+		B.typeId AND
+		A.typeId = C.typeId AND
+		A.corpId = D.corpId
+	</select>
+	<select id="selectSnmpParam" parameterType="long" resultType="snmpParam">
+		SELECT A.entityId,
+		A.version, A.timeout, A.retry, A.port, A.mibs,
+		A.community, A.writeCommunity,
+		A.username,
+		A.securityLevel,
+		A.authProtocol, A.authPassword, A.privProtocol, A.privPassword,
+		A.authoritativeEngineID, A.contextName, A.contextId, B.ip AS ipAddress
+		FROM SnmpParam A,
+		Entity B WHERE A.entityId = #{entityId} AND
+		B.entityId = #{entityId}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="long"> DELETE FROM
+		Entity WHERE entityId =
+		#{entityId}
+	</delete>
+	<select id="selectCount" parameterType="map" resultType="integer">
+		SELECT
+		count(entityId) FROM
+		Entity WHERE entityId IN(SELECT DISTINCT entityId
+		FROM EntityFolderRela)
+	</select>
+	<select id="getEntityCountSnmpSupported" parameterType="map"
+		resultType="integer"> SELECT
+		count(A.entityId) FROM Entity A WHERE A.snmpSupport
+		= '1' AND A.entityId IN(SELECT
+		DISTINCT
+		entityId FROM EntityFolderRela)
+	</select>
+	<select id="getEntityCountAgentSupported" parameterType="map"
+		resultType="integer"> SELECT
+		count(A.entityId) FROM Entity A WHERE
+		A.agentInstalled = '1' AND A.entityId IN(SELECT
+		DISTINCT entityId FROM
+		EntityFolderRela)
+	</select>
+	<select id="getEntityCountByType" parameterType="map"
+		resultType="integer"> SELECT
+		count(entityId) FROM Entity WHERE typeId in (select
+		typeId from entitytyperelation where type = #{type})
+	</select>
+	<select id="getSnmpEntityByType" parameterType="long"
+		resultType="entity"> SELECT A.entityId,
+		A.name, A.ip, A.snmpSupport,
+		A.agentInstalled, A.typeId FROM Entity A,
+		EntityType B WHERE
+		A.snmpSupport = '1' AND A.typeId = #{typeId} AND A.typeId = B.typeId
+		ORDER
+		BY name ASC
+	</select>
+	<select id="getEntityByType2" parameterType="map" resultType="entity">
+		select
+		A.entityId, A.parentId, B.folderId, A.name, A.sysName, A.ip,
+		A.typeId, C.icon16
+		FROM
+		EntityFolderRela B
+		LEFT JOIN Entity A ON
+		B.entityId = A.entityId
+		LEFT JOIN EntityType C ON A.typeId = C.typeId
+		WHERE
+		B.entityId in (SELECT entityId FROM Entity WHERE typeId in
+		(select typeId from entitytyperelation where type = #{type}))
+		AND
+		B.entityId in (select entityId from ${Authority})
+		GROUP BY B.entityId
+		ORDER BY A.ip
+	</select>
+	<select id="getEntityByTypeId" parameterType="map" resultType="entity">
+		SELECT
+		entityId,name,sysName,ip,typeId,mac,createTime,lastRefreshTime,status
+		FROM
+		entity
+		WHERE
+		typeId = #{typeId} AND entityId IN (SELECT entityId
+		FROM ${Authority})
+		order by ip
+	</select>
+
+	<select id="selectByMap" parameterType="map" resultType="entity">
+		SELECT
+		A.entityId, A.name, A.typeId, A.mac,
+		A.ip, A.icon, A.createTime,
+		B.displayName
+		AS
+		typeName, B.icon48, B.icon64
+		FROM Entity
+		A, EntityType B
+		WHERE
+		A.typeId =
+		B.typeId
+		ORDER BY ip ASC
+	</select>
+	<select id="getEntityInOffManagement" parameterType="map"
+		resultType="entity"> SELECT
+		A.entityId, A.ip, A.name, A.offManagementTime,
+		B.displayName AS typeName FROM
+		Entity A,
+		EntityType B WHERE A.status =
+		'0' AND A.typeId = B.typeId ORDER BY
+		A.offManagementTime DESC
+	</select>
+	<select id="getEntityCountInLonely" parameterType="map"
+		resultType="int"> SELECT
+		COUNT(a.entityId) FROM
+		(SELECT * from entity group by
+		ip ) a WHERE a.entityId NOT IN (SELECT
+		DISTINCT entityId FROM
+		EntityFolderRela)
+	</select>
+	<select id="getAllEntityInLonely" resultType="entity"> SELECT
+		A.entityId,
+		A.ip, A.name FROM
+		Entity A WHERE A.entityId NOT IN (SELECT DISTINCT
+		entityId FROM
+		EntityFolderRela)
+	</select>
+	<select id="getEntityByFolderId" parameterType="map" resultType="entity">
+		SELECT
+		A.entityId,
+		A.name,
+		ifnull(A.ip,E.ip) ip,
+		A.mac,
+		A.icon,
+		A.url,
+		A.status,
+		A.snmpSupport,
+		A.agentInstalled,
+		A.parentId,
+		B.x,
+		B.y,
+		B.iconInFolder,
+		C.icon48,
+		C.icon64,
+		B.iconInFolder,
+		C.module,
+		C.displayName AS typeName,
+		C.typeId,
+		IFNULL(A.ip,CONCAT(E.name,'(',E.ip,')')) AS uplinkDevice
+		FROM
+		Entity A
+		left join Entity E on A.parentId = E.entityId
+		left join
+		EntityFolderRela B on A.entityId = B.entityId
+		left join EntityType C on
+		A.typeId = C.typeId
+		WHERE B.folderId = #{folderId}
+		<if test="sortName != null and sortName != ''">
+				<![CDATA[ ORDER BY ${sortName} ASC ]]></if>
+	</select>
+	<select id="getEntityBySubFolder" parameterType="long"
+		resultType="long"> SELECT folderId FROM
+		TopoFolder WHERE superiorId =
+		#{folderId}
+	</select>
+	<select id="getEntityByFolderAndEntityId" parameterType="map"
+		resultType="entity"> SELECT
+		A.entityId,A.parentId,
+		A.name,A.sysName,A.status,
+		A.ip, A.mac, A.icon, A.snmpSupport, A.agentInstalled, A.url,
+		A.virtualNetworkStatus, B.x, B.y, B.fixed,B.nameInFolder,
+		B.iconInFolder, A.typeId, C.module,
+		C.modulePath, C.displayName AS
+		typeName, C.icon48, C.icon64, groupId FROM Entity A,
+		EntityFolderRela
+		B,
+		EntityType C WHERE
+		B.folderId IN(${folderIds}) AND B.entityId
+		IN(${ids}) AND A.entityId =
+		B.entityId AND A.typeId =
+		C.typeId
+	</select>
+	<!-- for entity layout -->
+	<select id="getEntityCoordByFolderId" parameterType="long"
+		resultType="entity"> SELECT
+		A.entityId, B.folderId, B.x, B.y FROM Entity A,
+		EntityFolderRela B WHERE
+		B.folderId =
+		#{folderId} AND A.entityId =
+		B.entityId
+	</select>
+	<select id="getEntityByIp" parameterType="string" resultType="entity">
+		SELECT entityId, name,
+		ip, createTime, modifyTime, lastRefreshTime,
+		icon, snmpSupport, sysName,
+		sysDescr,
+		sysObjectID, sysContact,
+		sysLocation, sysServices, panel, ipv6, os, mac, location, duty,
+		typeId, corpId
+		FROM
+		Entity WHERE entityId = (SELECT entityId FROM
+		EntityAddress WHERE
+		ip='${value}')
+	</select>
+	<update id="moveEntityById" parameterType="map"> UPDATE
+		EntityFolderRela SET folderId =
+		#{destFolderId} WHERE entityId =
+		#{entityId} AND folderId = #{srcFolderId}
+	</update>
+	<delete id="deleteEntityAllFolderRelation" parameterType="long">
+		DELETE
+		FROM
+		EntityFolderRela WHERE entityId =
+		#{entityId}
+	</delete>
+	<insert id="insertEntityFolder" parameterType="map">
+		INSERT INTO
+		Entityfolderrela(entityId, folderId, x, y, visible)
+		values
+		(#{entityId}, #{destFolderId}, Round(RAND()*600), Round(RAND()*400),
+		1);
+	</insert>
+
+	<update id="deleteEntity" parameterType="entity"> DELETE FROM
+		EntityFolderRela WHERE entityId =
+		#{entityId} AND folderId =
+		#{folderId}
+	</update>
+	<update id="moveEntityToRecyle">
+		DELETE FROM
+		EntityFolderRela
+		WHERE entityId =
+		#{entityId}
+	</update>
+	<update id="emptyRecyle"> DELETE FROM Entity WHERE entityId NOT IN (SELECT
+		DISTINCT entityId FROM
+		EntityFolderRela)
+	</update>
+	<select id="getEntityId" parameterType="long" resultType="long">
+		SELECT
+		entityId FROM
+		EntityFolderRela WHERE folderId = #{folderId}
+	</select>
+	<select id="getEntityCount" resultType="long"> SELECT count(entityId)
+		FROM Entity WHERE
+		entityId IN(SELECT DISTINCT entityId FROM
+		EntityFolderRela)
+	</select>
+	<select id="getEntityIdByFolderId" parameterType="long"
+		resultType="long"> SELECT distinct
+		entityId FROM EntityFolderRela Where
+		folderId = #{folderId}
+	</select>
+	<select id="queryEntityByFolderIdAndType" parameterType="map"
+		resultType="entity">
+		SELECT entityId, name, ip FROM Entity WHERE 1=1
+		<if test="typeId != null and typeId != ''">
+			and typeId = #{typeId}
+		</if>
+		<if test="snmpSupport != null and snmpSupport != ''">
+			and snmpSupport ='1'
+		</if>
+		<if test="folderId != null and folderId != ''">
+			and entityId
+			IN(select entityId FROM
+			EntityFolderRela WHERE
+			folderId =
+			#{folderId})
+		</if>
+		ORDER BY ip ASC
+	</select>
+	<select id="statAgentInstalledEntity" resultType="long"> SELECT
+		COUNT(entityId) FROM Entity
+		WHERE agentInstalled = '1' AND entityId
+		IN(SELECT DISTINCT entityId FROM
+		EntityFolderRela)
+	</select>
+	<select id="queryEntityForAc" parameterType="string" resultType="entity">
+		SELECT entityId, name,
+		ip FROM Entity WHERE ip LIKE #{name} OR name
+		LIKE #{name} ORDER BY ip
+		ASC
+	</select>
+	<select id="queryCountEntity" parameterType="map" resultType="int">
+		SELECT count(entityId) FROM entity A where A.entityId in (select
+		entityId from ${Authority})
+		<if test="name != null and name != ''">
+			and A.name LIKE #{name}
+		</if>
+		<if test="ip != null and ip != ''">
+			and A.ip LIKE #{ip}
+		</if>
+		<if test="typeId != null and typeId != ''">
+			and A.typeId =
+			#{typeId}
+		</if>
+		<if test="folderId != null and folderId != ''">
+			and A.entityId
+			IN(SELECT entityId
+			FROM EntityFolderRela
+			WHERE folderId =
+			#{folderId})
+		</if>
+	</select>
+	<select id="getAllEntity" resultType="entity">
+		select * from entity;
+	</select>
+	<select id="getAliasLogCount" resultType="long">
+		select count(*) from
+		aliaslog;
+	</select>
+	<select id="selectHistoryAliasByMac" parameterType="string"
+		resultType="string">
+		select newname from AliasLog where mac=#{mac} and actionType=2 
+		order by actionTime desc limit 1
+	</select>
+
+	<select id="selectHistoryAliasByIndex" parameterType="map"	resultType="string">
+		select newname from AliasLog where parentId = #{entityId} and `index`=#{index} and actionType=2
+		order by actionTime desc limit 1
+	</select>
+	
+	<select id="selectHistoryAliasBySn" parameterType="map"  resultType="string">
+        select newname from AliasLog where sn=#{sn} and actionType=2 
+        order by actionTime desc limit 1
+    </select>
+
+
+	<update id="updateEntityUrl" parameterType="entity"> UPDATE Entity SET
+		url =
+		#{url}, note = #{note} WHERE entityId = #{entityId}
+	</update>
+	<update id="updateEntityOutline" parameterType="entity"> UPDATE Entity
+		SET ip = #{ip}, name =
+		#{name}, location = #{location}, duty =
+		#{duty},
+		note =
+		#{note} WHERE entityId = #{entityId}
+	</update>
+	<update id="updateEntityType" parameterType="entity"> UPDATE Entity SET
+		typeId = #{typeId} WHERE
+		entityId = #{entityId}
+	</update>
+	<update id="updateEntityGroup" parameterType="entity"> UPDATE
+		EntityFolderRela SET groupId =
+		#{groupId} WHERE entityId = #{entityId}
+		AND folderId = #{folderId}
+	</update>
+	<update id="updateEntityIcon" parameterType="entity"> UPDATE Entity SET
+		icon = #{icon} WHERE
+		entityId = #{entityId}
+	</update>
+	<update id="updateEntityIconInFolder" parameterType="entity"> UPDATE
+		EntityFolderRela SET
+		iconInFolder = #{iconInFolder} WHERE entityId =
+		#{entityId} AND folderId =
+		#{folderId}
+	</update>
+	<update id="enableManagement" parameterType="long"> UPDATE Entity SET
+		status = '1' WHERE
+		entityId = #{entityId}
+	</update>
+	<update id="disableManagement" parameterType="entity">
+		UPDATE
+		Entity
+		SET
+		status = '0',offManagementTime = #{offManagementTime}
+		WHERE
+		entityId =
+		#{entityId}
+	</update>
+	<update id="updateEntityFixed" parameterType="entity"> UPDATE
+		EntityFolderRela SET fixed =
+		#{fixed} WHERE entityId = #{entityId} AND
+		folderId = #{folderId}
+	</update>
+	<select id="getEntityByIp2" parameterType="string" resultType="entity">
+		SELECT entityId, name,
+		ip
+		FROM Entity WHERE ip IN (${ip})
+	</select>
+	<select id="countEntitySnap" parameterType="map" resultType="int">
+		SELECT COUNT(A.entityId)
+		FROM EntitySnap A, Entity B WHERE A.entityId =
+		B.entityId
+	</select>
+	<select id="getAllEntitySnap" resultType="entitySnap"> SELECT entityId, cpu,
+		mem, state, sysUpTime,
+		snapTime FROM EntitySnap
+	</select>
+	<select id="getEntityRelationUsers" resultType="user"> SELECT
+		ifnull(C.userId,0) AS
+		userId,ifnull(C.userName,'') AS userName,
+		C.familyName,C.workTelPhone,ifnull(D.name,'')as
+		departmentName FROM
+		entity A
+		LEFT JOIN entityrelauser B ON A.entityId = B.entityId
+		LEFT JOIN
+		users C ON C.userId = B.userId
+		LEFT JOIN department D ON C.departmentId
+		= D.departmentId
+		WHERE A.entityId =#{entityId}
+	</select>
+	<select id="getAttentionEntityList" parameterType="map"
+		resultType="snap">
+		SELECT
+		A.entityId,
+		A.name,
+		A.ip,
+		A.icon,
+		A.snmpSupport,
+		A.agentInstalled,
+		A.status,
+		B.cpu,
+		B.mem,
+		B.snapTime,
+		B.delay,
+		B.state,
+		B.sysUpTime,
+		B.usedDisk,
+		B.usedMem,
+		C.typeId,
+		C.displayName,
+		C.displayName
+		as
+		typeName
+		FROM entity A, entitysnap B,EntityType C ,userAttention D
+		WHERE A.typeId = C.typeId
+		AND A.entityId = B.entityId
+		AND D.entityId =
+		A.entityId
+		AND D.userId = #{userId}
+		and A.entityId in (select entityId
+		from ${Authority})
+	</select>
+
+	<select id="loadEntitySnapCount" resultType="int" parameterType="map">
+		SELECT
+		count(D.entityId)
+		FROM (SELECT
+		A.entityId,
+		A.parentId,
+		A.name,
+		A.sysName,
+		A.ip,
+		A.mac,
+		A.icon,
+		A.snmpSupport,
+		A.agentInstalled,
+		A.status,
+		A.createTime,
+		A.lastRefreshTime,
+		B.cpu,
+		B.mem,
+		B.snapTime,
+		B.delay,
+		B.state,
+		B.sysUpTime,
+		B.usedDisk,
+		B.usedMem,
+		C.module,
+		C.modulePath,
+		C.typeId,
+		C.displayName,
+		C.displayName as typeName
+		FROM
+		entity A,
+		entitysnap
+		B,EntityType C
+		WHERE
+		A.typeId = C.typeId AND
+		A.entityId =
+		B.entityId and A.typeId in
+		(select typeId from
+		entitytyperelation where
+		type = ${typeWithIp} or type =
+		-1) and
+		A.entityId in (select
+		entityId
+		from ${Authority})
+		<if test="queryText != null and queryText != ''">
+			and (A.name like '%${queryText}%' or A.ip like
+			'%${queryText}%' or A.sysName like '%${queryText}%')
+		</if>
+		<if test="deviceType != null ">
+			and A.typeId = #{deviceType}
+		</if>
+		<if test="onlineStatus != null ">
+			and B.state = #{onlineStatus}
+		</if>
+		)
+		D
+		LEFT JOIN
+		userAttention E
+		ON
+		D.entityId =
+		E.entityId
+		AND
+		E.userId =
+		#{userId}
+	</select>
+
+	<delete id="deleteEntityRelationUsers" parameterType="long">
+		DELETE FROM
+		EntityRelaUser WHERE
+		entityId = #{entityId}
+	</delete>
+	<delete id="removeEntity" parameterType="long">
+		DELETE FROM
+		entity
+		WHERE
+		entityId = #{entityId}
+	</delete>
+	<delete id="cancelAttention" parameterType="map">
+		DELETE FROM
+		userAttention
+		WHERE
+		userId = #{userId}
+		AND
+		entityId = #{entityId}
+	</delete>
+
+	<insert id="pushAttention" parameterType="map">
+		INSERT INTO
+		userAttention(userId,entityId)
+		VALUES
+		(#{userId},#{entityId})
+	</insert>
+
+	<insert id="insertEntityRelationUsers" parameterType="map">
+		INSERT INTO
+		EntityRelaUser
+		(entityId, userId) VALUES (#{entityId}, #{userId})
+	</insert>
+	<insert id="insertEntityAlias" parameterType="entity">
+		insert into
+		aliaslog (entityId,name,ip,mac) values
+		(#{entityId},#{name},#{ip},#{mac})
+	</insert>
+	<update id="updateEntitySnap" parameterType="entitySnap">
+		UPDATE EntitySnap SET snapTime = #{snapTime}, vmem = #{vmem},
+		usedMem = #{usedMem},usedDisk = #{usedDisk}
+		<if test="disk != null">
+			,disk = #{disk}
+		</if>
+		<if test="cpu != null">
+			,cpu = #{cpu}
+		</if>
+		<if test="mem != null">
+			,mem = #{mem}
+		</if>
+		<if test="sysUpTime != null">
+			,sysUpTime = #{sysUpTime}
+		</if>
+		<if test="state != null">
+			,state=#{state}
+		</if>
+		WHERE entityId = #{entityId}
+	</update>
+	<update id="renameEntity" parameterType="map">
+		UPDATE Entity
+		SET name
+		=#{name}
+		WHERE entityId = #{entityId}
+	</update>
+	
+	<update id="modifyDeviceInfo" parameterType="map">
+        UPDATE Entity
+        SET name
+        =#{name} , location=#{location} , contact=#{contact}, note=#{note}
+        WHERE entityId = #{entityId}
+    </update>
+    
+	<update id="modifyEntityMac" parameterType="map">
+		UPDATE Entity
+		SET mac
+		= #{mac}
+		WHERE entityId = #{entityId}
+	</update>
+	<select id="getRefreshStatus" parameterType="long" resultType="int">
+		select extend1 from entity where entityId=#{value}
+	</select>
+	<update id="updateRefreshStatus" parameterType="map">
+		update entity set
+		extend1=#{status} where entityId=#{entityId}
+	</update>
+	<update id="resetRefreshStatus">
+		update entity set extend1=0
+	</update>
+	<insert id="insertEntitySnap" parameterType="entitySnap">
+		insert into
+		entitysnap
+		(entityId, cpu, mem, vmem, usedMem, disk, usedDisk, diskio,
+		processCount,
+		snapTime,
+		state,
+		delay,
+		delayTime,
+		sysUpTime
+		)
+		values
+		(#{entityId}, #{cpu}, #{mem}, #{vmem}, #{usedMem}, #{disk},
+		#{usedDisk}, #{diskio},
+		#{processCount},
+		#{snapTime},
+		#{state},
+		#{delay},
+		#{delayTime},
+		#{sysUpTime}
+		)
+	</insert>
+	<select id="selectSnapByEntityId" parameterType="entitySnap"
+		resultType="entitySnap">
+		select * from entitysnap where entityId=#{entityId}
+	</select>
+	<select id="getEntityByParentIdAndMac" parameterType="entity"
+		resultType="Long">
+		select entityId from entity where mac = #{mac} and parentId
+		= #{parentId}
+	</select>
+	<update id="updateEntityTypeAndTypeId" parameterType="map">
+		update
+		entity set typeId = #{typeId} where entityId =
+		#{entityId}
+	</update>
+	<select id="selectEntityFromView" parameterType="string"
+		resultType="entity">
+		select * from ${_parameter};
+	</select>
+	<select id="getUserAuthorityEntity" parameterType="string"
+		resultType="entity">
+		select entityId from ${_parameter};
+	</select>
+	<update id="updateEntityIpAddress" parameterType="map">
+		update entity
+		set ip = #{ipAddress}
+		where entityId = #{entityId}
+	</update>
+
+	<update id="updateEntityAddressTable" parameterType="map">
+		Update
+		entityaddress
+		set ip = #{ip}
+		where entityId = #{entityId}
+	</update>
+
+	<select id="getAllEntityByFolderId" parameterType="map"
+		resultType="entity">
+		select * from entity where entityId in (select entityId
+		from ${Authority});
+	</select>
+
+	<select id="getEntityByIpAndId" parameterType="map" resultType="entity">
+		select * from entity where entityId = #{entityId} and ip = #{ip}
+	</select>
+
+	<select id="getEntityBySingleIp" parameterType="map" resultType="entity">
+		select * from entity where ip = #{ip}
+	</select>
+
+	<select id="getFolderIdByEntityId" parameterType="long"
+		resultType="long">
+		select folderId FROM entityfolderrela where entityId =
+		#{entityId}
+	</select>
+	<!-- <procedure id="authority" parameterMap="folderMap"> {call autoInsertAuthotiry 
+		(?,?)} </procedure> -->
+	<select id="getEntityByMac" parameterType="string" resultType="long">
+		select entityId from entity where mac = #{mac}
+	</select>
+
+	<update id="updateEntityState" parameterType="entitySnap">
+		update entitysnap
+		set state = #{state}, delay = #{delay}, sysUpTime = #{sysUpTime},
+		snapTime = #{snapTime} where
+		entityId=#{entityId}
+	</update>
+	<update id="updateOnuEntityState" parameterType="entitySnap">
+		update entitysnap
+		set state = #{state}
+		,sysUpTime = #{sysUpTime}
+		<if test="snapTime != null">
+			, snapTime = #{snapTime}
+		</if>
+		where entityId=#{entityId}
+	</update>
+
+	<select id="selectCentralEntity" parameterType="map" resultType="entity">
+		SELECT A.* FROM entity A,entitysnap B where (A.parentId is NULL OR
+		A.parentId = A.entityId)
+		and A.entityId in (select A.entityId from
+		${Authority}) AND A.entityId=B.entityId AND B.state =1
+	</select>
+
+	<select id="getEntityWithIp" parameterType="map" resultType="entity">
+		SELECT * FROM entity where typeId in (select typeId from
+		entitytyperelation where type = 50000)
+		and entityId in (select entityId
+		from ${Authority})
+	</select>
+
+	<select id="selectEntityIdsByType" parameterType="long"
+		resultType="long">
+		select entityId from entity where typeId in (select typeId
+		from entitytyperelation where type = #{type})
+	</select>
+
+	<select id="getEntityIdsByAuthority" parameterType="map"
+		resultType="long">
+		SELECT
+		e.entityId
+		FROM
+		entity e, ${Authority}
+		WHERE
+		e.typeId in
+		(select typeId from entitytyperelation where type = #{type})
+		AND
+		e.entityId = ${Authority}.entityId
+	</select>
+
+	<select id="getAllUnknownEntity" resultType="entity">
+		select * from entity
+		where typeId = -1;
+	</select>
+
+	<select id="getEntityIpList" parameterType="long" resultType="String">
+		select ip from entityaddress where entityId = #{entityId};
+	</select>
+
+
+	<select id="getEntityWithMacAndTypeId" parameterType="map"
+		resultType="entity">
+		select * from entity where mac = #{macAddress} and typeId =
+		#{typeId}
+	</select>
+	
+	<select id="getEntityListWithMacAndTypeId" parameterType="map" resultType="entity">
+		select * from entity where mac = #{macAddress} and typeId =
+		#{typeId}
+	</select>
+
+	<update id="replaceEntity" parameterType="map">
+		UPDATE entity SET
+		<if test="ip != null">
+		ip = #{ip}
+		</if>
+		<if test="ip == null">
+		ip = NULL
+		</if>
+		<if test="mac != null">
+			, mac = #{mac}
+		</if>
+		WHERE entityId = #{preEntityId}
+	</update>
+
+	<update id="replaceEntityAddress" parameterType="map">
+		update
+		entityaddress set ip = #{replaceIpAddress} where ip=#{preIpAddress}
+		and entityId=#{entityId}
+	</update>
+	
+	<delete id="deleteEntityAddress" parameterType="map">
+		delete from entityaddress where ip=#{preIpAddress} and entityId=#{entityId}
+	</delete>
+	
+	<insert id="insertEntityAddress" parameterType="map">
+		insert into entityaddress(entityId, ip) values (#{entityId}, #{replaceIpAddress});
+	</insert>
+
+	<insert id="insertReplaceEntityRecord" parameterType="map">
+		insert into
+		entityreplacerecord values
+		(#{entityId},#{macAddress},#{preIpAddress},#{replaceIpAddress},#{replaceTime})
+	</insert>
+
+
+	<select id="isEntityInAuthorityTable" parameterType="map"
+		resultType="int">
+		select count(1) from ${tableName} where entityId = #{entityId}
+	</select>
+
+	<update id="updateEntityDeviceName" parameterType="map">
+		UPDATE entity
+		SET
+		sysName = #{deviceName}
+		WHERE
+		entityId = #{entityId}
+	</update>
+
+	<update id="updateSnapSysUptime" parameterType="map">
+		UPDATE entitysnap
+		SET
+		sysUpTime = #{sysUptime}
+		WHERE
+		entityId = #{entityId}
+	</update>
+
+	<update id="updateEntityNameAndMac" parameterType="map">
+		UPDATE entity
+		SET
+		<if test="sysName != null and sysName != ''">
+			sysName = #{deviceName},
+		</if>
+		mac = #{mac}
+		WHERE
+		entityId = #{entityId}
+	</update>
+
+	<select id="getSubEntityByEntityId" resultType="entity"
+		parameterType="long">
+		select * from entity where parentId = #{entityId}
+	</select>
+
+	<delete id="deleteEntityFolderRela" parameterType="map">
+		DELETE FROM
+		entityfolderrela WHERE entityId=#{entityId} AND FIND_IN_SET(folderId,
+		#{authFolderIds})>0
+	</delete>
+
+	<insert id="addEntityFolderRela" parameterType="map">
+		insert into
+		entityfolderrela(entityId, folderId, x, y)
+		SELECT #{entityId},
+		#{folderId}, #{x}, #{y}
+		FROM dual
+		WHERE
+		not exists (select * from
+		entityfolderrela where entityId = #{entityId}
+		and
+		folderId=#{folderId});
+	</insert>
+
+	<delete id="deleteEntitiesFoldersRela" parameterType="map">
+		DELETE FROM
+		entityfolderrela
+		WHERE FIND_IN_SET(entityId, #{entityIdStr})>0 AND
+		FIND_IN_SET(folderId,
+		#{authFolderIdStr})>0;
+	</delete>
+
+	<delete id="removeEntityFromFolder" parameterType="map">
+		DELETE FROM
+		entityfolderrela WHERE entityId=#{entityId} AND folderId=#{folderId};
+	</delete>
+
+	<select id="getAllEntityExportInfo" parameterType="map"
+		resultType="entity">
+		SELECT
+		A.ip,
+		A.entityId,
+		C.displayName typeName,
+		A.name,
+		A.contact,
+		A.location,
+		A.note,
+		A.corpId,
+		A.sysObjectID,
+		A.mac,
+		A.typeId,
+		C.icon48,
+		A.status,
+		A.authorityUserId,
+		A.sysName,
+		MIN(D.folderId) folderId,
+		GROUP_CONCAT(E.name) folderName,
+		B.*
+		FROM entity A
+		LEFT JOIN snmpparam B
+		ON A.entityId=B.entityId
+		INNER
+		JOIN
+		entitytype C ON A.typeId=C.typeId
+		LEFT JOIN entityfolderrela D ON
+		A.entityId=D.entityId
+		LEFT JOIN
+		topofolder E ON D.folderId=E.folderId
+		WHERE
+		A.entityId in (select
+		entityId from ${Authority})
+		<if test="ip != null">
+			and A.ip = #{ip}
+		</if>
+		<if test="startIp != null and endIp != null">
+			and INET_ATON(A.ip) BETWEEN INET_ATON(#{startIp}) and
+			INET_ATON(#{endIp})
+		</if>
+		<if test="mac != null">
+			and A.mac = #{mac}
+		</if>
+		<if test="startMac != null and endMac != null">
+			and A.mac BETWEEN #{startMac} and #{endMac}
+		</if>
+		<if test="folderId != null">
+			and (D.folderId IN (${folderId}))
+		</if>
+		<if test="typeId != null">
+			and (A.typeId IN (${typeId}))
+		</if>
+		<if test="needIp != null">
+			and (A.ip IS NOT NULL)
+		</if>
+		GROUP BY A.entityId
+		<if test="start != null and limit != null">
+			limit ${start} , ${limit}
+		</if>
+	</select>
+
+	<select id="getExportEntityNum" parameterType="map" resultType="int">
+		SELECT count(*) FROM
+		(SELECT
+		A.entityId
+		FROM entity A
+		LEFT JOIN snmpparam
+		B ON A.entityId=B.entityId
+		INNER JOIN
+		entitytype C ON A.typeId=C.typeId
+		LEFT JOIN entityfolderrela D ON
+		A.entityId=D.entityId
+		LEFT JOIN
+		topofolder E ON D.folderId=E.folderId
+		WHERE
+		A.entityId in (select
+		entityId from ${Authority})
+		<if test="ip != null">
+			and A.ip = #{ip}
+		</if>
+		<if test="startIp != null and endIp != null">
+			and INET_ATON(A.ip) BETWEEN INET_ATON(#{startIp}) and
+			INET_ATON(#{endIp})
+		</if>
+		<if test="mac != null">
+			and A.mac = #{mac}
+		</if>
+		<if test="startMac != null and endMac != null">
+			and A.mac BETWEEN #{startMac} and #{endMac}
+		</if>
+		<if test="folderId != null">
+			and (D.folderId IN (${folderId}))
+		</if>
+		<if test="typeId != null">
+			and (A.typeId IN (${typeId}))
+		</if>
+		GROUP BY A.entityId) A
+	</select>
+
+	<select id="getAllEntityFolders" resultType="entityFolderRela">
+		SELECT
+		B.ip,
+		B.mac,
+		A.*
+		FROM entityfolderrela A
+		INNER JOIN entity B ON A.entityId=B.entityId
+		WHERE B.ip IS NOT null OR B.mac IS NOT NULL
+	</select>
+
+	<update id="updateEntityParentId" parameterType="map">
+		UPDATE entity
+		SET
+		parentId=#{parentId}
+		WHERE
+		entityId=#{entityId}
+	</update>
+
+	<delete id="deleteTopoEntityByEntityIdAndType" parameterType="map">
+		delete from entity where typeId in (select typeId from
+		entitytyperelation where type = #{typeId}) and parentId not in (
+		select cmcEntityId from cmcentityrelation);
+	</delete>
+
+	<update id="updateEntityInfo" parameterType="entity">
+		UPDATE entity
+		SET
+		sysName=#{sysName}, sysLocation = #{sysLocation}
+		,sysContact =
+		#{sysContact}
+		WHERE entityId = #{entityId}
+	</update>
+
+	<delete id="deleteEntityIfNoMapNode" parameterType="long">
+		delete from
+		entity where entityId not in (select entityId from
+		entityfolderrela)
+		and entityId =
+		#{entityId}
+	</delete>
+
+	<delete id="removeProductFromTopoGraph" parameterType="long">
+		delete
+		from entity where entityId=#{entityId}
+	</delete>
+	<update id="updateEntityConnectInfo" parameterType="entity">
+		UPDATE
+		entity
+		SET name
+		=
+		#{name},sysName=#{sysName},note = #{note},
+		sysLocation =
+		#{sysLocation} ,sysContact
+		=
+		#{sysContact} , ip = #{ip}
+		WHERE entityId =
+		#{entityId}
+	</update>
+
+	<update id="updateEntityOltInfo" parameterType="entity">
+		UPDATE
+		entity
+		SET
+		sysName=#{sysName},sysLocation =#{sysLocation}
+		,sysContact=#{sysContact}
+		<if test="name != null">
+			, name = #{name}
+		</if>
+		<if test="ip != null and ip != ''">
+			, ip = #{ip}
+		</if>
+		<if test="note != null">
+			, note = #{note}
+		</if>
+		WHERE
+		entityId =#{entityId}
+	</update>
+
+	<update id="updateEmsSnmpparam" parameterType="snmpParam">
+		UPDATE snmpparam
+		SET
+		version = #{version},
+		community = #{community},
+		writeCommunity =
+		#{writeCommunity}
+		WHERE
+		entityId = #{entityId}
+	</update>
+
+	<update id="updateEntityName" parameterType="com.topvision.ems.network.domain.EntityImport">
+		update entity set
+		name =#{name}, contact =#{contact},
+		location =#{location}, note
+		=#{note}
+		where entityId = #{entityId}
+	</update>
+	<select id="loadUserAttentionList" parameterType="map"
+		resultType="snap">
+		select
+		B.entityId,
+		b.parentId,
+		B.name,
+		B.mac,
+		B.sysName,
+		C.displayName
+		typeName,
+		D.state,
+		B.typeId,
+		E.name parentName,(select count(alertId)
+		from alert where
+		entityId = A.entityId) alertNum,
+		IFNULL(B.ip,E.ip) ip,
+		IFNULL(B.ip,CONCAT(E.name,'(',E.ip,')')) AS uplinkDevice
+		from
+		userattention A
+		left join entity B on a.entityId = b.entityId
+		left join
+		entity E on
+		B.parentId = E.entityId
+		left join entityType C on b.typeId =
+		C.typeId
+		left join entitySnap D on d.entityId = A.entityId
+		where userId
+		=
+		#{userId}
+		<if test="queryText != null and queryText != ''">
+			and (B.name like '%${queryText}%' or B.sysName like
+			'%${queryText}%' or B.mac like '%${queryText}%'
+			or
+			IFNULL(B.ip,CONCAT(E.name,'(',E.ip,')')) like '%${queryText}%')
+		</if>
+		<if test="deviceType != null ">
+			and B.typeId = #{deviceType}
+		</if>
+		<if test="onlineStatus != null ">
+			and D.state = #{onlineStatus}
+		</if>
+		<if test="sort != null and dir != null">
+			order by ${sort} ${dir}
+		</if>
+		LIMIT ${start},${limit}
+	</select>
+
+	<select id="userAttentionCount" parameterType="map" resultType="int">
+		select count(B.entityId)
+		from userattention A
+		left join entity B on
+		a.entityId = b.entityId
+		left join entity E on B.parentId = E.entityId
+		left join entityType C on
+		b.typeId = C.typeId
+		left join entitySnap D on
+		d.entityId = A.entityId
+		where userId = #{userId}
+		<if test="queryText != null and queryText != ''">
+			and (B.name like '%${queryText}%' or B.sysName like
+			'%${queryText}%' or B.mac like '%${queryText}%'
+			or
+			IFNULL(B.ip,CONCAT(E.name,'(',E.ip,')')) like '%${queryText}%')
+		</if>
+		<if test="deviceType != null ">
+			and B.typeId = #{deviceType}
+		</if>
+		<if test="onlineStatus != null ">
+			and D.state = #{onlineStatus}
+		</if>
+	</select>
+
+	<select id="getEntityIndexOfOlt" parameterType="long"
+		resultType="long">
+		SELECT onuIndex FROM oltonurelation WHERE onuId=#{entityId};
+	</select>
+	
+	<select id="getOnuEorG" parameterType="long" resultType="string">
+	   SELECT onuEorG FROM oltonuattribute WHERE onuId=#{entityId}; 
+	</select>
+	
+	<select id="getOnuLevel" parameterType="long" resultType="int">
+       SELECT onulevel FROM oltonuattribute WHERE onuId=#{entityId}; 
+    </select>
+
+	<select id="getEntityIdsUnderEntity" parameterType="long" resultType="long">
+		SELECT entityId FROM entity where entityId=#{entityId} OR parentId=#{entityId};
+	</select>
+	
+	<select id="getEntityRelaOnlineCm" parameterType="long" resultType="long">
+	   select
+       IFNULL(onlineNum,0)  onlineNum
+       from usernumlastdevice 
+       where entityId=#{entityId}
+	</select>
+	
+</mapper>

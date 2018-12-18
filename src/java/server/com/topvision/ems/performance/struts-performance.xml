@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="performance" namespace="/performance" extends="default">
+		<!-- 添加操作日志拦截器配置  -->
+
+        
+        <action name="showRestartStasticAnalyzer" class="restartAnalyzerAction" method="showRestartStasticAnalyzer">
+            <result>/performance/showRestartStasticAnalyzer.jsp</result>
+        </action>
+        <action name="loadRestartStasticData" class="restartAnalyzerAction" method="loadRestartStasticData" />
+        <action name="loadRestartStatistic" class="restartAnalyzerAction" method="loadRestartStatistic" />
+        <action name="loadEponDeviceList" class="restartAnalyzerAction" method="loadEponDeviceList" />
+        <action name="showRestartDetail" class="restartAnalyzerAction" method="showRestartDetail">
+            <result>/admin/showRestartDetail.jsp</result>
+        </action>
+        <action name="exportRestartStatic" class="restartAnalyzerAction" method="exportRestartStatic" />
+        <action name="exportRestartDetail" class="restartAnalyzerAction" method="exportRestartDetail" />
+        
+        <action name="showAddPerfTag" class="performanceAction" method="showAddPerfTag">
+        	<result>/performance/addPerfTag.jsp</result>
+        </action>
+        
+        <action name="moidifyTemplateName" class="performanceAction" method="moidifyTemplateName" />
+        <action name="copyTemplate" class="performanceAction" method="copyTemplate" />
+        <!-- <action name="deletePerfTemplate" class="performanceAction" method="deletePerfTemplate" /> -->
+        
+        <action name="showPerfTagDetail" class="performanceAction" method="showPerfTagDetail">
+        	<result>/performance/perfTagDetail.jsp</result>
+        </action>
+        <action name="modifyTemplatePerfTag" class="performanceAction" method="modifyTemplatePerfTag">
+        	<result>/performance/editPerfTag.jsp</result>
+        </action>
+        
+        <action name="saveEntityAlertEnabled" class="performanceAction" method="saveEntityAlertEnabled" />
+        
+        <!-- 性能指标批量配置 -->
+        <action name="showBatchConfigTarget" class="perfTargetManageAction" method="showBatchConfigTarget" >
+        	<result>/performance/showBatchStep1.jsp</result>
+        </action>
+        <action name="showSupportTargetDeviceList" class="perfTargetManageAction" method="showSupportTargetDeviceList" >
+       		<result>/performance/showBatchStep2.jsp</result>
+        </action>
+        <action name="loadSupportTargetDevice" class="perfTargetManageAction" method="loadSupportTargetDevice" />
+        <action name="batchModifyDeviceSingleTarget" class="perfTargetManageAction" method="batchModifyDeviceSingleTarget" />
+        <action name="loadAllArea" class="perfTargetManageAction" method="loadAllArea" />
+	</package>
+</struts>

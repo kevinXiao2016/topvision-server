@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="igmpconfig" namespace="/epon/igmpconfig" extends="default">
+	    <action name="showOltIgmpConfig" class="oltIgmpConfigAction" method="showOltIgmpConfig">
+			<result>/epon/igmp/oltIgmpConfig.jsp</result>
+		</action>
+		<action name="showIgmpGroupImport" class="igmpBatchAction" method="showIgmpGroupImport">
+			<result>/epon/igmp/importIgmpGroups.jsp</result>
+		</action>
+		
+	    <action name="showIgmpProtocol" class="oltIgmpConfigAction" method="showIgmpProtocol">
+			<result>/epon/igmp/igmpProtocol.jsp</result>
+		</action>
+		<action name="batchImportIgmpGroups" class="igmpBatchAction" method="batchImportIgmpGroups"/>
+		<action name="modifyIgmpMode" class="oltIgmpConfigAction" method="modifyIgmpMode" />
+		<action name="refreshAllIgmpData" class="oltIgmpConfigAction" method="refreshAllIgmpData" />
+	    <action name="modifyIgmpProtocol" class="oltIgmpConfigAction" method="modifyIgmpProtocol" />
+	    <action name="refreshIgmpProtocol" class="oltIgmpConfigAction" method="refreshIgmpProtocol" />
+	    
+	    <action name="showIgmpCascadePort" class="oltIgmpConfigAction" method="showIgmpCascadePort">
+			<result>/epon/igmp/igmpCascadePort.jsp</result>
+		</action>
+		<action name="loadCascadePortList" class="oltIgmpConfigAction" method="loadCascadePortList" />
+	    <action name="addCascadePort" class="oltIgmpConfigAction" method="addCascadePort" />
+	    <action name="deleteCascadePort" class="oltIgmpConfigAction" method="deleteCascadePort" />
+	    <action name="batchDeleteCascadePort" class="oltIgmpConfigAction" method="batchDeleteCascadePort" />
+	    <action name="refreshCascadePort" class="oltIgmpConfigAction" method="refreshCascadePort" />
+		
+	    <action name="showIgmpVlan" class="oltIgmpConfigAction" method="showIgmpVlan">
+			<result>/epon/igmp/igmpVlan.jsp</result>
+		</action>
+		<action name="loadIgmpVlanList" class="oltIgmpConfigAction" method="loadIgmpVlanList" />
+	    <action name="addIgmpVlan" class="oltIgmpConfigAction" method="addIgmpVlan" />
+	    <action name="modifyIgmpVlan" class="oltIgmpConfigAction" method="modifyIgmpVlan" />
+	    <action name="deleteIgmpVlan" class="oltIgmpConfigAction" method="deleteIgmpVlan" />
+	    <action name="batchDeleteIgmpVlan" class="oltIgmpConfigAction" method="batchDeleteIgmpVlan" />
+	    <action name="refreshIgmpVlan" class="oltIgmpConfigAction" method="refreshIgmpVlan" />
+		
+	    <action name="showIgmpGroup" class="oltIgmpConfigAction" method="showIgmpGroup">
+			<result>/epon/igmp/igmpGroup.jsp</result>
+		</action>
+		<action name="loadVlanGroupList" class="oltIgmpConfigAction" method="loadVlanGroupList" />
+	    <action name="addVlanGroup" class="oltIgmpConfigAction" method="addVlanGroup" />
+	    <action name="modifyVlanGroup" class="oltIgmpConfigAction" method="modifyVlanGroup" />
+	    <action name="deleteVlanGroup" class="oltIgmpConfigAction" method="deleteVlanGroup" />
+	    <action name="batchDeleteVlanGroup" class="oltIgmpConfigAction" method="batchDeleteVlanGroup" />
+	    <action name="refreshVlanGroup" class="oltIgmpConfigAction" method="refreshVlanGroup" />
+	    <action name="loadAllVlanGroup" class="oltIgmpConfigAction" method="loadAllVlanGroup" />
+	    <action name="modifyGroupPreJoin" class="oltIgmpConfigAction" method="modifyGroupPreJoin" />
+		
+	    <action name="showSnoopingGroup" class="oltIgmpConfigAction" method="showSnoopingGroup">
+			<result>/epon/igmp/igmpSnoopingGroup.jsp</result>
+		</action>
+		<action name="loadSnpGroupList" class="oltIgmpConfigAction" method="loadSnpGroupList" />
+	    <action name="refreshSnpGroup" class="oltIgmpConfigAction" method="refreshSnpGroup" />
+		
+	     <action name="showIgmpUplinkPort" class="oltIgmpConfigAction" method="showIgmpUplinkPort">
+			<result>/epon/igmp/igmpUplinkPort.jsp</result>
+		</action>
+		<action name="modifyUplinkPort" class="oltIgmpConfigAction" method="modifyUplinkPort" />
+	    <action name="refreshUplinkPort" class="oltIgmpConfigAction" method="refreshUplinkPort" />
+		
+	    <action name="showIgmpStaticJoin" class="oltIgmpConfigAction" method="showIgmpStaticJoin">
+			<result>/epon/igmp/igmpStaticJoin.jsp</result>
+		</action>
+		<action name="loadStaticJoinList" class="oltIgmpConfigAction" method="loadStaticJoinList" />
+	    <action name="addSnpStaticJoin" class="oltIgmpConfigAction" method="addSnpStaticJoin" />
+	    <action name="deleteSnpStaticJoin" class="oltIgmpConfigAction" method="deleteSnpStaticJoin" />
+	    <action name="batchDeleteSnpStaticJoin" class="oltIgmpConfigAction" method="batchDeleteSnpStaticJoin" />
+	    <action name="refreshSnpStaticJoin" class="oltIgmpConfigAction" method="refreshSnpStaticJoin" />
+		
+	    <action name="showIgmpCtcConfig" class="oltIgmpConfigAction" method="showIgmpCtcConfig">
+			<result>/epon/igmp/igmpCtcConfig.jsp</result>
+		</action>
+		<action name="modifyCtcParam" class="oltIgmpConfigAction" method="modifyCtcParam" />
+		<action name="reportCtcCdr" class="oltIgmpConfigAction" method="reportCtcCdr" />
+	    <action name="refreshCtcParam" class="oltIgmpConfigAction" method="refreshCtcParam" />
+	    
+	    <action name="showIgmpCtcProfile" class="oltIgmpConfigAction" method="showIgmpCtcProfile">
+			<result>/epon/igmp/igmpCtcProfile.jsp</result>
+		</action>
+		<action name="loadCtcProfileList" class="oltIgmpConfigAction" method="loadCtcProfileList" />
+	    <action name="addCtcProfile" class="oltIgmpConfigAction" method="addCtcProfile" />
+	    <action name="modifyCtcProfile" class="oltIgmpConfigAction" method="modifyCtcProfile" />
+	    <action name="deleteCtcProfile" class="oltIgmpConfigAction" method="deleteCtcProfile" />
+	    <action name="batchDeleteCtcProfile" class="oltIgmpConfigAction" method="batchDeleteCtcProfile" />
+	    <action name="refreshCtcProfile" class="oltIgmpConfigAction" method="refreshCtcProfile" />
+		
+	    <action name="showIgmpCtcRecord" class="oltIgmpConfigAction" method="showIgmpCtcRecord">
+			<result>/epon/igmp/igmpCtcRecord.jsp</result>
+		</action>
+		<action name="loadCtcRecordList" class="oltIgmpConfigAction" method="loadCtcRecordList" />
+	    <action name="refreshCtcRecord" class="oltIgmpConfigAction" method="refreshCtcRecord" />
+		
+	    <action name="showProfileRelaGroup" class="oltIgmpConfigAction" method="showProfileRelaGroup" >
+	        <result>/epon/igmp/igmpprofilegroup.jsp</result>
+	    </action>
+	     <action name="loadProfileGroupList" class="oltIgmpConfigAction" method="loadProfileGroupList" />
+	    <action name="addProfileGroupRela" class="oltIgmpConfigAction" method="addProfileGroupRela" />
+	    <action name="deleteProfileGroupRela" class="oltIgmpConfigAction" method="deleteProfileGroupRela" />
+	    <action name="refreshProfileGroupRela" class="oltIgmpConfigAction" method="refreshProfileGroupRela" />
+	    
+	    <action name="loadSniList" class="oltIgmpConfigAction" method="loadSniList" />
+	    <action name="loadSniListByType" class="oltIgmpConfigAction" method="loadSniListByType" />
+	    <action name="loadSniAggList" class="oltIgmpConfigAction" method="loadSniAggList" />
+	    <action name="loadPonListByType" class="oltIgmpConfigAction" method="loadPonListByType" />
+	    <action name="loadAllCtcProfile" class="oltIgmpConfigAction" method="loadAllCtcProfile" />
+	    
+	    <action name="showOnuIgmpConfig" class="onuIgmpConfigAction" method="showOnuIgmpConfig">
+			<result>/epon/igmp/onuIgmpConfig.jsp</result>
+		</action>
+	    <action name="loadOnuIgmpConfig" class="onuIgmpConfigAction" method="loadOnuIgmpConfig" />
+	    <action name="modifyOnuIgmpConfig" class="onuIgmpConfigAction" method="modifyOnuIgmpConfig" />
+	    <action name="refreshOnuIgmpConfig" class="onuIgmpConfigAction" method="refreshOnuIgmpConfig" />
+	    
+	    <action name="loadUniIgmpConfig" class="onuIgmpConfigAction" method="loadUniIgmpConfig" />
+	    <action name="modifyUniIgmpConfig" class="onuIgmpConfigAction" method="modifyUniIgmpConfig" />
+	    <action name="refreshUniIgmpConfig" class="onuIgmpConfigAction" method="refreshUniIgmpConfig" />
+	    
+	    <action name="loadUniBindProfileList" class="onuIgmpConfigAction" method="loadUniBindProfileList" />
+	    <action name="addUniBindProfile" class="onuIgmpConfigAction" method="addUniBindProfile" />
+	    <action name="deleteUniBindProfile" class="onuIgmpConfigAction" method="deleteUniBindProfile" />
+	    <action name="refreshUniBindProfile" class="onuIgmpConfigAction" method="refreshUniBindProfile" />
+		
+	    <action name="showUniVlanTrans" class="onuIgmpConfigAction" method="showUniVlanTrans">
+			<result>/epon/igmp/igmpUniVlanTrans.jsp</result>
+		</action>
+	    <action name="loadUniVlanTransList" class="onuIgmpConfigAction" method="loadUniVlanTransList" />
+	    <action name="addUniVlanTrans" class="onuIgmpConfigAction" method="addUniVlanTrans" />
+	    <action name="deleteUniVlanTrans" class="onuIgmpConfigAction" method="deleteUniVlanTrans" />
+	    <action name="refreshUniVlanTrans" class="onuIgmpConfigAction" method="refreshUniVlanTrans" />
+	    
+	    <action name="loadAllGroupId" class="oltIgmpConfigAction" method="loadAllGroupId" />
+	    <action name="loadAllProfileId" class="oltIgmpConfigAction" method="loadAllProfileId" />
+	    <action name="loadCascadePortByType" class="oltIgmpConfigAction" method="loadCascadePortByType" />
+	    <action name="showIgmpGroupAliasImport" class="igmpGroupAction" method="showIgmpGroupAliasImport" >
+	    	<result>/epon/igmp/importIgmpGroupAlias.jsp</result>
+	    </action>
+	    <action name="importIgmpGroupAlias" class="igmpGroupAction"  method="importIgmpGroupAlias" />
+	    <action name="batchBindProfileGroup"  class="igmpBatchAction" method="batchBindProfileGroup" />
+	</package>
+</struts>

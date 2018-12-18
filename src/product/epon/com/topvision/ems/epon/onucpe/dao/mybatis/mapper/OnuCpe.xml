@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OnuCpe">
+    <select id="selectOnuUniCpeList" resultType="onuUniCpe" parameterType="long">
+        SELECT
+        A.entityId,A.uniIndex,A.mac,A.type,A.vlan,A.ipAddress,A.cpeType FROM onucpelistlast
+        A,oltunirelation B where A.entityId=B.entityId and
+        A.uniIndex=B.uniIndex AND B.onuId=#{onuId}
+    </select>
+    <select id="selectOltUniCpeList" resultType="onuUniCpe" parameterType="map">
+        SELECT
+        A.entityId,A.uniIndex,A.mac,A.type,A.vlan,A.ipAddress,A.cpeType FROM onucpelistlast A where
+        A.entityId=#{entityId} limit
+        #{start},#{limit}
+    </select>
+    <delete id="deleteCpeListByOnuId" parameterType="long">
+        DELETE A FROM onucpelistlast A, oltunirelation B where
+        A.entityId=B.entityId and A.uniIndex=B.uniIndex AND B.onuId=#{onuId}
+    </delete>
+    <insert id="insertOnuCpeList" parameterType="onuCpe">
+        insert into
+        onucpelistlast(entityId,uniIndex,mac,type,vlan,realtime
+        <if test="ipAddress != null and ipAddress != ''">
+            ,ipAddress </if>
+        <if test="cpeType != null and cpeType != ''">
+            ,cpeType </if>
+        )
+        values(#{entityId},#{uniIndex},#{mac},#{type},#{vlan},#{realtime}
+        <if test="ipAddress != null and ipAddress != ''">
+            ,#{ipAddress} </if>
+        <if test="cpeType != null and cpeType != ''">
+            ,#{cpeType} </if>
+        );
+    </insert>
+    <insert id="insertOnuCpeCount" parameterType="onuUniCpeCount">
+        insert into
+        onucpecountlast(entityId,uniIndex,uniNo,cpecount,realtime)
+        values(#{entityId},#{uniIndex},#{uniNo},#{cpecount},#{realtime});
+    </insert>
+
+    <select id="selectOltUniCpeListCount" parameterType="long" resultType="int">
+        SELECT count(*) FROM onucpelistlast A
+        where A.entityId=#{entityId}
+    </select>
+    <delete id="deleteCpeCountListByOnuId" parameterType="long">
+        DELETE A FROM onucpecountlast A ,oltunirelation B where
+        A.entityId=B.entityId and A.uniIndex=B.uniIndex AND B.onuId=#{onuId}
+    </delete>
+</mapper> 

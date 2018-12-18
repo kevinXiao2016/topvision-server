@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcDownChannelIpQam" namespace="/cmc/ipQamChannel" extends="default">
+
+	    
+	    <!-- ipqam -->
+        <action name="getDownStreamIpqamBaseInfo" class="cmcDownChannelIpQamAction" method="getDownStreamIpqamBaseInfo">
+        </action>
+	    <action name="showCmcIPQamList" class="cmcDownChannelIpQamAction" method="showCmcIPQamList">
+            <result>/cmc/ipQamList.jsp</result>
+        </action>
+        <action name="showProgramList" class="cmcDownChannelIpQamAction" method="showProgramList">
+            <result>/cmc/programList.jsp</result>
+        </action>
+        
+        <action name="getCCIpqamIpInfo" class="cmcDownChannelIpQamAction" method="getCCIpqamIpInfo"></action>
+        <action name="modifyCCIpqamIpInfo" class="cmcDownChannelIpQamAction" method="modifyCCIpqamIpInfo"></action>
+        <action name="showCCIpqamOutPutStatusList" class="cmcDownChannelIpQamAction" method="showCCIpqamOutPutStatusList"></action>
+		<action name="showIpqamStreamMapList" class="cmcDownChannelIpQamAction" method="showIpqamStreamMapList"></action>
+		<action name="refreshIpQamMappingsStatus" class="cmcDownChannelIpQamAction" method="refreshIpQamMappingsStatus"></action>
+		<action name="showIpQamConfigInfo" class="cmcDownChannelIpQamAction" method="showIpQamConfigInfo">
+			<result>/cmc/ipQamMapModify.jsp</result>
+		</action>
+		<action name="modifyIPQAMStreamMapList" class="cmcDownChannelIpQamAction" method="modifyIPQAMStreamMapList"></action>
+		<action name="ipqamPidMapModify" class="cmcDownChannelIpQamAction" method="ipqamPidMapModify">
+			<result>/cmc/ipqamPidMapModify.jsp</result>
+		</action>
+		
+		
+
+		<action name="showIpqamInputStreamInfoList" class="cmcDownChannelIpQamAction" method="showIpqamInputStreamInfoList"></action>
+		<action name="showIpqamOutputStreamInfoList" class="cmcDownChannelIpQamAction" method="showIpqamOutputStreamInfoList"></action>
+		<action name="refreshIpqamStreamInfoList" class="cmcDownChannelIpQamAction" method="refreshIpqamStreamInfoList"></action>
+		 
+	</package>
+</struts>

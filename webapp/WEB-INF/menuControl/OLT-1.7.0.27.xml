@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.6.0_24" class="java.beans.XMLDecoder">
+	<object class="com.topvision.ems.network.domain.MenuControl">
+	<void property="deviceVersion">
+         <string>1.7.0.27</string>
+    </void>
+    <void property="menuItems">
+          <object class="java.util.ArrayList">
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>usmSnmpV3UserList</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>usmSnmpV3GroupList</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>usmSnmpV3ViewList</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>snmpV3Notify</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>elecOnuComVlan</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>ponCutOver</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>oltMacListTab</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>perfThreshold</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>oltAlertMask</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                
+                 <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>oltQos</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>sniQos</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>sni24HourPerfStatus</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>ponQosConfig</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>pon24HourPerfStatus</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>onuSlaConfig</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>onuIgmp</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>qosConfig</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>igmpUni</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                
+                 <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>onu24hourEnable</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>uni24hourEnable</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>vlanConfig</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>sni15MinPerfStatus</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>pon15MinPerfStatus</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>onu15minEnable</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>uni15minEnable</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>uniMacAddrAgeTime</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                 <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>ponMacLearningNumSet</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>geuaTempDetectEnable</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>mpuaTempDetectEnable</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>epuaTempDetectEnable</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>onuOpticalAlarm</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+                <void method="add">
+                    <object class="com.topvision.ems.network.domain.MenuItem">
+                        <void property="menuId">
+                            <string>isolationgroup_view</string>
+                        </void>
+                        <void property="disabled">
+                            <boolean>true</boolean>
+                        </void>
+                        <void property="display">
+                            <boolean>true</boolean>
+                        </void>
+                    </object>
+                </void>
+            </object>
+    	</void>
+	</object>
+</java>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cm.cmtsInfoSummary.domain.CmtsInfoMaintain">
+    <delete id="emptyCmtsMaintain">
+        Truncate TABLE cmtsinfosummarylast;
+    </delete>
+    
+    <insert id="insertCmtsInfoMaintain" parameterType="cmtsInfoMaintain">
+        INSERT INTO cmtsInfoSummary(
+            cmcId,
+            collectTime,
+            upSnrOutRange,
+            downSnrOutRange,
+            upTxOutRange,
+            downReOutRange,
+            upSnrAvg,
+            downSnrAvg,
+            upTxAvg,
+            downReAvg,
+            onlineCmNum,
+            totalCmNum)
+            VALUES(
+            #{cmcId},
+            #{collectTime},
+            #{upChannelSnrOutRange},
+            #{downChannelSnrOutRange},
+            #{upChannelTxOutRange},
+            #{downChannelTxOutRange},
+            #{upChannelSnrAvg},
+            #{downChannelSnrAvg},
+            #{upChannelTxAvg},
+            #{downChannelTxAvg},
+            #{cm_online},
+            #{cm_total})
+    </insert>
+    
+    <insert id="insertCmtsInfoMaintainlast" parameterType="cmtsInfoMaintain">
+        INSERT INTO cmtsInfoSummarylast(
+            cmcId,
+            collectTime,
+            upSnrOutRange,
+            downSnrOutRange,
+            upTxOutRange,
+            downReOutRange,
+            upSnrAvg,
+            downSnrAvg,
+            upTxAvg,
+            downReAvg,
+            onlineCmNum,
+            totalCmNum)
+            VALUES(
+            #{cmcId},
+            #{collectTime},
+            #{upChannelSnrOutRange},
+            #{downChannelSnrOutRange},
+            #{upChannelTxOutRange},
+            #{downChannelTxOutRange},
+            #{upChannelSnrAvg},
+            #{downChannelSnrAvg},
+            #{upChannelTxAvg},
+            #{downChannelTxAvg},
+            #{cm_online},
+            #{cm_total}) 
+            ON DUPLICATE KEY update 
+            collectTime=#{collectTime},
+            upSnrOutRange=#{upChannelSnrOutRange},
+            downSnrOutRange=#{downChannelSnrOutRange},
+            upTxOutRange=#{upChannelTxOutRange},
+            downReOutRange=#{downChannelTxOutRange},
+            upSnrAvg=#{upChannelSnrAvg},
+            downSnrAvg=#{downChannelSnrAvg},
+            upTxAvg=#{upChannelTxAvg},
+            downReAvg=#{downChannelTxAvg},
+            onlineCmNum=#{cm_online},
+            totalCmNum=#{cm_total}
+    </insert>
+</mapper>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="qos" namespace="/epon/qos" extends="default">
+    	<!-- OLT QOS 配置开始 -->
+		<action name="modifyPortQosPolicy" class="oltQosAction" method="modifyPortQosPolicy" />		
+		<action name="modifyPortQosMapRule" class="oltQosAction" method="modifyPortQosMapRule" />
+		<action name="modifyOnuQosPolicy" class="oltQosAction" method="modifyOnuQosPolicy" />
+		<action name="modifyOnuQosMapRule" class="oltQosAction" method="modifyOnuQosMapRule" />	
+		<action name="showQosPortMap" class="oltQosAction" method="showQosPortMap" >
+			<result>/epon/qosPortMap.jsp</result>			
+		</action>
+		<action name="showQosOltMap" class="oltQosAction" method="showQosOltMap" >
+			<result>/epon/qosPortMap.jsp</result>			
+		</action>
+		<action name="showQosPortPolicy" class="oltQosAction" method="showQosPortPolicy" >
+			<result>/epon/qosPortPolicy.jsp</result>
+		</action>
+		<action name="showQosOltPolicy" class="oltQosAction" method="showQosOltPolicy" >
+			<result>/epon/qosPortPolicy.jsp</result>
+		</action>
+		<action name="showQosOnuMap" class="oltQosAction" method="showQosOnuMap" >
+			<result>/epon/qosOnuMap.jsp</result>
+		</action>		
+		<action name="showQosOnuPolicy" class="oltQosAction" method="showQosOnuPolicy" >
+			<result>/epon/qosOnuPolicy.jsp</result>
+		</action>
+			<action name="refreshPortMap" class="oltQosAction" method="refreshPortMap"/>
+		<action name="refreshPortPolicy" class="oltQosAction" method="refreshPortPolicy"/>
+		<action name="refreshQosOnuMap" class="oltQosAction" method="refreshQosOnuMap"/>
+		<action name="refreshQosOnuPolicy" class="oltQosAction" method="refreshQosOnuPolicy"/>
+		<!-- OLT QOS 配置结束 -->
+		<!-- ONU SLA 配置开始 -->
+		<action name="modifyOnuSlaConfig" class="onuSlaAction" method="modifyOnuSlaConfig" />	
+		<action name="showOnuSlaConfig" class="onuSlaAction" method="showOnuSlaConfig">
+			<result>/epon/onuSlaConfig.jsp</result>
+		</action>
+		<action name="showOnuSlaConfigBack" class="onuSlaAction" method="showOnuSlaConfigBack">
+			<result>/epon/onuSlaConfigBack.jsp</result>
+		</action>
+		<action name="refrshOnuSla" class="onuSlaAction" method="refrshOnuSla"/>
+		<!-- ONU SLA 配置结束 -->
+		
+	</package>
+</struts>

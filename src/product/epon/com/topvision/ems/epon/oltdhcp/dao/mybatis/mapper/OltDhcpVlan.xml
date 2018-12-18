@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="OltDhcpVlan">
+
+	<select id="getOltDhcpVlanCfgs" parameterType="long" resultType="topOltDhcpVLANCfg">
+		select * from topOltDhcpVLANCfg where entityId = #{entityId}
+	</select>
+	
+	<select id="getOltDhcpVlanCfg" parameterType="map" resultType="topOltDhcpVLANCfg">
+		select vlan.* ,
+			(select count(*) from topoltdhcpvifcfg vif where vif.entityId= vlan.entityId and vif.topOltDhcpVifIndex = vlan.topOltDhcpVLANIndex) option60Count	
+		from topOltDhcpVLANCfg vlan where vlan.entityId = #{entityId}
+			and vlan.topOltDhcpVLANIndex = #{vlanIndex}
+	</select>
+	
+	<update id="updateOltDhcpVLANCfg" parameterType="topOltDhcpVLANCfg">
+		update topOltDhcpVLANCfg
+		set topOltDhcpVLANMode = #{topOltDhcpVLANMode},
+			topOltDhcpVLANRelayMode = #{topOltDhcpVLANRelayMode}
+		where entityId = #{entityId} and topOltDhcpVLANIndex = #{topOltDhcpVLANIndex}
+	</update>
+
+</mapper>

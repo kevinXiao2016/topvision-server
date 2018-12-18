@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="export" namespace="/export" extends="default">
+        <action name="generateExportExcel" class="exportAction" method="generateExportExcel" />
+        
+        <action name="showExportAndImport" class="exportAction" method="showExportAndImport">
+        	<result>/admin/exportAndImport.jsp</result>
+        </action>
+        
+        <action name="downloadGenerateFile" class="exportAction" method="downloadGenerateFile"></action>
+
+        <action name="showEntityExport" class="exportAction" method="showEntityExport">
+			<result>/network/entityExport.jsp</result>
+		</action>
+		
+		<action name="loadEntity" class="exportAction" method="loadEntity"></action>
+		
+		<action name="exportEntityToExcel" class="exportAction" method="exportEntityToExcel">
+		</action>
+		
+		<action name="exportGridToExcel" class="exportAction" method="exportGridToExcel"></action>
+    </package>
+    
+    <package name="import" namespace="/import" extends="default">
+    	<action name="importEntireExcel" class="importAction" method="importEntireExcel"></action>
+    </package>
+</struts>

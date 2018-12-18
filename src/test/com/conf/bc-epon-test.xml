@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC 
+	"-//SPRING//DTD BEAN//EN" 
+	"http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="oltService" class="com.topvision.ems.epon.service.impl.OltServiceImpl">
+		<property name="oltDao" ref="oltDao" />
+		<property name="entityDao" ref="entityDao"></property>
+		<property name="entityService" ref="entityService" />
+		<property name="facadeFactory" ref="facadeFactory" />
+		<property name="oltDiscoveryService" ref="oltDiscoveryService" />
+	</bean>
+	<bean id="oltDiscoveryService"
+		class="com.topvision.ems.epon.service.impl.OltDiscoveryServiceImpl">
+		<property name="entityDao" ref="entityDao" />
+		<property name="portDao" ref="portDao" />
+		<property name="entityAttributeDao" ref="entityAttributeDao" />
+		<property name="entityTypeService" ref="entityTypeService" />
+		<property name="messageService" ref="messageService" />
+		<property name="entityService" ref="entityService" />
+		<property name="facadeFactory" ref="facadeFactory" />
+		<property name="oltDao" ref="oltDao" />
+		<property name="sniVlanDao" ref="sniVlanDao" />
+		<property name="ponVlanDao" ref="ponVlanDao" />
+	</bean>
+	<bean id="oltVlanService" class="com.topvision.ems.epon.service.impl.OltVlanServiceImpl"
+		init-method="initialize" destroy-method="destroy">
+		<property name="messageService" ref="messageService" />
+		<property name="ponVlanService" ref="ponVlanService" />
+		<property name="sniVlanService" ref="sniVlanService" />
+		<property name="uniVlanService" ref="uniVlanService" />
+		<property name="entityService" ref="entityService" />
+		<property name="facadeFactory" ref="facadeFactory" />
+		<property name="sniVlanDao" ref="sniVlanDao" />
+		<property name="uniVlanDao" ref="uniVlanDao" />
+		<property name="ponVlanDao" ref="ponVlanDao" />
+	</bean>
+	<bean id="oltMonitorService"
+		class="com.topvision.ems.epon.performance.impl.OltMonitorServiceImpl"
+		init-method="initialize" destroy-method="destroy">
+		<property name="monitorDao" ref="monitorDao" />
+		<property name="messageService" ref="messageService" />
+		<property name="entityTypeService" ref="entityTypeService" />
+
+	</bean>
+	<bean id="sniVlanService" class="com.topvision.ems.epon.service.impl.SniVlanServiceImpl"
+		init-method="initialize" destroy-method="destroy">
+		<property name="sniVlanDao" ref="sniVlanDao" />
+		<property name="messageService" ref="messageService" />
+		<property name="entityService" ref="entityService" />
+		<property name="facadeFactory" ref="facadeFactory" />
+	</bean>
+	<bean id="ponVlanService" class="com.topvision.ems.epon.service.impl.PonVlanServiceImpl"
+		init-method="initialize" destroy-method="destroy">
+		<property name="oltDao" ref="oltDao" />
+		<property name="ponVlanDao" ref="ponVlanDao" />
+		<property name="entityService" ref="entityService" />
+		<property name="messageService" ref="messageService" />
+		<property name="facadeFactory" ref="facadeFactory" />
+	</bean>
+	<bean id="uniVlanService" class="com.topvision.ems.epon.service.impl.UniVlanServiceImpl"
+		init-method="initialize" destroy-method="destroy">
+		<property name="oltDao" ref="oltDao" />
+		<property name="uniVlanDao" ref="uniVlanDao" />
+		<property name="messageService" ref="messageService" />
+		<property name="entityService" ref="entityService" />
+		<property name="facadeFactory" ref="facadeFactory" />
+	</bean>
+	<bean id="oltDhcpService" class="com.topvision.ems.epon.service.impl.OltDhcpServiceImpl"
+		init-method="initialize" destroy-method="destroy">
+		<property name="dhcpDao" ref="oltDhcpDao" />
+		<property name="messageService" ref="messageService" />
+		<property name="entityService" ref="entityService" />
+		<property name="facadeFactory" ref="facadeFactory" />
+	</bean>
+	<bean id="oltAlertService" class="com.topvision.ems.epon.service.impl.OltAlertServiceImpl"
+		init-method="initialize" destroy-method="destroy">
+		<property name="entityService" ref="entityService" />
+		<property name="messageService" ref="messageService" />
+		<property name="oltAlertDao" ref="oltAlertDao" />
+		<property name="facadeFactory" ref="facadeFactory" />
+	</bean>
+	<bean id="oltPerfService" class="com.topvision.ems.epon.service.impl.OltPerfServiceImpl"
+		init-method="initialize" destroy-method="destroy">
+		<property name="entityService" ref="entityService" />
+		<property name="oltPerfDao" ref="oltPerfDao" />
+		<property name="messageService" ref="messageService" />
+        <property name="facadeFactory" ref="facadeFactory" />
+    </bean>
+	<bean id="oltIgmpService" class="com.topvision.ems.epon.service.impl.OltIgmpServiceImpl"
+		init-method="initialize" destroy-method="destroy">
+		<property name="entityService" ref="entityService" />
+		<property name="oltIgmpDao" ref="oltIgmpDao" />
+		<property name="messageService" ref="messageService" />
+        <property name="facadeFactory" ref="facadeFactory" />
+    </bean>
+	<bean id="oltAclService" class="com.topvision.ems.epon.service.impl.OltAclServiceImpl"
+		init-method="initialize" destroy-method="destroy">
+		<property name="entityService" ref="entityService" />
+		<property name="oltAclDao" ref="oltAclDao" />
+		<property name="messageService" ref="messageService" />
+        <property name="facadeFactory" ref="facadeFactory" />
+    </bean>
+	<bean id="oltQosService" class="com.topvision.ems.epon.service.impl.OltQosServiceImpl"
+		init-method="initialize" destroy-method="destroy">
+		<property name="entityService" ref="entityService" />
+		<property name="oltQosDao" ref="oltQosDao" />
+		<property name="messageService" ref="messageService" />
+        <property name="facadeFactory" ref="facadeFactory" />
+    </bean>
+        <bean id="oltStpService" class="com.topvision.ems.epon.service.impl.OltStpServiceImpl"
+        init-method="initialize" destroy-method="destroy">
+        <property name="stpDao" ref="oltStpDao" />
+        <property name="oltDao" ref="oltDao" />
+        <property name="messageService" ref="messageService" />
+        <property name="entityService" ref="entityService" />
+        <property name="facadeFactory" ref="facadeFactory" />
+    </bean>
+</beans>

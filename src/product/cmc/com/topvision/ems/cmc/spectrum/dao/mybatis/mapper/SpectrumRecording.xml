@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.spectrum.domain.SpectrumRecording">
+	<select id="getTimeInterval" parameterType="long" resultType="int">
+		SELECT period FROM perfmonitor where identifykey = #{cmcId} and category = 'CC_CCSPECTRUM' 
+	</select>
+	
+	<select id="generateVideoInfo" parameterType="long" resultType="com.topvision.ems.cmc.spectrum.domain.SpectrumVideo">
+	    SELECT 
+	    	cmcattribute.cmcId cmcId,
+	    	entity2.ip entityIp,
+	    	entity1.typeId entityType,
+	    	entity2.name oltAlias,
+			entity1.name cmtsAlias
+		FROM 
+			cmcattribute
+		LEFT JOIN cmcentityrelation ON cmcattribute.cmcId = cmcentityrelation.cmcId
+		LEFT JOIN entity entity1 ON cmcattribute.cmcId = entity1.entityId
+		LEFT JOIN entity entity2 ON cmcentityrelation.cmcEntityId = entity2.entityId
+		WHERE 
+			cmcattribute.cmcId = #{cmcId}
+	</select>
+	
+	<select id="selectByVideoId" parameterType="long" resultType="com.topvision.ems.cmc.spectrum.domain.SpectrumVideo">
+		SELECT
+			*
+		FROM
+			spectrumiivideo
+		WHERE 
+			videoId = #{videoId}
+	</select>
+	
+	<select id="getCmtsSwitchById" parameterType="long" resultType="com.topvision.ems.cmc.spectrum.domain.CmtsSpectrumConfig">
+	    SELECT
+	    	spectrumiiswitchcmts.cmcId cmcId,
+	    	spectrumiiswitchcmts.hisVideoSwitch hisVideoSwitch,
+	    	spectrumiiswitchcmts.collectSwitch cmtsCollectSwitch
+	   	FROM
+	    	spectrumiiswitchcmts
+	    WHERE
+	    	cmcId = #{cmcId}
+	</select>
+	
+	<insert id="insertHisVideoSwitch">
+	     INSERT INTO 
+	    	spectrumiiswitchcmts(
+	    		cmcId,
+	    		hisVideoSwitch
+	    	) 
+	    VALUES (
+	    		#{cmcId},
+	    		1
+	    	)
+	</insert>
+	
+	<insert id="insertVideo" parameterType="com.topvision.ems.cmc.spectrum.domain.SpectrumVideo" useGeneratedKeys="true" 
+			keyProperty="videoId">
+		INSERT INTO spectrumiivideo
+		(videoName,startTime,endTime,videoType,entityIp,entityType,oltAlias,cmtsAlias,userName,terminalIp,url,timeInterval,firstFrameTime)
+		VALUES
+		(#{videoName},#{startTime},#{startTime},#{videoType},#{entityIp},#{entityType},#{oltAlias},#{cmtsAlias},
+		#{userName},#{terminalIp},#{url},#{timeInterval},#{firstFrameTime})
+	</insert>
+	
+	<insert id="insertVideoCmtsRela" parameterType="map">
+		INSERT INTO spectrumiicmstrela
+		(cmcId,videoId)
+		VALUES
+		(#{cmcId},#{videoId})
+	</insert>
+	
+	<update id="startHisVideoSwitch" parameterType="long">
+		UPDATE spectrumiiswitchcmts
+		SET hisVideoSwitch = 1
+		WHERE cmcId = #{cmcId}
+	</update>
+	
+	<update id="updateVideoEndTime" parameterType="map"> 
+		UPDATE
+		spectrumiivideo 
+		SET endTime = #{endTime} WHERE
+		videoId = #{videoId}
+	</update>
+	
+	<update id="updateVideoName" parameterType="map"> 
+		UPDATE
+		spectrumiivideo 
+		SET videoName = #{videoName} WHERE
+		videoId = #{videoId}
+	</update>
+	
+	<update id="stopHisVideoSwitch" parameterType="long">
+		UPDATE spectrumiiswitchcmts
+		SET hisVideoSwitch = 0
+		WHERE cmcId = #{cmcId}
+	</update>
+</mapper>

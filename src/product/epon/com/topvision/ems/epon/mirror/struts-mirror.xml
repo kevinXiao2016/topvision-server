@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="mirror" namespace="/epon/mirror" extends="default">
+    	<action name="showOltMirrorView" class="oltMirrorAction" method="showOltMirrorView">
+			<result>/epon/oltMirrorView.jsp</result>
+		</action>
+		<action name="loadMirrorConfigList" class="oltMirrorAction" method="loadMirrorConfigList" />
+		<action name="showMirrorNameJsp" class="oltMirrorAction" method="showMirrorNameJsp">
+			<result>/epon/setMirrorName.jsp</result>
+		</action>
+		<action name="modifyMirrorName" class="oltMirrorAction" method="modifyMirrorName" />
+		<action name="updateMirrorPortList" class="oltMirrorAction" method="updateMirrorPortList" />
+		<action name="showSniMirrorMgmt" class="oltMirrorAction" method="showSniMirrorMgmt">
+			<result>/epon/sniMirrorMgmt.jsp</result>
+		</action>
+    </package>
+</struts>

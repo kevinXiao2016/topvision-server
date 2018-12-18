@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcDhcp" namespace="/cmc/dhcp" extends="default">
+		<action name="showDhcpRelay" class="cmcDhcpAction" method="showDhcpRelay">
+			<!-- <result>/cmc/cmcDhcpRelay.jsp</result> -->
+		</action>
+		<action name="modifyDhcpRelay" class="cmcDhcpAction" method="modifyDhcpRelay">
+		</action>
+		<action name="refreshDhcpRelay" class="cmcDhcpAction" method="refreshDhcpRelay">
+		</action>
+		
+		<!-- Bundle -->
+		<action name="showDhcpBundle" class="cmcDhcpAction" method="showDhcpBundle">
+		</action>
+		<action name="showDhcpBundleModify" class="cmcDhcpAction" method="showDhcpBundleModify">
+			<result>/cmc/cmcDhcpBundleModify.jsp</result>
+		</action>
+		<action name="addDhcpBundle" class="cmcDhcpAction" method="addDhcpBundle">
+		</action>
+		<action name="deleteDhcpBundle" class="cmcDhcpAction" method="deleteDhcpBundle">
+		</action>
+		<action name="modifyDhcpBundle" class="cmcDhcpAction" method="modifyDhcpBundle">
+		</action>
+		<action name="refreshDhcpBundle" class="cmcDhcpAction" method="refreshDhcpBundle">
+		</action>
+		
+		<!-- server -->
+		<action name="showDhcpServer" class="cmcDhcpAction" method="showDhcpServer">
+			<!-- <result>/cmc/cmcDhcpServer.jsp</result> -->
+		</action>
+		<action name="showDhcpServerModify" class="cmcDhcpAction" method="showDhcpServerModify">
+			<result>/cmc/cmcDhcpServerModify.jsp</result>
+		</action>
+		<action name="addDhcpServer" class="cmcDhcpAction" method="addDhcpServer">
+		</action>
+		<action name="deleteDhcpServer" class="cmcDhcpAction" method="deleteDhcpServer">
+		</action>
+		<action name="modifyDhcpServer" class="cmcDhcpAction" method="modifyDhcpServer">
+		</action>
+		<action name="refreshDhcpServer" class="cmcDhcpAction" method="refreshDhcpServer">
+		</action>
+		
+		<!-- GiAddr -->
+		<action name="showDhcpGiAddr" class="cmcDhcpAction" method="showDhcpGiAddr">
+			<!-- <result>/cmc/cmcDhcpGiAddr.jsp</result> -->
+		</action>
+		<action name="showDhcpGiAddrModify" class="cmcDhcpAction" method="showDhcpGiAddrModify">
+			<result>/cmc/cmcDhcpGiAddrModify.jsp</result>
+		</action>
+		<action name="addDhcpGiAddr" class="cmcDhcpAction" method="addDhcpGiAddr">
+		</action>
+		<action name="deleteDhcpGiAddr" class="cmcDhcpAction" method="deleteDhcpGiAddr">
+		</action>
+		<action name="modifyDhcpGiAddr" class="cmcDhcpAction" method="modifyDhcpGiAddr">
+		</action>
+		<action name="refreshDhcpGiAddr" class="cmcDhcpAction" method="refreshDhcpGiAddr">
+		</action>
+		
+		<!-- IntIp -->
+		<action name="showDhcpIntIp" class="cmcDhcpAction" method="showDhcpIntIp">
+			<result>/cmc/cmcDhcpIntIp.jsp</result>
+		</action>
+		<action name="showDhcpIntIpModify" class="cmcDhcpAction" method="showDhcpIntIpModify">
+			<result>/cmc/cmcDhcpIntIpModify.jsp</result>
+		</action>
+		<action name="addDhcpIntIp" class="cmcDhcpAction" method="addDhcpIntIp">
+		</action>
+		<action name="deleteDhcpIntIp" class="cmcDhcpAction" method="deleteDhcpIntIp">
+		</action>
+		<action name="modifyDhcpIntIp" class="cmcDhcpAction" method="modifyDhcpIntIp">
+		</action>
+		<action name="refreshDhcpIntIp" class="cmcDhcpAction" method="refreshDhcpIntIp">
+		</action>
+		
+		<!-- Option60 -->
+		<action name="showDhcpOption60"  class="cmcDhcpAction" method="showDhcpOption60">
+		</action>
+		<action name="showDhcpOption60Modify" class="cmcDhcpAction" method="showDhcpOption60Modify">
+			<result>/cmc/cmcDhcpOption60Modify.jsp</result>
+		</action>
+		<action name="addDhcpOption60" class="cmcDhcpAction" method="addDhcpOption60">
+		</action>
+		<action name="deleteDhcpOption60" class="cmcDhcpAction" method="deleteDhcpOption60">
+		</action>
+		<action name="modifyDhcpOption60" class="cmcDhcpAction" method="modifyDhcpOption60">
+		</action>
+		<action name="refreshDhcpOption60" class="cmcDhcpAction" method="refreshDhcpOption60">
+		</action>
+		
+		<!-- DHCP Relay基本信息 -->
+		<action name="modifyCmcDhcpRelayBaseInfo" class="cmcDhcpAction" method="modifyCmcDhcpRelayBaseInfo"></action>
+		
+		
+		<action name="updateCmcPollingConfig" class="cmcDhcpAction" method="updateCmcPollingConfig">
+		</action>
+	</package>
+</struts>

@@ -1,0 +1,37 @@
+/*
+ * @author: niejun
+ *
+ * icon css for system
+ */
+.systemIcon {
+	background-image: url(images/system/bt.gif) !important;
+	valign: middle;
+}
+
+.logIcon {
+	background-image: url(../images/system/log.gif) !important;
+}
+
+.engineIcon {
+	background-image: url(../images/system/engine.gif) !important;
+}
+
+.postIcon {
+	background-image: url(../images/system/post.gif) !important;
+}
+
+.functionIcon {
+	background-image: url(../images/system/function.gif) !important;
+}
+
+.userIcon {
+	background-image: url(../images/system/user.gif) !important;
+}
+
+.roleIcon {
+	background-image: url(../images/system/role.gif) !important;
+}
+
+.departmentIcon {
+	background-image: url(../images/system/department.gif) !important;
+}

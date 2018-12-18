@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.performance.domain.RestartAnalyzer">
+    <select id="selectRestartStasticData" parameterType="map" resultType="restartCount">
+        SELECT entityId , onuId AS deviceIndex , count(entityId) count,
+        max(deviceReStartTime) maxTime,min(deviceReStartTime) minTime from
+        oltdevicerestarttime where entityId = #{entityId} and onuid=0 AND isOffline = 0
+        <if test="queryStartTime != null and queryStartTime != ''">
+            and (deviceReStartTime BETWEEN #{queryStartTime} AND
+            #{queryEndTime})
+        </if>
+        group by onuid
+        union all
+        SELECT C.entityId, C.onuIndex AS deviceIndex,
+        IFNULL(B.cn,0) count ,
+        IFNULL(B.maxde,-1) AS
+        maxTime,IFNULL(B.minTime,-1) AS minTime from
+        oltonurelation C left join
+        (SELECT entityId, onuId , count(distinct deviceUptime) AS cn,
+        max(deviceReStartTime) AS
+        maxde,min(deviceReStartTime) AS minTime from
+        oltdevicerestarttime
+        where entityId = #{entityId}
+        <if test="queryStartTime != null and queryStartTime != ''">
+            and (deviceReStartTime
+            BETWEEN #{queryStartTime} AND
+            #{queryEndTime})
+        </if>
+        group by onuId) B
+        on B.entityId = C.entityId and B.onuId = C.onuIndex
+        WHERE
+        C.entityId = #{entityId}
+    </select>
+    <select id="selectEponDeviceList" resultType="entity">
+        SELECT A.entityId,
+        A.name, A.ip, A.sysLocation, A.type,
+        B.displayName
+        AS
+        typeName FROM
+        Entity A, EntityType B
+        WHERE A.typeId = B.typeId
+        AND A.type = 10000
+    </select>
+    <select id="selectRestartRecords" parameterType="map" resultType="restartRecord">
+        SELECT
+        <if test="onuId != 0">
+        distinct deviceUptime,
+        </if>
+        if(deviceUptime=0,deviceReStartTime,deviceUptime) as deviceReStartTime,
+        deviceLastOnlineTime,
+        collectTime
+        FROM
+        oltdevicerestarttime
+        WHERE entityId = #{entityId}
+        AND onuId =
+        #{onuId}
+        <if test="queryStartTime != null and queryStartTime != ''">
+            and (deviceReStartTime
+            BETWEEN #{queryStartTime} AND
+            #{queryEndTime})
+        </if>
+        <if test="onuId != 0">
+        group by deviceUptime 
+        </if>
+        order by deviceReStartTime
+    </select>
+    <select id="selectRestartStatics" parameterType="map" resultType="restartCount">
+        SELECT A.entityId,A.deviceIndex,A.count, B.ip, B.name
+        entityAlias,b.createTime FROM (SELECT entityId , onuId AS deviceIndex
+        , count(entityId) count, max(deviceReStartTime)
+        maxTime,min(deviceReStartTime) minTime from oltdevicerestarttime
+        where onuId=0 AND isOffline = 0 and (deviceReStartTime BETWEEN #{queryStartTime} AND
+        #{queryEndTime}) GROUP BY entityId,onuId) A
+        LEFT JOIN entity B
+        ON
+        A.entityId = B.entityId
+        UNION
+        SELECT E.entityId,E.deviceIndex,E.count,
+        f.ip, D.name entityAlias,D.createTime FROM (SELECT A.entityId ,A.onuId
+        deviceIndex, B.onuId , count(distinct A.deviceUptime) count,
+        max(A.deviceReStartTime) maxTime,min(A.deviceReStartTime) minTime from
+        oltdevicerestarttime A,oltonurelation B
+        WHERE A.onuId = B.onuIndex AND
+        A.entityId = B.entityId and (deviceReStartTime BETWEEN
+        #{queryStartTime} AND #{queryEndTime}) and A.onuId != 0 GROUP BY
+        entityId,onuId) E
+        LEFT JOIN entity D LEFT JOIN entity F ON D.parentId =
+        F.entityId
+        ON E.onuId = D.entityId
+        order by entityId,deviceIndex desc
+    </select>
+</mapper>

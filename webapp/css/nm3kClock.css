@@ -1,0 +1,106 @@
+/* CSS Document */
+/*灰色日历*/
+.nm3kClockContainer{ width:100%; height:76px; overflow:hidden;clear:both; position:relative;}
+.nm3kClockContainerEnglish{ width:100%; height:76px; overflow:hidden;clear:both; position:relative;}
+.nm3kGrayClock{clear:both; position:relative; left:50%; float:left; height:76px;}
+.nm3kGrayClockDay2, .nm3kGrayClockHour, .nm3kGrayClockMin, .nm3kGrayClockSec{ width:46px; height:76px; padding:0px 16px; overflow:hidden; background:url(../images/dayDiv1.png) no-repeat; float:left; position:relative; left:-50%; margin-right:2px;}
+.x-body .nm3kGrayClockDay2, .x-body .nm3kGrayClockHour, .x-body .nm3kGrayClockMin, .x-body .nm3kGrayClockSec{ width:78px;}
+.nm3kGrayClockDay3{ background:url(../images/dayDiv3.png) no-repeat; width:69px; height:76px; padding:0px 16px; overflow:hidden; float:left; position:relative; left:-50%; margin-right:2px;}
+.x-body .nm3kGrayClockDay3{ width:101px;}
+.nm3kGrayClockDay4{ background:url(../images/dayDiv4.png) no-repeat; width:92px; height:76px; padding:0px 16px; overflow:hidden; float:left; position:relative; left:-50%; margin-right:2px;}
+.x-body .nm3kGrayClockDay4{ width:124px;}
+.nm3kGrayClockHour{ background:url(../images/hourDiv.png) no-repeat;}
+.nm3kGrayClockMin{ background:url(../images/minuteDiv.png) no-repeat;}
+.nm3kGrayClockSec{ background:url(../images/secondsDiv.png) no-repeat; margin-right:0;}
+
+.nm3kClockContainerEnglish .nm3kGrayClockDay2{ background:url(../images/dayDiv1English.png) no-repeat;}
+.nm3kClockContainerEnglish .nm3kGrayClockDay3{ background:url(../images/dayDiv3English.png) no-repeat;}
+.nm3kClockContainerEnglish .nm3kGrayClockDay4{ background:url(../images/dayDiv4English.png) no-repeat;}
+.nm3kClockContainerEnglish .nm3kGrayClockHour{ background:url(../images/hourDivEnglish.png) no-repeat;}
+.nm3kClockContainerEnglish .nm3kGrayClockMin{ background:url(../images/minuteDivEnglish.png) no-repeat;}
+.nm3kClockContainerEnglish .nm3kGrayClockSec{ background:url(../images/secondsDivEnglish.png) no-repeat; margin-right:0;}
+
+.nm3kGrayClockNum0{ width:23px; height:76px; background:url(../images/grayCalendarNum.png) no-repeat 0 18px; overflow:hidden; float:left;}
+.nm3kGrayClockNum1{ width:23px; height:76px; background:url(../images/grayCalendarNum.png) no-repeat -23px 18px; overflow:hidden; float:left;}
+.nm3kGrayClockNum2{ width:23px; height:76px; background:url(../images/grayCalendarNum.png) no-repeat -46px 18px; overflow:hidden; float:left;}
+.nm3kGrayClockNum3{ width:23px; height:76px; background:url(../images/grayCalendarNum.png) no-repeat -69px 18px; overflow:hidden; float:left;}
+.nm3kGrayClockNum4{ width:23px; height:76px; background:url(../images/grayCalendarNum.png) no-repeat -92px 18px; overflow:hidden; float:left;}
+.nm3kGrayClockNum5{ width:23px; height:76px; background:url(../images/grayCalendarNum.png) no-repeat -115px 18px; overflow:hidden; float:left;}
+.nm3kGrayClockNum6{ width:23px; height:76px; background:url(../images/grayCalendarNum.png) no-repeat -138px 18px; overflow:hidden; float:left;}
+.nm3kGrayClockNum7{ width:23px; height:76px; background:url(../images/grayCalendarNum.png) no-repeat -161px 18px; overflow:hidden; float:left;}
+.nm3kGrayClockNum8{ width:23px; height:76px; background:url(../images/grayCalendarNum.png) no-repeat -184px 18px; overflow:hidden; float:left;}
+.nm3kGrayClockNum9{ width:23px; height:76px; background:url(../images/grayCalendarNum.png) no-repeat -207px 18px; overflow:hidden; float:left;}
+
+/*白色日历，带有logo*/
+.nm3kWhiteClockContainer,.nm3kWhiteClockContainerEnglish{width:100%; height:146px; overflow:hidden; clear:both; position:relative;}
+.nm3kWhiteClock{ clear:both; position:relative; left:50%; float:left; height:146px;}
+.nm3kWhiteClock li{ float:left; height:146px; overflow:hidden; position:relative; left:-50%;}
+.nm3kWhiteClockFirst{ width:22px; background:url(../images/nm3kWhiteClockFirst.png) no-repeat;}
+.nm3kWhiteClockDay2{ padding-left:8px; width:64px; background:url(../images/nm3kWhiteClockDay2.png) no-repeat;}
+.x-body .nm3kWhiteClockDay2{ width:72px;}
+.nm3kWhiteClockDay3{ padding-left:8px; width:92px; background:url(../images/nm3kWhiteClockDay3.png) no-repeat;}
+.x-body .nm3kWhiteClockDay3{ width:72px;}
+.nm3kWhiteClockDay4{ padding-left:8px; width:120px; background:url(../images/nm3kWhiteClockDay4.png) no-repeat;}
+.x-body .nm3kWhiteClockDay4{ width:72px;}
+.nm3kWhiteClockHour{ padding-left:8px; width:64px; background:url(../images/nm3kWhiteClockHour.png) no-repeat;}
+.x-body .nm3kWhiteClockHour{ width:72px;}
+.nm3kWhiteClockMin{ padding-left:8px; width:64px; background:url(../images/nm3kWhiteClockMin.png) no-repeat;}
+.x-body .nm3kWhiteClockMin{ width:72px;}
+.nm3kWhiteClockSec{ padding-left:8px; width:64px; background:url(../images/nm3kWhiteClockSec.png) no-repeat;}
+.x-body .nm3kWhiteClockSec{ width:72px;}
+.nm3kWhiteClockLast{ width:72px; background:url(../images/nm3kWhiteClockLast.png) no-repeat;}
+
+.nm3kWhiteClockContainerEnglish .nm3kWhiteClockDay2{ background:url(../images/nm3kWhiteClockDay2English.png) no-repeat;}
+.nm3kWhiteClockContainerEnglish .nm3kWhiteClockDay3{ background:url(../images/nm3kWhiteClockDay3English.png) no-repeat;}
+.nm3kWhiteClockContainerEnglish .nm3kWhiteClockDay4{ background:url(../images/nm3kWhiteClockDay4English.png) no-repeat;}
+.nm3kWhiteClockContainerEnglish .nm3kWhiteClockHour{ background:url(../images/nm3kWhiteClockHourEnglish.png) no-repeat;}
+.nm3kWhiteClockContainerEnglish .nm3kWhiteClockMin{ background:url(../images/nm3kWhiteClockMinEnglish.png) no-repeat;}
+.nm3kWhiteClockContainerEnglish .nm3kWhiteClockSec{ background:url(../images/nm3kWhiteClockSecEnglish.png) no-repeat;}
+
+
+.nm3kWhiteClockNum0{ float:left; overflow:hidden; width:28px; height:120px; background:url(../images/nm3kWhiteClockNum.png) no-repeat 0px 55px;}
+.nm3kWhiteClockNum1{ float:left; overflow:hidden; width:28px; height:120px; background:url(../images/nm3kWhiteClockNum.png) no-repeat -28px 55px;}
+.nm3kWhiteClockNum2{ float:left; overflow:hidden; width:28px; height:120px; background:url(../images/nm3kWhiteClockNum.png) no-repeat -56px 55px;}
+.nm3kWhiteClockNum3{ float:left; overflow:hidden; width:28px; height:120px; background:url(../images/nm3kWhiteClockNum.png) no-repeat -84px 55px;}
+.nm3kWhiteClockNum4{ float:left; overflow:hidden; width:28px; height:120px; background:url(../images/nm3kWhiteClockNum.png) no-repeat -112px 55px;}
+.nm3kWhiteClockNum5{ float:left; overflow:hidden; width:28px; height:120px; background:url(../images/nm3kWhiteClockNum.png) no-repeat -140px 55px;}
+.nm3kWhiteClockNum6{ float:left; overflow:hidden; width:28px; height:120px; background:url(../images/nm3kWhiteClockNum.png) no-repeat -168px 55px;}
+.nm3kWhiteClockNum7{ float:left; overflow:hidden; width:28px; height:120px; background:url(../images/nm3kWhiteClockNum.png) no-repeat -196px 55px;}
+.nm3kWhiteClockNum8{ float:left; overflow:hidden; width:28px; height:120px; background:url(../images/nm3kWhiteClockNum.png) no-repeat -224px 55px;}
+.nm3kWhiteClockNum9{ float:left; overflow:hidden; width:28px; height:120px; background:url(../images/nm3kWhiteClockNum.png) no-repeat -252px 55px;}
+
+/*圆形橙色*/
+.nm3kCirClockContainer{ width:454px; height:108px; overflow:hidden; clear:both; margin:0 auto;}
+.nm3kCirBg, .nm3kCirBg1, .nm3kCirBg2, .nm3kCirBg3, .nm3kCirBg4{ width:108px; height:108px; overflow:hidden; float:left; background:url(../images/nm3kCirClock.png) no-repeat 0 0; margin-right:5px; position:relative;}
+.nm3kCirBg1{ background:url(../images/nm3kCirClock.png) no-repeat 0px -108px;}
+.nm3kCirBg2{ background:url(../images/nm3kCirClock.png) no-repeat 0px -216px;}
+.nm3kCirBg3{ background:url(../images/nm3kCirClock.png) no-repeat 0px -324px;}
+.nm3kCirBg4{ background:url(../images/nm3kCirClock.png) no-repeat 0px -432px;}
+
+.nm3kCirDaysEnglish{ width:46px; height:9px; background:url(../images/nm3kCirClockEnglishTxt.gif) no-repeat center -27px; top:67px; left:31px; position:absolute;}
+.nm3kCirHoursEnglish{ width:46px; height:9px; background:url(../images/nm3kCirClockEnglishTxt.gif) no-repeat center -18px; top:67px; left:31px; position:absolute;}
+.nm3kCirMinsEnglish{ width:46px; height:9px; background:url(../images/nm3kCirClockEnglishTxt.gif) no-repeat center -9px; top:67px; left:31px; position:absolute;}
+.nm3kCirSecsEnglish{ width:46px; height:9px; background:url(../images/nm3kCirClockEnglishTxt.gif) no-repeat center 0px; top:67px; left:31px; position:absolute;}
+
+.nm3kCirDays{ width:24px; height:15px; background:url(../images/nm3kCirClockTxt.gif) no-repeat center 0px; top:67px; left:42px; position:absolute;}
+.nm3kCirHours{ width:24px; height:15px; background:url(../images/nm3kCirClockTxt.gif) no-repeat center -15px; top:67px; left:42px; position:absolute;}
+.nm3kCirMins{ width:24px; height:15px; background:url(../images/nm3kCirClockTxt.gif) no-repeat center -30px; top:67px; left:42px; position:absolute;}
+.nm3kCirSecs{ width:24px; height:15px; background:url(../images/nm3kCirClockTxt.gif) no-repeat center -45px; top:67px; left:42px; position:absolute;}
+
+.nm3kCirNum0{ width:16px; height:32px; overflow:hidden; background:url(../images/nm3kCirNum.png) no-repeat 0px 0px;}
+.nm3kCirNum1{ width:16px; height:32px; overflow:hidden; background:url(../images/nm3kCirNum.png) no-repeat -16px 0px;}
+.nm3kCirNum2{ width:16px; height:32px; overflow:hidden; background:url(../images/nm3kCirNum.png) no-repeat -32px 0px;}
+.nm3kCirNum3{ width:16px; height:32px; overflow:hidden; background:url(../images/nm3kCirNum.png) no-repeat -48px 0px;}
+.nm3kCirNum4{ width:16px; height:32px; overflow:hidden; background:url(../images/nm3kCirNum.png) no-repeat -64px 0px;}
+.nm3kCirNum5{ width:16px; height:32px; overflow:hidden; background:url(../images/nm3kCirNum.png) no-repeat -80px 0px;}
+.nm3kCirNum6{ width:16px; height:32px; overflow:hidden; background:url(../images/nm3kCirNum.png) no-repeat -96px 0px;}
+.nm3kCirNum7{ width:16px; height:32px; overflow:hidden; background:url(../images/nm3kCirNum.png) no-repeat -112px 0px;}
+.nm3kCirNum8{ width:16px; height:32px; overflow:hidden; background:url(../images/nm3kCirNum.png) no-repeat -128px 0px;}
+.nm3kCirNum9{ width:16px; height:32px; overflow:hidden; background:url(../images/nm3kCirNum.png) no-repeat -144px 0px;}
+
+.nm3kCirNumUl{ height:32px; position:relative; top:36px; left:50%; float:left; clear:both;}
+.nm3kCirNumUl li{ width:16px; height:32px; overflow:hidden; position:relative; float:left; top:0; left:-50%;}
+/* 未获取到时间的时候，显示错误提示信息 */
+.nm3kClockErrorTip{ color:#f00; clear:both; position:relative; top:-50px; text-align:center; z-index:2; display:none;}
+.nm3kClockErrorTip span{ padding:5px; background:#fff; border:1px solid #ccc;}
+

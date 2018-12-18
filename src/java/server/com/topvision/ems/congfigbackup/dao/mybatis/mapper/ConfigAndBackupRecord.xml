@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.congfigbackup.service.ConfigAndBackupRecord">
+	<insert id="recordOperation" parameterType="configAndBackupRecord">
+		INSERT INTO 
+			ConfigBackupRecords(operationType,userId,clientIp,result,fileName,entityId)
+		VALUES
+			(#{operationType},#{userId},#{clientIp},#{result},#{fileName},#{entityId})
+	</insert>
+	
+	<select id="selectOperationRecords" parameterType="map" resultType="configAndBackupRecord">
+		SELECT
+			A.operationType,B.username,A.userId,A.clientIp,A.result,A.fileName,C.name,c.ip,A.operationTime
+		FROM
+			ConfigBackupRecords A LEFT JOIN users B ON A.userId = B.userId,
+			entity C
+		WHERE
+			A.entityId = C.entityId 
+			<if test="entityId != null">
+				and A.entityId= #{entityId}
+			</if>
+			<if test="operationType != null">
+				and A.operationType= #{operationType}
+			</if>
+			ORDER BY A.operationTime DESC
+	</select>
+	
+</mapper>

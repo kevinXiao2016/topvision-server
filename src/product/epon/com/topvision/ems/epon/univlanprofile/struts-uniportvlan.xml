@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+    <package name="uniportvlan" namespace="/epon/uniportvlan" extends="default">
+    	<!-- UNI PORT VLAN  -->
+    	<action name="showUniVlanView"  class="uniPortVlanAction" method="showUniVlanView">
+    		<result name="tag">/epon/uniportvlan/tagMode.jsp</result>
+    		<result name="translation">/epon/uniportvlan/translateMode.jsp</result>
+    		<result name="aggregation">/epon/uniportvlan/aggregateMode.jsp</result>
+    		<result name="trunk">/epon/uniportvlan/trunkMode.jsp</result>
+    		<result name="input">/epon/uniportvlan/uniVlanException.jsp</result>
+    	</action>
+    	<action name="modifyVlanMode" class="uniPortVlanAction" method="modifyVlanMode" />
+    	<action name="refreshUniVlanData" class="uniPortVlanAction" method="refreshUniVlanData" />
+    	<action name="loadTranslationRuleList" class="uniPortVlanAction" method="loadTranslationRuleList" />
+    	<action name="addTranslateRule" class="uniPortVlanAction" method="addTranslateRule" />
+    	<action name="deleteTranslationRule" class="uniPortVlanAction" method="deleteTranslationRule" />
+    	<action name="loadAggregationRule" class="uniPortVlanAction" method="loadAggregationRule" />
+    	<action name="addAggregationRule" class="uniPortVlanAction" method="addAggregationRule" />
+		<action name="modifyAggregationRule" class="uniPortVlanAction" method="modifyAggregationRule" />
+    	<action name="deleteAggregationRule" class="uniPortVlanAction" method="deleteAggregationRule" />
+    	<action name="loadTrunkRuleList" class="uniPortVlanAction" method="loadTrunkRuleList" />
+    	<action name="addTrunkRule" class="uniPortVlanAction" method="addTrunkRule" />
+    	<action name="deleteTrunkRule" class="uniPortVlanAction" method="deleteTrunkRule" />
+    </package>
+</struts>

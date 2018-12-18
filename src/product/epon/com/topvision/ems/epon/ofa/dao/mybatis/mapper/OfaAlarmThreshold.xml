@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.ofa.facade.domain.OfaAlarmThreshold">
+	
+	<insert id="insertOrUpdateOfaAlarm" parameterType="ofaAlarmThreshold">
+		INSERT INTO ofaAlarmThreshold
+			(entityId,
+			alarmThresholdIndex,
+			inputAlarmUp,
+			inputAlarmLow,
+			outputAlarmUp,
+			outputAlarmLow,
+			pump1BiasAlarmUp,
+			pump1BiasAlarmLow,
+			pump1TempAlarmUp,
+			pump1TempAlarmLow,
+			pump1TecAlarmUp,
+			pump1TecAlarmLow,
+			pump2BiasAlarmUp,
+			pump2BiasAlarmLow,
+			pump2TempAlarmUp,
+			pump2TempAlarmLow,
+			voltage5AlarmUp,
+			voltage5AlarmLow,
+			voltage12AlarmUp,
+			voltage12AlarmLow)
+		VALUES
+			(#{entityId},
+			#{alarmThresholdIndex},
+			#{inputAlarmUp},
+			#{inputAlarmLow},
+			#{outputAlarmUp},
+			#{outputAlarmLow},
+			#{pump1BiasAlarmUp},
+			#{pump1BiasAlarmLow},
+			#{pump1TempAlarmUp},
+			#{pump1TempAlarmLow},
+			#{pump1TecAlarmUp},
+			#{pump1TecAlarmLow},
+			#{pump2BiasAlarmUp},
+			#{pump2BiasAlarmLow},
+			#{pump2TempAlarmUp},
+			#{pump2TempAlarmLow},
+			#{voltage5AlarmUp},
+			#{voltage5AlarmLow},
+			#{voltage12AlarmUp},
+			#{voltage12AlarmLow})
+		ON DUPLICATE KEY UPDATE
+			inputAlarmUp = #{inputAlarmUp},
+			inputAlarmLow = #{inputAlarmLow},
+			outputAlarmUp = #{outputAlarmUp},
+			outputAlarmLow = #{outputAlarmLow},
+			pump1BiasAlarmUp = #{pump1BiasAlarmUp},
+			pump1BiasAlarmLow = #{pump1BiasAlarmLow},
+			pump1TempAlarmUp = #{pump1TempAlarmUp},
+			pump1TempAlarmLow = #{pump1TempAlarmLow},
+			pump1TecAlarmUp = #{pump1TecAlarmUp},
+			pump1TecAlarmLow = #{pump1TecAlarmLow},
+			pump2BiasAlarmUp = #{pump2BiasAlarmUp},
+			pump2BiasAlarmLow = #{pump2BiasAlarmLow},
+			pump2TempAlarmUp = #{pump2TempAlarmUp},
+			pump2TempAlarmLow = #{pump2TempAlarmLow},
+			voltage5AlarmUp = #{voltage5AlarmUp},
+			voltage5AlarmLow = #{voltage5AlarmLow},
+			voltage12AlarmUp = #{voltage12AlarmUp},
+			voltage12AlarmLow = #{voltage12AlarmLow}
+	</insert>
+	
+	<select id="getOfaAlarmThresholdById" parameterType="long" resultType="ofaAlarmThreshold">
+		SELECT
+			entityId,
+			alarmThresholdIndex,
+			inputAlarmUp,
+			inputAlarmLow,
+			outputAlarmUp,
+			outputAlarmLow,
+			pump1BiasAlarmUp,
+			pump1BiasAlarmLow,
+			pump1TempAlarmUp,
+			pump1TempAlarmLow,
+			pump1TecAlarmUp,
+			pump1TecAlarmLow,
+			pump2BiasAlarmUp,
+			pump2BiasAlarmLow,
+			pump2TempAlarmUp,
+			pump2TempAlarmLow,
+			voltage5AlarmUp,
+			voltage5AlarmLow,
+			voltage12AlarmUp,
+			voltage12AlarmLow
+		FROM ofaAlarmThreshold
+		WHERE entityId = #{entityId}
+	</select>
+	
+</mapper>

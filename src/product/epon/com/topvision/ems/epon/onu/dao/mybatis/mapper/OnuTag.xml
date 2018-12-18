@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.platform.domain.OnuTag">
+	<insert id="insertEntity" parameterType="onuTag">
+		INSERT INTO onutag(tagName, tagLevel) VALUES(#{tagName}, #{tagLevel})
+	</insert>
+	
+	<update id="updateEntity" parameterType="onuTag">
+		UPDATE onutag SET tagName = #{tagName}, tagLevel = #{tagLevel} WHERE id = #{id}
+	</update> 
+	
+	<delete id="deleteByPrimaryKey" parameterType="onuTag">
+		DELETE FROM onutag WHERE id = #{id}
+	</delete>
+	
+	<select id="selectOnuTags" parameterType="map" resultType="onuTag">
+		SELECT id, tagName, tagLevel FROM onutag
+		<if test="sort != null and dir != ''">
+			order by ${sort} ${dir}
+		</if>
+        limit ${start},${limit}
+	</select>
+	
+	<select id="selectOnuTagsCount" resultType="int">
+		SELECT COUNT(id) FROM onutag
+	</select>
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="cmtsInfo" namespace="/cmtsInfo" extends="default">
+        <action name="showCmtsInfoPage" class="cmtsNetworkInfoAction" method="showCmtsInfoPage">
+            <result>/cmc/cmtsNetworkInfo.jsp</result>
+        </action>
+        <action name="queryCmcList" class="cmtsNetworkInfoAction" method="queryCmcList">
+        </action>
+        <action name="saveLocalThreshold" class="cmtsNetworkInfoAction" method="saveLocalThreshold">
+        </action>
+        <action name="getLocalThreshold" class="cmtsNetworkInfoAction" method="getLocalThreshold">
+        </action>
+
+    </package>
+</struts>

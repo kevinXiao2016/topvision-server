@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.batchdeploy.domain.BatchDeploy">
+
+    <insert id="insertRecord" useGeneratedKeys="true" keyProperty="batchDeployId"  parameterType="batchDeployRecord">
+    	INSERT INTO batchdeployrecords(
+			typeId,
+			entityId,
+			operator,
+			sucessCount,
+			failureCount,
+			duration,
+			matches,
+			comment
+		)VALUES(
+			#{typeId},
+			#{entityId},
+			#{operator},
+			#{sucessCount},
+			#{failureCount},
+			#{duration},
+			#{matches},
+			#{comment}
+		)
+    </insert>
+    <insert id="insertDetail" parameterType="batchDeployRecord">
+    	INSERT INTO batchdeploydetail(
+    		batchDeployId,
+    		success,
+    		failures
+    	)VALUES(
+    		#{batchDeployId},
+    		#{successBlob:BLOB},
+    		#{failuresBlob:BLOB}
+    	)
+    </insert>
+    <select id="selectRecords" parameterType="map" resultType="batchDeployRecord">
+    	SELECT
+			C.name entityName,
+    		A.batchDeployId,
+			A.typeId,
+			A.entityId,
+			A.operator,
+			A.sucessCount,
+			A.failureCount,
+			A.duration,
+			A.matches,
+			A.comment,
+    		B.success successBlob,
+    		B.failures failuresBlob,
+    		startTime 
+    	FROM batchdeployrecords A, batchdeploydetail B, Entity C
+    	WHERE
+    		A.batchDeployId = b.batchDeployId AND A.entityId=C.entityId
+    		<if test="typeId != null">
+	    		AND A.typeId = #{typeId}
+    		</if>
+    		<if test="entityId != null">
+    			AND A.entityId =#{entityId}
+    		</if>
+    		<if test="operator != null">
+    			AND A.operator like '%${operator}%'
+    		</if>
+    		<if test="st != null">
+    			AND ( A.startTime BETWEEN #{st} AND #{et}) 
+    		</if>
+    		limit ${start}, ${limit}
+    </select>
+    <select id="selectRecordCount" parameterType="map" resultType="int">
+   	 	SELECT
+   	 		count(A.batchDeployId)
+    	FROM batchdeployrecords A, batchdeploydetail B, Entity C
+    	WHERE
+    		A.batchDeployId = b.batchDeployId AND A.entityId=C.entityId
+    		<if test="typeId != null">
+	    		AND A.typeId = #{typeId}
+    		</if>
+    		<if test="entityId != null">
+    			AND A.entityId =#{entityId}
+    		</if>
+    		<if test="operator != null">
+    			AND A.operator like '%${operator}%'
+    		</if>
+    		<if test="st != null">
+    			AND ( A.startTime BETWEEN #{st} AND #{et}) 
+    		</if>
+    </select>
+    <select id="selectSuccess" parameterType="int" resultType="batchDeployRecord">
+    	SELECT success successBlob FROM batchdeploydetail 
+    	WHERE batchDeployId = #{batchDeployId}
+    </select>
+     <select id="selectFailure" parameterType="int" resultType="batchDeployRecord">
+    	SELECT failures failuresBlob FROM batchdeploydetail 
+    	WHERE batchDeployId = #{batchDeployId}
+    </select>
+</mapper>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmts.domain.CmtsChannel">
+	<select id="selectUpLinkPortList" parameterType="long" resultType="com.topvision.ems.cmts.domain.CmtsUpLinkPort">
+	select a.portId,
+		a.entityId,
+		a.ifIndex,
+		a.ifDescr,
+		a.ifType,
+		a.ifMtu,
+		a.ifPhysAddress,
+		a.ifAdminStatus,
+		a.ifOperStatus,
+		a.ifLastChange,
+		a.ifSpeed,
+		a.ifName,
+		b.channelInSpeed ifInOctetsRate, 
+		b.channelOutSpeed ifOutOctetsRate from port a 
+		left join perfcmcflowqualitylast b 
+		on a.entityId = b.cmcId and a.ifIndex = b.channelIndex where
+		a.entityId = #{entityId}
+		and (a.ifType = 6 or a.ifType = 117)
+	</select>
+	<select id="selectCmtsChannelPerfInfoList" parameterType="long" resultType="com.topvision.ems.cmc.ccmts.domain.ChannelPerfInfo">
+		select
+		a.cmcId entityId,
+		a.cmcId,
+		a.channelIndex,
+		c.channelType,
+		a.channelInSpeed channelInOctetsRate,
+		a.channelOutSpeed channelOutOctetsRate,
+		a.channelUtilization,
+		c.cmcPortId,
+		d.ifSpeed,
+		d.ifOperStatus,
+		d.ifDescr,
+		d.ifName
+		from
+		cmcportrelation c left join
+		perfcmcflowqualitylast a on c.cmcId
+		= a.cmcId and c.channellIndex =a.channelIndex left join
+		cmcportattribute d on c.cmcPortId = d.cmcPortId
+		where
+		a.cmcId = #{cmcId}
+		ORDER BY
+		a.channelIndex
+	</select>
+	
+	 <select id="selectUpChannelBaseShowInfoList" parameterType="Long" resultType="com.topvision.ems.cmc.upchannel.domain.CmcUpChannelBaseShowInfo">
+        SELECT
+        a.cmcPortId,
+        a.cmcId,
+        a.channelIndex,
+        a.channelId,
+        a.channelFrequency,
+        a.channelWidth,
+        a.channelModulationProfile,
+        a.channelMode as channelExtMode,
+        a.cmtsChannelModulationProfile as cmtsChannelModulationProfile,
+        d.collectValue AS docsIfSigQSignalNoise,
+        b.docsIf3SignalPower,
+        c.ifSpeed,
+        c.ifMtu,
+        c.ifAdminStatus,
+        c.ifOperStatus,
+        c.ifDescr,
+        c.ifName,
+        a.channelSlotSize,
+        a.channelTxTimingOffset,
+        a.channelRangingBackoffStart,
+        a.channelRangingBackoffEnd,
+        a.channelTxBackoffStart,
+        a.channelTxBackoffEnd,
+        a.channelScdmaActiveCodes,
+        a.channelScdmaHoppingSeed,
+        a.channelScdmaCodesPerSlot,
+        a.channelScdmaFrameSize,
+        a.channelScdmaHoppingSeed,
+        a.channelType,
+        a.channelCloneFrom,
+        a.channelUpdate,
+        a.channelStatus,
+        a.channelPreEqEnable,
+        (unlp.onlineNum + unlp.offlineNum + unlp.otherNum) cmcChannelTotalCmNum,
+        unlp.onlineNum as cmcChannelOnlineCmNum
+        FROM
+        cmcupchannelbaseinfo a left join cmcupchannelsignalqualityinfo b on
+        a.cmcPortId=b.cmcPortId
+        left join cmcportattribute c on
+        b.cmcPortId=c.cmcPortId
+				LEFT JOIN cmcentityrelation cer on a.cmcId = cer.cmcId
+        left join perfcmcsnrqualitylast d on
+        b.cmcId = d.cmcId AND b.channelIndex = d.channelIndex
+        left join usernumlastport unlp on
+        unlp.entityId = cer.cmcEntityId and unlp.portIfIndex = a.channelIndex
+        WHERE a.cmcId = #{cmcId}
+    </select>
+</mapper>

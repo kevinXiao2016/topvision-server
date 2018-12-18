@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.platform.domain.UserPreferences">
+    <insert id="insertEntity" parameterType="userPreferences">
+        INSERT INTO UserPreferences (userId, name, value, module) VALUES
+        (#{userId}, #{name}, #{value},
+        #{module})
+    </insert>
+
+    <update id="updateEntity" parameterType="userPreferences">
+        UPDATE UserPreferences SET value = #{value} WHERE userId =
+        #{userId}
+        AND name = #{name} AND module = #{module}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="userPreferences">
+        DELETE FROM UserPreferences WHERE userId = #{userId} and name =
+        #{name} and module = #{module}
+    </delete>
+
+    <select id="getUserPreferences" parameterType="long" resultType="userPreferences">
+        SELECT name, module, value FROM
+        UserPreferences WHERE userId = #{userId}
+    </select>
+    
+    <select id="queryEntityExisted" parameterType="userPreferences" resultType="userPreferences">
+        SELECT name, module, value 
+        FROM UserPreferences 
+        WHERE userId = #{userId} and name = #{name} and module = #{module}
+    </select>
+    <select id="handleUserPreferences" parameterType="map" resultType="userPreferences">
+        SELECT name, module, value FROM UserPreferences WHERE userId = #{userId}
+    </select>
+
+    <select id="getModulePreferences" parameterType="userPreferences" resultType="userPreferences">
+        SELECT name, module, value,
+        userId FROM UserPreferences WHERE
+        userId = #{userId} AND module = #{module}
+    </select>
+    <select id="getAllUserPerferences" parameterType="long" resultType="userPreferences">
+        SELECT name, module, value,module,userId 
+        FROM UserPreferences 
+        WHERE userId = #{userId}
+    </select>
+    
+    <select id="getTotalUserPerferences" resultType="userPreferences">
+    	SELECT * FROM userpreferences A
+    </select>
+    
+    <select id="getUserPreference" parameterType="userPreferences" resultType="userPreferences">
+        SELECT * 
+        FROM UserPreferences 
+        WHERE userId = #{userId} AND name=#{name}
+    </select>
+    
+</mapper>

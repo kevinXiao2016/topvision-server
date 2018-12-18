@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.google.domain.GoogleEntity">
+    <insert id="insertEntity" parameterType="googleEntity">
+        INSERT INTO GoogleEntity (entityId, longitude, latitude, zoom,
+        minZoom, maxZoom,location) VALUES (#{entityId}, #{longitude}, #{latitude},
+        #{zoom}, #{minZoom},
+        #{maxZoom},#{location})
+    </insert>
+
+    <update id="updateEntity" parameterType="googleEntity">
+        UPDATE GoogleEntity SET longitude = #{longitude}, latitude =
+        #{latitude}, zoom = #{zoom}, minZoom = #{minZoom}, maxZoom =
+        #{maxZoom} , location = #{location} ,fixed = 0 WHERE
+        entityId = #{entityId}
+    </update>
+
+    <select id="selectByPrimaryKey" parameterType="long" resultType="googleEntity">
+        SELECT A.entityId, A.longitude, A.latitude,
+        A.zoom, A.minZoom,A.location,
+        A.maxZoom, C.icon48, B.name, B.ip, B.url FROM GoogleEntity A, Entity B,
+        EntityType C
+        WHERE B.entityId = #{entityId} AND A.entityId =
+        B.entityId AND B.typeId = C.typeId
+    </select>
+
+    <select id="selectByMap" parameterType="map" resultType="googleEntity">
+        <!-- SELECT A.entityId, A.longitude, A.latitude, A.zoom, A.minZoom, A.maxZoom, C.icon48, B.name, B.ip FROM GoogleEntity 
+            A, Entity B, EntityType C WHERE A.entityId = B.entityId AND B.typeId = C.typeId -->
+        <!-- Modified by huangdongsheng 支持 CCMTS8800A、B、C、D、ONU， 从entity表中查找设备的管理IP地址，增加通过Mac过滤 -->
+        <!-- Modified by Rod [EMS-6360] google地图添加OLT设备后无法回读 -->
+        SELECT A.entityId, A.longitude, A.latitude, A.zoom, A.minZoom,A.fixed,A.location,
+        A.maxZoom,
+        ifnull(B.icon,C.icon48) AS icon48, B.name, ifnull(B.ip,D.ip) ip, B.url,B.mac, B.parentId, B.typeId
+        FROM
+        GoogleEntity A, EntityType C, entity B left join entity D on B.parentId=D.entityId
+        WHERE A.entityId = B.entityId
+        AND B.typeId = C.typeId and B.entityId in (select entityId from ${Authority})
+        <if test="filter != null">AND
+            (B.name LIKE '%${filter}%' OR B.ip LIKE '%${filter}%' OR D.ip LIKE
+            '%${filter}%' OR A.location
+            LIKE '%${filter}%'
+            OR B.mac LIKE '%${filter}%')
+        </if>
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="long">
+        DELETE FROM GoogleEntity WHERE entityId = #{entityId}
+    </delete>
+
+    <select id="getLinkInGoogleMap" resultType="link">
+        SELECT linkId, name, srcEntityId, destEntityId, srcIfSpeed,
+        destIfSpeed FROM Link WHERE srcEntityId IN(SELECT entityId FROM
+        GoogleEntity) and destEntityId IN(SELECT entityId
+        From
+        GoogleEntity)
+    </select>
+
+    <select id="getGoogleEntityInfo" parameterType="long" resultType="googleEntity">
+        SELECT entityId, longitude, latitude, zoom,
+        minZoom, maxZoom,location
+        FROM GoogleEntity
+        WHERE entityId = #{entityId}
+    </select>
+
+    <select id="queryAvaibleDevice" parameterType="map" resultType="entity">
+        <!-- 增加8800A、B、C、D，ONU设备的支持，查找设备的管理IP地址 modified by huangdongsheng -->
+        select e.entityId,e.name, ifnull(e.ip, f.ip) ip, e.mac, t.icon64 as url, e.typeId
+        from entity e left join entity f
+        on e.parentId=f.entityId,entityType t
+        where e.entityId NOT IN (select entityId from googleentity) and e.typeId =
+        t.typeId and t.typeId IN (select typeId from entitytyperelation where type = 1) and e.entityId in (select
+        entityId from ${Authority})
+    </select>
+
+    <update id="fixlocation" parameterType="map">
+        update googleentity
+        set fixed = #{fixed}
+        where entityId = #{entityId}
+    </update>
+    
+    <insert id="batchInsertOrUpdateGoogleEntity" parameterType="googleEntity">
+        INSERT INTO GoogleEntity 
+            (entityId, longitude, latitude, zoom,minZoom, maxZoom,location) 
+        VALUES 
+            (#{entityId}, #{longitude}, #{latitude},#{zoom}, #{minZoom},#{maxZoom},#{location})
+        ON DUPLICATE KEY UPDATE
+	        longitude = #{longitude}, 
+	        latitude = #{latitude}, 
+	        zoom = #{zoom}, 
+	        minZoom = #{minZoom}, 
+	        maxZoom = #{maxZoom}, 
+	        location = #{location},
+	        fixed = 0
+    </insert>
+</mapper>

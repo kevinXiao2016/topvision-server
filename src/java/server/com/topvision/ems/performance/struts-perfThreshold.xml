@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="perfThreshold" namespace="/performance/perfThreshold" extends="default">
+		<!-- 添加操作日志拦截器配置  -->
+
+		
+		<!-- 跳转到模板列表页面 -->
+		<action name="showPerfTemplate" class="perfThresholdAction" method="showPerfTemplate">
+        	<result>/performance/perfThreshold/perfThresholdTemplate.jsp</result>
+        </action>
+        
+        <!-- 加载阈值模板列表 -->
+        <action name="loadTemplateList" class="perfThresholdAction" method="loadTemplateList" />
+        
+        <!-- 跳转到新建阈值模板页面 -->
+        <action name="showCreateTemplate" class="perfThresholdAction" method="showCreateTemplate">
+        	<result>/performance/perfThreshold/showCreateTemplate.jsp</result>
+        </action>
+        
+        <!-- 校验模板名称是否存在 -->
+        <action name="checkTemplateName" class="perfThresholdAction" method="checkTemplateName" />
+        
+        <!-- 新建阈值模板 -->
+        <action name="addTemplate" class="perfThresholdAction" method="addTemplate" />
+        
+        <!-- 跳转到修改阈值模板页面 -->
+        <action name="showModifyTemplate" class="perfThresholdAction" method="showModifyTemplate">
+        	<result>/performance/perfThreshold/modifyTemplate.jsp</result>
+        </action>
+        
+        <!-- 修改阈值模板 -->
+        <action name="modifyTemplate" class="perfThresholdAction" method="modifyTemplate" />
+        
+        <!-- 删除阈值模板 -->
+        <action name="deletePerfTemplate" class="perfThresholdAction" method="deletePerfTemplate" />
+        
+        <!-- 跳转到向阈值模板添加指标页面 -->
+        <action name="addPerfTargetsToTemplate" class="perfThresholdAction" method="addPerfTargetsToTemplate">
+        	<result>/performance/perfThreshold/addPerfTargetsToTemplate.jsp</result>
+        </action>
+        
+        <!-- 跳转到为阈值模板修改指标页面 -->
+        <action name="modifyTemplatePerfTargets" class="perfThresholdAction" method="modifyTemplatePerfTargets">
+        	<result>/performance/perfThreshold/modifyTemplatePerfTargets.jsp</result>
+        </action>
+        
+        <!-- 跳转到为阈值模板绑定设备页面 -->
+        <action name="showApplyTemplateJsp" class="perfThresholdAction" method="showApplyTemplateJsp">
+        	<result>/performance/perfThreshold/applyTemplate.jsp</result>
+        </action>
+        
+        <!-- 解除设备性能阈值模板关联 -->
+        <action name="removeEntityRelaTemplate" class="perfThresholdAction" method="removeEntityRelaTemplate" />
+        
+        <!-- 关联性能阈值模板 -->
+        <action name="saveEntityRelaTemplate" class="perfThresholdAction" method="saveEntityRelaTemplate" />
+        
+        <!-- 加载关联阈值模板设备列表 -->
+        <action name="loadRelaTemplateEntityList" class="perfThresholdAction" method="loadRelaTemplateEntityList" />
+        
+        <!-- 加载未关联阈值模板设备列表 -->
+        <action name="loadNoRelaTemplateEntityList" class="perfThresholdAction" method="loadNoRelaTemplateEntityList" />
+        
+        <!-- 开启设备的阈值告警 -->
+        <action name="openDeviceThreshold" class="perfThresholdAction" method="openDeviceThreshold" />
+        
+        <!-- 关闭设备的阈值告警 -->
+        <action name="closeDeviceThreshold" class="perfThresholdAction" method="closeDeviceThreshold" />
+        
+        <!-- 显示对应设备类型的模板列表页面 -->
+        <action name="showTemplateDetailList" class="perfThresholdAction" method="showTemplateDetailList">
+        	<result>/performance/perfThreshold/templateDetailList.jsp</result>
+        </action>
+        
+        <!-- 加载指定类型的所有模板 -->
+        <action name="loadTemplateListByType" class="perfThresholdAction" method="loadTemplateListByType" />
+        
+        <!-- 为设备绑定阈值模板 -->
+        <action name="bindTemplateToEntity" class="perfThresholdAction" method="bindTemplateToEntity" />
+        
+        <action name="showTemplateDetail_readonly" class="perfThresholdAction" method="showTemplateDetail_readonly">
+        	<result>/performance/perfThreshold/templateDetail_readonly.jsp</result>
+        </action>
+        
+        <!-- 显示阈值指标管理页面-->
+        <action name="showTargetManage" class="thresholdTargetAction" method="showTargetManage">
+        	<result>/performance/perfThreshold/targetManage.jsp</result>
+        </action>
+        
+        <action name="loadTargetList" class="thresholdTargetAction" method="loadTargetList" />
+        <action name="showTargetEdit" class="thresholdTargetAction" method="showTargetEdit">
+        	<result>/performance/perfThreshold/targetEdit.jsp</result>
+        </action>
+        <action name="modifyTarget" class="thresholdTargetAction" method="modifyTarget" />
+        <action name="enableTarget" class="thresholdTargetAction" method="enableTarget" />
+        
+        
+        
+	</package>
+</struts>

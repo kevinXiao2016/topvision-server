@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmts.domain.CmtsBase">
+	<select id="getCmtsAttributeByCmcId" parameterType="long" resultType="com.topvision.ems.cmc.ccmts.facade.domain.CmcAttribute">
+		SELECT 
+		a.cmcId,a.cmcDeviceStyle,a.topCcmtsSysDescr,c.sysObjectID as
+		topCcmtsSysObjectId,a.topCcmtsSysUpTime,
+		a.topCcmtsSysContact,a.topCcmtsSysName,a.topCcmtsSysLocation,
+		a.topCcmtsSysORLastChange,a.topCcmtsDocsisBaseCapability,d.mem as
+		topCcmtsSysRAMRatio,
+		d.cpu as topCcmtsSysCPURatio, c.mac as
+		topCcmtsSysMacAddr,d.disk as topCcmtsSysFlashRatio,d.state as
+		topCcmtsSysStatus,
+		a.topCcmtsSysSwVersion,IfNull(c.name,
+		a.topCcmtsSysName) nmName, a.dt, b.cmcEntityId, c.ip as ipAddress,c.typeId,et.displayname as cmcDeviceStyleString
+		FROM
+		CmcAttribute a  left join CmcentityRelation b on a.cmcId = b.cmcId
+		left join entity c on b.cmcEntityId = c.entityId
+		LEFT JOIN EntitySnap d
+		ON b.cmcEntityId = d.entityId
+		LEFT JOIN EntityType et
+		ON c.typeId = et.typeId
+		WHERE a.cmcId = #{cmcId}
+	</select>
+	
+	<select id="selectCmtsSnapByEntityId" parameterType="long" resultType="com.topvision.ems.network.domain.EntitySnap">
+		select entityId, state, delayTime
+		FROM
+		EntitySnap
+		WHERE entityId = #{entityId}
+	</select>
+	
+	<select id="queryCmtsNum" parameterType="map" resultType="long">
+		SELECT 
+			count(distinct(a.cmcId))
+		FROM
+			CmcAttribute a 
+        	left join Entity f on f.entityId = a.cmcId
+        WHERE f.typeId in (select typeId from entitytyperelation where type = #{type})
+         AND f.entityId in (select entityId from ${Authority})
+         <if test="cmcName != null"> AND f.name LIKE CONCAT('%','${cmcName}','%')</if> 
+         <if test="connectPerson != null">AND a.topCcmtsSysContact LIKE CONCAT('%','${connectPerson}','%') </if>
+         <if test="cmcIp != null">AND  f.ip LIKE  CONCAT('%','${cmcIp}','%')</if>
+	</select>
+	
+	<select id="queryCmtsList" parameterType="map" databaseId="MySQL" resultType="com.topvision.ems.cmc.ccmts.facade.domain.CmcAttribute">
+		select
+			a.cmcId,a.cmcDeviceStyle,a.topCcmtsSysDescr,c.sysObjectID as topCcmtsSysObjectId,a.topCcmtsSysUpTime,
+			a.topCcmtsSysContact,a.topCcmtsSysName,a.topCcmtsSysLocation,a.topCcmtsSysORLastChange,a.topCcmtsDocsisBaseCapability,a.dt,
+			d.mem as topCcmtsSysRAMRatio,d.cpu as topCcmtsSysCPURatio, c.mac as	topCcmtsSysMacAddr,d.disk as topCcmtsSysFlashRatio,
+			d.state as topCcmtsSysStatus,a.topCcmtsSysSwVersion,IfNull(c.name,a.topCcmtsSysName) nmName, b.cmcEntityId, 
+			c.ip as ipAddress,c.typeId
+		FROM
+			CmcAttribute a 
+			left join CmcEntityRelation b on a.cmcId = b.cmcId
+			left join entity c on b.cmcEntityId = c.entityId
+			LEFT JOIN EntitySnap d ON b.cmcEntityId = d.entityId
+		WHERE c.typeId in (select typeId from entitytyperelation where type = #{type})
+		 AND c.entityId in (select entityId from ${Authority})
+		<if test="cmcName != null">AND c.name LIKE CONCAT('%','${cmcName}','%')</if>
+		<if test="connectPerson != null">AND  a.topCcmtsSysContact LIKE CONCAT('%','${connectPerson}','%')</if>
+		<if test="cmcIp != null">AND  c.ip LIKE CONCAT('%','${cmcIp}','%')</if>
+		<if test="sort != null and dir != null">
+		    ORDER BY ${sort} ${dir}
+		</if>
+		<if test="sort == null or dir == null">
+		    order by ipAddress
+		</if>
+		limit ${start} , ${limit}
+	</select>
+	
+	<select id="queryCmtsList" parameterType="map" databaseId="Oracle" resultType="com.topvision.ems.cmc.ccmts.facade.domain.CmcAttribute">
+		select tt.* from (select rownum rn , t.* from (
+		select
+			a.cmcId,a.cmcDeviceStyle,a.topCcmtsSysDescr,c.sysObjectID as topCcmtsSysObjectId,a.topCcmtsSysUpTime,
+			a.topCcmtsSysContact,a.topCcmtsSysName,a.topCcmtsSysLocation,a.topCcmtsSysORLastChange,
+			a.topCcmtsDocsisBaseCapability,d.mem as	topCcmtsSysRAMRatio,d.cpu as topCcmtsSysCPURatio, 
+			c.mac as topCcmtsSysMacAddr,d.disk as topCcmtsSysFlashRatio,d.state as topCcmtsSysStatus,
+			a.topCcmtsSysSwVersion,IfNull(c.name,a.topCcmtsSysName) nmName, b.cmcEntityId, 
+			c.ip as ipAddress,c.typeId
+		FROM
+			CmcAttribute a 
+			left join CmcEntityRelation b on a.cmcId = b.cmcId
+			left join entity c on b.cmcEntityId = c.entityId
+			LEFT JOIN EntitySnap d ON b.cmcEntityId = d.entityId
+		WHERE c.type in (select typeId from entitytyperelation where type = #{type}) AND c.entityId in (select entityId from ${Authority})
+		<if test="cmcName != null">AND c.name LIKE CONCAT('%','${cmcName}','%')</if>
+		<if test="connectPerson != null">AND  a.topCcmtsSysContact LIKE CONCAT('%','${connectPerson}','%')</if>
+		<if test="cmcIp != null">AND  c.ip LIKE CONCAT('%','${cmcIp}','%')</if>
+		order by ipAddress
+		) t) tt where rn <![CDATA[>]]>
+		${start} and rn <![CDATA[<=]]>
+		${start}+${limit} 
+	</select>
+	
+	<update id="updateCmtsBaseInfo" parameterType="cmtsBaseInfo">
+		update
+        cmcattribute
+        set
+        topCcmtsSysUpTime=#{sysUpTime},
+        topCcmtsSysName=#{sysName},
+        topCcmtsSysLocation=#{sysLocation}
+        where cmcId = #{entityId}
+	</update>
+</mapper>

@@ -1,0 +1,14 @@
+/.build
+/.settings
+/bin/
+/doc/mywork.txt
+/logs
+/topvision-server-test.iml
+/webapp/META-INF/cache
+/webapp/META-INF/fileTemp/startcon.cfg
+/webapp/META-INF/ftpTemp
+/webapp/META-INF/startConfig
+/webapp/META-INF/tftpTemp
+/webapp/META-INF/script
+/webapp/WEB-INF/classes
+/webapp/META-INF/engine

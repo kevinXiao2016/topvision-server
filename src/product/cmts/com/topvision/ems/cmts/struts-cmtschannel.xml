@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmtsChannel" namespace="/cmts/channel" extends="default">
+		<!-- 添加操作日志拦截器配置 -->
+		
+		<action name="showUpChannelList" class="cmtsChannelAction" method="showUpChannelList">
+			<result>/cmts/cmtsUpChannelList.jsp</result>
+		</action>
+		<action name="showDownChannelList" class="cmtsChannelAction" method="showDownChannelList">
+			<result>/cmts/cmtsDownChannelList.jsp</result>
+		</action>
+		<action name="showDownStreamConfigInfo" class="cmtsChannelAction" method="showDownStreamConfigInfo">
+			<result>/cmts/cmtsDownChannelConfig2.jsp</result>
+		</action>
+		<action name="showUpStreamBaseInfoConfig" class="cmtsChannelAction" method="showUpStreamBaseInfoConfig">
+			<result>/cmts/cmtsUpChannelConfig2.jsp</result>
+		</action>
+		<action name="showUpLinkPortList" class="cmtsChannelAction" method="showUpLinkPortList">
+			<result>/cmts/cmtsUpLinkPortList.jsp</result>
+		</action>
+		<action name="getUpStreamBaseInfo" class="cmtsChannelAction" method="getUpStreamBaseInfo">
+		</action>
+		<action name="getDownStreamBaseInfo" class="cmtsChannelAction" method="getDownStreamBaseInfo">
+		</action>
+		<action name="getUpStreamQualityInfo" class="cmtsChannelAction" method="getUpStreamQualityInfo">
+		</action>
+		<action name="getDownChannelInfo" class="cmtsChannelAction" method="getDownChannelInfo">
+		</action>
+		<action name="getUpChannelInfo" class="cmtsChannelAction" method="getUpChannelInfo">
+		</action>
+		<action name="getCmtsPortInfo" class="cmtsChannelAction" method="getCmtsPortInfo">
+		</action>
+		<action name="getUpChannelUserNum" class="cmtsChannelAction" method="getUpChannelUserNum">
+		</action>
+		<action name="getDownChannelUserNum" class="cmtsChannelAction" method="getDownChannelUserNum">
+		</action>
+		<action name="getUpLinkPortList" class="cmtsChannelAction" method="getUpLinkPortList">
+		</action>
+		<action name="refreshCmtsPorts" class="cmtsChannelAction" method="refreshCmtsPorts">
+		</action>
+		<action name="modifyUpStreamBaseInfo" class="cmtsChannelAction" method="modifyUpStreamBaseInfo"></action>
+		<action name="modifyDownStreamBaseInfo" class="cmtsChannelAction" method="modifyDownStreamBaseInfo"></action>
+	</package>
+</struts>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.onu.domain.OnuDeviceInfo">
+	
+	<sql id="selectCondition">
+		WHERE 
+			H.type=13000
+			AND A.onuId in (select entityId from  ${Authority})
+		<if test="queryContent != null">
+            AND (A.onuMac LIKE "%${queryContentMac}%" 
+            	<if test="queryMacWithoutSplit != null">
+                	OR REPLACE(A.onuMac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+                	OR REPLACE(A.onuUniqueIdentification, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            	</if>
+            	OR E.name LIKE "%${queryContent}%" OR F.name LIKE "%${queryContent}%" OR  F.ip LIKE "%${queryContent}%"
+            	OR A.onuUniqueIdentification LIKE "%${queryContent}%"
+            	)
+        </if>
+        <if test="queryContent == null">
+       		<if test="onuName != null">
+	            AND E.name LIKE '%${onuName}%'
+	        </if>
+	        <if test="macAddress != null">
+	        	AND (A.onuMac LIKE '%${macAddress}%' or A.onuUniqueIdentification LIKE '%${macAddress}%'
+				<if test="queryMacWithoutSplit != null">
+					OR REPLACE(A.onuMac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+					OR REPLACE(A.onuUniqueIdentification, ':', '') LIKE '%${queryMacWithoutSplit}%'
+				</if>
+				)
+	        </if>
+	        <if test="onuEorG != null">
+				AND A.onuEorG=#{onuEorG}
+			</if>
+			<if test="onuPreType != null">
+	            AND E.typeId = #{onuPreType}
+        	</if>
+        	<if test="entityId != null">
+				AND A.entityId = #{entityId}
+			</if>
+			<if test="slotId != null and ponId == null">
+				AND EXISTS (SELECT * FROM oltonurelation K,oltponrelation J WHERE K.onuid=A.onuId AND K.ponid=J.ponid and  slotid = #{slotId})
+			</if>
+			<if test="ponId != null">
+				AND D.ponId = #{ponId}
+			</if>
+			<if test="status != null">
+				AND A.onuOperationStatus=#{status}
+			</if>
+        </if>
+	</sql>
+
+	<sql id="selectTable">
+		FROM oltonuattribute A 
+		LEFT JOIN oltonuponrelation B ON A.onuId = B.onuId
+		LEFT JOIN oltonuponattribute C ON C.onuPonId=B.onuPonId
+		LEFT JOIN oltonurelation D ON A.onuId = D.onuId
+		LEFT JOIN entity E ON A.onuId = E.entityId
+		LEFT JOIN entity F ON E.parentId = F.entityId
+		LEFT JOIN entitytype G ON G.typeId = E.typeId
+		LEFT JOIN entitytyperelation H ON H.typeId = G.typeId
+		LEFT JOIN userAttention I ON I.entityId = A.onuId
+		LEFT JOIN onutagrelation OT ON OT.onuId = A.onuId
+		LEFT JOIN onutag T ON T.id = OT.tagId
+		LEFT JOIN perftemplateentityrelation PTER on PTER.entityId = A.onuId
+	</sql>
+
+	<select id="selectOnuDeviceList" parameterType="map" resultType="onuDeviceInfo">
+		SELECT 
+			A.onuEorG,A.onuMac, A.onuPreType, B.onuId, D.onuIndex, F.entityId, F.ip AS entityIp, F.name AS manageName,
+			E.name, A.onuUniqueIdentification, A.onuOperationStatus,A.changeTime, A.onuTimeSinceLastRegister, A.onuDeactive,
+			A.lastDeregisterTime, E.sysName AS onuDesc, G.displayName AS typeName, PTER.templateId,
+			IF(A.onuEorG='E',A.onuSoftwareVersion, IF(GSOFT.onuSoftware0Active=1 ,GSOFT.onuSoftware0Version,GSOFT.onuSoftware1Version)) onuSoftwareVersion,
+			A.topOnuHardwareVersion, A.onuChipVendor, E.contact, 
+			E.location, E.typeId, E.note, I.userId AS attention,T.tagName,T.id AS tagId,
+		    (SELECT offReason from onuonoffrecord WHERE onuId = A.onuId ORDER BY offTime DESC limit 1) AS lastOfflineReason
+		<include refid="selectTable"/>
+		LEFT JOIN gpon_onuinfosoftware GSOFT ON GSOFT.onuId = A.onuId
+		<include refid="selectCondition"/>
+        <if test="sort != null and dir != ''">
+			<choose>
+				<when test="sort == 'onuUniqueIdentification'">
+					ORDER BY onuEorG ${dir}, onuUniqueIdentification ${dir}
+				</when>
+				<when test="sort == 'entityIp'.toString()">
+					ORDER BY inet_aton(entityIp) ${dir}
+				</when>
+				<when test="sort == 'onuOperationStatus'">
+					ORDER BY IF((onuOperationStatus = 1), 1, 0) ${dir}, ${sort} ${dir}, lastOfflineReason ${dir}
+				</when>
+				<when test="sort == 'changeTime'">
+					ORDER BY IF((onuOperationStatus = 1), 1, 0) ${dir},
+					IF((onuOperationStatus = 1), onuTimeSinceLastRegister-UNIX_TIMESTAMP(changeTime), lastDeregisterTime) ${dir}
+				</when>
+				<otherwise>
+					order by ${sort} ${dir}
+				</otherwise>
+		</choose>
+		</if>
+        limit ${start},${limit}
+	</select>
+	
+	<select id="selectOnuDeviceCount" parameterType="map" resultType="int">
+	    SELECT COUNT(D.onuId)
+		<include refid="selectTable"/>
+		<include refid="selectCondition"/>
+	</select>
+	    
+</mapper>

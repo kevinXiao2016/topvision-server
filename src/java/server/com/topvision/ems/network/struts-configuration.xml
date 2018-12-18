@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="configuration" namespace="/configuration" extends="default">
+        <action name="isUpLoadAccess" class="configurationAction"
+            method="isUpLoadAccess">
+        </action>
+	</package>
+</struts>

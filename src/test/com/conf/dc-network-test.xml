@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+    <bean id="mapNodeDao" class="com.topvision.ems.network.dao.ibatis.MapNodeDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="networkDao" class="com.topvision.ems.network.dao.ibatis.NetworkDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="hostServiceDao" class="com.topvision.ems.network.dao.ibatis.HostServiceDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="topoFolderDao" class="com.topvision.ems.network.dao.ibatis.TopoFolderDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+    <bean id="topologyParamDao" class="com.topvision.ems.network.dao.ibatis.TopologyParamDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+    <bean id="topologyDao" class="com.topvision.ems.network.dao.ibatis.TopologyDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="entityDao" class="com.topvision.ems.network.dao.ibatis.EntityDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="linkDao" class="com.topvision.ems.network.dao.ibatis.LinkDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="portDao" class="com.topvision.ems.network.dao.ibatis.PortDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="entityAddressDao" class="com.topvision.ems.network.dao.ibatis.EntityAddressDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="entityAttributeDao" class="com.topvision.ems.network.dao.ibatis.EntityAttributeDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="portPerfDao" class="com.topvision.ems.network.dao.ibatis.PortPerfDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+
+    <bean id="configurationDao" class="com.topvision.ems.network.dao.ibatis.ConfigurationDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+</beans>

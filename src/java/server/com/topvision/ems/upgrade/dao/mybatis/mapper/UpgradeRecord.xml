@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.upgrade.domain.UpgradeRecord">
+	<select id="getUpgradeRecord" parameterType="upgradeRecordQueryParam"
+		resultType="upgradeRecord">
+		select 
+			a.recordId, 
+			a.entityId, 
+			a.entityName, 
+			a.manageIp, 
+			a.mac,
+			a.originVersion, 
+			a.retryTimes, 
+			a.upgradeVersion, 
+			a.status, 
+			a.startTime, 
+			a.endTime,
+			a.jobName, 
+			a.upLinkEntityName, 
+			a.typeId,
+			a.typeName,
+			IFNULL(e.Ip,CONCAT(a.upLinkEntityName,'(',a.manageIp,')')) AS uplinkDevice
+		from 
+			upgraderecord a left join entity e on a.entityId = e.entityId
+		where 1 = 1
+		<if test="entityName != null">
+			and a.entityName LIKE '%${entityName}%'
+		</if>
+		<if test="uplinkDevice != null">
+			and IFNULL(e.Ip,CONCAT(a.upLinkEntityName,'(',a.manageIp,')')) LIKE '%${uplinkDevice}%'
+		</if>
+		<if test="mac != null">
+			and a.mac LIKE '%${mac}%'
+		</if>
+		<if test="status == 1">
+			and <![CDATA[a.status = 1 ]]>
+		</if>
+		<if test="status == 2">
+			and (<![CDATA[a.status > 200]]> or a.status = 2)
+		</if>
+		<if test="typeId != null">
+			and a.typeId = #{typeId}
+		</if>
+		<if test="jobName != null">
+			and a.jobName LIKE '%${jobName}%'
+		</if>
+		 <if test="startTime != null">
+            AND <![CDATA[a.startTime >= #{startTime} ]]>
+        </if>
+        <if test="endTime != null">
+            AND <![CDATA[a.startTime <= #{endTime}]]>
+        </if>
+        <if test="sort != null">order by ${sort} ${dir}</if>
+		limit ${start} , ${limit};
+	</select>
+	<select id="getUpgradeRecordNum" parameterType="upgradeRecordQueryParam"
+		resultType="long">
+		select count(*) 
+		from 
+		upgraderecord a left join entity e on a.entityId = e.entityId
+		where 1 = 1
+		<if test="entityName != null">
+			and a.entityName LIKE '%${entityName}%'
+		</if>
+		<if test="uplinkDevice != null">
+			and IFNULL(e.Ip,CONCAT(a.upLinkEntityName,'(',a.manageIp,')')) LIKE '%${uplinkDevice}%'
+		</if>
+		<if test="mac != null">
+			and a.mac LIKE '%${mac}%'
+		</if>
+		<if test="status == 1">
+			and <![CDATA[a.status = 1 ]]>
+		</if>
+		<if test="status == 2">
+			and (<![CDATA[a.status > 200]]> or a.status = 2)
+		</if>
+		<if test="typeId != null">
+			and a.typeId = #{typeId}
+		</if>
+		<if test="jobName != null">
+			and a.jobName LIKE '%${jobName}%'
+		</if>
+		<if test="startTime != null">
+            AND <![CDATA[a.startTime >= #{startTime} ]]>
+        </if>
+        <if test="endTime != null">
+            AND <![CDATA[a.startTime <= #{endTime}]]>
+        </if>
+	</select>
+	
+	<select id="selectCmcEntityIdByIndexAndEntityId" parameterType="map" resultType="long">
+		select cmcId from cmcentityrelation where cmcIndex = #{index} and cmcEntityId = #{entityId}
+	</select>
+	
+	<select id="selectCmcVersionByEntityId" parameterType="long" resultType="string">
+		select topCcmtsSysSwVersion from cmcattribute where cmcId = #{entityId}
+	</select>
+	
+	<select id="selectOnuEntityIdByIndexAndEntityId" parameterType="map" resultType="long">
+		select onuId from oltonurelation where onuIndex = #{index} and entityId = #{entityId}
+	</select>
+	
+	<select id="selectOnuVersionByEntityId" parameterType="long" resultType="string">
+		select onuSoftwareVersion from oltonuattribute where onuId = #{entityId}
+	</select>
+	
+	<select id="selectUplinkEntityName" parameterType="long" resultType="string">
+		select name from entity where entityId in(select cmcEntityId from cmcentityrelation where cmcId =  #{entityId})
+	</select>
+	
+	<!-- ################################## insert start ####################################### -->
+	<insert id="insertUpgradeRecord" parameterType="upgradeRecord" useGeneratedKeys="true" keyProperty="recordId">
+		insert into upgraderecord(entityId, entityName, manageIp, mac,
+		originVersion, retryTimes, upgradeVersion, status, startTime, endTime,
+		jobName, upLinkEntityName, typeId,
+		typeName)
+		values(#{entityId}, #{entityName}, #{manageIp}, #{mac}, #{originVersion},
+		#{retryTimes}, #{upgradeVersion}, #{status}, #{startTime}, #{endTime},
+		#{jobName}, #{upLinkEntityName}, #{typeId}, #{typeName});
+	</insert>
+
+	<!-- ################################## delete start ####################################### -->
+	<delete id="deleteTelnetLogin" parameterType="long">
+		delete from upgraderecord where recordId = #{recordId};
+	</delete>
+</mapper>

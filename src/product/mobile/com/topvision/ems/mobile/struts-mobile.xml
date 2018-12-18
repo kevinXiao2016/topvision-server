@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="mobile" namespace="/mobile" extends="default">
+		<!-- mLoginAction -->
+		<action name="login" class="mLoginAction" method="login" />
+		<action name="loginWithPower" class="mLoginAction" method="loginWithPower" />
+		<action name="testConnect" class="mLoginAction" method="testConnect"></action>
+		<action name="logout" class="mLoginAction" method="logout" />
+
+		<!-- mSearchAction -->
+		<action name="queryByCmtsMac" class="mSearchAction" method="queryByCmtsMac" />
+		<action name="queryByCmtsName" class="mSearchAction" method="queryByCmtsName" />
+		<action name="queryByCmMac" class="mSearchAction" method="queryByCmMac" />
+
+		<!-- mCmAction -->
+		<action name="getCmList" class="mCmAction" method="getCmList" />
+		<action name="getCmListWithRegion" class="mCmAction" method="getCmListWithRegion" />
+		<action name="getCmListByCmcId" class="mCmAction" method="getCmListByCmcId" />
+		<action name="getCmInfoByCmId" class="mCmAction" method="getCmInfoByCmId" />
+		<action name="refreshCm" class="mCmAction" method="refreshCm" />
+		<action name="refreshCmList" class="mCmAction" method="refreshCmList" />
+		<action name="getCpeListByCmId" class="mCmAction" method="getCpeListByCmId" />
+		<action name="getCpeListByCmIdFromDb" class="mCmAction" method="getCpeListByCmIdFromDb" />
+		<action name="getCmBaseInfo" class="mCmAction" method="getCmBaseInfo"></action>
+		<action name="getCmtsCmList" class="mCmAction" method="getCmtsCmList" />
+		<action name="refreshCmtsCmList" class="mCmAction" method="refreshCmtsCmList" />
+		<action name="refreshAndGetCmSignal" class="mCmAction" method="refreshAndGetCmSignal" />
+		<action name="getPowerUnit" class="mCmAction" method="getPowerUnit" />
+		<action name="getUpChannelSignalByCmId" class="mCmAction" method="getUpChannelSignalByCmId" />
+		<action name="getDownChannelSignalByCmId" class="mCmAction" method="getDownChannelSignalByCmId" />
+		<action name="getCmFlapByCmId" class="mCmAction" method="getCmFlapByCmId"></action>
+		<action name="getOneCMFlapHisData" class="mCmAction" method="getOneCMFlapHisData"></action>
+		<action name="loadCmtsDataByGroup" class="mCmAction" method="loadCmtsDataByGroup"></action>
+		<action name="pingDocsis" class="mCmAction" method="pingDocsis"></action>
+        <action name="moveCmChannel" class="mCmAction" method="moveCmChannel"></action>
+        <action name="realPnmp" class="mCmAction" method="realPnmp"></action>
+		<action name="loadMtrSnrGraph" class="mCmAction" method="loadMtrSnrGraph"></action>
+		<action name="loadRelativeCm" class="mCmAction" method="loadRelativeCm"></action>
+		<action name="getUpchannelList" class="mCmAction" method="getUpchannelList"></action>
+		<action name="refreshCmAfterMove" class="mCmAction" method="refreshCmAfterMove"></action>
+		
+		<action name="uploadProgramImg" class="mCmAction" method="uploadProgramImg"></action>
+		<action name="getCmProgramImg" class="mCmAction" method="getCmProgramImg"></action>
+		
+		<!-- mCmtsAction -->
+		<action name="getCmtsList" class="mCmtsAction" method="getCmtsList" />
+		<action name="getCmtsListWithRegion" class="mCmtsAction" method="getCmtsListWithRegion" />
+		<action name="getCmtsInfoById" class="mCmtsAction" method="getCmtsInfoById" />
+		<action name="reTopoCmtsWithoutAgent" class="mCmtsAction" method="reTopoCmtsWithoutAgent" />
+		<action name="reTopoCmtsAndCC" class="mCmtsAction" method="reTopoCmtsAndCC" />
+		<action name="getOpticalReceiverInfo" class="mCmtsAction"
+			method="getOpticalReceiverInfo" />
+		<action name="getDownChannelsById" class="mCmtsAction" method="getDownChannelsById" />
+		<action name="getDownChannelsInfoById" class="mCmtsAction" method="getDownChannelsInfoById" />
+		<action name="modifyDownChannel" class="mCmtsAction" method="modifyDownChannel" />
+		<action name="getUpChannelsById" class="mCmtsAction" method="getUpChannelsById" />
+		<action name="getUpChannelsInfoById" class="mCmtsAction" method="getUpChannelsInfoById" />
+		<action name="modifyUpChannel" class="mCmtsAction" method="modifyUpChannel" />
+		<action name="getCmtsSignalQuality" class="mCmtsAction"
+			method="getCmtsSignalQuality" />
+		<action name="getCmtsSpectrum" class="mCmtsAction" method="getCmtsSpectrum" />
+		<action name="getCmtsSignalQuality" class="mCmtsAction"
+			method="getCmtsSignalQuality" />
+		<action name="refreshCmList" class="mCmtsAction" method="refreshCmList" />
+		<action name="transMaptoDB" class="mCmtsAction" method="transMaptoDB" />
+		<action name="modifyCmtsLocation" class="mCmtsAction" method="modifyCmtsLocation" />
+		<action name="getOpticalReceiverInfoOfFF" class="mCmtsAction" method="getOpticalReceiverInfoOfFF" />
+		<action name="uploadCmtsConfig" class="mCmtsAction" method="uploadCmtsConfig" />
+		<action name="modifyEntityName" class="mCmtsAction" method="modifyEntityName" />
+		<action name="getCmtsSpectrum2" class="mCmtsAction" method="getCmtsSpectrum2" />
+		<action name="openDownChannel" class="mCmtsAction" method="openDownChannel" />
+		<action name="closeChannels" class="mCmtsAction" method="closeChannels" />
+        <action name="refreshUpChannel" class="mCmtsAction" method="refreshUpChannel" />
+        <action name="refreshDownChannel" class="mCmtsAction" method="refreshDownChannel" />
+
+        <action name="getCmcCurSpectrum" class="mSpectrumAction" method="getCmcCurSpectrum" />
+        <action name="heartbeat" class="mSpectrumAction" method="heartbeat" />
+        <action name="stopCurSpectrum" class="mSpectrumAction" method="stopCurSpectrum" />
+        
+		<!-- mVersionAction -->
+		<action name="getVersion" class="mVersionAction" method="getAndroidVersion" />
+		<action name="getAndroidVersion" class="mVersionAction" method="getAndroidVersion" />
+		<action name="getAndroidVersionAndUrl" class="mVersionAction"
+			method="getAndroidVersionAndUrl" />
+		<action name="getIOSVersion" class="mVersionAction" method="getIOSVersion" />
+		<action name="getIOSUrl" class="mVersionAction" method="getIOSUrl" />
+		<action name="getEmsVersion" class="mVersionAction" method="getEmsVersion" />
+		<action name="getIOSVersionAndUrl" class="mVersionAction" method="getIOSVersionAndUrl" />
+        <!-- old url -->
+        <action name="getAndroidVersionAndShortUrl" class="mVersionAction"
+                method="getAndroidVersionAndUrl" />
+        <!-- 终端助手 -->
+        <action name="getMuiAndroidVersionAndUrl" class="mVersionAction" method="getMuiAndroidVersionAndUrl"/>
+        <action name="getMuiIOSVersionAndUrl" class="mVersionAction" method="getMuiIOSVersionAndUrl"/>
+        <!-- 手机网管 -->
+        <action name="getEMSIIAndroidVersionAndUrl" class="mVersionAction" method="getEMSIIAndroidVersionAndUrl"/>
+        <action name="getEMSIIIOSVersionAndUrl" class="mVersionAction" method="getEMSIIIOSVersionAndUrl"/>
+
+		<!-- mVersionAction -->
+		<action name="showMobileDeviceConfig" class="mConfigAction"
+			method="showMobileDeviceConfig">
+			<result>/mobile/mobileDeviceConfig.jsp</result>
+		</action>
+		<action name="showDefaultPowerLevelConfig" class="mConfigAction"
+			method="showDefaultPowerLevelConfig">
+			<result>/mobile/defaultPowerLevelConfig.jsp</result>
+		</action>
+		<action name="showModifyMobileDeviceType" class="mConfigAction"
+			method="showModifyMobileDeviceType">
+			<result>/mobile/modifyMobileDeviceType.jsp</result>
+		</action>
+		<action name="showAddMobileDeviceType" class="mConfigAction"
+			method="showAddMobileDeviceType">
+			<result>/mobile/addMobileDeviceType.jsp</result>
+		</action>
+		<action name="mobileDeviceTypeList" class="mConfigAction"
+			method="mobileDeviceTypeList" />
+		<action name="addMobileDeviceType" class="mConfigAction"
+			method="addMobileDeviceType" />
+		<action name="modifyMobileDeviceType" class="mConfigAction"
+			method="modifyMobileDeviceType" />
+		<action name="delMobileDeviceType" class="mConfigAction"
+			method="delMobileDeviceType" />
+		<action name="setDefaultMobileDeviceType" class="mConfigAction"
+			method="setDefaultMobileDeviceType" />
+		<action name="modifyDefaultPowerLevel" class="mConfigAction"
+			method="modifyDefaultPowerLevel" />
+		<action name="getDefaultPowerLevelInfo" class="mConfigAction"
+			method="getDefaultPowerLevelInfo" />
+		<action name="startCalculateAttenuation" class="mConfigAction"
+			method="startCalculateAttenuation" />
+		<action name="stopCalculateAttenuation" class="mConfigAction"
+			method="stopCalculateAttenuation" />
+		<action name="pickAttenuationInfo" class="mConfigAction"
+			method="pickAttenuationInfo" />
+		<action name="resetFlatnessInfo" class="mConfigAction"
+			method="resetFlatnessInfo" />
+		<action name="getMobileDeviceForMobile" class="mConfigAction"
+			method="getMobileDeviceForMobile" />
+		<action name="getTimeInterval" class="mConfigAction" method="getTimeInterval" />
+		<action name="getPowerLevelUnit" class="mConfigAction" method="getPowerLevelUnit" />
+
+
+        <action name="startFlatnessInfo" class="mConfigAction"
+                method="startFlatnessInfo" />
+        <action name="stopFlatnessInfo" class="mConfigAction"
+                method="stopFlatnessInfo" />
+        <action name="pickFlatnessInfo" class="mConfigAction"
+                method="pickFlatnessInfo" />
+                
+        <!-- mSpectrumAction -->  
+        <action name="heartbeat" class="mSpectrumAction"
+                method="heartbeat" />
+        <action name="stopCurSpectrum" class="mSpectrumAction"
+                method="stopCurSpectrum" />
+                
+		<action name="getCmcCurSpectrum" class="mSpectrumAction"
+                method="getCmcCurSpectrum" />
+        <action name="getSpectrumUpchannelInfo" class="mSpectrumAction" method="getSpectrumUpchannelInfo" />
+                
+		<!-- mOltAction -->
+		<action name="getOltList" class="mOltAction" method="getOltList" />
+		<action name="getOnuList" class="mOltAction" method="getOnuList" />
+		<action name="getOltBaseInfo" class="mOltAction" method="getOltBaseInfo" />
+		<action name="getOltCmtsList" class="mOltAction" method="getOltCmtsList" />
+		<action name="getOltCmtsListWithRegion" class="mOltAction" method="getOltCmtsListWithRegion" />
+		<action name="getOltOnuList" class="mOltAction" method="getOltOnuList" />
+		<action name="getOnuAuthFailedList" class="mOltAction" method="getOnuAuthFailedList" />
+		<action name="showAddOnuAuth" class="mOltAction" method="showAddOnuAuth" />
+		<action name="addOnuAuthRule" class="mOltAction" method="addOnuAuthRule" />
+		<action name="reTopoOlt" class="mOltAction" method="reTopoOlt" />
+		<action name="getReTopoResult" class="mOltAction" method="getReTopoResult" ></action>
+		<action name="modifyLocationOltOnu" class="mOltAction" method="modifyLocationOltOnu" ></action>
+		<action name="transEntityMaptoDB" class="mOltAction" method="transEntityMaptoDB" ></action>
+		<action name="getOnuListWithRegion" class="mOltAction" method="getOnuListWithRegion" ></action>
+		<action name="getOltOnuListWithRegion" class="mOltAction" method="getOltOnuListWithRegion" ></action>
+		<!-- mOnuAction -->
+		<action name="getOnuBaseInfo" class="mOnuAction" method="getOnuBaseInfo" />
+		<action name="getOnuCapabilityInfo" class="mOnuAction" method="getOnuCapabilityInfo" />
+		<action name="getOnuOpticalInfo" class="mOnuAction" method="getOnuOpticalInfo" />
+		<action name="refreshOnuOpticalInfo" class="mOnuAction" method="refreshOnuOpticalInfo" />
+		<action name="getOnuUniList" class="mOnuAction" method="getOnuUniList" />
+		<action name="modifyUniVlanInfo" class="mOnuAction" method="modifyUniVlanInfo" />
+		<action name="refreshOnuUniList" class="mOnuAction" method="refreshOnuUniList" />
+		<action name="getOnuCpeList" class="mOnuAction" method="getOnuCpeList" />
+		<action name="rebootOnu" class="mOnuAction" method="rebootOnu" />
+		<action name="deregisterOnu" class="mOnuAction" method="deregisterOnu" />
+		<action name="deleteOnuAuth" class="mOnuAction" method="deleteOnuAuth" />
+		<action name="setGponUniInfo" class="mOnuAction" method="setGponUniInfo" />
+		
+		<!-- mPerfAction -->
+		<action name="getTopLowNoiseLoading" class="mPerfAction" method="getTopLowNoiseLoading"/>
+		<action name="getTopChnlUtiliLoading" class="mPerfAction" method="getTopChnlUtiliLoading"/>
+		<action name="getTopCcUsersLoading" class="mPerfAction" method="getTopCcUsersLoading"/>
+		<action name="getTopSniLoading" class="mPerfAction" method="getTopSniLoading"/>
+		<action name="getCmcOpticalLoading" class="mPerfAction" method="getCmcOpticalLoading"/>
+		<action name="getTopUpChnUsersLoading" class="mPerfAction" method="getTopUpChnUsersLoading"/>
+		<action name="getTopDownChnUsersLoading" class="mPerfAction" method="getTopDownChnUsersLoading"/>
+		<action name="getTopPortletErrorCodesLoading" class="mPerfAction" method="getTopPortletErrorCodesLoading"/>
+		<action name="getTopPortletFlapInsGrowthLoading" class="mPerfAction" method="getTopPortletFlapInsGrowthLoading"/>
+		<action name="getTopPonLoading" class="mPerfAction" method="getTopPonLoading"/>
+		<action name="getDeviceDelayingOutLoading" class="mPerfAction" method="getDeviceDelayingOutLoading"/>
+		<action name="getDeviceDelayingTopLoading" class="mPerfAction" method="getDeviceDelayingTopLoading"/>
+		<action name="getTopCpuLoading" class="mPerfAction" method="getTopCpuLoading"/>
+		<action name="getTopMemLoading" class="mPerfAction" method="getTopMemLoading"/>
+		
+		<!-- MUIOnuAction -->
+		<action name="getOnuAllInfo" class="MUIOnuAction" method="getOnuAllInfo"/>
+		<action name="synchronizingInformation" class="MUIOnuAction" method="synchronizingInformation"/>
+		<action name="getOnuByMac" class="MUIOnuAction" method="getOnuByMac"></action>
+		<action name="getOnuByUniqueId" class="MUIOnuAction" method="getOnuByUniqueId"/>
+		<action name="rebootMUIOnu" class="MUIOnuAction" method="rebootMUIOnu" />
+		<action name="getOnuDownloadSpeed" class="MUIOnuAction" method="getOnuDownloadSpeed"/>
+		<action name="uploadUserExper" class="MUIOnuAction" method="uploadUserExper"/>
+		<action name="uploadPreconfigInfo" class="MUIOnuAction" method="uploadPreconfigInfo"/>
+		<action name="uploadOpenreport" class="MUIOnuAction" method="uploadOpenreport"/>
+		<action name="getOnuAroundInfo" class="MUIOnuAction" method="getOnuAroundInfo"/>
+		<action name="getPonAuthTypeAndShowView" class="MUIOnuAction" method="getPonAuthTypeAndShowView"/>
+		<action name="replaceOnuEntityByMac" class="MUIOnuAction" method="replaceOnuEntityByMac"/>
+		<action name="replaceOnuEntityBySnAndPwd" class="MUIOnuAction" method="replaceOnuEntityBySnAndPwd"/>
+		<action name="configWifiParamByMobile" class="MUIOnuAction" method="configWifiParamByMobile"/>
+		<action name="configPPPoEParamByMobile" class="MUIOnuAction" method="configPPPoEParamByMobile"/>
+	</package>
+</struts>

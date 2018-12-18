@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="cmcDocsis" namespace="/cmc" extends="default">
+        <!-- 添加操作日志拦截器配置 -->
+
+
+        <action name="loadDocsisConfig" class="cmcDocsisConfigAction" method="loadDocsisConfig">
+            <result name="success">/cmc/cmcDocsisConfig.jsp</result>
+            <result name="input">/cmc/docsisConfigException.jsp</result>
+        </action>
+        <action name="savaDocsisConfig" class="cmcDocsisConfigAction" method="savaDocsisConfig"></action>
+        <action name="refreshCmcDocsisFromFacility" class="cmcDocsisConfigAction" method="refreshCmcDocsisFromFacility"></action>
+        
+    </package>
+</struts>

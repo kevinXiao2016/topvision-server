@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.mobile.domain.MobileOnu">
+	
+	<select id="queryOnuBaseInfo" resultType="MobileOnu" parameterType="long">
+		SELECT A.onuIndex, A.onuId, A.entityId, B.name, B.mac, B.typeId, C.onuChipVendor  chipVendor, C.onuChipType chipType,
+		C.onuSoftwareVersion softVersion, C.onuLlidId  onuLlid, C.onuChipVersion  chipVersion,C.topOnuHardwareVersion hardVersion,
+		C.changeTime,C.onuTimeSinceLastRegister,
+		D.state, D.sysUpTime, E.displayName onuType, F.ip manageIp,
+		G.location onuLocation 
+		FROM oltonurelation A
+		JOIN entity B ON A.onuId = B.entityId
+		LEFT JOIN oltonuattribute C ON A.onuId = C.onuId
+		LEFT JOIN entitysnap D ON A.onuId = D.entityId
+		LEFT JOIN entitytype E ON B.typeId = E.typeId
+		LEFT JOIN baiduentity G ON G.entityId=A.onuId 
+		JOIN entity F ON A.entityId = F.entityId  
+		WHERE A.onuId = #{onuId}
+	</select>
+	
+	<select id="queryOnuPonIndex" resultType="long" parameterType="map">
+		select onuPonIndex from oltonuponrelation where onuId = #{onuId} and entityId = #{entityId}
+	</select>
+	
+	<select id="getOnuLinkPonOpticalByOnuId" resultType="oltPonOptical" parameterType="long">
+		select  *,C.oltponrevpower revPower from oltponoptical A left join oltonurelation B on A.ponId = B.ponId 
+        left join perfonulinkqualitylast C on B.onuId=C.onuId where B.onuId = #{onuId}
+	</select>
+	
+</mapper>

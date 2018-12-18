@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="gponOnuAuth" namespace="/gpon/onuauth" extends="default">
+		<action name="showOnuAuthen" class="gponOnuAuthAction" method="showOnuAuthen">
+			<result>/gpon/onuauth/gponOnuAuth.jsp</result>
+		</action>
+		<action name="showGponAutoAuthConfig" class="gponOnuAuthAction" method="showGponAutoAuthConfig">
+			<result>/gpon/onuauth/autoAuthConfig.jsp</result>
+		</action>
+		<action name="loadOnuAuthConfigList" class="gponOnuAuthAction" method="loadOnuAuthConfigList" />
+		<action name="loadAutoFindOnuList" class="gponOnuAuthAction" method="loadAutoFindOnuList" />
+		<action name="loadAutoAuthConfigList" class="gponOnuAuthAction" method="loadAutoAuthConfigList" />
+		<action name="addGponOnuAuth" class="gponOnuAuthAction" method="addGponOnuAuth"/>
+		<action name="batchAddGponOnuAuth" class="gponOnuAuthAction" method="batchAddGponOnuAuth"/>
+		<action name="refreshGponOnuAuth" class="gponOnuAuthAction" method="refreshGponOnuAuth" />
+		<action name="modifyOnuAuthMode" class="gponOnuAuthAction" method="modifyOnuAuthMode" />
+		<action name="modifyOnuAutoFind" class="gponOnuAuthAction" method="modifyOnuAutoFind" />
+		<action name="addGponAutoAuth" class="gponOnuAuthAction" method="addGponAutoAuth" />
+		<action name="updateGponAutoAuth" class="gponOnuAuthAction" method="updateGponAutoAuth" />
+		<action name="loadGponPorts" class="gponOnuAuthAction"  method="loadGponPorts" />
+		<action name="loadOnuNoList" class="gponOnuAuthAction"  method="loadOnuNoList" />
+		<action name="loadGponPortList" class="gponOnuAuthAction"  method="loadGponPortList" />
+		<action name="getGponOnuAutoFindByIds" class="gponOnuAuthAction"  method="getGponOnuAutoFindByIds" />
+		<action name="showGponOnuAutoFindList" class="gponOnuAuthAction" method="showGponOnuAutoFindList">
+			<result>/gpon/onuauth/gponOnuAutoFindList.jsp</result>
+		</action>
+		<action name="showAddGponOnuAuthList" class="gponOnuAuthAction" method="showAddGponOnuAuthList">
+			<result>/gpon/onuauth/addGponOnuAuthList.jsp</result>
+		</action>
+		<action name="loadGponONuAutoFindList" class="gponOnuAuthAction" method="loadGponONuAutoFindList" />
+		<action name="showAddGponOnuAuth" class="gponOnuAuthAction" method="showAddGponOnuAuth">
+			<result>/gpon/onuauth/addGponOnuAuth.jsp</result>
+		</action>
+		<action name="showBatchAddGponOnuAuth" class="gponOnuAuthAction" method="showBatchAddGponOnuAuth">
+			<result>/gpon/onuauth/batchAddGponOnuAuth.jsp</result>
+		</action>
+		<action name="deleteGponOnuAuth"  class="gponOnuAuthAction" method="deleteGponOnuAuth" />
+		<action name="showModifyPonAuthMode" class="gponOnuAuthAction" method="showModifyPonAuthMode">
+			<result>/gpon/onuauth/modifyPonAuthMode.jsp</result>
+		</action>
+		<action name="showOnuType" class="gponOnuAuthAction" method="showOnuType"/>
+		<action name="queryGponOnuAutoFind" class="gponOnuAuthAction" method="queryGponOnuAutoFind" />
+		<action name="batchModifyGponOnuAuthMode" class="gponOnuAuthAction" method="batchModifyGponOnuAuthMode" />
+		<action name="deleteGponAutoAuth" class="gponOnuAuthAction" method="deleteGponAutoAuth" />
+	</package>
+</struts>

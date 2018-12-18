@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="vlan" namespace="/epon/vlan" extends="default">
+    	<!-- PON配置方式 -->
+    	<action name="loadTransData" class="ponPortVlanAction" method="loadTransData" />
+    	<action name="addTransRule" class="ponPortVlanAction" method="addTransRule" />
+    	<action name="deleteTransRule" class="ponPortVlanAction" method="deleteTransRule" />
+    	<action name="modifyTransRule" class="ponPortVlanAction" method="modifyTransRule" />
+        <action name="loadAggrData" class="ponPortVlanAction" method="loadAggrData" />
+        <action name="addSvlanAggrRule" class="ponPortVlanAction" method="addSvlanAggrRule" />
+        <action name="deleteSvlanAggrRule" class="ponPortVlanAction" method="deleteSvlanAggrRule" />
+        <action name="modifyCvlanAggrRule" class="ponPortVlanAction" method="modifyCvlanAggrRule" />
+    	<action name="loadTrunkData" class="ponPortVlanAction" method="loadTrunkData" />
+    	<action name="modifyTrunkRule" class="ponPortVlanAction" method="modifyTrunkRule" />
+    	<action name="loadQinqData" class="ponPortVlanAction" method="loadQinqData" />
+    	<action name="loadQinqRule" class="ponPortVlanAction" method="loadQinqRule" />
+    	<action name="loadAggrRule" class="ponPortVlanAction" method="loadAggrRule" />
+    	<action name="addQinqRule" class="ponPortVlanAction" method="addQinqRule" />
+    	<action name="deleteQinqRule" class="ponPortVlanAction" method="deleteQinqRule" />
+    	<action name="loadPonCvidModeRela" class="ponPortVlanAction" method="loadPonCvidModeRela" />
+    	<action name="loadPonSvidModeRela" class="ponPortVlanAction" method="loadPonSvidModeRela" />
+    	<action name="refreshVlanDataFromOlt" class="ponPortVlanAction" method="refreshVlanDataFromOlt" />
+    	<action name="loadTransparentData" class="ponPortVlanAction" method="loadTransparentData" />
+    	<action name="addTransparentRule" class="ponPortVlanAction" method="addTransparentRule" />
+    	<action name="delTransparentRule" class="ponPortVlanAction" method="delTransparentRule" />
+    	<action name="modifyTransparentRule" class="ponPortVlanAction" method="modifyTransparentRule" />
+    	<!-- PON配置方式 -->
+    	
+    	<!-- LLID配置方式 -->
+    	<action name="refreshVlanLlidListFromOlt" class="ponLlidVlanAction" method="refreshVlanLlidListFromOlt" />
+    	<action name="loadOnuMacAddress" class="ponLlidVlanAction" method="loadOnuMacAddress" />
+    	<action name="loadLlidTransData" class="ponLlidVlanAction" method="loadLlidTransData" />
+    	<action name="addLlidTransRule" class="ponLlidVlanAction" method="addLlidTransRule" />
+    	<action name="deleteLlidTransRule" class="ponLlidVlanAction" method="deleteLlidTransRule" />
+    	<action name="modifyLlidTransRule" class="ponLlidVlanAction" method="modifyLlidTransRule" />
+        <action name="loadLlidAggrData" class="ponLlidVlanAction" method="loadLlidAggrData" />
+        <action name="addLlidSvlanAggrRule" class="ponLlidVlanAction" method="addLlidSvlanAggrRule" />
+        <action name="deleteLlidSvlanAggrRule" class="ponLlidVlanAction" method="deleteLlidSvlanAggrRule" />
+        <action name="modifyLlidCvlanAggrRule" class="ponLlidVlanAction" method="modifyLlidCvlanAggrRule" />
+    	<action name="loadLlidTrunkData" class="ponLlidVlanAction" method="loadLlidTrunkData" />
+    	<action name="modifyLlidTrunkRule" class="ponLlidVlanAction" method="modifyLlidTrunkRule" />
+    	<action name="loadLlidQinqData" class="ponLlidVlanAction" method="loadLlidQinqData" />
+    	<action name="addLlidQinqRule" class="ponLlidVlanAction" method="addLlidQinqRule" />
+    	<action name="deleteLlidQinqRule" class="ponLlidVlanAction" method="deleteLlidQinqRule" />
+    	<!-- LLID配置方式 -->
+
+        <!-- SNI端口Action配置区域start -->
+    	<!-- SNI端口基本属性 -->
+    	<action name="getSniPortVlanAttribute" class="sniVlanAction" method="getSniPortVlanAttribute"> 
+    	      <result  name="sniVlanConfig">/epon/sniVlanMgmt.jsp</result>
+    	      <result name="sniPortEntry">/epon/sniVlanEntryMgmt.jsp</result>
+    	</action>
+    	<action name="updateSniPortVlanAttribute" class="sniVlanAction" method="updateSniPortVlanAttribute"/>
+    	<action name="refreshSniPortVlanAttribute" class="sniVlanAction" method="refreshSniPortVlanAttribute"/>
+    	<!-- VLAN视图 -->
+    	<action name="loadOltVlanConfigList" class="sniVlanAction" method="loadOltVlanConfigList"/>
+    	<action name="modifyVlanName" class="sniVlanAction" method="modifyVlanName"/>
+    	<action name="loadOltVlanGlobalInfo" class="sniVlanAction" method="loadOltVlanGlobalInfo"/>
+    	<action name="addOltVlan" class="sniVlanAction" method="addOltVlan"/>
+    	<action name="deleteOltVlan" class="sniVlanAction" method="deleteOltVlan"/>
+    	<action name="updateTagStatus" class="sniVlanAction" method="updateTagStatus"/>
+    	<action name="loadOltVlanConfig" class="sniVlanAction" method="loadOltVlanConfig"/>
+    	<action name="createVlanVif" class="sniVlanAction" method="createVlanVif"/>
+    	<action name="deleteVlanVif" class="sniVlanAction" method="deleteVlanVif"/>
+    	<action name="modifyVlanVifPriIp" class="sniVlanAction" method="modifyVlanVifPriIp"/>
+    	<action name="deleteVlanVifSubIp" class="sniVlanAction" method="deleteVlanVifSubIp"/>
+    	<action name="modifyVlanVifSubIp" class="sniVlanAction" method="modifyVlanVifSubIp"/>
+    	<action name="addVlanVifSubIp" class="sniVlanAction" method="addVlanVifSubIp"/>
+    	<action name="loadVlanVifSubIp" class="sniVlanAction" method="loadVlanVifSubIp"/>
+    	<action name="refreshVlanVif" class="sniVlanAction" method="refreshVlanVif" />
+    	<action name="showVlanNameJsp" class="sniVlanAction" method="showVlanNameJsp">
+			<result>/epon/setVlanName.jsp</result>
+		</action>
+		<action name="createVlanVifJsp" class="sniVlanAction" method="createVlanVifJsp">
+			<result>/epon/createVlanVif.jsp</result>
+		</action>
+		<action name="setVlanVifJsp" class="sniVlanAction" method="setVlanVifJsp">
+			<result>/epon/setVlanVif.jsp</result>
+		</action>
+		<action name="addVlanVifSubIpJsp" class="sniVlanAction" method="addVlanVifSubIpJsp">
+			<result>/epon/createVlanVif.jsp</result>
+		</action>
+		<action name="modifyVlanVifSubIpJsp" class="sniVlanAction" method="modifyVlanVifSubIpJsp">
+			<result>/epon/createVlanVif.jsp</result>
+		</action>
+		<action name="showVlanBatchAdd" class="sniVlanAction" method="showVlanBatchAdd">
+			<result>/epon/oltVlanBatchAdd.jsp</result>
+		</action>
+    	<!-- SNI端口Action配置区域end -->
+    	
+    	<!-- UNI端口Action配置区域 start -->
+    	<!-- UNI端口基本属性 -->
+    	<action name="showPortVlanAttribute" class="uniVlanAction" method="showPortVlanAttribute">
+    		<result>/epon/uniVlanBaseConfig.jsp</result>
+    	</action>
+    	<action name="updatePortVlanAttribute" class="uniVlanAction" method="updatePortVlanAttribute" />
+    	<action name="refreshPortVlanAttribute" class="uniVlanAction" method="refreshPortVlanAttribute" />
+    	<action name="showUniVlanMode" class="uniVlanAction" method="showUniVlanMode">
+    		<result>/epon/uniVlanModeConfig.jsp</result>
+    	</action>
+    	<action name="changePortVlanMode" class="uniVlanAction" method="changePortVlanMode"/>
+    	
+    	<!-- UNI端口VLAN转换规则 -->
+    	<action name="loadVlanTranslationRuleList" class="uniVlanAction" method="loadVlanTranslationRuleList" />
+    	<action name="addVlanTranslationRule" class="uniVlanAction" method="addVlanTranslationRule" />
+    	<action name="updateVlanTranslationRule" class="uniVlanAction" method="updateVlanTranslationRule" />
+    	<action name="deleteVlanTranslationRule" class="uniVlanAction" method="deleteVlanTranslationRule" />
+    	<action name="refreshVlanTranlationRule" class="uniVlanAction" method="refreshVlanTranlationRule" />
+    	
+    	<!-- UNI端口VLAN聚合规则 -->
+    	<action name="loadVlanAggregationRuleList" class="uniVlanAction" method="loadVlanAggregationRuleList" />
+    	<action name="addVlanAggregationRuleList" class="uniVlanAction" method="addVlanAggregationRuleList" />
+    	<action name="modifyVlanAggregationRuleList" class="uniVlanAction" method="modifyVlanAggregationRuleList" />
+    	<action name="deleteVlanAggregationRuleList" class="uniVlanAction" method="deleteVlanAggregationRuleList" />
+    	<action name="refreshVlanAggregationRuleList" class="uniVlanAction" method="refreshVlanAggregationRuleList" />
+    	
+    	<!-- UNI端口VLAN Trunk规则 -->
+    	<action name="loadVlanTrunkRuleList" class="uniVlanAction" method="loadVlanTrunkRuleList" />
+    	<action name="updateVlanTrunkRule" class="uniVlanAction" method="updateVlanTrunkRule" />
+    	<action name="refreshVlanTrunkRule" class="uniVlanAction" method="refreshVlanTrunkRule" />
+
+        <action name="showOltVlanView" class="oltVlanAction" method="showOltVlanView">
+            <result>/epon/oltVlanView.jsp</result>
+        </action>
+        
+        <action name="showSniVlanMgmt" class="sniVlanAction" method="showSniVlanMgmt">
+			<result>/epon/sniVlanMgmt.jsp</result>
+		</action>
+		<action name="showPonVlanConfig" class="ponPortVlanAction" method="showPonVlanConfig">
+			<result>/epon/ponVlanConfig.jsp</result>
+		</action>
+		<action name="showPonVlanLlidConfig" class="ponLlidVlanAction"
+			method="showPonVlanLlidConfig">
+			<result>/epon/ponVlanLlidConfig.jsp</result>
+		</action>
+        
+    </package>
+</struts>

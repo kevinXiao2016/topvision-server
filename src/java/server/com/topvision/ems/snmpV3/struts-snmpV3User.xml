@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="/snmp" extends="default">
+        <action name="refreshSnmpV3Config" class="snmpV3UserAction" method="refreshSnmpV3Config" />
+        <action name="showSnmpV3UserList" class="snmpV3UserAction" method="showSnmpV3UserList">
+            <result>/snmpV3/usmSnmpV3UserList.jsp</result>
+        </action>
+        <action name="showSnmpV3AccessList" class="snmpV3UserAction" method="showSnmpV3AccessList">
+            <result>/snmpV3/vacmSnmpV3AccessList.jsp</result>
+        </action>
+        <action name="showSnmpV3ViewList" class="snmpV3UserAction" method="showSnmpV3ViewList">
+            <result>/snmpV3/vacmSnmpV3ViewList.jsp</result>
+        </action>
+        <action name="showSnmpConfigForManager" class="snmpV3UserAction" method="showSnmpConfigForManager">
+            <result>/snmpV3/snmpConfigForManager.jsp</result>
+        </action>
+        <action name="loadSnmpV3UserList" class="snmpV3UserAction" method="loadSnmpV3UserList" />    
+        <action name="loadSnmpV3AccessList" class="snmpV3UserAction" method="loadSnmpV3AccessList" />
+        <action name="loadSnmpV3ViewList" class="snmpV3UserAction" method="loadSnmpV3ViewList" />
+        <action name="loadSnmpV3ViewNameList" class="snmpV3UserAction" method="loadSnmpV3ViewNameList" />
+        <action name="showUserAddtionWizard" class="snmpV3UserAction" method="showUserAddtionWizard">
+            <result>/snmpV3/userAddtionWizard.jsp</result>
+        </action>
+        <action name="showUserAddtionWizardGroup" class="snmpV3UserAction" method="showUserAddtionWizardGroup">
+            <result>/snmpV3/userAddtionWizardGroup.jsp</result>
+        </action>
+        <action name="showVacmAccessAddtion" class="snmpV3UserAction" method="showVacmAccessAddtion">
+            <result>/snmpV3/vacmAccessAddtion.jsp</result>
+        </action>
+        <action name="showVacmViewAddtion" class="snmpV3UserAction" method="showVacmViewAddtion">
+            <result>/snmpV3/vacmViewAddtion.jsp</result>
+        </action>
+        <action name="loadSnmpAccessInfo" class="snmpV3UserAction" method="loadSnmpAccessInfo" />
+        <action name="addView" class="snmpV3UserAction" method="addView" />
+        <action name="addAccess" class="snmpV3UserAction" method="addAccess" />
+        <action name="addUser" class="snmpV3UserAction" method="addUser" />
+        <action name="tryUserValid" class="snmpV3UserAction" method="tryUserValid" />
+        <action name="showSnmpV2Cfg" class="snmpV3UserAction" method="showSnmpV2Cfg">
+            <result>/snmpV3/snmpV2Cfg.jsp</result>
+        </action>
+        <action name="deleteUser" class="snmpV3UserAction" method="deleteUser" />
+        <action name="deleteAccess" class="snmpV3UserAction" method="deleteAccess" />
+        <action name="deleteView" class="snmpV3UserAction" method="deleteView" />
+        <action name="loadAvaiableCloneUserList" class="snmpV3UserAction" method="loadAvaiableCloneUserList" />
+        <action name="loadAvaiableCloneEngineList" class="snmpV3UserAction" method="loadAvaiableCloneEngineList" />
+        <action name="modifyAccess" class="snmpV3UserAction" method="modifyAccess" />
+        <action name="modifySnmpV3View" class="snmpV3UserAction" method="modifySnmpV3View" />
+        <action name="modifyUser" class="snmpV3UserAction" method="modifyUser" />
+        <action name="showModifySnmpV3User" class="snmpV3UserAction" method="showModifySnmpV3User">
+            <result>/snmpV3/updateSnmpV3User.jsp</result>
+        </action>
+        <action name="getEntitySnmpEngineId" class="snmpV3UserAction" method="getEntitySnmpEngineId" />
+    </package>
+</struts>

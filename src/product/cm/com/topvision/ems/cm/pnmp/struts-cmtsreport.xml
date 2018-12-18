@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+    
+<struts>
+	<package name="pnmpcmtsreport" namespace="/pnmp/cmtsreport" extends="default">
+        <action name="showCmtsReportView" class="pnmpCmtsReportAction" method="showCmtsReportView">
+            <result>/terminal/pnmp/pnmp-cmts-report.jsp</result>
+        </action>
+        <action name="loadCmtsReportData" class="pnmpCmtsReportAction" method="loadCmtsReportData" />
+        <action name="loadCorrelationGroup" class="pnmpCmtsReportAction" method="loadCorrelationGroup" />
+        <action name="showCmtsReportDetailView" class="pnmpCmtsReportAction" method="showCmtsReportDetailView">
+            <result>/terminal/pnmp/pnmp-cmts-detail.jsp</result>
+        </action>
+         <action name="loadCmtsReportDetailData" class="pnmpCmtsReportAction" method="loadCmtsReportDetailData" />
+    </package>
+</struts>

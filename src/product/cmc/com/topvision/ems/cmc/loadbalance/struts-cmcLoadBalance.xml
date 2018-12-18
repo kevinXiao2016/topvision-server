@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcLoadBalance" namespace="/cmc/loadbalance" extends="default">
+		<action name="getLoadBalanceGroups" class="cmcLoadBalanceAction"
+			method="getLoadBalanceGroups">
+		</action>
+		<action name="showLoadbalance" class="cmcLoadBalanceAction" method="showLoadbalance">
+			<result>/cmc/loadbalance.jsp</result>
+		</action>
+		<action name="showLoadBalanceAddition" class="cmcLoadBalanceAction" method="showLoadBalanceAddition">
+			<result>/cmc/loadBalanceAddition.jsp</result>
+		</action>
+		<action name="showExcMacRangeAddition" class="cmcLoadBalanceAction" method="showExcMacRangeAddition">
+			<result>/cmc/showExcMacRangeAddition.jsp</result>
+		</action>
+		<action name="enterLoadBalPolicyTplAddPage" class="cmcLoadBalanceAction" method="enterLoadBalPolicyTplAddPage">
+            <result>/cmc/addLoadBalPolicyTpl.jsp</result>
+        </action>
+		<action name="showMacRangeDetail" class="cmcLoadBalanceAction" method="showMacRangeDetail">
+			<result>/cmc/showMacRangeDetail.jsp</result>
+		</action>
+		
+		<action name="getLoadBalanceGroupList" class="cmcLoadBalanceAction" method="getLoadBalanceGroupList" />
+		<action name="addLoadBalanceExcMacRange" class="cmcLoadBalanceAction" method="addLoadBalanceExcMacRange" />
+		<action name="getLoadBalPolicyTplList" class="cmcLoadBalanceAction" method="getLoadBalPolicyTplList" />
+        <action name="addLoadBalPolicyTpl" class="cmcLoadBalanceAction" method="addLoadBalPolicyTpl" />
+        <action name="deleteLoadBalPolicyTpl" class="cmcLoadBalanceAction" method="deleteLoadBalPolicyTpl" />
+        <action name="enterLoadBalPolicyTplModifyPage" class="cmcLoadBalanceAction" method="enterLoadBalPolicyTplModifyPage">
+            <result>/cmc/modifyLoadBalPolicyTpl.jsp</result>
+        </action>
+        <action name="modifyLoadBalPolicyTpl" class="cmcLoadBalanceAction" method="modifyLoadBalPolicyTpl" />
+		<action name="getLoadBalanceExcMacRangeList" class="cmcLoadBalanceAction" method="getLoadBalanceExcMacRangeList" />
+		<action name="getCcmtsUpchannelList" class="cmcLoadBalanceAction" method="getCcmtsUpchannelList" />
+		<action name="getCcmtsDownchannelList" class="cmcLoadBalanceAction" method="getCcmtsDownchannelList" />
+		<action name="getLoadBalanceTimePolicy" class="cmcLoadBalanceAction" method="getLoadBalanceTimePolicy" />
+		<action name="enterLoadBalPolicyModifyPage" class="cmcLoadBalanceAction" method="enterLoadBalPolicyModifyPage">
+            <result>/cmc/modifyLoadBalPolicy.jsp</result>
+        </action>
+        <action name="enterLoadBalPolicyAddPage" class="cmcLoadBalanceAction" method="enterLoadBalPolicyAddPage">
+            <result>/cmc/addLoadBalPolicy.jsp</result>
+        </action>
+        <action name="modifyLoadBalPolicy" class="cmcLoadBalanceAction" method="modifyLoadBalPolicy" />
+        <action name="enterLoadBalPolicyListPage" class="cmcLoadBalanceAction" method="enterLoadBalPolicyListPage">
+            <result>/cmc/loadBalPolicyList.jsp</result>
+        </action>
+        <action name="getLoadBalPolicyList" class="cmcLoadBalanceAction" method="getLoadBalPolicyList" />
+        <action name="addLoadBalPolicy" class="cmcLoadBalanceAction" method="addLoadBalPolicy" />
+        <action name="deleteLoadBalPolicy" class="cmcLoadBalanceAction" method="deleteLoadBalPolicy" />
+        <action name="createOrModifyLoadbalance" class="cmcLoadBalanceAction" method="createOrModifyLoadbalance" />
+        <action name="modifyCcmtsPolicy" class="cmcLoadBalanceAction" method="modifyCcmtsPolicy" />
+        <action name="modifyLBGlobalConfig" class="cmcLoadBalanceAction" method="modifyLBGlobalConfig" />
+        <action name="addLoadBalanceGroup" class="cmcLoadBalanceAction" method="addLoadBalanceGroup" />
+        <action name="modifyLoadBalanceGroup" class="cmcLoadBalanceAction" method="modifyLoadBalanceGroup" />
+        <action name="deleteLoadBalanceGroup" class="cmcLoadBalanceAction" method="deleteLoadBalanceGroup" />
+        <action name="modifyLoadBalanceChannel" class="cmcLoadBalanceAction" method="modifyLoadBalanceChannel" />
+        <action name="modifyLoadBalanceMacRanges" class="cmcLoadBalanceAction" method="modifyLoadBalanceMacRanges" />
+        <action name="deleteLoadBalanceExcMacRange" class="cmcLoadBalanceAction" method="deleteLoadBalanceExcMacRange" />
+        <action name="syncLoadBalPolicy" class="cmcLoadBalanceAction" method="syncLoadBalPolicy" />
+        <action name="refreshLoadBalance" class="cmcLoadBalanceAction" method="refreshLoadBalance"></action>
+	</package>
+</struts>

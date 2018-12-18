@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="link" namespace="/link" extends="default">
+
+        <action name="insertNewLink" class="linkAction" method="insertNewLink" />
+        <action name="updateLinkOutline" class="linkAction" method="updateLinkOutline">
+        </action>
+        <action name="showEntityLinkTableJsp" class="linkAction" method="showEntityLinkTableJsp">
+            <result>/network/entityLinkInfo.jsp</result>
+        </action>
+        <action name="getEntityLinkTable" class="linkAction" method="getEntityLinkTable" />
+
+        <action name="queryLinkForAc" class="linkSearchAction" method="queryLinkForAc" />
+
+        <action name="showPopLinkDlg" class="linkSearchAction" method="showPopLinkDlg">
+            <result>/network/popLinkDlg.jsp</result>
+        </action>
+
+        <action name="loadAllLink" class="linkSearchAction" method="loadAllLink">
+            <result>/network/popLinkDlg.jsp</result>
+        </action>
+
+        <action name="loadLinkForCb" class="linkSearchAction" method="loadAllLink" />
+
+        <action name="showLinkSelectPortJsp" class="linkAction" method="showLinkSelectPortJsp">
+            <result>/network/popSelectPort.jsp</result>
+        </action>
+        <action name="changePortOfLink" class="linkAction" method="changePortOfLink">
+        </action>
+
+        <action name="showLinkInfo" class="linkAction" method="showLinkInfo">
+            <result>/network/linkInfo.jsp</result>
+        </action>
+
+        <action name="showLinkPropertyJsp" class="linkAction" method="showLinkPropertyJsp">
+            <result>/network/linkProperty.jsp</result>
+        </action>
+    </package>
+</struts>

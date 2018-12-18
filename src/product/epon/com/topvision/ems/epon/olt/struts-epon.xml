@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="epon" namespace="/epon" extends="default">
+		<action name="entityPortal" class="oltPortalAction" method="showOltEntityById">
+			<result>/epon/8601/oltPortal.jsp</result>
+		</action>
+		<action name="entityPortalCancel" class="oltPortalAction" method="showOltCancelJsp">
+			<result>/epon/8601/oltCanceled.jsp</result>
+		</action>
+		<action name="showOltFaceplate" class="oltAction" method="showOltFaceplate">
+			<result>/epon/8601/oltFaceplate.jsp</result>
+		</action>
+		<action name="showOltVlanView" class="oltVlanAction" method="showOltVlanView">
+			<result>/epon/8601/oltVlanView.jsp</result>
+		</action>
+		<action name="showOltVlanList" class="oltVlanAction" method="showOltVlanList">
+			<result>/epon/vlan/oltVlanList.jsp</result>
+		</action>
+		<action name="showOltMirrorView" class="oltMirrorAction" method="showOltMirrorView">
+			<result>/epon/8601/oltMirrorView.jsp</result>
+		</action>
+		<action name="showOltTrunkView" class="oltTrunkAction" method="showOltTrunkView">
+			<result>/epon/8601/oltTrunkView.jsp</result>
+		</action>
+		<action name="showOltPonProtectView" class="oltPonProtectAction" method="showOltPonProtectView">
+			<result>/epon/8601/oltPonProtectView.jsp</result>
+		</action>
+		<action name="showIsolataionGroupView" class="isolationGroupAction" method="showIsolataionGroupView" >
+			<result>/epon/8601/oltPortIsolation.jsp</result>			
+		</action>
+		<action name="getOltUptimeByEntity" class="oltPortalAction"
+			method="getOltUptimeByEntity" />
+		<action name="getCpuUsageByEntityId" class="oltPortalAction"
+			method="getCpuUsageByEntityId" />
+		<action name="getMemoryUsageByEntityId" class="oltPortalAction"
+			method="getMemoryUsageByEntityId" />
+		<action name="getFlashUsageByEntityId" class="oltPortalAction" method="getFlashUsageByEntityId" />
+		<action name="checkSysTiming" class="oltAction" method="checkSysTiming" />
+		<action name="resetOlt" class="oltAction" method="resetOlt" />
+		<action name="switchoverOlt" class="oltAction" method="switchoverOlt" />
+		<action name="restoreOlt" class="oltAction" method="restoreOlt" />
+		
+		<action name="upgradeMasterBoard" class="oltAction" method="upgradeMasterBoard" />
+		<action name="syncSlaveBoard" class="oltAction" method="syncSlaveBoard" />
+		<action name="modifyPreconfigMgmt" class="oltSlotAction" method="modifyPreconfigMgmt" />
+		<action name="refreshBoardInfo" class="oltSlotAction" method="refreshBoardInfo" />
+		<action name="modifySniBasicConfig" class="oltSniAction" method="modifySniBasicConfig" />
+		<action name="modifySniAdminStatus" class="oltSniAction" method="modifySniAdminStatus" />
+		<action name="modifySniIsolationStatus" class="oltSniAction" method="modifySniIsolationStatus" />
+		<action name="modifySni15MinPerfStatus" class="oltSniAction" method="modifySni15MinPerfStatus" />
+		<action name="modifySni24HourPerfStatus" class="oltSniAction" method="modifySni24HourPerfStatus" />
+		<action name="updateOltAttribute" class="oltAction" method="updateOltAttribute" />
+		<action name="updateEmsSnmpAttribute" class="oltAction" method="updateEmsSnmpAttribute" />
+		<action name="showSniConfig" class="oltSniAction" method="showSniConfig">
+			<result>/epon/sniConfig.jsp</result>
+		</action>
+		<action name="showSniBaseConfig" class="oltSniAction" method="showSniBaseConfig">
+			<result>/epon/sniBaseConfig.jsp</result>
+		</action>
+		<action name="showSniFlowControl" class="oltSniAction" method="showSniFlowControl">
+			<result>/epon/sniFlowControl.jsp</result>
+		</action>
+		<action name="showAddSniRedirect" class="oltSniAction" method="showAddSniRedirect">
+			<result>/epon/sniRedirectAdd.jsp</result>
+		</action>
+		<action name="addSniRedirect" class="oltSniAction" method="addSniRedirect">
+		</action>
+		<action name="showSniRedirect" class="oltSniAction" method="showSniRedirect">
+			<result>/epon/sniRedirect.jsp</result>
+		</action>
+		<action name="loadSniRedirect" class="oltSniAction" method="loadSniRedirect">
+		</action>
+		<action name="loadAvailableSniRedirect" class="oltSniAction"
+			method="loadAvailableSniRedirect">
+		</action>
+		<action name="loadAllSniRedirect" class="oltSniAction" method="loadAllSniRedirect">
+		</action>
+		<action name="deleteSniRedirect" class="oltSniAction" method="deleteSniRedirect">
+		</action>
+		<action name="showSniMacAddrMgmt" class="oltSniAction" method="showSniMacAddrMgmt">
+			<result>/epon/sniMacAddrMgmt.jsp</result>
+		</action>
+		<action name="loadSniMacAddress" class="oltSniAction" method="loadSniMacAddress">
+		</action>
+		<action name="showSniMacAddressAgingTime" class="oltSniAction"
+			method="showSniMacAddressAgingTime">
+			<result>/epon/sniMacAddressAgingTime.jsp</result>
+		</action>
+		<action name="saveSniMacAddressAgingTime" class="oltSniAction"
+			method="saveSniMacAddressAgingTime">
+		</action>
+		<action name="showSniMacAddressMaxLearningNum" class="oltSniAction"
+			method="showSniMacAddressMaxLearningNum">
+			<result>/epon/sniMacAddressMaxLearningNum.jsp</result>
+		</action>
+		<action name="saveSniMacAddressMaxLearningNum" class="oltSniAction"
+			method="saveSniMacAddressMaxLearningNum">
+		</action>
+		<action name="showSniBroadCastStormMgmt" class="oltSniAction"
+			method="showSniBroadCastStormMgmt">
+			<result>/epon/sniBroadCastStromMgmt.jsp</result>
+		</action>
+		<action name="saveSniBroadCastStorm" class="oltSniAction"
+			method="saveSniBroadCastStorm">
+		</action>
+		<action name="refreshSniFlowControl" class="oltSniAction" method="refreshSniFlowControl"></action>
+		<action name="refreshSniBroadCastStorm" class="oltSniAction" method="refreshSniBroadCastStorm"></action>
+		
+		<action name="showPonConfig" class="oltAction" method="showPonConfig">
+			<result>/epon/ponConfig.jsp</result>
+		</action>
+		<action name="showPreConfigMgmt" class="oltSlotAction" method="showPreConfigMgmt">
+			<result>/epon/preConfigMgmt.jsp</result>
+		</action>
+		<action name="showOltUptimeByEntity" class="oltPortalAction"
+			method="showOltUptimeByEntity">
+			<result>/epon/showOltUptime.jsp</result>
+		</action>
+		<action name="oltObjectCreate" class="oltAction" method="oltObjectCreate" />
+		<action name="showFileManage" class="oltUploadAndUpdateAction" method="showFileManage">
+			<result>/epon/fileManage.jsp</result>
+		</action>
+		<action name="upLoadFile" class="oltUploadAndUpdateAction" method="upLoadFile">
+			<result>/epon/upLoadFile.jsp</result>
+		</action>
+		<action name="fileShow" class="oltUploadAndUpdateAction" method="fileShow" />
+		<action name="downFile" class="oltUploadAndUpdateAction" method="downFile" />
+		<action name="deleteFile" class="oltUploadAndUpdateAction" method="deleteFile" />
+		<action name="updatePreConfigMgmt" class="oltAction" method="updatePreConfigMgmt" />
+		<action name="resetOltBoard" class="oltSlotAction" method="resetOltBoard" />
+		<action name="getOltFanAttribute" class="oltSlotAction" method="getOltFanAttribute">
+			<result>/epon/oltPorts.jsp</result>
+		</action>
+		<action name="fanSpeedAdjust" class="oltSlotAction" method="fanSpeedAdjust" />
+		<action name="getOltSniAttribute" class="oltSniAction" method="getOltSniAttribute">
+			<result>/epon/oltPorts.jsp</result>
+		</action>
+		<action name="updateOltSniAttribute" class="oltSniAction"
+			method="updateOltSniAttribute" />
+		<action name="upLoadFileToFile" class="oltUploadAndUpdateAction" method="upLoadFileToFile" />
+		<action name="fileValidate" class="oltAction" method="fileValidate" />
+		<action name="oltUpdateValidate" class="oltUploadAndUpdateAction" method="oltUpdateValidate" />
+		<action name="oltUpdate" class="oltUploadAndUpdateAction" method="oltUpdate">
+			<result name="onuUpgrade" type="chain">
+				<param name="namespace">/onu</param>
+				<param name="actionName">onuUpdate</param>
+			</result>
+		</action>
+		<action name="oltUpdateBack" class="oltUploadAndUpdateAction" method="oltUpdateBack" />
+		<action name="controlOltUpLoad" class="oltUploadAndUpdateAction" method="controlOltUpLoad" />
+		<action name="upLoadFile" class="oltUploadAndUpdateAction" method="upLoadFile">
+			<result>/epon/upLoadFile.jsp</result>
+		</action>
+		
+		<action name="showOltControlBoardUpdate" class="oltAction"
+			method="showOltControlBoardUpdate">
+			<result>/epon/oltControlBoardUpdate.jsp</result>
+		</action>
+		<action name="showPonBaseConfig" class="oltPonAction" method="showPonBaseConfig">
+			<result>/epon/ponBaseConfig.jsp</result>
+		</action>
+		<action name="showPonBroadStormConfig" class="oltPonAction"
+			method="showPonBroadStormConfig">
+			<result>/epon/ponBroadStormConfig.jsp</result>
+		</action>
+		<action name="modifyPonBroadStormConfig" class="oltPonAction"
+			method="modifyPonBroadStormConfig"></action>
+		<action name="refreshPonBroadCastStorm" class="oltPonAction"
+			method="refreshPonBroadCastStorm"></action>
+		<action name="showPonMacLearnMaxNnm" class="oltPonAction"
+			method="showPonMacLearnMaxNnm">
+			<result>/epon/oltPonMacAddrLearnMaxSet.jsp</result>
+		</action>
+		<action name="showPonMacNum" class="oltPonAction"
+			method="showPonMacNum">
+			<result>/epon/oltPonMacSet.jsp</result>
+		</action>
+		<action name="showMacInfoJsp" class="oltAction" method="showMacInfoJsp" >
+		    <result>/epon/searchMacInfo.jsp</result>
+		</action>
+		<action name="loadMacInfo" class="oltAction" method="loadMacInfo"></action>
+		<action name="modifyPonAdminStatus" class="oltPonAction"
+			method="modifyPonAdminStatus" />
+		<action name="modifyPonIsolationStatus" class="oltPonAction"
+			method="modifyPonIsolationStatus" />
+		<action name="modifyPon15MinPerfStatus" class="oltPonAction"
+			method="modifyPon15MinPerfStatus" />
+		<action name="modifyPon24HourPerfStatus" class="oltPonAction"
+			method="modifyPon24HourPerfStatus" />
+		<action name="modifyPonPortEncryptMode" class="oltPonAction"
+			method="modifyPonPortEncryptMode" />
+		<action name="modifyPonMaxLearnMacNum" class="oltPonAction"
+			method="modifyPonMaxLearnMacNum" />
+		<action name="modifySniMacAddress" class="oltSniAction" method="modifySniMacAddress" />
+		<action name="updateSniCtrlFlow" class="oltSniAction" method="updateSniCtrlFlow" />
+		<action name="setSniCtrlFlowEnable" class="oltSniAction"
+			method="setSniCtrlFlowEnable" />
+		<action name="setTempDetectEnable" class="oltSlotAction" method="setTempDetectEnable" />
+		<action name="makeEvent" class="oltAction" method="makeEvent" />
+		<action name="boardAdminStatusConfig" class="oltSlotAction"
+			method="boardAdminStatusConfig" />
+		<action name="refreshOlt" class="oltAction" method="refreshOlt" />
+		<action name="showVirtualNet" class="oltAction" method="showVirtualNet">
+			<result>/epon/showVirtualNet.jsp</result>
+		</action>
+		<action name="getFanRealSpeed" class="oltSlotAction" method="getFanRealSpeed" />
+		<action name="refreshBdTemperature" class="oltSlotAction" method="refreshBdTemperature" />
+		<action name="checkFileSize" class="oltUploadAndUpdateAction" method="checkFileSize" />
+		<action name="getFileDir" class="oltUploadAndUpdateAction" method="getFileDir" />
+		<action name="showProgressBar" class="oltUploadAndUpdateAction" method="showProgressBar">
+			<result>/epon/showProgressBar.jsp</result>
+		</action>
+		<action name="getOltList" class="oltAction" method="getOltList" />
+		<action name="showPonPortLmt" class="oltPonAction" method="showPonPortLmt">
+			<result>/epon/showPonPortLmt.jsp</result>
+		</action>
+		<action name="loadPonPortLmt" class="oltPonAction" method="loadPonPortLmt">
+		</action>
+		<action name="savePonPortLmtCfg" class="oltPonAction" method="savePonPortLmtCfg"></action>
+		<action name="showOltMacListTab" class="oltAction" method="showOltMacListTab" >
+		    <result>/epon/oltMacListTab.jsp</result>
+		</action>
+		<action name="loadOltMacListTab" class="oltAction" method="loadOltMacListTab"></action>
+		<action name="refreshOltMacListTab" class="oltAction" method="refreshOltMacListTab"></action>
+		<action name="showPonSpeedMode" class="oltPonAction" method="showPonSpeedMode" >
+			<result>/epon/showPonSpeedMode.jsp</result>
+		</action>
+		<action name="modifyPonSpeedMode" class="oltPonAction" method="modifyPonSpeedMode" />
+		<action name="showSniMacAddrModify" class="oltSniAction"
+			method="showSniMacAddrModify">
+			<result>/epon/sniMacAddrModify.jsp</result>
+		</action>
+		<action name="saveOltFaceView" class="oltAction" method="saveOltFaceView"></action>
+		<action name="savePortalView" class="oltPortalAction" method="savePortalView"></action>
+		<action name="loadCcmtsFftGbStatus" class="oltAction" method="loadCcmtsFftGbStatus"></action>
+        <action name="modifyCcmtsFftGbStatus" class="oltAction" method="modifyCcmtsFftGbStatus"></action>
+        <action name="showOnuGlobalConfig" class="oltAction" method="showOnuGlobalConfig">
+            <result>/epon/onuGlobalConfig.jsp</result>
+        </action>
+        <action name="modifyOnuGlobalCfg" class="oltAction" method="modifyOnuGlobalCfg"></action>
+        <action name="refreshCmInfo" class="eponCmListAction" method="refreshCmInfo"></action>
+        <action name="getPonCmNum" class="eponCmListAction" method="getPonCmNum"></action>
+        <action name="getCmtsCmNum" class="eponCmListAction" method="getCmtsCmNum"></action>
+        <action name="loadOltSubInfo" class="oltPortalAction" method="loadOltSubInfo"></action>
+        <action name="loadPonUsedInfo" class="oltPortalAction" method="loadPonUsedInfo"></action>
+        <action name = "getUsedRatio" class = "oltPortalAction" method = "getUsedRatio"/>
+        <action name="refreshSniBaseInfo" class="oltSniAction" method="refreshSniBaseInfo" />        
+        <action name="showBatchPerfCollectSetting" class="oltPerfAction" method="showBatchPerfCollectSetting">			
+        	<result>/epon/showBatchPerfCollectSetting.jsp</result>		
+        </action>		
+        <action name="saveBatchPerfCollect" class="oltPerfAction" method="saveBatchPerfCollect" />        
+        <action name="bfsxOlt" class="oltBfsxAction" method="bfsxOlt" />
+		<action name="bfsxOltVlan" class="oltBfsxAction" method="bfsxOltVlan" />
+		<action name="bfsxOltMirror" class="oltBfsxAction" method="bfsxOltMirror" />
+		<action name="bfsxOltTrunk" class="oltBfsxAction" method="bfsxOltTrunk" />
+		<action name="bfsxOltPonProtectGroup" class="oltBfsxAction" method="bfsxOltPonProtectGroup" />
+		<action name="resetPon" class="oltPonAction" method="resetPon" />
+		<action name="showPonPvidConfig" class="oltPonAction" method="showPonPvidConfig">
+		    <result>/epon/ponPvidConfig.jsp</result>
+		</action>
+		<action name="modifyPonPvid" class="oltPonAction" method="modifyPonPvid" />
+		<action name="refreshPonVlanInfo" class="oltPonAction" method="refreshPonVlanInfo" />
+	</package>
+	<package name="8602" namespace="/epon/8602" extends="default">
+		<action name="entityPortal" class="oltPortalAction" method="showOltEntityById">
+			<result>/epon/8602/oltPortal.jsp</result>
+		</action>
+		<action name="entityPortalCancel" class="oltPortalAction" method="showOltCancelJsp">
+			<result>/epon/8602/oltCanceled.jsp</result>
+		</action>
+		<action name="showOltFaceplate" class="oltAction" method="showOltFaceplate">
+			<result>/epon/8602/oltFaceplate.jsp</result>
+		</action>
+		<action name="showOltVlanView" class="oltVlanAction" method="showOltVlanView">
+			<result>/epon/8602/oltVlanView.jsp</result>
+		</action>
+		<action name="showOltMirrorView" class="oltMirrorAction" method="showOltMirrorView">
+			<result>/epon/8602/oltMirrorView.jsp</result>
+		</action>
+		<action name="showOltTrunkView" class="oltTrunkAction" method="showOltTrunkView">
+			<result>/epon/8602/oltTrunkView.jsp</result>
+		</action>
+		<action name="showOltPonProtectView" class="oltPonProtectAction" method="showOltPonProtectView">
+			<result>/epon/8602/oltPonProtectView.jsp</result>
+		</action>
+		<action name="showIsolataionGroupView" class="isolationGroupAction" method="showIsolataionGroupView" >
+			<result>/epon/8602/oltPortIsolation.jsp</result>			
+		</action>
+	</package>
+	<package name="8603" namespace="/epon/8603" extends="default">
+		<action name="entityPortal" class="oltPortalAction" method="showOltEntityById">
+			<result>/epon/8603/oltPortal.jsp</result>
+		</action>
+		<action name="entityPortalCancel" class="oltPortalAction" method="showOltCancelJsp">
+			<result>/epon/8603/oltCanceled.jsp</result>
+		</action>
+		<action name="showOltFaceplate" class="oltAction" method="showOltFaceplate">
+			<result>/epon/8603/oltFaceplate.jsp</result>
+		</action>
+		<action name="showOltUptimeByEntity" class="oltPortalAction"
+			method="showOltUptimeByEntity">
+			<result>/epon/showOltUptime.jsp</result>
+		</action>
+		<action name="showOltVlanView" class="oltVlanAction" method="showOltVlanView">
+			<result>/epon/8603/oltVlanView.jsp</result>
+		</action>
+		<action name="showOltMirrorView" class="oltMirrorAction" method="showOltMirrorView">
+			<result>/epon/8603/oltMirrorView.jsp</result>
+		</action>
+		<action name="showOltTrunkView" class="oltTrunkAction" method="showOltTrunkView">
+			<result>/epon/8603/oltTrunkView.jsp</result>
+		</action>
+		<action name="showOltPonProtectView" class="oltPonProtectAction"
+			method="showOltPonProtectView">
+			<result>/epon/8603/oltPonProtectView.jsp</result>
+		</action>
+		<action name="showIsolataionGroupView" class="isolationGroupAction" method="showIsolataionGroupView" >
+			<result>/epon/8603/oltPortIsolation.jsp</result>			
+		</action>
+	</package>
+	<package name="8602-E" namespace="/epon/8602-E" extends="default">
+		<action name="entityPortal" class="oltPortalAction" method="showOltEntityById">
+			<result>/epon/8602-E/oltPortal.jsp</result>
+		</action>
+		<action name="entityPortalCancel" class="oltPortalAction" method="showOltCancelJsp">
+			<result>/epon/8602-E/oltCanceled.jsp</result>
+		</action>
+		<action name="showOltFaceplate" class="oltAction" method="showOltFaceplate">
+			<result>/epon/8602-E/oltFaceplate.jsp</result>
+		</action>
+		<action name="showOltUptimeByEntity" class="oltPortalAction"
+			method="showOltUptimeByEntity">
+			<result>/epon/showOltUptime.jsp</result>
+		</action>
+		<action name="showOltVlanView" class="oltVlanAction" method="showOltVlanView">
+			<result>/epon/8602-E/oltVlanView.jsp</result>
+		</action>
+		<action name="showOltMirrorView" class="oltMirrorAction" method="showOltMirrorView">
+			<result>/epon/8602-E/oltMirrorView.jsp</result>
+		</action>
+		<action name="showOltTrunkView" class="oltTrunkAction" method="showOltTrunkView">
+			<result>/epon/8602-E/oltTrunkView.jsp</result>
+		</action>
+		<action name="showOltPonProtectView" class="oltPonProtectAction"
+			method="showOltPonProtectView">
+			<result>/epon/8602-E/oltPonProtectView.jsp</result>
+		</action>
+		<action name="showIsolataionGroupView" class="isolationGroupAction" method="showIsolataionGroupView" >
+			<result>/epon/8602-E/oltPortIsolation.jsp</result>			
+		</action>
+	</package>
+	<package name="8602-EF" namespace="/epon/8602-EF" extends="default">
+		<action name="entityPortal" class="oltPortalAction" method="showOltEntityById">
+			<result>/epon/8602-EF/oltPortal.jsp</result>
+		</action>
+		<action name="entityPortalCancel" class="oltPortalAction" method="showOltCancelJsp">
+			<result>/epon/8602-EF/oltCanceled.jsp</result>
+		</action>
+		<action name="showOltFaceplate" class="oltAction" method="showOltFaceplate">
+			<result>/epon/8602-EF/oltFaceplate.jsp</result>
+		</action>
+		<action name="showOltUptimeByEntity" class="oltPortalAction"
+			method="showOltUptimeByEntity">
+			<result>/epon/showOltUptime.jsp</result>
+		</action>
+		<action name="showOltVlanView" class="oltVlanAction" method="showOltVlanView">
+			<result>/epon/8602-EF/oltVlanView.jsp</result>
+		</action>
+		<action name="showOltMirrorView" class="oltMirrorAction" method="showOltMirrorView">
+			<result>/epon/8602-EF/oltMirrorView.jsp</result>
+		</action>
+		<action name="showOltTrunkView" class="oltTrunkAction" method="showOltTrunkView">
+			<result>/epon/8602-EF/oltTrunkView.jsp</result>
+		</action>
+		<action name="showOltPonProtectView" class="oltPonProtectAction"
+			method="showOltPonProtectView">
+			<result>/epon/8602-EF/oltPonProtectView.jsp</result>
+		</action>
+		<action name="showIsolataionGroupView" class="isolationGroupAction" method="showIsolataionGroupView" >
+			<result>/epon/8602-EF/oltPortIsolation.jsp</result>			
+		</action>
+	</package>
+	
+	
+	<package name="8602-G" namespace="/epon/8602-G" extends="default">
+		<action name="entityPortal" class="oltPortalAction" method="showOltEntityById">
+			<result>/epon/8602-G/oltPortal.jsp</result>
+		</action>
+		<action name="entityPortalCancel" class="oltPortalAction" method="showOltCancelJsp">
+			<result>/epon/8602-G/oltCanceled.jsp</result>
+		</action>
+		<action name="showOltFaceplate" class="oltAction" method="showOltFaceplate">
+			<result>/epon/8602-G/oltFaceplate.jsp</result>
+		</action>
+		<action name="showOltUptimeByEntity" class="oltPortalAction"
+			method="showOltUptimeByEntity">
+			<result>/epon/showOltUptime.jsp</result>
+		</action>
+		<action name="showOltVlanView" class="oltVlanAction" method="showOltVlanView">
+			<result>/epon/8602-G/oltVlanView.jsp</result>
+		</action>
+		<action name="showOltMirrorView" class="oltMirrorAction" method="showOltMirrorView">
+			<result>/epon/8602-G/oltMirrorView.jsp</result>
+		</action>
+		<action name="showOltTrunkView" class="oltTrunkAction" method="showOltTrunkView">
+			<result>/epon/8602-G/oltTrunkView.jsp</result>
+		</action>
+		<action name="showOltPonProtectView" class="oltPonProtectAction"
+			method="showOltPonProtectView">
+			<result>/epon/8602-G/oltPonProtectView.jsp</result>
+		</action>
+		<action name="showIsolataionGroupView" class="isolationGroupAction" method="showIsolataionGroupView" >
+			<result>/epon/8602-G/oltPortIsolation.jsp</result>			
+		</action>
+	</package>
+	
+	
+	<package name="standardOlt" namespace="/epon/standardOlt" extends="default">
+	    <action name="entityPortal" class="oltPortalAction" method="showOltEntityById">
+			<result>/epon/standardOlt/oltPortal.jsp</result>
+		</action>
+		
+	    <action name="showStandardOltConfig" class="standardOltAction" method="showStandardOltConfig">
+	        <result>/epon/standardOlt/standardOltConfig.jsp</result>
+	    </action>
+	    <action name="showOltPortList" class="standardOltAction" method="showOltPortList">
+	        <result>/epon/standardOlt/standardOltPortList.jsp</result>
+	    </action>
+	    <action name="showStandardOltOnuView" class="standardOltAction" method="showStandardOltOnuView">
+	        <result>/epon/standardOlt/standardOltOnuView.jsp</result>
+	    </action>
+	    <action name="showStandardOltAlert" class="standardOltAction" method="showStandardOltAlert">
+	        <result>/epon/standardOlt/standardOltAlert.jsp</result>
+	    </action>
+	    <action name="showStandardOltAlertHistory" class="standardOltAction" method="showStandardOltAlertHistory">
+	        <result>/epon/standardOlt/standardOltHistoryAlert.jsp</result>
+	    </action>
+	    <action name="showStandardOltPerfView" class="standardOltAction" method="showStandardOltPerfView">
+	        <result>/epon/standardOlt/standardOltPerView.jsp</result>
+	    </action>
+	    <action name="loadSniList" class="standardOltAction" method="loadSniList">
+	    </action>
+	    <action name="loadPonList" class="standardOltAction" method="loadPonList">
+	    </action>
+	    <action name="loadStandardOnuInfo" class="standardOltAction" method="loadStandardOnuInfo">
+	    </action>
+	    <action name="getOltPonSlotList" class="standardOltAction" method="getOltPonSlotList"></action>
+
+	</package>
+</struts>

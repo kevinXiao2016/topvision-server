@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="OltDhcpBase">
+
+	<select id="getOltDhcpBaseCfg" parameterType="long" resultType="topOltDhcpGlobalObjects">
+		select * from topOltDhcpGlobalObjects where entityId = #{entityId}
+	</select>
+	
+	<update id="updateDhcpEnable" parameterType="map">
+		update topOltDhcpGlobalObjects
+		set topOltDhcpEnable = #{status} where entityId = #{entityId}
+	</update>
+	
+	<update id="updateOltDhcpGlobalObjects" parameterType="topOltDhcpGlobalObjects">
+		update topOltDhcpGlobalObjects set
+		topOltDhcpEnable = #{topOltDhcpEnable},
+		topOltDhcpOpt82Enable = #{topOltDhcpOpt82Enable},
+		topOltDhcpOpt82Policy = #{topOltDhcpOpt82Policy},
+		topOltDhcpOpt82Format = #{topOltDhcpOpt82Format},
+		topOltDhcpSourceVerifyEnable = #{topOltDhcpSourceVerifyEnable}
+		where entityId = #{entityId}
+	</update>
+	
+	<insert id="insertPortAttribute" parameterType="topOltDhcpPortAttribute">
+        insert into topOltDhcpPortAttribute
+            (entityId,topOltDhcpPortProtIndex,topOltDhcpPortTypeIndex,topOltDhcpSlotIndex,topOltDhcpPortIndex,
+            topOltDhcpPortCascade,topOltDhcpPortTrans,topOltDhcpPortTrust)
+        values
+            (#{entityId},#{topOltDhcpPortProtIndex},#{topOltDhcpPortTypeIndex},#{topOltDhcpSlotIndex},#{topOltDhcpPortIndex},         
+            #{topOltDhcpPortCascade},#{topOltDhcpPortTrans},#{topOltDhcpPortTrust})
+    </insert>
+    
+    <update id="updateOltDhcpOption82Cfg" parameterType="topOltDhcpGlobalObjects">
+		update topOltDhcpGlobalObjects set
+		topOltDhcpOpt82Enable = #{topOltDhcpOpt82Enable},
+		topOltDhcpOpt82Policy = #{topOltDhcpOpt82Policy},
+		topOltDhcpOpt82Format = #{topOltDhcpOpt82Format}
+		where entityId = #{entityId}
+	</update>
+	
+	<update id="updateOltPppoeEnable" parameterType="map">
+		update topOltDhcpGlobalObjects
+		set topOltPPPoEPlusEnable = #{status} where entityId = #{entityId}
+	</update>
+	
+	<delete id="deletePortAttributes" parameterType="map">
+		delete from topOltDhcpPortAttribute where entityId = #{entityId} and topOltDhcpPortProtIndex = #{portProtIndex}
+	</delete>
+	
+	<update id="updateOltPppoeGlobalObjects" parameterType="topOltDhcpGlobalObjects">
+		update topOltDhcpGlobalObjects set
+		topOltPPPoEPlusEnable = #{topOltPPPoEPlusEnable},
+		topOltPPPoEPlusPolicy = #{topOltPPPoEPlusPolicy},
+		topOltPPPoEPlusFormat = #{topOltPPPoEPlusFormat}
+		where entityId = #{entityId}
+	</update>
+	
+	<update id="updateOltPppoeCfg" parameterType="topOltDhcpGlobalObjects">
+		update topOltDhcpGlobalObjects set
+		topOltPPPoEPlusPolicy = #{topOltPPPoEPlusPolicy},
+		topOltPPPoEPlusFormat = #{topOltPPPoEPlusFormat}
+		where entityId = #{entityId}
+	</update>
+	
+	<update id="updateOltDhcpSourceVerifyEnable" parameterType="map">
+		update topOltDhcpGlobalObjects
+		set topOltDhcpSourceVerifyEnable = #{status} where entityId = #{entityId}
+	</update>
+	
+</mapper>

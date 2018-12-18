@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="workbench" namespace="/workbench" extends="default">
+        <action name="loadUserPreferences" class="userAction" method="loadUserPreferences">
+            <result>/workbench/preferences.jsp</result>
+        </action>
+
+        <action name="showMyPreferemces" class="userAction" method="showMyPreferemces">
+            <result>/workbench/popMyPreferences.jsp</result>
+        </action>
+
+        <action name="hasBindIp" class="userAction" method="hasBindIp" />
+
+        <action name="setPageSize" class="userAction" method="setPageSize" />
+
+        <action name="setStyleName" class="userAction" method="setStyle" />
+		<action name="modifyUserSoundStatus" class="userAction" method="modifyUserSoundStatus"></action>
+	
+        <action name="saveUserPreferences" class="userAction" method="saveUserPreferences">
+        </action>
+        <action name="saveGeneralPreferences" class="userAction" method="saveGeneralPreferences">
+        </action>
+
+        <action name="loadFavouriteFolder" class="favouriteFolderAction" method="loadFavouriteFolder">
+        </action>
+
+        <action name="newFavouriteLinkJsp" class="favouriteFolderAction" method="newFavouriteLinkJsp">
+            <result>/workbench/newFavouriteLink.jsp</result>
+        </action>
+        <action name="newFavouriteFolderJsp">
+            <result>/workbench/newFavouriteFolder.jsp</result>
+        </action>
+        <action name="createFavouriteFolder" class="favouriteFolderAction" method="createFavouriteFolder">
+        </action>
+        <action name="createFavouriteLink" class="favouriteFolderAction" method="createFavouriteLink">
+        </action>
+        <action name="deleteFavouriteFolder" class="favouriteFolderAction" method="deleteFavouriteFolder">
+        </action>
+        <action name="renameFavouriteFolder" class="favouriteFolderAction" method="renameFavouriteFolder">
+        </action>
+        <action name="updateFavouriteFolder" class="favouriteFolderAction" method="updateFavouriteFolder">
+        </action>
+        <action name="moveFavouriteFolder" class="favouriteFolderAction" method="moveFavouriteFolder">
+        </action>
+        <action name="showFavouriteFolder" class="favouriteFolderAction" method="showFavouriteFolder">
+            <result name="folder">
+                /workbench/favouriteFolderProperty.jsp
+            </result>
+            <result name="link">
+                /workbench/favouriteLinkProperty.jsp
+            </result>
+        </action>
+
+        <action name="showNaviOption" class="userAction" method="showNaviOption">
+            <result>/workbench/popNaviOption.jsp</result>
+        </action>
+        <action name="setNaviOrder" class="userAction" method="setNaviOrder">
+        </action>
+        <action name="resetNaviOption" class="userAction" method="resetNaviOption">
+            <result>/workbench/popNaviOption.jsp</result>
+        </action>
+        
+        <action name="showCustomMyDesk" class="userAction" method="showCustomMyDesk">
+            <result>/workbench/customMyDesk.jsp</result>
+        </action>
+        <action name="showWorkbench" class="userAction" method="showWorkbench">
+            <result>/workbench/menuNew.jsp</result>
+        </action>
+        <action name="updateCustomMydesck" class="userAction" method="updateCustomMydesck" />
+        <action name="modifyNavCartoonStatus" class="userAction" method="modifyNavCartoonStatus" />
+        
+        <action name="showNetwork" class="userAction" method="showNetwork">
+            <result>/network/menuNew.jsp</result>
+        </action>
+        <action name="showTopology">
+            <result>/topo/menuNew.jsp</result>
+        </action>
+        <action name="showTerminal">
+            <result>/terminal/menuNew.jsp</result>
+        </action>
+        <action name="showConfig">
+            <result>/config/menuNew.jsp</result>
+        </action>
+        <action name="showPerformance">
+            <result>/performance/menuNew.jsp</result>
+        </action>
+        <action name="showFault">
+            <result>/fault/menuNew.jsp</result>
+        </action>
+        <action name="showReport">
+            <result>/report/menuNew.jsp</result>
+        </action>
+        <action name="showCmpoll">
+            <result>/cm/menuNew.jsp</result>
+        </action>
+        <action name="showSystem">
+            <result>/system/menuNew.jsp</result>
+        </action>
+        <action name="showOperation">
+            <result>/operation/menuNew.jsp</result>
+        </action>
+    </package>
+</struts>

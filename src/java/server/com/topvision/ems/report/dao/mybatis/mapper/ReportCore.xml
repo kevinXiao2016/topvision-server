@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.report.dao.mybatis.ReportCoreDaoImpl">
+
+	<select id="queryUserFolderList" parameterType="map" resultType="com.topvision.ems.network.domain.TopoFolder">
+		select A.folderId, A.name 
+		from ${folderView}
+		INNER JOIN topofolder A ON ${folderView}.folderId=A.folderId
+    </select>
+    
+    <select id="queryAllOlt" resultType="com.topvision.ems.report.domain.EntityPair">
+		SELECT entity.entityId id, name FROM entity, oltattribute WHERE entity.entityId=oltattribute.entityId;
+    </select>
+    
+    <select id="queryOltByFolderId" parameterType="long" resultType="com.topvision.ems.report.domain.EntityPair">
+    	SELECT 
+    		DISTINCT(A.entityId) id, 
+    		A.name 
+    	FROM entity A, oltattribute B, entityfolderrela C 
+    	WHERE A.entityId=B.entityId AND A.entityId=C.entityId AND C.folderId=#{folderId}
+    </select>
+</mapper>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="snmpV3" namespace="/v3" extends="default">
+
+    	<action name="showSnmpV3Notify" class="snmpV3Action" method="showSnmpV3Notify">
+			<result>/snmpV3/snmpV3Notify.jsp</result>
+		</action>
+		<action name="refreshSnmpV3Notify" class="snmpV3Action" method="refreshSnmpV3Notify"></action>
+		<action name="loadAllSnmpNotifyData" class="snmpV3Action" method="loadAllSnmpNotifyData"></action>
+		<!-- create -->
+		<action name="create_simple" class="snmpV3Action" method="create_simple"></action>
+		<action name="create_target" class="snmpV3Action" method="create_target"></action>
+		<action name="create_tParam" class="snmpV3Action" method="create_tParam"></action>
+		<action name="create_notify" class="snmpV3Action" method="create_notify"></action>
+		<action name="create_nFilter" class="snmpV3Action" method="create_nFilter"></action>
+		<!-- momdify -->
+		<action name="modify_simple" class="snmpV3Action" method="modify_simple"></action>
+		<action name="modify_target" class="snmpV3Action" method="modify_target"></action>
+		<action name="modify_tParam" class="snmpV3Action" method="modify_tParam"></action>
+		<action name="modify_notify" class="snmpV3Action" method="modify_notify"></action>
+		<action name="modify_nFilter" class="snmpV3Action" method="modify_nFilter"></action>
+		<!-- delete -->
+		<action name="delete_simple" class="snmpV3Action" method="delete_simple"></action>
+		<action name="delete_target" class="snmpV3Action" method="delete_target"></action>
+		<action name="delete_tParam" class="snmpV3Action" method="delete_tParam"></action>
+		<action name="delete_notify" class="snmpV3Action" method="delete_notify"></action>
+		<action name="delete_nFilter" class="snmpV3Action" method="delete_nFilter"></action>
+    </package>
+</struts>

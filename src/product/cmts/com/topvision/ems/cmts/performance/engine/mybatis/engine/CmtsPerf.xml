@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmts.domain.CmtsPerf">
+	<!-- ################################## select start ####################################### -->
+	 <select id="getCmtsPerformanceMonitorId" parameterType="map" resultType="int">
+        select monitorId from perfmonitor
+        where
+        identifyKey=#{entityId} and
+        category=#{category}
+    </select>
+	<select id="selectCmtsSnrPoints" parameterType="map"
+        resultType="com.topvision.platform.util.highcharts.domain.Point">
+        select 
+        collectValue y,
+		collectTime xTime
+		from perfcmtssnrquality 
+  		where cmcId = #{entityId} and channelIndex = #{channelIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+	<select id="selectCmtsCcerPoints" parameterType="map"
+        resultType="com.topvision.platform.util.highcharts.domain.Point">
+        select 
+        ccerCode tipStr,
+        ccerRate y,
+		collectTime xTime
+		from perfcmtserrorcodequality 
+  		where cmcId = #{entityId} and channelIndex = #{channelIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+	<select id="selectCmtsUcerPoints" parameterType="map"
+        resultType="com.topvision.platform.util.highcharts.domain.Point">
+        select 
+        ucerCode tipStr,
+        ucerRate y,
+		collectTime xTime
+		from perfcmtserrorcodequality 
+  		where cmcId = #{entityId} and channelIndex = #{channelIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    <select id="selectCmtsChannelSpeedPoints" parameterType="map"
+        resultType="com.topvision.platform.util.highcharts.domain.Point">
+        select 
+        (channelInSpeed+channelOutSpeed) y,
+		collectTime xTime
+		from perfcmtsflowquality 
+  		where cmcId = #{entityId} and channelIndex = #{channelIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    
+	<select id="selectCmtsLinkInSpeedPoints" parameterType="map"
+        resultType="com.topvision.platform.util.highcharts.domain.Point">
+        select 
+        channelInSpeed y,
+		collectTime xTime
+		from perfcmtsflowquality 
+  		where cmcId = #{entityId} and channelIndex = #{channelIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+	<select id="selectCmtsLinkOutSpeedPoints" parameterType="map"
+        resultType ="com.topvision.platform.util.highcharts.domain.Point">
+        select 
+        channelOutSpeed y,
+		collectTime xTime
+		from perfcmtsflowquality 
+  		where cmcId = #{entityId} and channelIndex = #{channelIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+	<select id="selectLastUplinkSpeedStatic" 
+	    resultType="com.topvision.ems.cmts.performance.domain.UplinkSpeedStatic">
+		select 
+		  *
+		from 
+		  PerfUplinkSpeedStaticLast 
+		where
+		  entityId=#{entityId} 
+		and
+		  ifIndex=#{ifIndex}
+    </select>
+    <select id="selectLastUplinkUtilization" resultType="com.topvision.ems.cmts.performance.domain.IfUtilization">
+		select 
+		  *
+		from 
+		  PerfUplinkUtilizationLast 
+		where
+		  entityId=#{entityId}
+		and
+		  ifIndex=#{ifIndex}
+    </select>
+    <select id="selectCmtsPortUsedPoints" parameterType="map" resultType="com.topvision.platform.util.highcharts.domain.Point">
+        select 
+        channelUtilization y,
+		collectTime xTime
+		from perfcmtsflowquality 
+  		where cmcId = #{entityId} and channelIndex = #{channelIndex}
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    
+    <select id="getCmtsRelayPerfPoints" parameterType="map"
+        resultType="point">
+  		select collectValue y,collectTime xTime from perfconnectivity
+  		where entityId = #{entityId} 
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    
+    <select id="queryCmtsCpuData" parameterType="map" resultType="point">
+        select collectValue y,collectTime xTime from perfcmtscpuquality
+  		where cmcId = #{cmcId} 
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+    
+    <select id="queryCmtsMemData" parameterType="map" resultType="point">
+        select collectValue y,collectTime xTime from perfcmtsmemquality
+  		where cmcId = #{cmcId} 
+  		and <![CDATA[ collectTime >= #{startTime} ]]> and <![CDATA[ collectTime <= #{endTime} ]]>
+  		order by xTime
+    </select>
+	<!-- ################################## select end ######################################### -->
+	<!-- ################################## insert start ####################################### -->
+	<insert id="insertLastUplinkSpeedStatic" 
+		parameterType="com.topvision.ems.cmts.performance.domain.UplinkSpeedStatic">
+		INSERT INTO 
+		PerfUplinkSpeedStaticLast
+		(entityId,ifIndex,ifInOctets,ifInOctetsRate,ifOutOctets,ifOutOctetsRate,ifOctetsRate,DT)
+		VALUES 
+		(#{entityId}, #{ifIndex},#{ifInOctets},#{ifInOctetsRate},#{ifOutOctets},#{ifOutOctetsRate},#{ifOctetsRate},#{dt})
+    </insert>
+    <insert id="insertHisUplinkSpeedStatic" 
+    	parameterType="com.topvision.ems.cmts.performance.domain.UplinkSpeedStatic">
+		INSERT INTO 
+		PerfUplinkSpeedStaticHis
+		(entityId,ifIndex,ifInOctets,ifInOctetsRate,ifOutOctets,ifOutOctetsRate,ifOctetsRate,DT)
+		VALUES 
+		(#{entityId}, #{ifIndex},#{ifInOctets},#{ifInOctetsRate},#{ifOutOctets},#{ifOutOctetsRate},#{ifOctetsRate},#{dt})
+    </insert>
+    <insert id="insertLastUplinkUtilization" 
+        parameterType="com.topvision.ems.cmts.performance.domain.IfUtilization">
+		INSERT INTO 
+			PerfUplinkUtilizationLast 
+			(entityId,ifIndex,ifUtilization,DT)
+		VALUES 
+			(#{entityId},#{ifIndex},#{ifUtilization},#{dt})
+    </insert>
+    <insert id="insertHisUplinkUtilization" 
+    	parameterType="com.topvision.ems.cmts.performance.domain.IfUtilization">
+		INSERT INTO 
+			PerfUplinkUtilizationHis
+			(entityId,ifIndex,ifUtilization,DT)
+		VALUES 
+			(#{entityId},#{ifIndex},#{ifUtilization},#{dt})
+    </insert>
+   <insert id="insertCmtsSnrQuality" parameterType="map">
+        insert into
+        perfcmtssnrquality
+        (cmcId,channelIndex, collectValue,
+        collectTime)
+        values
+        (#{cmcId},#{channelIndex},
+        #{collectValue},
+        #{collectTime})
+    </insert>
+    <insert id="insertCmtsErrorCodeQuality" parameterType="map">
+        insert into
+        perfcmtserrorcodequality
+        (cmcId,channelIndex,
+        ccerCode,ucerCode,ccerRate,ucerRate,noerCode,noerRate,
+        collectTime)
+        values
+        (#{cmcId},#{channelIndex},
+        #{ccerCode},#{ucerCode},#{ccerRate},#{ucerRate},#{noerCode},#{noerRate},
+        #{collectTime})
+    </insert>
+    <insert id="insertCmtsFlowQuality" parameterType="cmtsFlowQuality">
+        insert into
+        perfcmtsflowquality
+        (cmcId, channelIndex, channelInOctets,
+        channelOutOctets, channelOctets,
+        channelInSpeed,channelOutSpeed,
+        channelUtilization,
+        collectTime,portBandWidth
+        )
+        values
+        (#{cmcId}, #{ifIndex}, #{inOctets}, #{outOctets},
+        #{ifOctets},#{ifInSpeed},#{ifOutSpeed},
+        #{ifUtilization},
+        #{collectTime},#{ifSpeed}
+        )
+    </insert>
+    
+    <insert id="insertCmtsCpuQuality" parameterType="cmtsServiceQualityResult">
+        insert into perfcmtscpuquality(cmcId, collectValue, collectTime)
+        values(#{entityId},#{cpuUtilization},#{collectTime})
+    </insert>
+    <insert id="insertCmtsMemQuality" parameterType="cmtsServiceQualityResult">
+        insert into perfcmtsmemquality(cmcId, collectValue, collectTime)
+        values(#{entityId},#{memUtilization},#{collectTime})
+    </insert>
+	<!-- ################################## insert end ######################################### -->
+	
+	<!-- ################################## update start ####################################### -->
+	<update id="updateLastUplinkSpeedStatic" 
+		parameterType="com.topvision.ems.cmts.performance.domain.UplinkSpeedStatic">
+		UPDATE
+			PerfUplinkSpeedStaticLast
+		SET 
+			DT = #{dt},
+			ifInOctetsRate = #{ifInOctetsRate},
+			ifOutOctetsRate = #{ifOutOctetsRate},
+			ifInOctets = #{ifInOctets},
+			ifOutOctets = #{ifOutOctets},
+			ifOctetsRate = #{ifOctetsRate}
+		WHERE
+			entityId = #{entityId} 
+		and
+			ifIndex=#{ifIndex}
+    </update>
+    <update id="updateLastUplinkUtilization" 
+    	parameterType="com.topvision.ems.cmts.performance.domain.IfUtilization">
+		UPDATE
+			PerfUplinkUtilizationLast
+		SET 
+			ifUtilization = #{ifUtilization},
+			DT = #{dt}
+		WHERE
+			entityId=#{entityId} 
+		AND
+			ifIndex=#{ifIndex}
+    </update>
+    <update id="updateCmtsPortStatus" parameterType="map">
+		update 
+			port 
+		set
+			ifOperStatus=#{ifOperStatus},
+			ifAdminStatus=#{ifAdminStatus}
+		where 
+			entityId=#{entityId}
+		<if test="ifIndex != null">AND ifIndex = #{ifIndex}</if>
+	</update>
+	<update id="updateCmtsIfSpeed" parameterType="map">
+		UPDATE
+			port
+		SET 
+			ifSpeed=#{ifSpeed}
+		WHERE 
+			entityId = #{entityId} 
+		AND ifIndex	= #{ifIndex}
+    </update>
+    <!-- ################################## update end ######################################### -->
+    
+    <select id="selectUpLinkIndex" parameterType="long" resultType="long">
+        select a.ifIndex
+        from port a 
+        where a.entityId = #{entityId} and (a.ifType = 6 or a.ifType = 117)
+    </select>
+    
+    <select id="selectUpChannelIndex" parameterType="long" resultType="long">
+        select channelIndex
+        from cmcupchannelbaseinfo 
+        where cmcId = #{cmcId}
+    </select>
+    
+    <select id="selectDownChannelIndex" parameterType="long" resultType="long">
+        select channelIndex
+        from cmcdownchannelbaseinfo 
+        where cmcId = #{cmcId}
+    </select>
+</mapper>

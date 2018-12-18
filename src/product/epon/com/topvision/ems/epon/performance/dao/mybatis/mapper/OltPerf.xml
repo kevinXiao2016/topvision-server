@@ -1,0 +1,1275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.performance.domain.OltPerf">
+
+	<select id="getPerf15FromDB" parameterType="map" resultType="perfStats15Table">
+		SELECT
+		a.entityId,
+		a.portIndex,
+		a.stats15InOctets,
+		a.stats15InPkts,
+		a.stats15InBroadcastPkts,
+		a.stats15InMulticastPkts,
+		a.stats15InPkts64Octets,
+		a.stats15InPkts65to127Octets,
+		a.stats15InPkts128to255Octets,
+		a.stats15InPkts256to511Octets,
+		a.stats15InPkts512to1023Octets,
+		a.stats15InPkts1024to1518Octets,
+		a.stats15InPkts1519to1522Octets,
+		a.stats15InUndersizePkts,
+		a.stats15InOversizePkts,
+		a.stats15InFragments,
+		a.stats15InMpcpFrames,
+		a.stats15InMpcpOctets,
+		a.stats15InOAMFrames,
+		a.stats15InOAMOctets,
+		a.stats15InCRCErrorPkts,
+		a.stats15InDropEvents,
+		a.stats15InJabbers,
+		a.stats15InCollision,
+		a.stats15OutOctets,
+		a.stats15OutPkts,
+		a.stats15OutBroadcastPkts,
+		a.stats15OutMulticastPkts,
+		a.stats15OutPkts64Octets,
+		a.stats15OutPkts65to127Octets,
+		a.stats15OutPkts128to255Octets,
+		a.stats15OutPkts256to511Octets,
+		a.stats15OutPkts512to1023Octets,
+		a.stats15OutPkts1024to1518Octets,
+		a.stats15OutPkts1519to1522Octets,
+		a.stats15OutUndersizePkts,
+		a.stats15OutOversizePkts,
+		a.stats15OutFragments,
+		a.stats15OutMpcpFrames,
+		a.stats15OutMpcpOctets,
+		a.stats15OutOAMFrames,
+		a.stats15OutOAMOctets,
+		a.stats15OutCRCErrorPkts,
+		a.stats15OutDropEvents,
+		a.stats15OutJabbers,
+		a.stats15OutCollision,
+		a.stats15EndTime stats15EndTimeDb
+		FROM
+		perfstats15table a
+		WHERE
+		a.entityId = #{entityId} AND
+		a.portIndex = #{portIndex}
+		<if test="startTime != null and startTime != ''">
+			<if test="endTime != null and endTime != ''">
+				and a.stats15EndTime between
+				#{startTime} and #{endTime}
+			</if>
+		</if>
+	</select>
+	<select id="getLast15RecordTime" parameterType="oltSimplePort"
+		resultType="java.sql.Timestamp">
+		SELECT
+		Max(a.stats15EndTime)
+		FROM
+		perfstats15table a
+		WHERE
+		a.entityId = #{entityId} AND
+		a.portIndex = #{portIndex}
+	</select>
+	<select id="getPerf24FromDB" parameterType="map" resultType="perfStats24Table">
+		SELECT
+		a.entityId,
+		a.portIndex,
+		a.stats24InOctets,
+		a.stats24InPkts,
+		a.stats24InBroadcastPkts,
+		a.stats24InMulticastPkts,
+		a.stats24InPkts64Octets,
+		a.stats24InPkts65to127Octets,
+		a.stats24InPkts128to255Octets,
+		a.stats24InPkts256to511Octets,
+		a.stats24InPkts512to1023Octets,
+		a.stats24InPkts1024to1518Octets,
+		a.stats24InPkts1519to1522Octets,
+		a.stats24InUndersizePkts,
+		a.stats24InOversizePkts,
+		a.stats24InFragments,
+		a.stats24InMpcpFrames,
+		a.stats24InMpcpOctets,
+		a.stats24InOAMFrames,
+		a.stats24InOAMOctets,
+		a.stats24InCRCErrorPkts,
+		a.stats24InDropEvents,
+		a.stats24InJabbers,
+		a.stats24InCollision,
+		a.stats24OutOctets,
+		a.stats24OutPkts,
+		a.stats24OutBroadcastPkts,
+		a.stats24OutMulticastPkts,
+		a.stats24OutPkts64Octets,
+		a.stats24OutPkts65to127Octets,
+		a.stats24OutPkts128to255Octets,
+		a.stats24OutPkts256to511Octets,
+		a.stats24OutPkts512to1023Octets,
+		a.stats24OutPkts1024to1518Octets,
+		a.stats24OutPkts1519to1522Octets,
+		a.stats24OutUndersizePkts,
+		a.stats24OutOversizePkts,
+		a.stats24OutFragments,
+		a.stats24OutMpcpFrames,
+		a.stats24OutMpcpOctets,
+		a.stats24OutOAMFrames,
+		a.stats24OutOAMOctets,
+		a.stats24OutCRCErrorPkts,
+		a.stats24OutDropEvents,
+		a.stats24OutJabbers,
+		a.stats24OutCollision,
+		a.stats24EndTime stats24EndTimeDb
+		FROM
+		perfstats24table a
+		WHERE
+		a.entityId = #{entityId} AND
+		a.portIndex = #{portIndex}
+		<if test="startTime != null and startTime != ''">
+			<if test="endTime != null and endTime != ''">
+				and a.stats24EndTime between
+				#{startTime} and #{endTime}
+			</if>
+		</if>
+	</select>
+	<select id="getLast24RecordTime" parameterType="oltSimplePort"
+		resultType="java.sql.Timestamp">
+		SELECT
+		Max(a.stats24EndTime)
+		FROM
+		perfstats24table a
+		WHERE
+		a.entityId = #{entityId} AND
+		a.portIndex = #{portIndex}
+	</select>
+	<select id="getPerfStatCycle" parameterType="long" resultType="perfStatCycle">
+		SELECT
+		a.entityId,
+		a.topPerfStatOLTCycle,
+		a.topPerfStatONUCycle,
+		a.topPerfOLTTemperatureCycle,
+		a.topPerfONUTemperatureCycle
+		FROM
+		perfstatcycle a
+		WHERE
+		a.entityId = #{entityId}
+	</select>
+	<select id="getPerfStatsGlobalSet" parameterType="long"
+		resultType="perfStatsGlobalSet">
+		SELECT
+		a.entityId,
+		a.perfStats15MinMaxRecord,
+		a.perfStats24HourMaxRecord
+		FROM
+		perfstatsglobalset a
+		WHERE
+		a.entityId =
+		#{entityId}
+	</select>
+	<select id="getPerfThresholdByType" parameterType="map"
+		resultType="oltPerfThreshold">
+		SELECT
+		entityId,
+		thresholdType,
+		perfThresholdTypeIndex,
+		perfThresholdObject,
+		perfThresholdUpper,
+		perfThresholdLower
+		FROM
+		oltperfthreshold
+		WHERE
+		entityId = #{entityId} AND
+		thresholdType =
+		#{thresholdType}
+	</select>
+	<select id="getDeviceThreshold" parameterType="long" resultType="oltPerfThreshold">
+		SELECT
+		entityId,
+		thresholdType,
+		perfThresholdTypeIndex,
+		perfThresholdObject,
+		perfThresholdUpper,
+		perfThresholdLower
+		FROM
+		oltperfthreshold
+		WHERE
+		entityId = #{entityId}
+	</select>
+	<select id="getMonitorNameList" resultType="String">
+		select
+		monitorname
+		from
+		monitorbaseinfo
+	</select>
+	<select id="getCollectIndex" parameterType="long" resultType="eponStatsRecord">
+		SELECT
+		entityId,
+		portIndex,
+		collector
+		FROM
+		eponstatsrecord
+		WHERE
+		entityId =
+		#{entityId}
+	</select>
+	<select id="getHistoryPerformance" parameterType="map"
+		resultType="perfStats15Table">
+		SELECT
+		a.entityId,
+		a.portIndex,
+		a.stats15InOctets,
+		a.stats15InPkts,
+		a.stats15InBroadcastPkts,
+		a.stats15InMulticastPkts,
+		a.stats15InPkts64Octets,
+		a.stats15InPkts65to127Octets,
+		a.stats15InPkts128to255Octets,
+		a.stats15InPkts256to511Octets,
+		a.stats15InPkts512to1023Octets,
+		a.stats15InPkts1024to1518Octets,
+		a.stats15InPkts1519to1522Octets,
+		a.stats15InUndersizePkts,
+		a.stats15InOversizePkts,
+		a.stats15InFragments,
+		a.stats15InMpcpFrames,
+		a.stats15InMpcpOctets,
+		a.stats15InOAMFrames,
+		a.stats15InOAMOctets,
+		a.stats15InCRCErrorPkts,
+		a.stats15InDropEvents,
+		a.stats15InJabbers,
+		a.stats15InCollision,
+		a.stats15OutOctets,
+		a.stats15OutPkts,
+		a.stats15OutBroadcastPkts,
+		a.stats15OutMulticastPkts,
+		a.stats15OutPkts64Octets,
+		a.stats15OutPkts65to127Octets,
+		a.stats15OutPkts128to255Octets,
+		a.stats15OutPkts256to511Octets,
+		a.stats15OutPkts512to1023Octets,
+		a.stats15OutPkts1024to1518Octets,
+		a.stats15OutPkts1519to1522Octets,
+		a.stats15OutUndersizePkts,
+		a.stats15OutOversizePkts,
+		a.stats15OutFragments,
+		a.stats15OutMpcpFrames,
+		a.stats15OutMpcpOctets,
+		a.stats15OutOAMFrames,
+		a.stats15OutOAMOctets,
+		a.stats15OutCRCErrorPkts,
+		a.stats15OutDropEvents,
+		a.stats15OutJabbers,
+		a.stats15OutCollision,
+		a.stats15EndTime stats15EndTimeDb
+		FROM
+		perfstats15table a
+		WHERE
+		entityId =
+		#{entityId} and portIndex =
+		#{portIndex}
+		<if test="startTime != null and startTime != ''">
+			<if test="endTime != null and endTime != ''">
+				and stats15EndTime between
+				#{startTime} and #{endTime}
+			</if>
+		</if>
+		ORDER BY stats15EndTime
+	</select>
+	<select id="get24HistoryPerformance" parameterType="map"
+		resultType="perfStats24Table">
+		SELECT
+		a.entityId,
+		a.portIndex,
+		a.stats24InOctets,
+		a.stats24InPkts,
+		a.stats24InBroadcastPkts,
+		a.stats24InMulticastPkts,
+		a.stats24InPkts64Octets,
+		a.stats24InPkts65to127Octets,
+		a.stats24InPkts128to255Octets,
+		a.stats24InPkts256to511Octets,
+		a.stats24InPkts512to1023Octets,
+		a.stats24InPkts1024to1518Octets,
+		a.stats24InPkts1519to1522Octets,
+		a.stats24InUndersizePkts,
+		a.stats24InOversizePkts,
+		a.stats24InFragments,
+		a.stats24InMpcpFrames,
+		a.stats24InMpcpOctets,
+		a.stats24InOAMFrames,
+		a.stats24InOAMOctets,
+		a.stats24InCRCErrorPkts,
+		a.stats24InDropEvents,
+		a.stats24InJabbers,
+		a.stats24InCollision,
+		a.stats24OutOctets,
+		a.stats24OutPkts,
+		a.stats24OutBroadcastPkts,
+		a.stats24OutMulticastPkts,
+		a.stats24OutPkts64Octets,
+		a.stats24OutPkts65to127Octets,
+		a.stats24OutPkts128to255Octets,
+		a.stats24OutPkts256to511Octets,
+		a.stats24OutPkts512to1023Octets,
+		a.stats24OutPkts1024to1518Octets,
+		a.stats24OutPkts1519to1522Octets,
+		a.stats24OutUndersizePkts,
+		a.stats24OutOversizePkts,
+		a.stats24OutFragments,
+		a.stats24OutMpcpFrames,
+		a.stats24OutMpcpOctets,
+		a.stats24OutOAMFrames,
+		a.stats24OutOAMOctets,
+		a.stats24OutCRCErrorPkts,
+		a.stats24OutDropEvents,
+		a.stats24OutJabbers,
+		a.stats24OutCollision,
+		a.stats24EndTime stats24EndTimeDb
+		FROM
+		perfstats24table a
+		WHERE
+		entityId =
+		#{entityId} and portIndex =
+		#{portIndex}
+		<if test="startTime != null and startTime != ''">
+			<if test="endTime != null and endTime != ''">
+				and stats24EndTime between
+				#{startTime} and #{endTime}
+			</if>
+		</if>
+		ORDER BY stats24EndTime
+	</select>
+	<select id="getTopPonLoading" databaseId="MySQL" parameterType="map"
+		resultType="perfRecord">
+		select
+		a.entityid,a.portindex,a.portInSpeed as
+		value,a.portOutSpeed as tempValue,a.collectTime,d.ip,d.name
+		from perfeponflowqualitylast
+		a,oltponrelation c,entity d WHERE
+		a.entityId=c.entityId and a.entityId=d.entityId
+		and a.portIndex =
+		c.ponIndex
+		and d.entityId in (select entityId from ${Authority})
+		<if test="name != null and name !=''">
+			and (d.name like '%${name}%' or d.ip like '%${name}%')
+		</if>
+		<if test="deviceType != -1 and deviceType != null">
+			and d.typeId = #{deviceType}
+		</if>
+		<if test="sort != null and dir != null">
+			order by ${sort} ${dir}
+		</if>
+		<if test="sort == null and dir == null">
+		 	order by value desc
+        </if>
+		<if test="start != -1 and limit != -1">
+		 	limit #{start},#{limit}
+        </if>
+	</select>
+	
+	<select id="getPonSpeedCount" databaseId="MySQL" parameterType="map"
+		resultType="int">
+		select count(a.portindex)
+		from perfeponflowqualitylast
+		a,oltponrelation c,entity d WHERE
+		a.entityId=c.entityId and
+		a.entityId=d.entityId
+		and a.portIndex =
+		c.ponIndex
+		and d.entityId in (select entityId from ${Authority})
+		<if test="name != null and name !=''">
+			and (d.name like '%${name}%' or d.ip like '%${name}%')
+		</if>
+		<if test="deviceType != -1 and deviceType != null">
+			and d.typeId = #{deviceType}
+		</if>
+	</select>
+
+	<select id="getTopSniLoading" databaseId="MySQL" parameterType="map"
+		resultType="perfRecord">
+		select a.entityid,a.portindex,a.portInSpeed as value,
+		a.portOutSpeed as tempValue,a.collectTime,d.ip,d.name, E.sniDisplayName AS portName
+		from perfeponflowqualitylast a,oltsnirelation c,entity d, oltsniattribute E
+		WHERE a.entityId=c.entityId and a.entityId=d.entityId
+		and a.portIndex = c.sniIndex and c.sniId = E.sniId
+		and d.entityId in (select entityId from ${Authority})
+		<if test="name != null and name !=''">
+			and (d.name like '%${name}%' or d.ip like '%${name}%')
+		</if>
+		<if test="deviceType != -1 and deviceType != null">
+			and d.typeId = #{deviceType}
+		</if>
+		<if test="sort != null and dir != null">
+			order by ${sort} ${dir}
+		</if>
+		<if test="sort == null and dir == null">
+		 	order by value desc, portIndex ASC
+        </if>
+        <if test="start != -1 and limit != -1">
+		 	limit #{start},#{limit}
+        </if>
+	</select>
+	
+	<select id="getSniSpeedCount" databaseId="MySQL" parameterType="map"
+		resultType="int">
+		select count(a.portindex)
+		from perfeponflowqualitylast
+		a,oltsnirelation c,entity d WHERE
+		a.entityId=c.entityId and
+		a.entityId=d.entityId
+		and a.portIndex =
+		c.sniIndex
+		and d.entityId in (select entityId from ${Authority})
+		<if test="name != null and name !=''">
+			and (d.name like '%${name}%' or d.ip like '%${name}%')
+		</if>
+		<if test="deviceType != -1 and deviceType != null">
+			and d.typeId = #{deviceType}
+		</if>
+	</select>
+
+	<select id="getAllOltList" resultType="perfFolderDevice"
+		parameterType="map">
+		select
+		a.entityId,
+		a.name,
+		a.ip,
+		a.mac,
+		b.folderId
+		from entity
+		a, entityfolderrela b
+		where a.entityId = b.entityId and a.status = 1
+		and a.typeId in
+		(select typeId from entitytyperelation where type = #{type})
+		and
+		a.entityId in (select entityId from ${Authority})
+		UNION
+		select
+		entityId,name,ip,-1 as folderId
+		from entity
+		where entityId not in (select entityId from entityfolderrela)
+		and typeId in (select typeId from entitytyperelation where type = #{type}) and
+		entityId in(select entityId from
+		${Authority})
+	</select>
+	<select id="getAllOltDeviceList" resultType="perfFolderDevice"
+		parameterType="map">
+		select
+		distinct(a.entityId),
+		a.name,
+		a.sysName,
+		a.mac,
+		a.ip,
+		c.icon16 icon
+		from entity a, entityfolderrela b,entityType c
+		where
+		a.entityId = b.entityId and a.status = 1 and a.typeid=c.typeid and
+		a.typeId in
+		(select typeId from entitytyperelation where type = #{type})
+		and
+		a.entityId in (select entityId from ${Authority})
+	</select>
+	<select id="getAllFolderList" resultType="topoFolder">
+		select
+		folderId,
+		name
+		from topofolder
+	</select>
+	<select id="getMonitorInfoList" resultType="monitorBaseInfo">
+		select
+		monitorId,
+		monitorName,
+		monitorDesc,
+		monitorType,
+		monitorTick
+		from monitorbaseinfo
+	</select>
+	<select id="getMonitorPorts" resultType="monitorPort">
+		select
+		A.monitorId,
+		A.entityId,
+		A.entityIp,
+		A.portId,
+		A.portIndex,
+		B.name
+		as entityName
+		from
+		monitorportrelation A,entity B
+		where A.monitorId = #{monitorId} and
+		A.entityId = B.entityId
+	</select>
+	<select id="getMonitorIndexes" resultType="monitorIndex">
+		select
+		monitorId,
+		monitorIndex
+		from monitorindexrelation
+		where
+		monitorId = #{monitorId}
+	</select>
+
+	<select id="selectPerformanceBySql" resultType="performance"
+		parameterType="java.util.HashMap">
+		<if test=" sql != null and  sql != ''"> ${sql}</if>
+	</select>
+
+	<select id="loadHistoryPerformance" resultType="historyPerformance"
+		parameterType="java.util.HashMap">
+		<if test=" sql != null and  sql != ''"> ${sql}</if>
+	</select>
+
+	<!-- INSET SEGMENT -->
+	<insert id="insertPerfStatCycle" parameterType="perfStatCycle">
+		insert into
+		perfstatcycle
+		(entityId,topPerfStatOLTCycle,
+		topPerfStatONUCycle,
+		topPerfOLTTemperatureCycle
+		, topPerfONUTemperatureCycle)
+		values
+		(#{entityId},#{topPerfStatOLTCycle},
+		#{topPerfStatONUCycle},
+		#{topPerfOLTTemperatureCycle},
+		#{topPerfONUTemperatureCycle})
+	</insert>
+	<insert id="insertPerfStatsGlobalSet" parameterType="perfStatsGlobalSet">
+		insert into
+		perfstatsglobalset
+		(entityId,perfStats15MinMaxRecord,
+		perfStats24HourMaxRecord)
+		values
+		(#{entityId},#{perfStats15MinMaxRecord},
+		#{perfStats24HourMaxRecord})
+	</insert>
+	<insert id="insertOltPerfThresholds" parameterType="oltPerfThreshold">
+		insert into
+		oltperfthreshold
+		(entityId,thresholdType,perfThresholdTypeIndex,perfThresholdObject,perfThresholdLower,
+		perfThresholdUpper)
+		values
+		(#{entityId},#{thresholdType},#{perfThresholdTypeIndex},
+		#{perfThresholdObject}, #{perfThresholdLower}
+		,
+		#{perfThresholdUpper})
+	</insert>
+	<insert id="insertPerfStats15Table" parameterType="perfStats15Table">
+		insert into
+		perfstats15table
+		(entityId,
+		portIndex,
+		stats15InOctets,
+		stats15InPkts,
+		stats15InBroadcastPkts,
+		stats15InMulticastPkts,
+		stats15InPkts64Octets,
+		stats15InPkts65to127Octets,
+		stats15InPkts128to255Octets,
+		stats15InPkts256to511Octets,
+		stats15InPkts512to1023Octets,
+		stats15InPkts1024to1518Octets,
+		stats15InPkts1519to1522Octets,
+		stats15InUndersizePkts,
+		stats15InOversizePkts,
+		stats15InFragments,
+		stats15InMpcpFrames,
+		stats15InMpcpOctets,
+		stats15InOAMFrames,
+		stats15InOAMOctets,
+		stats15InCRCErrorPkts,
+		stats15InDropEvents,
+		stats15InJabbers,
+		stats15InCollision,
+		stats15OutOctets,
+		stats15OutPkts,
+		stats15OutBroadcastPkts,
+		stats15OutMulticastPkts,
+		stats15OutPkts64Octets,
+		stats15OutPkts65to127Octets,
+		stats15OutPkts128to255Octets,
+		stats15OutPkts256to511Octets,
+		stats15OutPkts512to1023Octets,
+		stats15OutPkts1024to1518Octets,
+		stats15OutPkts1519to1522Octets,
+		stats15OutUndersizePkts,
+		stats15OutOversizePkts,
+		stats15OutFragments,
+		stats15OutMpcpFrames,
+		stats15OutMpcpOctets,
+		stats15OutOAMFrames,
+		stats15OutOAMOctets,
+		stats15OutCRCErrorPkts,
+		stats15OutDropEvents,
+		stats15OutJabbers,
+		stats15OutCollision,
+		stats15EndTime)
+		values
+		(#{entityId},
+		#{portIndex},
+		#{stats15InOctets},
+		#{stats15InPkts},
+		#{stats15InBroadcastPkts},
+		#{stats15InMulticastPkts},
+		#{stats15InPkts64Octets},
+		#{stats15InPkts65to127Octets},
+		#{stats15InPkts128to255Octets},
+		#{stats15InPkts256to511Octets},
+		#{stats15InPkts512to1023Octets},
+		#{stats15InPkts1024to1518Octets},
+		#{stats15InPkts1519to1522Octets},
+		#{stats15InUndersizePkts},
+		#{stats15InOversizePkts},
+		#{stats15InFragments},
+		#{stats15InMpcpFrames},
+		#{stats15InMpcpOctets},
+		#{stats15InOAMFrames},
+		#{stats15InOAMOctets},
+		#{stats15InCRCErrorPkts},
+		#{stats15InDropEvents},
+		#{stats15InJabbers},
+		#{stats15InCollision},
+		#{stats15OutOctets},
+		#{stats15OutPkts},
+		#{stats15OutBroadcastPkts},
+		#{stats15OutMulticastPkts},
+		#{stats15OutPkts64Octets},
+		#{stats15OutPkts65to127Octets},
+		#{stats15OutPkts128to255Octets},
+		#{stats15OutPkts256to511Octets},
+		#{stats15OutPkts512to1023Octets},
+		#{stats15OutPkts1024to1518Octets},
+		#{stats15OutPkts1519to1522Octets},
+		#{stats15OutUndersizePkts},
+		#{stats15OutOversizePkts},
+		#{stats15OutFragments},
+		#{stats15OutMpcpFrames},
+		#{stats15OutMpcpOctets},
+		#{stats15OutOAMFrames},
+		#{stats15OutOAMOctets},
+		#{stats15OutCRCErrorPkts},
+		#{stats15OutDropEvents},
+		#{stats15OutJabbers},
+		#{stats15OutCollision},
+		#{stats15EndTimeDb})
+	</insert>
+	<insert id="insertPerfStats24Table" parameterType="perfStats24Table">
+		insert into
+		perfstats24table
+		(entityId,
+		portIndex,
+		stats24InOctets,
+		stats24InPkts,
+		stats24InBroadcastPkts,
+		stats24InMulticastPkts,
+		stats24InPkts64Octets,
+		stats24InPkts65to127Octets,
+		stats24InPkts128to255Octets,
+		stats24InPkts256to511Octets,
+		stats24InPkts512to1023Octets,
+		stats24InPkts1024to1518Octets,
+		stats24InPkts1519to1522Octets,
+		stats24InUndersizePkts,
+		stats24InOversizePkts,
+		stats24InFragments,
+		stats24InMpcpFrames,
+		stats24InMpcpOctets,
+		stats24InOAMFrames,
+		stats24InOAMOctets,
+		stats24InCRCErrorPkts,
+		stats24InDropEvents,
+		stats24InJabbers,
+		stats24InCollision,
+		stats24OutOctets,
+		stats24OutPkts,
+		stats24OutBroadcastPkts,
+		stats24OutMulticastPkts,
+		stats24OutPkts64Octets,
+		stats24OutPkts65to127Octets,
+		stats24OutPkts128to255Octets,
+		stats24OutPkts256to511Octets,
+		stats24OutPkts512to1023Octets,
+		stats24OutPkts1024to1518Octets,
+		stats24OutPkts1519to1522Octets,
+		stats24OutUndersizePkts,
+		stats24OutOversizePkts,
+		stats24OutFragments,
+		stats24OutMpcpFrames,
+		stats24OutMpcpOctets,
+		stats24OutOAMFrames,
+		stats24OutOAMOctets,
+		stats24OutCRCErrorPkts,
+		stats24OutDropEvents,
+		stats24OutJabbers,
+		stats24OutCollision,
+		stats24EndTime)
+		values
+		(#{entityId},
+		#{portIndex},
+		#{stats24InOctets},
+		#{stats24InPkts},
+		#{stats24InBroadcastPkts},
+		#{stats24InMulticastPkts},
+		#{stats24InPkts64Octets},
+		#{stats24InPkts65to127Octets},
+		#{stats24InPkts128to255Octets},
+		#{stats24InPkts256to511Octets},
+		#{stats24InPkts512to1023Octets},
+		#{stats24InPkts1024to1518Octets},
+		#{stats24InPkts1519to1522Octets},
+		#{stats24InUndersizePkts},
+		#{stats24InOversizePkts},
+		#{stats24InFragments},
+		#{stats24InMpcpFrames},
+		#{stats24InMpcpOctets},
+		#{stats24InOAMFrames},
+		#{stats24InOAMOctets},
+		#{stats24InCRCErrorPkts},
+		#{stats24InDropEvents},
+		#{stats24InJabbers},
+		#{stats24InCollision},
+		#{stats24OutOctets},
+		#{stats24OutPkts},
+		#{stats24OutBroadcastPkts},
+		#{stats24OutMulticastPkts},
+		#{stats24OutPkts64Octets},
+		#{stats24OutPkts65to127Octets},
+		#{stats24OutPkts128to255Octets},
+		#{stats24OutPkts256to511Octets},
+		#{stats24OutPkts512to1023Octets},
+		#{stats24OutPkts1024to1518Octets},
+		#{stats24OutPkts1519to1522Octets},
+		#{stats24OutUndersizePkts},
+		#{stats24OutOversizePkts},
+		#{stats24OutFragments},
+		#{stats24OutMpcpFrames},
+		#{stats24OutMpcpOctets},
+		#{stats24OutOAMFrames},
+		#{stats24OutOAMOctets},
+		#{stats24OutCRCErrorPkts},
+		#{stats24OutDropEvents},
+		#{stats24OutJabbers},
+		#{stats24OutCollision},
+		#{stats24EndTimeDb})
+	</insert>
+	<insert id="insertMonitorBaseInfo" databaseId="MySQL"
+		parameterType="monitorBaseInfo" useGeneratedKeys="true" keyProperty="monitorId">
+		insert into
+		monitorbaseinfo
+		(monitorName,
+		monitorDesc,
+		monitorType,
+		monitorTick)
+		values
+		(#{monitorName},
+		#{monitorDesc},
+		#{monitorType},
+		#{monitorTick})
+	</insert>
+	<insert id="insertMonitorBaseInfo" databaseId="Oracle"
+		parameterType="monitorBaseInfo">
+		<selectKey keyProperty="monitorId" resultType="long" order="BEFORE">
+			SELECT MonitorBaseinfo_Seq.nextval AS monitorId from dual
+		</selectKey>
+		insert into
+		monitorbaseinfo
+		(monitorId,
+		monitorName,
+		monitorDesc,
+		monitorType,
+		monitorTick)
+		values
+		(#{monitorId},
+		#{monitorName},
+		#{monitorDesc},
+		#{monitorType},
+		#{monitorTick})
+	</insert>
+	<insert id="insertPortMonitorPortInfo" parameterType="monitorPort">
+		insert into
+		monitorportrelation
+		(monitorId,
+		entityId,
+		entityIp,
+		portId,
+		portIndex)
+		values
+		(#{monitorId},
+		#{entityId},
+		#{entityIp},
+		#{portId},
+		#{portIndex})
+	</insert>
+	<insert id="insertOltCollector" parameterType="map">
+		insert into
+		eponstatsrecord
+		(entityId, portIndex, collector)
+		values
+		(#{entityId},
+		#{portIndex}, #{collector})
+	</insert>
+	<update id="updateOltCollector" parameterType="map">
+		update
+		eponStatsRecord set
+		collector = #{collector}
+		where entityId
+		= #{entityId}
+		and portIndex = #{portIndex}
+	</update>
+	<insert id="insertMonitorIndexInfo" parameterType="monitorIndex">
+		insert into
+		monitorindexrelation
+		(monitorId,
+		monitorIndex)
+		values
+		(#{monitorId},
+		#{monitorIndex})
+	</insert>
+	<delete id="deletePerfStatCycle" parameterType="long">
+		delete from
+		perfstatcycle where entityId = #{entityId}
+	</delete>
+	<delete id="deleteOltCollector" parameterType="map">
+		delete from
+		eponstatsrecord where entityId = #{entityId} and
+		portIndex =
+		#{portIndex}
+	</delete>
+	<delete id="deletePerfStatsGlobalSet" parameterType="long">
+		delete from
+		perfstatsglobalset where entityId =
+		#{entityId}
+	</delete>
+	<delete id="deleteOltPerfThresholds" parameterType="long">
+		delete from
+		oltperfthreshold where entityId = #{entityId}
+	</delete>
+	<delete id="deletePerf15FromDB" parameterType="perfStats15Table">
+		delete from
+		perfStats15Table where entityId = #{entityId} and
+		portIndex =
+		#{portIndex}
+	</delete>
+	<delete id="deletePerf24FromDB" parameterType="perfstats24table">
+		delete from
+		perfstats24table where entityId = #{entityId} and
+		portIndex =
+		#{portIndex}
+	</delete>
+	<delete id="deleteMonitor" parameterType="long">
+		delete from
+		monitorbaseinfo where monitorId = #{monitorId}
+	</delete>
+	<update id="updatePerfThreshold" parameterType="oltPerfThreshold">
+		UPDATE
+		oltperfthreshold a
+		SET
+		a.perfThresholdUpper =
+		#{perfThresholdUpper},
+		a.perfThresholdLower = #{perfThresholdLower}
+		WHERE
+		a.entityId =
+		#{entityId} AND
+		a.perfThresholdTypeIndex = #{perfThresholdTypeIndex}
+		AND
+		a.perfThresholdObject = #{perfThresholdObject}
+	</update>
+
+	<insert id="insertEponCurrentStats" parameterType="perfCurStatsTable">
+		insert into
+		eponcurrentstats
+		(entityId, portIndex,
+		curInOctets,
+		curInPkts, curInBroadcastPkts,
+		curInMulticastPkts,
+		curInPkts64Octets,
+		curInPkts65to127Octets,
+		curInPkts128to255Octets,
+		curInPkts256to511Octets,
+		curInPkts512to1023Octets,
+		curInPkts1024to1518Octets,
+		curInPkts1519to1522Octets,
+		curInUndersizePkts,
+		curInOversizePkts,
+		curInFragments,
+		curInMpcpFrames,
+		curInMpcpOctets,
+		curInOAMFrames,
+		curInOAMOctets,
+		curInCRCErrorPkts,
+		curInDropEvents,
+		curInJabbers,
+		curInCollision,
+		curOutOctets,
+		curOutPkts,
+		curOutBroadcastPkts,
+		curOutMulticastPkts,
+		curOutPkts64Octets,
+		curOutPkts65to127Octets,
+		curOutPkts128to255Octets,
+		curOutPkts256to511Octets,
+		curOutPkts512to1023Octets,
+		curOutPkts1024to1518Octets,
+		curOutPkts1519to1522Octets,
+		curOutUndersizePkts,
+		curOutOversizePkts,
+		curOutFragments,
+		curOutMpcpFrames,
+		curOutMpcpOctets,
+		curOutOAMFrames,
+		curOutOAMOctets,
+		curOutCRCErrorPkts,
+		curOutDropEvents,
+		curOutJabbers,
+		curOutCollision
+		<if test="_databaseId == 'Oracle'">
+			, curStatsTime
+		</if>
+		)
+		values
+		(#{entityId}, #{portIndex},
+		#{curStatsInOctets},
+		#{curStatsInPkts},
+		#{curStatsInBroadcastPkts},
+		#{curStatsInMulticastPkts},
+		#{curStatsInPkts64Octets},
+		#{curStatsInPkts65to127Octets},
+		#{curStatsInPkts128to255Octets},
+		#{curStatsInPkts256to511Octets},
+		#{curStatsInPkts512to1023Octets},
+		#{curStatsInPkts1024to1518Octets},
+		#{curStatsInPkts1519to1522Octets},
+		#{curStatsInUndersizePkts},
+		#{curStatsInOversizePkts},
+		#{curStatsInFragments},
+		#{curStatsInMpcpFrames},
+		#{curStatsInMpcpOctets},
+		#{curStatsInOAMFrames},
+		#{curStatsInOAMOctets},
+		#{curStatsInCRCErrorPkts},
+		#{curStatsInDropEvents},
+		#{curStatsInJabbers},
+		#{curStatsInCollision},
+		#{curStatsOutOctets},
+		#{curStatsOutPkts},
+		#{curStatsOutBroadcastPkts},
+		#{curStatsOutMulticastPkts},
+		#{curStatsOutPkts64Octets},
+		#{curStatsOutPkts65to127Octets},
+		#{curStatsOutPkts128to255Octets},
+		#{curStatsOutPkts256to511Octets},
+		#{curStatsOutPkts512to1023Octets},
+		#{curStatsOutPkts1024to1518Octets},
+		#{curStatsOutPkts1519to1522Octets},
+		#{curStatsOutUndersizePkts},
+		#{curStatsOutOversizePkts},
+		#{curStatsOutFragments},
+		#{curStatsOutMpcpFrames},
+		#{curStatsOutMpcpOctets},
+		#{curStatsOutOAMFrames},
+		#{curStatsOutOAMOctets},
+		#{curStatsOutCRCErrorPkts},
+		#{curStatsOutDropEvents},
+		#{curStatsOutJabbers},
+		#{curStatsOutCollision}
+		<if test="_databaseId == 'Oracle'">
+			, sysdate
+		</if>
+		)
+	</insert>
+
+
+	<update id="updateEponCurrentStats" parameterType="perfCurStatsTable">
+		update
+		eponcurrentstats set
+		curInOctets =
+		#{curStatsInOctets},
+		curInPkts =
+		#{curStatsInPkts},
+		curInBroadcastPkts = #{curStatsInBroadcastPkts},
+		curInMulticastPkts
+		=#{curStatsInMulticastPkts},
+		curInPkts64Octets
+		=#{curStatsInPkts64Octets},
+		curInPkts65to127Octets
+		=#{curStatsInPkts65to127Octets},
+		curInPkts128to255Octets
+		=#{curStatsInPkts128to255Octets},
+		curInPkts256to511Octets
+		=#{curStatsInPkts256to511Octets},
+		curInPkts512to1023Octets
+		=#{curStatsInPkts512to1023Octets},
+		curInPkts1024to1518Octets
+		=#{curStatsInPkts1024to1518Octets},
+		curInPkts1519to1522Octets
+		=#{curStatsInPkts1519to1522Octets},
+		curInUndersizePkts
+		=#{curStatsInUndersizePkts},
+		curInOversizePkts
+		=#{curStatsInOversizePkts},
+		curInFragments =#{curStatsInFragments},
+		curInMpcpFrames =#{curStatsInMpcpFrames},
+		curInMpcpOctets
+		=#{curStatsInMpcpOctets},
+		curInOAMFrames =#{curStatsInOAMFrames},
+		curInOAMOctets
+		=#{curStatsInOAMOctets},
+		curInCRCErrorPkts
+		=#{curStatsInCRCErrorPkts},
+		curInDropEvents
+		=#{curStatsInDropEvents},
+		curInJabbers =#{curStatsInJabbers},
+		curInCollision
+		=#{curStatsInCollision},
+		curOutOctets
+		=#{curStatsOutOctets},
+		curOutPkts
+		=#{curStatsOutPkts},
+		curOutBroadcastPkts =#{curStatsOutBroadcastPkts},
+		curOutMulticastPkts
+		=#{curStatsOutMulticastPkts},
+		curOutPkts64Octets
+		=#{curStatsOutPkts64Octets},
+		curOutPkts65to127Octets
+		=#{curStatsOutPkts65to127Octets},
+		curOutPkts128to255Octets
+		=#{curStatsOutPkts128to255Octets},
+		curOutPkts256to511Octets
+		=#{curStatsOutPkts256to511Octets},
+		curOutPkts512to1023Octets
+		=#{curStatsOutPkts512to1023Octets},
+		curOutPkts1024to1518Octets
+		=#{curStatsOutPkts1024to1518Octets},
+		curOutPkts1519to1522Octets
+		=#{curStatsOutPkts1519to1522Octets},
+		curOutUndersizePkts
+		=#{curStatsOutUndersizePkts},
+		curOutOversizePkts
+		=#{curStatsOutOversizePkts},
+		curOutFragments =#{curStatsOutFragments},
+		curOutMpcpFrames
+		=#{curStatsOutMpcpFrames},
+		curOutMpcpOctets
+		=#{curStatsOutMpcpOctets},
+		curOutOAMFrames =#{curStatsOutOAMFrames},
+		curOutOAMOctets =#{curStatsOutOAMOctets},
+		curOutCRCErrorPkts
+		=#{curStatsOutCRCErrorPkts},
+		curOutDropEvents
+		=#{curStatsOutDropEvents},
+		curOutJabbers =#{curStatsOutJabbers},
+		curOutCollision =#{curStatsOutCollision}
+		<if test="_databaseId == 'Oracle'">
+			, curStatsTime = sysdate
+		</if>
+		where
+		entityId=#{entityId}
+		and portIndex=#{portIndex}
+	</update>
+	<select id="getEponCurrentStatsCount" parameterType="map"
+		resultType="int">
+		select count(*) from eponcurrentstats
+		where
+		entityId=#{entityId} and
+		portIndex=#{portIndex}
+	</select>
+	<delete id="deleteEponCurrentStats" parameterType="long">
+		delete from
+		eponcurrentstats where entityId=#{entityId}
+	</delete>
+	<select id="getEponPerformanceMonitorId" parameterType="map"
+		resultType="int">
+		select monitorId from perfmonitor
+		where
+		identifyKey=#{entityId} and
+		category=#{category}
+	</select>
+	<select id="queryUserFolderIdList" parameterType="map"
+		resultType="long">
+		select folderId from ${folderView}
+	</select>
+
+	<insert id="insertEponServiceQuality" parameterType="map">
+		insert into
+		perfeponservicequality
+		(entityId, slotIndex,
+		targetName, targetValue,
+		collectTime)
+		values
+		(#{entityId}, #{slotIndex}, #{targetName},
+		#{targetValue}, #{collectTime})
+	</insert>
+	<insert id="insertEponCpuQuality" parameterType="map">
+		insert into
+		perfeponcpuquality
+		(entityId, slotIndex,collectValue,collectTime)
+		values
+		(#{entityId}, #{slotIndex},
+		#{collectValue}, #{collectTime})
+	</insert>
+	<insert id="insertEponMemQuality" parameterType="map">
+		insert into
+		perfeponmemquality
+		(entityId, slotIndex,collectValue,
+		collectTime)
+		values
+		(#{entityId}, #{slotIndex},
+		#{collectValue}, #{collectTime})
+	</insert>
+	<insert id="insertEponFlashQuality" parameterType="map">
+		insert into
+		perfeponflashquality
+		(entityId, slotIndex,collectValue,
+		collectTime)
+		values
+		(#{entityId}, #{slotIndex},
+		#{collectValue}, #{collectTime})
+	</insert>
+	<insert id="insertEponBoardTempQuality" parameterType="map">
+		insert
+		into
+		perfeponboardtempquality
+		(entityId, slotIndex,collectValue,
+		collectTime)
+		values
+		(#{entityId}, #{slotIndex},
+		#{collectValue},
+		#{collectTime})
+	</insert>
+	<insert id="insertEponFanSpeedQuality" parameterType="map">
+		insert into
+		perfeponfanspeedquality
+		(entityId, slotIndex, collectValue,
+		collectTime)
+		values
+		(#{entityId}, #{slotIndex},
+		#{collectValue},
+		#{collectTime})
+	</insert>
+
+	<insert id="insertEponLinkQuality" parameterType="eponLinkQualityData">
+		insert into
+		perfeponlinkquality
+		(entityId, portIndex,
+		optTxPower,
+		optRePower,optCurrent,optVoltage,optTemp,collectTime)
+		values
+		(#{entityId}, #{portIndex},
+		#{transPower},#{recvPower},
+		#{biasCurrent},#{workingVoltage},#{workingTemp}, #{collectTime})
+	</insert>
+	<insert id="insertEponFlowQuality" parameterType="oltFlowQuality">
+		insert into
+		perfeponflowquality
+		(entityId,
+		portIndex,portInOctets,
+		portOutOctets,portInSpeed,portOutSpeed,portInUsed,portOutUsed,portBandwidth,
+		collectTime
+		)
+		values
+		(#{entityId}, #{portIndex},#{ifInOctets},#{ifOutOctets},
+		#{ifInSpeed},#{ifOutSpeed},#{portInUsed},#{portOutUsed},#{portBandwidth},
+		#{collectTime})
+	</insert>
+    
+    <insert id="insertEponFlowQualitySummary" parameterType="oltFlowQuality">
+		INSERT INTO perfstats15tableSummary(
+			entityId,portIndex,stats15InOctets,stats15OutOctets,stats15InOctetsMax,stats15OutOctetsMax,stats15EndTime, summarized,
+			portInSpeed,portInSpeedMax,portOutSpeed,portOutSpeedMax,portInUsed,portInUsedMax,portOutUsed,portOutUsedMax,portBandwidth)
+		values(#{entityId},#{portIndex},#{ifInOctets},#{ifOutOctets},#{ifInOctets},#{ifOutOctets},#{collectTime},0,
+			#{ifInSpeed},#{ifInSpeed},#{ifOutSpeed},#{ifOutSpeed},#{portInUsed},#{portInUsed},#{portOutUsed},#{portOutUsed},#{portBandwidth})	
+    </insert>
+
+	<select id="getOltSniIndexList" parameterType="long" resultType="long">
+		select sniIndex from oltsnirelation where
+		entityId =
+		#{entityId}
+	</select>
+
+	<select id="getOltPonIndexList" parameterType="long" resultType="long">
+		select ponIndex from oltponrelation where
+		entityId =
+		#{entityId}
+	</select>
+	<select id="getOltOnuPonIndexList" parameterType="long"
+		resultType="long">
+		select onuPonIndex from
+		oltonuponrelation where
+		entityId =
+		#{entityId}
+	</select>
+	<select id="getOltUniIndexList" parameterType="long" resultType="long">
+		select uniIndex from oltunirelation where
+		entityId =
+		#{entityId}
+	</select>
+
+	<select id="getDeviceSniLoading" databaseId="MySQL"
+		parameterType="long" resultType="perfRecord">
+		select a.entityid,a.portindex,a.portInSpeed as value,a.portOutSpeed as tempValue,
+		a.collectTime, d.ip, d.name, E.sniDisplayName AS portName
+		from perfeponflowqualitylast a,oltsnirelation c,entity d,  oltsniattribute E
+		WHERE a.entityId=c.entityId 
+		and a.entityId=d.entityId
+		and a.portIndex = c.sniIndex
+		and c.sniId = E.sniId
+		and d.entityId = #{entityId}
+	</select>
+
+	<select id="getDevicePonLoading" databaseId="MySQL"
+		parameterType="long" resultType="perfRecord">
+		select
+		a.entityid,a.portindex,a.portInSpeed as value,a.portOutSpeed as
+		tempValue,a.collectTime,d.ip,d.name
+		from
+		perfeponflowqualitylast
+		a,oltponrelation c,entity d WHERE
+		a.entityId=c.entityId and a.entityId=d.entityId
+		and a.portIndex =
+		c.ponIndex
+		and d.entityId = #{entityId}
+	</select>
+
+	<update id="syncSlotStatus" parameterType="oltServiceQualityPerf">
+		update oltslotstatus A
+		inner join (select slotId from oltslotrelation
+		where slotIndex =
+		#{slotIndex} and entityId = #{entityId}) B
+		on
+		A.slotId = B.slotId set
+		topSysBdCPUUseRatio = #{topSysBdCPUUseRatio},
+		topSysBdlMemSize =
+		#{topSysBdlMemSize}* 1024 * 1024,
+		topSysBdFreeMemSize =
+		#{topSysBdFreeMemSize},
+		topTotalFlashOctets =
+		#{topSysBdTotalFlashOctets},
+		topSysBdFreeFlashOctets =
+		#{topSysBdFreeFlashOctets},
+		topSysBdCurrentTemperature =
+		#{topSysBdCurrentTemperature}
+	</update>
+	<update id="syncSniOptical" parameterType="eponLinkQualityData">
+		update oltsnioptical
+		set workingTemp=#{optTemp},
+		workingVoltage = #{optVoltage},
+		biasCurrent
+		= #{optCurrent},
+		txPower = #{optTxPower},
+		rxPower = #{optRePower}
+		where
+		entityId = #{entityId} and portIndex = #{portIndex}
+	</update>
+	<update id="syncPonOptical" parameterType="eponLinkQualityData">
+		update oltponoptical
+		set workingTemp=#{optTemp},
+		workingVoltage = #{optVoltage},
+		biasCurrent
+		= #{optCurrent},
+		txPower = #{optTxPower},
+		rxPower = #{optRePower}
+		where
+		entityId = #{entityId} and portIndex = #{portIndex}
+	</update>
+</mapper> 

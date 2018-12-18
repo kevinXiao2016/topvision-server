@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.platform.domain.FavouriteFolder">
+	<insert id="insertEntity" parameterType="favouriteFolder"
+		useGeneratedKeys="true" keyProperty="folderId">
+		INSERT INTO FavouriteFolder (superiorId, userId, name, type,
+		url, shared, path) VALUES (#{superiorId}, #{userId},
+		#{name},
+		#{type}, #{url}, #{shared}, #{path})
+    </insert>
+
+	<update id="updateEntity" parameterType="favouriteFolder">
+		UPDATE FavouriteFolder SET url = #{url}, name = #{name} WHERE
+		folderId = #{folderId}
+    </update>
+
+	<update id="renameFavouriteFolder" parameterType="favouriteFolder">
+		UPDATE FavouriteFolder SET name = #{name} WHERE folderId =
+		#{folderId}
+    </update>
+
+	<update id="moveFavouriteFolder" parameterType="favouriteFolder">
+		UPDATE FavouriteFolder SET superiorId = #{superiorId}, path =
+		#{path} WHERE folderId = #{folderId}
+    </update>
+
+	<delete id="deleteByPrimaryKey" parameterType="long">
+		DELETE FROM FavouriteFolder WHERE folderId = #{folderId}
+    </delete>
+
+	<select id="selectByMap" parameterType="map" resultType="favouriteFolder">
+		SELECT folderId, superiorId, userId, name, type, url,
+		shared,
+		path FROM FavouriteFolder WHERE userId = #{userId} OR shared = '1'
+		ORDER BY superiorId ASC, folderId ASC
+    </select>
+
+	<select id="selectByPrimaryKey" parameterType="long" resultType="favouriteFolder">
+		SELECT folderId, superiorId, name, type, url
+		FROM
+		FavouriteFolder WHERE folderId = #{folderId}
+    </select>
+
+	<select id="getFolderPath" parameterType="long" resultType="string">
+		select path from FavouriteFolder where folderId =
+		#{folderId}
+    </select>
+
+	<update id="updateFolderPath" parameterType="favouriteFolder">
+		UPDATE FavouriteFolder SET path = #{path} WHERE folderId =
+		#{folderId}
+    </update>
+
+	<delete id="deleteByPath" parameterType="string">
+		DELETE FROM FavouriteFolder WHERE path LIKE #{folderPath}
+    </delete>
+</mapper>

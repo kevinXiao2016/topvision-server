@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.opticalreceiver.dao.mybatis.OpticalReceiverRefreshDaoImpl">
+    <update id="updateSysDorType" parameterType="topCcmtsSysDorType">
+    	update cmcattribute set topCcmtsSysDorType = #{topCcmtsSysDorType} where cmcId = #{cmcId}
+    </update>
+    
+    <insert id="insertOrUpdateABSwitch" parameterType="topCcmtsDorABSwitch">
+    	insert into topCcmtsDorABSwitch(cmcId,abSwitchIndex,abSwitchState)
+    	values(#{cmcId},#{abSwitchIndex},#{abSwitchState})
+    	ON DUPLICATE KEY UPDATE
+    	<if test="abSwitchState != null">
+    		abSwitchState = #{abSwitchState},
+    	</if>
+    	cmcId=#{cmcId},
+		abSwitchIndex=#{abSwitchIndex}
+    </insert>
+    
+    <insert id="insertOrUpdateChannelNum" parameterType="topCcmtsDorChannelNum">
+    	insert into topccmtsdorchannelnum(cmcId,channelNumIndex,channelNum)
+    	values(#{cmcId},#{channelNumIndex},#{channelNum})
+    	ON DUPLICATE KEY UPDATE
+    	<if test="channelNum != null">
+    		channelNum = #{channelNum},
+    	</if>
+    	cmcId=#{cmcId},
+		channelNumIndex=#{channelNumIndex}
+    </insert>
+    
+    <insert id="insertOrUpdateDCPower" parameterType="topCcmtsDorDCPower">
+    	insert into topccmtsdordcpower(cmcId,dcPowerIndex,dcPowerVoltage) 
+    	values(#{cmcId},#{dcPowerIndex},#{dcPowerVoltage})
+    	ON DUPLICATE KEY UPDATE
+    	<if test="dcPowerVoltage != null">
+    		dcPowerVoltage = #{dcPowerVoltage},
+    	</if>
+    	cmcId=#{cmcId},
+		dcPowerIndex=#{dcPowerIndex}
+    </insert>
+    
+    <insert id="insertOrUpdateDevParams" parameterType="topCcmtsDorDevParams">
+    	insert into topccmtsdordevparams
+    	(cmcId,devIndex,platSN,frxNum,optNodeTemp,fwdEQ0,fwdATT0,revEQ,rtxState,rtxLaserPower,
+    	revATTUS,revATTRTX,rtxLaserCurrent,catvInLevel,catvInputState,ftxOptPower,ftxLaserCurrent)
+    	values(#{cmcId},#{devIndex},#{platSN},#{frxNum},#{optNodeTemp},#{fwdEQ0},#{fwdATT0},#{revEQ},#{rtxState},
+    	#{rtxLaserPower},#{revATTUS},#{revATTRTX},#{rtxLaserCurrent},#{catvInLevel},#{catvInputState},
+    	#{ftxOptPower},#{ftxLaserCurrent})
+    	ON DUPLICATE KEY UPDATE
+    	<if test="platSN != null">
+    		platSN = #{platSN},
+    	</if>
+    	<if test="frxNum != null">
+    		frxNum = #{frxNum},
+    	</if>
+    	<if test="optNodeTemp != null">
+    		optNodeTemp = #{optNodeTemp},
+    	</if>
+    	<if test="fwdEQ0 != null">
+    		fwdEQ0 = #{fwdEQ0},
+    	</if>
+    	<if test="fwdATT0 != null">
+    		fwdATT0 = #{fwdATT0},
+    	</if>
+    	<if test="revEQ != null">
+    		revEQ = #{revEQ},
+    	</if>
+    	<if test="rtxState != null">
+    		rtxState = #{rtxState},
+    	</if>
+    	<if test="rtxLaserPower != null">
+    		rtxLaserPower = #{rtxLaserPower},
+    	</if>
+    	<if test="revATTUS != null">
+    		revATTUS = #{revATTUS},
+    	</if>
+    	<if test="revATTRTX != null">
+    		revATTRTX = #{revATTRTX},
+    	</if>
+    	<if test="rtxLaserCurrent != null">
+    		rtxLaserCurrent = #{rtxLaserCurrent},
+    	</if>
+    	<if test="catvInLevel != null">
+    		catvInLevel = #{catvInLevel},
+    	</if>
+    	<if test="catvInputState != null">
+    		catvInputState = #{catvInputState},
+    	</if>
+    	<if test="ftxOptPower != null">
+    		ftxOptPower = #{ftxOptPower},
+    	</if>
+    	<if test="ftxLaserCurrent != null">
+    		ftxLaserCurrent = #{ftxLaserCurrent},
+    	</if>
+    	cmcId=#{cmcId},
+		devIndex=#{devIndex}
+    </insert>
+    
+    <insert id="insertOrUpdateFwdAtt" parameterType="topCcmtsDorFwdAtt">
+    	insert into topccmtsdorfwdatt(cmcId,fwdAttIndex,fwdAtt)
+    	values(#{cmcId},#{fwdAttIndex},#{fwdAtt})
+    	ON DUPLICATE KEY UPDATE
+    	<if test="fwdAtt != null">
+    		fwdAtt = #{fwdAtt},
+    	</if>
+    	cmcId=#{cmcId},
+		fwdAttIndex=#{fwdAttIndex}
+    </insert>
+    
+    <insert id="insertOrUpdateFwdEq" parameterType="topCcmtsDorFwdEq">
+    	insert into topccmtsdorfwdeq(cmcId,fwdEqIndex,fwdEq)
+    	values(#{cmcId},#{fwdEqIndex},#{fwdEq})
+    	ON DUPLICATE KEY UPDATE
+    	<if test="fwdEq != null">
+    		fwdEq = #{fwdEq},
+    	</if>
+    	cmcId=#{cmcId},
+		fwdEqIndex=#{fwdEqIndex}
+    </insert>
+    
+    <insert id="insertOrUpdateLinePower" parameterType="topCcmtsDorLinePower">
+    	insert into topccmtsdorlinepower(cmcId,linePowerIndex,linePowerVoltage1)
+    	values(#{cmcId},#{linePowerIndex},#{linePowerVoltage1})
+    	ON DUPLICATE KEY UPDATE
+    	<if test="linePowerVoltage1 != null">
+    		linePowerVoltage1 = #{linePowerVoltage1},
+    	</if>
+    	cmcId=#{cmcId},
+		linePowerIndex=#{linePowerIndex}
+    </insert>
+    
+    <insert id="insertOrUpdateRevAtt" parameterType="topCcmtsDorRevAtt">
+    	insert into topccmtsdorrevatt(cmcId,revAttIndex,revAtt)
+    	values(#{cmcId},#{revAttIndex},#{revAtt})
+    	ON DUPLICATE KEY UPDATE
+    	<if test="revAtt != null">
+    		revAtt = #{revAtt},
+    	</if>
+    	cmcId=#{cmcId},
+		revAttIndex=#{revAttIndex}
+    </insert>
+    
+    <insert id="insertOrUpdateRFPort" parameterType="topCcmtsDorRFPort">
+    	insert into topccmtsdorrfport(cmcId,rfPortIndex,rfPortOutputRFLevel)
+    	values(#{cmcId},#{rfPortIndex},#{rfPortOutputRFLevel})
+    	ON DUPLICATE KEY UPDATE
+    	<if test="rfPortOutputRFLevel != null">
+    		rfPortOutputRFLevel = #{rfPortOutputRFLevel},
+    	</if>
+    	cmcId=#{cmcId},
+		rfPortIndex=#{rfPortIndex}
+    </insert>
+    
+    <insert id="insertOrUpdateRRXOptPow" parameterType="topCcmtsDorRRXOptPow">
+    	insert into topccmtsdorrrxoptpow(cmcId,rrxOptPowIndex,rrxOptPow)
+    	values(#{cmcId},#{rrxOptPowIndex},#{rrxOptPow})
+    	ON DUPLICATE KEY UPDATE
+    	<if test="rrxOptPow != null">
+    		rrxOptPow = #{rrxOptPow},
+    	</if>
+    	cmcId=#{cmcId},
+		rrxOptPowIndex=#{rrxOptPowIndex}
+    </insert>
+    
+    <insert id="insertOrUpdateOpRxInput" parameterType="topCcmtsOpRxInput">
+    	insert into topccmtsoprxinput(cmcId,inputIndex,inputPower)
+    	values(#{cmcId},#{inputIndex},#{inputPower})
+    	ON DUPLICATE KEY UPDATE
+    	<if test="inputPower != null">
+    		inputPower = #{inputPower},
+    	</if>
+    	cmcId=#{cmcId},
+		inputIndex=#{inputIndex}
+    </insert>
+    
+    <insert id="insertOrUpdateOpRxOutput" parameterType="topCcmtsOpRxOutput">
+    	insert into topccmtsoprxoutput
+    	(cmcId,outputIndex,outputControl,configurationOutputRFlevelatt,configurationAGCRg)
+    	values(#{cmcId},#{outputIndex},#{outputControl},#{configurationOutputRFlevelatt},#{configurationAGCRg})
+    	ON DUPLICATE KEY UPDATE
+    	<if test="outputControl != null">
+    		outputControl = #{outputControl},
+    	</if>
+    	<if test="configurationOutputRFlevelatt != null">
+    		configurationOutputRFlevelatt = #{configurationOutputRFlevelatt},
+    	</if>
+    	<if test="configurationAGCRg != null">
+    		configurationAGCRg = #{configurationAGCRg},
+    	</if>
+    	cmcId=#{cmcId},
+		outputIndex=#{outputIndex}
+    </insert>
+</mapper>

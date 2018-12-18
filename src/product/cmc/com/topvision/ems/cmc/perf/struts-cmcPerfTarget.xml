@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcPerfTarget" namespace="/cmc/perfTarget" extends="default">
+		<!-- 添加操作日志拦截器配置  -->
+
+        <!--  重构后的 -->
+        <action name="showCmcPerfManage" class="cmcPerfTargetManageAction" method="showCmcPerfManage" >
+        	<result>/performance/perfTarget/cmcPerfTargetManage.jsp</result>
+        </action>
+       
+        <action name="loadCmcTargetList" class="cmcPerfTargetManageAction" method="loadCmcTargetList" />
+        <action name="loadCmcPerfTarget" class="cmcPerfTargetManageAction" method="loadCmcPerfTarget" />
+        <action name="modifyCmcPerfTarget" class="cmcPerfTargetManageAction" method="modifyCmcPerfTarget" />
+        <action name="saveAsCmcGlobalTarget" class="cmcPerfTargetManageAction" method="saveAsCmcGlobalTarget" />
+        <action name="applyCurrentTargetToAllCmc" class="cmcPerfTargetManageAction" method="applyCurrentTargetToAllCmc" />
+
+        <action name="showCmcGlobalPerfTarget" class="cmcPerfTargetManageAction" method="showCmcGlobalPerfTarget" >
+        	<result>/performance/perfTarget/cmcGlobalPerfTarget.jsp</result>
+        </action>
+        <action name="modifyCmcGlobalTarget" class="cmcPerfTargetManageAction" method="modifyCmcGlobalTarget" />
+        <action name="loadAllArea" class="cmcPerfTargetManageAction" method="loadAllArea" />
+        
+        <action name="saveCmcPerfCollect" class="cmcPerfTargetManageAction" method="saveCmcPerfCollect" />
+        <action name="useCmcGolbalPerf" class="cmcPerfTargetManageAction" method="useCmcGolbalPerf" />
+	</package>
+</struts>

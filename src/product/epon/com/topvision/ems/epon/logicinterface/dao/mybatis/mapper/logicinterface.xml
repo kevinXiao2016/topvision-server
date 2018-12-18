@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.logicinterface.domain.LogicInterface">
+	<insert id="insertLogicInterface" parameterType="logicInterface">
+		insert into oltlogicInterface
+		(entityId,interfaceType,interfaceId,interfaceIndex,interfaceName,
+		interfaceDesc,interfaceAdminStatus,interfaceOperateStatus,interfaceMac
+		)
+		values
+		(#{entityId}, #{interfaceType},#{interfaceId},#{interfaceIndex},#{interfaceName},
+		#{interfaceDesc}, #{interfaceAdminStatus}, #{interfaceOperateStatus},#{interfaceMac}
+		)
+	</insert>
+
+	<insert id="insertInterfaceIpV4Config" parameterType="interfaceIpV4Config">
+		insert into oltInterfaceIpV4Config
+		(entityId,ipV4ConfigIndex,ipV4Addr,ipV4NetMask,ipV4AddrType)
+		values
+		(#{entityId},#{ipV4ConfigIndex},#{ipV4Addr},#{ipV4NetMask},#{ipV4AddrType})
+	</insert>
+
+	<delete id="deleteEntityLogicInterface" parameterType="long">
+		delete from oltlogicInterface where entityId = #{entityId}
+	</delete>
+
+	<delete id="deleteEntityInterfaceIpV4Config" parameterType="long">
+		delete from oltInterfaceIpV4Config where entityId = #{entityId}
+	</delete>
+	
+	<select id="getOltLogicInterfaceByType" parameterType="map" resultType="logicInterface">
+		select * from oltlogicInterface where entityId = #{entityId} and interfaceType = #{interfaceType}
+		<if test="name != null">
+			and (interfaceName like '%${name}%' or interfaceDesc like '%${name}%')
+		</if>
+		<if test="interfaceAdminStatus != null">
+			and interfaceAdminStatus = #{interfaceAdminStatus}
+		</if>
+		<if test="interfaceOperateStatus != null">
+			and interfaceOperateStatus = #{interfaceOperateStatus}
+		</if>
+		<if test="sortName != null and sortDir != null">
+            order by ${sortName} ${sortDir}
+        </if>
+        <if test="sortName == null and sortDir == null">
+            order by interfaceId ASC 
+        </if>
+        <if test="start != null and start != null">
+			limit ${start} , ${start}
+		</if>
+	</select>
+	
+	<select id="getOltLogicInterfaceByTypeCount" parameterType="map" resultType="int">
+		select count(*) from oltlogicInterface where entityId = #{entityId} and interfaceType = #{interfaceType}
+		<if test="name != null">
+			and (interfaceName like '%${name}%' or interfaceDesc like '%${name}%')
+		</if>
+		<if test="interfaceAdminStatus != null">
+			and interfaceAdminStatus = #{interfaceAdminStatus}
+		</if>
+		<if test="interfaceOperateStatus != null">
+			and interfaceOperateStatus = #{interfaceOperateStatus}
+		</if>
+	</select>
+	
+	<select id="getOltLogicInterface" parameterType="map" resultType="logicInterface">
+		select * from oltlogicInterface where entityId = #{entityId} and interfaceType = #{interfaceType} and interfaceId = #{interfaceId}
+	</select>
+	
+	<update id="updateLogicInterface" parameterType="logicInterface">
+		update oltlogicInterface set interfaceDesc = #{interfaceDesc}
+		<if test="interfaceAdminStatus != null">
+			, interfaceAdminStatus = #{interfaceAdminStatus}
+		</if>
+		where entityId = #{entityId} and interfaceType = #{interfaceType} and interfaceId = #{interfaceId}
+	</update>
+	
+	<delete id="deleteLogicInterface" parameterType="map">
+		delete from oltlogicInterface where entityId = #{entityId} and interfaceType = #{interfaceType} and interfaceId = #{interfaceId}
+	</delete>
+	
+	<delete id="deleteIpV4ConfigByInterface" parameterType="map">
+		delete from oltInterfaceIpV4Config where entityId = #{entityId} and ipV4ConfigIndex in (select interfaceIndex from oltlogicInterface where interfaceType = #{interfaceType} and interfaceId = #{interfaceId})
+	</delete>
+	
+	<select id="getInterfaceIpList" parameterType="map" resultType="interfaceIpV4Config">
+		select * from oltInterfaceIpV4Config where entityId = #{entityId} and ipV4ConfigIndex = #{ipV4ConfigIndex}
+		<if test="sortName != null and sortDir != null">
+            order by ${sortName} ${sortDir}
+        </if>
+        <if test="sortName == null and sortDir == null">
+            order by ipV4AddrType ASC
+        </if>
+	</select>
+	
+	<select id="getInterfaceIpV4Config" parameterType="map" resultType="interfaceIpV4Config">
+		select * from oltInterfaceIpV4Config where entityId = #{entityId} and ipV4ConfigIndex = #{ipV4ConfigIndex} and ipV4Addr = #{ipV4Addr}
+	</select>
+	
+	<delete id="deleteInterfaceIpV4Config" parameterType="map">
+		delete from oltInterfaceIpV4Config where entityId = #{entityId} and ipV4ConfigIndex = #{ipV4ConfigIndex} and ipV4Addr = #{ipV4Addr}
+	</delete>
+	
+	<delete id="deletePriIpV4Config" parameterType="map">
+		delete from oltInterfaceIpV4Config where entityId = #{entityId} and ipV4ConfigIndex = #{ipV4ConfigIndex} and ipV4AddrType = 0
+	</delete>
+</mapper>

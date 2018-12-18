@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cm.cmhistory.domain.CmHistoryShow">
+	<select id="selectCmHistoryList" parameterType="map" resultType="cmHistoryShow">
+		select 
+			* 
+		from 
+			cmhistory
+		where
+			cmId = #{cmId}
+		and
+			collecttime <![CDATA[>]]> #{startTime}
+		and
+			collecttime <![CDATA[<]]> #{endTime}
+		order by collecttime desc
+	</select>
+	
+	<insert id="insertCmHistory" parameterType="cmHistory">
+		INSERT INTO cmHistory(
+				cmId,
+				collectTime,
+ 				statusValue,
+ 				checkStatus,
+ 				upChannelId,
+  				downChannelId,
+				upChannelFreq,
+				downChannelFreq,
+				upRecvPower,
+				upSnr,
+				downSnr,
+				upSendPower,
+				downRecvPower
+		)
+		VALUES(
+			#{cmId}, 
+			#{collectTime}, 
+			#{statusValue},  
+			#{checkStatus},  
+			#{upChannelId},  
+			#{downChannelId},  
+			#{upChannelFreq},  
+			#{downChannelFreq},  
+			#{upRecvPower},  
+			#{upSnr},
+			#{downSnr},  
+			#{upSendPower},
+			#{downRecvPower}
+		);
+	</insert>
+</mapper>

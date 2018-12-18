@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<report id="CM">
+    <induction>Resource</induction>
+	<title>CM REPORT</title>
+	<lazyLoad>true</lazyLoad>
+	<topLevel>true</topLevel>
+	<linkReport>linkId</linkReport>
+	<columns>
+		<column id="topoFolder">
+			<name>i18N.topoFolder</name>
+			<width>100</width>
+		</column>
+		<column id="oltName">
+			<name>i18N.oltName</name>
+			<width>110</width>
+		</column>
+		<column id="oltIp">
+			<name>i18N.oltIp</name>
+			<width>120</width>
+			<link>true</link>
+		</column>
+		<column id="ponIndexStr">
+			<name>i18N.ponIndexStr</name>
+			<width>130</width>
+		</column>
+		<column id="ccmtsName">
+			<name>i18N.ccmtsName</name>
+			<width>140</width>
+		</column>
+		<column id="onlineCm">
+			<name>i18N.onlineCm</name>
+			<width>150</width>
+		</column>
+		<column id="offlineCm">
+			<name>i18N.offlineCm</name>
+			<width>160</width>
+		</column>
+		<column id="otherCm">
+			<name>i18N.otherCm</name>
+			<width>170</width>
+		</column>
+		<column id="allCm">
+			<name>i18N.allCm</name>
+			<width>180</width>
+		</column>
+	</columns>
+	<skeleton>
+		<node key="folderId">
+			<names>
+				<name>topoFolder</name>
+			</names>
+			<groups relative="topoFolder" displayName="i18N.AllAggregate">
+				<group>onlineCm</group>
+				<group>offlineCm</group>
+				<group>otherCm</group>
+				<group>allCm</group>
+			</groups>
+			<node key="entityId">
+				<names>
+					<name>oltName</name>
+					<name>oltIp</name>
+				</names>
+				<groups relative="oltName" displayName="i18N.partAggregate">
+					<group>onlineCm</group>
+					<group>offlineCm</group>
+					<group>otherCm</group>
+					<group>allCm</group>
+				</groups>
+				<node key="ponIndex">
+					<names>
+						<name>ponIndexStr</name>
+					</names>
+					<node key="ccIndex">
+						<names>
+							<name>ccmtsName</name>
+							<name>onlineCm</name>
+							<name>offlineCm</name>
+							<name>otherCm</name>
+							<name>allCm</name>
+						</names>
+					</node>
+				</node>
+			</node>
+		</node>
+	</skeleton>
+	<conditions>
+		<startTime>true</startTime>
+		<endTime>true</endTime>
+		<sortColumns>
+			<column dataIndex="allCm" displayName="i18N.allCm" sorted="true"></column>
+			<column dataIndex="allCm1" displayName="i18N.allCm1"></column>
+			<column dataIndex="allCm2" displayName="i18N.allCm2"></column>
+			<column dataIndex="allCm3" displayName="i18N.allCm3"></column>
+		</sortColumns>
+		<displayColumns>
+			<column dataIndex="allCm" displayName="i18N.allCm" displayed="true"></column>
+			<column dataIndex="allCm1" displayName="i18N.allCm1" displayed="true"></column>
+			<column dataIndex="allCm2" displayName="i18N.allCm2" displayed="true"></column>
+			<column dataIndex="allCm3" displayName="i18N.allCm3" displayed="true"></column>
+		</displayColumns>
+		<deviceType>
+			<column value="30001" displayName="i18N.8800A"></column>
+			<column value="30002" displayName="i18N.8800B"></column>
+			<column value="30003" displayName="i18N.8800C"></column>
+			<column value="30004" displayName="i18N.8800D"></column>
+			<column value="30005" displayName="i18N.8800E"></column>
+		</deviceType>
+	</conditions>
+</report>

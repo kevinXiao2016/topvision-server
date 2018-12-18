@@ -1,0 +1,209 @@
+/*body {
+	SCROLLBAR-HIGHLIGHT-COLOR: buttonface;
+	SCROLLBAR-SHADOW-COLOR: buttonface;
+	SCROLLBAR-3DLIGHT-COLOR: buttonhighlight;
+	SCROLLBAR-TRACK-COLOR: #eeeeee;
+	SCROLLBAR-DARKSHADOW-COLOR: buttonshadow
+}*/
+
+.POPUP_WND {
+	background: #f0f0f0;
+}
+
+.checkedItem {
+	background: url(menu/checked.gif) no-repeat;
+}
+
+
+.BUTTON75 {
+	BACKGROUND: url(button75.gif) 0 0;
+}
+
+.BUTTON_OVER75 {
+	BACKGROUND: url(button75.gif) 0 -21px;
+}
+
+.BUTTON_PRESSED75 {
+	BACKGROUND: url(button75.gif) 0 -42px;
+}
+
+.BUTTON95 {
+	BACKGROUND: url(button95.gif) 0 0;
+}
+
+.BUTTON_OVER95 {
+	BACKGROUND: url(button95.gif) 0 -21px;
+}
+
+.BUTTON_PRESSED95 {
+	BACKGROUND: url(button95.gif) 0 -42px;
+}
+
+.BUTTON120 {
+	BACKGROUND: url(button120.gif) 0 0;
+}
+
+.BUTTON_OVER120 {
+	BACKGROUND: url(button120.gif) 0 -21px;
+}
+
+.BUTTON_PRESSED120 {
+	BACKGROUND: url(button120.gif) 0 -42px;
+}
+
+.NAVI_SEPARATOR {
+	background: #e0e0e0;
+}
+
+.NAVI_BAR td {
+	border-bottom: 1px solid #d0d0d0;
+}
+
+.NAVI_BAR_OVER td {
+	border-bottom: 1px solid #d0d0d0;
+}
+
+.NAVI_BAR_PRESSED td {
+	border-bottom: 1px solid #d0d0d0;
+}
+
+.NAVI_BAR_SELECTED td {
+	border-bottom: 1px solid #d0d0d0;
+}
+
+.NAVI_BT_CONTAINER {
+	background: #DFE8F6;
+}
+
+.NAVI_DIVIDER {
+	background: #E3EFFF;
+	border-top: 1px solid #d0d0d0;
+	border-bottom: 1px solid #d0d0d0;
+}
+
+.NAVI_DIVIDER_OVER {
+	background: #E3EFFF;
+	border-top: 1px solid #d0d0d0;
+	border-bottom: 1px solid #d0d0d0;
+}
+
+.row-selected {
+	color: white;
+	background-color: #316AC5;
+}
+
+.row-unselected {
+	color: black;
+}
+
+.progress-container {
+	border: solid 1px #d0d0d0
+}
+
+.discovery-container {
+	border: solid 1px #d0d0d0;
+}
+
+.PAGING_TOOLBAR {
+	border-top: solid 1px #d0d0d0;
+}
+
+.TREE-CONTAINER {
+	border: 1px solid #d0d0d0;
+}
+
+.PANEL-CONTAINER {
+	border: 1px solid #d0d0d0;
+}
+
+#topoMap .ui-unselecting {
+	color: black;
+	padding: 5px;
+}
+
+#topoMap .ui-selecting {
+	color: black;
+	padding: 5px;
+}
+
+#topoMap .ui-selected {
+	padding: 2px;
+	border: 3px solid #316AC5
+}
+
+#topoMap .ui-selected span {
+	color: white;
+	background-color: #316AC5;
+}
+
+#entityMap .ui-selected {
+	padding: 2px;
+	border: 3px solid #316AC5;
+}
+
+#entityMap .ui-selected span {
+	color: white;
+	background-color: #316AC5;
+}
+
+#monitorMap div a {
+	COLOR: #00156E;
+	TEXT-DECORATION: none
+}
+
+#monitorMap div a:hover {
+	COLOR: #00156E;
+	TEXT-DECORATION: underline
+}
+
+#monitorMap .ui-selecting {
+	padding: 2px;
+	border: 3px solid #316AC5;
+}
+
+#monitorMap .ui-selected {
+	padding: 2px;
+	border: 3px solid #316AC5
+}
+
+.monitor-icon {
+	background: url(gui_bg.gif) 0 0 repeat-x;
+	border: 1px solid #CEBD8B;
+	width: 180px;
+	margin-bottom: 2px;
+	height: 100px
+}
+
+/* dhtmlx */
+.selectedTreeRow {
+	background-color: #316AC5;
+	color: #FFFFFF;
+}
+
+.dhx_combo_list {
+	height: 200px;
+}
+
+.dhx_combo_list_rtl {
+	height: 200px;
+}
+
+.dhx_selected_option {
+	background-color: #316AC5;
+	color: #FFFFFF;
+}
+
+.cs_CustomColorAdd_Mini {
+	height: 21px;
+	background: url(button155.gif) 0 0;
+}
+
+.cs_ButtonOk {
+	background: url(button75.gif) 0 0;
+	height: 21px;
+}
+
+.cs_ButtonCancel {
+	background: url(button75.gif) 0 0;
+	height: 21px;
+}

@@ -1,0 +1,63 @@
+body,html{ height:100%; width:100%; overflow:hidden;}
+.outerTab{ height:24px; overflow:hidden; border-bottom:0px solid #ccc; width:100%; background: url(../images/grayDot.gif) repeat-x 0px 23px;}
+.tab{ padding:4px 10px 4px; border:1px solid #ccc; border-bottom:none; height:15px; overflow:hidden; float:left; background:url(../images/myTabWithoutSel.gif) repeat-x;}
+.tab:hover{ color:#0267B7; background:#f9f9f9 url(../images/myTab.gif) repeat-x;}
+a.tabSel{ background:#fff; font-weight:bolder; color:#0267B7; cursor:default; background:#f9f9f9 url(../images/myTab.gif) repeat-x;}
+.putConfigTable, .putSoundTable{ padding-top:10px; clear:both; height:320px; overflow:auto;}
+
+#changeSoundPage, #uploadPage{ width:100%; height:100%; background:#F7F7F7; position:absolute; top:0; left:0; z-index:2; overflow:auto; display:none;}
+.putSelSoundTable{ height:350px; overflow:auto;}
+a.singleBox{ width:13px; height:13px; display:block; overflow:hidden; background:url(../images/radio.gif) no-repeat;}
+td a.singleBox:hover{ background:url(../images/radio.gif) no-repeat -13px 0px;}
+a.singleBoxSelected{ background:url(../images/radio.gif) no-repeat 0px -13px; cursor:default;}
+td a.singleBoxSelected:hover{ background:url(../images/radio.gif) no-repeat 0px -13px;}
+tr.blueBg, .dataTable tr.blueBg{ background:#CCE3FF;}
+
+.dataTable tr.flashTr{ 
+	-webkit-animation: flash 1.5s ease-in-out 1 forwards;
+	   -moz-animation: flash 1.5s ease-in-out 1 forwards;
+		 -o-animation: flash 1.5s ease-in-out 1 forwards;
+			animation: flash 1.5s ease-in-out 1 forwards;	
+}
+/*闪烁3次*/
+@-webkit-keyframes flash{
+	0%,30%,60%,90%{ background:#CCE3FF;}
+	15%,45%,75%,100%{background:transparent;}
+}
+@-moz-keyframes flash{
+	0%,30%,60%,90%{ background:#CCE3FF;}
+	15%,45%,75%,100%{background:transparent;}
+}
+@-o-keyframes flash{
+	0%,30%,60%,90%{ background:#CCE3FF;}
+	15%,45%,75%,100%{background:transparent;}
+}
+@-keyframes flash{
+	0%,30%,60%,90%{ background:#CCE3FF;}
+	15%,45%,75%,100%{background:transparent;}
+}
+.redTips{ position: absolute; top:10px; right:10px; color:#fff; background:#d9534f; padding:4px 10px; -moz-border-radius: .25em; -webkit-border-radius: .25em; -o-border-radius: .25em;
+    -ms-border-radius: .25em;border-radius: .25em;
+}
+.flashTxt{
+	-webkit-animation: tipShake 1.0s ease-in-out infinite alternate;
+	   -moz-animation: tipShake 1.0s ease-in-out infinite alternate;
+		 -o-animation: tipShake 1.0s ease-in-out infinite alternate;
+			animation: tipShake 1.0s ease-in-out infinite alternate;
+}
+@-webkit-keyframes tipShake{
+	0%{color:#fff;}
+	100%{color:#f0ad4e;}
+}
+@-moz-keyframes tipShake{
+	0%{color:#fff;}
+	100%{color:#f0ad4e;}
+}
+@-o-keyframes tipShake{
+	0%{color:#fff;}
+	100%{color:#f0ad4e;}
+}
+@keyframes tipShake{
+	0%{color:#fff;}
+	100%{color:#f0ad4e;}
+}

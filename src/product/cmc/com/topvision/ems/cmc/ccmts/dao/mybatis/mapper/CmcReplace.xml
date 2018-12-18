@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.ccmts.domain.CmcReplaceEntry">
+
+	<select id="getOnuMacListByEntityId" parameterType="long"
+		resultType="entity">
+		select
+		entity.name,entity.mac,entity.typeId,oltonurelation.onuIndex
+		location from entity,
+		oltonuattribute,
+		oltonurelation where
+		entity.entityId=oltonuattribute.onuId and oltonuattribute.onuId =
+		oltonurelation.onuId and
+		oltonurelation.entityId = #{entityId}
+	</select>
+
+
+	<select id="getCmcAttributeByMacAddress" parameterType="map"
+		resultType="cmcAttribute">
+		select * from cmcattribute where topCcmtsSysMacAddr=#{mac}
+		and cmcId in (select cmcId from cmcentityrelation where
+		cmcEntityId=#{entityId})
+	</select>
+
+	<update id="updateCmcMac" parameterType="cmcAttribute">
+		update cmcattribute
+		set
+		topCcmtsSysMacAddrLong = #{topCcmtsSysMacAddrLong},
+		topCcmtsSysMacAddr
+		= #{topCcmtsSysMacAddr} where cmcId = #{cmcId}
+	</update>
+
+	<update id="updateEntityMac" parameterType="map">
+		update entity set mac
+		= #{mac} where entityId = #{entityId}
+	</update>
+
+	<update id="updateOnuMacAndStatus" parameterType="map">
+		update
+		oltOnuAttribute
+		set onuMac=#{mac},
+		onuMacAddress=#{macLong},
+		onuOperationStatus=#{status}
+		where onuId=#{onuId}
+	</update>
+
+
+	<select id="loadCmcReplaceList" parameterType="long" resultType="cmcReplaceInfo">
+		select
+		a.entityId,a.name,a.ip entityIp, a.sysName entityName, a.mac
+		mac, c.state
+		status, d.topCcmtsSysSwVersion
+		softVersion, a.createTime
+		from entity a,
+		entity b, entitysnap c, cmcattribute d
+		where a.typeId =
+		b.typeId and
+		a.entityId = c.entityId and a.entityId =
+		d.cmcId and
+		b.entityId =
+		#{entityId} order by createTime desc
+	</select>
+
+
+</mapper>

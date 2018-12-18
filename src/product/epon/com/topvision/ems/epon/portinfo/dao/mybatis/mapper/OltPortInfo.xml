@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.portinfo.domain.OltPortOpticalInfo">
+    
+	<select id="querySniOpticalInfo" parameterType="long" resultType="OltPortOpticalInfo">
+	    SELECT A.entityId, A.sniId as portId, A.sniPortName AS portName, A.sniOperationStatus as operationStatus, A.sniAdminStatus AS adminStatus, A.sniMediaType AS portType,
+	    A.sniAutoNegotiationMode AS autoNegoMode, A.topSniAttrFlowCtrlEnable AS flowCtrlEnable, A.topSniAttrIngressRate AS upLimitRate, A.topSniAttrEgressRate AS downLimitRate, A.sniDisplayName AS portLocation, 
+	    A.sniPerfStats15minuteEnable AS perfStats, C.slotId, C.sniIndex AS portIndex, D.topSysBdPreConfigType AS slotType, B.vendorName, B.vendorPN, B.vendorsN, 
+	    B.workingTemp, B.workingVoltage, B.biasCurrent, B.txPower, B.rxPower, B.waveLength, B.identifier, B.inCurrentRate, B.outCurrentRate, B.modifyTime
+		FROM oltsniattribute A 
+		JOIN oltsnirelation C ON A.entityId = C.entityId and A.sniId = C.sniId 
+		JOIN oltslotattribute D ON C.entityId = D.entityId and C.slotId = D.slotId
+		LEFT JOIN oltsnioptical B ON A.entityId = B.entityId and A.sniId = B.sniId 
+		WHERE A.entityId = #{entityId}
+		ORDER BY C.sniIndex
+	</select>
+	
+	<select id="queryPonOpticalInfo" parameterType="long" resultType="OltPortOpticalInfo">
+		SELECT A.entityId, A.ponId AS portId, A.ponOperationStatus AS operationStatus, A.ponPortAdminStatus AS adminStatus, 
+		A.maxDsBandwidth AS downLimitRate, A.maxUsBandwidth AS upLimitRate,A.perfStats15minuteEnable AS perfStats,A.ponPortType AS portType,
+		B.slotId, B.ponIndex AS portIndex, C.topSysBdPreConfigType AS slotType, D.vendorName, D.vendorPN, D.vendorsN, D.workingTemp, D.workingVoltage, D.biasCurrent, 
+		D.txPower, D.rxPower, D.waveLength, D.identifier, D.inCurrentRate, D.outCurrentRate, D.modifyTime 
+		FROM oltponattribute A
+		JOIN oltponrelation B ON A.entityId = B.entityId and A.ponId = B.ponId
+		JOIN oltslotattribute C ON B.entityId = C.entityId and B.slotId = C.slotId
+		LEFT JOIN oltponoptical D ON A.entityId = D.entityId and A.ponId = D.ponId
+		WHERE A.entityId = #{entityId}
+		ORDER BY B.ponIndex   
+	</select>
+	
+	<update id="updateSniOpticalInfo" parameterType="OltPortOpticalInfo">
+	    UPDATE oltsnioptical 
+	    SET vendorName = #{vendorName}, vendorPN = #{vendorPN}, vendorsN = #{vendorSN}, workingTemp = #{workingTemp}, workingVoltage = #{workingVoltage}, 
+	    biasCurrent = #{biasCurrent}, txPower = #{txPower}, rxPower = #{rxPower}, waveLength = #{waveLength}, identifier = #{identifier},  
+	    inCurrentRate = #{inCurrentRate}, outCurrentRate = #{outCurrentRate}
+	    WHERE entityId = #{entityId} and sniId = #{portId}
+	</update>
+	
+	<update id="updatePonOpticalInfo" parameterType="OltPortOpticalInfo">
+	    UPDATE oltponoptical 
+	    SET vendorName = #{vendorName}, vendorPN = #{vendorPN}, vendorsN = #{vendorSN}, workingTemp = #{workingTemp}, workingVoltage = #{workingVoltage}, 
+	    biasCurrent = #{biasCurrent}, txPower = #{txPower}, rxPower = #{rxPower}, waveLength = #{waveLength}, identifier = #{identifier},  
+	    inCurrentRate = #{inCurrentRate}, outCurrentRate = #{outCurrentRate}
+	    WHERE entityId = #{entityId} and ponId = #{portId}
+	</update>
+	
+	<select id="queryOltSniList" parameterType="long" resultType="OltSniOptical">
+	    SELECT entityId, sniId, sniIndex AS portIndex
+		FROM oltsnirelation
+		WHERE entityId = #{entityId}
+	</select>
+	
+	<select id="queryOltPonList" parameterType="long" resultType="OltPonOptical">
+		SELECT A.entityId, A.ponId, A.ponIndex AS portIndex,B.ponPortType portType
+		FROM oltponrelation A  left join oltponAttribute b on A.ponId = B.ponId
+		WHERE A.entityId = #{entityId}
+	</select>
+	
+</mapper> 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="realtime" namespace="/realtime" extends="default">
+        <action name="showPortFlowInfo" class="portRealAction" method="showPortFlowInfo">
+            <result>/network/portFlowRealData.jsp</result>
+            <result name="applet">
+                /network/portFlowRealData_.jsp
+			</result>
+        </action>
+        <action name="showPortRealSingleInfo" class="portRealAction" method="showPortRealSingleInfo">
+            <result>/network/portFlowRealSingleInfo.jsp</result>
+        </action>
+        <action name="showPortRealCompareInfo" class="portRealAction" method="showPortRealCompareInfo">
+            <result>/network/portFlowRealCompareInfo.jsp</result>
+        </action>
+        <action name="getPortRealDataByEntity" class="portRealAction" method="getPortRealDataByEntity" />
+
+        <action name="showLinkRealFlowJsp" class="linkRealFlowAction" method="showLinkRealFlowJsp">
+            <result>/network/linkRealFlow.jsp</result>
+            <result name="applet">/network/linkRealFlow_.jsp</result>
+        </action>
+        <action name="showLinkRealFlow" class="linkRealFlowAction" method="showLinkRealFlow" />
+
+        <action name="loadMibInfo" class="entityMibAction" method="loadMibInfo" />
+        <action name="showEntityMibJsp" class="entityMibAction" method="showEntityMibJsp">
+            <result>/network/entityMib.jsp</result>
+        </action>
+    </package>
+</struts>

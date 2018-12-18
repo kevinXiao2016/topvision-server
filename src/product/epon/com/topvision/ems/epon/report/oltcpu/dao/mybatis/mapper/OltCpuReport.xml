@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.report.domain.OltCpuReport">
+
+	<select id="getEponCpuRank" resultType="com.topvision.ems.epon.domain.PerforamanceRank"
+		parameterType="map">
+		select
+			s.entityId,s.cpu,s.snapTime,e.ip,e.name
+		from
+			entitySnap s , entity e
+		where
+			s.entityId=e.entityId
+			and e.typeId in (select typeId from entityTypeRelation where type = #{type} )
+			and e.entityId in (select entityId from ${Authority})
+		order by s.cpu desc
+	</select>
+
+</mapper>

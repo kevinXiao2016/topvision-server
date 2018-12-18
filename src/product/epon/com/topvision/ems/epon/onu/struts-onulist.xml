@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="onulist" namespace="/onulist" extends="default">
+		<action name="showOnuDeviceView" class="onuDeviceAction" method="showOnuDeviceView">
+			<result>/epon/onuDeviceView.jsp</result>
+		</action>
+		<action name="showOnuLinkView" class="onuLinkAction" method="showOnuLinkView">
+			<result>/epon/onuLinkView.jsp</result>
+		</action>
+		<action name="showEponOnuBusinessView" class="eponOnuBusinessAction" method="showEponOnuBusinessView">
+			<result>/epon/eponOnuBusiness.jsp</result>
+		</action>
+		<action name="showGponOnuBusinessView" class="gponOnuBusinessAction" method="showGponOnuBusinessView">
+			<result>/gpon/gponOnuBusiness.jsp</result>
+		</action>
+		<action name="queryOnuDeviceList" class="onuDeviceAction" method="queryOnuDeviceList"> </action>
+		<action name="queryEponOnuBusinessList" class="eponOnuBusinessAction" method="queryEponOnuBusinessList"> </action>
+		<action name="queryOnuLinkList" class="onuLinkAction" method="queryOnuLinkList"> </action>
+		<action name="queryGponOnuBusinessList" class="gponOnuBusinessAction" method="queryGponOnuBusinessList"> </action>
+		<action name="loadOnuLocationInfo" class="onuListAction" method="loadOnuLocationInfo"> </action>
+		<action name="refreshOnuInfo" class="onuListAction" method="refreshOnuInfo"> </action>
+		<action name="saveOnuTagRelation" class="onuListAction" method="saveOnuTagRelation"> </action>
+		<action name="showOnuTagView" class="onuListAction" method="showOnuTagView"> 
+			<result>/epon/onu/onuTagView.jsp</result>
+		</action>
+		<action name="showWifiPasswordModifyView" class="onuListAction" method="showWifiPasswordModifyView"> 
+			<result>/epon/onu/wifiPasswordModifyView.jsp</result>
+		</action>
+		<action name="modifyWifiPassord" class="onuListAction" method="modifyWifiPassord"> </action>
+		<action name="showWanPasswordModifyView" class="onuListAction" method="showWanPasswordModifyView"> 
+			<result>/epon/onu/wanPasswordModifyView.jsp</result>
+		</action>
+		<action name="modifyWanPPPoEPassord" class="onuListAction" method="modifyWanPPPoEPassord"> </action>
+	</package>
+</struts>

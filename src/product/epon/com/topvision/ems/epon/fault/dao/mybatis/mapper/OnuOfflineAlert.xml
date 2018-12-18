@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.fault.domain.OnuOfflineAlarm">
+	<insert id="insertOnuOfflineAlarm" parameterType="onuOfflineAlarm">
+		INSERT INTO onuofflinealarm(entityId,mac,onuIndex,alertType,onuType,onuAlias,message,firetime)
+		VALUES(#{entityId},#{mac},#{onuIndex},#{alertType},#{onuType},#{onuAlias},#{message},#{fireTime})
+	</insert>
+</mapper>

@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.dhcp.domain.DhcpRelay">
+
+	<!-- *********************************Select Begin************************************ -->
+	<select id="getDhcpRelaySwitch" parameterType="long" resultType="int">
+		select
+		topCcmtsDhcpRelaySwitch
+		from oltdhcprelaybaseconfig
+		where entityId
+		= #{entityId}  
+    </select>
+	<select id="getDhcpBundle" parameterType="map" resultType="dhcpBundle">
+		select
+		entityId,topCcmtsDhcpBundleInterface,topCcmtsDhcpBundlePolicy,cableSourceVerify,
+		virtualPrimaryIpAddr, virtualPrimaryIpMask, topCcmtsDhcpBundleVlanMap
+		from oltdhcpbundle
+		where entityId = #{entityId} and
+		topCcmtsDhcpBundleInterface =
+		#{topCcmtsDhcpBundleInterface}    
+    </select>
+	<select id="getDhcpBundleList" parameterType="long" resultType="dhcpBundle">
+		select
+		entityId,topCcmtsDhcpBundleInterface,topCcmtsDhcpBundlePolicy,cableSourceVerify,
+		virtualPrimaryIpAddr, virtualPrimaryIpMask,topCcmtsDhcpBundleVlanMap
+		from oltdhcpbundle
+		where entityId = #{entityId}
+    </select>
+	<select id="getDhcpServer" parameterType="map" resultType="dhcpServerConfig">
+		select
+		entityId,helperId,topCcmtsDhcpBundleInterface,topCcmtsDhcpHelperDeviceType,
+		topCcmtsDhcpHelperIndex,topCcmtsDhcpHelperIpAddr, deviceTypeStr
+		from
+		oltdhcpserverconfig
+		where entityId = #{entityId} and helperId =
+		#{helperId}
+    </select>
+	<select id="getDhcpServerList" parameterType="map" resultType="dhcpServerConfig">
+		select
+		entityId,helperId,topCcmtsDhcpBundleInterface,topCcmtsDhcpHelperDeviceType,
+		topCcmtsDhcpHelperIndex,topCcmtsDhcpHelperIpAddr, deviceTypeStr
+		from
+		oltdhcpserverconfig
+		where entityId = #{entityId} 
+		<if test="topCcmtsDhcpBundleInterface != null and topCcmtsDhcpBundleInterface != ''">
+                and topCcmtsDhcpBundleInterface =
+                #{topCcmtsDhcpBundleInterface}
+        </if>
+        <if test="deviceType != null and deviceType != ''">           
+                and topCcmtsDhcpHelperDeviceType =
+                #{deviceType}
+        </if>
+        <if test="deviceTypeStr != null and deviceTypeStr != ''">    
+                and (deviceTypeStr =
+                #{deviceTypeStr}
+                OR 
+                deviceTypeStr='ALL'
+                )
+        </if>
+	</select>
+	<select id="getDhcpServerIndex" parameterType="map" resultType="int">
+		select
+		topCcmtsDhcpHelperIndex
+		from
+		oltdhcpserverconfig
+		where
+		entityId =
+		#{entityId} and topCcmtsDhcpBundleInterface =
+		#{topCcmtsDhcpBundleInterface}
+		AND topCcmtsDhcpHelperDeviceType =
+		#{deviceType}
+		ORDER BY topCcmtsDhcpHelperIndex ASC    
+    </select>
+	<select id="getDhcpGiAddrList" parameterType="map" resultType="dhcpGiAddr">
+		select
+		a.entityId,a.giAddrId,a.topCcmtsDhcpBundleInterface,a.topCcmtsDhcpGiAddrDeviceType,a.topCcmtsDhcpGiAddress,
+		b.topCcmtsDhcpIntIpMask AS topCcmtsDhcpGiAddrMask, a.deviceTypeStr
+		from
+		oltdhcpgiaddrconfig a left join oltDhcpIntIpTable b on
+		a.topCcmtsDhcpGiAddress =
+		b.topCcmtsDhcpIntIpAddr
+		AND a.entityId =
+		b.entityId
+		where a.entityId = #{entityId}
+		<if test="topCcmtsDhcpBundleInterface != null and topCcmtsDhcpBundleInterface != ''">
+			and a.topCcmtsDhcpBundleInterface =
+			#{topCcmtsDhcpBundleInterface}
+        </if>
+		<if
+			test="topCcmtsDhcpGiAddrDeviceType != null and topCcmtsDhcpGiAddrDeviceType != ''">
+			and a.topCcmtsDhcpGiAddrDeviceType =
+			#{topCcmtsDhcpGiAddrDeviceType}
+		</if>
+		<if test="deviceTypeStr != null and deviceTypeStr != ''">
+			and a.deviceTypeStr =
+			#{deviceTypeStr}
+        </if>
+	</select>
+	<select id="getDhcpGiAddrByMap" parameterType="map" resultType="dhcpGiAddr">
+		select
+		entityId,giAddrId,topCcmtsDhcpBundleInterface,topCcmtsDhcpGiAddrDeviceType,
+		topCcmtsDhcpGiAddress,topCcmtsDhcpGiAddrMask, deviceTypeStr
+		from
+		oltdhcpgiaddrconfig
+		where entityId = #{entityId} and
+		topCcmtsDhcpBundleInterface =
+		#{topCcmtsDhcpBundleInterface} 
+		<if
+			test="topCcmtsDhcpGiAddrDeviceType != null and topCcmtsDhcpGiAddrDeviceType != ''">
+			and topCcmtsDhcpGiAddrDeviceType =
+			#{topCcmtsDhcpGiAddrDeviceType}
+        </if>
+		<if test="deviceTypeStr != null and deviceTypeStr != ''">
+			and deviceTypeStr
+			=
+			#{deviceTypeStr}
+       </if>
+	</select>
+	<select id="getDhcpIntIpList" parameterType="long" resultType="dhcpIntIp">
+		select entityId,
+		topCcmtsDhcpBundleInterface,
+		topCcmtsDhcpIntIpIndex,
+		topCcmtsDhcpIntIpAddr,
+		topCcmtsDhcpIntIpMask
+		from oltDhcpIntIpTable
+		where entityId = #{entityId}
+    </select>
+	<select id="getDhcpIntIpListByMap" parameterType="map"
+		resultType="dhcpIntIp">
+		select entityId,
+		topCcmtsDhcpBundleInterface,
+		topCcmtsDhcpIntIpIndex,
+		topCcmtsDhcpIntIpAddr,
+		topCcmtsDhcpIntIpMask
+		from oltDhcpIntIpTable
+		where
+		entityId = #{entityId} AND
+		topCcmtsDhcpBundleInterface=#{topCcmtsDhcpBundleInterface}
+		<if test="topCcmtsDhcpIntIpAddr != null and topCcmtsDhcpIntIpAddr != ''">
+			and topCcmtsDhcpIntIpAddr =
+			#{topCcmtsDhcpIntIpAddr}
+        </if>
+	</select>
+	<select id="getDhcpOption60List" parameterType="map" resultType="dhcpOption60">
+		select
+		entityId,option60Id,topCcmtsDhcpBundleInterface,topCcmtsDhcpOption60DeviceType,
+		topCcmtsDhcpOption60Index,topCcmtsDhcpOption60Str, deviceTypeStr
+		from
+		oltdhcpOption60
+		where entityId = #{entityId}
+		<if
+			test="topCcmtsDhcpBundleInterface != null and topCcmtsDhcpBundleInterface != ''">
+			and topCcmtsDhcpBundleInterface =
+			#{topCcmtsDhcpBundleInterface}
+		</if>
+		<if test="deviceType != null and deviceType != ''">
+			and topCcmtsDhcpOption60DeviceType =
+			#{deviceType}
+		</if>
+		<if test="deviceTypeStr != null and deviceTypeStr != ''">
+			and deviceTypeStr =
+			#{deviceTypeStr}
+		</if>
+	</select>
+	<select id="getDhcpOption60" parameterType="map" resultType="dhcpOption60">
+		select
+		entityId,option60Id,topCcmtsDhcpBundleInterface,topCcmtsDhcpOption60DeviceType,
+		topCcmtsDhcpOption60Index,topCcmtsDhcpOption60Str, deviceTypeStr
+		from
+		oltdhcpOption60
+		where entityId = #{entityId} and option60Id =
+		#{option60Id}
+    </select>
+	<select id="getDhcpOption60Index" parameterType="map"
+		resultType="int">
+		select
+		topCcmtsDhcpOption60Index
+		from
+		oltdhcpOption60
+		where
+		entityId =
+		#{entityId} and topCcmtsDhcpBundleInterface =
+		#{topCcmtsDhcpBundleInterface}
+		AND topCcmtsDhcpOption60DeviceType =
+		#{deviceType}
+		<if test="deviceType != null and deviceType != ''">
+			and topCcmtsDhcpOption60DeviceType =
+			#{deviceType}
+		</if>
+		<if test="deviceTypeStr != null and deviceTypeStr != ''">
+			and deviceTypeStr
+			=
+			#{deviceTypeStr}
+        </if>
+		ORDER BY topCcmtsDhcpOption60Index ASC
+	</select>
+	<select id="getDeviceTypes" parameterType="map" resultType="string">
+		select distinct deviceTypeStr
+		from oltdhcpoption60
+		where
+		entityId=#{entityId} AND
+		topCcmtsDhcpBundleInterface=#{topCcmtsDhcpBundleInterface}
+		AND
+		topCcmtsDhcpOption60DeviceType is NULL
+    </select>
+	<!-- *********************************Select END ************************************ -->
+
+	<!-- *********************************Update Begin************************************ -->
+	<update id="updateDhcpRelaySwitch" parameterType="map">
+		UPDATE
+		oltdhcprelaybaseconfig SET
+		topCcmtsDhcpRelaySwitch =
+		#{topCcmtsDhcpRelaySwitch}
+		WHERE
+		entityId=#{entityId}
+    </update>
+	<update id="updateDhcpBundle" parameterType="dhcpBundle">
+		UPDATE
+		oltdhcpbundle
+		SET
+		topCcmtsDhcpBundlePolicy = #{topCcmtsDhcpBundlePolicy},
+		cableSourceVerify=#{cableSourceVerify},
+		virtualPrimaryIpAddr=#{virtualPrimaryIpAddr},
+		virtualPrimaryIpMask=#{virtualPrimaryIpMask}
+		WHERE
+		entityId=#{entityId}
+		AND topCcmtsDhcpBundleInterface = #{topCcmtsDhcpBundleInterface}
+	</update>
+	<update id="updateDhcpServer" parameterType="dhcpServerConfig">
+		UPDATE
+		oltdhcpserverconfig SET
+		topCcmtsDhcpHelperIpAddr =
+		#{topCcmtsDhcpHelperIpAddr}
+		WHERE
+		entityId=#{entityId} AND helperId =
+		#{helperId}
+    </update>
+	<update id="updateDhcpGiAddr" parameterType="dhcpGiAddr">
+		UPDATE
+		oltdhcpgiaddrconfig SET
+		topCcmtsDhcpGiAddress =
+		#{topCcmtsDhcpGiAddress},
+		topCcmtsDhcpGiAddrMask =
+		#{topCcmtsDhcpGiAddrMask}
+		WHERE
+		entityId=#{entityId} AND
+		topCcmtsDhcpBundleInterface=#{topCcmtsDhcpBundleInterface} AND
+		deviceTypeStr=#{deviceTypeStr}
+    </update>
+	<update id="updateDhcpIntIp" parameterType="dhcpIntIp">
+		UPDATE
+		oltDhcpIntIpTable SET
+		topCcmtsDhcpIntIpAddr = #{topCcmtsDhcpIntIpAddr},
+		topCcmtsDhcpIntIpMask = #{topCcmtsDhcpIntIpMask}
+		WHERE
+		entityId=#{entityId} AND topCcmtsDhcpBundleInterface =
+		#{topCcmtsDhcpBundleInterface}
+		AND topCcmtsDhcpIntIpIndex =
+		#{topCcmtsDhcpIntIpIndex}
+    </update>
+	<update id="updateDhcpOption60" parameterType="dhcpOption60">
+		UPDATE
+		oltdhcpOption60 SET
+		topCcmtsDhcpOption60Str =
+		#{topCcmtsDhcpOption60Str}
+		WHERE
+		entityId=#{entityId} AND option60Id =
+		#{option60Id}
+    </update>
+	<update id="updateDhcpRelayVlanMap" parameterType="dhcpRelayVlanMap">
+		UPDATE
+		oltdhcpbundle SET
+		topCcmtsDhcpBundleVlanMap =
+		#{topCcmtsDhcpBundleVlanMap}
+		WHERE
+		entityId=#{entityId} AND
+		topCcmtsDhcpBundleInterface = #{topCcmtsDhcpBundleInterface}
+	</update>
+	<!-- *********************************Update END ************************************ -->
+
+	<!-- *********************************Insert Begin************************************ -->
+	<insert id="addDhcpRelaySwitch" parameterType="map">
+		insert into
+		oltdhcprelaybaseconfig
+		(entityId,topCcmtsDhcpRelaySwitch)
+		values
+		(#{entityId},#{topCcmtsDhcpRelaySwitch})
+    </insert>
+	<insert id="addDhcpBundle" parameterType="dhcpBundle">
+		insert into
+		oltdhcpbundle
+		(entityId,topCcmtsDhcpBundleInterface,topCcmtsDhcpBundlePolicy,
+		cableSourceVerify,virtualPrimaryIpAddr, virtualPrimaryIpMask)
+		values
+		(#{entityId},#{topCcmtsDhcpBundleInterface},#{topCcmtsDhcpBundlePolicy},
+		#{cableSourceVerify},#{virtualPrimaryIpAddr}, #{virtualPrimaryIpMask})
+	</insert>
+	<insert id="addDhcpServer" parameterType="dhcpServerConfig"
+		useGeneratedKeys="true" keyProperty="helperId">
+		insert into oltdhcpserverconfig
+		(entityId,topCcmtsDhcpBundleInterface,topCcmtsDhcpHelperDeviceType,
+		topCcmtsDhcpHelperIndex,topCcmtsDhcpHelperIpAddr, deviceTypeStr)
+		values
+		(#{entityId},#{topCcmtsDhcpBundleInterface},#{topCcmtsDhcpHelperDeviceType},
+		#{topCcmtsDhcpHelperIndex},#{topCcmtsDhcpHelperIpAddr},
+		#{deviceTypeStr})
+	</insert>
+	<insert id="addDhcpGiAddr" parameterType="dhcpGiAddr"
+		useGeneratedKeys="true" keyProperty="giAddrId">
+		insert into oltdhcpgiaddrconfig
+		(entityId,topCcmtsDhcpBundleInterface,topCcmtsDhcpGiAddrDeviceType,topCcmtsDhcpGiAddress,
+		topCcmtsDhcpGiAddrMask, deviceTypeStr)
+		values
+		(#{entityId},#{topCcmtsDhcpBundleInterface},#{topCcmtsDhcpGiAddrDeviceType},#{topCcmtsDhcpGiAddress},
+		#{topCcmtsDhcpGiAddrMask}, #{deviceTypeStr})
+	</insert>
+	<insert id="addDhcpIntIp" parameterType="dhcpIntIp">
+		insert into
+		oltDhcpIntIpTable
+		(entityId,topCcmtsDhcpBundleInterface,topCcmtsDhcpIntIpIndex,topCcmtsDhcpIntIpAddr,
+		topCcmtsDhcpIntIpMask)
+		values
+		(#{entityId},#{topCcmtsDhcpBundleInterface},#{topCcmtsDhcpIntIpIndex},#{topCcmtsDhcpIntIpAddr},
+		#{topCcmtsDhcpIntIpMask})
+    </insert>
+	<insert id="addDhcpOption60" parameterType="dhcpOption60"
+		useGeneratedKeys="true" keyProperty="option60Id">
+		insert into oltdhcpOption60
+		(entityId,topCcmtsDhcpBundleInterface,topCcmtsDhcpOption60DeviceType,
+		topCcmtsDhcpOption60Index,topCcmtsDhcpOption60Str, deviceTypeStr)
+		values
+		(#{entityId},#{topCcmtsDhcpBundleInterface},#{topCcmtsDhcpOption60DeviceType},
+		#{topCcmtsDhcpOption60Index},#{topCcmtsDhcpOption60Str},
+		#{deviceTypeStr})
+	</insert>
+	<!-- *********************************Insert END ************************************ -->
+
+	<!-- *********************************Delete Begin************************************ -->
+	<delete id="deleteAllDhcpOption60" parameterType="long">
+		delete from
+		oltdhcpOption60 where entityId=#{entityId}
+    </delete>
+	<delete id="deleteAllDhcpServer" parameterType="long">
+		delete from
+		oltdhcpserverconfig where entityId=#{entityId}
+    </delete>
+	<delete id="deleteAllDhcpBundle" parameterType="long">
+		delete from
+		oltdhcpbundle where entityId=#{entityId}
+    </delete>
+	<delete id="deleteAllDhcpGiaddrConfig" parameterType="long">
+		delete from
+		oltdhcpgiaddrconfig where entityId=#{entityId}
+    </delete>
+	<delete id="deleteAllDhcpIntIp" parameterType="long">
+		delete from
+		oltDhcpIntIpTable where entityId=#{entityId}
+    </delete>
+	<delete id="deleteDhcpBundle" parameterType="map">
+		DELETE FROM
+		oltdhcpbundle
+		WHERE
+		entityId = #{entityId} AND
+		topCcmtsDhcpBundleInterface =
+		#{topCcmtsDhcpBundleInterface}
+    </delete>
+	<delete id="deleteDhcpServer" parameterType="map">
+		DELETE FROM
+		oltdhcpserverconfig WHERE entityId = #{entityId} AND helperId =
+		#{helperId}
+    </delete>
+	<delete id="deleteDhcpGiAddr" parameterType="map">
+		DELETE FROM
+		oltdhcpgiaddrconfig WHERE entityId = #{entityId} AND giAddrId =
+		#{giAddrId}
+    </delete>
+	<delete id="deleteDhcpOption60" parameterType="map">
+		DELETE FROM
+		oltdhcpOption60 WHERE entityId = #{entityId} AND option60Id =
+		#{option60Id}
+    </delete>
+	<delete id="deleteDhcpIntIp" parameterType="map">
+		DELETE FROM
+		oltDhcpIntIpTable
+		WHERE
+		entityId = #{entityId} AND topCcmtsDhcpIntIpAddr
+		= #{ip} AND
+		topCcmtsDhcpBundleInterface =
+		#{topCcmtsDhcpBundleInterface}
+    </delete>
+	<!-- *********************************Delete END ************************************ -->
+</mapper>

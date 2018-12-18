@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.cm.dao.mybatis.CmServiceTypeDaoImpl">
+
+	<select id="getCmServiceTypeList" resultType="cmServiceType">
+		select * from cmServiceType
+	</select>
+	
+	<select id="getCmServiceTypeById" parameterType="string" resultType="cmServiceType">
+		select * from cmServiceType where fileName = #{fileName}
+	</select>
+	
+	<select id="getlogs" parameterType="long" resultType="cmFileNameChangeLog">
+		select 
+			cmMac,
+			a.oldFileName,
+			b.serviceType oldServiceType,
+			a.newFileName,
+			c.serviceType newServiceType,
+			date_format(a.changeTime,'%Y-%c-%d %H:%i:%s') changeTime
+		from cmFileNameChangeLog a 
+		left join cmServiceType b on a.oldFileName =  b.fileName
+		left join cmServiceType c on a.newFileName =  c.fileName
+		where cmMac in
+		(select StatusMacAddress from cmattribute where cmId = #{cmId}) 
+		order by a.changeTime desc
+	</select>
+	
+	<insert id="insertCmServiceType" parameterType="cmServiceType">
+		insert into cmServiceType(fileName,serviceType) values(#{fileName},#{serviceType})
+		ON DUPLICATE KEY UPDATE serviceType = #{serviceType}
+	</insert>
+	
+	<update id="updateCmServiceType" parameterType="cmServiceType">
+		update cmServiceType set serviceType = #{serviceType}
+		where fileName = #{fileName}
+	</update>
+	
+	<delete id="deleteCmServiceType" parameterType="string">
+		delete from cmServiceType where fileName = #{fileName}
+	</delete>
+	
+	<delete id="clearCmServiceType">
+		delete from cmServiceType
+	</delete>
+</mapper>

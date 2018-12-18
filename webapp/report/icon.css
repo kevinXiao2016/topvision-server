@@ -1,0 +1,13 @@
+/*
+ * @author: niejun
+ *
+ * icon css for report
+ */
+.taskIcon {
+	background-image: url(../images/report/task.gif) !important;
+}
+
+.reportIcon {
+	background-image: url(../images/report/bt.gif) !important;
+	valign: middle;
+}

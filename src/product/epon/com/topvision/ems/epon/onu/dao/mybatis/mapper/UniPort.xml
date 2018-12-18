@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.onu.domain.UniPort">
+	<select id="selectUniList" parameterType="long" resultType="uniPort">
+		SELECT B.entityId,B.uniIndex,A.uniId,A.uniOperationStatus,A.uniAutoNegotiationEnable,A.FlowCtrl,A.uniAdminStatus,A.PerfStats15minuteEnable,C.bindPvid,D.profileMode,E.vlanMode
+		FROM oltuniattribute A,oltunirelation B 
+		left join uniVlanBindTable C on B.entityId=C.entityId AND B.uniIndex=C.uniIndex
+		LEFT JOIN univlanprofile D on C.bindProfileId=d.profileId  AND C.entityId=D.entityId
+		left join onuportvlan E on B.uniId = E.uniId and B.entityId = E.entityId
+		WHERE A.uniId=B.uniId 
+		AND B.onuId=#{onuId}
+	</select>
+
+	<select id="selectOnuList" parameterType="map" resultType="onuInfo">
+		SELECT 
+		J.displayName typeName,D.name,E.onuindex,F.ip entityIp,F.entityId,F.name manageName,B.onuId,G.oltponrevpower,
+		A.onuIsolationEnable,A.temperatureDetectEnable,A.ponPerfStats15minuteEnable,A.onuTestDistance,A.onuType,
+		A.changeTime,A.onuUniqueIdentification,A.onuEorG,A.onuLevel,A.onuTimeSinceLastRegister,A.lastDeregisterTime,D.contact,D.location,D.note,
+		G.onuPonRevPower ,G.onuPonTransPower ,
+		A.onuMac,A.onuOperationStatus,A.onuPreType,A.onuChipVendor,A.onuSoftwareVersion,A.topOnuHardwareVersion, D.typeId, D.sysName AS onuDesc,
+		H.userId attention,capability.onuTotalPotsNum topGponOnuCapOnuPotsNum, PL.onuCatvOrInfoRxPower, PH.minOnuPonRevPower, PH.minPowerTimeStr, PH.minCatvRevPower, PH.minCatvTimeStr,Y.laserSwitch
+		FROM 
+		oltonuattribute A LEFT JOIN perfonulinkqualitylast G ON A.onuId=G.onuId left join userAttention H on A.onuId = H.entityId
+		left join onuLaser Y on A.onuId = Y.onuId
+		LEFT JOIN perfonucatvqualitylast PL ON A.onuId=PL.onuId LEFT JOIN perfonuqualityhistory PH ON A.onuId = PH.onuId,
+		oltonuponrelation B,oltonuponattribute C,oltonurelation E,
+		entity D  LEFT JOIN entity F ON D.parentId=F.entityId
+		          left join gpon_onucapability capability on D.entityId = capability.onuId,
+		entitytype J,entitytyperelation K
+		WHERE 
+		A.onuid=B.onuid AND B.onuPonId=C.onuPonId AND  A.onuid=D.entityId AND a.onuid=E.onuId
+		AND  D.typeId  = J.typeid AND J.typeId=K.typeId AND K.type=13000 AND A.onuId in (select entityId from  ${Authority})  
+	  	AND d.typeId=J.typeId
+		<if test="queryContent != null">
+            AND (A.onuMac LIKE "%${queryContentMac}%" 
+            	<if test="queryMacWithoutSplit != null">
+                	OR REPLACE(A.onuMac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+                	OR REPLACE(A.onuUniqueIdentification, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            	</if>
+            	OR D.name LIKE "%${queryContent}%" OR F.name LIKE "%${queryContent}%" OR  F.ip LIKE "%${queryContent}%"
+            	OR A.onuUniqueIdentification LIKE "%${queryContent}%"
+            	)
+        </if>
+        <if test="queryContent == null">
+        	<if test="entityId != null">
+				and A.entityId = #{entityId}
+			</if>
+			<if test="slotId != null and ponId == null">
+				AND EXISTS (SELECT * FROM oltonurelation I,oltponrelation J WHERE I.onuid=A.onuId AND I.ponid=J.ponid and  slotid = #{slotId})
+			</if>
+			<if test="status != null">
+				and A.onuOperationStatus=#{status}
+			</if>
+			<if test="onuEorG != null">
+				and A.onuEorG=#{onuEorG}
+			</if>
+			<if test="onuLevel != null">
+				and A.onuLevel=#{onuLevel}
+			</if>
+			<if test="ponId != null">
+				and E.ponId = #{ponId}
+			</if>
+	        <if test="onuName != null">
+	            and D.name LIKE '%${onuName}%'
+	        </if>
+        	<if test="onuPreType != null">
+	            and D.typeId = #{onuPreType}
+        	</if>
+	        <if test="macAddress != null">
+	        	AND (A.onuMac LIKE '%${macAddress}%' or A.onuUniqueIdentification LIKE '%${macAddress}%'
+				<if test="queryMacWithoutSplit != null">
+					OR REPLACE(A.onuMac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+					OR REPLACE(A.onuUniqueIdentification, ':', '') LIKE '%${queryMacWithoutSplit}%'
+				</if>
+				)
+	        </if>
+	        <if test="receiveMin != null">
+	        	<![CDATA[AND G.onuPonRevPower >= #{receiveMin}]]>
+	        </if>
+	        <if test="receiveMax != null">
+	        	<![CDATA[AND ( G.onuPonRevPower < #{receiveMax} OR G.onuPonRevPower is NULL )]]>
+	        </if>
+	        <if test="transmitMin != null">
+	        	<![CDATA[AND G.onuPonTransPower >= #{transmitMin}]]>
+	        </if>
+	        <if test="transmitMax != null">
+	        	<![CDATA[AND ( G.onuPonTransPower < #{transmitMax} OR G.onuPonTransPower is NULL )]]>
+	        </if>
+	         <if test="ponRecvMin != null">
+	        	<![CDATA[AND G.oltponrevpower >= #{ponRecvMin}]]>
+	        </if>
+	        <if test="ponRecvMax != null">
+	        	<![CDATA[AND ( G.oltponrevpower < #{ponRecvMax} OR G.oltponrevpower is NULL )]]>
+	        </if>
+        </if>
+        <if test="sort != null and dir != ''">
+			<choose>
+				<when test="sort == 'entityIp'.toString()">
+					ORDER BY inet_aton(entityIp) ${dir}
+				</when>
+				<otherwise>
+					order by ${sort} ${dir}
+			</otherwise>
+		</choose>
+		</if>
+        limit ${start},${limit}
+	</select>
+	
+	<update id="updateOnuVersionInfo" parameterType="onuQualityInfo">
+		UPDATE oltonuattribute
+		SET onuOperationStatus=#{onuOperationStatus}, onuSoftwareVersion=#{onuSoftwareVersion}
+		WHERE onuId=#{onuId}
+	</update>
+	
+	<update id="updateOnuQuality" parameterType="onuQualityInfo">
+		UPDATE perfonulinkqualitylast
+		SET onuPonRevPower=#{onuPonRevPower},onuPonTransPower=#{onuPonTransPower},oltPonRevPower=#{oltPonRevPower},collectTime=now()
+		WHERE onuId=#{onuId}
+	</update>
+	
+	<insert id="insertOnuQuality" parameterType="onuQualityInfo">
+		INSERT INTO perfonulinkqualitylast VALUES 
+		(#{entityId},#{onuId},#{onuIndex},#{onuPonRevPower},#{onuPonTransPower},#{oltPonRevPower},now())
+	</insert>
+	
+	<update id="updateGponOnuVersionInfo" parameterType="gponOnuQualityInfo">
+		UPDATE oltonuattribute
+		SET onuOperationStatus=#{onuOperationStatus}, topOnuHardwareVersion=#{onuHardwareVersion}
+		WHERE onuId=#{onuId}
+	</update>
+	<update id="updateGponOnuQuality" parameterType="gponOnuQualityInfo">
+		UPDATE perfonulinkqualitylast
+		SET onuPonRevPower=#{onuPonRevPower},onuPonTransPower=#{onuPonTransPower},oltPonRevPower=#{oltPonRevPower},collectTime=now()
+		WHERE onuId=#{onuId}
+	</update>
+	
+	<insert id="insertGponOnuQuality" parameterType="gponOnuQualityInfo">
+		INSERT INTO perfonulinkqualitylast VALUES 
+		(#{entityId},#{onuId},#{onuIndex},#{onuPonRevPower},#{onuPonTransPower},#{oltPonRevPower},now())
+	</insert>
+	
+	<select id="selectOnuAlertTypes" resultType="alertType">
+		SELECT typeId,category, name, displayName, levelId
+		FROM AlertType
+		ORDER BY typeId ASC
+	</select>
+	
+	<select id="selectOnuHistoryAlertList" parameterType="map" resultType="historyAlert">
+		SELECT A.alertId, A.typeId, A.name, A.levelId, C.name as
+	    levelName,
+	    A.monitorId, A.entityId, A.host, A.source, A.message,
+	    A.firstTime,
+	    A.lastTime, A.happenTimes, A.confirmUser,
+	    A.confirmTime,
+	    A.confirmMessage, A.status, A.clearUser, A.clearTime, A.clearMessage,
+	    B.displayName AS typeName FROM HistoryAlert A, AlertType
+	    B, Levels C
+	    WHERE A.typeId = B.typeId AND A.levelId = C.levelId
+		<!-- <if test="entityId != null">
+    	   AND A.entityId = #{entityId}
+    	</if> 
+    	<if test="source != null">
+    	   AND A.source = #{source}
+    	</if> -->
+    	<if test="onuId != null">
+    	    AND A.entityId = #{onuId}
+    	</if>
+	    <if test="typeId != null">
+	       <!--  AND A.typeId = #{typeId} -->
+	       and FIND_IN_SET(A.typeId,topoEventFun(#{typeId},'alerttype'))
+	    </if>
+	    <if test="levelId != null">
+	        AND A.levelId = #{levelId}
+	    </if>
+	    <if test="message != null">
+	        AND A.message like '%${message}%'
+	    </if>
+	    <if test="startTime != null">
+	        AND <![CDATA[ A.firstTime >= #{startTime} ]]>
+	    </if>
+	    <if test="endTime != null">
+	        AND <![CDATA[A.firstTime <= #{endTime}]]>
+	    </if>
+		order by firstTime desc
+	    limit ${start},${limit}
+	</select>
+	<select id="selectOnuHistoryAlertListNum" parameterType="map" resultType="int">
+	 	SELECT count(A.alertId) FROM HistoryAlert A, AlertType B, Levels C
+	    WHERE A.typeId = B.typeId AND A.levelId = C.levelId
+	   		<!--<if test="entityId != null">
+	    	   AND A.entityId = #{entityId}
+	    	</if> 
+	    	<if test="source != null">
+	    	   AND A.source = #{source}
+	    	</if> -->
+	    	<if test="onuId != null">
+    	    	AND A.entityId = #{onuId}
+    		</if>
+	        <if test="typeId != null">
+	            <!-- AND A.typeId = #{typeId} -->
+	            and FIND_IN_SET(A.typeId,topoEventFun(#{typeId},'alerttype'))
+	        </if>
+	        <if test="levelId != null">
+	            AND A.levelId = #{levelId}
+	        </if>
+	        <if test="message != null">
+	            AND A.message like '%${message}%'
+	        </if>
+	        <if test="startTime != null">
+	            AND <![CDATA[ A.firstTime >= #{startTime} ]]>
+	        </if>
+	        <if test="endTime != null">
+	            AND <![CDATA[A.firstTime <= #{endTime}]]>
+	        </if>
+	    </select>
+	    <select id="selectOnuAlertList" parameterType="map" resultType="alert">
+	    	SELECT A.alertId, A.typeId, A.name, A.levelId, C.name as
+		    levelName,
+		    A.monitorId, A.entityId, A.host, A.source, A.message,
+		    A.firstTime,
+		    A.lastTime, A.happenTimes, A.confirmUser,
+		    A.confirmTime,
+		    A.confirmMessage, 
+		    A.clearUser, A.clearTime, A.clearMessage,
+		    A.status, A.orginalCode,
+		    B.displayName AS typeName FROM
+		    Alert A, AlertType B, Levels C
+		    WHERE A.typeId = B.typeId AND A.levelId = C.levelId
+		    	<!-- <if test="entityId != null">
+		    	    AND A.entityId = #{entityId}
+		    	</if> 
+		    	<if test="source != null">
+		    	    AND A.source = #{source}
+		    	</if> -->
+		    	<if test="onuId != null">
+		    	    AND A.entityId = #{onuId}
+		    	</if>
+		    	<if test="alertId != null">
+		        	and A.alertId = #{alertId}
+		        </if>
+		        <if test="alertId == null">
+			        <if test="typeId != null">
+			            <!-- AND A.typeId = #{typeId} -->
+			            and FIND_IN_SET(A.typeId,topoEventFun(#{typeId},'alerttype'))
+			        </if>
+			        <if test="levelId != null">
+			            AND A.levelId = #{levelId}
+			        </if>
+			        <if test="message != null">
+			            AND A.message like '%${message}%'
+			        </if>
+			        <if test="startTime != null">
+			            AND <![CDATA[ A.firstTime >= #{startTime} ]]>
+			        </if>
+			        <if test="endTime != null">
+			            AND <![CDATA[A.firstTime <= #{endTime}]]>
+			        </if>
+		        </if>
+		    order by firstTime desc
+		    limit ${start},${limit}
+	    </select>
+	    <select id="selectOnuAlertListNum" parameterType="map" resultType="int">
+	    	SELECT COUNT(A.alertId)
+		    FROM Alert A, AlertType B, Levels C
+		    WHERE
+		    A.typeId = B.typeId AND A.levelId = C.levelId
+				<!-- <if test="entityId != null">
+		    	    AND A.entityId = #{entityId}
+		    	</if> 
+		    	<if test="source != null">
+		    	    AND A.source = #{source}
+		    	</if> -->
+		    	<if test="onuId != null">
+		    	    AND A.entityId = #{onuId}
+		    	</if>
+		    	<if test="alertId != null">
+		        	and A.alertId = #{alertId}
+		        </if>
+		        <if test="alertId == null">
+			        <if test="typeId != null">
+			            <!-- AND A.typeId = #{typeId} -->
+			            and FIND_IN_SET(A.typeId,topoEventFun(#{typeId},'alerttype'))
+			        </if>
+			        <if test="levelId != null">
+			            AND A.levelId = #{levelId}
+			        </if>
+			        <if test="message != null">
+			            AND A.message like '%${message}%'
+			        </if>
+			        <if test="startTime != null">
+			            AND <![CDATA[ A.firstTime >= #{startTime} ]]>
+			        </if>
+			        <if test="endTime != null">
+			            AND <![CDATA[A.firstTime <= #{endTime}]]>
+			        </if>
+		        </if>
+	    </select>
+	    
+	<select id="selectOnuCount" parameterType="map" resultType="int">
+	    SELECT 
+		count(B.onuId)
+		FROM 
+		oltonuattribute A LEFT JOIN perfonulinkqualitylast G ON  A.onuId=G.onuId,
+		oltonuponrelation B,oltonuponattribute C,oltonurelation E,
+		entity D  LEFT JOIN entity F ON D.parentId=F.entityId,entitytyperelation H
+		WHERE 
+		A.onuid=B.onuid AND B.onuPonId=C.onuPonId AND  A.onuid=D.entityId AND a.onuid=E.onuId
+		AND  D.typeId  = H.typeid AND H.type=13000 AND A.onuId in (select entityId from ${Authority})
+		<if test="queryContent != null">
+            AND (A.onuMac LIKE "%${queryContentMac}%" 
+            	<if test="queryMacWithoutSplit != null">
+                	OR REPLACE(A.onuMac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+                	OR REPLACE(A.onuUniqueIdentification, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            	</if>
+            	OR D.name LIKE "%${queryContent}%" OR F.name LIKE "%${queryContent}%" OR  F.ip LIKE "%${queryContent}%"
+            	OR A.onuUniqueIdentification LIKE "%${queryContent}%"
+            	)
+        </if>
+        <if test="queryContent == null">
+        	<if test="entityId != null">
+				and A.entityId = #{entityId}
+			</if>
+			<if test="slotId != null">
+				AND EXISTS (SELECT * FROM oltonurelation I,oltponrelation J WHERE I.onuid=A.onuId AND I.ponid=J.ponid and  slotid = #{slotId})
+			</if>
+			<if test="status != null">
+				and A.onuOperationStatus=#{status}
+			</if>
+			<if test="onuEorG != null">
+				and A.onuEorG=#{onuEorG}
+			</if>
+			<if test="onuLevel != null">
+				and A.onuLevel=#{onuLevel}
+			</if>
+			<if test="ponId != null">
+				and E.ponId = #{ponId}
+			</if>
+	        <if test="onuName != null">
+	            and D.name LIKE '%${onuName}%'
+	        </if>
+	        <if test="onuPreType != null">
+	            and D.typeId LIKE '%${onuPreType}%'
+	        </if>
+	        <if test="macAddress != null">
+	        	AND (A.onuMac LIKE '%${macAddress}%' or A.onuUniqueIdentification LIKE '%${macAddress}%'
+					<if test="queryMacWithoutSplit != null">
+					OR REPLACE(A.onuMac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+					OR REPLACE(A.onuUniqueIdentification, ':', '') LIKE '%${queryMacWithoutSplit}%'
+					</if>
+					)
+	        </if>
+	        <if test="receiveMin != null">
+	        	<![CDATA[AND G.onuPonRevPower >= #{receiveMin}]]>
+	        </if>
+	        <if test="receiveMax != null">
+	        	<![CDATA[AND ( G.onuPonRevPower < #{receiveMax} OR G.onuPonRevPower is NULL )]]>
+	        </if>
+	        <if test="transmitMin != null">
+	        	<![CDATA[AND G.onuPonTransPower >= #{transmitMin}]]>
+	        </if>
+	        <if test="transmitMax != null">
+	        	<![CDATA[AND ( G.onuPonTransPower < #{transmitMax} OR G.onuPonTransPower is NULL )]]>
+	        </if>
+	         <if test="ponRecvMin != null">
+	        	<![CDATA[AND G.oltponrevpower >= #{ponRecvMin}]]>
+	        </if>
+	        <if test="ponRecvMax != null">
+	        	<![CDATA[AND ( G.oltponrevpower < #{ponRecvMax} OR G.oltponrevpower is NULL )]]>
+	        </if>
+		</if>
+	    </select>
+	    
+	    <update id="modifyOnuMac" parameterType="map">
+	    	UPDATE
+	        Entity
+	        SET mac = #{mac}
+	        WHERE entityId = #{onuId}
+	    </update>
+	    
+	    <select id="queryOnuRelaInfoList" parameterType="map" resultType="onuLinkCollectInfo">
+	        select entityId, onuId, onuIndex
+	        from oltonurelation
+	        where onuId in
+			<foreach item="item" index="index" collection="onuIdList" open="(" separator="," close=")">
+				#{item}
+  			</foreach>
+	    </select>
+	    
+	    <update id="saveOnuServerLevel" parameterType="map">
+	    	UPDATE oltonuattribute SET onuLevel = #{onuLevel}
+	        WHERE onuId = #{onuId}
+	    </update>
+	    
+	     <select id="getOnuServerLevel" parameterType="long" resultType="int">
+	        select onuLevel from oltonuattribute
+	        where onuId = #{onuId} 
+			
+	    </select>
+</mapper>  

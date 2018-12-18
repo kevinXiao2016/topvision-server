@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.fault.domain.HistoryAlert">
+
+	<insert id="insertEntity" databaseId="MySQL" parameterType="historyAlert"
+		useGeneratedKeys="true" keyProperty="alertId">
+		INSERT INTO HistoryAlert
+		(typeId,
+		name, levelId, monitorId,
+		entityId, host, source, message,
+		firstTime,
+		lastTime,
+		happenTimes, confirmUser, confirmTime,
+		confirmMessage, status,
+		clearUser, clearTime, clearMessage, userObject)
+		VALUES
+		(#{typeId},
+		#{name}, #{levelId}, #{monitorId}, #{entityId},
+		#{host},
+		#{source},
+		#{message}, #{firstTime}, #{lastTime},
+		#{happenTimes},
+		#{confirmUser},
+		#{confirmTime}, #{confirmMessage},
+		#{status},
+		#{clearUser},
+		#{clearTime}, #{clearMessage},
+		#{userObject})
+	</insert>
+	<insert id="insertEntity" databaseId="Oracle" parameterType="historyAlert">
+		<selectKey keyProperty="alertId" resultType="long" order="BEFORE">
+			select HistoryAlert_Seq.nextval as alertId from dual
+		</selectKey>
+		INSERT INTO HistoryAlert (alertId, typeId, name, levelId, monitorId,
+		entityId,
+		host, source, message, firstTime, lastTime,
+		happenTimes,
+		confirmUser,
+		confirmTime, confirmMessage, status,
+		clearUser, clearTime,
+		clearMessage, userObject) VALUES
+		(#{alertId}, #{typeId}, #{name},
+		#{levelId},
+		#{monitorId}, #{entityId}, #{host},
+		#{source}, #{message},
+		#{firstTime},
+		#{lastTime}, #{happenTimes},
+		#{confirmUser},
+		#{confirmTime},
+		#{confirmMessage}, #{status},
+		#{clearUser},
+		#{clearTime},
+		#{clearMessage},
+		#{userObject})
+	</insert>
+
+	<select id="selectByPrimaryKey" parameterType="long" resultType="historyAlert">
+		SELECT A.alertId, A.typeId, B.displayName as typeName, A.name,
+		A.levelId, C.name AS levelName, A.monitorId, A.entityId, A.host,
+		A.source, A.message, A.firstTime, A.lastTime, A.happenTimes,
+		A.confirmUser, A.confirmTime, A.confirmMessage, A.status,
+		A.clearUser,
+		A.clearTime, A.clearMessage, A.userObject FROM
+		HistoryAlert A,
+		AlertType B, Levels C WHERE alertId = #{alertId}
+		AND A.typeId =
+		B.typeId AND A.levelId = C.levelId
+	</select>
+
+	<select id="getHistoryAlertByAlertId" parameterType="map"
+		resultType="historyAlert">
+		SELECT A.alertId, A.typeId, B.displayName as typeName,
+		A.name,
+		A.levelId, C.name AS levelName, A.monitorId, A.entityId,
+		A.host,
+		A.source, A.message, A.firstTime, A.lastTime, A.happenTimes,
+		A.confirmUser, A.confirmTime, A.confirmMessage, A.status,
+		A.clearUser,
+		A.clearTime, A.clearMessage, A.userObject FROM
+		HistoryAlert A,
+		AlertType B, Levels C WHERE alertId = #{alertId}
+		AND A.typeId =
+		B.typeId AND A.levelId = C.levelId
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="long">
+		DELTE FROM
+		HistoryAlert WHERE alertId = #{alertId}
+	</delete>
+
+	<delete id="empty">DELETE FROM HistoryAlert</delete>
+
+	<select id="selectByMap" parameterType="map" resultType="historyAlert">
+		SELECT A.alertId, A.typeId, B.displayName as typeName, A.name,
+		A.levelId, A.monitorId, A.entityId, A.host, A.source, A.message,
+		A.firstTime, A.lastTime, A.happenTimes, A.confirmUser,
+		A.confirmTime,
+		A.confirmMessage, A.status, A.userObject,
+		A.clearUser, A.clearTime,
+		A.clearMessage FROM HistoryAlert A,
+		AlertType B 
+		WHERE A.typeId = B.typeId
+		<if test="levelId != null">
+			and A.levelId = #{levelId}
+		</if>
+		<if test="sql != null">
+			and ${sql}
+		</if>
+		ORDER BY A.alertId DESC
+	</select>
+
+	<select id="selectCount" parameterType="map" resultType="integer">
+		SELECT count(A.alertId) FROM HistoryAlert A, entity V,
+		AlertType B,
+		Levels C WHERE A.entityId = V.entityId and A.typeId = B.typeId AND
+		A.levelId = C.levelId
+		and V.entityId in (select entityId from
+		${Authority})
+		<if test="entityId != null">
+			and A.entityId = #{entityId}
+		</if>
+		<if test="host != null">
+			and A.host like concat('%',#{host},'%')
+		</if>
+		<if test="ip != null">
+			and A.host like concat('%',#{ip},'%')
+		</if>
+		<if test="levelId != null">
+			and A.levelId = #{levelId}
+		</if>
+		<if test="message != null">
+			and A.message like concat('%',#{message},'%')
+		</if>
+		<if test="startTime != null">
+			<choose>
+				<when test="_databaseId == 'MySQL'">
+					and A.firstTime >= #{startTime}
+             </when>
+				<when test="_databaseId == 'Oracle'">
+					and A.firstTime >= to_date(#{startTime},'yyyy-mm-dd hh24:mi:ss')
+				</when>
+			</choose>
+		</if>
+		<if test="clearMessage != null">
+			and A.clearMessage like concat('%', #{clearMessage}, '%')
+		</if>
+		<if test="clearUser != null">
+			and A.clearUser like concat('%', #{clearUser}, '%')
+		</if>
+		<if test="clearStartTime != null">
+			and A.clearTime >= #{clearStartTime}
+		</if>
+		<if test="clearEndTime != null">
+			and <![CDATA[A.clearTime <= #{clearEndTime}]]>
+		</if>
+		<if test="endTime != null">
+			<choose>
+				<when test="_databaseId == 'MySQL'">
+					and <![CDATA[A.firstTime <= #{endTime}]]>
+				</when>
+				<when test="_databaseId == 'Oracle'">
+					and <![CDATA[firstTime <= to_date(#{endTime},'yyyy-mm-dd hh24:mi:ss')]]>
+				</when>
+			</choose>
+		</if>
+		<if test="typeId != null">
+			<!-- and (A.typeId = #{typeId} OR B.category = #{typeId}) -->
+			and FIND_IN_SET(A.typeId,topoEventFun(#{typeId},'alerttype'))
+		</if>
+		<if test="typeIds != null">
+			and FIND_IN_SET(A.typeId, #{typeIds})
+		</if>
+	</select>
+
+	<select id="selectWithPage" databaseId="MySQL" parameterType="map"
+		resultType="historyAlert">
+		SELECT A.alertId, A.typeId, B.displayName as typeName, A.name,
+		A.levelId, C.name as levelName, A.monitorId, A.entityId, A.host,
+		A.source, A.message, A.firstTime, A.lastTime, A.happenTimes,
+		A.confirmUser, A.confirmTime, A.confirmMessage, A.status, V.typeId AS
+		entityType, V.name as entityName,
+		A.userObject, A.clearUser, A.clearTime FROM HistoryAlert A,
+		entity V,
+		AlertType B, Levels C WHERE A.entityId = V.entityId and
+		A.typeId = B.typeId AND A.levelId = C.levelId
+		and V.entityId in (select
+		entityId from ${Authority})
+		<if test="entityId != null">
+			and A.entityId = #{entityId}
+		</if>
+		<if test="host != null">
+			and A.host like concat('%',#{host},'%')
+		</if>
+		<if test="ip != null">
+			and A.host like concat('%',#{ip},'%')
+		</if>
+		<if test="levelId != null">
+			and A.levelId = #{levelId}
+		</if>
+		<if test="message != null">
+			and A.message like concat('%',#{message},'%')
+		</if>
+		<if test="startTime != null">
+			and A.firstTime >= #{startTime}
+		</if>
+		<if test="endTime != null">
+			and <![CDATA[A.firstTime <= #{endTime}]]>
+		</if>
+		<if test="clearMessage != null">
+			and A.clearMessage like concat('%', #{clearMessage}, '%')
+		</if>
+		<if test="clearUser != null">
+			and A.clearUser like concat('%', #{clearUser}, '%')
+		</if>
+		<if test="clearStartTime != null">
+			and A.clearTime >= #{clearStartTime}
+		</if>
+		<if test="clearEndTime != null">
+			and <![CDATA[A.clearTime <= #{clearEndTime}]]>
+		</if>
+		<if test="typeId != null">
+			<!-- and (A.typeId = #{typeId} OR B.category = #{typeId}) -->
+			and FIND_IN_SET(A.typeId,topoEventFun(#{typeId},'alerttype'))
+		</if>
+		<if test="typeIds != null">
+			and FIND_IN_SET(A.typeId, #{typeIds})
+		</if>
+		<if test="sort != null and sort != ''">
+			order by ${sort} ${dir}
+		</if>
+		LIMIT ${start}, ${limit}
+	</select>
+	<select id="selectWithPage" databaseId="Oracle" parameterType="map"
+		resultType="historyAlert">
+		select tt.* from (select rownum rn , t.* from (
+		SELECT A.alertId,
+		A.typeId, B.displayName as typeName, A.name,
+		A.levelId, C.name as
+		levelName, A.monitorId, A.entityId, A.host,
+		A.source, A.message,
+		A.firstTime, A.lastTime, A.happenTimes,
+		A.confirmUser, A.confirmTime,
+		A.confirmMessage, A.status,
+		A.userObject,
+		A.clearUser, A.clearTime, V.typeId as entityType FROM
+		HistoryAlert A, entity V,
+		AlertType B,
+		Levels C WHERE A.entityId = V.entityId and
+		A.typeId = B.typeId AND
+		A.levelId = C.levelId
+		and V.entityId in (select
+		entityId from
+		${Authority})
+		<if test="entityId != null">
+			and A.entityId = #{entityId}
+		</if>
+		<if test="host != null">
+			and A.host like concat('%',#{host},'%')
+		</if>
+		<if test="ip != null">
+			and A.host like concat('%',#{ip},'%')
+		</if>
+		<if test="levelId != null">
+			and A.levelId = #{levelId}
+		</if>
+		<if test="message != null">
+			and A.message like concat('%',#{message},'%')
+		</if>
+		<if test="startTime != null">
+			and A.firstTime >= to_date(#{startTime},'yyyy-mm-dd
+			hh24:mi:ss')
+		</if>
+		<if test="endTime != null">
+			and <![CDATA[firstTime <= to_date(#{endTime},'yyyy-mm-dd hh24:mi:ss')]]>
+		</if>
+		<if test="typeId != null">
+			and (A.typeId = #{typeId} OR B.category = #{typeId})
+		</if>
+		<if test="sort != null and sort != ''">
+			order by ${sort} ${dir}
+		</if>
+		) t) tt where rn <![CDATA[>]]>
+		${start} and rn <![CDATA[<=]]>
+		(${start}+${limit})
+	</select>
+
+	<update id="updateEntity" parameterType="historyAlert">
+		UPDATE HistoryAlert SET
+		levelId = #{levelId} WHERE alertId =
+		#{alertId}
+	</update>
+
+	<select id="statHistoryAlertByCategory" resultType="alertTypeEx">
+		SELECT count(A.alertId) as count, B.typeId, B.note,
+		B.displayName,
+		A.name FROM AlertType B left join HistoryAlert A
+		on A.typeId = B.typeId
+		where B.parentId
+	<![CDATA[ < ]]>
+		10 group by B.typeId order by B.typeId asc
+	</select>
+
+	<select id="queryHistoryAlertCount" parameterType="map"
+		resultType="int">
+		SELECT count(A.alertId) FROM HistoryAlert A, AlertType B where
+		B.parentId = #{parentId} AND A.typeId = B.typeId
+		<if test="levelId != null">
+			and A.levelId = #{levelId}
+		</if>
+		<if test="typeId != null">
+			and A.typeId = #{typeId}
+		</if>
+		<if test="host != null">
+			and A.host = #{host}
+		</if>
+	</select>
+
+	<select id="queryHistoryAlert" databaseId="MySQL" parameterType="map"
+		resultType="historyAlert">
+		SELECT A.alertId, A.typeId, B.displayName as typeName, A.name,
+		A.levelId, A.monitorId, A.entityId, A.host, A.source, A.message,
+		A.firstTime, A.lastTime, A.happenTimes, A.confirmUser,
+		A.confirmTime,
+		A.confirmMessage, A.clearUser, A.clearMessage,
+		A.status FROM
+		HistoryAlert A, AlertType B WHERE B.parentId =
+		#{parentId} AND A.typeId
+		= B.typeId
+		<if test="levelId != null">
+			and A.levelId = #{levelId}
+		</if>
+		<if test="typeId != null">
+			and A.typeId = #{typeId}
+		</if>
+		<if test="host != null">
+			and A.host = #{host}
+		</if>
+		ORDER BY A.firstTime DESC LIMIT #{offset}, #{pageSize}
+	</select>
+	<select id="queryHistoryAlert" databaseId="Oracle"
+		parameterType="map" resultType="historyAlert">
+		select tt.* from (select rownum rn , t.* from (
+		SELECT A.alertId, A.typeId, B.displayName as typeName, A.name,
+		A.levelId, A.monitorId, A.entityId, A.host, A.source, A.message,
+		A.firstTime, A.lastTime, A.happenTimes, A.confirmUser,
+		A.confirmTime,
+		A.confirmMessage, A.clearUser, A.clearMessage,
+		A.status FROM
+		HistoryAlert A, AlertType B WHERE B.parentId =
+		#{parentId} AND A.typeId
+		= B.typeId
+		<if test="levelId != null">
+			and A.levelId = #{levelId}
+		</if>
+		<if test="typeId != null">
+			and A.typeId = #{typeId}
+		</if>
+		<if test="host != null">
+			and A.host = #{host}
+		</if>
+		ORDER BY A.firstTime DESC
+		) t) tt where rn <![CDATA[>]]>
+		${offset} and rn <![CDATA[<=]]>
+		(${offset}+${pageSize})
+	</select>
+
+	<select id="handleHistoryAlert" parameterType="map" resultType="historyAlert">
+		SELECT A.alertId, A.typeId, B.displayName as typeName, A.name,
+		A.levelId, A.monitorId, A.entityId, A.host, A.source, A.message,
+		A.firstTime, A.lastTime, A.happenTimes, A.confirmUser,
+		A.confirmTime,
+		A.confirmMessage, A.clearUser, A.clearMessage,
+		A.status FROM
+		HistoryAlert A, AlertType B WHERE B.parentId =
+		#{parentId} AND A.typeId
+		= B.typeId
+		<if test="levelId != null">
+			and A.levelId = #{levelId}
+		</if>
+		<if test="typeId != null">
+			and A.typeId = #{typeId}
+		</if>
+		<if test="host != null">
+			and A.host = #{host}
+		</if>
+		ORDER BY A.firstTime DESC
+	</select>
+	<select id="getHistoryAlertList" parameterType="map" resultType="historyAlert">
+		SELECT alertId, typeId,entityId,
+		firstTime, lastTime FROM historyAlert
+		where entityId = #{entityId} AND typeId = #{typeId}  
+	</select>
+	<select id="getAvailability" parameterType="map" resultType="long">
+		select time_to_sec(timediff(#{endTime},#{startTime})) from
+		historyAlert
+		where alertId = #{alertId}
+	</select>
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="cmcBaseConfig" namespace="/cmc" extends="default">
+        <!-- 添加操作日志拦截器配置 -->
+
+        <action name="showCmcBasicInfoConfig" class="cmcBaseConfigAction" method="showCmcBasicInfoConfig">
+            <result>/cmc/cmcBasicInfoConfig.jsp</result>
+        </action>
+        <action name="modifyCcmtsBasicInfo" class="cmcBaseConfigAction" method="modifyCcmtsBasicInfo">
+        </action>
+        <action name="saveConfig" class="cmcBaseConfigAction" method="saveConfig">
+        </action>
+        <action name="clearConfig" class="cmcBaseConfigAction" method="clearConfig">
+        </action>
+
+    </package>
+</struts>

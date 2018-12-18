@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.opticalreceiver.dao.mybatis.OpticalReceiverDaoImpl">
+
+    <select id="getOpticalReceiverData" parameterType="long" resultType="opticalReceiverData">
+    	select 
+    	ca.cmcId,ca.topCcmtsSysDorType,a.abSwitchState,b.channelNum,
+    	c.platSN,c.frxNum,c.optNodeTemp,c.fwdEQ0,c.fwdATT0,c.revEQ,c.rtxState,c.rtxLaserPower,c.revATTUS,c.revATTRTX,
+    	c.rtxLaserCurrent,c.catvInLevel,c.catvInputState,c.ftxOptPower,c.ftxLaserCurrent,
+    	d.linePowerVoltage1,e.inputPower,f.outputControl,f.configurationOutputRFlevelatt,f.configurationAGCRg
+    	from cmcattribute ca 
+    	left join topccmtsdorabswitch a on ca.cmcId = a.cmcId
+    	left join topccmtsdorchannelnum b on ca.cmcId = b.cmcId
+    	left join topccmtsdordevparams c on ca.cmcId = c.cmcId
+    	left join topccmtsdorlinepower d on ca.cmcId = d.cmcId
+    	left join topccmtsoprxinput e on ca.cmcId = e.cmcId
+    	left join topccmtsoprxoutput f on ca.cmcId = f.cmcId
+    	where ca.cmcId = #{cmcId}
+    </select>
+    
+    <select id="getDCPowers" parameterType="long" resultType="topCcmtsDorDCPower">
+    	select * from topccmtsdordcpower where cmcId = #{cmcId}
+    </select>
+    
+    <select id="getFwdAtts" parameterType="long" resultType="topCcmtsDorFwdAtt">
+    	select * from topccmtsdorfwdatt where cmcId = #{cmcId}
+    </select>
+    
+    <select id="getFwdEqs" parameterType="long" resultType="topCcmtsDorFwdEq">
+    	select * from topccmtsdorfwdeq where cmcId = #{cmcId}
+    </select>
+    
+    <select id="getRevAtts" parameterType="long" resultType="topCcmtsDorRevAtt">
+   		 select * from topccmtsdorrevatt where cmcId = #{cmcId}
+    </select>
+    
+    <select id="getRfPorts" parameterType="long" resultType="topCcmtsDorRFPort">
+   		 select * from topccmtsdorrfport where cmcId = #{cmcId}
+    </select>
+    
+    <select id="getRrxOptPows" parameterType="long" resultType="topCcmtsDorRRXOptPow">
+   		 select * from topccmtsdorrrxoptpow where cmcId = #{cmcId}
+    </select>
+</mapper>

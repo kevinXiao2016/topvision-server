@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmts" namespace="/cmts" extends="default">
+        <action name="entityPortal" class="cmtsBaseAction" method="entityPortal">
+            <result type="redirect">/cmts/showCmtsPortal.tv?cmcId=${cmcId}</result>
+        </action>
+        <action name="entityPortalCancel" class="cmcPortalAction" method="showCmcCancelJsp">
+            <result>/cmc/cmcCanceled.jsp</result>
+        </action>
+        <action name="showAllCmtsList" class="cmtsBaseAction" method="showAllCmtsList">
+            <result>/cmts/queryForAllCmtsList.jsp</result>
+        </action>
+        <action name="showCmtsPortal" class="cmtsBaseAction" method="showCmtsPortal">
+            <result>/cmts/newCmtsPortal.jsp</result>
+        </action>
+        <action name="showCmtsBasicInfoConfig" class="cmtsBaseAction" method="showCmtsBasicInfoConfig">
+            <result>/cmts/cmtsBasicInfoConfig.jsp</result>
+        </action>
+        <action name="showCmtsConfig" class="cmtsBaseAction" method="showCmtsConfig">
+            <result>/cmts/cmtsConfig.jsp</result>
+        </action>
+        <action name="showCmtsCurPerf" class="cmtsBaseAction" method="showCmtsCurPerf">
+            <result>/cmts/cmtsCurPerf.jsp</result>
+        </action>
+        <action name="queryCmtsList" class="cmtsBaseAction" method="queryCmtsList">
+        </action>
+        <action name="refreshCmts" class="cmtsBaseAction" method="refreshCmts">
+        </action>
+        <action name="getCmtsUptimeByEntity" class="cmtsBaseAction" method="getCmtsUptimeByEntity">
+        </action>
+        <action name="modifyCmtsBasicInfo" class="cmtsBaseAction" method="modifyCmtsBasicInfo">
+        </action>
+        <action name="modifyCmtsSnmpParam" class="cmtsBaseAction" method="modifyCmtsSnmpParam">
+        </action>
+        <action name="saveCmtsPortalView" class="cmtsBaseAction" method="saveCmtsPortalView" />
+    </package>
+</struts>

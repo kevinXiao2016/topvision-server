@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.olt.domain.OltPon">
+
+	<update id="updatePonAdminStatus" parameterType="oltPonAttribute">
+		UPDATE
+		OltPonAttribute SET ponPortAdminStatus = #{ponPortAdminStatus} WHERE
+		ponId = #{ponId}   
+	</update>
+	
+	<update id="updatePonIsolationStatus" parameterType="oltPonAttribute">
+		UPDATE
+		OltPonAttribute SET ponPortIsolationEnable = #{ponPortIsolationEnable}
+		WHERE ponId = #{ponId}   
+	</update>
+	
+	<update id="updatePonPortEncryptMode" parameterType="oltPonAttribute"> UPDATE
+		oltponattribute SET ponPortEncryptMode = #{ponPortEncryptMode},
+		ponPortEncryptKeyExchangeTime = #{ponPortEncryptKeyExchangeTime} WHERE
+		ponId = #{ponId}	
+	</update>
+	
+	<select id="getPonStormSuppression" parameterType="long"
+		resultType="oltPonStormSuppressionEntry">
+		SELECT ponId,
+		unicastStormEnable,
+		unicastStormInPacketRate,
+		multicastStormEnable,
+		multicastStormInPacketRate,
+		broadcastStormEnable,
+		broadcastStormInPacketRate
+		FROM OltPonStormInfo
+		WHERE ponId = #{ponId}
+	</select>
+	
+	<update id="updatePonMaxLearnMacNum" parameterType="oltPonAttribute"> UPDATE
+		oltponattribute SET ponPortMacAddrLearnMaxNum =
+		#{ponPortMacAddrLearnMaxNum} WHERE ponId = #{ponId}	
+	</update>
+	
+	<update id="updatePon15MinPerfStatus" parameterType="oltPonAttribute">
+		UPDATE
+		OltPonAttribute SET perfStats15minuteEnable =
+		#{perfStats15minuteEnable} WHERE ponId = #{ponId}
+	</update>
+	
+	<update id="updatePon24HourPerfStatus" parameterType="oltPonAttribute">
+		UPDATE
+		OltPonAttribute SET perfStats24hourEnable = #{perfStats24hourEnable}
+		WHERE ponId = #{ponId}
+	</update>
+	
+	<update id="updatePonPortSpeedMode" parameterType="map">
+		UPDATE
+		oltponportspeed SET
+		ponPortSpeedMod = #{speedMode}
+		WHERE entityId =
+		#{entityId} and ponId = #{ponId}
+    </update>
+    
+    <select id="getPonPortSpeedMode" parameterType="map"
+		resultType="topPonPortSpeedEntry">
+		select entityId,slotId ponPortSpeedCardIndex,ponId
+		ponPortSpeedPortIndex,slotId,ponId,ponIndex,ponPortSpeedMod
+		from
+		oltponportspeed where entityId = #{entityId} and ponId = #{ponId}
+	</select>
+	
+	<insert id="insertOltPonRelation" databaseId="MySQL"
+		parameterType="oltPonAttribute" useGeneratedKeys="true" keyProperty="ponId">
+		insert into
+		OltPonRelation(slotId,ponIndex,entityId) values
+		(#{slotId},#{ponIndex},#{entityId})
+	</insert>
+	<insert id="insertOltPonRelation" databaseId="Oracle"
+		parameterType="oltPonAttribute">
+		<selectKey keyProperty="ponId" resultType="long" order="BEFORE">
+			SELECT
+			OltPonRelation_Seq.nextval AS ponId from dual
+        </selectKey>
+		insert into OltPonRelation(ponId,slotId,ponIndex,entityId) values
+		(#{ponId},#{slotId},#{ponIndex},#{entityId})
+	</insert>
+	
+	<insert id="insertOltPonAttribute" parameterType="oltPonAttribute">
+		insert into
+		OltPonAttribute
+		(ponId, ponPortType, ponOperationStatus,
+		ponPortAdminStatus,
+		ponPortMaxOnuNumSupport,
+		ponPortUpOnuNum,
+		ponPortEncryptMode,
+		ponPortEncryptKeyExchangeTime,
+		ponPortIsolationEnable,
+		maxDsBandwidth,
+		actualDsBandwidthInUse,
+		remainDsBandwidth,
+		perfStats15minuteEnable,
+		perfStats24hourEnable,
+		ponPortMacAddrLearnMaxNum,
+		maxUsBandwidth,
+		actualUsBandwidthInUse,
+		remainUsBandwidth,
+		entityId
+		)
+		values
+		(#{ponId}, #{ponPortType},
+		#{ponOperationStatus},
+		#{ponPortAdminStatus},
+		#{ponPortMaxOnuNumSupport},
+		#{ponPortUpOnuNum},
+		#{ponPortEncryptMode},
+		#{ponPortEncryptKeyExchangeTime},
+		#{ponPortIsolationEnable},
+		#{maxDsBandwidth},
+		#{actualDsBandwidthInUse},
+		#{remainDsBandwidth},
+		#{perfStats15minuteEnable},
+		#{perfStats24hourEnable},
+		#{ponPortMacAddrLearnMaxNum},
+		#{maxUsBandwidth},
+		#{actualUsBandwidthInUse},
+		#{remainUsBandwidth},
+		#{entityId}
+		)
+	</insert>
+	
+	<update id="updatePonStormInfo" parameterType="oltPonStormSuppressionEntry">
+		UPDATE
+		OltPonStormInfo
+		SET
+		unicastStormEnable =
+		#{unicastStormEnable},
+		unicastStormInPacketRate =
+		#{unicastStormInPacketRate},
+		unicastStormOutPacketRate =
+		#{unicastStormOutPacketRate},
+		multicastStormEnable =
+		#{multicastStormEnable},
+		multicastStormInPacketRate =
+		#{multicastStormInPacketRate},
+		multicastStormOutPacketRate =
+		#{multicastStormOutPacketRate},
+		broadcastStormEnable =
+		#{broadcastStormEnable},
+		broadcastStormInPacketRate =
+		#{broadcastStormInPacketRate},
+		broadcastStormOutPacketRate =
+		#{broadcastStormOutPacketRate}
+		WHERE ponId
+		= #{ponId}
+	</update>
+	
+	<insert id="insertPonStormInfo" parameterType="oltPonStormSuppressionEntry">
+		insert into
+		oltponstorminfo
+		(ponId, unicastStormEnable, unicastStormInPacketRate,
+		unicastStormOutPacketRate,
+		multicastStormEnable,
+		multicastStormInPacketRate,
+		multicastStormOutPacketRate,
+		broadcastStormEnable,
+		broadcastStormInPacketRate,
+		broadcastStormOutPacketRate,
+		entityId
+		)
+		values
+		(#{ponId},
+		#{unicastStormEnable},
+		#{unicastStormInPacketRate},
+		#{unicastStormOutPacketRate},
+		#{multicastStormEnable},
+		#{multicastStormInPacketRate},
+		#{multicastStormOutPacketRate},
+		#{broadcastStormEnable},
+		#{broadcastStormInPacketRate},
+		#{broadcastStormOutPacketRate},
+		#{entityId}
+		)  
+	</insert>
+	
+	<select id="getPonId" parameterType="oltPonAttribute"
+		resultType="long">
+		SELECT
+		ponId
+		FROM
+		OltPonRelation
+		WHERE
+		entityId = #{entityId}
+		and ponIndex = #{ponIndex}    
+	</select>
+	
+	<select id="getPonIds" parameterType="map" resultType="long">  
+		SELECT 
+		ponId
+		FROM 
+		OltPonRelation
+		WHERE
+		entityId = #{entityId}
+		and
+		ponIndex in  
+	 	<foreach item="item" index="index" collection="ponIndexs" open="(" separator="," close=")">  
+	  		#{item}  
+	 	</foreach>  
+	</select>
+	
+	<delete id="deletePonStormInfo" parameterType="Long">
+		delete from
+		oltponstorminfo where ponId=#{ponId}
+	</delete>
+	
+	<update id="updatePonBandMax" parameterType="map">
+		UPDATE
+		OltPonAttribute SET
+		ponBandMax = #{ponBandMax}
+		WHERE ponId = #{ponId}
+	</update>
+	
+	<update id="updatePonRateLimit" parameterType="map">
+		UPDATE
+		OltPonAttribute SET
+		maxDsBandwidth = #{downRatelimit},
+		maxUsBandwidth =
+		#{upRatelimit}
+		WHERE ponId = #{ponId}
+	</update>
+	
+	<update id="updateOltPonAttribute" parameterType="oltPonAttribute">
+		UPDATE
+		OltPonAttribute SET
+		ponPortType = #{ponPortType},
+		ponOperationStatus =
+		#{ponOperationStatus},
+		ponPortAdminStatus = #{ponPortAdminStatus},
+		ponPortMaxOnuNumSupport = #{ponPortMaxOnuNumSupport},
+		ponPortUpOnuNum =
+		#{ponPortUpOnuNum},
+		ponPortEncryptMode = #{ponPortEncryptMode},
+		ponPortEncryptKeyExchangeTime = #{ponPortEncryptKeyExchangeTime},
+		ponPortIsolationEnable = #{ponPortIsolationEnable},
+		maxDsBandwidth =
+		#{maxDsBandwidth},
+		actualDsBandwidthInUse = #{actualDsBandwidthInUse},
+		remainDsBandwidth = #{remainDsBandwidth},
+		perfStats15minuteEnable =
+		#{perfStats15minuteEnable},
+		perfStats24hourEnable =
+		#{perfStats24hourEnable},
+		ponPortMacAddrLearnMaxNum =
+		#{ponPortMacAddrLearnMaxNum},
+		maxUsBandwidth = #{maxUsBandwidth},
+		actualUsBandwidthInUse = #{actualUsBandwidthInUse},
+		remainUsBandwidth =
+		#{remainUsBandwidth}
+		WHERE exists
+		(select 1 from OltPonRelation where
+		OltPonRelation.ponId =
+		OltPonAttribute.ponId and
+		OltPonRelation.entityId=#{entityId} and
+		OltPonRelation.ponIndex=#{ponIndex})
+	</update>
+	
+	<select id="getOltPonCount" parameterType="OltPonAttribute"
+		resultType="int">
+		select
+		count(B.ponId)
+		from
+		OltPonRelation B
+		where B.entityId =
+		#{entityId} and B.ponIndex =
+		#{ponIndex}
+	</select>
+	
+	<select id="getPonAttribute" parameterType="long" resultType="oltPonAttribute">
+		SELECT
+		A.entityId,
+		B.ponIndex,
+		A.ponPortType,
+		A.ponOperationStatus,
+		A.ponPortAdminStatus,
+		A.ponPortMaxOnuNumSupport,
+		A.ponPortUpOnuNum,
+		A.ponPortEncryptMode,
+		A.ponPortEncryptKeyExchangeTime,
+		A.ponPortIsolationEnable,
+		A.maxDsBandwidth,
+		A.actualDsBandwidthInUse,
+		A.remainDsBandwidth,
+		A.perfStats15minuteEnable,
+		A.perfStats24hourEnable,
+		A.ponPortMacAddrLearnMaxNum,
+		A.maxUsBandwidth,
+		A.actualUsBandwidthInUse,
+		A.ponBandMax,
+		A.remainUsBandwidth,
+		D.ponPortSpeedMod ponSpeedMode,
+		E.rogueSwitch ponRogueSwitch,
+		<choose>
+			<when test="_databaseId == 'MySQL'">
+				IFNULL(c.topPonPSStandbyPortIndex,0) as isStandbyPort
+		  </when>
+			<when test="_databaseId == 'Oracle'">
+				NVL(c.topPonPSStandbyPortIndex,0) as isStandbyPort
+		  </when>
+		  <otherwise>  
+                IFNULL(c.topPonPSStandbyPortIndex,0) as isStandbyPort 
+          </otherwise>  
+		</choose>
+		
+		FROM
+		OltPonAttribute A LEFT JOIN oltponrelation B
+		ON
+		A.ponId = B.ponId
+		LEFT JOIN topponpsgrpconfig C
+		ON
+		B.entityId =
+		c.entityId AND B.ponIndex = C.topPonPSStandbyPortIndex
+		left join
+		oltponportspeed D
+		on B.entityId = D.entityId and A.ponId = D.ponId
+		left join oltPonRogueInfo E
+		on B.entityId = E.entityId and A.ponId = E.ponId
+		WHERE
+		A.ponId = #{ponId}
+	</select>
+	
+	<select id="getPonIndex" parameterType="long" resultType="long">
+		SELECT
+		ponIndex FROM OltPonRelation WHERE ponId = #{ponId}
+	</select>
+	
+	<select id="getAllPonIndex" parameterType="long" resultType="long">
+		SELECT DISTINCT ponIndex FROM OltPonRelation WHERE entityId =
+		#{entityId} ORDER BY ponIndex ASC
+	</select>
+	
+	<select id="getAllEponIndex" parameterType="long" resultType="long">
+		SELECT DISTINCT A.ponIndex FROM OltPonRelation A , oltponattribute B
+		WHERE A.entityId = #{entityId} and A.ponId = B.ponId  and B.ponPortType != 3
+		ORDER BY A.ponIndex ASC
+	</select>
+	
+	<select id="getOltPonList" parameterType="Long" resultType="oltSlotAttribute">
+		SELECT
+		A.slotId,
+		B.slotIndex,
+		A.slotNo,
+		A.topSysBdPreConfigType,
+		A.topSysBdActualType,
+		A.bAttribute,
+		A.bAdminStatus,
+		A.bHardwareVersion,
+		A.bFirmwareVersion,
+		A.bSoftwareVersion,
+		A.bUpTime,
+		A.bSerialNumber,
+		A.bName,
+		A.bPresenceStatus
+		FROM
+		OltSlotAttribute A,
+		OltSlotRelation B
+		WHERE
+		B.entityId = #{entityId}
+		and A.slotId =
+		B.slotId and
+		A.topSysBdPreConfigType in (3,4,10,14,15,16,17,18,19,20,21,23)
+		order by
+		A.slotNo
+	</select>
+	
+	<select id="getOltEponList" parameterType="long" resultType="oltSlotAttribute">
+		SELECT
+		A.slotId,
+		B.slotIndex,
+		A.slotNo,
+		A.topSysBdPreConfigType,
+		A.topSysBdActualType,
+		A.bAttribute,
+		A.bAdminStatus,
+		A.bHardwareVersion,
+		A.bFirmwareVersion,
+		A.bSoftwareVersion,
+		A.bUpTime,
+		A.bSerialNumber,
+		A.bName,
+		A.bPresenceStatus
+		FROM
+		OltSlotAttribute A,
+		OltSlotRelation B
+		WHERE
+		B.entityId = #{entityId}
+		and A.slotId =
+		B.slotId and
+		A.topSysBdPreConfigType in (3,4,10,15,16,17,18,19,20,21,23)
+		order by A.slotNo
+	</select>
+	
+	<select id="getOltGponList" parameterType="long" resultType="oltSlotAttribute">
+		SELECT
+		A.slotId,
+		B.slotIndex,
+		A.slotNo,
+		A.topSysBdPreConfigType,
+		A.topSysBdActualType,
+		A.bAttribute,
+		A.bAdminStatus,
+		A.bHardwareVersion,
+		A.bFirmwareVersion,
+		A.bSoftwareVersion,
+		A.bUpTime,
+		A.bSerialNumber,
+		A.bName,
+		A.bPresenceStatus
+		FROM
+		OltSlotAttribute A,
+		OltSlotRelation B
+		WHERE
+		B.entityId = #{entityId}
+		and A.slotId =
+		B.slotId and
+		A.topSysBdPreConfigType in (14,23)
+		order by A.slotNo
+	</select>
+	
+	<delete id="deletePonPortSpeed" parameterType="long">
+		delete from
+		oltponportspeed where entityId = #{entityId}
+    </delete>
+    
+    <insert id="insertPonPortSpeed" parameterType="topPonPortSpeedEntry">
+		insert into
+		oltponportspeed(entityId, slotId,ponId, ponIndex, ponPortSpeedMod)
+		values
+		(#{entityId},#{ponPortSpeedCardIndex},#{ponId},#{ponIndex},#{ponPortSpeedMod})
+	</insert>
+	
+	<select id="getPonPortList" parameterType="map" resultType="oltPonAttribute">
+		select
+		A.ponId,
+		A.ponPortType,
+		A.ponOperationStatus,
+		A.ponPortAdminStatus,
+		B.ip AS entityIp,
+		B.name AS entityName,
+		C.ponIndex
+		from
+		oltponattribute A,entity B,oltponrelation C
+		where A.entityId =
+		B.entityId AND A.ponId = C.ponId and B.entityId in (select entityId
+		from ${Authority})
+		<if test="entityType != null and entityType != ''">
+			and B.typeId =
+			#{entityType}</if>
+		<if test="entityIp != null and entityIp != ''">
+			and B.ip = #{entityIp}</if>
+		<if test="adminState != null and adminState != ''">
+			and A.ponPortAdminStatus =
+			#{adminState} </if>
+		<if test="operationState != null and operationState != ''">
+			and A.ponOperationStatus =
+			#{operationState}</if>
+	</select>
+	
+	<select id="getOnuAttributeByPonIndexs" parameterType="map"
+		resultType="oltOnuAttribute">
+		SELECT D.onuIndex,
+		C.onuId,
+		C.onuLlidId,
+		C.onuUniqueIdentification,
+		C.onuMacAddress,
+		C.onuType,
+		C.onuPreType,
+		C.onuOperationStatus,
+		IF(C.onuEorG='E',C.onuSoftwareVersion, IF(GSOFT.onuSoftware0Active=1,GSOFT.onuSoftware0Version,GSOFT.onuSoftware1Version)) onuSoftwareVersion,
+		C.onuFirmwareVersion,
+		C.topOnuHardwareVersion
+		FROM 
+		oltonuattribute C INNER JOIN oltonurelation D on C.onuId = D.onuId
+		LEFT JOIN gpon_onuinfosoftware GSOFT ON GSOFT.onuId = C.onuId
+		WHERE ${onuTypeSql}
+		AND
+		C.onuId IN
+		(SELECT B.onuId
+		FROM oltonurelation B
+		WHERE B.ponId IN
+		(SELECT A.ponId
+		FROM oltponrelation A
+		WHERE entityId = #{entityId} and A.ponIndex IN
+		<foreach item="item" index="index" collection="ponIndexList"
+			open="(" separator="," close=")">
+			#{item}
+        </foreach>
+		))
+	</select>
+	
+	<update id="updatePonOperationStatus" parameterType="map">
+		UPDATE OltPonAttribute 
+		SET ponOperationStatus = #{ponOperationStatus} 
+		WHERE ponId = #{ponId}    
+	</update>
+	
+	<select id="getPonListByEntityId" parameterType="long"
+		resultType="oltPonAttribute">
+		select A.*, B.ponIndex,B.slotId from oltponattribute A, oltponrelation B
+		where A.entityId = #{entityId} and A.ponId = B.ponId
+	</select>
+	
+	<select id="getPonPortType" parameterType="map" resultType="int">
+		select B.ponPortType from oltponrelation A left join oltponattribute B 
+		on A.ponId = B.ponId and A.entityId = B.entityId
+		where A.entityId = #{entityId} and A.ponIndex = #{ponIndex}
+	</select>
+
+</mapper>

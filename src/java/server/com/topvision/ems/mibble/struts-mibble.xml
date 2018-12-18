@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="mibble" namespace="/mibble" extends="default">
+        <action name="showMibbleBrowser" class="mibbleBrowserAction" method="showMibbleBrowser">
+            <result>/mibble/mibbleBrowser.jsp</result>
+        </action>
+        <action name="showMibbleSelectJsp" class="mibbleBrowserAction" method="showMibbleSelectJsp">
+            <result>/mibble/selectMibs.jsp</result>
+        </action>
+        <action name="loadMibbles" class="mibbleBrowserAction" method="loadMibbles" />
+        <action name="loadMibble" class="mibbleBrowserAction" method="loadMibble" />
+        <action name="uploadMib" class="mibbleBrowserAction" method="uploadMib" />
+        <action name="deleteMib" class="mibbleBrowserAction" method="deleteMib" />
+        <action name="get" class="mibbleBrowserAction" method="get" />
+        <action name="getNext" class="mibbleBrowserAction" method="getNext" />
+        <action name="getAll" class="mibbleBrowserAction" method="getAll" />
+        <action name="set" class="mibbleBrowserAction" method="set" />
+        <action name="stopGetAll" class="mibbleBrowserAction" method="stopGetAll" />
+        <action name="saveSelectedMib" class="mibbleBrowserAction" method="saveSelectedMib" />
+        
+    </package>
+</struts>

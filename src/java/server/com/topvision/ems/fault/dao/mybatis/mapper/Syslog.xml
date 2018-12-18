@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.fault.domain.Syslog">
+	<insert id="insertEntity" databaseId="MySQL" parameterType="syslog"
+		useGeneratedKeys="true" keyProperty="syslogId">
+		insert into syslog
+		(host, entityId,
+		facility, level, time, text)
+		values
+		(host, entityId, facility, level,
+		time, text)
+	</insert>
+	<insert id="insertEntity" databaseId="Oracle" parameterType="syslog">
+		<selectKey keyProperty="syslogId" resultType="int" order="BEFORE">
+			select Syslog_Seq.nextval as syslogId from dual
+		</selectKey>
+		insert into syslog
+		(syslogId, host, entityId, facility, level, time,
+		text)
+		values
+		(#syslogId#, #host#, #entityId#, #facility#, #level#,
+		#time#, #text#)
+	</insert>
+
+	<select id="selectByPrimaryKey" parameterType="long" resultType="syslog">
+		SELECT host, entityId, facility, level, time, text FROM
+		syslog
+		where
+		syslogId = #{syslogId}
+	</select>
+
+
+	<delete id="deleteByPrimaryKey" parameterType="long">
+		DELETE FROM
+		syslog
+		WHERE syslogId = #{syslogId}
+	</delete>
+
+
+</mapper>

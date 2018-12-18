@@ -1,0 +1,999 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.fault.domain.Alert">
+
+	<insert id="insertEntity" databaseId="MySQL" parameterType="alert"
+		useGeneratedKeys="true" keyProperty="alertId">
+		INSERT INTO Alert (typeId, name,
+		levelId, monitorId, entityId,
+		host,
+		source, message, firstTime,
+		lastTime, happenTimes,
+		confirmUser,
+		confirmTime, confirmMessage,
+		clearUser, clearTime, clearMessage,
+		status,
+		orginalCode,
+		userObjectString)
+		VALUES (#{typeId}, #{name}, #{levelId},
+		#{monitorId},
+		#{entityId},
+		#{host}, #{source}, #{message},
+		#{firstTime}, #{lastTime},
+		#{happenTimes}, #{confirmUser},
+		#{confirmTime},#{confirmMessage},
+		#{clearUser}, #{clearTime}, #{clearMessage},
+		#{status},#{orginalCode},#{userObjectString})
+	</insert>
+	<insert id="insertEntity" databaseId="Oracle" parameterType="alert">
+		<selectKey keyProperty="alertId" resultType="long" order="BEFORE">
+			SELECT Alert_Seq.nextval AS alertId from dual
+		</selectKey>
+		INSERT INTO Alert (alertId, typeId, name, levelId, monitorId,entityId,
+		host, source, message, firstTime, lastTime, happenTimes,
+		confirmUser,confirmTime, confirmMessage,
+		clearUser, clearTime,
+		clearMessage,status)
+		VALUES(#{alertId}, #{typeId},
+		#{name}, #{levelId},
+		#{monitorId}, #{entityId},
+		#{host}, #{source},
+		#{message}, #{firstTime},
+		#{lastTime},
+		#{happenTimes},#{confirmUser},
+		#{confirmTime},
+		#{confirmMessage},
+		#{clearUser}, #{clearTime}, #{clearMessage},
+		#{status})
+	</insert>
+
+	<update id="updateEntity" parameterType="alert">
+		UPDATE Alert SET name =
+		#{name}, levelId = #{levelId}, monitorId =
+		#{monitorId}, entityId =
+		#{entityId}, host = #{host}, source =
+		#{source}, message = #{message},
+		firstTime = #{firstTime}, lastTime
+		= #{lastTime}, happenTimes =
+		#{happenTimes},confirmUser =
+		#{confirmUser}, confirmTime =
+		#{confirmTime}, confirmMessage =
+		#{confirmMessage},
+		clearUser =
+		#{clearUser},
+		clearTime = #{clearTime},
+		clearMessage = #{clearMessage},
+		status = #{status}
+		WHERE alertId = #{alertId}
+	</update>
+
+	<select id="selectByPrimaryKey" parameterType="long" resultType="alert">
+		SELECT A.alertId, A.typeId, A.name, A.levelId, A.monitorId,
+		A.entityId, A.host, A.source, A.message, A.firstTime,
+		A.lastTime,
+		A.happenTimes, A.confirmUser, A.confirmTime,
+		A.confirmMessage,
+		A.clearUser, A.clearTime, A.clearMessage,
+		A.status, A.userObjectString,
+		B.displayName AS
+		typeName, C.name as
+		levelName FROM Alert A, AlertType
+		B, Levels C
+		WHERE A.alertId =
+		#{alertId} AND A.typeId = B.typeId AND
+		A.levelId
+		= C.levelId
+	</select>
+
+	<select id="getAlertByAlertId" parameterType="long" resultType="alert">
+		SELECT A.alertId, A.typeId, A.name, A.levelId, A.monitorId,
+		A.entityId, A.host, A.source, A.message, A.firstTime,
+		A.lastTime,
+		A.happenTimes, A.confirmUser, A.confirmTime,
+		A.confirmMessage,
+		A.clearUser, A.clearTime, A.clearMessage,
+		A.status, A.userObjectString,
+		B.displayName AS
+		typeName, C.name as
+		levelName FROM Alert A, AlertType
+		B, Levels C
+		WHERE A.alertId =
+		#{alertId} AND A.typeId = B.typeId AND
+		A.levelId
+		= C.levelId
+	</select>
+
+	<select id="selectByMap" parameterType="map" resultType="alert">
+		SELECT A.alertId, A.typeId, A.name, A.levelId, C.name as
+		levelName,
+		A.monitorId, A.entityId, A.host, A.source, A.message,
+		A.firstTime,
+		A.lastTime, A.happenTimes, A.confirmUser,
+		A.confirmTime,
+		A.confirmMessage, A.clearUser, A.clearTime, A.clearMessage,
+		A.status,
+		A.userObjectString,
+		B.displayName AS
+		typeName FROM Alert A, AlertType B,
+		Levels C
+		WHERE A.typeId = B.typeId
+		AND A.levelId = C.levelId
+		<if test="typeId != null">
+			and A.typeId = #{typeId}
+		</if>
+		<if test="source != null">
+			and A.source = #{source}
+		</if>
+		<if test="entityId != null">
+			and A.entityId = #{entityId}
+		</if>
+		<if test="monitorId != null">
+			and A.monitorId = #{monitorId}
+		</if>
+		<if test="host != null">
+			and A.host like concat('%',#{host},'%')
+		</if>
+		<if test="ip != null">
+			and A.host like concat('%',#{ip},'%')
+		</if>
+		<if test="levelId != null">
+			and A.levelId = #{levelId}
+		</if>
+		<if test="sql != null">
+			and ${sql}
+		</if>
+		ORDER BY A.alertId DESC
+		<if test="pageSize != null">
+			LIMIT ${offset}, ${pageSize}
+		</if>
+	</select>
+
+	<select id="selectCurrentAlert" parameterType="map" resultType="alert">
+		SELECT A.alertId, A.typeId, A.name, A.levelId, C.name as
+		levelName,
+		A.monitorId, A.entityId, A.host, A.source, A.message,
+		A.firstTime,
+		A.lastTime, A.happenTimes, A.confirmUser,
+		A.confirmTime,
+		A.confirmMessage, A.clearUser, A.clearTime, A.clearMessage,
+		A.status,
+		A.userObjectString,
+		B.displayName AS
+		typeName FROM Alert A, AlertType B,
+		Levels C
+		WHERE A.typeId = B.typeId
+		AND A.levelId = C.levelId
+		AND
+		A.clearUser is null
+		<if test="typeId != null">
+			and A.typeId = #{typeId}
+		</if>
+		<if test="source != null">
+			and A.source = #{source}
+		</if>
+		<if test="blurrySource != null">
+	        and A.source like concat('%',#{blurrySource},'%')
+		</if>
+		<if test="entityId != null">
+			and A.entityId = #{entityId}
+		</if>
+		<if test="monitorId != null">
+			and A.monitorId = #{monitorId}
+		</if>
+		<if test="host != null">
+			and A.host like concat('%',#{host},'%')
+		</if>
+		<if test="ip != null">
+			and A.host like concat('%',#{ip},'%')
+		</if>
+		<if test="levelId != null">
+			and A.levelId = #{levelId}
+		</if>
+		<if test="messageLike != null">
+			and A.message LIKE concat('%',#{messageLike},'%')
+		</if>
+		<if test="sql != null">
+			and ${sql}
+		</if>
+		ORDER BY A.alertId DESC
+	</select>
+
+	<select id="handleRecentAlert" databaseId="MySQL" resultType="alert"
+		parameterType="string">
+		SELECT A.alertId, A.typeId, A.name, A.levelId, C.name as
+		levelName,
+		A.monitorId, A.entityId, A.host, A.source, A.message,
+		A.firstTime,
+		A.lastTime, A.happenTimes, A.confirmUser,
+		A.confirmTime,
+		A.confirmMessage, A.clearUser, A.clearTime, A.clearMessage,
+		A.status,
+		A.userObjectString,
+		B.displayName AS
+		typeName FROM Alert A, AlertType B,
+		Levels C
+		WHERE A.typeId = B.typeId
+		AND A.levelId = C.levelId ORDER BY
+		A.alertId DESC LIMIT 0,${value}
+	</select>
+	<select id="handleRecentAlert" databaseId="Oracle" resultType="alert"
+		parameterType="string">
+		select tt.* from (select rownum rn , t.* from (SELECT A.alertId,
+		A.typeId, A.name, A.levelId, C.name as levelName, A.monitorId,
+		A.entityId, A.host, A.source, A.message, A.firstTime, A.lastTime,
+		A.happenTimes, A.confirmUser, A.confirmTime, A.confirmMessage,
+		A.clearUser, A.clearTime, A.clearMessage,
+		A.status, A.userObjectString,
+		B.displayName AS typeName FROM Alert A,
+		AlertType B, Levels C WHERE
+		A.typeId = B.typeId AND A.levelId =
+		C.levelId ORDER BY A.alertId DESC)
+		t)
+		tt where rn <![CDATA[>]]>
+		0 and rn <![CDATA[<=]]>
+		${value}
+	</select>
+
+
+	<select id="selectCount" parameterType="map" resultType="integer">
+		SELECT count(A.alertId) FROM Alert A, AlertType B, Levels C, entity D
+		WHERE A.entityId = D.entityId and A.typeId = B.typeId AND A.levelId =
+		C.levelId
+		and D.entityId in (select entityId from ${Authority})
+		<if test="queryContent != null">
+			and (
+				A.host like concat('%',#{queryContent},'%')
+				or D.name like concat('%',#{queryContent},'%')
+				or B.localeName like concat('%',#{queryContent},'%')
+				or A.message like concat('%',#{queryContent},'%')
+			)
+		</if>
+		<if test="source != null">
+			and A.source = #{source}
+		</if>
+		<if test="entityId != null">
+			and A.entityId = #{entityId}
+		</if>
+		<if test="monitorId != null">
+			and A.monitorId =
+			#{monitorId}
+		</if>
+		<if test="host != null">
+			and A.host like concat('%',#{host},'%')
+		</if>
+		<if test="ip != null">
+			and A.host like concat('%',#{ip},'%')
+		</if>
+		<if test="levelId != null">
+			and A.levelId = #{levelId}
+		</if>
+		<if test="message != null">
+			and A.message like concat('%',#{message},'%')
+		</if>
+		<if test="startTime != null">
+			and A.firstTime >=
+			#{startTime}
+		</if>
+		<if test="endTime != null">
+			and <![CDATA[A.firstTime <= #{endTime}]]>
+		</if>
+		<if test="statusQuery != null">
+			and <![CDATA[${statusQuery}]]>
+		</if>
+		<if test="confirmUser != null">
+			and A.confirmUser = #{confirmUser}
+		</if>
+		<if test="confirmStartTime != null">
+			and A.confirmTime >= #{confirmStartTime}
+		</if>
+		<if test="confirmEndTime != null">
+			and <![CDATA[A.confirmTime <= #{confirmEndTime}]]>
+		</if>
+		<if test="clearUser != null">
+			and A.clearUser = #{clearUser}
+		</if>
+		<if test="clearStartTime != null">
+			and A.clearTime >= #{clearStartTime}
+		</if>
+		<if test="clearEndTime != null">
+			and <![CDATA[A.clearTime <= #{clearEndTime}]]>
+		</if>
+		<if test="typeId != null">
+			<!-- and (A.typeId = #{typeId} OR B.category = #{typeId}) -->
+			and FIND_IN_SET(A.typeId,topoEventFun(#{typeId},'alerttype'))
+		</if>
+		<if test="typeIds != null">
+			and FIND_IN_SET(A.typeId, #{typeIds})
+		</if>
+		<if test="alertId != null">
+			and A.alertId = #{alertId}
+		</if>
+	</select>
+
+	<select id="selectWithPage" databaseId="MySQL" parameterType="map" resultType="alert">
+		SELECT
+			A.alertId,
+			A.typeId,
+			B.displayName AS typeName,
+			A. NAME,
+			A.levelId,
+			C. NAME AS levelName,
+			A.monitorId,
+			A.entityId,
+			A. HOST,
+			A.source,
+			A.message,
+			A.firstTime,
+			A.lastTime,
+			A.happenTimes,
+			A.confirmUser,
+			A.confirmTime,
+			A.confirmMessage,
+			A.clearUser,
+			A.clearTime,
+			A.clearMessage,
+			A. STATUS,
+			D.typeId AS entityType,
+			D. NAME AS entityName,
+			A.userObjectString
+		FROM
+			Alert A,
+			AlertType B,
+			Levels C,
+			entity D
+		WHERE
+			A.entityId = D.entityId
+			AND A.typeId = B.typeId
+			AND A.levelId = C.levelId
+			AND D.entityId in (select entityId from ${Authority})
+		<if test="queryContent != null">
+			and (
+				A.host like concat('%',#{queryContent},'%')
+				or D.name like concat('%',#{queryContent},'%')
+				or B.localeName like concat('%',#{queryContent},'%')
+				or A.message like concat('%',#{queryContent},'%')
+			)
+		</if>
+		<if test="source != null">
+			and A.source = #{source}
+		</if>
+		<if test="entityId != null">
+			and A.entityId = #{entityId}
+		</if>
+		<if test="monitorId != null">
+			and A.monitorId = #{monitorId}
+		</if>
+		<if test="host != null">
+			and A.host like concat('%',#{host},'%')
+		</if>
+		<if test="ip != null">
+			and A.host like concat('%',#{ip},'%')
+		</if>
+		<if test="levelId != null">
+			and A.levelId = #{levelId}
+		</if>
+		<if test="message != null">
+			and A.message like concat('%',#{message},'%')
+		</if>
+		<if test="startTime != null">
+			and A.firstTime >= #{startTime}
+		</if>
+		<if test="endTime != null">
+			and <![CDATA[A.firstTime <= #{endTime}]]>
+		</if>
+		<if test="statusQuery != null">
+			and <![CDATA[${statusQuery}]]>
+		</if>
+		<if test="confirmUser != null">
+			and A.confirmUser = #{confirmUser}
+		</if>
+		<if test="confirmStartTime != null">
+			and A.confirmTime >= #{confirmStartTime}
+		</if>
+		<if test="confirmEndTime != null">
+			and <![CDATA[A.confirmTime <= #{confirmEndTime}]]>
+		</if>
+		<if test="clearUser != null">
+			and A.clearUser = #{clearUser}
+		</if>
+		<if test="clearStartTime != null">
+			and A.clearTime >= #{clearStartTime}
+		</if>
+		<if test="clearEndTime != null">
+			and <![CDATA[A.clearTime <= #{clearEndTime}]]>
+		</if>
+		<if test="typeId != null">
+			<!-- and (A.typeId = #{typeId} OR B.category = #{typeId}) -->
+			and FIND_IN_SET(A.typeId,topoEventFun(#{typeId},'alerttype'))
+		</if>
+		<if test="typeIds != null">
+			and FIND_IN_SET(A.typeId, #{typeIds})
+		</if>
+		<if test="alertId != null">
+			and A.alertId = #{alertId}
+		</if>
+		<if test="sort != null and sort != ''">
+			order by ${sort} ${dir}
+		</if>
+		LIMIT ${start}, ${limit}
+	</select>
+	<select id="selectWithPage" databaseId="Oracle" parameterType="map"
+		resultType="alert">
+		select tt.* from (select rownum rn , t.* from (
+		SELECT A.alertId,
+		A.typeId, B.displayName as typeName, A.name,
+		A.levelId, C.name as
+		levelName, A.monitorId, A.entityId, A.host,
+		A.source, A.message,
+		A.firstTime, A.lastTime, A.happenTimes,
+		A.confirmUser, A.confirmTime,
+		A.confirmMessage,
+		A.clearUser, A.clearTime, A.clearMessage,
+		A.status,
+		A.userObjectString, ,v.typeId as
+		entityType
+		FROM Alert A, AlertType
+		B,entity V,
+		Levels C WHERE A.typeId =
+		B.typeId
+		AND
+		A.levelId = C.levelId
+		AND A.entityId = V.entityId
+		AND
+		V.entityId in
+		(select entityId from
+		${Authority})
+		<if test="source != null">
+			and A.source = #{source}
+		</if>
+		<if test="entityId != null">
+			and A.entityId = #{entityId}
+		</if>
+		<if test="monitorId != null">
+			and A.monitorId = #{monitorId}
+		</if>
+		<if test="host != null">
+			and A.host like concat('%',#{host},'%')
+		</if>
+		<if test="ip != null">
+			and A.host like concat('%',#{ip},'%')
+		</if>
+		<if test="levelId != null">
+			and A.levelId = #{levelId}
+		</if>
+		<if test="message != null">
+			and A.message like concat('%',#{message},'%')
+		</if>
+		<if test="startTime != null">
+			and A.firstTime >= #{startTime}
+		</if>
+		<if test="endTime != null">
+			and <![CDATA[A.firstTime <= #{endTime}]]>
+		</if>
+		<if test="statusQuery != null">
+			and <![CDATA[#{statusQuery}]]>
+		</if>
+		<if test="confirmUser != null">
+			and A.confirmUser = #{confirmUser}
+		</if>
+		<if test="confirmStartTime != null">
+			and A.confirmTime >= #{confirmStartTime}
+		</if>
+		<if test="confirmEndTime != null">
+			and <![CDATA[A.confirmTime <= #{confirmEndTime}]]>
+		</if>
+		<if test="clearUser != null">
+			and A.clearUser = #{clearUser}
+		</if>
+		<if test="clearStartTime != null">
+			and A.clearTime >= #{clearStartTime}
+		</if>
+		<if test="clearEndTime != null">
+			and <![CDATA[A.clearTime <= #{clearEndTime}]]>
+		</if>
+		<if test="typeId != null">
+			and (A.typeId = #{typeId} OR
+			B.category = #{typeId})
+		</if>
+		<if test="sort != null and sort != ''">
+			order by ${sort} ${dir}
+		</if>
+		) t) tt where rn <![CDATA[>]]>
+		${start} and rn <![CDATA[<=]]>(${start}+${limit})
+	</select>
+
+
+	<select id="getRecentAlert" parameterType="map" resultType="alert">
+		SELECT alertId, typeId, name, levelId, monitorId, entityId, host,
+		source, message, firstTime, lastTime, happenTimes, confirmUser,
+		confirmTime, confirmMessage,
+		clearUser, clearTime, clearMessage,
+		status, userObjectString FROM Alert
+	</select>
+
+	<select id="getEntityIdByMac" parameterType="String" resultType="long">
+		select entityId from entity where mac = #{cmcMac} order by entityId
+		desc limit 0,1
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="long">
+		DELETE FROM Alert
+		WHERE alertId = #{alertId}
+	</delete>
+
+
+	<select id="getAlertByEntityIdAndType" parameterType="map"
+		resultType="alert">
+		SELECT alertId, typeId, name, levelId, monitorId, entityId, host,
+		source, message, firstTime, lastTime, happenTimes, confirmUser,
+		confirmTime, confirmMessage,
+		clearUser, clearTime, clearMessage,
+		status
+		FROM Alert WHERE monitorId =
+		#{monitorId} AND typeId = #{typeId}
+		<if test="source != null">
+			and source = #{source}
+		</if>
+	</select>
+
+	<select id="getMaxLevelByEntityId" databaseId="MySQL"
+		parameterType="long" resultType="alert">
+		SELECT alertId, message, levelId,
+		lastTime FROM
+		Alert WHERE entityId
+		=
+		#{entityId} order by levelId desc,
+		firstTime desc
+		limit 0,1
+	</select>
+	<select id="getMaxLevelByEntityId" databaseId="Oracle"
+		parameterType="long" resultType="alert">
+		select tt.* from (select rownum rn , t.* from (SELECT alertId,
+		message, levelId FROM Alert WHERE entityId=#{entityId} order by
+		levelId
+		desc, firstTime desc) t) tt where rn <![CDATA[>]]>
+		0 and rn <![CDATA[<=]]>
+		1
+	</select>
+
+
+
+	<select id="getMaxLevelAlerts" resultType="alert">
+		SELECT
+		max(levelId),entityId FROM Alert GROUP BY entityId
+	</select>
+
+	<select id="getMaxAlertInChildFolder" databaseId="MySQL"
+		parameterType="string" resultType="topoFolderEx">
+		select A.folderId,
+		ifnull(D.alertLevel,0) as alertLevel
+		from
+		TopoFolder A left join (select
+		B.folderId, max(levelId) as
+		alertLevel from EntityFolderRela B, Alert C
+		WHERE B.entityId =
+		C.entityId group by B.folderId) D on A.folderId =
+		D.folderId
+		where
+		A.path like '${_parameter}%'
+	</select>
+	<select id="getMaxAlertInChildFolder" databaseId="Oracle"
+		parameterType="string" resultType="topoFolderEx">
+		select A.folderId,
+		nvl(D.alertLevel,0) as alertLevel
+		from
+		TopoFolder A left join (select
+		B.folderId, max(levelId) as
+		alertLevel from EntityFolderRela B, Alert C
+		WHERE B.entityId =
+		C.entityId group by B.folderId) D on A.folderId =
+		D.folderId
+		where A.path like '${_parameter}%'
+	</select>
+
+
+	<update id="confirmAlert" parameterType="alert">
+		UPDATE Alert SET status
+		= #{status}, confirmUser = #{confirmUser},
+		confirmTime =
+		#{confirmTime}, confirmMessage = #{confirmMessage}
+		WHERE alertId =
+		#{alertId}
+	</update>
+
+
+	<update id="clearAlert" parameterType="alert">
+		UPDATE Alert SET status
+		=
+		#{status}, clearUser = #{clearUser},
+		clearTime =
+		#{clearTime},
+		clearMessage = #{clearMessage}
+		WHERE alertId =
+		#{alertId}
+	</update>
+
+	<select id="hasAlertInChildFolder" parameterType="string"
+		resultType="alert">
+		select C.folderId, max(levelId) as levelId from Alert A,
+		EntityFolderRela B, TopoFolder C where C.path like '1/100%'and
+		C.folderId = B.folderId and A.entityId = B.entityId group by
+		C.folderId, A.entityId
+	</select>
+
+	<select id="statAlertByEntity" parameterType="map" resultType="alertStat">
+	<![CDATA[ 
+		select B.name AS entityName, A.host, count(A.alertId) as count from Alert A, Entity B
+		WHERE A.entityId = B.entityId group by A.entityId order by
+		count desc limit 0,10
+	]]>
+	</select>
+
+	<select id="statAlertByServer" parameterType="map" resultType="alertStat">
+	<![CDATA[ 
+		select B.name AS entityName, A.host, count(A.alertId) as count from Alert A, Entity B
+		WHERE A.entityId = B.entityId group by A.entityId order by
+		count desc limit 0,10
+	]]>
+	</select>
+
+	<select id="topAlertByEntity" databaseId="MySQL" parameterType="map"
+		resultType="alertStat">
+		SELECT
+		count(if(B.alertId is null,0,1)) count,
+		C.displayName,
+		A.entityId,
+		B.lastTime,
+		A.name entityName,
+		A.typeId
+		entityType,
+		IFNULL(A.ip,E.ip) host,
+		IFNULL(A.ip,CONCAT(E.name,'(',E.ip,')')) AS uplinkDevice
+		FROM
+		alert B
+		LEFT JOIN entity A ON B.entityId = A.entityId
+		left join entity E on
+		A.parentId = E.entityId
+		left join entityType C on A.typeId = C.typeId
+		where
+		A.typeid in (select typeId from entitytyperelation where type =
+		10000 or type
+		= 60000 or type = 13000)
+		and A.entityId in(select entityId
+		from ${Authority})
+		and A.typeId != -1
+		group by B.entityId order by count
+		desc
+		limit #{start},#{limit}
+	</select>
+
+	<select id="getStatAlertListByEntity" parameterType="map"
+		resultType="alertStat">
+		SELECT
+		count(if(B.alertId is null,0,1)) count,
+		C.displayName,
+		A.parentId,
+		A.mac,
+		A.entityId,
+		B.lastTime,
+		A.name entityName,
+		A.typeId
+		entityType,
+		IFNULL(A.ip,E.ip) host,
+		IFNULL(A.ip,CONCAT(E.name,'(',E.ip,')')) AS uplinkDevice
+		FROM
+		alert B
+		LEFT JOIN entity A ON A.entityId = B.entityId
+		left join entity E on
+		A.parentId = E.entityId
+		left join entityType C on A.typeId = C.typeId
+		where
+		A.typeid in (select typeId from entitytyperelation where type =
+		10000 or type
+		= 60000 or type = 13000)
+		and A.entityId in(select entityId
+		from ${Authority})
+		and A.typeId != -1
+		<if test="startTime != null">
+			and <![CDATA[B.firstTime >=#{startTime}]]>
+		</if>
+		<if test="endTime != null">
+			<![CDATA[and B.firstTime <= #{endTime}]]>
+		</if>
+		<if test="name != null and name !=''">
+			and (A.name like '%${name}%' or
+			IFNULL(A.ip,CONCAT(E.name,'(',E.ip,')')) like '%${name}%')
+		</if>
+		<if test="deviceType != -1 and deviceType != null">
+			and A.typeId = #{deviceType}
+		</if>
+		group by B.entityId
+		<if test="sort != null and dir != null">
+			order by ${sort} ${dir}
+		</if>
+		<if test="sort == null and dir == null">
+			order by count desc
+		</if>
+		<if test="start != -1 and limit != -1">
+			limit #{start},#{limit}
+		</if>
+	</select>
+
+	<select id="getStatAlertCountByEntity" parameterType="map"
+		resultType="int">
+		select count(*) count from
+		(
+		SELECT
+		count(A.entityId)
+		FROM
+		alert B
+		LEFT JOIN
+		entity A ON A.entityId = B.entityId
+		left join entity E on A.parentId =
+		E.entityId
+		left join entityType C on A.typeId = C.typeId
+		where
+		A.typeid
+		in (select typeId from entitytyperelation where type = 10000 or type
+		=
+		60000 or type = 13000)
+		and A.entityId in(select entityId from
+		${Authority})
+		and A.typeId != -1
+		<if test="startTime != null">
+			and <![CDATA[B.firstTime >=#{startTime}]]>
+		</if>
+		<if test="endTime != null">
+				<![CDATA[and B.firstTime <= #{endTime}]]>
+		</if>
+		<if test="name != null and name !=''">
+			and (A.name like '%${name}%' or
+			IFNULL(A.ip,CONCAT(E.name,'(',E.ip,')'))
+			like '%${name}%')
+		</if>
+		<if test="deviceType != -1 and deviceType != null">
+			and A.typeId = #{deviceType}
+		</if>
+		group by B.entityId
+		) x
+	</select>
+
+	<select id="topAlertByEntity" databaseId="Oracle" parameterType="map"
+		resultType="alertStat">
+		select tt.* from (select rownum rn , t.* from (
+		select
+		B.name AS
+		entityName, A.entityId, B.ip host, B.typeId as entityType,
+		count(A.entityId) as count from Alert A right join entity B
+		on
+		A.entityId = B.entityId and B.entityId in (select entityId from
+		${Authority})
+		<if test="startTime != null">
+			and A.firstTime >=
+			#{startTime}
+		</if>
+		<if test="endTime != null">
+			<![CDATA[and A.firstTime <= #{endTime}]]>
+		</if>
+		group by B.entityId order by
+		count desc ) t) tt where rn
+		BETWEEN 0 AND
+		10
+	</select>
+
+	<select id="statAlertByLevel" parameterType="map" resultType="levelStat">
+		SELECT A.levelId, A.name,
+		<choose>
+			<when test="_databaseId == 'MySQL'">
+				ifnull(count(B.entityId),0)
+			</when>
+			<when test="_databaseId == 'Oracle'">
+				nvl(count(B.entityId),0)
+			</when>
+		</choose>
+		as count from
+		levels A left join
+		(select C.* from alert C, entity V
+		where V.entityId
+		= C.entityId
+		<if test="startTime != null">
+			and C.firstTime >=
+			#{startTime}
+		</if>
+		<if test="endTime != null">
+			and <![CDATA[C.firstTime <= #{endTime}]]>
+		</if>
+		) B
+		on A.levelId = B.levelId and B.entityId
+		in (select
+		entityId from
+		${Authority})
+		group by A.levelId order by
+		A.levelId desc
+	</select>
+
+	<select id="restoreEntityCurrentAlertState" resultType="entitySnap">
+		select
+		A.entityId, A.levelId as alertLevel, A.message as alertDesc,
+		A.alertId, A.lastTime as alertTime
+		from alert
+		A, (select entityId,
+		max(levelId) as levelId from alert
+		group by
+		entityId) B where A.entityId
+		= B.entityId and A.levelId =
+		B.levelId
+		order by A.firstTime desc
+	</select>
+
+	<select id="loadFloatingAlert" databaseId="MySQL" resultType="alert"
+		parameterType="long">
+		SELECT alertId, typeId, name, levelId, monitorId,
+		entityId, host,
+		source, message, firstTime, lastTime, happenTimes,
+		confirmUser,
+		confirmTime, confirmMessage, status, userObjectString FROM
+		Alert WHERE
+		entityId = #{entityId} limit 0, 6
+	</select>
+	
+	<select id="loadEntityAndSubAlert" resultType="alert" parameterType="long">
+		SELECT 
+			A.alertId, A.typeId, A.name, A.levelId, A.monitorId,
+			A.entityId, A.host, A.source, A.message, A.firstTime,
+			A.lastTime, A.happenTimes, A.confirmUser, A.confirmTime,
+			A.confirmMessage, A.clearUser, A.clearTime, A.clearMessage,
+			A.status, A.userObjectString, 
+			B.displayName AS typeName, 
+			C.name as levelName 
+		FROM 
+			Alert A, AlertType B, Levels C
+		WHERE 
+			A.entityId IN (select entityId from entity where entityId=#{entityId} OR parentId=#{entityId})
+			AND A.typeId = B.typeId 
+			AND A.levelId = C.levelId
+	</select>
+	
+	<select id="getConcernAlertTypes" resultType="long">
+		select distinct(alertTypeId) alertTypeId from alerttypeactionrela
+	</select>
+	
+	<select id="loadFloatingAlert" databaseId="Oracle" resultType="alert"
+		parameterType="long">
+		<![CDATA[ 
+	    select tt.* from (select rownum rn , t.* from (
+		SELECT alertId, typeId, name, levelId, monitorId,
+		entityId, host,
+		source, message, firstTime, lastTime, happenTimes,
+		confirmUser,
+		confirmTime, confirmMessage, status, userObjectString FROM Alert
+		WHERE
+		entityId = #{entityId}) t) tt where rn > 0 and rn <= 6 
+		]]>
+	</select>
+
+
+	<select id="getCurrentAlert" parameterType="map" resultType="alert">
+		SELECT alertId, typeId,entityId,
+		firstTime, lastTime FROM Alert where
+		entityId = #{entityId} AND typeId = #{typeId}
+		order by firstTime desc
+	</select>
+	<select id="getEntityCreateTime" parameterType="long"
+		resultType="entity">
+		SELECT entityId,
+		createTime
+		FROM Entity
+		WHERE entityId =
+		#{entityId}
+	</select>
+
+	<select id="getRecentAlertByEntityIdAndLimit" databaseId="MySQL"
+		resultType="alert" parameterType="map">
+		SELECT a.alertId, a.typeId,
+		b.displayName as typeName,
+		a.name, a.levelId, a.monitorId, a.entityId,
+		a.host,
+		a.source,
+		a.message, a.firstTime, a.lastTime, a.happenTimes,
+		a.confirmUser,
+		a.confirmTime, a.confirmMessage,
+		a.clearUser,
+		a.clearTime, a.clearMessage,
+		a.status,
+		a.userObjectString FROM
+		Alert a
+		left join alerttype b on a.typeId =
+		b.typeId
+		WHERE
+		a.entityId =
+		#{entityId} limit ${limit}
+	</select>
+	<select id="getRecentAlertByEntityIdAndLimit" databaseId="Oracle"
+		resultType="alert" parameterType="map">
+		select tt.* from (select rownum rn , t.* from (
+		SELECT a.alertId,
+		a.typeId, b.displayName as typeName, a.name, a.levelId, a.monitorId,
+		a.entityId, a.host,
+		a.source, a.message, a.firstTime, a.lastTime,
+		a.happenTimes, a.confirmUser,
+		a.confirmTime, a.confirmMessage,
+		a.clearUser, a.clearTime, a.clearMessage,
+		a.status, a.userObjectString
+		FROM Alert a
+		left join alerttype b on
+		a.typeId = b.typeId
+		WHERE
+		a.entityId = #{entityId}) t) tt where rn <![CDATA[ <= ]]>
+		#{limit}
+	</select>
+
+	<select id="getEntityNameByIp" parameterType="string"
+		resultType="string">
+		SELECT name
+		FROM Entity
+		WHERE ip = #{host}
+	</select>
+	<select id="getMacByEntityId" parameterType="long" resultType="string">
+		SELECT mac
+		FROM Entity
+		WHERE entityId = #{entityId}
+	</select>
+
+	<select id="getCmcPowerOffAlert" parameterType="map" resultType="alert">
+		SELECT A.alertId, A.typeId, A.name, A.levelId, A.monitorId,
+		A.entityId, A.host, A.source, A.message, A.firstTime,
+		A.lastTime,
+		A.happenTimes, A.confirmUser, A.confirmTime,
+		A.confirmMessage,
+		A.clearUser, A.clearTime, A.clearMessage,
+		A.status, A.userObjectString,
+		B.displayName AS
+		typeName, C.name as
+		levelName FROM Alert A, AlertType
+		B, Levels C
+		WHERE A.typeId = B.typeId AND A.levelId
+		= C.levelId and
+		A.typeId = #{typeId} and A.message like "%${mac}%"
+	</select>
+
+	<select id="getSpecialCmcAlertList" parameterType="map"
+		resultType="alert">
+		SELECT A.alertId, A.typeId, A.name, A.levelId, A.monitorId,
+		A.entityId, A.host, A.source, A.message, A.firstTime,
+		A.lastTime,
+		A.happenTimes, A.confirmUser, A.confirmTime,
+		A.confirmMessage,
+		A.clearUser, A.clearTime, A.clearMessage,
+		A.status, A.userObjectString,
+		B.displayName AS typeName, C.name as levelName
+		FROM Alert A, AlertType
+		B, Levels C
+		WHERE A.typeId = B.typeId AND A.levelId
+		= C.levelId
+		and
+		A.entityId = #{entityId}
+		and A.typeId in
+		<foreach collection="typeList" index="index" item="item" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select> 
+	
+	<select id="getAlertInfoOfUsersAndChoose" resultType="AlertAboutUsers">
+	    SELECT userId,userName FROM users
+	    where userId > 2 	
+	    <if test="sort != null and dir != null">
+			ORDER BY ${sort} ${dir}
+	    </if>
+	        LIMIT ${start},${limit}
+	</select> 
+	
+	<select id="selectUserNameByUserId" resultType="String" parameterType="long">
+	    SELECT userName FROM users
+	    WHERE userId =#{userId} 	
+	</select> 
+
+</mapper> 

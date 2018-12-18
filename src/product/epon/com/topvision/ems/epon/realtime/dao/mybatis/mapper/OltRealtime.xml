@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.realtime.domain.OltBaseInfo">
+	
+	<select id="queryOpticalThreshold" parameterType="map" resultType="perfThresholdRule">
+		SELECT * FROM  perftemplateentityrelation A, perfthresholdrule B 
+		WHERE A.entityId = #{entityId} and B.targetId = #{targetId} and A.templateId = B.templateId
+	</select>
+
+	<select id="queryDeviceAlias" parameterType="map" resultType="String">
+		SELECT onuName FROM oltonuattribute 
+		WHERE onuMacAddress = #{mac} and entityId = #{entityId}
+	</select>
+</mapper>

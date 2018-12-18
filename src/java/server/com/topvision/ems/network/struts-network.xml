@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="network" namespace="/network" extends="default">
+
+		<action name="searchForAutoComplete" class="networkSearchAction"
+			method="searchForAutoComplete" />
+		<action name="queryAllEntityList" class="networkSearchAction"
+			method="queryAllEntityList" />
+		<action name="search" class="networkSearchAction" method="search">
+			<result>/network/searchIndex.jsp</result>
+		</action>
+
+		<action name="findEntity" class="networkAction" method="findEntity" />
+
+		<action name="showMibBrowser" class="mibBrowserAction" method="showMibBrowser">
+			<result>/network/tool/mibBrowser.jsp</result>
+		</action>
+
+		<action name="showTelnet" class="telnetAction" method="showTelnet">
+			<result>/network/tool/telnet.jsp</result>
+		</action>
+
+		<action name="loadNetworkServices" class="networkAction"
+			method="loadNetworkServices">
+		</action>
+
+		<action name="getCmList" class="cmAction" method="getCmList">
+			<result>/cmc/showCmList.jsp</result>
+		</action>
+
+		<action name="getCmDetail" class="cmAction" method="getCmDetail">
+			<result>/cmc/showCmDetail.jsp</result>
+		</action>
+
+		<action name="getCmListTable" class="cmAction" method="getCmListTable">
+		</action>
+
+		<action name="loadVersionControl" class="networkAction" method="loadVersionControl" />
+		<action name="loadTypeAndVersion" class="networkAction" method="loadTypeAndVersion" />
+
+		<action name="showDeviceViewJsp" class="networkAction" method="showDeviceViewJsp">
+			<result>/network/dashboard.jsp</result>
+		</action>
+		<action name="saveDeviceView" class="networkAction" method="saveDeviceView" />
+
+		<action name="showEntitySnapList" class="networkAction" method="showEntitySnapList">
+			<result>/network/entitySnapList.jsp</result>
+		</action>
+		<action name="saveEntitySnapView" class="networkAction" method="saveEntitySnapView" />
+
+
+		<action name="showAutoRefreshConfig" class="autoRefreshAction"
+			method="showAutoRefreshConfig">
+			<result>/system/autoRefreshConfig.jsp</result>
+		</action>
+
+        <action name="saveAutoRefreshConfig" class="autoRefreshAction" method="saveAutoRefreshConfig" />
+        
+        <action name="showEntityList" class="networkAction" method="showEntityList" >
+            <result>/topo/entityList.jsp</result>
+        </action>
+        
+        <!-- Snmp 系统选项设置 -->
+		<action name="showSnmpConfig" class="snmpConfig" method="showSnmpConfig">
+			<result>/system/snmpConfig.jsp</result>
+		</action>
+		<action name="saveSnmpConfig" class="snmpConfig" method="saveSnmpConfig"></action>
+		
+		<action name="showTerminalLocation" class="networkAction" method="showTerminalLocation" >
+            <result>/network/terminalLocate.jsp</result>
+        </action>
+		<action name="saveTerminalUserView" class="networkAction" method="saveTerminalUserView" />
+	</package>
+</struts>

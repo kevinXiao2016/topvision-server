@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.exportAndImport.dao.mybatis.ExportDaoImpl">
+	<select id="getAllEntityAlias" resultType="entity">
+		SELECT
+			entityId,
+			IFNULL(ip, (SELECT ip FROM entity B WHERE B.entityId=A.parentId)) ip,
+			mac,
+			name 
+		FROM 
+			entity A
+	</select>
+</mapper>

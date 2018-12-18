@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="/gpon/unifiltermac" namespace="/gpon/unifiltermac" extends="default">
+	    <action name="showGponUniFilterMac" class="gponUniFilterMacAction" method="showGponUniFilterMac">
+           <result>/gpon/unifiltermac/gponUniFilterMac.jsp</result>
+        </action>
+        <action name="loadGponUniFilterMacList" class="gponUniFilterMacAction" method="loadGponUniFilterMacList"></action>
+        <action name="addGponUniFilterMac" class="gponUniFilterMacAction" method="addGponUniFilterMac"></action>
+        <action name="deleteGponUniFilterMac" class="gponUniFilterMacAction" method="deleteGponUniFilterMac"></action>
+        <action name="refreshGponUniFilterMac" class="gponUniFilterMacAction" method="refreshGponUniFilterMac"></action>
+	</package>
+</struts>

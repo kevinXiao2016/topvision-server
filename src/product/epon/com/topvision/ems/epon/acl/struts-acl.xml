@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="oltAcl" namespace="/epon/acl" extends="default">
+		<!-- ACL配置 -->
+		<action name="showAclList" class="oltAclAction" method="showAclList">
+			<result>/epon/acl/aclList.jsp</result>
+		</action>
+		<action name="showAclRule" class="oltAclRuleAction" method="showAclRule">
+			<result>/epon/acl/aclRule2.jsp</result>
+		</action>
+		<action name="showAclPort" class="oltAclPortAction" method="showAclPort">
+			<result>/epon/acl/aclPort.jsp</result>
+		</action>
+		<action name="showAclAdd" class="oltAclAction" method="showAclAdd">
+			<result>/epon/acl/aclAdd.jsp</result>
+		</action>
+		<action name="showAclEdit" class="oltAclAction" method="showAclEdit">
+			<result>/epon/acl/aclEdit.jsp</result>
+		</action>
+		<action name="loadAclRule" class="oltAclRuleAction" method="loadAclRule" />
+		<action name="modifyAclPort" class="oltAclPortAction" method="modifyAclPort" />
+		<action name="addAclList" class="oltAclAction" method="addAclList" />
+		<action name="modifyAclList" class="oltAclAction" method="modifyAclList" />
+		<action name="deletAclList" class="oltAclAction" method="deletAclList" />
+		<action name="addAclRule" class="oltAclRuleAction" method="addAclRule" />
+		<action name="modifyAclRule" class="oltAclRuleAction" method="modifyAclRule" />
+		<action name="deletAclRule" class="oltAclRuleAction" method="deletAclRule" />
+		<action name="deleteAclPort" class="oltAclPortAction" method="deleteAclPort" />
+		<action name="refreshAcl" class="oltAclAction" method="refreshAcl" />
+	</package>
+</struts>

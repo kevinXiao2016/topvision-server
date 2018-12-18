@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<bean id="oltIgmpConfigFacade"
+		class="com.topvision.ems.epon.igmpconfig.engine.OltIgmpConfigFacadeImpl">
+		<property name="snmpExecutorService" ref="snmpExecutorService" />
+	</bean>
+	<bean id="onuIgmpConfigFacade"
+		class="com.topvision.ems.epon.igmpconfig.engine.OnuIgmpConfigFacadeImpl">
+		<property name="snmpExecutorService" ref="snmpExecutorService" />
+	</bean>
+</beans>

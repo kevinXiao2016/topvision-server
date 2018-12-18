@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.platform.domain.PortletItem">
+	<select id="loadAllPortletItem" resultType="portletItem">
+		SELECT * FROM UserPortletRela;
+	</select>
+
+	<update id="updateEntity" parameterType="portletItem">
+		UPDATE UserPortletRela
+		SET gridX = #{gridX}, gridY = #{gridY} WHERE
+		userId
+		= #{userId} AND
+		itemId = #{itemId}
+    </update>
+
+	<select id="selectByMap" parameterType="map" resultType="portletItem">
+		SELECT
+		itemId, name, categoryId FROM PortletItem
+		ORDER BY
+		categoryId ASC,
+		itemId ASC
+    </select>
+
+	<select id="getPortletCategory" parameterType="map" resultType="portletCategory">
+		SELECT categoryId, name FROM PortletCategory
+		ORDER BY categoryId
+		ASC
+	</select>
+
+	<insert id="insertEntity" parameterType="portletItem">
+		INSERT INTO
+		UserPortletRela(userId, itemId, gridX, gridY, param)
+		values(#{userId},
+		#{itemId}, #{gridX}, #{gridY},
+		#{param})
+    </insert>
+
+	<update id="removePortletItemByUserId" parameterType="long">
+		DELETE FROM
+		UserPortletRela WHERE userId = #{userId}
+    </update>
+
+	<select id="getPortletItemByUser" parameterType="long"
+		resultType="portletItem">
+		SELECT A.itemId, A.name, A.url,
+		A.refreshable, B.gridX,
+		B.gridY,
+		B.param, A.type FROM PortletItem A, UserPortletRela B WHERE
+		B.userId = #{userId}
+		AND A.itemId = B.itemId ORDER BY gridY ASC,
+		gridX
+		ASC, itemId ASC
+    </select>
+
+	<select id="getPortletItemByModule" parameterType="string"
+		resultType="portletItem">
+		SELECT itemId, name, url, refreshable,
+		type FROM PortletItem
+		WHERE module = #{module} ORDER BY itemId ASC
+    </select>
+</mapper>

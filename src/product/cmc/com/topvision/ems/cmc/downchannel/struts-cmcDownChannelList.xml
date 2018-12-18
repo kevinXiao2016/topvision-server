@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcDownChannelList" namespace="/cmc/channel" extends="default">
+
+        <action name="showDownChannelList" class="cmcDownChannelListAction" method="showDownChannelList">
+            <result>/cmc/downChannelList.jsp</result>
+            <result name="ccmtsWeb">/cmc/downChannelListFromWeb.jsp</result>
+        </action>
+        <action name="getDownStreamBaseInfo" class="cmcDownChannelListAction" method="getDownStreamBaseInfo">
+        </action>
+        <action name="showDownStreamConfigInfo" class="cmcDownChannelListAction" method="showDownStreamConfigInfo">
+            <result>/cmc/dowmStreamConfigInfo.jsp</result>
+        </action>
+        <action name="showDSIpqamConfigInfo" class="cmcDownChannelListAction" method="showDSIpqamConfigInfo">
+            <result>/cmc/downChannelConfigInfo.jsp</result>
+        </action>
+        <action name="modifyDownStreamBaseInfo" class="cmcDownChannelListAction" method="modifyDownStreamBaseInfo">
+        </action>
+        <action name="refreshDownChannelBaseInfo" class="cmcDownChannelListAction" method="refreshDownChannelBaseInfo">
+        </action>
+        <action name="refreshDownChannelStaticInfo" class="cmcDownChannelListAction" method="refreshDownChannelStaticInfo">
+        </action>
+	</package>
+</struts>

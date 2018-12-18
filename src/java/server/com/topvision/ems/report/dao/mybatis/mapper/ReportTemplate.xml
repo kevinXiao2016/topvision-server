@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.report.domain.ReportTemplate">
+
+	<select id="getReportTemplate" resultType="com.topvision.ems.report.domain.ReportTemplate">
+		SELECT
+			templateId, superiorId, name, displayName, icon16, taskable, url, display
+		FROM 
+			ReportTemplate 
+		ORDER BY templateId ASC
+	</select>
+	
+	<update id="updateOneReportDisplay" parameterType="com.topvision.ems.report.domain.ReportTemplate">
+		UPDATE 
+			reporttemplate 
+		SET 
+			display = #{display}
+		WHERE 
+			templateId = #{templateId}
+	</update>
+
+</mapper>

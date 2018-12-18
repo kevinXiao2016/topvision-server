@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TopSIPSrvProf">
+    <select id="selectTopSIPSrvProfInfoList" parameterType="long" resultType="topSIPSrvProfInfo">
+        SELECT 
+            entityId,
+            topSIPSrvProfIdx,
+            topSIPSrvProfName,
+            topSIPSrvProfCallWait,
+            topSIPSrvProf3Way,
+            topSIPSrvProfCallTransfer,
+            topSIPSrvProfCallHold,
+            topSIPSrvProfDND,
+            topSIPSrvProfHotline,
+            topSIPSrvProfHotlineNum,
+            topSIPSrvProfHotDelay,
+            topSIPSrvProfBindCnt
+        FROM 
+            topsipsrvprofinfo 
+        WHERE entityId=#{entityId}
+    </select>
+    
+    <select id="selectTopSIPSrvProfInfo" parameterType="map" resultType="topSIPSrvProfInfo">
+            SELECT 
+            entityId,
+            topSIPSrvProfIdx,
+            topSIPSrvProfName,
+            topSIPSrvProfCallWait,
+            topSIPSrvProf3Way,
+            topSIPSrvProfCallTransfer,
+            topSIPSrvProfCallHold,
+            topSIPSrvProfDND,
+            topSIPSrvProfHotline,
+            topSIPSrvProfHotlineNum,
+            topSIPSrvProfHotDelay,
+            topSIPSrvProfBindCnt
+        FROM 
+            topsipsrvprofinfo 
+        WHERE entityId=#{entityId} and topSIPSrvProfIdx = #{profileId}
+    </select>
+    
+    <insert id="insertTopSIPSrvProfInfo"  parameterType="topSIPSrvProfInfo">
+        INSERT INTO 
+            topsipsrvprofinfo(entityId,topSIPSrvProfIdx,topSIPSrvProfName,
+                    topSIPSrvProfCallWait,topSIPSrvProf3Way,topSIPSrvProfCallTransfer,topSIPSrvProfCallHold,topSIPSrvProfDND,
+                    topSIPSrvProfHotline,topSIPSrvProfHotlineNum,topSIPSrvProfHotDelay,topSIPSrvProfBindCnt) 
+        VALUES (#{entityId},#{topSIPSrvProfIdx},#{topSIPSrvProfName},
+            #{topSIPSrvProfCallWait},#{topSIPSrvProf3Way},#{topSIPSrvProfCallTransfer},#{topSIPSrvProfCallHold},#{topSIPSrvProfDND},
+            #{topSIPSrvProfHotline},#{topSIPSrvProfHotlineNum},#{topSIPSrvProfHotDelay},#{topSIPSrvProfBindCnt}
+            )
+    </insert>
+    
+    <update id="updateTopSIPSrvProfInfo" parameterType="topSIPSrvProfInfo">
+        UPDATE topsipsrvprofinfo 
+        SET topSIPSrvProfName=#{topSIPSrvProfName},
+        	topSIPSrvProfCallWait=#{topSIPSrvProfCallWait},
+        	topSIPSrvProf3Way=#{topSIPSrvProf3Way},
+        	topSIPSrvProfCallTransfer=#{topSIPSrvProfCallTransfer},
+        	topSIPSrvProfCallHold=#{topSIPSrvProfCallHold},
+        	topSIPSrvProfDND=#{topSIPSrvProfDND},
+        	topSIPSrvProfHotline=#{topSIPSrvProfHotline},
+        	topSIPSrvProfHotlineNum=#{topSIPSrvProfHotlineNum},
+        	topSIPSrvProfHotDelay=#{topSIPSrvProfHotDelay}
+        WHERE  entityId=#{entityId} AND topSIPSrvProfIdx=#{topSIPSrvProfIdx}
+    </update>
+    
+    <delete id="deleteTopSIPSrvProfInfo"  parameterType="map">
+        DELETE FROM topsipsrvprofinfo WHERE entityId=#{entityId} AND topSIPSrvProfIdx=#{profileId} 
+    </delete>
+</mapper>

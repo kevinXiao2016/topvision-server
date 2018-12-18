@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TopVoipMediaProf">
+    <select id="selectTopVoipMediaProfInfoList" parameterType="long" resultType="topVoipMediaProfInfo">
+        SELECT 
+            entityId,
+            topVoipMediaProfIdx,
+            topVoipMediaProfName,
+            topVoipMediaFaxmode,
+            topVoipMediaNegotiate,
+            topVoipMediaBindCnt
+        FROM 
+            topvoipmediaprofinfo 
+        WHERE entityId=#{entityId}
+    </select>
+    
+    <select id="selectTopVoipMediaProfInfo" parameterType="map" resultType="topVoipMediaProfInfo">
+        SELECT 
+            entityId,
+            topVoipMediaProfIdx,
+            topVoipMediaProfName,
+            topVoipMediaFaxmode,
+            topVoipMediaNegotiate,
+            topVoipMediaBindCnt
+        FROM 
+            topvoipmediaprofinfo 
+        WHERE entityId=#{entityId} and topVoipMediaProfIdx = #{profileId}
+    </select>
+    
+    <insert id="insertTopVoipMediaProfInfo"  parameterType="topVoipMediaProfInfo">
+        INSERT INTO 
+            topvoipmediaprofinfo(entityId,topVoipMediaProfIdx,topVoipMediaProfName,
+                    topVoipMediaFaxmode,topVoipMediaNegotiate,topVoipMediaBindCnt) 
+        VALUES (#{entityId},#{topVoipMediaProfIdx},#{topVoipMediaProfName},
+            #{topVoipMediaFaxmode},#{topVoipMediaNegotiate},#{topVoipMediaBindCnt}
+            )
+    </insert>
+    
+    <update id="updateTopVoipMediaProfInfo" parameterType="topVoipMediaProfInfo">
+        UPDATE topvoipmediaprofinfo 
+        SET topVoipMediaProfName=#{topVoipMediaProfName},
+        	topVoipMediaFaxmode=#{topVoipMediaFaxmode},
+            topVoipMediaNegotiate=#{topVoipMediaNegotiate}
+        WHERE  entityId=#{entityId} AND topVoipMediaProfIdx=#{topVoipMediaProfIdx}
+    </update>
+    
+    <delete id="deleteTopVoipMediaProfInfo"  parameterType="map">
+        DELETE FROM topvoipmediaprofinfo WHERE entityId=#{entityId} AND topVoipMediaProfIdx=#{profileId} 
+    </delete>
+</mapper>

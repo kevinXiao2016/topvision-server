@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="portal" namespace="/portal" extends="default">
+
+        <action name="showMydesktop" class="portalAction" method="showMydesktop">
+            <result>/workbench/mydesktop.jsp</result>
+        </action>
+        <action name="saveDesktopView" class="portalAction" method="saveDesktopView" />
+		
+        <action name="showEntitySnapJsp" class="entityPortalAction"
+            method="showEntitySnapJsp">
+            <!--<result>/network/entityPortal.jsp</result>-->
+            <!--<result name="cancel">/network/entityCanceled.jsp</result>-->
+        </action>
+
+        <action name="showUnknownEntityJsp" class="entityPortalAction"
+            method="showUnknownEntityJsp">
+            <result>/network/entityUnknownType.jsp</result>
+            <!--<result name="cancel">/network/entityCanceled.jsp</result>-->
+        </action>
+
+
+        <action name="isEntityExist" class="entityPortalAction"
+            method="isEntityExist">
+        </action>
+
+        <action name="getResponseByAddress" class="entityPortalAction"
+            method="getResponseByAddress">
+        </action>
+        <action name="getPortsByEntityId" class="entityPortalAction"
+            method="getPortsByEntityId">
+        </action>
+
+        <action name="getSysuptimeByEntity" class="entityPortalAction"
+            method="getSysuptimeByEntity">
+        </action>
+
+        <action name="getRecentAlarmByEntityId" class="entityPortalAction"
+            method="getRecentAlarmByEntityId">
+        </action>
+        <action name="getMonitorByEntityId" class="entityPortalAction"
+            method="getMonitorByEntityId">
+        </action>
+        <action name="getCpuUsageByEntityId" class="entityPortalAction"
+            method="getCpuUsageByEntityId">
+        </action>
+        <action name="getMemUsageByEntityId" class="entityPortalAction"
+            method="getMemUsageByEntityId">
+        </action>
+        <action name="getDiskUsageByEntityId" class="entityPortalAction"
+            method="getDiskUsageByEntityId">
+        </action>
+
+        <action name="getDiskByEntityId" class="entityPortalAction"
+            method="getDiskByEntityId">
+        </action>
+        <action name="getActiveProcessByEntityId" class="entityPortalAction"
+            method="getActiveProcessByEntityId">
+        </action>
+        <action name="getSoftwareByEntityId" class="entityPortalAction"
+            method="getSoftwareByEntityId">
+        </action>
+
+        <action name="getImportantEntity" class="networkPortalAction"
+            method="getImportantEntity">
+        </action>
+
+        <action name="getEntityTopology" class="networkPortalAction"
+            method="getEntityTopology">
+        </action>
+
+        <action name="showDashboard" class="portalAction" method="showDashboard">
+            <result>/network/dashboard.jsp</result>
+        </action>
+
+        <action name="showPopPortletItems" class="portalAction"
+            method="showPopPortletItems">
+            <result>/workbench/popPortletItems.jsp</result>
+        </action>
+
+        <action name="loadPortletItemsByUserId" class="portalAction"
+            method="loadPortletItemsByUserId">
+        </action>
+
+        <action name="modifyMyDesktop" class="portalAction"
+            method="modifyMyDesktop">
+        </action>
+
+        <action name="removePortletItem" class="portalAction"
+            method="removePortletItem">
+        </action>
+
+        <action name="updatePortletPosition" class="portalAction"
+            method="updatePortletPosition">
+        </action>
+
+        <action name="viewPersonalInfoForPortal" class="systemPortalAction"
+            method="viewPersonalInfoForPortal">
+        </action>
+
+        <action name="searchForPortal" class="systemPortalAction"
+            method="searchForPortal">
+        </action>
+
+        <!-- network -->
+        <action name="getNetworkInfo" class="networkPortalAction" method="getNetworkInfo">
+            <result>/network/networkInfoDist.jsp</result>
+        </action>
+        <action name="loadNetworkInfoDist" class="networkPortalAction" method="loadNetworkInfoDist" />
+        
+
+        <action name="getTopLinkFlow" class="linkPortalAction"
+            method="getTopLinkFlow" />
+
+        <action name="getLinkRateTop" class="linkPortalAction"
+            method="getLinkRateTop" />
+
+        <action name="getPortFlowTop" class="portPortalAction"
+            method="getPortFlowTop" />
+
+        <action name="getPortRateTop" class="portPortalAction"
+            method="getPortRateTop" />
+
+        <action name="getTopDeviceDelaying" class="networkPortalAction"
+            method="getTopDeviceDelaying" />
+
+        <action name="getTopCpuLoading" class="networkPortalAction"
+            method="getTopCpuLoading" />
+        <action name="showDeviceCpuJsp" class="networkPortalAction"  method="showDeviceCpuJsp">
+            <result>/network/deviceCpuUsed.jsp</result>
+        </action>
+        <action name="loadDeviceCpuUsedList" class="networkPortalAction"  method="loadDeviceCpuUsedList" />
+
+        <action name="getTopMemLoading" class="networkPortalAction"
+            method="getTopMemLoading" />
+        <action name="showDeviceMemJsp" class="networkPortalAction"  method="showDeviceMemJsp">
+            <result>/network/deviceMemUsed.jsp</result>
+        </action>
+        <action name="loadDeviceMemUsedList" class="networkPortalAction"  method="loadDeviceMemUsedList" />
+
+        <action name="getDeviceDelayingTop" class="networkPortalAction"
+            method="getDeviceDelayingTop" />
+        <action name="getDeviceDelayingOut" class="networkPortalAction"
+            method="getDeviceDelayingOut" />
+        
+        <action name="showDeviceDelayJsp" class="networkPortalAction"  method="showDeviceDelayJsp">
+            <result>/network/deviceDelay.jsp</result>
+        </action>
+        
+        <action name="loadDeviceDelayList" class="networkPortalAction"
+            method="loadDeviceDelayList" />
+            
+        <action name="showDeviceDelayOutJsp" class="networkPortalAction"  method="showDeviceDelayOutJsp">
+            <result>/network/deviceDelayOut.jsp</result>
+        </action>
+        
+        <action name="loadDeviceDelayOutList" class="networkPortalAction"
+            method="loadDeviceDelayOutList" />
+        
+        <action name="showDeviceAttentionList" class="networkPortalAction"  method="showDeviceAttentionList">
+            <result>/network/deviceAttentionList.jsp</result>
+        </action>
+        
+        <action name="loadDeviceAttentionList" class="networkPortalAction"
+            method="loadDeviceAttentionList" />
+            
+        <!-- alert -->
+        <action name="getAlertDistGraph" class="alertPortalAction"  method="getAlertDistGraph">
+            <result>/workbench/destopAlertDist.jsp</result>
+        </action>
+        <action name="loadAlertDistGraph" class="alertPortalAction"  method="loadAlertDistGraph" />
+
+        <action name="getDeviceAlertTop" class="alertPortalAction"
+            method="getDeviceAlertTop" />
+        <action name="showDeviceAlertList" class="alertPortalAction"  method="showDeviceAlertList">
+            <result>/fault/deviceAlertTopList.jsp</result>
+        </action>
+        <action name="loadDeviceAlertList" class="alertPortalAction" method="loadDeviceAlertList" />
+
+        <action name="getServerAlertTop" class="alertPortalAction"
+            method="getServerAlertTop" />
+
+
+        <action name="getTopServerCpuLoading" class="serverPortalAction"
+            method="getTopServerCpuLoading" />
+
+        <action name="getTopServerMemLoading" class="serverPortalAction"
+            method="getTopServerMemLoading" />
+
+        <action name="getTopServerDelaying" class="serverPortalAction"
+            method="getTopServerDelaying" />
+
+        <action name="getServerAvailableDist" class="serverPortalAction"
+            method="getServerAvailableDist" />
+
+        <action name="getServerTypeDist" class="serverPortalAction"
+            method="getServerTypeDist" />
+    </package>
+</struts>

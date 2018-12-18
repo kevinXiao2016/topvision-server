@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+    version="2.4">
+    <display-name>NM3000</display-name>
+
+    <context-param>
+        <param-name>webAppRootKey</param-name>
+        <param-value>nm3000.root</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            classpath:META-INF/spring/applicationContext.xml,
+            classpath*:com/**/engineContext-*.xml,
+            classpath*:com/**/daoContext-*.xml,
+            classpath*:com/**/businessContext-*.xml,
+            classpath*:com/**/dwrContext-*.xml,
+            classpath*:com/**/actionContext-*.xml,
+        </param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>com.topvision.platform.EmsContextListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>com.topvision.platform.EmsHttpSessionListener</listener-class>
+    </listener>
+
+    <filter>
+        <filter-name>LoginChecking</filter-name>
+        <filter-class>com.topvision.framework.web.filter.LoginCheckingFilter</filter-class>
+        <init-param>
+            <param-name>filterURL</param-name>
+            <param-value>
+                /index.jsp, /timeout.jsp, /failure.jsp, /showlogon.tv,/system/loadAllDeviceTypes.tv,
+                /logon.tv,/system/getCuLicView.tv,/system/showLicense.tv,/system/showLicenseApply.tv,/system/loadAllReports.tv,/system/getProductKey.tv,/system/importLicense.tv,/system/showSetPassword.tv,/setPasswd.tv,
+                /logoff.tv, /ping.tv, /system/showAbout.tv, /include/lang.tv,/include/i18n.tv,/version.tv,/system/dongleError.jsp,/mobile/testConnect.mb,/mobile/login.mb,
+                /mobile/getAndroidVersion.mb,/mobile/getAndroidVersionAndUrl.mb,/mobile/getAndroidVersionAndShortUrl.mb,/mobile/getIOSVersion.mb,/mobile/getIOSUrl.mb,/mobile/getEmsVersion.mb
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>loginURL</param-name>
+            <param-value>timeout.jsp</param-value>
+        </init-param>
+        <init-param>
+            <param-name>userKey</param-name>
+            <param-value>UserContext</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>LoginChecking</filter-name>
+        <url-pattern>*.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>LoginChecking</filter-name>
+        <url-pattern>*.tv</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+    	<filter-name>LoginChecking</filter-name>
+    	<url-pattern>*.mb</url-pattern>
+    </filter-mapping>
+     
+     
+    <filter>
+        <filter-name>SessionTimeoutFilter</filter-name>
+        <filter-class>com.topvision.platform.zetaframework.filter.SessionTimeoutFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>SessionTimeoutFilter</filter-name>
+        <url-pattern>*.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>SessionTimeoutFilter</filter-name>
+        <url-pattern>*.tv</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+    	<filter-name>SessionTimeoutFilter</filter-name>
+    	<url-pattern>*.mb</url-pattern>
+    </filter-mapping>
+    
+    <!-- <filter>
+        <filter-name>XssFilter</filter-name>
+        <filter-class>com.topvision.framework.web.filter.XssFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>XssFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping> -->
+    
+    <filter>
+        <filter-name>RequestMethodFilter</filter-name>
+        <filter-class>com.topvision.framework.web.filter.RequestMethodFilter</filter-class>
+        <init-param>
+            <param-name>forbiddenURL</param-name>
+            <param-value>
+                /system/userList.jsp,
+                /system/newUser.jsp,
+				/system/popRole.jsp,
+				/system/modifyUserPwd.jsp,
+				/system/modifyUser.jsp,
+				/system/setSessionTime.jsp,
+				/system/licenseApply.jsp,
+				/system/license.jsp
+            </param-value>
+        </init-param>
+        <init-param>
+            <param-name>postURL</param-name>
+            <param-value>
+                /system/deleteUser.tv,
+                /system/startUser.tv,
+				/system/stopUser.tv,
+				/system/setUserRole.tv,
+				/system/modifyUserPwd.tv,
+				/system/updateUserDetail.tv,
+				/system/unlockUser.tv,
+				/system/updateUserSession.tv,
+				/system/loadUserList.tv
+            </param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>RequestMethodFilter</filter-name>
+        <url-pattern>*.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>RequestMethodFilter</filter-name>
+        <url-pattern>*.tv</url-pattern>
+    </filter-mapping>
+    
+    
+
+    <filter>
+        <filter-name>javascriptFilter</filter-name>
+        <filter-class>com.topvision.platform.zetaframework.filter.JavaScriptFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>javascriptFilter</filter-name>
+        <url-pattern>*.jsr</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>struts2</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+        <init-param>
+            <param-name>actionPackages</param-name>
+            <param-value>com.topvision</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>struts2</filter-name>
+        <url-pattern>*.tv</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>struts2</filter-name>
+        <url-pattern>*.mb</url-pattern>
+    </filter-mapping>
+
+    <jsp-config>
+        <taglib>  
+            <!-- 配置标签的引用地址 JSP页面中引用时使用 -->  
+            <taglib-uri>zetaframework</taglib-uri>  
+            <!-- 配置标签的TLD文件地址  -->
+            <taglib-location>/WEB-INF/tld/zetaframework.tld</taglib-location>  
+        </taglib>  
+    </jsp-config>
+    
+    <!-- jfreechart servlet -->
+    <servlet>
+        <servlet-name>DisplayChart</servlet-name>
+        <servlet-class>org.jfree.chart.servlet.DisplayChart</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DisplayChart</servlet-name>
+        <url-pattern>/servlet/DisplayChart</url-pattern>
+    </servlet-mapping>
+    
+    <!-- highchart export  -->
+    <servlet>  
+		<servlet-name>ExportHighChartGraphServlet</servlet-name>
+		<servlet-class>com.topvision.platform.ExportHighChartGraphServlet</servlet-class>  
+	</servlet>  
+	<servlet-mapping>  
+   		<servlet-name>ExportHighChartGraphServlet</servlet-name>  
+    	<url-pattern>/exportHighChartGraphServlet</url-pattern>  
+  	</servlet-mapping>
+  	
+  	<servlet>  
+		<servlet-name>TopWebSocketServlet</servlet-name>
+		<servlet-class>com.topvision.ems.socketserver.websocket.TopWebSocketServlet</servlet-class>  
+	</servlet>  
+	<servlet-mapping>  
+   		<servlet-name>TopWebSocketServlet</servlet-name>  
+    	<url-pattern>/websocket/*</url-pattern>  
+  	</servlet-mapping>
+
+    <!-- admin report export  -->
+    <servlet>
+	    <servlet-name>adminHttpExporter</servlet-name>
+	    <servlet-class>org.springframework.web.context.support.HttpRequestHandlerServlet</servlet-class>
+	</servlet>
+
+	<servlet-mapping>
+	    <servlet-name>adminHttpExporter</servlet-name>
+	    <url-pattern>/remoting/PassiveReportService</url-pattern>
+	</servlet-mapping>
+
+    <!-- JSPC servlet mappings start -->
+    <!-- FromwebJSP -->
+    <!-- JSPC servlet mappings end -->
+
+    <!-- Http Session Timeout -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+    <!-- The Usual Welcome File List -->
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.htm</welcome-file>
+    </welcome-file-list>
+</web-app>

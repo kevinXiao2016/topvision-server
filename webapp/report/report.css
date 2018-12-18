@@ -1,0 +1,84 @@
+#content-tit {
+	height: 60px !important;
+	margin-bottom: 15px;
+}
+
+#content-tit span:FIRST-CHILD {
+	position: fixed;
+	top: 20px;
+	left: 20px;
+}
+
+#content-tit span img {
+	position: absolute;
+	top: 10px;
+	right: 5px;
+}
+
+fieldset {
+	padding: 4px;
+	margin: 10px 50px;
+	border: 1px solid #7F9EB9;
+}
+
+.required {
+	font: 0.8em Verdana !important;
+	color: red;
+}
+
+.control-group {
+	margin-bottom: 10px;
+}
+
+.control-group:before,.control-group:after {
+	display: table;
+	line-height: 0;
+}
+
+.control-label {
+	font-size: 13px;
+	font-weight: normal;
+	line-height: 20px;
+	display: block;
+	margin-bottom: 5px;
+	float: left;
+	padding-top: 5px;
+	text-align: left;
+	text-indent: 50px;
+	width: 160px;
+}
+
+.controls {
+	margin-left: 130px;
+	padding-top: 5px;
+	text-align:left;
+	vertical-align: middle;
+}
+.controls input[type="checkbox"]{
+	vertical-align: middle;
+	margin-bottom: 2px;
+}
+
+.normalInput {
+	width: 250px;
+	height: 20px;
+	background: #FFF;
+	line-height: 20px;
+	background-color: #FFFFFF;
+	border: 1px solid #7F9EB9;
+	display: inline-block;
+	margin-bottom: 5px;
+	vertical-align: middle;
+}
+.columnTable td{
+	width: 100px;
+	vertical-align: middle;
+	height: 25px;
+}
+.columnTable td input[type="checkbox"]{
+	vertical-align: middle;
+	margin: 2px;
+}
+.COLUMN-NAME {text-align: left;margin-left: 0px;}
+.COLUMN-CHECKBOX{width: 20px;}
+.txtLeftTable td{text-align: left;align:left;}

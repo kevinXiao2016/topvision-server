@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="/gpon/onu" namespace="/gpon/onu" extends="default">
+		<action name="showOnuHostList" class="onuPortalAction" method="showOnuHostList">
+			<result>/gpon/onuIpHostList.jsp</result>
+		</action>
+		<action name="loadGponOnuIpHostList" class="gponOnuAction" method="loadGponOnuIpHostList">
+		</action>
+		<action name="deleteOnuIpHost" class="gponOnuAction" method="deleteOnuIpHost">
+		</action>
+		<action name="showAddOnuIpHostView" class="gponOnuAction" method="showAddOnuIpHostView">
+			<result>/gpon/addOnuIpHost.jsp</result>
+		</action>
+		<action name="addOnuIpHost" class="gponOnuAction" method="addOnuIpHost">
+		</action>
+		<action name="refreshOnuIpHost" class="gponOnuAction" method="refreshOnuIpHost">
+		</action>
+		<action name="batchDelOnuIpHost" class="gponOnuAction" method="batchDelOnuIpHost">
+		</action>
+		<action name="showGponOnuCapability" class="gponOnuAction" method="showGponOnuCapability">
+			<result>/gpon/gponOnuCapability.jsp</result>
+		</action>
+		<action name="showOnuUniList" class="gponOnuAction" method="showOnuUniList">
+			<result>/gpon/onuUniList.jsp</result>
+		</action>
+		<action name="loadGponOnuUniList" class="gponOnuAction" method="loadGponOnuUniList">
+		</action>
+		<action name="showOnuPotsList" class="gponOnuAction" method="showOnuPotsList">
+            <result>/gpon/onuPotsList.jsp</result>
+        </action>
+		<action name="showGponOnuPotsList" class="gponOnuAction" method="showGponOnuPotsList">
+			<result>/gpon/onuPotsList.jsp</result>
+		</action>
+		<action name="showOnuCpeList" class="gponOnuAction" method="showOnuCpeList">
+			<result>/gpon/onucpe/onuCpeList.jsp</result>
+		</action>
+		
+		
+		<action name="showUniVlanView" class="gponOnuAction" method="showUniVlanView">
+			<result>/gpon/gponOnuVlanConfig.jsp</result>
+		</action>
+		<action name="setUniVlanConfig" class="gponOnuAction" method="setUniVlanConfig">
+		</action>
+	</package>
+</struts>

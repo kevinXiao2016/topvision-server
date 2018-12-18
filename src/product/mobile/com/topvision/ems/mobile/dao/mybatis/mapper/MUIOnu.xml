@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.mobile.domain.MUIOnu">
+	<select id="queryAllPreconfigInfo" resultType="onuPreconfigInfo">
+		SELECT
+		*
+		FROM
+		onupreconfiginfo
+	</select>
+	
+	<select id="queryAllOpenReport" resultType="onuOpenReport">
+		SELECT
+		*
+		FROM
+		onuopenreport
+	</select>
+	
+	<select id="selectOnuList" parameterType="map" resultType="mUIOnu">
+		SELECT
+		    A.onuId,
+		    A.entityId,
+		    A.onuMac mac,
+		    A.onuSerialNum sn,
+		    A.onuUniqueIdentification uniqueId,
+		    A.onuChipVendor,
+			IF (
+			     A.onuEorG = 'E',
+			     A.onuSoftwareVersion,
+			     IF (gponSoft.onuSoftware1Active,gponSoft.onuSoftware1Version,gponSoft.onuSoftware0Version)
+			) AS onuSoftwareVersion,
+		    A.onuTestDistance,
+		    A.changeTime,
+		    A.onuTimeSinceLastRegister,
+		    A.topOnuHardwareVersion,
+		    A.onuOperationStatus,
+		    A.topOnuExtAttr,
+		    A.onuEorG,
+		    B.ip,
+		    B.name,
+		    B.contact,
+		    B.location,
+		    C.onuPonRevPower,
+		    C.onuPonTransPower,
+		    C.oltPonRevPower,
+		    D.onuCatvOrInfoRxPower,
+		    D.onuCatvOrInfoRfOutVoltage,
+		    D.onuCatvOrInfoVoltage,
+		    D.onuCatvOrInfoTemperature,
+		    owc.connectMode AS wanMode,
+		    E.connectStatus AS wanStatus,
+		    E.connectErrorCode AS wanErrorCode,
+		    E.connectId AS wanId,
+		    F.ssid,
+		    F.ssidName,
+		    F.encryptMode,
+		    F.password,
+		    G.ip AS oltIp,
+		    G.NAME AS oltName,
+		    G.location AS oltLocation,
+		    K.onuTotalCatvNum
+		FROM
+		    oltonuattribute AS A
+			LEFT JOIN entity AS B ON A.onuId = B.entityId
+			LEFT JOIN perfonulinkqualitylast AS C ON A.onuId = C.onuId
+			LEFT JOIN perfonucatvqualitylast AS D ON A.onuId = D.onuId
+			LEFT JOIN gpon_onucapability AS K ON A.onuId=K.onuId
+			LEFT JOIN onuwanconnect AS owc ON (A.onuId = owc.onuId AND owc.connectId = #{wanId})
+			LEFT JOIN onuwanconnectstatus AS E ON (A.onuId = e.onuId AND E.connectId = #{wanId})
+			LEFT JOIN onuwanssid AS F ON (A.onuId = F.onuId AND F.ssid = #{ssid})
+			LEFT JOIN entity AS G ON A.entityId = G.entityId
+			LEFT JOIN gpon_onuinfosoftware gponSoft ON A.onuId = gponSoft.onuId
+        <where>
+                A.onuOperationStatus=1
+			<if test="uniqueId != null">
+			    AND A.onuUniqueIdentification LIKE #{uniqueId} 
+			</if>
+			<if test="queryContext != null and queryContext != ''">
+				AND  (B.name LIKE '%${queryContext}%' 
+				  OR B.ip LIKE '%${queryContext}%'
+				  OR A.onuMac LIKE '%${queryContext}%'
+				  OR A.onuMac LIKE '%${queryContentMac}%'
+				  OR A.onuSerialNum LIKE '%${queryContext}%'
+				  OR REPLACE(A.onuSerialNum, ':', '') LIKE '%${queryContext}%'
+				<if test="queryMacWithoutSplit != null">
+				  OR REPLACE(A.onuMac, ':', '') LIKE '%${queryMacWithoutSplit}%'
+				</if>
+				)
+			</if>
+		</where>
+		LIMIT ${start},${limit}
+	</select>
+	
+	<select id="selectOnlineOnuAttr" parameterType="string" resultType="oltOnuAttribute">
+	   SELECT * from oltonuattribute where onuOperationStatus = 1 AND onuUniqueIdentification = #{uniqueId}
+	</select>
+	
+	<select id="selectAllOnuAttr" parameterType="string" resultType="oltOnuAttribute">
+       SELECT * from oltonuattribute where onuUniqueIdentification = #{uniqueId}
+    </select>
+	<select id="selectOnuAroundInfo" resultType="onuAroundInfo">
+       SELECT 
+       A.onuId,
+       A.onuUniqueIdentification uniqueId,
+       A.onuOperationStatus,
+       B.longitude,
+       B.latitude,
+       B.typeId,
+       C.onuPonRevPower,
+       C.onuPonTransPower,
+       C.oltPonRevPower,
+       D.onuCatvOrInfoRxPower,
+       D.onuCatvOrInfoRfOutVoltage,
+       D.onuCatvOrInfoVoltage,
+       D.onuCatvOrInfoTemperature
+       FROM oltonuattribute A
+       LEFT JOIN baiduentity B ON B.entityId=A.onuId
+       LEFT JOIN perfonulinkqualitylast C ON C.onuId=A.onuId
+       LEFT JOIN perfonucatvqualitylast D ON D.onuId=A.onuId
+       WHERE
+       B.longitude!='null'
+       AND B.longitude!=0
+       AND B.latitude!='null'
+       AND B.latitude!=0
+       AND A.onuOperationStatus=1
+       AND B.typeId IN (select typeId from entitytyperelation where type = 13000)
+    </select>
+    
+    <select id="selectOnuThreshold" resultType="OnuHealthyThreshold">
+        select distinct targetId,thresholds from perfthresholdrule where 
+        targetId in ('ONU_PON_RE_POWER','ONU_PON_TX_POWER','OLT_PONLLID_RE_POWER',
+        'ONU_CATV_RX_POWER','ONU_CATV_RF','ONU_CATV_VOLTAGE','ONU_CATV_TEMP',
+        'ONU_GPON_RE_POWER','ONU_GPON_TX_POWER','OLT_GPONLLID_RE_POWER') and
+        templateId=3
+    </select>
+	<delete id="clearTablePreconfig">
+		truncate onupreconfiginfo
+	</delete>
+	
+	<delete id="clearTableOpenreport">
+		truncate onuopenreport
+	</delete>
+	
+	<insert id="savePreconfigList" parameterType="java.util.List">
+		INSERT INTO
+		onupreconfiginfo(mac,onuSn,name,wanId,pppoeName,pppoePwd,ssid,wifiName,wifiPwd,contact,phoneNo,address,time,modifyTime,preconfig,current)
+		VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.mac},
+			#{item.onuSn},
+			#{item.name},
+			#{item.wanId},
+			#{item.pppoeName},
+			#{item.pppoePwd},
+			#{item.ssid},
+			#{item.wifiName},
+			#{item.wifiPwd},
+			#{item.contact},
+			#{item.phoneNo},
+			#{item.address},
+			#{item.time},
+			#{item.modifyTime},
+			#{item.preconfig},
+			#{item.current})
+		</foreach>
+	</insert>
+	
+	<insert id="saveOpenreportList" parameterType="onuOpenReport">
+		INSERT INTO
+		onuopenreport(mac,onuOnlineState,onuOptical,wanState,internetConnect,wifiState,nm3000Connect,nm3000Control,time)
+		VALUES
+		(#{mac},
+		#{onuOnlineState},
+		#{onuOptical},
+		#{wanState},
+		#{internetConnect},
+		#{wifiState},
+		#{nm3000Connect},
+		#{nm3000Control},
+		#{time})
+	</insert>
+	
+	<insert id="batchInsertOrUpdatePreconfigInfo" parameterType="onuPreconfigInfo">
+	   INSERT INTO onupreconfiginfo (
+		    uniqueId,
+		    name,
+		    wanId,
+		    pppoeName,
+		    pppoePwd,
+		    ssid,
+		    wifiName,
+		    wifiPwd,
+		    contact,
+		    phoneNo,
+		    address,
+		    longitude,
+		    latitude,
+		    time,
+		    modifyTime,
+		    preconfig,
+		    current)
+		VALUES(
+	        #{uniqueId},
+	        #{name},
+	        #{wanId},
+	        #{pppoeName},
+	        #{pppoePwd},
+	        #{ssid},
+	        #{wifiName},
+	        #{wifiPwd},
+	        #{contact},
+	        #{phoneNo},
+	        #{address},
+	        #{longitude},
+	        #{latitude},
+	        #{timeStamp},
+	        #{modifyTimeStamp},
+	        #{preconfig},
+	        #{current}) 
+		ON DUPLICATE KEY UPDATE 
+	        name = #{name},
+	        wanId = #{wanId},
+	        pppoeName = #{pppoeName},
+	        pppoePwd = #{pppoePwd},
+	        ssid = #{ssid},
+	        wifiName = #{wifiName},
+	        wifiPwd = #{wifiPwd},
+	        contact = #{contact},
+	        phoneNo = #{phoneNo},
+	        address = #{address},
+	        longitude = #{longitude},
+	        latitude = #{latitude},
+	        time = #{timeStamp},
+	        modifyTime = #{modifyTimeStamp},
+	        preconfig = #{preconfig},
+	        current = #{current}
+	</insert>
+    
+    <insert id="batchInsertOrUpdateOpenreport" parameterType="onuOpenReport">
+	    INSERT INTO onuopenreport (
+            uniqueId,
+            pppoeParamSet,
+            wifiParamSet,
+            onuOnlineState,
+            onuOptical,
+            wanState,
+            internetConnect,
+            wifiState,
+            nm3000Connect,
+            nm3000Control,
+            time)
+        VALUES (
+	       #{uniqueId},
+	       #{pppoeParamSet},
+	       #{wifiParamSet},
+	       #{onuOnlineState},
+	       #{onuOptical},
+	       #{wanState},
+	       #{internetConnect},
+	       #{wifiState},
+	       #{nm3000Connect},
+	       #{nm3000Control},
+	       #{timeStamp} ) 
+	   ON DUPLICATE KEY UPDATE 
+	       pppoeParamSet = #{pppoeParamSet},
+	       wifiParamSet = #{wifiParamSet},
+	       onuOnlineState = #{onuOnlineState},
+	       onuOptical = #{onuOptical},
+	       wanState = #{wanState},
+	       internetConnect = #{internetConnect},
+	       wifiState = #{wifiState},
+	       nm3000Connect = #{nm3000Connect},
+	       nm3000Control = #{nm3000Control},
+	       time = #{timeStamp}
+    </insert>
+    
+    <insert id="saveVisitView" parameterType="visitView">
+        insert into terminalVisitView(uuid,startupTime,endTime,lastView,deviceId,deviceModel,deviceVendor,deviceVersion)
+        values(
+            #{uuid},
+	        #{startupTimeStamp},
+	        #{endTimeStamp},
+	        #{lastView},
+	        #{deviceId},
+	        #{deviceModel},
+	        #{deviceVendor},
+	        #{deviceVersion}
+	        ) 
+    </insert>
+    
+    <insert id="savePageView" parameterType="visitView">
+        insert into terminalPageView(uuid,url,startTime,closedTime,opener)
+        values(
+            #{uuid},
+	        #{url},
+	        #{startTimeStamp},
+	        #{closedTimeStamp},
+	        #{opener}) 
+    </insert>
+
+</mapper>

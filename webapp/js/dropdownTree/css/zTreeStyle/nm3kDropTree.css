@@ -1,0 +1,9 @@
+.ztree li a:hover {text-decoration:none; background:#069; color:#fff;}
+.nm3kDropTree{ position:relative; top:0px; left:0px; overflow:hidden; border:1px solid #B7B8CA; height:22px; cursor:pointer; background:#fff url(img/normalInputBg.gif) repeat-x;}
+.nm3kDropTree p{font:12px Arial, Helvetica, sans-serif, "宋体"; padding:3px 0px 0px 3px; color:#333; white-space:nowrap; word-break:keep-all;}
+a.nm3kDropTreeSelectArr{ position:absolute; top:0px; right:0px; width:23px; height:22px; background:url(img/Nm3kSelectArr.gif) no-repeat; overflow:hidden;}
+a.nm3kDropTreeSelectArr:hover{background:url(img/Nm3kSelectArrHover.gif) no-repeat;}
+.nm3kDropTreeSub{ position:absolute; top:0px; left:0px; border:1px solid #ccc; padding:5px; background:#fff; overflow:auto; z-index:999999999; -webkit-box-shadow:2px 2px 6px #333;-moz-box-shadow:2px 2px 6px #333; box-shadow:2px 2px 6px #333;}
+.ztreeSearchBtn{ font:12px Arial, Helvetica, sans-serif, "宋体"; color:#333; text-decoration:none; position:absolute; top:0px; right:0px;}
+.ztreeSearchBtn span{ width:16px; height:16px; overflow:hidden; display:inline-block; position:relative; top:5px;}
+.ztreeSearchBtn label{ cursor:pointer;}

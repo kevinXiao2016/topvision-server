@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.report.domain.OltSniPortFlowReport">
+
+	<select id="statEntitySniFlow" parameterType="map" resultType="com.topvision.ems.epon.report.domain.OltSniPortFlowStastic">
+		<![CDATA[
+		SELECT
+			IFNULL(SUM(case when (c.portInUsedMax*100 >= 0 AND c.portInUsedMax*100 < 20) then 1 else 0 end),0)as range20,
+			IFNULL(SUM(case when (c.portInUsedMax*100 >= 20 AND c.portInUsedMax*100 < 40) then 1 else 0 end),0) as range40,
+			IFNULL(SUM(case when (c.portInUsedMax*100 >= 40 AND c.portInUsedMax*100 < 60) then 1 else 0 end),0) as range60,
+			IFNULL(SUM(case when (c.portInUsedMax*100 >= 60 AND c.portInUsedMax*100 < 80) then 1 else 0 end),0) as range80,
+			IFNULL(SUM(case when (c.portInUsedMax*100 >= 80 AND c.portInUsedMax*100 <= 100) then 1 else 0 end),0) as range100,
+			IFNULL(max(c.portInSpeedMax)/1000000,0) maxRecvFlow,
+			IFNULL(max(c.portOutSpeedMax)/1000000,0) maxSendFlow
+		FROM (
+			SELECT max(A.portInSpeedMax) portInSpeedMax,max(A.portOutSpeedMax) portOutSpeedMax,
+			       max(A.portInUsedMax) portInUsedMax,max(A.portOutUsedMax) portOutUsedMax
+			from perfstats15tablesummary A, oltsnirelation B,oltsniattribute D
+			WHERE A.entityId = B.entityId AND A.portIndex = B.sniIndex AND B.sniId =D.sniId 
+			AND D.sniOperationStatus = 1 AND A.entityId = #{entityId}
+			AND	${sql} GROUP BY A.portIndex
+			) c
+		]]>
+	</select>
+
+	<select id="selectEntitySniCount" parameterType="long" resultType="int">
+		SELECT count(*) from oltsniattribute WHERE entityId =#{entityId} AND sniOperationStatus = 1;
+	</select>
+
+	<select id="selectSniFlowDetail" parameterType="map" resultType="com.topvision.ems.epon.report.domain.OltSniPortFlowDetail">
+		<![CDATA[
+		SELECT portIndex,portInSpeedMax/1000000 stats15InOctets,portInUsedMax*100 portUsedMax,collectTime,name FROM (
+			SELECT A.entityId, A.portIndex,A.portInSpeedMax,A.portInUsedMax,A.stats15EndTime collectTime,E.name
+			FROM perfstats15tableSummary A,entity E, oltsnirelation B, oltsniattribute D
+			WHERE
+				A.entityId = B.entityId AND A.portIndex = B.sniIndex AND B.sniId = D.sniId AND	D.sniOperationStatus = 1 AND A.entityId = E.entityId
+				AND A.entityId = #{entityId} AND (A.stats15EndTime BETWEEN #{stTime} and #{etTime})
+			ORDER BY portInSpeedMax DESC
+		) C 
+		GROUP BY portIndex
+		HAVING (portUsedMax >= #{rangeStart} and portUsedMax < #{rangeEnd})
+		]]>
+	</select>
+
+	<update id="migrateFlowHourly">
+		call migrateFlowHourly()
+	</update>
+	<update id="summaryFlowDaily">
+		call summaryFlowDaily()
+	</update>
+
+</mapper>

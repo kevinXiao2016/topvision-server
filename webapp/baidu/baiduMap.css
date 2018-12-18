@@ -1,0 +1,85 @@
+body,html {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	overflow: hidden
+}
+
+.baiduSearchInput {
+	width: 460px;
+	height: 20px;
+	padding-top: 2px;
+	border: 0px solid transparent;
+	position: absolute;
+	top: 3px;
+	right: 12px;
+	color: #B9B9B9;
+}
+
+.baiduSearchLinkBtn {
+	width: 16px;
+	height: 16px;
+	overflow: hidden;
+	display: block;
+	position: absolute;
+	top: 6px;
+	left: 6px;
+}
+
+.topoSearchInput {
+	width: 140px;
+	height: 20px;
+	padding-top: 2px;
+	border: 0px solid transparent;
+	position: absolute;
+	top: 3px;
+	right: 12px;
+	color: #B9B9B9;
+}
+
+.topoSearchLinkBtn {
+	width: 16px;
+	height: 16px;
+	overflow: auto;
+	display: block;
+	position: absolute;
+	top: 6px;
+	left: 60px;
+}
+
+#baiduMapSide {
+	width: 250px;
+	padding: 0px 10px;
+	height: 100%;
+	overflow: auto;
+	background: #F4F4F4;
+	position: absolute;
+	top: 0;
+	right: -400px;
+	border-left: 1px solid #9a9a9a;
+	z-index: 999;
+	opacity: 0.9;
+	filter: alpha(opacity = 90);
+}
+
+#baiduMapSideArrow {
+	width: 19px;
+	height: 140px;
+	overflow: hidden;
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	z-index: 1000;
+	cursor: pointer;
+}
+
+#arrow {
+	position: absolute;
+	top: 20px;
+	left: 8px;
+	width: 4px;
+	height: 8px;
+	overflow: hidden;
+}
+.baiduSearchResult{}
+.baiduSearchResult:hover{ background:#fff;}

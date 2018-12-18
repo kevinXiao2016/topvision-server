@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.fault.domain.Action">
+	<insert id="insertEntity" databaseId="MySQL" parameterType="action" useGeneratedKeys="true" keyProperty="actionId">
+		INSERT INTO Action (name, actionTypeId, enabled, params) VALUES
+		(#{name}, #{actionTypeId}, #{enabled}, #{params})
+	</insert>
+	<insert id="insertEntity" databaseId="Oracle" parameterType="action">
+	    <selectKey keyProperty="actionId" resultType="int" order="BEFORE">
+    		select Action_Seq.nextval as actionId from dual
+		</selectKey>
+		INSERT INTO Action (actionId, name, actionTypeId, enabled, params) VALUES
+		(#{actionId}, #{name}, #{actionTypeId}, #{enabled}, #{params})
+	</insert>
+	
+	<select id="selectByPrimaryKey" parameterType="long" resultType="action">
+		SELECT actionId, name, actionTypeId, enabled, params FROM Action
+		WHERE
+		actionId = #{actionId}
+	</select>
+
+	<select id="selectByMap" parameterType="map" resultType="action">
+		SELECT
+		actionId, name, actionTypeId, enabled, params FROM Action
+	</select>
+
+	<select id="existActionName" parameterType="map" resultType="int">
+		SELECT count(*) FROM Action where actionTypeId = #{actionType} and name=#{name}
+		<if test="actionId != null">
+            AND actionId != #{actionId}
+        </if>
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="long">
+		DELETE FROM Action
+		WHERE actionId = #{actionId}
+	</delete>
+
+	<update id="updateEntity" parameterType="action">
+		UPDATE Action SET name =
+		#{name}, params = #{params} WHERE
+		actionId = #{actionId}
+	</update>
+
+	<update id="updateActionStatus" parameterType="action">
+		UPDATE Action SET
+		enabled = #{enabled} WHERE actionId =
+		#{actionId}
+	</update>
+</mapper>

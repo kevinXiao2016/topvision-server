@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.spectrum.domain.SpectrumDiscovery">
+
+	<select id="getCmcIdByMac" parameterType="string" resultType="long">
+		SELECT cmcId
+		FROM cmcAttribute
+		WHERE topCcmtsSysMacAddr = #{value}
+	</select>
+
+	<select id="getSpectrumCfgByCmcId" parameterType="long"
+		resultType="com.topvision.ems.cmc.spectrum.facade.domain.SpectrumCfg">
+		SELECT cmcId,macIndex fftMonitorCmcMacIndex,freqInterval fftMonitorFreqInterval,
+				freqStart fftMonitorFreqStart,freqEnd fftMonitorFreqEnd,pollingStatus fftMonitorPollingStatus
+		FROM spectrumiiconfig
+		WHERE cmcId = #{cmcId}
+	</select>
+	
+	<select id="getSpectrumOltSwitch" parameterType="long" 
+		resultType="com.topvision.ems.cmc.spectrum.facade.domain.SpectrumOltSwitch">
+		SELECT * 
+		FROM spectrumiiswitcholt
+		WHERE entityId = #{entityId}
+	</select>
+	
+	<select id="getSpectrumCmtsSwitch" parameterType="long" 
+		resultType="com.topvision.ems.cmc.spectrum.facade.domain.SpectrumCmtsSwitch">
+		SELECT * 
+		FROM spectrumiiswitchCmts
+		WHERE cmcId = #{entityId}
+	</select>
+	
+	<insert id="insertSpectrumCfg" parameterType="com.topvision.ems.cmc.spectrum.facade.domain.SpectrumCfg">
+		INSERT INTO spectrumiiconfig(cmcId,macIndex,freqInterval,freqStart,freqEnd,pollingStatus)
+		VALUES(#{cmcId},#{fftMonitorCmcMacIndex},#{fftMonitorFreqInterval},#{fftMonitorFreqStart},#{fftMonitorFreqEnd},
+		#{fftMonitorPollingStatus})
+	</insert>
+	
+	<insert id="insertSpectrumOltSwitch" parameterType="com.topvision.ems.cmc.spectrum.facade.domain.SpectrumOltSwitch">
+		INSERT INTO spectrumiiswitcholt(entityId,collectSwitch)
+		VALUES(#{entityId},#{collectSwitch})
+	</insert>
+	
+	<insert id="insertSpectrumCmtsSwitch" parameterType="long">
+		INSERT INTO spectrumiiswitchcmts(cmcId,hisVideoSwitch,collectSwitch)
+		VALUES(#{entityId},0,1)
+	</insert>
+
+	<update id="updateSpectrumCfg" parameterType="com.topvision.ems.cmc.spectrum.facade.domain.SpectrumCfg">
+		UPDATE spectrumiiconfig 
+		SET macIndex = #{fftMonitorCmcMacIndex},freqInterval=#{fftMonitorFreqInterval},
+			freqStart = #{fftMonitorFreqStart}, freqEnd = #{fftMonitorFreqEnd},
+			pollingStatus = #{fftMonitorPollingStatus}
+		WHERE cmcId = #{cmcId}
+	</update>
+	
+	<update id="updateSpectrumOltSwitch" parameterType="com.topvision.ems.cmc.spectrum.facade.domain.SpectrumCfg">
+		UPDATE spectrumiiswitcholt
+		SET collectSwitch = #{collectSwitch}
+		WHERE entityId = #{entityId}
+	</update>
+</mapper>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.onuauth.domain.OnuAuthFail">
+	<select id="selectOnuAuthFailList" parameterType="map"
+		resultType="onuAuthFail">
+		select 
+			a.entityId, 
+			a.ponId, 
+			a.onuIndex,
+			a.onuAuthenBlockMacAddress as mac, 
+			a.topOnuAuthBlockedExtLogicSn as sn,
+			a.topOnuAuthBlockedExtPwd as password, 
+			a.authenTime as lastAuthTime, 
+			b.slotId, 
+			b.ponIndex,
+			c.onuId, 
+			e.ip as manageIp,
+			CONCAT(e.name,'(',e.ip,')') AS uplinkDevice
+		from 
+			onublockauthen a
+			left join oltponrelation b on a.ponId = b.ponId
+			left join oltonurelation c on a.onuIndex = c.onuIndex and a.entityId = c.entityId
+			left join entity e on a.entityId = e.entityId
+		where 1=1
+		<if test="entityId != null">
+            AND a.entityId = #{entityId}
+        </if>
+        <if test="slotId != null">
+            AND b.slotId = #{slotId}
+        </if>
+        <if test="ponId != null">
+            AND b.ponId = #{ponId}
+        </if>
+        <if test="mac != null">
+        	AND (a.onuAuthenBlockMacAddress LIKE '%${mac}%'
+				<if test="queryMacWithoutSplit != null">
+				OR REPLACE(a.onuAuthenBlockMacAddress, ':', '') LIKE '%${queryMacWithoutSplit}%'
+				</if>
+				)
+        </if>
+        limit ${start} , ${limit}
+	</select>
+	<select id="selectOnuAuthFailCount" parameterType="map"
+		resultType="long">
+        select count(a.onuAuthenBlockMacAddress)
+		from onublockauthen a
+		left join oltponrelation b on a.ponId = b.ponId
+		left join oltonurelation c on a.onuIndex = c.onuIndex and a.entityId =
+		c.entityId
+		left join entity e on a.entityId = e.entityId
+		where 1=1
+		<if test="entityId != null">
+            AND a.entityId = #{entityId}
+        </if>
+        <if test="slotId != null">
+            AND b.slotId = #{slotId}
+        </if>
+        <if test="ponId != null">
+            AND b.ponId = #{ponId}
+        </if>
+        <if test="mac != null">
+        	AND (a.onuAuthenBlockMacAddress LIKE '%${mac}%'
+				<if test="queryMacWithoutSplit != null">
+				OR REPLACE(a.onuAuthenBlockMacAddress, ':', '') LIKE '%${queryMacWithoutSplit}%'
+				</if>
+				)
+        </if>
+	</select>
+	<select id="getOnuAuthFailObject" parameterType="map" resultType="onuAuthFail">
+		select 
+			a.entityId, 
+			a.ponId, 
+			a.onuIndex,
+			a.onuAuthenBlockMacAddress as mac, 
+			a.topOnuAuthBlockedExtLogicSn as sn,
+			a.topOnuAuthBlockedExtPwd as password, 
+			a.authenTime as lastAuthTime, 
+			b.slotId, 
+			b.ponIndex,
+			c.onuId, 
+			e.ip as manageIp,
+			CONCAT(e.name,'(',e.ip,')') AS uplinkDevice
+		from 
+			onublockauthen a
+			left join oltponrelation b on a.ponId = b.ponId
+			left join oltonurelation c on a.onuIndex = c.onuIndex and a.entityId = c.entityId
+			left join entity e on a.entityId = e.entityId
+		where a.entityId = #{entityId} and a.onuIndex = #{onuIndex} 
+      </select>
+</mapper>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="perf" namespace="/epon/perf" extends="default">
+		<action name="showPerfThresholdJsp" class="oltPerfThresholdAction" method="showPerfThresholdJsp">
+			<result>/epon/oltPerfThreshold.jsp</result>
+		</action>
+		<action name="showPerfStatCycle" class="oltPerfAction" method="showPerfStatCycle">
+			<result>/epon/oltPeriodConfig.jsp</result>
+		</action>
+		<action name="showPerfStatsGlobalSet" class="oltPerfAction" method="showPerfStatsGlobalSet">
+			<result>/epon/oltCollectConfig.jsp</result>
+		</action>
+		<action name="showPerfThresholdModifyJsp" class="oltPerfThresholdAction" method="showPerfThresholdModifyJsp">
+			<result>/epon/modifyOltPerfThreshold.jsp</result>
+		</action>
+		<action name="loadPerfThresholdByType" class="oltPerfThresholdAction" method="loadPerfThresholdByType"/>
+		<action name="modifyPerfThreshold" class="oltPerfThresholdAction" method="modifyPerfThreshold"/>
+		<action name="refreshPerfThreshold" class="oltPerfThresholdAction" method="refreshPerfThreshold"/>
+		<action name="savePerfStatsGlobalSet" class="oltPerfAction" method="savePerfStatsGlobalSet"/>
+		<action name="refreshPerfStatsGlobalSet" class="oltPerfAction" method="refreshPerfStatsGlobalSet"/>
+		<action name="savePerfStatCycle" class="oltPerfAction" method="savePerfStatCycle"/>
+		<action name="refreshPerfStatCycle" class="oltPerfAction" method="refreshPerfStatCycle"/>
+		
+		<!-- monitor -->
+		<action name="showPortPerfCycle" class="oltPerfAction" method="showPortPerfCycle">
+			<result>/epon/perfCycle.jsp</result>
+		</action>
+		<action name="showSaveAsGolbal" class="oltPerfAction" method="showSaveAsGolbal">
+			<result name="success">/performance/saveAsGolbalEponPerf.jsp</result>
+		</action>
+		<action name="showApplyToAllEpon" class="oltPerfAction" method="showApplyToAllEpon">
+			<result name="success">/performance/applyToAllEpon.jsp</result>
+		</action>
+		<action name="showSniPortSpeed" class="oltPerfAction" method="showSniPortSpeed">
+			<result name="success">/epon/sniPortSpeed.jsp</result>
+		</action>
+		<action name="loadSniSpeedList" class="oltPerfAction" method="loadSniSpeedList" />
+		<action name="getTopSniLoading" class="oltPerfAction" method="getTopSniLoading" />
+		<action name="showPonPortSpeed" class="oltPerfAction" method="showPonPortSpeed">
+			<result name="success">/epon/ponPortSpeed.jsp</result>
+		</action>
+		<action name="loadPonSpeedList" class="oltPerfAction" method="loadPonSpeedList" />
+		<action name="getTopPonLoading" class="oltPerfAction" method="getTopPonLoading" />
+		
+		<action name="getDeviceSniLoading" class="oltPerfAction" method="getDeviceSniLoading" />
+		<action name="getDevicePonLoading" class="oltPerfAction" method="getDevicePonLoading" />
+	</package>
+</struts>

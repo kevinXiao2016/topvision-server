@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cm.cmtsInfoSummary.domain.CmtsInfoThreshold">
+    <select id="selectCmtsInfoThreshold" resultType="cmtsInfoThreshold">
+    select upSnrMin,
+	    upSnrMax,
+	    downSnrMin,
+	    downSnrMax,
+	    upPowerMin,
+	    upPowerMax,
+	    downPowerMin,
+        downPowerMax from cmtsInfoThreshold
+    </select>
+    
+    <select id="selectMainChannelFromCmattribute" resultType="cmMainChannel">
+    select 
+	    cmId,
+	    <![CDATA[((StatusUpChannelIfIndex & 0x7F00) >> 8) cmMainUpChannel]]>,
+	    <![CDATA[((StatusDownChannelIfIndex & 0x7F00) >> 8) cmMainDownChannel]]>
+	    from cmattribute
+    </select>
+    
+    <insert id="insertCmtsInfoSummary" parameterType="cmtsInfoStatistics">
+        INSERT INTO cmtsInfoSummary(
+            cmcId,
+            collectTime,
+            upSnrOutRange,
+            downSnrOutRange,
+            upTxOutRange,
+            downReOutRange,
+            upSnrAvg,
+            downSnrAvg,
+            upTxAvg,
+            downReAvg,
+            onlineCmNum,
+            totalCmNum)
+            VALUES(
+            #{cmcId},
+            #{collectTime},
+            #{upSnrOutRange},
+            #{downSnrOutRange},
+            #{upTxOutRange},
+            #{downReOutRange},
+            #{upSnrAvg},
+            #{downSnrAvg},
+            #{upTxAvg},
+            #{downReAvg},
+            #{onlineCmNum},
+            #{totalCmNum})
+    </insert>
+    
+    <insert id="insertOrUpdateCmtsInfoSummary" parameterType="cmtsInfoStatistics">
+        INSERT INTO cmtsInfoSummarylast(
+            cmcId,
+            collectTime,
+            upSnrOutRange,
+            downSnrOutRange,
+            upTxOutRange,
+            downReOutRange,
+            upSnrAvg,
+            downSnrAvg,
+            upTxAvg,
+            downReAvg,
+            onlineCmNum,
+            totalCmNum)
+            VALUES(
+            #{cmcId},
+            #{collectTime},
+            #{upSnrOutRange},
+            #{downSnrOutRange},
+            #{upTxOutRange},
+            #{downReOutRange},
+            #{upSnrAvg},
+            #{downSnrAvg},
+            #{upTxAvg},
+            #{downReAvg},
+            #{onlineCmNum},
+            #{totalCmNum})
+            ON DUPLICATE KEY update
+            collectTime=#{collectTime},
+            upSnrOutRange=#{upSnrOutRange},
+            downSnrOutRange=#{downSnrOutRange},
+            upTxOutRange=#{upTxOutRange},
+            downReOutRange=#{downReOutRange},
+            upSnrAvg=#{upSnrAvg},
+            downSnrAvg=#{downSnrAvg},
+            upTxAvg=#{upTxAvg},
+            downReAvg=#{downReAvg},
+            onlineCmNum=#{onlineCmNum},
+            totalCmNum=#{totalCmNum}
+    </insert>
+    
+    <delete id="deletCmtsInfoSummaryLast">
+        delete from cmtsInfoSummarylast
+    </delete>
+    
+    <select id="insertCmSignal" parameterType="cmSignal">
+        INSERT INTO cmSignal (
+            cmId,
+            collectTime,
+            upChannelSnr,
+            downChannelSnr,
+            downChannelTx,
+            upChannelTx,
+            downChannelFrequency,
+            upChannelFrequency
+        )
+        VALUES(
+            #{cmId}, 
+            #{collectTime}, 
+            #{upChannelSnr},
+            #{downChannelSnr},  
+            #{downChannelTx},  
+            #{upChannelTx},  
+            #{downChannelFrequency},  
+            #{upChannelFrequency}
+        )
+        ON DUPLICATE KEY UPDATE 
+            collectTime=#{collectTime}
+            <if test="upChannelSnr != null">
+            ,upChannelSnr=#{upChannelSnr}
+            </if>
+            <if test="downChannelSnr != null">
+            ,downChannelSnr=#{downChannelSnr}
+            </if>
+            <if test="downChannelTx != null">
+            ,downChannelTx=#{downChannelTx}
+            </if>
+            <if test="upChannelTx != null">
+            ,upChannelTx=#{upChannelTx}
+            </if>
+            <if test="downChannelFrequency != null">
+            ,downChannelFrequency=#{downChannelFrequency}
+            </if>
+            <if test="upChannelFrequency != null">
+            ,upChannelFrequency=#{upChannelFrequency}
+            </if>
+    </select>
+    
+    <insert id="insertOrUpdateCm3Signal" parameterType="com.topvision.ems.cm.cmsignal.domain.Cm3Signal">
+       INSERT INTO Cm3Signal
+       (
+          cmId,
+          channelType,
+          channelId,
+          downChannelSnr,
+          downChannelTx,
+          upChannelTx,
+          upChannelSnr,
+          collectTime
+       )
+       VALUES 
+       (
+           #{cmId},
+           #{channelType}, 
+           #{channelId}, 
+           #{downChannelSnr},
+           #{downChannelTx},
+           #{upChannelTx},
+           #{upChannelSnr},
+           #{collectTime}
+       )
+       ON DUPLICATE KEY UPDATE 
+           upChannelTx = #{upChannelTx},
+           upChannelSnr = #{upChannelSnr},
+           downChannelSnr = #{downChannelSnr},
+           downChannelTx = #{downChannelTx},
+           collectTime = #{collectTime}
+    </insert>
+    
+    <delete id="deleteCm3Signals" parameterType="java.util.ArrayList">
+        delete from Cm3Signal
+        <where>  
+            cmId in (  
+            <foreach item="cmId" index="index" collection="list" separator=","> #{cmId} </foreach>  
+            )  
+        </where>
+    </delete>
+</mapper>

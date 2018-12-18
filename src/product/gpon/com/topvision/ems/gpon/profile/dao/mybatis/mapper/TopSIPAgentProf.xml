@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TopSIPAgentProf">
+    <select id="selectTopSIPAgentProfInfoList" parameterType="long" resultType="topSIPAgentProfInfo">
+        SELECT 
+            entityId,
+            topSIPAgtProfIdx,
+            topSIPAgtProfName,
+            topSIPAgtProxyAddr,
+            topSIPAgtProxyPort,
+            topSIPAgtSecProxyAddr,
+            topSIPAgtSecProxyPort,
+            topSIPAgtBindCnt,
+            topSIPAgtReqExpTime
+        FROM 
+            topsipagentprofinfo 
+        WHERE entityId=#{entityId}
+    </select>
+    
+    <select id="selectTopSIPAgentProfInfo" parameterType="map" resultType="topSIPAgentProfInfo">
+        SELECT 
+            entityId,
+            topSIPAgtProfIdx,
+            topSIPAgtProfName,
+            topSIPAgtProxyAddr,
+            topSIPAgtProxyPort,
+            topSIPAgtSecProxyAddr,
+            topSIPAgtSecProxyPort,
+            topSIPAgtBindCnt,
+            topSIPAgtReqExpTime
+        FROM 
+            topsipagentprofinfo 
+        WHERE entityId=#{entityId} and topSIPAgtProfIdx = #{profileId}
+    </select>
+    
+    <insert id="insertTopSIPAgentProfInfo"  parameterType="topSIPAgentProfInfo">
+        INSERT INTO 
+            topsipagentprofinfo(entityId,topSIPAgtProfIdx,topSIPAgtProfName,
+                    topSIPAgtProxyAddr,topSIPAgtProxyPort,topSIPAgtSecProxyAddr,topSIPAgtSecProxyPort,topSIPAgtBindCnt,topSIPAgtReqExpTime) 
+        VALUES (#{entityId},#{topSIPAgtProfIdx},#{topSIPAgtProfName},
+            #{topSIPAgtProxyAddr},#{topSIPAgtProxyPort},#{topSIPAgtSecProxyAddr},#{topSIPAgtSecProxyPort},#{topSIPAgtBindCnt},#{topSIPAgtReqExpTime}
+            )
+    </insert>
+    
+    <update id="updateTopSIPAgentProfInfo" parameterType="topSIPAgentProfInfo">
+        UPDATE topsipagentprofinfo 
+        SET topSIPAgtProfName=#{topSIPAgtProfName},topSIPAgtProxyAddr=#{topSIPAgtProxyAddr},
+            topSIPAgtProxyPort=#{topSIPAgtProxyPort},topSIPAgtSecProxyAddr=#{topSIPAgtSecProxyAddr},
+            topSIPAgtSecProxyPort=#{topSIPAgtSecProxyPort},topSIPAgtReqExpTime=#{topSIPAgtReqExpTime}
+        WHERE  entityId=#{entityId} AND topSIPAgtProfIdx=#{topSIPAgtProfIdx}
+    </update>
+    
+    <delete id="deleteTopSIPAgentProfInfo"  parameterType="map">
+        DELETE FROM topsipagentprofinfo WHERE entityId=#{entityId} AND topSIPAgtProfIdx=#{profileId} 
+    </delete>
+</mapper>

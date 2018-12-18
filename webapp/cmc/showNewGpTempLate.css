@@ -1,0 +1,15 @@
+
+.x-panel-header-text {
+padding: 3px 36px 3px 16px;
+font: bold 12px/2em Arial, Helvetica, sans-serif,"宋体";
+display: inline-block;
+background: url(../css/white/flag.png) no-repeat right 0;
+color: #fff;}
+.x-panel-header {
+background: transparent;
+padding: 0;
+height: 26px;
+overflow: hidden;
+border: none;
+}
+.x-panel-bwrap{border-top:1px solid #ccc;}

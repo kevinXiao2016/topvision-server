@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.ofa.facade.domain.OfaBasicInfo">
+	
+	<select id="getOfaBasicInfoById" parameterType="long" resultType="ofaBasicInfo">
+		SELECT
+			entityId,
+			deviceIndex,
+			platSN,
+			hWVer,
+			sWVer,
+			moduleType,
+			inputPower,
+			outputPower,
+			pump1BiasCurr,
+			pump1Temp,
+			pump1Tec,
+			pump2BiasCurr,
+			pump2Temp,
+			pump2Tec,
+			voltage5v,
+			voltage12v,
+			systemTemp,
+			outputAtt
+		FROM ofabasicinfo
+		WHERE entityId = #{entityId}
+	</select>
+	
+	<insert id="insertOrUpdateOfaBasicInfo" parameterType="ofaBasicInfo">
+		INSERT INTO ofabasicinfo
+			(entityId,
+			deviceIndex,
+			platSN,
+			hWVer,
+			sWVer,
+			moduleType,
+			inputPower,
+			outputPower,
+			pump1BiasCurr,
+			pump1Temp,
+			pump1Tec,
+			pump2BiasCurr,
+			pump2Temp,
+			pump2Tec,
+			voltage5v,
+			voltage12v,
+			systemTemp,
+			outputAtt)
+		VALUES
+			(#{entityId},
+			#{deviceIndex},
+			#{platSN},
+			#{hWVer},
+			#{sWVer},
+			#{moduleType},
+			#{inputPower},
+			#{outputPower},
+			#{pump1BiasCurr},
+			#{pump1Temp},
+			#{pump1Tec},
+			#{pump2BiasCurr},
+			#{pump2Temp},
+			#{pump2Tec},
+			#{voltage5v},
+			#{voltage12v},
+			#{systemTemp},
+			#{outputAtt})
+		ON DUPLICATE KEY UPDATE
+			platSN = #{platSN},
+			hWVer = #{hWVer},
+			sWVer = #{sWVer},
+			moduleType = #{moduleType},
+			inputPower = #{inputPower},
+			outputPower = #{outputPower},
+			pump1BiasCurr = #{pump1BiasCurr},
+			pump1Temp = #{pump1Temp},
+			pump1Tec = #{pump1Tec},
+			pump2BiasCurr = #{pump2BiasCurr},
+			pump2Temp = #{pump2Temp},
+			pump2Tec = #{pump2Tec},
+			voltage5v = #{voltage5v},
+			voltage12v = #{voltage12v},
+			systemTemp = #{systemTemp},
+			outputAtt = #{outputAtt}
+	</insert>
+	
+	<update id="updateOfaBasicInfo" parameterType="ofaBasicInfo"> 
+		UPDATE ofabasicinfo SET 
+		outputAtt = #{outputAtt} 
+		WHERE
+		entityId = #{entityId}
+	</update>
+</mapper>

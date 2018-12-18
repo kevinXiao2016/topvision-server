@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="port" namespace="/port" extends="default">
+
+		<action name="loadPortForCombox" class="portSearchAction"
+			method="loadPortForCombox" />
+
+		<action name="getPortsByEntityId" class="portSearchAction"
+			method="getPortsByEntityId" />
+
+		<action name="showPortsJsp" class="portAction"
+			method="showPortsJsp">
+			<result>/network/entityPorts.jsp</result>
+		</action>
+		
+		<action name="showPortPropertyJsp" class="portAction"
+			method="showPortPropertyJsp">
+			<result>/network/popPortProperty.jsp</result>
+		</action>
+		
+		<action name="updatePortInfo" class="portAction"
+			method="updatePortInfo"/>
+
+		<action name="loadPortsByEntityId" class="portAction"
+			method="loadPortsByEntityId" />		
+
+		<action name="loadPortTip" class="portAction" method="loadPortTip" />
+
+		<action name="openPort" class="portAction" method="openPort" />
+		<action name="closePort" class="portAction" method="closePort" />
+	</package>
+</struts>

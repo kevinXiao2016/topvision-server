@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.businesstemplate.domain.BusinessTemplate">
+	<select id="selectOnuSrvProfiles" parameterType="long" resultType="onuSrvProfile">
+		select * from onuSrvProfile where entityId=#{entityId}
+    </select>
+    
+    <select id="selectOnuIgmpProfiles" parameterType="map" resultType="onuIgmpProfile">
+		select A.*, B.srvBindCap
+		from onuigmpprofile A, onuSrvProfile B
+		where A.entityId=#{entityId} 
+		and A.entityId = B.entityId and A.igmpProfileId = B.srvProfileId
+		<if test="srvProfileId != null">
+		   and srvProfileId = #{srvProfileId} 
+		</if>
+    </select>
+    
+    <select id="selectOnuPortVlanProfiles" parameterType="map" resultType="onuPortVlanProfile">
+		select A.*, B.srvBindCap
+		from onuportVlanprofile A, onuSrvProfile B
+		where A.entityId=#{entityId} 
+		and A.entityId = B.entityId and A.vlanProfileId = B.srvProfileId
+		<if test="srvProfileId != null">
+		   and srvProfileId = #{srvProfileId} 
+		</if>
+    </select>
+    
+    <select id="selectOnuCapabilitys" parameterType="long" resultType="onuCapability">
+		select * from onuCapability where entityId=#{entityId}
+    </select>
+    
+    <delete id="deleteOnuSrvProfile" parameterType="onuSrvProfile">
+		DELETE FROM onuSrvProfile 
+		where entityId = #{entityId}  and srvProfileId = #{srvProfileId}
+	</delete>
+	
+	<delete id="deleteOnuIgmpProfile" parameterType="onuIgmpProfile">
+		DELETE FROM onuigmpprofile 
+		where entityId = #{entityId} and igmpProfileId = #{igmpProfileId} and igmpPortId= #{igmpPortId}
+	</delete>
+	
+	<delete id="deleteOnuPortVlanProfile" parameterType="onuPortVlanProfile">
+		DELETE FROM onuportVlanprofile 
+		where entityId = #{entityId} and vlanProfileId = #{vlanProfileId} and srvPortId= #{srvPortId} 
+	</delete>
+	
+	<delete id="deleteOnuCapability" parameterType="onuCapability">
+		DELETE FROM OnuCapability 
+		where entityId = #{entityId}  and capabilityId = #{capabilityId}
+	</delete>
+	
+	<update id="updateOnuSrvProfile" parameterType="onuSrvProfile">
+		update onuSrvProfile set srvProfileName = #{srvProfileName},srvImgpMode = #{srvImgpMode},
+		srvIgmpFastLeave = #{srvIgmpFastLeave},srvBindCap = #{srvBindCap}
+		where entityId=#{entityId} and srvProfileId = #{srvProfileId} 
+	</update>
+	
+	<update id="updateOnuIgmpProfile" parameterType="onuIgmpProfile">
+		update onuigmpprofile set igmpMaxGroup = #{igmpMaxGroup},igmpVlanMode = #{igmpVlanMode},
+		igmpTransId = #{igmpTransId},igmpVlanList = #{igmpVlanList}
+		where entityId=#{entityId} and igmpProfileId = #{igmpProfileId} and igmpPortId= #{igmpPortId}
+	</update>
+	
+	<update id="updateOnuPortVlanProfile" parameterType="onuPortVlanProfile">
+		update onuportVlanprofile set bindVlanProfile = #{bindVlanProfile},profileVlanPvid = #{profileVlanPvid},
+		profileVlanPvidPri=#{profileVlanPvidPri}
+		where entityId=#{entityId} and vlanProfileId = #{vlanProfileId} and srvPortId= #{srvPortId}
+	</update>
+	
+	<insert id="insertOnuSrvProfile" parameterType="onuSrvProfile">
+		insert into onuSrvProfile
+		(srvProfileId, entityId, srvProfileName,
+		srvImgpMode,srvIgmpFastLeave,srvBindCap,srvBindCnt
+		)
+		values
+		(#{srvProfileId}, #{entityId},#{srvProfileName},
+		#{srvImgpMode}, #{srvIgmpFastLeave}, #{srvBindCap}, #{srvBindCnt}
+		)
+	</insert>
+	
+	<insert id="insertOnuIgmpProfile" parameterType="onuIgmpProfile">
+		insert into onuigmpprofile
+		(igmpProfileId, entityId, igmpPortId,igmpMaxGroup,
+		igmpVlanMode,igmpTransId,igmpVlanList
+		)
+		values
+		(#{igmpProfileId}, #{entityId},#{igmpPortId},#{igmpMaxGroup},
+		#{igmpVlanMode}, #{igmpTransId}, #{igmpVlanList}
+		)
+	</insert>
+	
+	<insert id="insertOnuPortVlanProfile" parameterType="onuPortVlanProfile">
+		insert into onuportvlanprofile
+		(vlanProfileId, entityId, srvPortId,bindVlanProfile,profileVlanPvid, profileVlanPvidPri)
+		values
+		(#{vlanProfileId}, #{entityId},#{srvPortId},#{bindVlanProfile},#{profileVlanPvid},#{profileVlanPvidPri}
+		)
+	</insert>
+	
+	<insert id="insertOnuCapability" parameterType="onuCapability">
+		insert into onuCapability
+		(capabilityId, entityId, gePortNum,fePortNum,potsPortNum,e1PortNum,wlanPortNum,catvPortNum,uartPortNum)
+		values
+		(#{capabilityId}, #{entityId},#{gePortNum},#{fePortNum},#{potsPortNum},
+		#{e1PortNum},#{wlanPortNum},#{catvPortNum},#{uartPortNum}
+		)
+	</insert>
+	
+	 <delete id="deleteOnuSrvProfiles" parameterType="long">
+		DELETE FROM onuSrvProfile where entityId = #{entityId} 
+	</delete>
+	
+	<delete id="deleteOnuIgmpProfiles" parameterType="long">
+		DELETE FROM onuigmpprofile where entityId = #{entityId} 
+	</delete>
+	
+	<delete id="deleteOnuPortVlanProfiles" parameterType="long">
+		DELETE FROM onuportVlanprofile where entityId = #{entityId} 
+	</delete>
+	
+	<delete id="deleteOnuCapabilitys" parameterType="long">
+		DELETE FROM onuCapability where entityId = #{entityId} 
+	</delete>
+	
+	<select id="selectOnuSrvProfile" parameterType="map" resultType="onuSrvProfile">
+		select * from onuSrvProfile where entityId=#{entityId} and srvProfileId = #{profileId} 
+    </select>
+    
+    <select id="selectOnuIgmpProfile" parameterType="map" resultType="onuIgmpProfile">
+		select * from onuigmpprofile where entityId=#{entityId} and igmpProfileId = #{profileId} and igmpPortId= #{igmpPortId}
+    </select>
+    
+    <select id="selectOnuPortVlanProfile" parameterType="map" resultType="onuPortVlanProfile">
+		select * from onuportVlanprofile where entityId=#{entityId} and vlanProfileId = #{profileId} and srvPortId= #{srvPortId}
+    </select>
+    
+    <update id="updateProfileBindCap" parameterType="onuSrvProfile">
+        update onuSrvProfile 
+        set srvBindCap = #{srvBindCap}
+		where entityId=#{entityId} and srvProfileId = #{srvProfileId} 
+    </update>
+    
+    <insert id="insertOnuIgmpVlanTrans" parameterType="onuSrvIgmpVlanTrans">
+		insert into onuIgmpVlanTrans
+		(entityId, igmpProfileId, igmpPortId,igmpVlanTransId,transOldVlan,transNewVlan)
+		values
+		(#{entityId}, #{igmpProfileId},#{igmpPortId},
+		#{igmpVlanTransId}, #{transOldVlan}, #{transNewVlan}
+		)
+	</insert>
+    <delete id="deleteAllIgmpVlanTrans" parameterType="long">
+		DELETE FROM onuIgmpVlanTrans where entityId = #{entityId} 
+	</delete>
+	
+	<delete id="deleteOnuIgmpVlanTrans" parameterType="onuSrvIgmpVlanTrans">
+		DELETE FROM onuIgmpVlanTrans 
+		where entityId = #{entityId} and igmpProfileId = #{igmpProfileId} and igmpPortId = #{igmpPortId}
+		and igmpVlanTransId = #{igmpVlanTransId}
+	</delete>
+    <select id="loadOnuIgmpVlanTrans" parameterType="map" resultType="onuSrvIgmpVlanTrans">
+		select * from onuIgmpVlanTrans where entityId=#{entityId} and igmpProfileId = #{profileId} and igmpPortId = #{portId} 
+    </select>
+   
+</mapper>

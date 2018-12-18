@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<bean id="entityTypeDao"
+		class="com.topvision.ems.template.dao.ibatis.EntityTypeDaoImpl">
+		<property name="jdbcAccessor" ref="jdbcAccessor"></property>
+	</bean>
+
+	<bean id="macPrefixesDao"
+		class="com.topvision.ems.template.dao.ibatis.MacPrefixesDaoImpl">
+		<property name="jdbcAccessor" ref="jdbcAccessor"></property>
+	</bean>
+
+	<bean id="resourceCategoryDao"
+		class="com.topvision.ems.template.dao.ibatis.ResourceCategoryDaoImpl">
+		<property name="jdbcAccessor" ref="jdbcAccessor"></property>
+	</bean>
+</beans>

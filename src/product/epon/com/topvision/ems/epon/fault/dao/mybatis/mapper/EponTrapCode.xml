@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.fault.domain.EponTrapCode">
+
+	<select id="getEponCodeFromTrapCode" parameterType="map"
+		resultType="int">
+		select emsEventTypeId from eponeventtyperelation where deviceEventTypeId =
+		#{trapCode} and type=#{type} and module = #{module}
+	</select>
+	
+	<select id="getRelatedCmtsEventCode" parameterType="long" resultType="int">
+		select emsEventTypeId from cmceventtyperelation where deviceEventTypeId = #{trapCode}
+	</select>
+
+</mapper>

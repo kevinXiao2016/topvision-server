@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC 
+	"-//SPRING//DTD BEAN//EN" 
+	"http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+	<bean id="cmcLoadBalanceService"
+		class="com.topvision.ems.cmc.service.impl.CmcLoadBalanceServiceImpl">
+		<property name="cmcLoadBalanceDao" ref="cmcLoadBalanceDao" />
+		<property name="cmcDao" ref="cmcDao" />
+		<property name="entityDao" ref="entityDao" />
+		<property name="facadeFactory" ref="facadeFactory" />
+		<property name="cmcLoadBalPolicyTplDao" ref="cmcLoadBalPolicyTplDao" />
+		<property name="cmcService" ref="cmcService" />
+	</bean>
+	<bean id="cmcLoadBalanceDao" class="com.topvision.ems.cmc.dao.${dao.type}.CmcLoadBalanceDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+    <bean id="cmcDao" class="com.topvision.ems.cmc.dao.${dao.type}.CmcDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+    <bean id="cmcLoadBalPolicyTplDao" class="com.topvision.ems.cmc.dao.${dao.type}.CmcLoadBalPolicyTplDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+    <bean id="entityDao" class="com.topvision.ems.network.dao.${dao.type}.EntityDaoImpl">
+        <property name="jdbcAccessor" ref="jdbcAccessor"></property>
+    </bean>
+    <bean id="cmcLoadBalanceFacade" class="com.topvision.ems.cmc.engine.${engine.type}.CmcLoadBalanceFacadeImpl">
+        <property name="snmpExecutorService" ref="snmpExecutorService" />
+    </bean>
+    <bean id="snmpExecutorService" class="com.topvision.framework.snmp.SnmpExecutorService"
+		init-method="initialize" destroy-method="destroy">
+		<property name="corePoolSize" value="${SnmpPool.corePoolSize}" />
+		<property name="maximumPoolSize" value="${SnmpPool.maximumPoolSize}" />
+		<property name="keepAliveTime" value="${SnmpPool.keepAliveTime}" />
+		<property name="queueSize" value="${SnmpPool.queueSize}" />
+	</bean>
+	<bean id="cmcService" class="com.topvision.ems.cmc.service.impl.CmcServiceImpl">
+		<property name="cmcDao" ref="cmcDao" />
+	</bean>
+</beans>

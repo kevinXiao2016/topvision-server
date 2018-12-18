@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="resources" namespace="/resources" extends="default">
+
+		<!-- entity tree -->
+		<action name="getSnmpEntityTree" class="entityBrowserAction"
+			method="getSnmpEntityTree" />
+		<action name="getEntityTree" class="entityBrowserAction"
+			method="getEntityTree" />
+
+		<!-- entity tree with count stat -->
+		<action name="getEntityBrowserTree" class="entityBrowserAction"
+			method="getEntityBrowserTree" />
+		<action name="getSnmpEntityBrowserTree" class="entityBrowserAction"
+			method="getSnmpEntityBrowserTree" />
+
+		<action name="showImportAndExport">
+			<result>/resources/popImportGuide.jsp</result>
+		</action>
+
+		<action name="showFindEntity" class="entitySearchAction"
+			method="showFindEntity">
+			<result>/resources/popFindEntity.jsp</result>
+		</action>
+	</package>
+</struts>

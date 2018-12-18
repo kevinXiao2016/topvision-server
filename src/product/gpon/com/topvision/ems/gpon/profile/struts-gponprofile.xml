@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="gpon" namespace="/gpon/profile" extends="default">
+	    <action name="showGponProfile" class="gponProfileAction" method="showGponProfile">
+           <result>/gpon/profile/gponProfile.jsp</result>
+        </action>
+        
+        <action name="showMainProfileCfg" class="gponProfileAction" method="showMainProfileCfg">
+            <result>/gpon/profile/mainProfileTemplate.jsp</result>
+        </action>
+        
+        <action name="showDependProfileCfg" class="gponProfileAction" method="showDependProfileCfg">
+            <result>/gpon/profile/dependProfile.jsp</result>
+        </action>
+        
+        <!-- line profile -->
+        <action name="loadLineProfileList" class="gponProfileAction" method="loadLineProfileList"></action>
+        <action name="addLineProfile" class="gponProfileAction" method="addLineProfile"></action>
+        <action name="loadLineProfile" class="gponProfileAction" method="loadLineProfile"></action>
+        <action name="modifyLineProfile" class="gponProfileAction" method="modifyLineProfile"></action>
+        <action name="deleteLineProfile" class="gponProfileAction" method="deleteLineProfile"></action>
+        <action name="refreshLineProfile" class="gponProfileAction" method="refreshLineProfile"></action>
+        
+        <!-- line profile t-cont -->
+        <action name="loadLineProfileTcontList" class="gponProfileAction" method="loadLineProfileTcontList"></action>
+        <action name="addLineProfileTcont" class="gponProfileAction" method="addLineProfileTcont"></action>
+        <action name="modifyLineProfileTcont" class="gponProfileAction" method="modifyLineProfileTcont"></action>
+        <action name="deleteLineProfileTcont" class="gponProfileAction" method="deleteLineProfileTcont"></action>
+        <action name="refreshLineProfileTcont" class="gponProfileAction" method="refreshLineProfileTcont"></action>
+        
+        <!-- line profile gem -->
+        <action name="loadLineProfileGemList" class="gponProfileAction" method="loadLineProfileGemList"></action>
+        <action name="loadLineProfileGem" class="gponProfileAction" method="loadLineProfileGem"></action>
+        <action name="addLineProfileGem" class="gponProfileAction" method="addLineProfileGem"></action>
+        <action name="modifyLineProfileGem" class="gponProfileAction" method="modifyLineProfileGem"></action>
+        <action name="deleteLineProfileGem" class="gponProfileAction" method="deleteLineProfileGem"></action>
+        <action name="refreshLineProfileGem" class="gponProfileAction" method="refreshLineProfileGem"></action>
+        
+        <!-- line profile gem map -->
+        <action name="loadLineProfileGemMapList" class="gponProfileAction" method="loadLineProfileGemMapList"></action>
+        <action name="addLineProfileGemMap" class="gponProfileAction" method="addLineProfileGemMap"></action>
+        <action name="modifyLineProfileGemMap" class="gponProfileAction" method="modifyLineProfileGemMap"></action>
+        <action name="deleteLineProfileGemMap" class="gponProfileAction" method="deleteLineProfileGemMap"></action>
+        <action name="refreshLineProfileGemMap" class="gponProfileAction" method="refreshLineProfileGemMap"></action>
+        
+        <!-- service profile -->
+        <action name="loadServiceProfileList" class="gponProfileAction" method="loadServiceProfileList"></action>
+        <action name="showServiceProfileCfg" class="gponProfileAction" method="showServiceProfileCfg">
+            <result>/gpon/profile/serviceProfileCfg.jsp</result>
+        </action>
+        <action name="addServiceProfile" class="gponProfileAction" method="addServiceProfile"></action>
+        <action name="loadServiceProfile" class="gponProfileAction" method="loadServiceProfile"></action>
+        <action name="modifyServiceProfile" class="gponProfileAction" method="modifyServiceProfile"></action>
+        <action name="deleteServiceProfile" class="gponProfileAction" method="deleteServiceProfile"></action>
+        <action name="refreshServiceProfile" class="gponProfileAction" method="refreshServiceProfile"></action>
+        
+        <!-- service eth profile -->
+        <action name="loadServiceProfileEthList" class="gponProfileAction" method="loadServiceProfileEthList"></action>
+        <action name="modifyServiceProfileEth" class="gponProfileAction" method="modifyServiceProfileEth"></action>
+        <action name="refreshServiceProfileEth" class="gponProfileAction" method="refreshServiceProfileEth"></action>
+        
+        <!-- service pots profile -->
+        <action name="loadTopGponSrvPotsInfoList" class="gponProfileAction" method="loadTopGponSrvPotsInfoList"></action>
+        <action name="modifyTopGponSrvPotsInfo" class="gponProfileAction" method="modifyTopGponSrvPotsInfo"></action>
+        <action name="refreshTopGponSrvPotsInfo" class="gponProfileAction" method="refreshTopGponSrvPotsInfo"></action>
+        
+        <!-- service vlan profile -->
+        <action name="loadServiceProfileVlanList" class="gponProfileAction" method="loadServiceProfileVlanList"></action>
+        <action name="showModifyServiceProfileVlan" class="gponProfileAction" method="showModifyServiceProfileVlan">
+            <result>/gpon/profile/portVlanConfig.jsp</result>
+        </action>
+        <action name="modifyServiceProfileVlan" class="gponProfileAction" method="modifyServiceProfileVlan"></action>
+        <action name="modifyServiceProfileVlanMode" class="gponProfileAction" method="modifyServiceProfileVlanMode"></action>
+        <action name="loadServiceProfileVlan" class="gponProfileAction" method="loadServiceProfileVlan"></action>
+        <action name="refreshServiceProfileVlan" class="gponProfileAction" method="refreshServiceProfileVlan"></action>
+        
+        <action name="loadServiceProfileVlanTranslateList" class="gponProfileAction" method="loadServiceProfileVlanTranslateList"></action>
+        <action name="addServiceProfileVlanTranslate" class="gponProfileAction" method="addServiceProfileVlanTranslate"></action>
+        <action name="deleteServiceProfileVlanTranslate" class="gponProfileAction" method="deleteServiceProfileVlanTranslate"></action>
+        <action name="refreshServiceProfileVlanTranslate" class="gponProfileAction" method="refreshServiceProfileVlanTranslate"></action>
+        
+        <action name="loadServiceProfileVlanAggregationList" class="gponProfileAction" method="loadServiceProfileVlanAggregationList"></action>
+        <action name="loadServiceProfileVlanAggregationList" class="gponProfileAction" method="loadServiceProfileVlanAggregationList"></action>
+        <action name="addServiceProfileVlanAggregation" class="gponProfileAction" method="addServiceProfileVlanAggregation"></action>
+        <action name="modifyServiceProfileVlanAggregation" class="gponProfileAction" method="modifyServiceProfileVlanAggregation"></action>
+        <action name="deleteServiceProfileVlanAggregation" class="gponProfileAction" method="deleteServiceProfileVlanAggregation"></action>
+        <action name="refreshServiceProfileVlanAggregation" class="gponProfileAction" method="refreshServiceProfileVlanAggregation"></action>
+        
+        <action name="loadServiceProfileVlanTrunkList" class="gponProfileAction" method="loadServiceProfileVlanTrunkList"></action>
+        <action name="addServiceProfileVlanTrunk" class="gponProfileAction" method="addServiceProfileVlanTrunk"></action>
+        <action name="modifyServiceProfileVlanTrunk" class="gponProfileAction" method="modifyServiceProfileVlanTrunk"></action>
+        <action name="deleteServiceProfileVlanTrunk" class="gponProfileAction" method="deleteServiceProfileVlanTrunk"></action>
+        <action name="refreshServiceProfileVlanTrunk" class="gponProfileAction" method="refreshServiceProfileVlanTrunk"></action>
+        
+        <!-- dba profile -->
+        <action name="loadDbaProfileList" class="gponProfileAction" method="loadDbaProfileList"></action>
+        <action name="addDbaProfile" class="gponProfileAction" method="addDbaProfile"></action>
+        <action name="loadDbaProfile" class="gponProfileAction" method="loadDbaProfile"></action>
+        <action name="modifyDbaProfile" class="gponProfileAction" method="modifyDbaProfile"></action>
+        <action name="deleteDbaProfile" class="gponProfileAction" method="deleteDbaProfile"></action>
+        <action name="refreshDbaProfile" class="gponProfileAction" method="refreshDbaProfile"></action>
+        
+        <!-- traffic profile -->
+        <action name="loadTrafficProfileList" class="gponProfileAction" method="loadTrafficProfileList"></action>
+        <action name="addTrafficProfile" class="gponProfileAction" method="addTrafficProfile"></action>
+        <action name="loadTrafficProfile" class="gponProfileAction" method="loadTrafficProfile"></action>
+        <action name="modifyTrafficProfile" class="gponProfileAction" method="modifyTrafficProfile"></action>
+        <action name="deleteTrafficProfile" class="gponProfileAction" method="deleteTrafficProfile"></action>
+        <action name="refreshTrafficProfile" class="gponProfileAction" method="refreshTrafficProfile"></action>
+        
+        <!-- sip agent profile -->
+        <action name="loadSipAgentProfileList" class="gponProfileAction" method="loadSipAgentProfileList"></action>
+        <action name="addSipAgentProfile" class="gponProfileAction" method="addSipAgentProfile"></action>
+        <action name="loadSipAgentProfile" class="gponProfileAction" method="loadSipAgentProfile"></action>
+        <action name="modifySipAgentProfile" class="gponProfileAction" method="modifySipAgentProfile"></action>
+        <action name="deleteSipAgentProfile" class="gponProfileAction" method="deleteSipAgentProfile"></action>
+        <action name="refreshSipAgentProfile" class="gponProfileAction" method="refreshSipAgentProfile"></action>
+        
+        <!-- DigitMap profile -->
+        <action name="loadTopDigitMapProfList" class="gponProfileAction" method="loadTopDigitMapProfList"></action>
+        <action name="addTopDigitMapProf" class="gponProfileAction" method="addTopDigitMapProf"></action>
+        <action name="loadTopDigitMapProf" class="gponProfileAction" method="loadTopDigitMapProf"></action>
+        <action name="modifyTopDigitMapProf" class="gponProfileAction" method="modifyTopDigitMapProf"></action>
+        <action name="deleteTopDigitMapProf" class="gponProfileAction" method="deleteTopDigitMapProf"></action>
+        <action name="refreshTopDigitMapProf" class="gponProfileAction" method="refreshTopDigitMapProf"></action>
+        
+        <!-- VoipMedia profile -->
+        <action name="loadTopVoipMediaProfList" class="gponProfileAction" method="loadTopVoipMediaProfList"></action>
+        <action name="addTopVoipMediaProf" class="gponProfileAction" method="addTopVoipMediaProf"></action>
+        <action name="loadTopVoipMediaProf" class="gponProfileAction" method="loadTopVoipMediaProf"></action>
+        <action name="modifyTopVoipMediaProf" class="gponProfileAction" method="modifyTopVoipMediaProf"></action>
+        <action name="deleteTopVoipMediaProf" class="gponProfileAction" method="deleteTopVoipMediaProf"></action>
+        <action name="refreshTopVoipMediaProf" class="gponProfileAction" method="refreshTopVoipMediaProf"></action>
+        
+        <!-- SIPSrv profile -->
+        <action name="loadTopSIPSrvProfList" class="gponProfileAction" method="loadTopSIPSrvProfList"></action>
+        <action name="addTopSIPSrvProf" class="gponProfileAction" method="addTopSIPSrvProf"></action>
+        <action name="loadTopSIPSrvProf" class="gponProfileAction" method="loadTopSIPSrvProf"></action>
+        <action name="modifyTopSIPSrvProf" class="gponProfileAction" method="modifyTopSIPSrvProf"></action>
+        <action name="deleteTopSIPSrvProf" class="gponProfileAction" method="deleteTopSIPSrvProf"></action>
+        <action name="refreshTopSIPSrvProf" class="gponProfileAction" method="refreshTopSIPSrvProf"></action>
+       
+		<action name="refreshGponProfile" class="gponProfileAction" method="refreshGponProfile" />
+	</package>
+</struts>

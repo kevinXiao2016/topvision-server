@@ -1,0 +1,731 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.olt.domain.Olt">
+	<select id="getOltAttribute" parameterType="map" resultType="oltAttribute">
+		SELECT
+		a.entityId,
+		a.oltName,
+		b.displayname as oltType,
+		a.oltDeviceUpTime,
+		a.oltDeviceNumOfTotalServiceSlot,
+		a.oltDeviceNumOfTotalPowerSlot,
+		a.oltDeviceNumOfTotalFanSlot,
+		a.oltDeviceStyle,
+		a.inbandIpAddress,
+		a.inbandIpSubnetMask,
+		a.outbandIpSubnetMask,
+		a.outbandIpGateway,
+		a.outbandIpAddress,
+		a.inbandIpGateway,
+		a.inbandMacAddress,
+		a.inbandPortIndex,
+		a.outbandMacAddress,
+		a.inbandVlanId,
+		a.systemOUI,
+		a.vendorName,
+		a.topSysSnmpHostIp,
+		a.topSysSnmpHostIpMask,
+		a.topSysSnmpVersion,
+		a.topSysReadCommunity,
+		a.topSysWriteCommunity,
+		a.topSysSnmpPort,
+		a.topSysInBandMaxBW,
+		a.topSysOltRackNum,
+		a.topSysOltFrameNum,
+		a.onuAuthenticationPolicy,
+		a.sniMacAddrTableAgingTime,
+		a.topSysArpAgingTime,
+		a.systemRogueCheck,
+		c.name name,
+		F.userId attention
+		FROM
+		OltAttribute a 
+		left join (select * from userAttention where entityId = #{entityId} 
+		<if test="userId != null ">
+			and userId = #{userId}
+		</if>) F 
+		on a.entityId = F.entityId, entityType b, entity c
+		WHERE
+		a.entityId = c.entityId and
+		b.typeId = c.typeId and
+		a.entityId = #{entityId}
+	</select>
+	
+	<select id="getTopOnuGlobalCfgMgmt" parameterType="long" resultType="topOnuGlobalCfgMgmt">
+		select entityId,itemIndex topOnuGlobalCfgMgmtItemIndex,cfgMgmtValue topOnuGlobalCfgMgmtValue
+		from toponuglobalcfgmgmt where entityId = #{entityId}
+	</select>
+	
+	<update id="modifyOltBaseInfo" parameterType="oltAttribute"> 
+		UPDATE
+		oltattribute SET oltName = #{oltName} WHERE
+		entityId = #{entityId}
+	</update>
+	
+	<select id="getAllDeviceLocation" resultType="deviceLocation">
+		Select
+		B.sysLocation,
+		A.entityId,
+		A.oltType,
+		A.topSysOltRackNum AS rackNum,
+		A.topSysOltFrameNum AS frameNum
+		From
+		oltAttribute A, entity B
+		Where
+		A.entityId = B.entityId
+	</select>
+	
+	<update id="updateOltAttribute" parameterType="oltAttribute">
+		UPDATE
+		OltAttribute SET
+		oltName = #{oltName},
+		oltType = #{oltType},
+		oltDeviceUpTime = #{oltDeviceUpTime},
+		oltDeviceNumOfTotalServiceSlot =
+		#{oltDeviceNumOfTotalServiceSlot},
+		oltDeviceNumOfTotalPowerSlot =
+		#{oltDeviceNumOfTotalPowerSlot},
+		oltDeviceNumOfTotalFanSlot =
+		#{oltDeviceNumOfTotalFanSlot},
+		oltDeviceStyle = #{oltDeviceStyle},
+		inbandIpAddress = #{inbandIpAddress},
+		inbandIpSubnetMask =
+		#{inbandIpSubnetMask},
+		outbandIpSubnetMask = #{outbandIpSubnetMask},
+		outbandIpGateway = #{outbandIpGateway},
+		outbandIpAddress =
+		#{outbandIpAddress},
+		inbandIpGateway = #{inbandIpGateway},
+		inbandMacAddress = #{inbandMacAddress},
+		outbandMacAddress =
+		#{outbandMacAddress},
+		inbandVlanId = #{inbandVlanId},
+		systemOUI =
+		#{systemOui},
+		vendorName = #{vendorName},
+		topSysSnmpHostIp =
+		#{topSysSnmpHostIp},
+		topSysSnmpHostIpMask = #{topSysSnmpHostIpMask},
+		topSysSnmpVersion = #{topSysSnmpVersion},
+		topSysReadCommunity =
+		#{topSysReadCommunity},
+		topSysWriteCommunity = #{topSysWriteCommunity},
+		topSysSnmpPort = #{topSysSnmpPort},
+		topSysInBandMaxBW =
+		#{topSysInBandMaxBw},
+		topSysOltRackNum = #{topSysOltRackNum},
+		topSysOltFrameNum = #{topSysOltFrameNum},
+		onuAuthenticationPolicy =
+		#{onuAuthenticationPolicy},
+		sniMacAddrTableAgingTime =
+		#{sniMacAddrTableAgingTime},
+		topSysArpAgingTime = #{topSysArpAgingTime}
+		WHERE
+		entityId = #{entityId}
+	</update>
+	
+	
+	<update id="updateOltDeviceUpTime" parameterType="map">
+		update
+		oltattribute set oltDeviceUpTime = #{deviceUpTime} where
+		entityId=#{entityId}
+	</update>
+	
+	<select id="getOltListByParams" parameterType="map" resultType="oltAttribute">
+		SELECT
+		B.entityId,
+		E.displayname as oltType,
+		B.ip,
+		B.status,
+		C.state,
+		C.cpu cpuUsed,
+		C.mem memUsed,
+		C.sysUpTime,
+		C.snapTime,
+		B.name,
+		B.typeId,
+		B.contact,
+		B.location,
+		B.note,
+		D.bSoftwareVersion,
+		A.inbandIpAddress,
+		A.outbandIpAddress,
+		A.inbandMacAddress,
+		A.outbandMacAddress,
+		A.vendorName,
+		A.systemRogueCheck,
+		A.oltName,
+		F.userId attention
+		FROM
+		OltAttribute A left join entity B on A.entityId = B.entityId
+		left join  EntitySnap C  on  A.entityId = C.entityId
+		left join  OltSlotAttribute D  on  A.entityId = D.entityId
+		left join  entityType E  on  B.typeId = E.typeId
+		left join  userattention F  on  A.entityId = F.entityId AND F.userId = #{userId}
+		where
+		B.typeId in (select typeId from entitytyperelation where type = #{type})
+		and D.bAttribute = 1
+		and B.entityId in (select entityId from ${Authority})
+		<if test="entityName != null and entityName != ''">
+			and (B.name like '%${entityName}%' or B.ip like '%${entityName}%' or B.sysName like '%${entityName}%')
+		</if>
+		<if test="deviceType != null ">
+			and B.typeId = #{deviceType}
+		</if>
+		<if test="onlineStatus != null ">
+			and C.state = #{onlineStatus}
+		</if>
+		<if test="sort != null and dir != null">
+			<choose>
+				<when test="sort == 'sysUpTime'.toString()">
+					ORDER BY CAST(C.sysUpTime AS UNSIGNED) ${dir}
+				</when>
+				<when test="sort == 'ip'.toString()">
+					ORDER BY inet_aton(ip) ${dir}
+				</when>
+				<otherwise>
+					order by ${sort} ${dir}
+				</otherwise>
+			</choose>
+		</if>
+		limit ${start},${limit}
+	</select>
+	
+	<select id="getOltListCountByParams" parameterType="map" resultType="int">
+		SELECT COUNT(*)
+		FROM
+		OltAttribute A,
+		entity B, EntitySnap C,OltSlotAttribute D
+		where
+		A.entityId = B.entityId
+		and A.entityId = C.entityId and B.typeId in
+		(select typeId from entitytyperelation where type = #{type}) and A.entityId =
+		D.entityId and D.bAttribute = 1
+		and B.entityId in (select entityId from
+		${Authority})
+		<if test="entityName != null and entityName != ''">
+			and (B.name like '%${entityName}%' or B.ip like '%${entityName}%' or B.sysName like '%${entityName}%')
+		</if>
+		<if test="deviceType != null ">
+			and B.typeId = #{deviceType}
+		</if>
+		<if test="onlineStatus != null ">
+			and C.state = #{onlineStatus}
+		</if>
+	</select>
+	
+	<select id="getCcmtsFftGbStatus" parameterType="long" resultType="com.topvision.ems.epon.domain.CcmtsFftMonitorScalar">
+		select * from ccmtsfftmonitorscalar where entityId = #{entityId}
+	</select>
+	
+	<delete id="deleteAllOltMacAddressLearn" parameterType="long">
+		DELETE
+		FROM
+		oltMacAddressLearn
+		WHERE
+		entityId = #{entityId}
+	</delete>
+	
+	<delete id="deleteFftMonitorGlbStatus" parameterType="long">
+		DELETE FROM
+		CcmtsFftMonitorScalar
+		WHERE
+		entityId = #{entityId}
+	</delete>
+	
+	<delete id="deleteTopOnuGlobalCfgMgmt" parameterType="long">
+		DELETE FROM
+		toponuglobalcfgmgmt
+		WHERE
+		entityId = #{entityId}
+	</delete>
+	
+	<insert id="insertFftMonitorGlbStatus" parameterType="com.topvision.ems.epon.domain.CcmtsFftMonitorScalar">
+		INSERT INTO
+		ccmtsfftmonitorscalar(entityId,fftMonitorGlbStatus)
+		VALUES(#{entityId},#{fftMonitorGlbStatus})
+	</insert>
+	
+	<insert id="batchInsertOltMacAddressLearnTable" databaseId="MySQL" parameterType="oltMacAddressLearnTable">
+		INSERT INTO
+		oltMacAddressLearn(entityId,topSysMacAddr,topSysMacVid,topSysMacSlot,topSysMacPort,topSysMacFlag)
+		VALUES(#{entityId},#{topSysMacAddr},#{topSysMacVid},#{topSysMacSlot},#{topSysMacPort},#{topSysMacFlag})
+	</insert>
+	<insert id="batchInsertOltMacAddressLearnTable" databaseId="Oracle" parameterType="oltMacAddressLearnTable">
+       INSERT INTO oltMacAddressLearn(entityId,topSysMacAddr,topSysMacVid,topSysMacSlot,topSysMacPort,topSysMacFlag,lastChangeTime)
+       VALUES(#{entityId},#{topSysMacAddr},#{topSysMacVid},#{topSysMacSlot},#{topSysMacPort},#{topSysMacFlag},now())
+    </insert>
+	
+	<select id="getOltMacLearnTableList" parameterType="long"
+		resultType="oltMacAddressLearnTable">
+		SELECT
+		entityId,topSysMacAddr,topSysMacVid,topSysMacSlot,topSysMacPort,topSysMacFlag,lastChangeTime
+		FROM oltMacAddressLearn
+		WHERE entityId = #{entityId}
+	</select>
+	
+	<insert id="insertOltDeviceUpTime" parameterType="map">
+		insert into
+		oltDeviceUpTime(entityId, onuId, deviceUpTime, collectTime)
+		values
+		(#{entityId},#{onuId},#{deviceUpTime}, #{collectTime})
+	</insert>
+	
+	<insert id="insertTopOnuGlobalCfgMgmt" parameterType="topOnuGlobalCfgMgmt">
+		insert into
+		toponuglobalcfgmgmt(entityId, itemIndex, cfgMgmtValue)
+		values
+		(#{entityId},#{topOnuGlobalCfgMgmtItemIndex},#{topOnuGlobalCfgMgmtValue})
+	</insert>
+	
+	<insert id="insertOrupdateOltCmClearTime" parameterType="map">
+        insert into cmcclearcmtime (deviceId,clearTime) values (#{entityId},#{time}) ON DUPLICATE KEY UPDATE clearTime=#{time}
+    </insert>
+	
+	<delete id="cleanOltDeviceUpTime" parameterType="map">
+		<![CDATA[ delete from oltDeviceUpTime where entityId=#{entityId} and onuId=#{onuId} and collectTime < #{collectTime} ]]>
+	</delete>
+	
+	<select id="selectOltSoftVersion" parameterType="long"
+		resultType="String">
+		select bSoftwareVersion from oltslotattribute where
+		entityId = #{entityId}
+		and bAttribute = 1
+	</select>
+	
+	<select id="getEntitySnap" parameterType="long" resultType="entitySnap">
+		select entityId, cpu, mem, vmem, usedMem, disk, usedDisk, diskio,state
+		from
+		EntitySnap
+		where entityId = #{entityId}
+	</select>
+	
+	<insert id="insertOltAttribute" parameterType="oltAttribute">
+		insert into
+		OltAttribute
+		(entityId, oltName, oltType, oltDeviceUpTime,
+		oltDeviceNumOfTotalServiceSlot,
+		oltDeviceNumOfTotalPowerSlot,
+		oltDeviceNumOfTotalFanSlot,
+		oltDeviceStyle,
+		inbandIpAddress,
+		inbandIpSubnetMask,
+		outbandIpSubnetMask,
+		outbandIpGateway,
+		outbandIpAddress,
+		inbandIpGateway,
+		inbandMacAddress,
+		outbandMacAddress,
+		inbandVlanId,
+		systemOUI,
+		vendorName,
+		topSysSnmpHostIp,
+		topSysSnmpHostIpMask,
+		topSysSnmpVersion,
+		topSysReadCommunity,
+		topSysWriteCommunity,
+		topSysSnmpPort,
+		topSysInBandMaxBW,
+		topSysOltRackNum,
+		topSysOltFrameNum,
+		onuAuthenticationPolicy,
+		sniMacAddrTableAgingTime,
+		topSysArpAgingTime
+		)
+		values
+		(#{entityId},
+		#{oltName}, #{oltType},
+		#{oltDeviceUpTime},
+		#{oltDeviceNumOfTotalServiceSlot},
+		#{oltDeviceNumOfTotalPowerSlot},
+		#{oltDeviceNumOfTotalFanSlot},
+		#{oltDeviceStyle},
+		#{inbandIpAddress},
+		#{inbandIpSubnetMask},
+		#{outbandIpSubnetMask},
+		#{outbandIpGateway},
+		#{outbandIpAddress},
+		#{inbandIpGateway},
+		#{inbandMacAddress},
+		#{outbandMacAddress},
+		#{inbandVlanId},
+		#{systemOui},
+		#{vendorName},
+		#{topSysSnmpHostIp},
+		#{topSysSnmpHostIpMask},
+		#{topSysSnmpVersion},
+		#{topSysReadCommunity},
+		#{topSysWriteCommunity},
+		#{topSysSnmpPort},
+		#{topSysInBandMaxBw},
+		#{topSysOltRackNum},
+		#{topSysOltFrameNum},
+		#{onuAuthenticationPolicy},
+		#{sniMacAddrTableAgingTime},
+		#{topSysArpAgingTime}
+		)
+	</insert>
+	
+	<select id="getPortView" parameterType="long" resultType="portView">
+		SELECT
+		oltslotrelation.entityId,
+		oltslotrelation.slotId,
+		oltslotrelation.slotIndex,
+		'0' AS portId,
+		'0' AS portIndex,
+		'epua' as
+		portType
+		FROM
+		oltslotrelation Inner join oltslotattribute on
+		oltslotrelation.slotId =
+		oltslotattribute.slotId
+		and
+		oltslotattribute.topSysBdActualType = 1 and oltslotrelation.entityId
+		=
+		#{entityId}
+		union
+		SELECT
+		oltfanrelation.entityId,
+		oltfanrelation.fanCardId
+		slotId,
+		oltfanrelation.fanCardIndex slotIndex,
+		'0' AS portId,
+		'0' AS
+		portIndex,
+		'fan' as
+		portType
+		FROM
+		oltfanrelation Inner
+		join
+		oltfanattribute on
+		oltfanrelation.fanCardId =
+		oltfanattribute.fanCardId
+		and
+		oltfanrelation.entityId= #{entityId}
+		UNION
+		SELECT
+		oltpowerrelation.entityId,
+		oltpowerrelation.powerCardId slotId,
+		oltpowerrelation.powerCardIndex slotIndex,
+		'0' AS portId,
+		'0' AS
+		portIndex,
+		'power' as
+		portType
+		FROM
+		oltpowerrelation Inner join
+		oltpowerattribute on
+		oltpowerrelation.powerCardId =
+		oltpowerattribute.powerCardId and oltpowerrelation.entityId=
+		#{entityId}
+		union
+		SELECT
+		oltslotrelation.entityId,
+		oltslotrelation.slotId,
+		oltslotrelation.slotIndex,
+		'0' AS portId,
+		'0' AS
+		portIndex,
+		'blank' as
+		portType
+		FROM
+		oltslotrelation Inner join
+		oltslotattribute on
+		oltslotrelation.slotId =
+		oltslotattribute.slotId
+		and
+		oltslotrelation.entityId =
+		#{entityId}
+		union
+		SELECT
+		slot.entityId,
+		slot.slotId,
+		slot.slotIndex,
+		sni.sniId AS portId,
+		sni.sniIndex AS
+		portIndex,
+		'sni' as portType
+		FROM
+		oltslotrelation AS slot
+		INNER JOIN
+		oltsnirelation AS sni ON slot.slotId
+		= sni.slotId
+		WHERE
+		slot.entityId =
+		#{entityId}
+		UNION
+		SELECT
+		slot.entityId,
+		slot.slotId,
+		slot.slotIndex,
+		pon.ponId AS portId,
+		pon.ponIndex AS
+		portIndex,
+		'pon' as portType
+		FROM
+		oltslotrelation AS slot
+		INNER JOIN
+		oltponrelation AS pon ON slot.slotId
+		= pon.slotId
+		WHERE
+		slot.entityId =
+		#{entityId}
+	</select>
+	
+	
+	<update id="updateCcmtsFftGbStatus" parameterType="com.topvision.ems.epon.domain.CcmtsFftMonitorScalar"> 
+		UPDATE ccmtsfftmonitorscalar
+		SET fftMonitorGlbStatus = #{fftMonitorGlbStatus}
+		WHERE entityId = #{entityId}
+	</update>
+	
+	<select id="getEntity" parameterType="long" resultType="entity">
+		SELECT
+		A.entityId,
+		A.parentId,
+		A.name,
+		A.icon, A.ip, A.status, A.mac,
+		A.location, A.duty,
+		A.snmpSupport,
+		A.agentInstalled,
+		A.sysObjectID,
+		A.sysName, A.sysDescr,
+		A.sysLocation, A.sysServices, A.url, A.note,
+		A.sysContact,
+		B.displayName AS typeName, B.icon48,
+		D.displayName AS
+		modelName, C.displayName AS
+		corpName FROM
+		Entity A
+		LEFT
+		JOIN EntityType B
+		ON A.typeId = B.typeId
+		LEFT JOIN EntityCorp C ON
+		A.corpId =
+		C.corpId
+		LEFT
+		JOIN EntityType D ON A.typeId = D.typeId
+		WHERE
+		A.entityId =
+		#{entityId}
+	</select>
+	
+	<select id="getOltRelation" parameterType="long" resultType="java.util.HashMap">
+		select
+		slotIndex OLTINDEX , 'SlotRelation' oltRelationTable from
+		OltSlotRelation where entityId
+		= #{entityId}
+		union
+		select powerCardIndex
+		OLTINDEX, 'PowerRelation' oltRelation
+		from OltPowerRelation
+		where
+		entityId = #{entityId}
+		union
+		select fanCardIndex OLTINDEX, 'FanRelation'
+		oltRelation
+		from OltFanRelation where
+		entityId =
+		#{entityId}
+		union
+		select
+		sniIndex
+		OLTINDEX, 'SniRelation' oltRelation from
+		OltSniRelation where
+		entityId
+		=
+		#{entityId}
+		union
+		select
+		ponIndex OLTINDEX, 'PonRelation'
+		oltRelation from OltPonRelation where
+		entityId =
+		#{entityId}
+		union
+		select
+		onuIndex OLTINDEX, 'OnuRelation'
+		oltRelation from OltOnuRelation where
+		entityId =
+		#{entityId}
+		union
+		select
+		uniIndex OLTINDEX, 'UniRelation'
+		oltRelation from
+		OltUniRelation where
+		entityId =
+		#{entityId}
+		union
+		select
+		onuPonIndex OLTINDEX, 'OnuPonRelation'
+		oltRelation from
+		OltOnuPonRelation where
+		entityId = #{entityId}
+	</select>
+	
+	<select id="getOltMap" parameterType="long" resultType="java.util.HashMap">
+		select
+		slotId OLTID , slotIndex OLTINDEX from OltSlotRelation where entityId
+		= #{entityId}
+		union
+		select sniId OLTID , sniIndex OLTINDEX from
+		OltSniRelation where entityId =
+		#{entityId}
+		union
+		select ponId OLTID ,
+		ponIndex OLTINDEX from OltPonRelation where entityId =
+		#{entityId}
+		union
+		select onuId OLTID , onuIndex OLTINDEX from OltOnuRelation where
+		entityId =
+		#{entityId}
+		union
+		select uniId OLTID , uniIndex OLTINDEX from
+		OltUniRelation where entityId =
+		#{entityId}
+		union
+		select onuPonId OLTID ,
+		onuPonIndex OLTINDEX from OltOnuPonRelation where
+		entityId =
+		#{entityId}
+	</select>
+	
+	<select id="getEntityByFolder" parameterType="map" resultType="long">
+		select
+		A.entityId
+		from
+		entityfolderrela A,entity B
+		where
+		A.entityId =
+		B.entityId AND B.typeId in (select typeId from entitytyperelation where type = #{type})
+		AND folderId = #{folderId}
+    </select>
+    
+    <select id="getIsManagedOltList" resultType="long">
+		SELECT
+		entityId
+		FROM
+		entity
+		WHERE
+		typeId in (select typeId from entitytyperelation where type = #{type})
+	</select>
+	
+	<select id="getEntityDolStatus" parameterType="long" resultType="String">
+		SELECT attributeValue FROM entityattribute WHERE entityId
+		= #{entityId}
+	</select>
+	
+	<select id="getEntityAttribute" parameterType="long" resultType="entityAttribute">
+		SELECT entityId, attributeGroup,attributeName,
+		attributeValue FROM
+		entityattribute WHERE entityId = #{entityId}
+	</select>
+	
+	<update id="updateEntityAttribute" parameterType="entityAttribute">
+		UPDATE
+		entityattribute SET attributeValue = #{attributeValue} WHERE entityId
+		=
+		#{entityId}
+	</update>
+	
+	<insert id="insertEntityAttribute" parameterType="entityAttribute">
+		insert into
+		entityattribute
+		(entityId, attributeGroup, attributeName,
+		attributeValue)
+		values
+		(#{entityId}, #{attributeGroup},
+		#{attributeName},
+		#{attributeValue})
+	</insert>
+	
+	<select id="getDeviceListItemSortIp" parameterType="map"
+		resultType="deviceListItem">
+		SELECT A.entityId, A.name, A.ip, A.sysLocation, A.type,
+		B.displayName
+		AS
+		typeName ,
+		A.createTime
+		FROM
+		entity A, EntityType B
+		WHERE
+		A.typeId = B.typeId
+		AND
+		A.typeId = in (select typeId from entitytyperelation where type = #{type}) and A.entityId in (select
+		entityId from ${Authority})
+		ORDER BY inet_aton(${sortName})
+	</select>
+	
+	<select id="getDeviceListItem" parameterType="map" resultType="deviceListItem">
+		SELECT A.entityId, A.name, A.ip, A.sysLocation,
+		B.displayName
+		AS
+		typeName ,
+		A.createTime
+		FROM
+		entity A, EntityType B
+		WHERE A.typeId =
+		B.typeId
+		AND
+		A.typeId in (select typeId from entitytyperelation where type = #{type}) and A.entityId in (select
+		entityId from
+		${Authority})
+		ORDER BY ${sortName}
+	</select>
+	
+	<delete id="deleteFileDirData" parameterType="long">
+		DELETE
+		FROM
+		oltFileDir
+		WHERE
+		entityId = #{entityId}
+	</delete>
+	
+	<insert id="insertFileDirData" parameterType="topSysFileDirEntry">
+		insert into
+		oltFileDir
+		(entityId, fileDirType, fileDirPath,
+		fileDirAttr)
+		values
+		(#{entityId}, #{fileDirType},
+		#{fileDirPath},
+		#{fileDirAttr})
+	</insert>
+	
+	<select id="getOltFileDirAttr" parameterType="map"
+		resultType="topSysFileDirEntry">
+		SELECT entityId,fileDirType,fileDirPath,fileDirAttr
+		FROM oltFileDir
+		WHERE
+		entityId = #{entityId} and fileDirType = #{fileDirType}
+	</select>
+	
+	<select id="querySubCountInfo" resultType = "subDeviceCount" parameterType="map">
+		SELECT 
+			IFNULL(SUM(case WHEN entity.typeId not in(select typeId from entitytyperelation where type = 30000) THEN 1 END),0) onuTotal, 
+			IFNULL(SUM(case WHEN entity.typeId not in(select typeId from entitytyperelation where type = 30000) and oltonuattribute.onuOperationStatus=1 THEN 1 END),0) onuOnline
+		FROM oltonuattribute left join entity on oltonuattribute.onuId = entity.entityId
+		WHERE oltonuattribute.entityId = #{entityId} and oltonuattribute.onuId in(select entityId from ${Authority})
+	</select>
+	
+	<update id="updateOltBaseInfo" parameterType="oltBaseInfo">
+		UPDATE oltattribute
+		SET
+			oltName = #{deviceName}
+		WHERE
+			entityId = #{entityId}
+	</update>
+	
+	<update id="updateOltVersion" parameterType="oltBaseInfo">
+		UPDATE oltslotattribute
+		SET
+			bSoftwareVersion = #{softwareVersion}
+		WHERE
+			entityId = #{entityId} and bAttribute = 1
+	</update>
+	
+	<select id="queryEntityIdOfOlt" resultType="long">
+		SELECT DISTINCT entityId FROM oltonurelation
+	</select>
+</mapper>

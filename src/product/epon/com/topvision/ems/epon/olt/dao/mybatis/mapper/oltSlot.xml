@@ -1,0 +1,907 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.olt.domain.OltSlot">
+	<select id="getSlotAttribute" parameterType="long" resultType="oltSlotAttribute">
+		SELECT
+		entityId,
+		slotNo,
+		topSysBdPreConfigType,
+		topSysBdActualType,
+		topSysBdTempDetectEnable,
+		bAttribute,
+		bAdminStatus,
+		bHardwareVersion,
+		bFirmwareVersion,
+		bSoftwareVersion,
+		bUpTime,
+		bSerialNumber,
+		bName,
+		bPresenceStatus,
+		bOperationStatus
+		FROM
+		OltSlotAttribute
+		WHERE
+		slotId =
+		#{slotId}
+	</select>
+
+	<select id="getPowerAttribute" parameterType="long" resultType="oltPowerAttribute">
+		SELECT
+		topSysPowerSupplyType,
+		topSysPowerSupplyACVoltage,
+		powerCardName
+		FROM OltPowerAttribute
+		WHERE powerCardId = #{powerCardId}
+	</select>
+	
+	<select id="getSlotIndexBySlotNo" parameterType="oltSlotStatus" resultType="long">
+		select slotIndex from oltslotrelation where 
+		slotId = (select slotId from oltslotattribute where entityId = #{entityId} and slotNo = #{slotNo})
+	</select>
+
+	<select id="getFanAttribute" parameterType="long" resultType="oltFanAttribute">
+		SELECT
+		fanCardName,
+		topSysFanSpeedControl
+		FROM OltFanAttribute
+		WHERE
+		fanCardId = #{fanCardId}
+	</select>
+
+	<update id="updateFanSpeedControlLevel" parameterType="oltFanAttribute">
+		UPDATE
+		OltFanAttribute SET topSysFanSpeedControl = #{topSysFanSpeedControl}
+		WHERE fanCardId = #{fanCardId}
+	</update>
+
+	<update id="updateOltFanStatusByFanCardId" parameterType="oltFanStatus">
+		UPDATE
+		OltFanStatus
+		SET
+		topSysFanSpeed = #{topSysFanSpeed},
+		fanCardAlarmStatus =
+		#{fanCardAlarmStatus},
+		fanCardPresenceStatus =
+		#{fanCardPresenceStatus},
+		fanCardOperationStatus =
+		#{fanCardOperationStatus},
+		<choose>
+			<when test="_databaseId == 'MySQL'">
+				changeTime = now(),
+			</when>
+			<when test="_databaseId == 'Oracle'">
+				changeTime = sysdate,
+			</when>
+		</choose>
+		entityId =
+		#{entityId}
+		WHERE fanCardId = #{fanCardId}
+	</update>
+
+	<update id="updateOltSlotStatus" parameterType="oltSlotStatus">
+		UPDATE
+		OltSlotStatus SET
+		topSysBdCPUUseRatio = #{topSysBdCpuUseRatio},
+		topSysBdlMemSize = #{topSysBdlMemSize},
+		topSysBdFreeMemSize =
+		#{topSysBdFreeMemSize},
+		topTotalFlashOctets = #{topTotalFlashOctets},
+		topSysBdFreeFlashOctets = #{topSysBdFreeFlashOctets},
+		topSysBdCurrentTemperature = #{topSysBdCurrentTemperature},
+		topSysBdLampStatus = #{topSysBdLampStatus},
+		bAlarmStatus =
+		#{bAlarmStatus},
+		<choose>
+			<when test="_databaseId == 'MySQL'">
+				changeTime = now(),
+			</when>
+			<when test="_databaseId == 'Oracle'">
+				changeTime = sysdate,
+			</when>
+		</choose>
+		entityId = #{entityId}
+		WHERE
+		exists
+		(select 1 from
+		OltSlotRelation where
+		OltSlotRelation.slotId =
+		OltSlotStatus.slotId
+		and
+		OltSlotRelation.entityId=#{entityId} and
+		OltSlotRelation.slotIndex=#{slotIndex})
+	</update>
+
+	<update id="updateBoardStatusBySlotIndex" parameterType="map">
+		update
+		oltslotattribute set bPresenceStatus=#{bPresenceStatus} ,
+		topSysBdActualType=#{topSysBdActualType} where entityId=#{entityId}
+		and
+		slotId = (select slotId from oltslotrelation where slotIndex =
+		#{slotIndex} and entityId=#{entityId})
+	</update>
+
+	<select id="getFanStatus" parameterType="long" resultType="oltFanStatus">
+		SELECT
+		fanCardId,
+		topSysFanSpeed,
+		fanCardAlarmStatus,
+		fanCardPresenceStatus,
+		fanCardOperationStatus,
+		changeTime
+		FROM
+		OltFanStatus
+		WHERE fanCardId = #{fanCardId}
+	</select>
+
+	<select id="getEponBoardList" databaseId="MySQL" resultType="eponBoardStatistics"
+		parameterType="map">
+		select b.Ip as ip,b.`name`,
+		a.entityId, sum(case a.slotId
+		when 1 then 1 else 1 end)
+		allSlot,
+		ifnull(sum(case a.bPresenceStatus
+		when 1 then 1 end),0) online ,
+		ifnull(sum(case a.bPresenceStatus when 2
+		then 1 end),0) outline ,
+		ifnull(sum(case a.topSysBdActualType when 1
+		then 1 end),0) mpua,
+		ifnull(sum(case a.topSysBdActualType when 3 then 1
+		end),0) epua,
+		ifnull(sum(case a.topSysBdActualType when 4 then 1
+		end),0) epub,
+		ifnull(sum(case a.topSysBdActualType when 5 then 1
+		end),0) geua,
+		ifnull(sum(case a.topSysBdActualType when 6 then 1
+		end),0) geub,
+		ifnull(sum(case a.topSysBdActualType when 7 then 1
+		end),0) xgua,
+		ifnull(sum(case a.topSysBdActualType when 8 then 1
+		end),0) xgub,
+		ifnull(sum(case a.topSysBdActualType when 9 then 1
+		end),0) xguc
+		from
+		oltslotattribute a , entity b where
+		a.entityId=b.entityId and b.entityId in (select entityId from
+		${Authority})
+		group by a.entityId
+		ORDER BY inet_aton(${sortName})
+	</select>
+	<select id="getEponBoardList" databaseId="Oracle" resultType="eponBoardStatistics">
+		select b.Ip as ip,
+		to_number(substr(ip,1,instr(ip,'.',1,1)-1)) as SEG1,
+		to_number(substr(ip,instr(ip,'.',1,1)+1,instr(ip,'.',1,2)-instr(ip,'.',1,1)-1))
+		as SEG2,
+		to_number(substr(ip,instr(ip,'.',1,2)+1,instr(ip,'.',1,3)-instr(ip,'.',1,2)-1))
+		as SEG3,
+		to_number(substr(ip,instr(ip,'.',1,3)+1,length(ip)+1-instr(ip,'.',1,3)))
+		as SEG4,
+		a.entityId, sum(case a.slotId when 1 then 1 else 1 end)
+		allSlot,
+		nvl(sum(case
+		a.bPresenceStatus when 1 then 1 end),0) "online",
+		nvl(sum(case
+		a.bPresenceStatus when 2 then 1 end),0) "outline",
+		nvl(sum(case
+		a.topSysBdActualType when '1' then 1 end),0) mpua,
+		nvl(sum(case
+		a.topSysBdActualType when '3' then 1 end),0) epua,
+		nvl(sum(case
+		a.topSysBdActualType when '4' then 1 end),0) epub,
+		nvl(sum(case
+		a.topSysBdActualType when '5' then 1 end),0) geua,
+		nvl(sum(case
+		a.topSysBdActualType when '6' then 1 end),0) geub,
+		nvl(sum(case
+		a.topSysBdActualType when '7' then 1 end),0) xgua,
+		nvl(sum(case
+		a.topSysBdActualType when '8' then 1 end),0) xgub,
+		nvl(sum(case
+		a.topSysBdActualType when '9' then 1 end),0) xguc
+		from
+		oltslotattribute
+		a , entity b where a.entityId=b.entityId group by
+		b.ip,a.entityId
+		ORDER
+		BY SEG1,SEG2,SEG3,SEG4
+	</select>
+
+	<select id="getSlotNoById" parameterType="map" resultType="long">
+		select slotNo from oltslotattribute where entityId = #{entityId} and
+		slotId=#{slotId}
+	</select>
+
+	<select id="getOltSlotList" parameterType="long" resultType="oltSlotAttribute">
+		SELECT
+		A.slotId,
+		B.entityId,
+		B.slotIndex,
+		A.slotNo,
+		A.topSysBdPreConfigType,
+		A.topSysBdActualType,
+		A.topSysBdTempDetectEnable,
+		A.bAttribute,
+		A.bAdminStatus,
+		A.bHardwareVersion,
+		A.bFirmwareVersion,
+		A.bSoftwareVersion,
+		A.bUpTime,
+		A.bSerialNumber,
+		A.bName,
+		A.bPresenceStatus
+		FROM
+		OltSlotAttribute A,
+		OltSlotRelation B
+		WHERE
+		B.entityId = #{entityId}
+		AND A.slotId = B.slotId
+		ORDER BY A.slotNo
+	</select>
+
+	<select id="getSlotStatus" parameterType="long" resultType="oltSlotStatus">
+		SELECT
+		topSysBdCpuUseRatio,
+		topSysBdlMemSize,
+		topSysBdFreeMemSize,
+		topTotalFlashOctets,
+		topSysBdFreeFlashOctets,
+		topSysBdCurrentTemperature,
+		topSysBdLampStatus,
+		bAlarmStatus,
+		changeTime
+		FROM OltSlotStatus
+		WHERE
+		slotId = #{slotId}
+	</select>
+
+	<select id="getSlotPonList" parameterType="Long" resultType="oltPonAttribute">
+		SELECT
+		A.ponId,
+		B.ponIndex,
+		B.slotId,
+		ponPortType,
+		ponOperationStatus,
+		ponPortAdminStatus,
+		ponPortMaxOnuNumSupport,
+		ponPortUpOnuNum,
+		ponPortEncryptMode,
+		ponPortEncryptKeyExchangeTime,
+		ponPortIsolationEnable,
+		maxDsBandwidth,
+		actualDsBandwidthInUse,
+		remainDsBandwidth,
+		perfStats15minuteEnable,
+		perfStats24hourEnable,
+		ponPortMacAddrLearnMaxNum,
+		maxUsBandwidth,
+		actualUsBandwidthInUse,
+		remainUsBandwidth
+		FROM
+		OltPonAttribute A,
+		OltPonRelation B
+		WHERE
+		A.ponId =
+		B.ponId and B.slotId = #{slotId}
+		AND b.ponIndex NOT IN (SELECT
+		topPonPSStandbyPortIndex FROM topponpsgrpconfig C WHERE B.entityId =
+		C.entityId)
+		order by A.ponId asc
+	</select>
+
+	<select id="getSlotSniList" parameterType="Long" resultType="oltSniAttribute">
+		SELECT
+		A.entityId,
+		A.sniId,
+		B.sniIndex,
+		B.slotId,
+		sniPortName,
+		sniOperationStatus,
+		sniAdminStatus,
+		sniMediaType,
+		sniAutoNegotiationStatus,
+		sniAutoNegotiationMode,
+		sniPerfStats15minuteEnable,
+		sniPerfStats24hourEnable,
+		sniLastStatusChangeTime,
+		sniMacAddrLearnMaxNum,
+		sniIsolationEnable,
+		topSniAttrFlowCtrlEnable,
+		topSniAttrIngressRate,
+		topSniAttrEgressRate,
+		topSniAttrActualSpeed,
+		topSniAttrPortType
+		FROM
+		OltSniAttribute A,
+		OltSniRelation B
+		WHERE
+		A.sniId =
+		B.sniId and
+		B.slotId
+		= #{slotId}
+	</select>
+
+	<select id="getSlotUniList" parameterType="Long" resultType="oltUniAttribute">
+		SELECT
+		A.entityId,
+		A.uniId,
+		B.uniIndex,
+		B.onuId,
+		uniOperationStatus,
+		uniAdminStatus,
+		uniAutoNegotiationEnable,
+		uniAutoNegLocalTechAbility,
+		perfStats15minuteEnable,
+		perfStats24hourEnable,
+		isolationEnable,
+		flowCtrl
+		FROM OltUniAttribute
+		A,OltUniRelation B
+		WHERE A.uniId =
+		B.uniId
+		and B.onuId = #{onuId}
+	</select>
+
+	<select id="getSlotIndex" parameterType="long" resultType="long">
+		SELECT slotIndex FROM OltSlotRelation WHERE slotId = #{slotId}
+	</select>
+
+	<select id="getFanCardIndex" parameterType="long" resultType="long">
+		SELECT fanCardIndex FROM OltFanRelation WHERE fanCardId = #{fanCardId}
+	</select>
+
+	<delete id="deleteOltSlot" parameterType="Long">
+		delete from
+		OltSlotRelation where slotId=#{slotId}
+	</delete>
+
+	<delete id="deleteOnuBySlotId" parameterType="Long">
+		delete from entity
+		where entityId in(select onuId from oltonurelation
+		where ponId in
+		(select ponId from oltponrelation where slotId = #{slotId}))
+	</delete>
+
+	<delete id="deleteOnuRelationBySlotId" parameterType="Long">
+		delete from
+		oltonurelation where ponId in (select ponId from oltponrelation where
+		slotId = #{slotId})
+	</delete>
+
+	<delete id="deleteOltSlotRelation" parameterType="Long">
+		delete from
+		OltSlotRelation where slotIndex=#{Index}
+	</delete>
+
+	<select id="getPowerStatus" parameterType="long" resultType="oltPowerStatus">
+		SELECT
+		powerCardId,
+		powerCardAlarmStatus,
+		topSysPowerSupplyACTemperature,
+		powerCardPresenceStatus,
+		changeTime
+		FROM
+		OltPowerStatus
+		WHERE powerCardId = #{powerCardId}
+	</select>
+
+	<update id="updateOltFanStatus" parameterType="oltFanStatus">
+		UPDATE
+		OltFanStatus
+		SET
+		topSysFanSpeed = #{topSysFanSpeed},
+		fanCardAlarmStatus =
+		#{fanCardAlarmStatus},
+		fanCardPresenceStatus =
+		#{fanCardPresenceStatus},
+		fanCardOperationStatus =
+		#{fanCardOperationStatus},
+		<choose>
+			<when test="_databaseId == 'MySQL'">
+				changeTime = now(),
+			</when>
+			<when test="_databaseId == 'Oracle'">
+				changeTime = sysdate,
+			</when>
+		</choose>
+		entityId = #{entityId}
+		WHERE exists
+		(select 1 from
+		OltFanRelation where
+		OltFanRelation.fanCardId =
+		OltFanStatus.fanCardId
+		and
+		OltFanRelation.entityId=#{entityId} and
+		OltFanRelation.fanCardIndex=#{fanCardIndex})
+	</update>
+
+	<update id="updateOltPowerStatus" parameterType="oltPowerStatus">
+		UPDATE
+		OltPowerStatus SET
+		powerCardAlarmStatus =
+		#{powerCardAlarmStatus},
+		topSysPowerSupplyACTemperature =
+		#{topSysPowerSupplyACTemperature},
+		powerCardPresenceStatus =
+		#{powerCardPresenceStatus},
+		<choose>
+			<when test="_databaseId == 'MySQL'">
+				changeTime = now(),
+			</when>
+			<when test="_databaseId == 'Oracle'">
+				changeTime = sysdate,
+			</when>
+		</choose>
+		entityId = #{entityId}
+		WHERE exists
+		(select 1 from
+		OltPowerRelation where
+		OltPowerRelation.powerCardId =
+		OltPowerStatus.powerCardId and
+		OltPowerRelation.entityId=#{entityId}
+		and
+		OltPowerRelation.powerCardIndex=#{powerCardIndex})
+	</update>
+
+	<delete id="batchDeleteOltPowerAttribute" parameterType="long">
+		delete
+		from oltpowerrelation where entityId = #{entityId}
+	</delete>
+
+	<insert id="insertOltPowerRelation" databaseId="MySQL"
+		parameterType="oltPowerAttribute" useGeneratedKeys="true" keyProperty="powerCardId">
+		insert into
+		OltPowerRelation(entityId,powerCardIndex) values
+		(#{entityId},#{powerCardIndex})
+	</insert>
+
+	<insert id="insertOltPowerStatus" parameterType="oltPowerStatus">
+		insert into
+		OltPowerStatus
+		(powerCardId, powerCardAlarmStatus,
+		topSysPowerSupplyACTemperature,
+		powerCardPresenceStatus,
+		changeTime,entityId
+		)
+		values
+		(#{powerCardId}, #{powerCardAlarmStatus},
+		#{topSysPowerSupplyACTemperature},
+		#{powerCardPresenceStatus},
+		<choose>
+			<when test="_databaseId == 'MySQL'">
+				now(),
+			</when>
+			<when test="_databaseId == 'Oracle'">
+				sysdate,
+			</when>
+		</choose>
+		#{entityId}
+		)
+	</insert>
+
+	<insert id="insertOltPowerAttribute" parameterType="oltPowerAttribute">
+		insert into
+		OltPowerAttribute
+		(powerCardId, topSysPowerSupplyType,
+		topSysPowerSupplyACVoltage,
+		powerCardName,entityId
+		)
+		values
+		(#{powerCardId},
+		#{topSysPowerSupplyType},
+		#{topSysPowerSupplyACVoltage},
+		#{powerCardName},#{entityId}
+		)
+	</insert>
+
+	<delete id="batchDeleteOltFanAttribute" parameterType="long">
+		delete
+		from oltfanrelation where entityId = #{entityId}
+	</delete>
+
+	<insert id="insertOltFanRelation" databaseId="MySQL"
+		parameterType="oltFanAttribute" useGeneratedKeys="true" keyProperty="fanCardId">
+		insert into
+		OltFanRelation(entityId,fanCardIndex) values
+		(#{entityId},#{fanCardIndex})
+	</insert>
+
+	<insert id="insertOltFanStatus" parameterType="oltFanStatus">
+		insert into
+		OltFanStatus
+		(fanCardId, topSysFanSpeed, fanCardAlarmStatus,
+		fanCardPresenceStatus,
+		fanCardOperationStatus,
+		changeTime,entityId
+		)
+		values
+		(#{fanCardId}, #{topSysFanSpeed}, #{fanCardAlarmStatus},
+		#{fanCardPresenceStatus},
+		#{fanCardOperationStatus},
+		<choose>
+			<when test="_databaseId == 'MySQL'">
+				now(),
+			</when>
+			<when test="_databaseId == 'Oracle'">
+				sysdate,
+			</when>
+		</choose>
+		#{entityId}
+		)
+	</insert>
+
+	<insert id="insertOltFanAttribute" parameterType="oltFanAttribute">
+		insert into
+		OltFanAttribute
+		(fanCardId, fanCardName, topSysFanSpeedControl,
+		entityId)
+		values
+		(#{fanCardId}, #{fanCardName},
+		#{topSysFanSpeedControl},
+		#{entityId})
+	</insert>
+
+	<select id="getMpuaBoardList" parameterType="long" resultType="long">
+		select slotId from oltslotattribute where bAttribute != 4 and
+		entityId=#{entityId}
+	</select>
+
+	<update id="updateSlotBdTempDetectEnable" parameterType="map">
+		UPDATE
+		oltslotattribute
+		SET topSysBdTempDetectEnable=#{slotBdTempDetectEnable}
+		WHERE slotId = #{slotId}
+	</update>
+
+	<update id="updateBdTemperature" parameterType="map">
+		UPDATE
+		oltslotstatus
+		SET topSysBdCurrentTemperature = #{temperature}
+		WHERE
+		slotId = #{slotId}
+	</update>
+
+	<delete id="deletePower" parameterType="long">
+		DELETE
+		FROM
+		oltpowerrelation
+		WHERE
+		entityId = #{entityId}
+	</delete>
+
+	<insert id="insertOltPowerRelation" databaseId="Oracle"
+		parameterType="oltPowerAttribute">
+		<selectKey keyProperty="powerCardId" resultType="long"
+			order="BEFORE">
+			SELECT
+			OltPowerRelation_Seq.nextval AS powerCardId from dual
+		</selectKey>
+		insert into OltPowerRelation(powerCardId,entityId,powerCardIndex)
+		values
+		(#{powerCardId},#{entityId},#{powerCardIndex})
+	</insert>
+
+	<insert id="insertOltFanRelation" databaseId="Oracle"
+		parameterType="oltFanAttribute">
+		<selectKey keyProperty="fanCardId" resultType="long" order="BEFORE">
+			SELECT
+			OltFanRelation_Seq.nextval AS fanCardId from dual
+		</selectKey>
+		insert into OltFanRelation(fanCardId,entityId,fanCardIndex) values
+		(#{fanCardId},#{entityId},#{fanCardIndex})
+	</insert>
+
+	<delete id="deleteFan" parameterType="long">
+		DELETE
+		FROM
+		oltfanrelation
+		WHERE
+		entityId = #{entityId}
+	</delete>
+
+	<update id="updateBoardOperationStatusBySlotIndex"
+		parameterType="map">
+		update
+		oltslotattribute set
+		bOperationStatus=#{bOperationStatus} where entityId=#{entityId} and
+		slotId = (select slotId from oltslotrelation where slotIndex =
+		#{slotIndex} and entityId=#{entityId})
+	</update>
+
+	<update id="updateOltSlotAttribute" parameterType="oltSlotAttribute">
+		UPDATE
+		OltSlotAttribute SET
+		slotNo = #{slotNo},
+		topSysBdPreConfigType = #{topSysBdPreConfigType},
+		<if test="topSysBdActualType != 255">
+			topSysBdActualType = #{topSysBdActualType},
+		</if>
+		topSysBdTempDetectEnable = #{topSysBdTempDetectEnable},
+		bOperationStatus = #{bOperationStatus},
+		bAttribute = #{bAttribute},
+		bAdminStatus = #{bAdminStatus},
+		bHardwareVersion = #{bHardwareVersion},
+		bFirmwareVersion = #{bFirmwareVersion},
+		bSoftwareVersion = #{bSoftwareVersion},
+		bUpTime = #{bUpTime},
+		bSerialNumber =	#{bSerialNumber},
+		bName = #{bName},
+		bPresenceStatus = #{bPresenceStatus}
+		WHERE exists
+		(select 1 from
+		OltSlotRelation where
+		OltSlotRelation.slotId
+		=
+		OltSlotAttribute.slotId
+		and
+		OltSlotRelation.entityId=#{entityId} and
+		OltSlotRelation.slotIndex=#{slotIndex})
+	</update>
+
+	<insert id="insertOltSlotRelation" 
+		parameterType="oltSlotAttribute" useGeneratedKeys="true" keyProperty="slotId">
+		insert into
+		OltSlotRelation(entityId,slotIndex) values
+		(#{entityId},#{slotIndex})
+	</insert>
+
+	<insert id="insertOltSlotStatus" parameterType="oltSlotStatus">
+		insert into
+		OltSlotStatus
+		(slotId, topSysBdCPUUseRatio,
+		topSysBdlMemSize,
+		topSysBdFreeMemSize,
+		topTotalFlashOctets,
+		topSysBdFreeFlashOctets,
+		topSysBdCurrentTemperature,
+		topSysBdLampStatus,
+		bAlarmStatus,
+		changeTime,
+		entityId
+		)
+		values
+		(#{slotId},
+		#{topSysBdCpuUseRatio},
+		#{topSysBdlMemSize},
+		#{topSysBdFreeMemSize},
+		#{topTotalFlashOctets},
+		#{topSysBdFreeFlashOctets},
+		#{topSysBdCurrentTemperature},
+		#{topSysBdLampStatus},
+		#{bAlarmStatus},
+		<choose>
+			<when test="_databaseId == 'MySQL'">
+				now(),
+			</when>
+			<when test="_databaseId == 'Oracle'">
+				sysdate,
+			</when>
+		</choose>
+		#{entityId}
+		)
+	</insert>
+
+	<insert id="insertOltSlotAttribute" parameterType="oltSlotAttribute">
+		insert into
+		OltSlotAttribute
+		(slotId,slotNo, topSysBdPreConfigType,
+		topSysBdActualType,
+		topSysBdTempDetectEnable,
+		bOperationStatus,
+		bAttribute,
+		bAdminStatus,
+		bHardwareVersion,
+		bFirmwareVersion,
+		bSoftwareVersion,
+		bUpTime,
+		bSerialNumber,
+		bName,
+		bPresenceStatus,
+		entityId
+		)
+		values
+		(#{slotId},#{slotNo},
+		#{topSysBdPreConfigType},
+		#{topSysBdActualType},
+		#{topSysBdTempDetectEnable},
+		#{bOperationStatus},
+		#{bAttribute},
+		#{bAdminStatus},
+		#{bHardwareVersion},
+		#{bFirmwareVersion},
+		#{bSoftwareVersion},
+		#{bUpTime},
+		#{bSerialNumber},
+		#{bName},
+		#{bPresenceStatus},
+		#{entityId}
+		)
+	</insert>
+
+	<update id="updateOltSlotAttributeStatus" parameterType="int">
+		UPDATE
+		OltSlotAttribute SET
+		bAttribute = #{bAttribute}
+		WHERE
+		slotId=#{slotId}
+	</update>
+
+	<update id="updateBoardStatus" parameterType="map">
+		UPDATE
+		oltslotattribute
+		SET bAdminStatus=#{status}
+		WHERE slotId = #{slotId}
+	</update>
+
+	<select id="getV152MpuSlotIndex" parameterType="long"
+		resultType="long">
+		select A.slotIndex from oltslotrelation A, oltslotattribute
+		B where
+		A.entityId = B.entityId and A.entityId=#{entityId} and A.slotId
+		=
+		B.slotId and B.bSoftwareVersion like '%V1.5.2-rc2%' and B.bAttribute
+		=1
+	</select>
+
+	<delete id="deleteV152MpuSlot" parameterType="map">
+		delete from
+		oltslotrelation where entityId=#{entityId} and
+		slotIndex=#{slotIndex}
+	</delete>
+
+	<update id="updateSlotAttribue" parameterType="java.util.Map">
+		UPDATE
+		oltslotattribute SET bAttribute = #{bAttribute},slotNo = #{slotNo}
+		WHERE slotId =
+		#{slotId}
+	</update>
+
+	<select id="getSlotId" parameterType="oltSlotAttribute"
+		resultType="long">
+		SELECT
+		slotId
+		FROM
+		OltSlotRelation
+		WHERE
+		entityId = #{entityId}
+		and slotIndex = #{slotIndex}
+	</select>
+
+	<select id="getSlotNoByIndex" parameterType="java.util.Map"
+		resultType="long">
+		SELECT
+		B.slotNo
+		FROM
+		OltSlotRelation A left join
+		oltslotAttribute B on A.slotId = B.slotId
+		WHERE
+		A.entityId = #{entityId}
+		and slotIndex = #{slotIndex}
+	</select>
+	<select id="getMasterSlotNo" parameterType="long" resultType="long">
+		select slotNo from oltslotattribute where entityId = #{entityId} and
+		bAttribute = 1
+	</select>
+
+	<insert id="insertSlotMap" parameterType="oltSlotMapTable">
+		INSERT INTO
+		oltslotmaptable
+		(entityId, slotPhyNo, slotLogNo)
+		values
+		(#{entityId},
+		#{slotPhyNo}, #{slotLogNo})
+	</insert>
+
+	<delete id="deleteSlotMap" parameterType="long">
+		delete from
+		oltslotmaptable where entityId = #{entityId}
+	</delete>
+
+	<select id="getSlotLogNo" parameterType="map" resultType="int">
+		select
+		slotLogNo from oltslotmaptable
+		where entityId = #{entityId} and
+		slotPhyNo = #{slotPhyNo}
+	</select>
+
+	<update id="updateLampStatus" parameterType="map">
+		UPDATE oltslotstatus
+		SET topSysBdLampStatus = #{status}
+		WHERE slotId = #{slotId}
+	</update>
+
+	<select id="getSlotIdByPhyNo" parameterType="map" resultType="long">
+		select slotId from oltslotattribute
+		where entityId = #{entityId} and
+		slotNo=#{slotNo}
+	</select>
+
+	<update id="updateSlotPerConfig" parameterType="map">
+		UPDATE
+		oltslotattribute
+		SET topSysBdPreConfigType =
+		#{preConfigType},bAdminStatus = 2
+		WHERE
+		slotId = #{slotId}
+	</update>
+
+	<insert id="recordOltSlotCollect" parameterType="map">
+		insert into
+		oltslotrecord values(#{entityId}, #{slotId},
+		#{databasePreConfig},
+		#{collectPreConfig}, sysdate());
+	</insert>
+
+	<delete id="deleteSlotPonPort" parameterType="map">
+		delete from
+		oltsnirelation where entityId = #{entityId} and slotId = #{slotId}
+	</delete>
+	<delete id="deleteSlotSniPort" parameterType="map">
+		delete from
+		oltponrelation where entityId = #{entityId} and slotId = #{slotId}
+	</delete>
+	<select id="getEntityIdBySlotId" parameterType="Long"
+		resultType="long">
+		select entityId from entity where entityId in(select onuId
+		from oltonurelation
+		where ponId in (select ponId from oltponrelation
+		where slotId = #{slotId}))
+	</select>
+	<select id="selectSlotList" parameterType="long" resultType="oltSlotAttribute">
+		SELECT
+		entityId,
+		slotNo,
+		topSysBdPreConfigType,
+		topSysBdActualType,
+		topSysBdTempDetectEnable,
+		bAttribute,
+		bAdminStatus,
+		bHardwareVersion,
+		bFirmwareVersion,
+		bSoftwareVersion,
+		bUpTime,
+		bSerialNumber,
+		bName,
+		bPresenceStatus,
+		bOperationStatus
+		FROM
+		OltSlotAttribute
+		WHERE entityId=#{entityId}
+	</select>
+	<select id="selectSlotListForTl1" parameterType="long" resultType="com.topvision.nbi.tl1.api.domain.BoardInfo">
+        SELECT
+		    A.ip oltId,
+		    A.entityId,
+		    C.slotId,
+		    c.slotNo boardId,
+		    c.bName boardType,
+		    c.bSoftwareVersion swVer,
+		    C.bHardwareVersion hwVer
+		FROM
+		    entity A
+		INNER JOIN oltattribute B ON A.entityId = B.entityId
+		INNER JOIN oltslotattribute C ON B.entityId = C.entityId AND C.bPresenceStatus = 1
+		WHERE
+		    A.entityId = #{entityId}
+    </select>
+
+	<select id="getSlotIdByIndex" parameterType="map" resultType="long">
+		select slotId from oltslotrelation
+		where entityId = #{entityId} and slotIndex=#{slotIndex}
+	</select>
+	
+	<update id="updateBoardAlarmStatus" parameterType="map" >
+		update oltslotstatus set  bAlarmStatus = #{bAlarmStatus}
+		where slotId = #{slotId}
+	</update>
+	
+	<select id="querySlotPreType" parameterType="map" resultType="int">
+		select topSysBdPreConfigType from oltSlotAttribute
+		where entityId = #{entityId} and slotNo=#{slotNo}
+	</select>
+	
+	<select id="querySlotActualType" parameterType="map" resultType="int">
+		select topSysBdActualType from oltSlotAttribute
+		where entityId = #{entityId} and slotNo=#{slotNo}
+	</select>
+</mapper>

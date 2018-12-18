@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcTrapServer" namespace="/cmc" extends="default">
+        <!-- 添加操作日志拦截器配置 -->
+
+		<action name="showTrapServer" class="cmcTrapServerConfigAction" method="showTrapServer">
+            <result>/cmc/trapServerConfig.jsp</result>
+        </action>
+        <action name="loadTrapServer" class="cmcTrapServerConfigAction" method="loadTrapServer"></action>
+        <action name="refreshTrapServerFromFacility" class="cmcTrapServerConfigAction"
+            method="refreshTrapServerFromFacility"></action>
+        <action name="addTrapServer" class="cmcTrapServerConfigAction" method="addTrapServer"></action>
+        <action name="deleteTrapServer" class="cmcTrapServerConfigAction" method="deleteTrapServer"></action>
+	</package>
+</struts>

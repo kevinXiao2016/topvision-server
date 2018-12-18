@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmcreport" namespace="/cmc/report" extends="default">
+
+		<!-- ccmts channel -->
+		<action name="showCcmtsChannelAsset" class="ccmtsChannelListReportAction"
+			method="showCcmtsChannelAsset">
+			<result>/report/ccmtsChannelListReportCreator/ccChannelAssetReport.jsp
+			</result>
+		</action>
+		<action name="exprotCcmtsChannelReportToExcel" class="ccmtsChannelListReportAction"
+			method="exprotCcmtsChannelReportToExcel" />
+
+		<!-- ccmts list -->
+		<action name="showCcmtsDeviceAsset" class="ccmtsDeviceListReportAction"
+			method="showCcmtsDeviceAsset">
+			<result>/report/ccmtsDeviceListReportCreator/ccDeviceAssetReport.jsp
+			</result>
+		</action>
+		<action name="exportCcmtsAssetToExcel" class="ccmtsDeviceListReportAction"
+			method="exportCcmtsAssetToExcel" />
+
+		<!-- olt running status -->
+		<action name="queryOltRunningStatus" class="oltRunningStatusReportAction"
+			method="queryOltRunningStatus">
+			<result>/report/oltRunningStatusReportCreator/oltRunningStatus.jsp
+			</result>
+		</action>
+		<action name="exportOltRunningStatusToExcel" class="oltRunningStatusReportAction"
+			method="exportOltRunningStatusToExcel" />
+
+		<!-- cm list -->
+		<action name="showCmDeviceAsset" class="cmReportAction" method="showCmDeviceAsset">
+			<result>/report/cmReportCreator/cmDeviceAssetReport.jsp</result>
+		</action>
+		<action name="exportCmDeviceReportToExcel" class="cmReportAction"
+			method="exportCmDeviceReportToExcel" />
+		<action name="loadRangeSelect" class="cmReportAction"
+			method="loadRangeSelect" />
+
+		<!-- cmc snr -->
+		<action name="showCcmtsUsSnrStatistics" class="cmcSnrReportAction"
+			method="showCcmtsUsSnrStatistics">
+			<result>/report/cmcSnrReportCreator/ccmtsUsSnrStatistics.jsp</result>
+		</action>
+		<action name="showSnrReprotDetail" class="cmcSnrReportAction"
+			method="showSnrReprotDetail">
+			<result>/report/cmcSnrReportCreator/ccmtsUsSnrDetail.jsp</result>
+		</action>
+		<action name="exportSnrReportToExcel" class="cmcSnrReportAction"
+			method="exportSnrReportToExcel" />
+		<action name="exportSnrDetailReportToExcel" class="cmcSnrReportAction"
+			method="exportSnrDetailReportToExcel" />
+
+		<!-- cmc user flow -->
+		<action name="exportUserFlowReportToExcel" class="cmcUserFlowReportAction"
+			method="exportUserFlowReportToExcel" />
+		<action name="exportUserFlowDetailReportToExcel" class="cmcUserFlowReportAction"
+			method="exportUserFlowDetailReportToExcel" />
+		<action name="showCcmtsUserFlowDetail" class="cmcUserFlowReportAction"
+			method="showCcmtsUserFlowDetail">
+			<result>/report/cmcUserFlowReportCreator/ccmtsUserFlowDetail.jsp
+			</result>
+		</action>
+		<action name="showCcmtsUserFlowStatistics" class="cmcUserFlowReportAction"
+			method="showCcmtsUserFlowStatistics">
+			<result>/report/cmcUserFlowReportCreator/ccmtsUserFlowStatistics.jsp
+			</result>
+		</action>
+
+		<!-- cm daily num -->
+		<action name="showCmDailyNumStatic" class="cmDailyNumStaticReportAction"
+			method="loadCmDailyNumStatic">
+			<result>/report/cmDailyNumStaticReportCreator/cmDailyNumStatic.jsp
+			</result>
+		</action>
+		<action name="loadCmDailyNumStaticGraphData" class="cmDailyNumStaticReportAction"
+			method="loadCmDailyNumStaticGraphData" />
+
+		<!-- cm realtime user -->
+		<action name="showCmRealTimeUserStatic" class="cmRealTimeUserStaticReportAction"
+			method="showCmRealTimeUserStatic">
+			<result>/report/cmRealTimeUserStaticReportCreator/cmRealTimeUserStatic.jsp
+			</result>
+		</action>
+		<action name="exportCmRealTimeUserStaticReportToExcel" class="cmRealTimeUserStaticReportAction"
+			method="exportCmRealTimeUserStaticReportToExcel" />
+			
+		<!-- ccmts us flow -->
+		<action name="showCcmtsUpChlFlowAsset" class="ccmtsUpChlFlowReportAction"
+			method="showCcmtsUpChlFlowAsset">
+			<result>/report/ccmtsUpChlFlowReportCreator/ccmtsUpChlFlowStatistics.jsp
+			</result>
+		</action>
+		<action name="exportCcmtsUpChlFlowReportToExcel" class="ccmtsUpChlFlowReportAction"
+			method="exportCcmtsUpChlFlowReportToExcel"></action>
+		<action name="showCcmtsUpChlFlowDetail" class="ccmtsUpChlFlowReportAction"
+			method="showCcmtsUpChlFlowDetail">
+			<result>/report/ccmtsUpChlFlowReportCreator/ccmtsUpChlFlowDetail.jsp
+			</result>
+		</action>
+		<action name="exportCcmtsUpChlDetailToExcel" class="ccmtsUpChlFlowReportAction" 
+			method="exportCcmtsUpChlDetailToExcel"></action>
+		
+		<!-- ccmts ds flow -->
+		<action name="showCcmtsDownChlFlowAsset" class="ccmtsDownChlFlowReportAction"
+			method="showCcmtsDownChlFlowAsset">
+			<result>/report/ccmtsDownChlFlowReportCreator/ccmtsDownChlFlowStatistics.jsp
+			</result>
+		</action>
+		<action name="exportCcmtsDownChlFlowReportToExcel" class="ccmtsDownChlFlowReportAction"
+			method="exportCcmtsDownChlFlowReportToExcel"></action>
+		<action name="showCcmtsDownChlFlowDetail" class="ccmtsDownChlFlowReportAction"
+			method="showCcmtsDownChlFlowDetail">
+			<result>/report/ccmtsDownChlFlowReportCreator/ccmtsDownChlFlowDetail.jsp
+			</result>
+		</action>
+		<action name="exportCcmtsDownChlDetailToExcel" class="ccmtsDownChlFlowReportAction" 
+			method="exportCcmtsDownChlDetailToExcel"></action>
+		
+	</package>
+</struts>

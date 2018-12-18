@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="cmHistory" namespace="/cmHistory" extends="default">
+		<action name="showTestCmHistory" class="cmHistoryAction" method="showTestCmHistory">
+			<result>/cm/testCmHistory.jsp</result>
+		</action>
+		<action name="showCmHistory" class="cmHistoryAction" method="showCmHistory">
+			<result>/cm/cmHistory.jsp</result>
+		</action>
+		<action name="loadCmHistoryList" class="cmHistoryAction" method="loadCmHistoryList"></action>
+		<action name="insert3600WData" class="cmHistoryAction" method="insert3600WData"></action>
+		<action name="insert1Data" class="cmHistoryAction" method="insert1Data"></action>
+	</package>
+</struts>

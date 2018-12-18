@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmts.domain.CmtsAlert">
+	<select id="selectCmtsAlertType" resultType="com.topvision.ems.fault.domain.AlertType">
+		SELECT typeId,
+		category, name, displayName, levelId
+		FROM alerttype
+	</select>
+
+	<select id="selectCmtsAlertList" parameterType="map" databaseId="MySQL"
+		resultType="com.topvision.ems.fault.domain.Alert">
+		SELECT A.alertId, A.typeId, A.name, A.levelId, C.name as
+		levelName,
+		A.monitorId, A.entityId, A.host, A.source, A.message,
+		A.firstTime,
+		A.lastTime, A.happenTimes, A.confirmUser,
+		A.confirmTime,
+		A.confirmMessage, 
+		A.clearUser, A.clearTime, A.clearMessage,
+		A.status, A.orginalCode,
+		B.displayName AS typeName
+		FROM
+		Alert A, AlertType B, Levels C
+		WHERE A.typeId = B.typeId AND
+		A.levelId =
+		C.levelId AND
+		(A.entityId = #{cmcId})
+		<if test="typeId != null">
+			<!-- and A.typeId = #{typeId} -->
+			 and FIND_IN_SET(A.typeId,topoEventFun(#{typeId},'alerttype'))
+		</if>
+		<if test="levelId != null">and A.levelId = #{levelId}</if>
+		<if test="message != null">and A.message LIKE CONCAT('%','${message}','%')</if>
+		<if test="startTime != null">and <![CDATA[A.firstTime >= #{startTime}]]></if>
+		<if test="endTime != null">and <![CDATA[A.firstTime <= #{endTime}]]></if>
+		<if test="alertId != null">
+			and A.alertId = #{alertId}
+		</if>
+		order by a.firstTime desc
+		limit ${start} , ${limit}
+	</select>
+	
+	<select id="selectCmtsAlertList" parameterType="map" databaseId="Oracle"
+		resultType="com.topvision.ems.fault.domain.Alert">
+		select tt.* from (select rownum rn , t.* from (
+		SELECT A.alertId, A.typeId, A.name, A.levelId, C.name as
+		levelName,
+		A.monitorId, A.entityId, A.host, A.source, A.message,
+		A.firstTime,
+		A.lastTime, A.happenTimes, A.confirmUser,
+		A.confirmTime,A.confirmMessage, 
+		A.clearUser, A.clearTime, A.clearMessage,
+		A.status, A.orginalCode,
+		B.displayName AS typeName
+		FROM
+		Alert A, AlertType B, Levels C
+		WHERE A.typeId = B.typeId AND
+		A.levelId =
+		C.levelId AND
+		(A.entityId = #{cmcId})
+		<if test="typeId != null">and A.typeId = #{typeId}</if>
+		<if test="levelId != null">and A.levelId = #{levelId}</if>
+		<if test="message != null">and A.message LIKE CONCAT('%','${message}','%')</if>
+		<if test="startTime != null">and <![CDATA[A.firstTime >= #{startTime}]]></if>
+		<if test="endTime != null">and <![CDATA[A.firstTime <= #{endTime}]]></if>
+		order by a.firstTime desc
+		) t) tt where rn <![CDATA[>]]>
+		${start} and rn <![CDATA[<=]]>
+		${limit} 
+	</select>
+
+	<select id="selectCmtsAlertListNum" parameterType="map"
+		resultType="int">
+		SELECT COUNT(A.alertId)
+		FROM Alert A, AlertType B, Levels C
+		WHERE
+		A.typeId = B.typeId AND A.levelId = C.levelId AND
+		(A.entityId = #{cmcId})
+		<if test="typeId != null">
+			<!-- and A.typeId = #{typeId} -->
+			and FIND_IN_SET(A.typeId,topoEventFun(#{typeId},'alerttype'))
+		</if>
+		<if test="levelId != null">and A.levelId = #{levelId}</if>
+		<if test="message != null">and A.message LIKE CONCAT('%','${message}','%')</if>
+		<if test="startTime != null">and <![CDATA[A.firstTime >= #{startTime}]]></if>
+		<if test="endTime != null">and <![CDATA[A.firstTime <= #{endTime}]]></if>
+		<if test="alertId != null">
+			and A.alertId = #{alertId}
+		</if>
+	</select>
+
+	<select id="selectCmtsHistoryAlertList" parameterType="map" databaseId="MySQL"
+		resultType="com.topvision.ems.fault.domain.HistoryAlert">
+		SELECT A.alertId, A.typeId, A.name, A.levelId, C.name as
+		levelName,
+		A.monitorId, A.entityId, A.host, A.source, A.message,
+		A.firstTime,
+		A.lastTime, A.happenTimes, A.confirmUser,
+		A.confirmTime,
+		A.confirmMessage, A.status, A.clearUser, A.clearTime, A.clearMessage,
+		B.displayName AS typeName FROM HistoryAlert A, AlertType
+		B, Levels C
+		WHERE A.typeId = B.typeId AND A.levelId = C.levelId AND
+		(A.entityId = #{cmcId})
+		<if test="typeId != null">
+			<!-- and A.typeId = #{typeId} -->
+			and FIND_IN_SET(A.typeId,topoEventFun(#{typeId},'alerttype'))
+		</if>
+		<if test="levelId != null">and A.levelId = #{levelId}</if>
+		<if test="message != null">and A.message LIKE CONCAT('%','${message}','%')</if>
+		<if test="startTime != null">and <![CDATA[A.firstTime >= #{startTime}]]></if>
+		<if test="endTime != null">and <![CDATA[A.firstTime <= #{endTime}]]></if>
+		order by a.firstTime desc
+		limit ${start} , ${limit}
+	</select>
+	
+	<select id="selectCmtsHistoryAlertList" parameterType="map" databaseId="Oracle"
+		resultType="com.topvision.ems.fault.domain.HistoryAlert">
+		select tt.* from (select rownum rn , t.* from (
+		SELECT A.alertId, A.typeId, A.name, A.levelId, C.name as
+		levelName,
+		A.monitorId, A.entityId, A.host, A.source, A.message,
+		A.firstTime,
+		A.lastTime, A.happenTimes, A.confirmUser,
+		A.confirmTime,
+		A.confirmMessage, A.status, A.clearUser, A.clearTime, A.clearMessage,
+		B.displayName AS typeName FROM HistoryAlert A, AlertType
+		B, Levels C
+		WHERE A.typeId = B.typeId AND A.levelId = C.levelId AND
+		(A.entityId = #{cmcId})
+		<if test="typeId != null">and A.typeId = #{typeId}</if>
+		<if test="levelId != null">and A.levelId = #{levelId}</if>
+		<if test="message != null">and A.message LIKE CONCAT('%','${message}','%')</if>
+		<if test="startTime != null">and <![CDATA[A.firstTime >= #{startTime}]]></if>
+		<if test="endTime != null">and <![CDATA[A.firstTime <= #{endTime}]]></if>
+		order by a.firstTime desc
+		) t) tt where rn <![CDATA[>]]>
+		${start} and rn <![CDATA[<=]]>
+		${limit} 
+	</select>
+	
+	<select id="selectCmtsHistoryAlertListNum" parameterType="map"
+		resultType="int">
+		SELECT count(A.alertId) FROM HistoryAlert A, AlertType B, Levels C
+		WHERE A.typeId = B.typeId AND A.levelId = C.levelId AND
+		(A.entityId = #{cmcId})
+		<if test="typeId != null">
+			<!-- and A.typeId = #{typeId} -->
+			and FIND_IN_SET(A.typeId,topoEventFun(#{typeId},'alerttype'))
+		</if>
+		<if test="levelId != null">and A.levelId = #{levelId}</if>
+		<if test="message != null">and A.message LIKE CONCAT('%','${message}','%')</if>
+		<if test="startTime != null">and <![CDATA[A.firstTime >= #{startTime}]]></if>
+		<if test="endTime != null">and <![CDATA[A.firstTime <= #{endTime}]]></if>
+	</select>
+</mapper>

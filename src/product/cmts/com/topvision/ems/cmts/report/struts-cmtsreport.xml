@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+    
+<struts>
+	<package name="cmtsreport" namespace="/cmts/report" extends="default">
+		<!-- cmts list -->
+		<action name="showCmtsDeviceAsset" class="cmtsDeviceListReportAction"
+			method="showCmtsDeviceAsset">
+			<result>/report/cmtsDeviceListReportCreator/cmtsDeviceAssetReport.jsp
+			</result>
+		</action>
+		<action name="exportCmtsAssetToExcel" class="cmtsDeviceListReportAction"
+			method="exportCmtsAssetToExcel" />
+		
+	</package>
+</struts>

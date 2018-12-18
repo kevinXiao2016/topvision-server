@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.cmc.cmtsInfo.domain.CmtsNetworkInfo">
+
+    <!-- ################################## select start ####################################### -->
+
+    <select id="queryCmcList" parameterType="map" resultType="cmtsNetworkInfo">
+        select * from ( select
+        x.state status,
+        x.sysUpTime topCcmtsSysUpTime,
+        if(a.statusChangeTime='0000-00-00 00:00:00', sysdate(), a.statusChangeTime) statusChangeTime,
+        if(x.state = 1,if(x.sysUpTime>0,x.sysUpTime,f.sysUpTime),datediff(statusChangeTime,SYSDATE())) sysupTimeSortData,
+        a.cmcId,a.cmcDeviceStyle,a.topCcmtsSysDescr,a.topCcmtsSysObjectId,
+        a.topCcmtsSysContact,a.topCcmtsSysName,a.topCcmtsSysLocation,a.topCcmtsSysService,
+        a.topCcmtsSysORLastChange,a.topCcmtsDocsisBaseCapability,a.topCcmtsSysRAMRatio,
+        a.topCcmtsSysCPURatio,a.topCcmtsSysMacAddr, a.topCcmtsSysMacAddrLong,a.topCcmtsSysFlashRatio,a.topCcmtsSysStatus,
+        a.topCcmtsSysSwVersion, h.name nmName,b.cmcIndex,
+        c.ponId,d.entityId,f.ip as manageIp,x.snapTime dt,i.bSoftwareVersion
+        oltVersion, f.name as manageName
+        FROM
+        oltponrelation d right join oltonurelation c on
+        d.ponId = c.ponId
+        right join cmcentityrelation b on
+        c.onuId = b.onuId
+        right join entity f on f.entityId = b.cmcEntityId
+        right join cmcattribute a on b.cmcId = a.cmcId
+        right join entity h on h.entityId = b.cmcId
+        right join entitysnap x on x.entityId = h.entityId
+        left join oltslotattribute i on (i.entityId = b.cmcEntityId and
+        i.bAttribute=1 )
+        WHERE 1 = 1
+        <if test="deviceType != null">
+            AND a.cmcDeviceStyle = #{deviceType}
+        </if>
+        <if test="entityId != null">
+            AND d.entityId = #{entityId}
+        </if>
+        <if test="ponId != null">
+            AND c.ponId = #{ponId}
+        </if>
+        <if test="cmcMac != null">
+            AND (a.topCcmtsSysMacAddr LIKE '%${cmcMac}%'
+                <if test="queryMacWithoutSplit != null">
+                OR REPLACE(a.topCcmtsSysMacAddr, ':', '') LIKE '%${queryMacWithoutSplit}%'
+                </if>
+                )
+        </if>
+        <if test="cmcType != null">
+            AND A.cmcDeviceStyle = #{cmcType}
+        </if>
+        <if test="status != null and status != -1">
+            AND x.state = #{status}
+        </if>
+        <if test="cmcName != null">
+            AND h.name LIKE '%${cmcName}%'
+        </if>
+        <if test="connectPerson != null">
+            AND a.topCcmtsSysContact LIKE '${connectPerson}%'
+        </if>
+        <if test="cmcIp != null">
+            AND f.ip LIKE '%${cmcIp}%'
+        </if>
+        ) tmp inner join entity v on tmp.cmcId = v.entityId where v.entityId in (select entityId from ${Authority})
+        <if test="sort != null and dir != null">
+            order by ${sort} ${dir}
+        </if>
+        <if test="sort == null or dir == null">
+            order by manageIp, cmcIndex
+        </if>
+        limit ${start} , ${limit}
+    </select>
+    
+    <select id="queryForCmtsInfoList" parameterType="map" resultType="cmtsNetworkInfo">
+        select 
+        C.cmcId,
+        C.topCcmtsSysName,
+        C.cmcDeviceStyle,
+        G.channelOutSpeed upSpeed,
+		G.channelInSpeed  downSpeed,
+		D.countTotal,
+		D.upSnrAvg,
+		D.downSnrAvg,
+		D.cmOutPowerAvg,
+		D.cmRePowerAvg,
+		E.location,
+		E.note,
+		E.name as nmName,
+		F.cmcIndex,
+		H.ponId,
+		I.entityId,
+		J.name as manageName,
+		J.ip as manageIp,
+		K.state status,
+		L.onlineNum,
+		(L.onlineNum+L.otherNum+L.offlineNum) allNum
+		from cmcattribute C left join 
+		(select S.cmcId,count(S.upChannelSnr) countTotal,avg(S.upChannelSnr) upSnrAvg,avg(S.downChannelSnr) downSnrAvg,avg(S.upChannelTx) cmOutPowerAvg,avg(S.downChannelTx) cmRePowerAvg 
+		from(select A.cmId,A.cmcId,A.StatusSignalNoise/10 upChannelSnr,B.downChannelSnr,B.downChannelTx,B.upChannelTx from 
+		cmattribute A left join cmsignal B on A.cmId=B.cmId where A.StatusValue in(6,26,27)) S group by S.cmcId) D on C.cmcId=D.cmcId 
+		left join entity E on C.cmcId=E.entityId 
+		left join cmcentityrelation F on F.cmcId=C.cmcId
+		left join perfcmcflowqualitylast G on G.cmcId=C.cmcId and G.channelIndex=F.cmcIndex
+		left join oltonurelation H on H.onuId=F.onuId
+		left join oltponrelation I on H.ponId=I.ponId
+		left join entity J on F.cmcEntityId=J.entityId
+		left join entitysnap K on C.cmcId=K.entityId
+		left join usernumlastccmts L on L.entityId=C.cmcId
+        WHERE C.cmcId IN (select entityId from ${Authority})
+        <if test="deviceType != null">
+            AND C.cmcDeviceStyle = #{deviceType}
+        </if>
+        <if test="entityId != null">
+            AND J.entityId = #{entityId}
+        </if>
+        <if test="cmcType != null">
+            AND C.cmcDeviceStyle = #{cmcType}
+        </if>
+        <if test="cmcName != null">
+            AND (
+            E.name LIKE '%${cmcName}%' 
+            OR E.sysName LIKE '%${cmcName}%' 
+            OR E.ip like '%${cmcName}%'  
+            OR J.name like '%${cmcName}%' 
+            OR E.entityId in( select E1.entityId from entity E1, entity E2 where E2.ip like '%${cmcName}%' and E2.entityId = E1.parentId)
+            OR C.topCcmtsSysMacAddr LIKE '%${queryContentMac}%' 
+            <if test="queryMacWithoutSplit != null">
+            OR REPLACE(C.topCcmtsSysMacAddr, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            </if>
+            ) 
+        </if>
+        <if test="sort != null and dir != null">
+            <choose>
+                <when test="sort == 'topCcmtsSysUpTime'.toString()">
+                    ORDER BY status ${dir},CAST(C.topCcmtsSysUpTime AS UNSIGNED) ${dir}
+                </when>
+                <when test="sort == 'manageIp'.toString()">
+                    ORDER BY inet_aton(manageIp) ${dir}
+                </when>
+                <otherwise>
+                    order by ${sort} ${dir}
+                </otherwise>
+            </choose>
+        </if>
+        limit ${start} , ${limit}
+    </select>
+    
+    <select id="queryForCmtsInfoList2" parameterType="map" resultType="cmtsNetworkInfo">
+        select 
+        C.cmcId,
+        C.topCcmtsSysName,
+        C.cmcDeviceStyle,
+        G.channelOutSpeed downSpeed,
+        G.channelInSpeed  upSpeed,
+        D.upSnrAvg,
+        D.downSnrAvg,
+        D.upTxAvg cmOutPowerAvg,
+        D.downReAvg cmRePowerAvg,
+        D.upSnrOutRange upSnrNotInRange,
+        D.downSnrOutRange downSnrAvgNotInRange,
+        D.upTxOutRange cmOutPowerNotInRange,
+        D.downReOutRange cmRePowerNotInRange,
+        (select
+            sum(IFNULL(unlc.onlineNum,0)) as cmNumOnline
+            from
+            usernumlastccmts unlc
+            LEFT JOIN cmcentityrelation cer on (cer.cmcIndex is null and unlc.entityId = cer.cmcEntityId )  or (unlc.entityId = cer.cmcEntityId and unlc.ccIfIndex = cer.cmcIndex)
+            where cer.cmcId=C.cmcId) onlineNum,
+        (select
+            sum(IFNULL(unlc.onlineNum + unlc.offlineNum + unlc.otherNum,0))  as cmNumTotal
+            from
+            usernumlastccmts unlc
+            LEFT JOIN cmcentityrelation cer on (cer.cmcIndex is null and unlc.entityId = cer.cmcEntityId )  or (unlc.entityId = cer.cmcEntityId and unlc.ccIfIndex = cer.cmcIndex)
+            where cer.cmcId=C.cmcId) allNum,
+        E.location,
+        E.note,
+        E.name as nmName,
+        F.cmcIndex,
+        H.ponId,
+        I.entityId,
+        J.name as manageName,
+        J.ip as manageIp,
+        K.state status
+        from cmcattribute C left join 
+        cmtsinfosummarylast D on C.cmcId=D.cmcId 
+        left join entity E on C.cmcId=E.entityId 
+        left join cmcentityrelation F on F.cmcId=C.cmcId
+        left join perfcmcflowqualitylast G on G.cmcId=C.cmcId and G.channelIndex=F.cmcIndex
+        left join oltonurelation H on H.onuId=F.onuId
+        left join oltponrelation I on H.ponId=I.ponId
+        left join entity J on F.cmcEntityId=J.entityId
+        left join entitysnap K on C.cmcId=K.entityId
+        left join usernumlastccmts L on L.entityId=C.cmcId
+        WHERE C.cmcId IN (select entityId from ${Authority})
+        AND C.cmcDeviceStyle IN (select typeId from entitytyperelation where type=30000)
+        <if test="cmcName != null">
+            AND (
+            E.name LIKE '%${cmcName}%' 
+            OR E.sysName LIKE '%${cmcName}%' 
+            OR E.ip like '%${cmcName}%'  
+            OR J.name like '%${cmcName}%' 
+            OR E.entityId in( select E1.entityId from entity E1, entity E2 where E2.ip like '%${cmcName}%' and E2.entityId = E1.parentId)
+            OR C.topCcmtsSysMacAddr LIKE '%${queryContentMac}%' 
+            <if test="queryMacWithoutSplit != null">
+            OR REPLACE(C.topCcmtsSysMacAddr, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            </if>
+            ) 
+        </if>
+        <if test="sort != null and dir != null">
+            <choose>
+                <when test="sort == 'manageIp'.toString()">
+                    ORDER BY inet_aton(manageIp) ${dir}
+                </when>
+                <otherwise>
+                    order by ${sort} ${dir}
+                </otherwise>
+            </choose>
+        </if>
+        limit ${start} , ${limit}
+    </select>
+    
+    <select id="queryCmcInfoListCount" parameterType="map" resultType="long">
+        select 
+            count(0)
+        from cmcattribute A
+        LEFT JOIN entitysnap B ON A.cmcId=B.entityId
+        LEFT JOIN entity C ON A.cmcId=C.entityId
+        LEFT JOIN cmcentityrelation D ON A.cmcId=D.cmcId
+        LEFT JOIN entitytype E ON C.typeId=E.typeId
+        LEFT JOIN oltonurelation F ON D.onuId=F.onuId
+        LEFT JOIN oltponrelation G ON F.ponId=G.ponId
+        LEFT JOIN entity H ON D.cmcEntityId=H.entityId
+        LEFT JOIN oltslotattribute I ON (D.cmcEntityId=I.entityId AND I.bAttribute=1)
+        WHERE A.cmcId IN (select entityId from ${Authority}) 
+        AND A.cmcDeviceStyle IN (select typeId from entitytyperelation where type=30000)
+        <if test="cmcName != null">
+            AND (
+            C.name LIKE '%${cmcName}%' 
+            OR C.sysName LIKE '%${cmcName}%' 
+            OR C.ip like '%${cmcName}%'  
+            OR H.name like '%${cmcName}%' 
+            OR C.entityId in( select E1.entityId from entity E1, entity E2 where E2.ip like '%${cmcName}%' and E2.entityId = E1.parentId)
+            OR A.topCcmtsSysMacAddr LIKE '%${queryContentMac}%' 
+            <if test="queryMacWithoutSplit != null">
+            OR REPLACE(A.topCcmtsSysMacAddr, ':', '') LIKE '%${queryMacWithoutSplit}%'
+            </if>
+            ) 
+        </if>
+    </select>
+    
+    <select id="queryForCmtsInfoNotInRange" parameterType="map" resultType="cmtsInfoNotInRange">
+        select A.cmId,
+        A.cmcId,
+        A.StatusSignalNoise/10 upChannelSnr,
+        B.downChannelSnr,
+        B.downChannelTx,
+        B.upChannelTx 
+        from cmattribute A 
+        left join cmsignal B on A.cmId=B.cmId where A.StatusValue in(6,26,27)
+        <if test="upSnrMin != null">
+        <![CDATA[AND upChannelSnr>= #{upSnrMin}]]>
+        </if>
+        <if test="upSnrMax != null">
+        <![CDATA[AND upChannelSnr< #{upSnrMax}]]>
+        </if>
+        <if test="downSnrMin != null">
+        <![CDATA[AND downChannelSnr >= #{downSnrMin}]]>
+        </if>
+        <if test="downSnrMax != null">
+        <![CDATA[AND downChannelSnr < #{downSnrMax}]]>
+        </if>
+        <if test="downPowerMin != null">
+        <![CDATA[AND downChannelTx >= #{downPowerMin}]]>
+        </if>
+        <if test="downPowerMax != null">
+        <![CDATA[AND downChannelTx < #{downPowerMax}]]>
+        </if>
+        <if test="upPowerMin != null">
+        <![CDATA[AND upChannelTx >= #{upPowerMin}]]>
+        </if>
+        <if test="upPowerMax != null">
+        <![CDATA[AND upChannelTx < #{upPowerMax}]]>
+        </if>
+
+    </select>
+    
+    <select id="queryUpSnrNotInRange" parameterType="map" resultType="upSnrNotInRange">
+        select A.cmcId,SS.upSnrNotInRange from cmcattribute A
+        left join
+        (select S.cmcId,count(S.upChannelSnr) upSnrNotInRange
+        from (select A.cmId,
+        A.cmcId,
+        A.StatusSignalNoise/10 upChannelSnr,
+        B.downChannelSnr,
+        B.downChannelTx,
+        B.upChannelTx 
+        from cmattribute A 
+        left join cmsignal B on A.cmId=B.cmId where A.StatusValue in(6,26,27)
+        <if test="upSnrMin != null">
+        <![CDATA[AND upChannelSnr>= #{upSnrMin}]]>
+        </if>
+        <if test="upSnrMax != null">
+        <![CDATA[AND upChannelSnr< #{upSnrMax}]]>
+        </if>
+        )S group by S.cmcId)SS ON SS.cmcId=A.cmcId
+    </select>
+    
+    <select id="queryDownSnrAvgNotInRange" parameterType="map" resultType="downSnrAvgNotInRange">
+        select A.cmcId,SS.downSnrAvgNotInRange from cmcattribute A
+        left join
+        (select S.cmcId,count(S.downChannelSnr) downSnrAvgNotInRange
+        from (select A.cmId,
+        A.cmcId,
+        A.StatusSignalNoise/10 upChannelSnr,
+        B.downChannelSnr,
+        B.downChannelTx,
+        B.upChannelTx 
+        from cmattribute A 
+        left join cmsignal B on A.cmId=B.cmId where A.StatusValue in(6,26,27)
+        <if test="downSnrMin != null">
+        <![CDATA[AND downChannelSnr >= #{downSnrMin}]]>
+        </if>
+        <if test="downSnrMax != null">
+        <![CDATA[AND downChannelSnr < #{downSnrMax}]]>
+        </if>
+        )S group by S.cmcId)SS ON SS.cmcId=A.cmcId
+    </select>
+    
+    <select id="queryCmOutPowerNotInRange" parameterType="map" resultType="cmOutPowerNotInRange">
+        select A.cmcId,SS.cmOutPowerNotInRange from cmcattribute A
+        left join
+        (select S.cmcId,count(S.upChannelTx) cmOutPowerNotInRange
+        from (select A.cmId,
+        A.cmcId,
+        A.StatusSignalNoise/10 upChannelSnr,
+        B.downChannelSnr,
+        B.downChannelTx,
+        B.upChannelTx 
+        from cmattribute A 
+        left join cmsignal B on A.cmId=B.cmId where A.StatusValue in(6,26,27)
+        <if test="upPowerMin != null">
+        <![CDATA[AND upChannelTx >= #{upPowerMin}]]>
+        </if>
+        <if test="upPowerMax != null">
+        <![CDATA[AND upChannelTx < #{upPowerMax}]]>
+        </if>
+        )S group by S.cmcId)SS ON SS.cmcId=A.cmcId
+    </select>
+    
+    <select id="queryCmRePowerNotInRange" parameterType="map" resultType="cmRePowerNotInRange">
+        select A.cmcId,SS.cmRePowerNotInRange from cmcattribute A
+        left join
+        (select S.cmcId,count(S.downChannelTx) cmRePowerNotInRange
+        from (select A.cmId,
+        A.cmcId,
+        A.StatusSignalNoise/10 upChannelSnr,
+        B.downChannelSnr,
+        B.downChannelTx,
+        B.upChannelTx 
+        from cmattribute A 
+        left join cmsignal B on A.cmId=B.cmId where A.StatusValue in(6,26,27)
+        <if test="downPowerMin != null">
+        <![CDATA[AND downChannelTx >= #{downPowerMin}]]>
+        </if>
+        <if test="downPowerMax != null">
+        <![CDATA[AND downChannelTx < #{downPowerMax}]]>
+        </if>
+        )S group by S.cmcId)SS ON SS.cmcId=A.cmcId
+    </select>
+    
+    <update id="updateLocalThreshold" parameterType="map">
+        UPDATE 
+           cmtsinfothreshold
+        SET 
+           upSnrMin = #{upSnrMin},
+           upSnrMax = #{upSnrMax},
+           downSnrMin = #{downSnrMin},
+           downSnrMax = #{downSnrMax},
+           upPowerMin = #{upPowerMin},
+           upPowerMax = #{upPowerMax},
+           downPowerMin = #{downPowerMin},
+           downPowerMax = #{downPowerMax}
+    </update>
+    <select id="selectLocalThreshold" resultType="cmtsInfoThreshold">
+        select * from cmtsinfothreshold
+    </select>
+</mapper>

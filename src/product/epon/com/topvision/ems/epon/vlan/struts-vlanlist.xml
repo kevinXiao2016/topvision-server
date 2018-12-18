@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+    <package name="vlanList" namespace="/epon/vlanList" extends="default">
+    	<action name="loadVlanList" class="vlanListAction" method="loadVlanList"/>
+    	<action name="showVlanAttr" class="vlanListAction" method="showVlanAttr"> 
+    		<result name="success">/epon/vlan/vlanAttribute.jsp</result>
+    	</action>
+    	<action name="showBatchAddVlan" class="vlanListAction" method="showBatchAddVlan"> 
+    		<result name="success">/epon/vlan/batchAddVlan.jsp</result>
+    	</action>
+    	<action name="addVlan" class="vlanListAction" method="addVlan"></action>
+    	<action name="modifyVlanAttr" class="vlanListAction" method="modifyVlanAttr"></action>
+    	<action name="deleteVlan" class="vlanListAction" method="deleteVlan"/>
+    	<action name="loadOnuList" class="vlanListAction" method="loadOnuList"></action>
+    	<action name="loadSniPortVlanList" class="vlanListAction"  method="loadSniPortVlanList" />
+    	<action name="loadPonPortVlanList" class="vlanListAction"  method="loadPonPortVlanList" />
+    	<action name="refreshVlan" class="vlanListAction"  method="refreshVlan" />
+    	
+    	<action name="showEditPortVlans" class="vlanListAction"  method="showEditPortVlans">
+    		<result name="success">/epon/vlan/editPortVlans.jsp</result>
+    	</action>
+    	<action name="modifyPortVlans" class="vlanListAction"  method="modifyPortVlans"/>
+    	<action name="loadUniPortVlan" class="vlanListAction" method="loadUniPortVlan" />
+    	
+    	<action name="showPonVlanConfig" class="vlanListAction" method="showPonVlanConfig" >
+    		<result name="success">/epon/vlan/ponVlanConfig.jsp</result>
+    	</action>
+    	
+    	<action name="showApplyToOtherPon" class="vlanListAction" method="showApplyToOtherPon">
+    		<result name="success">/epon/vlan/applyToOtherPon.jsp</result>
+    	</action>
+    	<action name="batchCopyPonServiceVlanConfig" class="vlanListAction" method="batchCopyPonServiceVlanConfig" />
+    	<action name="loadSlotPonList" class="vlanListAction" method="loadSlotPonList" />
+    </package>
+</struts>

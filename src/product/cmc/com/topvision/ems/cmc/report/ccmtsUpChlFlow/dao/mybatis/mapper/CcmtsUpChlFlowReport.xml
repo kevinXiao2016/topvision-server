@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace = "com.topvision.ems.cmc.report.domain.CcmtsUpChlFlowReport">
+
+	<select id="getUpChlFlowReportStat" parameterType="map" resultType="com.topvision.ems.cmc.report.domain.CcmtsChlFlowStatic">
+		select cmcEntityId entityId, count(channelIndex) chlNum,
+		sum(case when utilization > 0.9 and utilization <![CDATA[ <= ]]> 1.0 then 1 else 0 end) usage90to100,
+		sum(case when utilization > 0.8 and utilization <![CDATA[ <= ]]> 0.9 then 1 else 0 end) usage80to90,
+		sum(case when utilization > 0.7 and utilization <![CDATA[ <= ]]> 0.8 then 1 else 0 end) usage70to80,
+		sum(case when utilization > 0.6 and utilization <![CDATA[ <= ]]> 0.7 then 1 else 0 end) usage60to70,
+		sum(case when utilization > 0.5 and utilization <![CDATA[ <= ]]> 0.6 then 1 else 0 end) usage50to60,
+		sum(case when utilization > 0.4 and utilization <![CDATA[ <= ]]> 0.5 then 1 else 0 end) usage40to50,
+		sum(case when utilization > 0.3 and utilization <![CDATA[ <= ]]> 0.4 then 1 else 0 end) usage30to40,
+		sum(case when utilization > 0.2 and utilization <![CDATA[ <= ]]> 0.3 then 1 else 0 end) usage20to30,
+		sum(case when utilization > 0.1 and utilization <![CDATA[ <= ]]> 0.2 then 1 else 0 end) usage10to20,
+		sum(case when utilization > 0 and utilization <![CDATA[ <= ]]> 0.1 then 1 else 0 end) usage0to10,
+		sum(case when utilization = 0 then 1 else 0 end) usage0
+		from (
+		<![CDATA[ 
+			select cmcEntityId, channelIndex, max(channelUtilization)/100 utilization
+			from perfcmcflowquality A,cmcentityrelation B ,entity C
+			where A.cmcId = B.cmcId and B.cmcId!= B.cmcEntityId and C.entityId=A.cmcId 
+			and C.typeId in(30001,30005,30013,30014,30015) and ((channelIndex & 0x8000) >> 15)=0 
+			and ((channelIndex & 0x7F00) >> 8) != 0 and ${sql} 
+			group by cmcEntityId, channelIndex) tmp group by cmcEntityId
+		]]>
+	</select>
+	
+	<select id="getUpChlFlowDetailStat" parameterType="map" resultType="com.topvision.ems.cmc.report.domain.CcmtsChlFlowDetail">
+		select a.cmcId entityId,a.cmcEntityId,c.name oltName from cmcentityrelation a 
+		LEFT JOIN entity b on a.cmcId = b.entityId 
+		LEFT JOIN entity c on a.cmcEntityId = c.entityId where b.typeId in(30001,30005,30013,30014,30015)
+		<if test="entityId != null">
+			and c.entityId = #{entityId}
+		</if>
+	</select>
+	
+	<select id="getCcmtsChlFlowInfos" parameterType="map" resultType="com.topvision.ems.cmc.report.domain.CcmtsChlFlowInfo">
+		select 
+			A.cmcId, 
+			A.channelIndex, 
+			C.ChannelModulationProfile modulationProfile, 
+			max(channelInSpeed+channelOutSpeed)/1000000 maxFlow,
+			max(channelUtilization) maxFlowUsage
+		from  
+			perfcmcflowquality A,cmcentityrelation B, cmcupchannelbaseinfo C 
+		where 
+			A.cmcId=B.cmcId and A.cmcId = C.cmcId and A.channelIndex = C.channelIndex and A.cmcId = #{cmcId} and ${timeSql}
+		group by A.cmcId, A.channelIndex 
+		having ${rangeSql}
+	</select>
+	
+	<select id="getUserNumDetail" parameterType="map" resultType="com.topvision.ems.cmc.report.domain.CcmtsChlFlowDetail">
+		select max(sumRegUserNum) maxRegUserNum,max(sumUserNum) maxUserNum from (
+			select 
+				sum(onlineNum) sumRegUserNum,
+				sum(onlineNum+otherNum+offlineNum) sumUserNum 
+			from 
+				usernumhisport
+			where 
+				entityId = #{entityId} and ${timeSql} and
+				portIfIndex in 
+				<foreach collection="channelIndexList" index="index" item="item" open="(" separator="," close=")">
+					#{item}
+				</foreach>
+			group by realtime
+		) b
+	</select>
+
+</mapper>

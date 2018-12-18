@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.network.domain.TopoFolder">
+	<insert id="insertEntity" parameterType="topoFolder"
+		useGeneratedKeys="true" keyProperty="folderId">
+		INSERT INTO TopoFolder
+		(superiorId, categoryId, name, type, note,
+		backgroundFlag,
+		backgroundImg, backgroundPosition, backgroundColor, linkWidth,
+		linkColor,
+		createTime,
+		modifyTime, x, y, width, height, icon, refreshInterval,
+		entityLabel, linkLabel, subnetIp,
+		subnetMask,
+		displayName)
+		VALUES
+		(#{superiorId}, #{categoryId}, #{name}, #{type}, #{note},
+		#{backgroundFlag}, #{backgroundImg}, #{backgroundPosition},
+		#{backgroundColor}, #{linkWidth},
+		#{linkColor}, #{createTime},
+		#{modifyTime}, #{x}, #{y}, #{width}, #{height}, #{icon}, #{refreshInterval},
+		#{entityLabel},
+		#{linkLabel}, #{subnetIp},
+		#{subnetMask},
+		#{showType})
+    </insert>
+    
+    <select id="getUserAuthFolderIds" parameterType="long" resultType="long">
+    	select folderId from userauthfolder where userId=#{userId}
+    </select>
+
+	<select id="statUserIdByFolderId" parameterType="long"
+		resultType="int">
+		SELECT userId FROM `users` WHERE userGroupId=#{folderId}
+	</select>
+
+	<update id="updateEntity" parameterType="topoFolder"> UPDATE TopoFolder SET
+		name = #{name}, note =
+		#{note}, type= #{type}, backgroundImg =
+		#{backgroundImg}, backgroundFlag =
+		#{backgroundFlag}, backgroundColor =
+		#{backgroundColor}, modifyTime =
+		#{modifyTime} WHERE
+		folderId =
+		#{folderId} </update>
+	<select id="selectByPrimaryKey" parameterType="long" resultType="topoFolder">
+		SELECT A.folderId,
+		A.superiorId, B.name as superiorName, A.name,
+		A.type, A.note, A.zoom,
+		A.backgroundImg,
+		A.backgroundColor,
+		A.backgroundFlag, A.backgroundPosition, A.linkColor, A.linkWidth,
+		A.linkShadow, A.displayLinkLabel, A.displayEntityLabel,
+		A.displayCluetip,
+		A.displayAlertIcon, A.displayNoSnmp, A.displayName as
+		showType, A.displayLink,
+		A.displayGrid,
+		A.displayRouter,
+		A.displayL3switch, A.displaySwitch, A.displayServer,
+		A.displayDesktop,
+		A.displayOthers, A.entityLabel, A.path, A.linkLabel, A.url, A.icon,
+		A.refreshInterval,
+		A.markerAlertMode, A.fixed, A.entityForOrgin,
+		A.depthForOrgin, A.subnetIp,
+		A.subnetMask,
+		A.path, A.width, A.height
+		FROM TopoFolder A LEFT JOIN TopoFolder B ON
+		A.superiorId =
+		B.folderId
+		WHERE A.folderId = #{folderId} </select>
+	<delete id="deleteByPrimaryKey" parameterType="long"> DELETE FROM
+		TopoFolder WHERE folderId =
+		#{folderId} </delete>
+	<delete id="deleteByPath" parameterType="long">
+		DELETE FROM TopoFolder
+		WHERE folderId = #{folderId}
+    </delete>
+	<select id="selectByMap" parameterType="map" resultType="topoFolder">
+		SELECT
+		folderId, superiorId,
+		name, type, path FROM TopoFolder ORDER BY
+		superiorId ASC, folderId ASC </select>
+	<select id="loadTopoFolder" parameterType="map" resultType="topoFolder"> SELECT folderId,
+		superiorId, name, type, url
+		FROM TopoFolder WHERE type != 60 and folderId in (select folderId from ${AuthorityFolder})
+		ORDER BY
+		superiorId ASC, type ASC,
+		folderId ASC </select>
+	<select id="loadTopoMap" parameterType="map" resultType="topoFolder"> SELECT
+		folderId, superiorId, name, type FROM
+		${Authority} WHERE type != 7 AND
+		type != 60 AND folderId > 1 ORDER BY superiorId
+		ASC, type
+		ASC, folderId
+		ASC </select>
+	<select id="getTopoFolderList" parameterType="topoFolder"
+		resultType="topoFolder"> SELECT folderId,
+		superiorId, name, type FROM
+		TopoFolder
+		WHERE superiorId = #{superiorId} AND name = #{name} AND
+		folderId !=
+		#{folderId}</select>
+	<select id="getChildTopoFolder" parameterType="long" resultType="topoFolder">
+		SELECT folderId, name,
+		type, x, y, icon, url, fixed FROM TopoFolder
+		WHERE superiorId =
+		#{superiorId} </select>
+	<select id="getChildTopoFolderByPath" parameterType="string"
+		resultType="topoFolderEx"> SELECT
+		folderId, name, path FROM TopoFolder WHERE path like
+		'${_parameter}%' </select>
+	<select id="getChildCount" parameterType="long" resultType="int">
+		SELECT count(folderId) FROM
+		TopoFolder WHERE superiorId = #{superiorId}
+	</select>
+	<select id="getEntityCountInFolder" parameterType="topoFolder"
+		resultType="int"> SELECT
+		count(entityId) FROM EntityFolderRela WHERE folderId
+		= #{folderId} </select>
+	<select id="getTopoFolderByName" parameterType="topoFolder"
+		resultType="topoFolder"> SELECT folderId
+		FROM TopoFolder WHERE name = #{name} AND
+		superiorId = #{superiorId} AND
+		folderId != #{folderId}
+    </select>
+    <select id="getFolderIdByName" parameterType="string"
+		resultType="long"> SELECT folderId
+		FROM TopoFolder WHERE name = #{name}  
+    </select>
+    
+	<update id="renameTopoFolder" parameterType="topoFolder"> UPDATE TopoFolder
+		SET name = #{name},
+		modifyTime = #{modifyTime} WHERE folderId =
+		#{folderId} </update>
+	<update id="updateTopoFolderBgImg" parameterType="topoFolder"> UPDATE
+		TopoFolder SET backgroundImg =
+		#{backgroundImg}, modifyTime =
+		#{modifyTime} WHERE folderId = #{folderId} </update>
+	<update id="updateTopoFolderBgColor" parameterType="topoFolder"> UPDATE
+		TopoFolder SET
+		backgroundColor = #{backgroundColor}, modifyTime =
+		#{modifyTime} WHERE folderId =
+		#{folderId}
+    </update>
+	<update id="updateTopoFolderRefreshInterval" parameterType="topoFolder">
+		UPDATE TopoFolder SET
+		refreshInterval = #{refreshInterval}, modifyTime
+		= #{modifyTime} WHERE folderId =
+		#{folderId}
+    </update>
+	<update id="updateTopoFolderLinkColor" parameterType="topoFolder"> UPDATE
+		TopoFolder SET linkColor =
+		#{linkColor}, modifyTime = #{modifyTime}
+		WHERE folderId = #{folderId} </update>
+	<update id="updateTopoFolderLinkWidth" parameterType="topoFolder"> UPDATE
+		TopoFolder SET linkWidth =
+		#{linkWidth}, modifyTime = #{modifyTime}
+		WHERE folderId = #{folderId} </update>
+	<update id="updateTopoFolderBgFlag" parameterType="topoFolder"> UPDATE
+		TopoFolder SET backgroundFlag
+		= #{backgroundFlag}, displayGrid = "",
+		modifyTime = #{modifyTime} WHERE
+		folderId = #{folderId}
+    </update>
+	<update id="updateTopoFolderZoom" parameterType="topoFolder"> UPDATE
+		TopoFolder SET zoom = #{zoom}
+		WHERE folderId = #{folderId} </update>
+	<select id="getTopoFolderByIp" parameterType="string"
+		resultType="topoFolderEx"> SELECT C.entityId,
+		B.folderId, B.name, B.type FROM Entity
+		C, EntityFolderRela A, TopoFolder B WHERE
+		C.ip = #{ip}
+		AND C.entityId = A.entityId AND A.folderId = B.folderId 
+	</select>
+	<update id="updateTopoFolderOutline" parameterType="topoFolder"> UPDATE
+		TopoFolder SET name = #{name},
+		note = #{note}, url = #{url}, subnetIp = #{subnetIp},
+		subnetMask = #{subnetMask}, modifyTime = #{modifyTime}, 
+		width = #{width}, height = #{height}
+		WHERE folderId = #{folderId} 
+	</update>
+	<update id="updateTopoFolderDisplayName" parameterType="topoFolder"> UPDATE
+		TopoFolder SET
+		displayName = #{showType} WHERE folderId = #{folderId}
+	</update>
+	<update id="updateTopoFolderDisplayGrid" parameterType="topoFolder"> UPDATE
+		TopoFolder SET
+		displayGrid = #{displayGrid}, backgroundFlag = "" WHERE
+		folderId = #{folderId} </update>
+	<update id="updateTopoFolderIcon" parameterType="topoFolder"> UPDATE
+		TopoFolder SET icon = #{icon}
+		WHERE folderId = #{folderId} </update>
+	<update id="updateFolderBgPosition" parameterType="topoFolder"> UPDATE
+		TopoFolder SET
+		backgroundPosition = #{backgroundPosition} WHERE
+		folderId = #{folderId} </update>
+	<select id="getStatTopoFolder" parameterType="map" resultType="topoFolderStat">
+		select folderId, name, superiorId
+		FROM ${Authority} WHERE
+		categoryId = 10
+		ORDER BY
+		superiorId ASC, folderId ASC </select>
+	<select id="statTopoFolder" resultType="entity"> select B.folderId,
+		A.entityId, C.typeId From
+		Entity A, EntityFolderRela B, EntityType C
+		Where A.entityId = B.entityId And
+		A.typeId =
+		C.typeId </select>
+	<select id="getFolderPath" parameterType="long" resultType="string">
+		SELECT path FROM TopoFolder
+		WHERE folderId = #{folderId} </select>
+	<update id="updateFolderPath" parameterType="topoFolder"> UPDATE TopoFolder
+		SET path = #{path} WHERE
+		folderId = #{folderId} </update>
+	<update id="updateFolderFixed" parameterType="topoFolder"> UPDATE TopoFolder
+		SET fixed = #{fixed}
+		WHERE folderId = #{folderId} </update>
+	<update id="updateMarkerAlertMode" parameterType="topoFolder"> UPDATE
+		TopoFolder SET markerAlertMode
+		= #{markerAlertMode} WHERE folderId =
+		#{folderId} </update>
+	<update id="updateFolderEntityLabel" parameterType="topoFolder"> UPDATE
+		TopoFolder SET entityLabel =
+		#{entityLabel} WHERE folderId =
+		#{folderId} </update>
+	<update id="updateFolderLinkLabel" parameterType="topoFolder"> UPDATE
+		TopoFolder SET linkLabel =
+		#{linkLabel} WHERE folderId = #{folderId}
+	</update>
+	<update id="updateTopoFolderDisplayNoSnmp" parameterType="topoFolder">
+		UPDATE
+		TopoFolder SET
+		displayNoSnmp = #{displayNoSnmp} WHERE folderId =
+		#{folderId} </update>
+	<update id="updateTopoFolderDisplayRouter" parameterType="topoFolder">
+		UPDATE
+		TopoFolder SET
+		displayRouter = #{displayRouter} WHERE folderId =
+		#{folderId} </update>
+	<update id="updateTopoFolderDisplaySwitch" parameterType="topoFolder">
+		UPDATE
+		TopoFolder SET
+		displaySwitch = #{displaySwitch} WHERE folderId =
+		#{folderId} </update>
+	<update id="updateTopoFolderLinkShadow" parameterType="topoFolder"> UPDATE
+		TopoFolder SET linkShadow
+		= #{linkShadow} WHERE folderId = #{folderId}
+	</update>
+	<update id="updateTopoFolderOrginEntity" parameterType="topoFolder"> UPDATE
+		TopoFolder SET
+		entityForOrgin = #{entityForOrgin}, depthForOrgin =
+		#{depthForOrgin} WHERE folderId =
+		#{folderId} </update>
+	<update id="updateTopoFolderDisplayLinkLabel" parameterType="topoFolder">
+		UPDATE TopoFolder SET
+		displayLinkLabel = #{displayLinkLabel} WHERE
+		folderId = #{folderId} </update>
+	<update id="updateTopoFolderDisplayEntityLabel" parameterType="topoFolder">
+		UPDATE TopoFolder SET
+		displayEntityLabel = #{displayEntityLabel} WHERE
+		folderId = #{folderId} </update>
+	<update id="updateTopoFolderDisplayL3switch" parameterType="topoFolder">
+		UPDATE TopoFolder SET
+		displayL3switch = #{displayL3switch} WHERE
+		folderId = #{folderId} </update>
+	<update id="updateTopoFolderDisplayServer" parameterType="topoFolder">
+		UPDATE
+		TopoFolder SET
+		displayServer = #{displayServer} WHERE folderId =
+		#{folderId} </update>
+	<update id="updateTopoFolderDisplayDesktop" parameterType="topoFolder">
+		UPDATE TopoFolder SET
+		displayDesktop = #{displayDesktop} WHERE folderId
+		= #{folderId} </update>
+	<update id="updateTopoFolderDisplayOthers" parameterType="topoFolder">
+		UPDATE
+		TopoFolder SET
+		displayOthers = #{displayOthers} WHERE folderId =
+		#{folderId} </update>
+	<update id="updateDisplayAlertIcon" parameterType="topoFolder"> UPDATE
+		TopoFolder SET
+		displayAlertIcon = #{displayAlertIcon} WHERE folderId =
+		#{folderId} </update>
+	<update id="updateDisplayLink" parameterType="topoFolder"> UPDATE TopoFolder
+		SET displayLink =
+		#{displayLink} WHERE folderId = #{folderId} </update>
+	<update id="updateDisplayAllEntity" parameterType="topoFolder"> UPDATE
+		TopoFolder SET displaySwitch =
+		#{displaySwitch}, displayRouter =
+		#{displayRouter}, displayL3switch = #{displayL3switch},
+		displayServer =
+		#{displayServer}, displayDesktop = #{displayDesktop},
+		displayOthers =
+		#{displayOthers} WHERE folderId = #{folderId} </update>
+	<update id="updateDisplayCluetip" parameterType="topoFolder"> UPDATE
+		TopoFolder SET displayCluetip =
+		#{displayCluetip} WHERE folderId =
+		#{folderId} </update>
+	<insert id="insertFolderUserGroup" parameterType="folderUserGroupRela"> INSERT INTO
+		FolderUserGroupRela
+		(userGroupId, folderId) VALUES (#{userGroupId},
+		#{folderId}) </insert>
+	<delete id="deleteFolderUserGroup" parameterType="long"> DELETE FROM
+		FolderUserGroupRela WHERE
+		userGroupId = #{userGroupId} </delete>
+	<select id="getMyTopoFolder" resultType="topoFolder"
+		parameterType="map">
+		<!-- C.superiorId, C.name, C.type FROM Users A, TopoFolder C WHERE A.userId 
+			= #{userId} AND C.categoryId = #{categoryId} AND (C.superiorId >= A.userGroupId 
+			OR C.folderId = A.userGroupId) ORDER BY C.superiorId ASC, C.folderId ASC, 
+			C.type ASC -->
+		select folderId,superiorId,name,type from ${Authority}
+	</select>
+	<select id="getTopoFolderByGroup" resultType="topoFolder"
+		parameterType="long"> SELECT
+		C.folderId, C.superiorId, C.name, C.type FROM
+		folderusergrouprela B, TopoFolder C
+		WHERE
+		B.userGroupId = #{userGroupId}
+		AND C.type != 60 AND B.folderId = C.folderId </select>
+	<select id="loadSubnetFolder" resultType="topoFolder"
+		parameterType="long"> SELECT folderId,
+		name, subnetIp FROM TopoFolder WHERE
+		type = 5 </select>
+	<select id="getMyTopoFolderMapNode" resultType="map"> select * from
+		mapnode where userObjId is
+		not null </select>
+	<select id="getDisplayNameType" parameterType="long" resultType="topoFolder">
+		SELECT displayName as showType FROM topoFolder WHERE folderId =
+		#{folderId}
+    </select>
+	<select id="getEntityNumByFolder" parameterType="long"
+		resultType="int">
+		SELECT count(*)
+		FROM
+		entityfolderrela
+		WHERE
+		folderId =
+		#{folderId}
+    </select>
+	<select id="getFodlerOtherNum" parameterType="long" resultType="int">
+		SELECT count(*)
+		FROM
+		entityfolderrela A, entity B
+		WHERE
+		A.entityId =
+		B.entityId AND folderId = #{folderId}
+    </select>
+	<update id="createAuthorityView" parameterType="string">
+		${_parameter}
+	</update>
+	<update id="createAuthorityTable" parameterType="string">
+		create
+		table
+		${_parameter}(
+		entityId bigint(20),
+		primary key(entityId),
+		constraint
+		fk_authority_${_parameter} foreign key(entityId) references
+		entity(entityId)
+		on delete cascade on update cascade
+		)
+    </update>
+	<update id="createAuthorityTableIndex" parameterType="string">
+		${_parameter}
+    </update>
+    
+    <select id="getTopoFolderNameById" parameterType="long"
+		resultType="String">
+		select A.name  from topofolder A, entityfolderrela B
+		where A.folderId = B.folderId and  B.entityId = #{entityId}
+    </select>
+    
+    <select id="getFolderIdAndName" parameterType="long" resultType="topoFolder">
+		select A.folderId, A.name from topofolder A, entityfolderrela B
+		where A.folderId = B.folderId and  B.entityId = #{entityId};
+    </select>
+    
+    <select id="getEntityLocatedFolderIds" parameterType="long" resultType="long">
+		SELECT folderId FROM entityfolderrela WHERE entityId=#{entityId}
+    </select>
+    
+    <update id="updateEntityTopoFolder" parameterType="long">
+		update entityfolderrela set folderId = #{folderId} where entityId = #{entityId}
+    </update>
+    
+    <select id="queryTopoFolderByEntityId" parameterType="long" resultType="topoFolder">
+    	select A.folderId, A.name, A.superiorId from topofolder A, entityfolderrela B
+		where A.folderId = B.folderId and  B.entityId = #{entityId}
+		order by A.folderId
+    </select>
+    
+    <select id="loadEntitiesWithFolderInfo" parameterType="map" resultType="entity">
+    	SELECT 
+			E.entityId,
+			E.typeId,
+			E.name,
+			E.ip,
+			ET.displayName typeName,
+			E.createTime,
+			(SELECT group_concat(DISTINCT name) FROM topofolder TF, entityfolderrela EFR WHERE EFR.entityId=E.entityId AND TF.folderId=EFR.folderId) location,
+			(SELECT count(DISTINCT name) FROM topofolder TF, entityfolderrela EFR WHERE EFR.entityId=E.entityId AND TF.folderId=EFR.folderId) topoInfo,
+			parentE.name sysName,
+			(SELECT group_concat(DISTINCT name) FROM topofolder TF, entityfolderrela EFR WHERE EFR.entityId=parentE.entityId AND TF.folderId=EFR.folderId) sysDescr,
+			IFNULL(E.ip,CONCAT(parentE.name,'(',parentE.ip,')')) AS uplinkDevice
+		FROM 
+			entity E
+		LEFT JOIN entity parentE ON e.parentId=parentE.entityId AND e.entityId!=e.parentId
+		LEFT JOIN entitytype ET ON E.typeId=ET.typeId
+		LEFT JOIN entityFolderRela B ON B.entityId = E.entityId
+		WHERE 1=1 and E.entityId in (select entityId from ${Authority})
+		<if test="alias != null and alias != ''">
+		AND E.name LIKE '%${alias}%'
+        </if>
+        <if test="ip != null and ip != ''">
+		AND IFNULL(E.ip,CONCAT(parentE.name,'(',parentE.ip,')')) LIKE '%${ip}%'
+        </if>
+        <if test="entityType != null and entityType != ''">
+		AND FIND_IN_SET(E.typeId,'${entityType}')>0
+        </if>
+        <if test="upperName != null and upperName != ''">
+		AND parentE.name LIKE '%${upperName}%'
+        </if>
+        <if test="folderIds != null and folderIds != ''">
+		AND FIND_IN_SET(B.folderId,'${folderIds}')>0
+        </if>
+        group by E.entityId ORDER BY ${sortName} ${sortDir}
+        LIMIT
+        ${offset},
+        ${pageSize}
+    </select>
+    
+    <select id="getEntitiesWithFolderInfoCount" parameterType="map" resultType="long">
+        select 
+			count(DISTINCT A.entityId)
+		from entity A
+        left join entityFolderRela B on B.entityId = A.entityId
+        left join TopoFolder C on B.folderId=C.folderId
+        left join entity D on A.parentId = D.entityId
+        left join entityFolderRela E on E.entityId = D.entityId
+        left join TopoFolder F on E.folderId=F.folderId
+        left join EntityType G on G.typeId=A.typeId
+        WHERE 1=1 and A.entityId in (select entityId from ${Authority})
+        <if test="alias != null and alias != ''">
+		AND A.name LIKE '%${alias}%'
+        </if>
+        <if test="ip != null and ip != ''">
+		AND IFNULL(A.ip,CONCAT(D.name,'(',D.ip,')')) LIKE '%${ip}%'
+        </if>
+        <if test="entityType != null and entityType != ''">
+		AND FIND_IN_SET(A.typeId,'${entityType}')>0
+        </if>
+        <if test="upperName != null and upperName != ''">
+		AND D.name LIKE '%${upperName}%'
+        </if>
+        <if test="folderIds != null and folderIds != ''">
+		AND FIND_IN_SET(B.folderId,'${folderIds}')>0
+        </if>
+    </select>
+    
+    <select id="getTopoFolderByIds" parameterType="map" resultType="topoFolder">
+    	<foreach item="folderId" index="index" collection="list" separator="union">
+			select folderId,superiorId,name,type from topofolder where folderId=#{folderId}
+        </foreach>
+    </select>
+    
+    <select id="loadAllFolders" resultType="topoFolder">
+    	SELECT
+			A.*,
+			B.name superiorName
+		FROM topofolder A
+		LEFT JOIN topofolder B ON A.superiorId=b.folderId
+    </select>
+    
+    <select id="fetchUserAuthFolders" parameterType="long" resultType="topoFolder">
+    	select * from topofolder where FIND_IN_SET(folderId, topofolderfun((SELECT userGroupId from users WHERE userId=#{userId})))
+    </select>
+    
+    <select id="getEntityNamesByIds" resultType="string">
+    	select name from entity where entityId in
+    	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach> 
+    </select>
+    
+    <select id="getFolderNamesByIds" resultType="string">
+    	select name from topofolder where folderId in
+    	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach> 
+    </select>
+    
+    <select id="selectFolderRelationById" resultType="folderRelation" parameterType="long">
+    	SELECT folderId, superiorId, name 
+    	FROM topofolder
+    	WHERE folderId = #{folderId} 
+	</select>
+	    
+	<select id="selectFolderRelationBySuperId" resultType="folderRelation" parameterType="long">
+    	SELECT folderId, superiorId, name 
+    	FROM topofolder
+    	WHERE superiorId = #{folderId} 
+	 </select>
+	 
+	 <select id="selectFolderRelationByEntityId" resultType="folderRelation" parameterType="long">
+	 	SELECT a.folderId, a.superiorId, a.name
+	 	FROM topofolder a
+	 	LEFT JOIN entityfolderrela b ON a.folderId = b.folderId
+	 	WHERE b.entityId = #{entityId}
+	 </select>
+</mapper>

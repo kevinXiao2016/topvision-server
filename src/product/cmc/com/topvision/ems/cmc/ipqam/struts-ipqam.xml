@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<package name="ipqam" namespace="/cmc/ipqam" extends="default">
+		<action name="showEqamPage" class="ipqamAction" method="showEqamPage">
+			<result>/cmc/ipqamListNew.jsp</result>
+		</action>
+		<action name="showProgramPage" class="ipqamAction" method="showProgramPage">
+			<result>/cmc/programListNew.jsp</result>
+		</action>
+		<action name="showOltProgramPage" class="ipqamAction" method="showOltProgramPage">
+			<result>/cmc/eqam/oltProgramList.jsp</result>
+		</action>
+		<action name="refreshProgramInfo" class="ipqamAction" method="refreshProgramInfo">
+		</action>
+		<action name="refreshEqamInfo" class="ipqamAction" method="refreshEqamInfo">
+		</action>
+		<action name="getEqamInfo" class="ipqamAction" method="getEqamInfo">
+		</action>
+		<action name="getProgramInfo" class="ipqamAction" method="getProgramInfo">
+		</action>
+		<action name="getOltProgramInfo" class="ipqamAction" method="getOltProgramInfo" />
+		<action name="refreshOltProgramInfo" class="ipqamAction" method="refreshOltProgramInfo" />
+		<action name="loadEqamSupportUnderOlt" class="ipqamAction" method="loadEqamSupportUnderOlt"></action>
+		<action name="loadEqamSupport" class="ipqamAction" method="loadEqamSupport"/>
+	</package>
+</struts> 

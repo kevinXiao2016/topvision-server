@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.topvision.ems.epon.onu.dao.OnuClear">
+    
+    <select id="getAllOnuForAutoClean" resultType="oltOnuAttribute">
+		select
+		oltonuattribute.onuId,
+		oltonuattribute.entityId, 
+		oltonuattribute.onuEorG,
+		entity.name,
+		entity.typeId,
+		oltonurelation.onuindex, onuSerialNum, onuMac, lastDeregisterTime from
+		oltonuattribute,oltonurelation,entity
+		where oltonuattribute.onuId =
+		entity.entityId
+		and oltonuattribute.onuId = oltonurelation.onuId
+		and
+		oltonuattribute.onuOperationStatus = 2
+		and entity.typeId in (select
+		typeId from
+		entitytyperelation where type = 13000)
+	</select>
+
+	<select id="getAllOnuIndex" resultType="oltOnuAttribute">
+		select
+		oltonuattribute.onuId, oltonurelation.entityId,
+		oltonurelation.onuIndex from oltonurelation, oltonuattribute where
+		oltonurelation.onuId = oltonuattribute.onuId and
+		oltonurelation.entityId = oltonuattribute.entityId
+	</select>
+
+	<update id="updateOnuDeregisterInfo" parameterType="oltOnuAttribute">
+		update
+		oltonuattribute set
+		lastDeregisterTime=#{lastDeregisterTime} where
+		onuId=#{onuId}
+	</update>
+	
+	 <select id="getAllCmcForAutoClean" resultType="oltOnuAttribute">
+		select
+		oltonuattribute.onuId,
+		oltonuattribute.entityId, 
+		entity.name,
+		entity.typeId,
+		oltonurelation.onuindex, onuMac, lastDeregisterTime from
+		oltonuattribute,oltonurelation,entity
+		where oltonuattribute.onuId =
+		entity.entityId
+		and oltonuattribute.onuId = oltonurelation.onuId
+		and
+		oltonuattribute.onuOperationStatus = 2
+		and entity.typeId in (select
+		typeId from
+		entitytyperelation where type = 30000)
+	</select>
+ 	
+</mapper>

@@ -1,0 +1,871 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.topvision.ems.epon.igmp.domain.OltIgmp">
+
+	<select id="getIgmpControlledMcCdr" parameterType="long"
+		resultType="igmpControlledMcCdrTable">
+		SELECT
+		a.entityId,
+		a.sequenceIndex,
+		a.cdrUniIndex,
+		a.cdrIgmpReqType,
+		a.cdrIgmpReqTime,
+		a.cdrIgmpReqChannel,
+		a.cdrIgmpReqRight,
+		a.cdrIgmpReqResult,
+		a.cdrLeaveType,
+		a.cdrRecordTime
+		FROM
+		oltigmptopcontrolledmccdrentry a
+		WHERE
+		a.entityId = #{entityId}
+    </select>
+	<select id="getIgmpControlledMcCdrLimit" databaseId="MySQL" parameterType="map"
+		resultType="igmpControlledMcCdrTable">
+		SELECT
+		a.entityId,
+		a.sequenceIndex,
+		a.cdrUniIndex,
+		a.cdrIgmpReqType,
+		a.cdrIgmpReqTime,
+		a.cdrIgmpReqChannel,
+		a.cdrIgmpReqRight,
+		a.cdrIgmpReqResult,
+		a.cdrLeaveType,
+		a.cdrRecordTime
+		FROM
+		oltigmptopcontrolledmccdrentry a
+		WHERE
+		a.entityId = #{entityId}
+		limit $start$ , $limit$    
+    </select>
+     <select id="getIgmpControlledMcCdrLimit" databaseId="Oracle" parameterType="map"
+		resultType="igmpControlledMcCdrTable">
+		select tt.* from (select rownum rn , t.* from (
+        SELECT
+            a.entityId,
+            a.sequenceIndex,
+            a.cdrUniIndex,
+            a.cdrIgmpReqType,
+            a.cdrIgmpReqTime,
+            a.cdrIgmpReqChannel,
+            a.cdrIgmpReqRight,
+            a.cdrIgmpReqResult,
+            a.cdrLeaveType,
+            a.cdrRecordTime
+        FROM
+            oltigmptopcontrolledmccdrentry a
+        WHERE
+            a.entityId = #entityId#
+        ) t) tt where rn <![CDATA[>]]>
+		0 and rn <![CDATA[<=]]>
+		10 
+    </select>
+    
+	<select id="getIgmpForwardingInfo" parameterType="long"
+		resultType="igmpForwardingTable">
+		SELECT
+		a.entityId,
+		a.deviceIndex,
+		a.groupVlanIndex,
+		a.macLongDB,
+		a.groupPortList
+		FROM
+		oltigmpforwardingentry a
+		WHERE
+		a.entityId = #{entityId}
+    </select>
+	<select id="getIgmpGlobalInfo" parameterType="long" resultType="igmpEntityTable">
+		SELECT
+		a.entityId,
+		a.deviceIndex,
+		a.igmpMode,
+		a.maxQueryResponseTime,
+		a.robustVariable,
+		a.queryInterval,
+		a.lastMemberQueryInterval,
+		a.lastMemberQueryCount,
+		a.igmpVersion
+		FROM
+		oltigmpentityentry a
+		WHERE
+		a.entityId = #{entityId}
+    </select>
+	<select id="getIgmpMaxGroupNum" parameterType="long"
+		resultType="igmpMcParamMgmtObjects">
+		SELECT
+		a.entityId,
+		a.topMcMaxGroupNum,
+		a.topMcMaxBw,
+		a.topMcSnoopingAgingTime,
+		a.topMcMVlan
+		FROM
+		OltIgmpTopMcOltConfMgmtObjs a
+		WHERE
+		a.entityId = #{entityId}
+    </select>
+	<select id="getIgmpMcOnuInfo" parameterType="map" resultType="igmpMcOnuTable">
+		SELECT
+		a.entityId,
+		a.onuIndex,
+		a.topMcOnuMode,
+		a.topMcOnuFastLeave
+		FROM
+		oltigmptopmconuentry a
+		WHERE
+		a.entityId = #{entityId} AND
+		a.onuIndex = #{onuIndex}
+    </select>
+	<select id="getIgmpMcOnuInfoList" parameterType="long"
+		resultType="igmpMcOnuTable">
+		SELECT
+		a.entityId,
+		a.onuIndex,
+		a.topMcOnuMode,
+		a.topMcOnuFastLeave
+		FROM
+		oltigmptopmconuentry a
+		WHERE
+		a.entityId = #{entityId}
+    </select>
+	<select id="getIgmpMcUniConfig" parameterType="map"
+		resultType="igmpMcUniConfigTable">
+		SELECT
+		a.entityId,
+		a.uniIndex,
+		a.topMcUniMaxGroupQuantity,
+		a.topMcUniVlanMode,
+		a.topMcUniVlanTransIdx,
+		a.topMcUniVlanList
+		FROM
+		oltigmptopmcuniconfigentry a
+		WHERE
+		a.entityId = #{entityId} AND
+		a.uniIndex = #{uniIndex}
+    </select>
+	<select id="getIgmpMvlanInfo" parameterType="long"
+		resultType="igmpControlledMulticastPackageTable">
+		SELECT
+		a.entityId,
+		a.cmIndex,
+		a.cmName,
+		a.cmChName,
+		a.cmProxyList,
+		a.multicastUserAuthority,
+		a.maxRequestChannelNum,
+		a.singlePreviewTime,
+		a.totalPreviewTime,
+		a.previewResetTime,
+		a.previewCount,
+		a.previewInterval
+		FROM
+		OltIgmpCtrlMPackgEntry a
+		WHERE
+		a.entityId = #{entityId}
+    </select>
+	<select id="getIgmpControlledMulticastPackageTable"
+		parameterType="map" resultType="igmpControlledMulticastPackageTable">
+		SELECT
+		a.entityId,
+		a.cmIndex,
+		a.cmName,
+		a.cmChName,
+		a.cmProxyList,
+		a.multicastUserAuthority,
+		a.maxRequestChannelNum,
+		a.singlePreviewTime,
+		a.totalPreviewTime,
+		a.previewResetTime,
+		a.previewCount
+		FROM
+		OltIgmpCtrlMPackgEntry a
+		WHERE
+		a.entityId = #{entityId} AND
+		a.cmIndex = #{cmIndex}
+    </select>
+	<select id="getIgmpControlledMulticastUserAuthorityTable"
+		parameterType="map" resultType="igmpControlledMulticastUserAuthorityTable">
+		SELECT
+		a.entityId,
+		a.portIndex,
+		a.multicastPackageList,
+		a.igmpGlobalBW,
+		a.igmpGlobalBWUsed
+		FROM
+		OltIgmpCtrlMUserAuthEntry a
+		WHERE
+		a.entityId = #{entityId} AND
+		a.portIndex = #{portIndex}
+    </select>
+	<select id="getIgmpProxyInfo" parameterType="long" resultType="igmpProxyParaTable">
+		SELECT
+		a.entityId,
+		a.proxyIndex,
+		a.proxyName,
+		a.proxyChName,
+		a.proxySrcIPAddress,
+		a.proxyMulticastVID,
+		a.proxyMulticastIPAddress,
+		a.multicastAssuredBW,
+		a.multicastMaxBW
+		FROM
+		oltigmpproxyparaentry a
+		WHERE
+		a.entityId = #{entityId}
+    </select>
+	<select id="getIgmpSniConfig" parameterType="long"
+		resultType="igmpMcSniConfigMgmtObjects">
+		SELECT
+		a.entityId,
+		a.topMcSniPortType,
+		a.topMcSniPort,
+		a.topMcSniAggPort,
+		a.topMcSniAgingTime
+		FROM
+		OltIgmpTopMcSniConfMgmtObjs a
+		WHERE
+		a.entityId = #{entityId}
+    </select>
+	<select id="getIgmpVlanTrans" parameterType="long"
+		resultType="igmpMcOnuVlanTransTable">
+		SELECT
+		a.entityId,
+		a.topMcOnuVlanTransIndex,
+		a.topMcOnuVlanTransOldVidList topMcOnuVlanTransOldVid,
+		a.topMcOnuVlanTransNewVidList topMcOnuVlanTransNewVid
+		FROM
+		oltigmptopmconuvlantransentry a
+		WHERE
+		a.entityId = #{entityId}
+    </select>
+	<select id="getTopMcForwardingSlot" parameterType="map"
+		resultType="topMcForwardingSlotTable">
+		SELECT
+		a.entityId,
+		a.proxyIndex topMcGroupIdIndex,
+		a.topMcForwardingSlotCount topMcSlotCount,
+		a.topMcForwardingSlotList topMcSlotList
+		FROM
+		oltigmpmcforwardingslottable a
+		WHERE
+		a.entityId = #{entityId} AND a.proxyIndex = #{proxyId}
+    </select>
+	<select id="getTopMcForwardingPort" parameterType="map"
+		resultType="topMcForwardingPortTable">
+		SELECT
+		a.entityId,
+		a.proxyIndex topMcGroupIdIndex,
+		a.topMcForwardingPortSlotIndex topMcSlotIndex,
+		a.topMcForwardingPortCount topMcPortCount,
+		a.topMcForwardingPortList topMcPortList
+		FROM
+		oltigmpmcforwardingporttable a
+		WHERE
+		a.entityId = #{entityId} AND a.proxyIndex = #{proxyId} AND
+		a.topMcForwardingPortSlotIndex = #{slotNo}
+    </select>
+	<select id="getTopMcForwardingOnu" parameterType="map"
+		resultType="topMcForwardingOnuTable">
+		SELECT
+		a.entityId,
+		a.proxyIndex topMcGroupIdIndex,
+		a.topMcForwardingOnuSlotIndex topMcSlotIndex,
+		a.topMcForwardingOnuPortIndex topMcPortIndex,
+		a.topMcForwardingOnuCount topMcOnuCount,
+		a.topMcForwardingOnuList topMcOnuList
+		FROM
+		oltigmpmcforwardingonutable a
+		WHERE
+		a.entityId = #{entityId} AND a.proxyIndex = #{proxyId} AND
+		a.topMcForwardingOnuSlotIndex = #{slotNo} AND
+		a.topMcForwardingOnuPortIndex = #{ponPortNo}
+    </select>
+	<select id="getForwardingSlot" parameterType="Long"
+		resultType="topMcForwardingSlotTable">
+		SELECT
+		entityId,
+		proxyIndex topMcGroupIdIndex,
+		topMcForwardingSlotCount topMcSlotCount,
+		topMcForwardingSlotList topMcSlotList
+		FROM
+		oltigmpmcforwardingslottable
+		WHERE
+		entityId = #{entityId}
+    </select>
+	<select id="getForwardingPort" parameterType="Long"
+		resultType="topMcForwardingPortTable">
+		SELECT
+		a.entityId,
+		a.proxyIndex topMcGroupIdIndex,
+		a.topMcForwardingPortSlotIndex topMcSlotIndex,
+		a.topMcForwardingPortCount topMcPortCount,
+		a.topMcForwardingPortList topMcPortList
+		FROM
+		oltigmpmcforwardingporttable a
+		WHERE
+		a.entityId = #{entityId}
+    </select>
+
+	<select id="loadIgmpSnoopingData" parameterType="map"
+		resultType="igmpForwardingSnooping">
+		SELECT
+		entityId,vid,portIndex,lastchangetime
+		FROM
+		topIgmpForwardingSnooping
+		WHERE
+		entityId = #{entityId}
+		<if test="vid != null">
+			and vid = #{vid} </if>
+		<if test="portIndex != null">
+			and portIndex = #{portIndex}</if>
+	</select>
+
+	<select id="getVidByMvlanIp" parameterType="map" resultType="int">
+		SELECT
+		proxyMulticastVID
+		FROM
+		oltigmpproxyparaentry
+		WHERE
+		entityId = #{entityId}
+		AND proxyIndex = #{mvlan}
+		AND proxyMulticastIPAddress = #{ip}
+    </select>
+	<delete id="deleteAllSnooping" parameterType="long">
+		DELETE FROM
+		topIgmpForwardingSnooping
+		WHERE
+		entityId = #{entityId}
+    </delete>
+	<insert id="batchInsertTopIgmpForwardingSnooping" databaseId="MySQL" parameterType="igmpForwardingSnooping">
+		INSERT INTO
+		topIgmpForwardingSnooping(
+		entityId,vid,portIndex
+		)
+		VALUES(
+		#{entityId},#{vid},#{portIndex}
+		)
+    </insert>
+    <insert id="batchInsertTopIgmpForwardingSnooping" databaseId="Oracle" parameterType="igmpForwardingSnooping">
+        INSERT INTO 
+            topIgmpForwardingSnooping(
+                entityId,vid,portIndex,lastchangetime
+            )
+        VALUES(
+            #{entityId},#{vid},#{portIndex},now()
+        )
+    </insert>
+
+	<update id="updateIgmpGlobalInfo" parameterType="igmpEntityTable">
+		UPDATE
+		oltigmpentityentry a
+		SET
+		a.igmpMode = #{igmpMode}
+		<if test="maxQueryResponseTime != null">
+			,a.maxQueryResponseTime = #{maxQueryResponseTime}
+		</if>
+		<if test="robustVariable != null">
+			,a.robustVariable = #{robustVariable}
+		</if>
+		<if test="queryInterval != null">
+			,a.queryInterval = #{queryInterval}
+		</if>
+		<if test="lastMemberQueryInterval != null">
+			,a.lastMemberQueryInterval = #{lastMemberQueryInterval}
+		</if>
+		<if test="lastMemberQueryCount != null">
+			,a.lastMemberQueryCount = #{lastMemberQueryCount}
+		</if>
+		<if test="igmpVersion != null">
+			,a.igmpVersion = #{igmpVersion}
+		</if>
+		WHERE
+		a.entityId = #{entityId} AND
+		a.deviceIndex = #{deviceIndex}
+	</update>
+	<update id="updateIgmpMaxGroupNum" parameterType="igmpMcParamMgmtObjects">
+		UPDATE
+		OltIgmpTopMcOltConfMgmtObjs a
+		SET
+		a.topMcMaxGroupNum = #{topMcMaxGroupNum},
+		a.topMcMaxBw = #{topMcMaxBw},
+		a.topMcSnoopingAgingTime = #{topMcSnoopingAgingTime},
+		a.topMcMVlan = #{topMcMVlan}
+		WHERE
+		a.entityId = #{entityId}
+	</update>
+	<update id="updateIgmpMcOnuInfo" parameterType="igmpMcOnuTable">
+		UPDATE
+		oltigmptopmconuentry a
+		SET
+		a.topMcOnuMode = #{topMcOnuMode},
+		a.topMcOnuFastLeave = #{topMcOnuFastLeave}
+		WHERE
+		a.entityId = #{entityId} AND
+		a.onuIndex = #{onuIndex}
+	</update>
+	<update id="updateIgmpMcUniConfig" parameterType="igmpMcUniConfigTable">
+		UPDATE
+		oltigmptopmcuniconfigentry a
+		SET
+		a.topMcUniMaxGroupQuantity = #{topMcUniMaxGroupQuantity},
+		a.topMcUniVlanMode = #{topMcUniVlanMode},
+		a.topMcUniVlanTransIdx = #{topMcUniVlanTransIdx},
+		a.topMcUniVlanList = #{topMcUniVlanList}
+		WHERE
+		a.entityId = #{entityId} AND
+		a.uniIndex = #{uniIndex}
+	</update>
+	<update id="updateIgmpMvlanInfo" parameterType="igmpControlledMulticastPackageTable">
+		UPDATE
+		OltIgmpCtrlMPackgEntry a
+		SET
+		a.cmName = #{cmName},
+		a.cmChName = #{cmChName},
+		a.cmProxyList = #{cmProxyList},
+		a.multicastUserAuthority = #{multicastUserAuthority},
+		a.maxRequestChannelNum = #{maxRequestChannelNum},
+		a.singlePreviewTime = #{singlePreviewTime},
+		a.totalPreviewTime = #{totalPreviewTime},
+		a.previewResetTime = #{previewResetTime},
+		a.previewCount = #{previewCount},
+		a.previewInterval = #{previewInterval}
+		WHERE
+		a.entityId = #{entityId} AND
+		a.cmIndex = #{cmIndex}
+    </update>
+	<update id="updateIgmpProxyInfo" parameterType="igmpProxyParaTable">
+		UPDATE
+		oltigmpproxyparaentry a
+		SET
+		a.proxyName = #{proxyName},
+		a.proxyChName = #{proxyChName},
+		a.proxySrcIPAddress = #{proxySrcIPAddress},
+		a.proxyMulticastVID = #{proxyMulticastVID},
+		a.proxyMulticastIPAddress = #{proxyMulticastIPAddress},
+		a.multicastAssuredBW = #{multicastAssuredBW},
+		a.multicastMaxBW = #{multicastMaxBW}
+		WHERE
+		a.entityId = #{entityId} AND
+		a.proxyIndex = #{proxyIndex}
+    </update>
+	<update id="updateIgmpSniConfig" parameterType="igmpMcSniConfigMgmtObjects">
+		UPDATE
+		OltIgmpTopMcSniConfMgmtObjs a
+		SET
+		a.topMcSniPortType = #{topMcSniPortType},
+		a.topMcSniPort = #{topMcSniPort},
+		a.topMcSniAggPort = #{topMcSniAggPort},
+		a.topMcSniAgingTime = #{topMcSniAgingTime}
+		WHERE
+		a.entityId = #{entityId} 
+    </update>
+	<update id="updateIgmpVlanTrans" parameterType="igmpMcOnuVlanTransTable">
+		UPDATE
+		oltigmptopmconuvlantransentry a
+		SET
+		a.topMcOnuVlanTransOldVidList =
+		#{topMcOnuVlanTransOldVid},
+		a.topMcOnuVlanTransNewVidList =
+		#{topMcOnuVlanTransNewVid}
+		WHERE
+		a.entityId = #{entityId} AND
+		a.topMcOnuVlanTransIndex = #{topMcOnuVlanTransIndex}
+	</update>
+	<update id="modifyMulticastUserAuthorityList" parameterType="igmpControlledMulticastUserAuthorityTable">
+		UPDATE
+		OltIgmpCtrlMUserAuthEntry a
+		SET
+		a.multicastPackageList = #{multicastPackageList}
+		WHERE
+		a.entityId = #{entityId} AND
+		a.portIndex = #{portIndex}
+    </update>
+	<update id="updateMulticastPackage" parameterType="igmpControlledMulticastPackageTable">
+		UPDATE
+		OltIgmpCtrlMPackgEntry a
+		SET
+		a.cmProxyList = #{cmProxyList}
+		WHERE
+		a.entityId = #{entityId} AND
+		a.cmIndex = #{cmIndex}
+    </update>
+	<insert id="updateIgmpControlledMulticastPackageTable"
+		parameterType="igmpControlledMcPreviewIntervalTable">
+		UPDATE
+		oltigmpctrlmpackgentry
+		SET
+		previewInterval = #{previewInterval}
+		where
+		entityId = #{entityId} AND cmIndex = #{cmIndex}
+	</insert>
+	<delete id="deleteIgmpControlledMcCdrTableAll" parameterType="long">
+		delete from
+		oltigmptopcontrolledmccdrentry where entityId = #{entityId}
+	</delete>
+	<delete id="deleteIgmpControlledMulticastPackageTableAll"
+		parameterType="long">
+		delete from
+		OltIgmpCtrlMPackgEntry where entityId =
+		#{entityId}
+	</delete>
+	<delete id="deleteIgmpControlledMulticastPackageTable"
+		parameterType="igmpControlledMulticastPackageTable">
+		delete from
+		OltIgmpCtrlMPackgEntry where entityId =
+		#{entityId} AND cmIndex = #{cmIndex}
+	</delete>
+	<delete id="deleteIgmpControlledMulticastUserAuthorityTable"
+		parameterType="igmpControlledMulticastUserAuthorityTable">
+		delete from
+		OltIgmpCtrlMUserAuthEntry where entityId =
+		#{entityId} and portIndex = #{portIndex}
+	</delete>
+	<delete id="deleteIgmpControlledMulticastUserAuthorityTableAll"
+		parameterType="long">
+		delete from
+		OltIgmpCtrlMUserAuthEntry where entityId =
+		#{entityId}
+	</delete>
+	<delete id="deleteIgmpEntityTableAll" parameterType="long">
+		delete from
+		oltigmpentityentry where entityId = #{entityId}
+	</delete>
+	<delete id="deleteIgmpForwardingTableAll" parameterType="long">
+		delete
+		from
+		oltigmpforwardingentry where entityId = #{entityId}
+	</delete>
+	<delete id="deleteIgmpMcOnuTableAll" parameterType="long">
+		delete from
+		oltigmptopmconuentry where entityId = #{entityId}
+	</delete>
+	<delete id="deleteIgmpMcOnuVlanTransTableAll" parameterType="long">
+		delete from
+		oltigmptopmconuvlantransentry where entityId = #{entityId}
+	</delete>
+	<delete id="deleteIgmpMcParamMgmtObjectsAll" parameterType="long">
+		delete from
+		OltIgmpTopMcOltConfMgmtObjs where entityId = #{entityId}
+	</delete>
+	<delete id="deleteIgmpMcSniConfigMgmtObjectsAll" parameterType="long">
+		delete from
+		OltIgmpTopMcSniConfMgmtObjs where entityId = #{entityId}
+	</delete>
+	<delete id="deleteIgmpMcUniConfigTableAll" parameterType="long">
+		delete
+		from
+		oltigmptopmcuniconfigentry where entityId = #{entityId}
+	</delete>
+	<delete id="deleteIgmpMcUniConfig" parameterType="igmpMcUniConfigTable">
+		delete from
+		oltigmptopmcuniconfigentry where entityId = #{entityId} and uniIndex =
+		#{uniIndex}
+	</delete>
+	<delete id="deleteIgmpProxyParaTableAll" parameterType="long">
+		delete
+		from
+		oltigmpproxyparaentry where entityId = #{entityId}
+	</delete>
+	<delete id="deleteIgmpProxyParaTable" parameterType="igmpProxyParaTable">
+		delete from
+		oltigmpproxyparaentry where entityId = #{entityId} AND proxyIndex =
+		#{proxyIndex}
+	</delete>
+	<delete id="deleteIgmpMcOnuVlanTransTable" parameterType="IgmpMcOnuVlanTransTable">
+		delete
+		from
+		oltigmptopmconuvlantransentry where entityId = #{entityId} AND
+		topMcOnuVlanTransIndex = #{topMcOnuVlanTransIndex}
+	</delete>
+	<delete id="deleteAllForwardingSlot" parameterType="long">
+		delete from
+		oltigmpmcforwardingslottable where entityId = #{entityId}
+	</delete>
+	<delete id="deleteAllForwardingPort" parameterType="long">
+		delete from
+		oltigmpmcforwardingporttable where entityId = #{entityId}
+	</delete>
+	<delete id="deleteAllForwardingOnu" parameterType="long">
+		delete from
+		oltigmpmcforwardingonutable where entityId = #{entityId}
+	</delete>
+	<insert id="insertIgmpControlledMcCdrTable" parameterType="igmpControlledMcCdrTable">
+		insert into
+		oltigmptopcontrolledmccdrentry (
+		entityId,
+		sequenceIndex,
+		cdrUniIndex,
+		cdrIgmpReqType,
+		cdrIgmpReqTime,
+		cdrIgmpReqChannel,
+		cdrIgmpReqRight,
+		cdrIgmpReqResult,
+		cdrLeaveType,
+		cdrRecordTime
+		)
+		values (
+		#{entityId},
+		#{sequenceIndex},
+		#{cdrUniIndex},
+		#{cdrIgmpReqType},
+		#{cdrIgmpReqTime},
+		#{cdrIgmpReqChannel},
+		#{cdrIgmpReqRight},
+		#{cdrIgmpReqResult},
+		#{cdrLeaveType},
+		#{cdrRecordTime}
+		)
+	</insert>
+	<insert id="insertIgmpControlledMulticastPackageTable"
+		parameterType="igmpControlledMulticastPackageTable">
+		insert into
+		OltIgmpCtrlMPackgEntry (
+		entityId,
+		cmIndex,
+		cmName,
+		cmChName,
+		cmProxyList,
+		multicastUserAuthority,
+		maxRequestChannelNum,
+		singlePreviewTime,
+		totalPreviewTime,
+		previewResetTime,
+		previewCount,
+		previewInterval
+		)
+		values (
+		#{entityId},
+		#{cmIndex},
+		#{cmName},
+		#{cmChName},
+		#{cmProxyList},
+		#{multicastUserAuthority},
+		#{maxRequestChannelNum},
+		#{singlePreviewTime},
+		#{totalPreviewTime},
+		#{previewResetTime},
+		#{previewCount},
+		#{previewInterval}
+		)
+	</insert>
+	<insert id="insertIgmpControlledMulticastUserAuthorityTable"
+		parameterType="igmpControlledMulticastUserAuthorityTable">
+		insert into
+		OltIgmpCtrlMUserAuthEntry (
+		entityId,
+		portIndex,
+		multicastPackageList,
+		igmpGlobalBW,
+		igmpGlobalBWUsed
+		)
+		values (
+		#{entityId},
+		#{portIndex},
+		#{multicastPackageList},
+		#{igmpGlobalBW},
+		#{igmpGlobalBWUsed}
+		)
+	</insert>
+	<insert id="insertIgmpEntityTable" parameterType="igmpEntityTable">
+		insert into
+		oltigmpentityentry (
+		entityId,
+		deviceIndex,
+		igmpMode,
+		maxQueryResponseTime,
+		robustVariable,
+		queryInterval,
+		lastMemberQueryInterval,
+		lastMemberQueryCount,
+		igmpVersion
+		)
+		values (
+		#{entityId},
+		#{deviceIndex},
+		#{igmpMode},
+		#{maxQueryResponseTime},
+		#{robustVariable},
+		#{queryInterval},
+		#{lastMemberQueryInterval},
+		#{lastMemberQueryCount},
+		#{igmpVersion}
+		)
+	</insert>
+	<insert id="insertIgmpForwardingTable" parameterType="igmpForwardingTable">
+		insert into
+		oltigmpforwardingentry (
+		entityId,
+		deviceIndex,
+		groupVlanIndex,
+		macLongDB,
+		groupPortList
+		)
+		values (
+		#{entityId},
+		#{deviceIndex},
+		#{groupVlanIndex},
+		#{macLongDB},
+		#{groupPortList}
+		)
+	</insert>
+	<insert id="insertIgmpMcOnuTable" parameterType="igmpMcOnuTable">
+		insert into
+		oltigmptopmconuentry (
+		entityId,
+		onuIndex,
+		topMcOnuMode,
+		topMcOnuFastLeave
+		)
+		values (
+		#{entityId},
+		#{onuIndex},
+		#{topMcOnuMode},
+		#{topMcOnuFastLeave}
+		)
+	</insert>
+	<insert id="insertIgmpMcOnuVlanTransTable" parameterType="igmpMcOnuVlanTransTable">
+		insert into
+		oltigmptopmconuvlantransentry (
+		entityId,
+		topMcOnuVlanTransIndex,
+		topMcOnuVlanTransOldVidList,
+		topMcOnuVlanTransNewVidList
+		)
+		values (
+		#{entityId},
+		#{topMcOnuVlanTransIndex},
+		#{topMcOnuVlanTransOldVid},
+		#{topMcOnuVlanTransNewVid}
+		)
+	</insert>
+	<insert id="insertIgmpMcParamMgmtObjects" parameterType="igmpMcParamMgmtObjects">
+		insert into
+		OltIgmpTopMcOltConfMgmtObjs (
+		entityId,
+		topMcMaxGroupNum,
+		topMcMaxBw,
+		topMcSnoopingAgingTime,
+		topMcMVlan
+		)
+		values (
+		#{entityId},
+		#{topMcMaxGroupNum},
+		#{topMcMaxBw},
+		#{topMcSnoopingAgingTime},
+		#{topMcMVlan}
+		)
+	</insert>
+	<insert id="insertIgmpMcSniConfigMgmtObjects" parameterType="igmpMcSniConfigMgmtObjects">
+		insert into
+		OltIgmpTopMcSniConfMgmtObjs (
+		entityId,
+		topMcSniPortType,
+		topMcSniPort,
+		topMcSniAggPort,
+		topMcSniAgingTime
+		)
+		values (
+		#{entityId},
+		#{topMcSniPortType},
+		#{topMcSniPort},
+		#{topMcSniAggPort},
+		#{topMcSniAgingTime}
+		)
+	</insert>
+	<insert id="insertIgmpMcUniConfigTable" parameterType="igmpMcUniConfigTable">
+		insert into
+		oltigmptopmcuniconfigentry (
+		entityId,
+		uniIndex,
+		topMcUniMaxGroupQuantity,
+		topMcUniVlanMode,
+		topMcUniVlanTransIdx,
+		topMcUniVlanList
+		)
+		values (
+		#{entityId},
+		#{uniIndex},
+		#{topMcUniMaxGroupQuantity},
+		#{topMcUniVlanMode},
+		#{topMcUniVlanTransIdx},
+		#{topMcUniVlanList}
+		)
+	</insert>
+	<insert id="insertIgmpProxyParaTable" parameterType="igmpProxyParaTable">
+		insert into
+		oltigmpproxyparaentry (
+		entityId,
+		proxyIndex,
+		proxyName,
+		proxyChName,
+		proxySrcIPAddress,
+		proxyMulticastVID,
+		proxyMulticastIPAddress,
+		multicastAssuredBW,
+		multicastMaxBW
+		)
+		values (
+		#{entityId},
+		#{proxyIndex},
+		#{proxyName},
+		#{proxyChName},
+		#{proxySrcIPAddress},
+		#{proxyMulticastVID},
+		#{proxyMulticastIPAddress},
+		#{multicastAssuredBW},
+		#{multicastMaxBW}
+		)
+	</insert>
+	<insert id="insertForwardingSlot" parameterType="topMcForwardingSlotTable">
+		insert into
+		oltigmpmcforwardingslottable (
+		entityId,
+		proxyIndex,
+		topMcForwardingSlotCount,
+		topMcForwardingSlotList
+		)
+		values (
+		#{entityId},
+		#{topMcGroupIdIndex},
+		#{topMcSlotCount},
+		#{topMcSlotList}
+		)
+	</insert>
+	<insert id="insertForwardingPort" parameterType="topMcForwardingPortTable">
+		insert into
+		oltigmpmcforwardingporttable (
+		entityId,
+		proxyIndex,
+		topMcForwardingPortSlotIndex,
+		topMcForwardingPortCount,
+		topMcForwardingPortList
+		)
+		values (
+		#{entityId},
+		#{topMcGroupIdIndex},
+		#{topMcSlotIndex},
+		#{topMcPortCount},
+		#{topMcPortList}
+		)
+	</insert>
+	<insert id="insertForwardingOnu" parameterType="topMcForwardingOnuTable">
+		insert into
+		oltigmpmcforwardingonutable (
+		entityId,
+		proxyIndex,
+		topMcForwardingOnuSlotIndex,
+		topMcForwardingOnuPortIndex,
+		topMcForwardingOnuCount,
+		topMcForwardingOnuList
+		)
+		values (
+		#{entityId},
+		#{topMcGroupIdIndex},
+		#{topMcSlotIndex},
+		#{topMcPortIndex},
+		#{topMcOnuCount},
+		#{topMcOnuList}
+		)
+	</insert>
+</mapper>
